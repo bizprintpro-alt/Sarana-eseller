@@ -1,3 +1,6 @@
+/* Dashboard (Buyer) */
+:root { --sb: 240px; --border: var(--bo); --indigo: var(--p); --indigo-d: var(--pd); --indigo-l: var(--pl); --amber: var(--a); }
+body { font-family: var(--ff); background: var(--bg); color: var(--t1); display: flex; min-height: 100vh; margin: 0; }
 
 /* ── SIDEBAR ── */
 .sidebar{width:var(--sb);flex-shrink:0;background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;overflow-y:auto;z-index:50}
