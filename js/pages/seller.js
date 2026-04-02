@@ -23,6 +23,50 @@ document.getElementById('wc-sub').textContent   = new Date().toLocaleDateString(
 // Load settings from localStorage
 loadSettings();
 
+// ══════ ANIMATED COUNTER ══════
+function animateCounter(el, target, prefix = '', suffix = '') {
+  if (!el) return;
+  const duration = 1200;
+  const start = performance.now();
+  const startVal = 0;
+  const isPrice = suffix === '₮' || prefix === '';
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const current = Math.round(startVal + (target - startVal) * eased);
+    el.textContent = prefix + (isPrice && suffix === '₮' ? current.toLocaleString('mn-MN') + '₮' : current.toLocaleString()) + (suffix !== '₮' ? suffix : '');
+    el.classList.add('counter-animate');
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// ══════ MINI SPARKLINE ══════
+function createSparkline(container, data, color = 'rgba(255,255,255,.3)') {
+  if (!container) return;
+  const max = Math.max(...data, 1);
+  container.innerHTML = data.map((v, i) => {
+    const h = Math.max(4, (v / max) * 28);
+    return `<div class="spark-bar" style="height:${h}px;background:${color};animation-delay:${i * .05}s"></div>`;
+  }).join('');
+}
+
+// ══════ COLLAPSIBLE SIDEBAR ══════
+const sbToggle = document.getElementById('sb-toggle');
+if (sbToggle) {
+  const sidebar = document.getElementById('sidebar');
+  const saved = localStorage.getItem('sb-collapsed');
+  if (saved === 'true' && sidebar) sidebar.classList.add('collapsed');
+
+  sbToggle.addEventListener('click', () => {
+    if (!sidebar) return;
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sb-collapsed', sidebar.classList.contains('collapsed'));
+  });
+}
+
 // Load all data
 loadProds();
 loadOrders();
@@ -67,11 +111,11 @@ async function loadProds() {
 function renderProds(list) {
   if (!list.length) {
     document.getElementById('prod-grid').innerHTML = `
-      <div class="empty-state" style="grid-column:1/-1;padding:60px">
-        <div style="font-size:52px;margin-bottom:14px;opacity:.4">📦</div>
-        <div style="font-size:16px;font-weight:700;color:var(--t2);margin-bottom:6px">Бараа байхгүй байна</div>
-        <p style="color:var(--t3);margin-bottom:16px">Эхний барааг нэмж борлуулалтаа эхлүүлэх</p>
-        <button onclick="openAddModal()" class="tbtn tbtn-p" style="margin:0 auto">+ Бараа нэмэх</button>
+      <div class="empty-premium" style="grid-column:1/-1">
+        <div class="ep-visual">📦</div>
+        <h3>Бараа байхгүй байна</h3>
+        <p>Эхний барааг нэмж, борлуулагчдын сүлжээгээр дамжуулан борлуулалтаа эхлүүлээрэй!</p>
+        <button class="ep-btn" onclick="openAddModal()">+ Эхний бараагаа нэмэх</button>
       </div>`;
     return;
   }
@@ -150,13 +194,22 @@ async function loadOrders() {
     return d.getMonth() === lm.getMonth() && d.getFullYear() === lm.getFullYear();
   });
 
-  document.getElementById('s-month-ord').textContent = thisMonthOrders.length;
+  animateCounter(document.getElementById('s-month-ord'), thisMonthOrders.length);
   document.getElementById('s-month-cmp').textContent = `Өмнөх сар: ${lastMonthOrders.length}`;
 
   // Revenue
   const thisRevenue = thisMonthOrders.reduce((s, o) => s + (o.total || 0), 0);
   const lastRevenue = lastMonthOrders.reduce((s, o) => s + (o.total || 0), 0);
-  document.getElementById('s-revenue').textContent = UI.price(thisRevenue);
+  // Animated counters
+  animateCounter(document.getElementById('s-revenue'), thisRevenue, '', '₮');
+  // Sparkline on revenue card
+  const revCard = document.getElementById('s-revenue')?.closest('.sc');
+  if (revCard && !revCard.querySelector('.sparkline')) {
+    const spark = document.createElement('div');
+    spark.className = 'sparkline';
+    revCard.appendChild(spark);
+    createSparkline(spark, [12,18,14,22,28,19,25,30,thisRevenue/10000||5].map(v => Math.max(2, v)), 'rgba(255,255,255,.3)');
+  }
   const revChange = lastRevenue > 0 ? Math.round(((thisRevenue - lastRevenue) / lastRevenue) * 100) : 0;
   const revEl = document.getElementById('s-rev-cmp');
   if (revChange > 0) { revEl.textContent = `↑ ${revChange}% өсөлт`; revEl.className = 'sc-sub sc-up'; }
@@ -175,7 +228,11 @@ async function loadOrders() {
 function renderRecentOrders() {
   const recent = allOrders.slice(0, 5);
   if (!recent.length) {
-    document.getElementById('recent-orders').innerHTML = `<div class="empty-state">Захиалга байхгүй байна</div>`;
+    document.getElementById('recent-orders').innerHTML = `<div class="empty-premium" style="padding:32px">
+      <div class="ep-visual" style="width:80px;height:80px;font-size:32px">🛒</div>
+      <h3 style="font-size:15px">Захиалга хүлээж байна</h3>
+      <p style="font-size:13px">Бараа нэмж, борлуулагчдад хуваалцахад захиалга ирж эхэлнэ</p>
+    </div>`;
     return;
   }
   document.getElementById('recent-orders').innerHTML = `<div class="order-list">${recent.map(o => {
