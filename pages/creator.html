@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Creator Profile — eseller.mn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/creator.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo-wrap" href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.12"/>
+      <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.2"/>
+      <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+      <line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+    </svg>
+    <span style="font-size:20px;font-weight:900;color:#CC0000;letter-spacing:-0.5px;font-family:'eseller Script',serif">eseller</span>
+  </a>
+  <div class="nav-r">
+    <a class="nav-a" href="storefront.html">🏪 Дэлгүүр</a>
+    <a class="nav-a" id="nav-user" href="login.html">Нэвтрэх</a>
+  </div>
+</nav>
+
+<!-- HERO COVER -->
+<div class="hero-cover" id="hero-cover">
+  <button class="cover-edit" id="cover-edit-btn" onclick="editCover()">✏️ Cover засах</button>
+</div>
+
+<!-- PROFILE CARD -->
+<div class="profile-wrap">
+  <div class="profile-card">
+    <div class="profile-top">
+      <div class="avatar-wrap">
+        <div class="avatar" id="creator-avatar">🎯</div>
+        <div class="online-dot"></div>
+      </div>
+      <div class="profile-info">
+        <div class="creator-name" id="creator-name"><div class="sk" style="height:28px;width:200px"></div></div>
+        <div class="creator-handle" id="creator-handle"></div>
+        <div id="verified-wrap"></div>
+      </div>
+      <div class="profile-actions" id="profile-actions">
+        <button class="follow-btn" id="follow-btn" onclick="toggleFollow()">+ Дагах</button>
+        <button class="share-btn-sm" onclick="copyProfileLink()">🔗 Хуваалцах</button>
+      </div>
+    </div>
+
+    <div class="bio-text" id="creator-bio">Уншиж байна...</div>
+    <div class="social-links" id="social-links"></div>
+
+    <div class="stats-strip" id="stats-strip">
+      <div class="stat-item"><div class="stat-val sk" style="height:28px;width:50px;margin:0 auto 4px"></div><div class="stat-lbl">Дагагчид</div></div>
+      <div class="stat-item"><div class="stat-val sk" style="height:28px;width:50px;margin:0 auto 4px"></div><div class="stat-lbl">Борлуулалт</div></div>
+      <div class="stat-item"><div class="stat-val sk" style="height:28px;width:50px;margin:0 auto 4px"></div><div class="stat-lbl">Бараа</div></div>
+      <div class="stat-item"><div class="stat-val sk" style="height:28px;width:50px;margin:0 auto 4px"></div><div class="stat-lbl">Орлого</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-area">
+
+  <!-- SHARE CARD for affiliate -->
+  <div class="share-card" id="share-card" style="display:none">
+    <div class="sc-title">🔗 Таны affiliate линк</div>
+    <div class="sc-sub">Энэ линкийг social media-д хуваалцаж комисс авна уу</div>
+    <div class="sc-url" id="profile-url">eseller.mn/u/username</div>
+    <div class="sc-copy">
+      <button onclick="copyAffLink()">📋 Хуулах</button>
+      <button onclick="shareSM('facebook')">Facebook</button>
+      <button onclick="shareSM('instagram')">Instagram</button>
+      <button onclick="shareSM('tiktok')">TikTok</button>
+    </div>
+  </div>
+
+  <!-- FEATURED PRODUCTS -->
+  <div id="featured-section">
+    <div class="section-head">
+      <div class="section-title">🔥 Creator-ийн санал болгосон бараанууд</div>
+      <button class="section-more" onclick="showMore()">Бүгдийг харах →</button>
+    </div>
+    <div class="pgrid" id="prod-grid">
+      <div class="sk" style="height:220px;border-radius:14px"></div>
+      <div class="sk" style="height:220px;border-radius:14px"></div>
+      <div class="sk" style="height:220px;border-radius:14px"></div>
+      <div class="sk" style="height:220px;border-radius:14px"></div>
+    </div>
+  </div>
+
+  <!-- EDIT PANEL (own profile) -->
+  <div id="own-panel" style="display:none;margin-bottom:28px">
+    <div class="section-head">
+      <div class="section-title">⚙️ Профайл засах</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="edit-btn" onclick="openEditModal()">✏️ Мэдээлэл засах</button>
+      <button class="edit-btn" onclick="openProductPicker()">📦 Бараа нэмэх</button>
+      <a class="edit-btn" style="text-decoration:none;display:inline-flex;align-items:center" href="affiliate.html">📊 Dashboard руу →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="edit-modal-bg" id="edit-modal" onclick="if(event.target===this)closeEdit()">
+  <div class="edit-modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h3 style="font-size:17px;font-weight:900">✏️ Creator профайл засах</h3>
+      <button onclick="closeEdit()" style="background:var(--bg);border:none;width:30px;height:30px;border-radius:8px;font-size:16px;cursor:pointer">✕</button>
+    </div>
+    <div class="fg"><label>Нэр</label><input id="e-name" placeholder="Таны нэр"></div>
+    <div class="fg"><label>Username</label><input id="e-username" placeholder="batbold" oninput="this.value=this.value.replace(/[^a-z0-9_]/gi,'').toLowerCase()"></div>
+    <div class="fg"><label>Bio</label><textarea id="e-bio" placeholder="Та өөрийн тухай товч бичнэ үү..."></textarea></div>
+    <div class="fg"><label>Зургийн URL</label><input id="e-avatar" placeholder="https://..."></div>
+    <div class="fg"><label>Instagram</label><input id="e-instagram" placeholder="@username"></div>
+    <div class="fg"><label>TikTok</label><input id="e-tiktok" placeholder="@username"></div>
+    <div class="fg"><label>Facebook</label><input id="e-facebook" placeholder="fb.com/username"></div>
+    <div class="modal-btns">
+      <button class="mbtn mbtn-s" onclick="closeEdit()">Болих</button>
+      <button class="mbtn mbtn-p" onclick="saveProfile()">💾 Хадгалах</button>
+    </div>
+  </div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/creator.js"></script>
+</body>
+</html>

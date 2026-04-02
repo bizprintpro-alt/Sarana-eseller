@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Бараа — eseller.mn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/product-detail.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo-wrap" href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.12"/>
+      <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.2"/>
+      <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+      <line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+    </svg>
+    <span style="font-size:20px;font-weight:900;color:#CC0000;letter-spacing:-0.5px;font-family:'eseller Script',serif">eseller</span>
+  </a>
+  <div style="flex:1;max-width:460px;margin:0 10px">
+    <div style="position:relative">
+      <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:13px;pointer-events:none">🔍</span>
+      <input type="text" placeholder="Бараа хайх..." style="width:100%;border:1.5px solid var(--bo);border-radius:20px;padding:8px 14px 8px 34px;font-size:13px;font-family:inherit;outline:none;background:var(--bg)" onfocus="this.style.borderColor='var(--p)'" onblur="this.style.borderColor='var(--bo)'" onkeydown="if(event.key==='Enter')location.href='storefront.html?q='+this.value">
+    </div>
+  </div>
+  <div class="nav-r">
+    <a class="nav-a" href="storefront.html">🏪 Дэлгүүр</a>
+    <a class="nav-a" id="nav-user" href="login.html">Нэвтрэх</a>
+    <button class="cart-btn" onclick="openCart()">🛒 Сагс<span class="cbadge" id="cbadge"></span></button>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="../index.html">Нүүр</a>
+  <span style="color:var(--bo)">›</span>
+  <a href="storefront.html">Дэлгүүр</a>
+  <span style="color:var(--bo)">›</span>
+  <a href="#" id="bc-cat" onclick="return false">—</a>
+  <span style="color:var(--bo)">›</span>
+  <span id="bc-name">Уншиж байна...</span>
+</div>
+
+<div class="page">
+  <div class="product-grid">
+
+    <!-- GALLERY -->
+    <div class="gallery">
+      <div class="main-img" id="main-img">
+        <div class="sk" style="width:100%;height:100%;border-radius:20px"></div>
+      </div>
+      <div class="thumb-row" id="thumb-row"></div>
+    </div>
+
+    <!-- INFO PANEL -->
+    <div class="info-panel" id="info-panel">
+      <div class="sk" style="height:20px;width:100px;margin-bottom:12px;border-radius:8px"></div>
+      <div class="sk" style="height:36px;width:100%;margin-bottom:8px;border-radius:8px"></div>
+      <div class="sk" style="height:18px;width:60%;margin-bottom:20px;border-radius:6px"></div>
+      <div class="sk" style="height:44px;width:50%;margin-bottom:20px;border-radius:8px"></div>
+      <div class="sk" style="height:50px;width:100%;border-radius:12px"></div>
+    </div>
+  </div>
+
+  <!-- DETAIL TABS -->
+  <div class="tab-section">
+    <div class="tab-nav">
+      <button class="tab-item on" onclick="switchTab(this,'desc')">📄 Тайлбар</button>
+      <button class="tab-item" onclick="switchTab(this,'specs')">📋 Техникийн мэдээлэл</button>
+      <button class="tab-item" onclick="switchTab(this,'reviews')">⭐ Үнэлгээ <span id="rev-cnt-tab"></span></button>
+    </div>
+    <div class="tab-pane on" id="pane-desc"><div class="desc-text" id="desc-text">Уншиж байна...</div></div>
+    <div class="tab-pane" id="pane-specs"><table class="spec-table" id="spec-table"><tr><td colspan="2" style="text-align:center;padding:28px;color:var(--t3)">Мэдээлэл байхгүй</td></tr></table></div>
+    <div class="tab-pane" id="pane-reviews"><div id="reviews-wrap"></div></div>
+  </div>
+
+  <!-- RELATED PRODUCTS -->
+  <div style="margin-top:36px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div style="font-size:18px;font-weight:900">✨ Төстэй бараанууд</div>
+      <a href="storefront.html" style="font-size:13px;font-weight:600;color:var(--p);text-decoration:none">Бүгдийг харах →</a>
+    </div>
+    <div class="related-grid" id="related-grid">
+      <div class="sk" style="height:210px;border-radius:13px"></div>
+      <div class="sk" style="height:210px;border-radius:13px"></div>
+      <div class="sk" style="height:210px;border-radius:13px"></div>
+      <div class="sk" style="height:210px;border-radius:13px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="dbg" id="dbg" onclick="closeCart()"></div>
+<div class="cart-panel" id="cpanel">
+  <div class="cp-top">
+    <h3>🛒 Сагс <span id="cp-cnt" style="color:var(--t3);font-size:13px;font-weight:500"></span></h3>
+    <button class="cp-x" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cp-body" id="cp-body"></div>
+  <div class="cp-foot">
+    <div class="cp-row"><span>Дүн</span><span id="cp-sub">₮0</span></div>
+    <div class="cp-row"><span>Хүргэлт</span><span id="cp-del" style="color:var(--g)">₮3,000</span></div>
+    <div class="cp-total"><span>Нийт</span><span id="cp-tot" style="color:var(--p)">₮0</span></div>
+    <button class="go-btn" id="go-btn" onclick="gocheckout()">💳 Захиалах</button>
+  </div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/product-detail.js"></script>
+</body>
+</html>

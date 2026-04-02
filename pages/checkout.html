@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Захиалах — eseller.mn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/checkout.css">
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="storefront.html">← Буцах</a>
+  <a class="logo-wrap nav-logo" href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.12"/>
+      <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.2"/>
+      <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+      <line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+    </svg>
+    <span style="font-size:20px;font-weight:900;color:#CC0000;letter-spacing:-0.5px;font-family:'eseller Script',serif">eseller</span>
+  </a>
+</nav>
+
+<!-- STEP PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress">
+    <div class="step">
+      <div class="step-num active" id="sn1">1</div>
+      <div class="step-label active" id="sl1">Хаяг</div>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step">
+      <div class="step-num waiting" id="sn2">2</div>
+      <div class="step-label waiting" id="sl2">Төлбөр</div>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step">
+      <div class="step-num waiting" id="sn3">✓</div>
+      <div class="step-label waiting" id="sl3">Баталгаа</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- LEFT: STEPS -->
+  <div id="step-content">
+
+    <!-- STEP 1: ADDRESS -->
+    <div id="pane-address">
+      <div class="card">
+        <div class="card-head"><span class="ch-ico">📍</span><h2>Хүргэлтийн хаяг</h2></div>
+        <div class="card-body">
+          <div class="row2">
+            <div class="fg" id="fg-name">
+              <label>Нэр</label>
+              <input id="d-name" type="text" placeholder="Таны нэр" autocomplete="name">
+              <div class="err-msg">Нэр оруулна уу</div>
+            </div>
+            <div class="fg" id="fg-phone">
+              <label>Утасны дугаар</label>
+              <input id="d-phone" type="tel" placeholder="9900 0000" autocomplete="tel">
+              <div class="err-msg">Зөв дугаар оруулна уу</div>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="fg" id="fg-city">
+              <label>Хот / аймаг</label>
+              <select id="d-city">
+                <option value="ulaanbaatar">Улаанбаатар</option>
+                <option value="erdenet">Эрдэнэт</option>
+                <option value="darkhan">Дархан</option>
+                <option value="choibalsan">Чойбалсан</option>
+                <option value="other">Бусад</option>
+              </select>
+            </div>
+            <div class="fg" id="fg-district">
+              <label>Дүүрэг / сум</label>
+              <select id="d-district">
+                <option value="">Сонгоно уу...</option>
+                <option>Баянзүрх</option>
+                <option>Сүхбаатар</option>
+                <option>Чингэлтэй</option>
+                <option>Хан-Уул</option>
+                <option>Баянгол</option>
+                <option>Сонгинохайрхан</option>
+                <option>Налайх</option>
+                <option>Багануур</option>
+                <option>Багахангай</option>
+              </select>
+              <div class="err-msg">Дүүрэг сонгоно уу</div>
+            </div>
+          </div>
+          <div class="fg" id="fg-khoroo">
+            <label>Хороо / гудамж</label>
+            <input id="d-khoroo" type="text" placeholder="Жишээ: 7-р хороо, Нарны зам">
+            <div class="err-msg">Хороо/гудамж оруулна уу</div>
+          </div>
+          <div class="fg">
+            <label>Байр / тоот (нэмэлт)</label>
+            <input id="d-apt" type="text" placeholder="Байрны дугаар, давхар, тоот">
+          </div>
+          <div class="fg">
+            <label>Нэмэлт заавар (нэмэлт)</label>
+            <textarea class="textarea" id="d-note" placeholder="Жолоочид зориулсан заавар — орц, хаалга кот гэх мэт"></textarea>
+          </div>
+          <hr style="border:none;border-top:1px solid var(--bo);margin:16px 0">
+          <div class="fg">
+            <label>Хүргэлтийн цаг</label>
+            <div class="time-grid">
+              <div class="time-opt on" onclick="selTime(this,'asap')">
+                ⚡ Аль болох хурдан
+                <div class="to-time">30–60 минут</div>
+              </div>
+              <div class="time-opt" onclick="selTime(this,'today')">
+                📅 Өнөөдөр оройд
+                <div class="to-time">18:00–21:00</div>
+              </div>
+              <div class="time-opt" onclick="selTime(this,'tomorrow-am')">
+                🌅 Маргааш өглөө
+                <div class="to-time">09:00–12:00</div>
+              </div>
+              <div class="time-opt" onclick="selTime(this,'tomorrow-pm')">
+                ☀️ Маргааш өдөр
+                <div class="to-time">14:00–18:00</div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <a class="btn btn-ghost" href="storefront.html" style="text-decoration:none">← Буцах</a>
+            <button class="btn btn-p" onclick="goToPayment()">Төлбөр рүү шилжих →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: PAYMENT -->
+    <div id="pane-payment" style="display:none">
+      <div class="card">
+        <div class="card-head"><span class="ch-ico">💳</span><h2>Төлбөрийн арга</h2></div>
+        <div class="card-body">
+          <div class="pay-grid">
+            <div class="pay-opt on" id="pay-qpay" onclick="selPay('qpay')">
+              <div class="po-ico">📱</div>
+              <div class="po-name">QPay</div>
+              <div class="po-desc">QR уншуулах</div>
+            </div>
+            <div class="pay-opt" id="pay-card" onclick="selPay('card')">
+              <div class="po-ico">💳</div>
+              <div class="po-name">Картаар</div>
+              <div class="po-desc">Visa / MasterCard</div>
+            </div>
+            <div class="pay-opt" id="pay-cash" onclick="selPay('cash')">
+              <div class="po-ico">💵</div>
+              <div class="po-name">Бэлнээр</div>
+              <div class="po-desc">Хүргэлтэд төл</div>
+            </div>
+            <div class="pay-opt" id="pay-wallet" onclick="selPay('wallet')">
+              <div class="po-ico">👛</div>
+              <div class="po-name">Түрийвч</div>
+              <div class="po-desc" id="wallet-bal-lbl">Үлдэгдэл шалгаж байна...</div>
+            </div>
+          </div>
+
+          <!-- QPay sub-panel -->
+          <div id="qpay-info" style="margin-top:16px;background:var(--pl);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--p)">
+            📲 Захиалгын дараа QPay QR код үүснэ. Банкны аппаар уншуулж төлнө.
+          </div>
+          <!-- Card sub-panel -->
+          <div id="card-info" style="display:none;margin-top:16px">
+            <div class="row2">
+              <div class="fg"><label>Картын дугаар</label><input type="text" placeholder="0000 0000 0000 0000" maxlength="19"></div>
+              <div class="fg"><label>Эзэмшигчийн нэр</label><input type="text" placeholder="BOLD ENKHBAYAR"></div>
+            </div>
+            <div class="row2">
+              <div class="fg"><label>Дуусах хугацаа</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
+              <div class="fg"><label>CVV</label><input type="password" placeholder="•••" maxlength="4"></div>
+            </div>
+          </div>
+          <!-- Cash info -->
+          <div id="cash-info" style="display:none;margin-top:16px;background:var(--al);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--a)">
+            💵 Жолооч хүргэлтэд бэлэн мөнгөөр төлнө. Буцааж өгөх мөнгө бэлдэнэ үү.
+          </div>
+          <!-- Wallet info -->
+          <div id="wallet-info" style="display:none;margin-top:16px;background:var(--gl);border-radius:10px;padding:12px 16px;font-size:13px;color:var(--g)">
+            👛 Түрийвчийн үлдэгдлээс автоматаар хасна.
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="goToAddress()">← Буцах</button>
+            <button class="btn btn-p" id="place-order-btn" onclick="placeOrder()">
+              Захиалга өгөх →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: SUCCESS / QPAY QR -->
+    <div id="pane-success" style="display:none">
+      <div class="card">
+        <div class="card-head"><span class="ch-ico">🎉</span><h2 id="s3-title">Захиалга амжилттай!</h2></div>
+        <div class="card-body">
+
+          <!-- QPay QR waiting -->
+          <div id="qpay-step" style="display:none">
+            <div class="qpay-wrap">
+              <div style="font-size:14px;color:var(--t2);margin-bottom:12px">Дараах банкны аппаар QR уншуулж төлнө үү</div>
+              <div class="qr-box" id="qr-container">
+                <div class="qr-placeholder">📲</div>
+              </div>
+              <div class="qpay-timer" id="qpay-timer">⏱ 09:59 хүлээгдэж байна</div>
+              <div class="bank-grid">
+                <button class="bank-btn" onclick="openBank('khanbank')"><span class="bank-ico">🏦</span>Хаан банк</button>
+                <button class="bank-btn" onclick="openBank('golomt')"><span class="bank-ico">🏦</span>Голомт</button>
+                <button class="bank-btn" onclick="openBank('tdb')"><span class="bank-ico">🏦</span>TDB</button>
+                <button class="bank-btn" onclick="openBank('khas')"><span class="bank-ico">🏦</span>Хас банк</button>
+                <button class="bank-btn" onclick="openBank('state')"><span class="bank-ico">🏦</span>Төрийн</button>
+                <button class="bank-btn" onclick="openBank('bogd')"><span class="bank-ico">🏦</span>Богд</button>
+                <button class="bank-btn" onclick="openBank('most')"><span class="bank-ico">🏦</span>Most</button>
+                <button class="bank-btn" onclick="openBank('arig')"><span class="bank-ico">🏦</span>Ариг</button>
+              </div>
+              <button class="btn btn-g check-btn" id="check-pay-btn" onclick="checkPayment()">
+                ✅ Төлбөр шалгах
+              </button>
+            </div>
+          </div>
+
+          <!-- Success final -->
+          <div id="success-step">
+            <div class="success-wrap">
+              <span class="success-ico">✅</span>
+              <div class="success-title">Захиалга баталгаажлаа!</div>
+              <div class="success-sub">Таны захиалгыг хүлээн авлаа.<br>Жолооч хуваарилагдахад SMS мэдэгдэл ирнэ.</div>
+              <div class="order-num" id="final-order-num">#DS000000</div>
+              <div class="success-actions">
+                <a class="btn btn-p" href="dashboard.html" style="text-decoration:none;width:auto;padding:12px 24px">
+                  📦 Захиалга хянах
+                </a>
+                <a class="btn btn-ghost" href="storefront.html" style="text-decoration:none;width:auto;padding:12px 24px">
+                  🛍️ Дэлгүүр үргэлжлүүлэх
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /step-content -->
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="summary" id="order-summary">
+    <div class="sum-head">🛒 Таны сагс <span id="item-count" style="color:var(--t3);font-size:13px;font-weight:500"></span></div>
+    <div class="sum-items" id="sum-items-list"></div>
+    <div class="sum-rows">
+      <div class="sr"><span>Бараа нийт</span><span id="subtotal">₮0</span></div>
+      <div class="sr"><span>Хүргэлт</span><span id="delivery-fee">₮3,000</span></div>
+      <div class="sr"><span>Хөнгөлөлт</span><span id="discount" style="color:var(--g)">—</span></div>
+      <div class="sr total"><span>Нийт дүн</span><strong id="grand-total">₮0</strong></div>
+    </div>
+    <div class="sum-note">🏷️ Affiliate линкээр ирсэн захиалгад нэмэлт хөнгөлөлт авах боломжтой</div>
+  </div>
+
+</div><!-- /main -->
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/checkout.js"></script>
+</body>
+</html>

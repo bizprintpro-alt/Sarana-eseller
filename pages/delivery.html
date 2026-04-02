@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Жолооч — eseller.mn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/delivery.css">
+</head>
+<body>
+
+<nav>
+  <a class="logo-wrap" href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0">
+    <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.12"/>
+      <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.2"/>
+      <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
+      <line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+      <line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
+    </svg>
+    <span style="font-size:20px;font-weight:900;color:#CC0000;letter-spacing:-0.5px;font-family:'eseller Script',serif">eseller</span>
+  </a>
+  <div class="nav-r">
+    <span id="nav-name">...</span>
+    <button class="logout-btn" onclick="Auth.logout()">🚪 Гарах</button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- STATUS BAR -->
+  <div class="status-bar" id="status-bar">
+    <div class="status-info">
+      <h3>🚚 Жолоочийн самбар</h3>
+      <p id="status-text">Ажлын өдрийн мэнд! Онлайн болж захиалга хүлээн аваарай.</p>
+      <div class="online-pill" id="online-pill" style="display:none">
+        <span class="dot"></span> Онлайн — Захиалга хүлээн авч байна
+      </div>
+    </div>
+    <div class="toggle-wrap">
+      <div>
+        <div class="toggle-label" id="toggle-label">Офлайн</div>
+        <div class="toggle-sub">Хүргэлт эхлүүлэх</div>
+      </div>
+      <div class="toggle-track" id="toggle-track" onclick="toggleOnline()" role="switch"></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="sc"><div class="sc-val" id="s-total">—</div><div class="sc-lbl">📦 Нийт захиалга</div></div>
+    <div class="sc"><div class="sc-val" id="s-active">—</div><div class="sc-lbl">🚚 Явааны</div></div>
+    <div class="sc"><div class="sc-val" id="s-done">—</div><div class="sc-lbl">✅ Хүргэсэн</div></div>
+    <div class="sc"><div class="sc-val" id="s-earn">—</div><div class="sc-lbl">💰 Миний орлого</div></div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="fb on" onclick="filterOrders(this,'all')">Бүгд</button>
+    <button class="fb" onclick="filterOrders(this,'confirmed')">⏳ Хүлээгдэж буй</button>
+    <button class="fb" onclick="filterOrders(this,'shipped')">🚚 Явааны</button>
+    <button class="fb" onclick="filterOrders(this,'delivered')">✅ Хүргэсэн</button>
+  </div>
+
+  <!-- ORDER LIST -->
+  <div class="olist" id="olist">
+    <div class="empty-state">
+      <div class="sp"></div><br><p>Ачааллаж байна...</p>
+    </div>
+  </div>
+
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/delivery.js"></script>
+</body>
+</html>

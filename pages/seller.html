@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Борлуулагч — eseller.mn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/seller.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <a class="sb-logo" href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+      <svg width="24" height="22" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.15"/>
+        <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.4"/>
+        <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.9" opacity="0.5"/>
+        <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.5"/>
+        <line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.4"/>
+        <line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.4"/>
+      </svg>
+      <span style="font-size:17px;font-weight:900;color:#CC0000;letter-spacing:-0.4px">eseller</span>
+    </a>
+
+  <!-- Store identity -->
+  <a class="sb-store" href="storefront.html" target="_blank">
+    <div class="sb-av" id="sb-av">S</div>
+    <div>
+      <div class="sb-sname" id="sb-sname">Миний дэлгүүр</div>
+      <div class="sb-surl">eseller.mn/store</div>
+    </div>
+    <div class="sb-ext">↗</div>
+  </a>
+
+  <div class="sb-menu">
+    <div class="sb-sect">Үндсэн</div>
+    <button class="sb-item on" id="snav-dashboard" onclick="gotoTab('dashboard')"><span class="si">📊</span>Самбар</button>
+    <button class="sb-item" id="snav-orders" onclick="gotoTab('orders')"><span class="si">🛒</span>Захиалга <span class="sb-badge" id="pend-badge" style="display:none"></span></button>
+    <button class="sb-item" id="snav-products" onclick="gotoTab('products')"><span class="si">📦</span>Бараа удирдах</button>
+
+    <div class="sb-sect">Борлуулалт</div>
+    <button class="sb-item" onclick="UI.toast('Тун удахгүй 🚀','info')"><span class="si">📈</span>Статистик <span class="sb-new">SOON</span></button>
+    <button class="sb-item" onclick="UI.toast('Тун удахгүй 🚀','info')"><span class="si">🎯</span>Урамшуулал <span class="sb-new">SOON</span></button>
+    <button class="sb-item" onclick="UI.toast('Тун удахгүй 🚀','info')"><span class="si">📢</span>Affiliate</button>
+
+    <div class="sb-sect">Тохиргоо</div>
+    <button class="sb-item" onclick="gotoTab('settings')"><span class="si">⚙️</span>Дэлгүүрийн тохиргоо</button>
+    <a class="sb-item" href="dashboard.html"><span class="si">👤</span>Профайл</a>
+  </div>
+
+  <div class="sb-bot">
+    <div class="sb-upgrade">
+      <div class="u-title">🚀 Pro руу шилжих</div>
+      <div class="u-sub">Нэмэлт функц, тэргүүлэх байр</div>
+    </div>
+    <button class="sb-logout" onclick="Auth.logout()">🚪 Гарах</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-left">
+      <div>
+        <div class="page-title" id="pg-title">Самбар</div>
+      </div>
+    </div>
+    <div class="tb-r">
+      <a class="tbtn tbtn-g" href="storefront.html" target="_blank">🏪 Дэлгүүр харах ↗</a>
+      <button class="tbtn tbtn-p" onclick="openAddModal()">+ Бараа нэмэх</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════ DASHBOARD PANE ════ -->
+    <div id="pane-dashboard">
+
+      <!-- Alert banner -->
+      <div class="alert-banner" id="setup-banner">
+        <div class="ab-txt">🕐 Үнэгүй туршилтын хугацаа <span id="trial-days">30 хоног</span> үлдсэн</div>
+        <button class="ab-btn">🛒 Багц авах</button>
+      </div>
+
+      <!-- Welcome + Plan grid -->
+      <div class="welcome-grid">
+        <!-- Welcome card -->
+        <div class="wcard">
+          <div class="wcard-head">
+            <div class="wc-av" id="wc-av">B</div>
+            <div>
+              <div class="wc-name" id="wc-name">Сайн уу!</div>
+              <div class="wc-sub" id="wc-sub">Дэлгүүрийг удирдах хэсэгт тавтай морил</div>
+            </div>
+          </div>
+          <div class="wcard-body">
+            <p>Дараах үйлдлүүдийг хийснээр таны дэлгүүр бүрэн ажиллагаатай болно:</p>
+            <div class="setup-steps">
+              <a class="setup-step" onclick="gotoTab('products');openAddModal()" style="cursor:pointer">
+                <div class="ss-ico">📦</div>
+                <div class="ss-txt"><div class="ss-title">Бараа нэмэх</div><div class="ss-sub">Шинэ бараа нэмж борлуулалтаа эхлүүл</div></div>
+                <div class="ss-arrow">→</div>
+              </a>
+              <a class="setup-step" onclick="UI.toast('Удахгүй','info')" style="cursor:pointer">
+                <div class="ss-ico">💳</div>
+                <div class="ss-txt"><div class="ss-title">Дансны мэдээлэл нэмэх</div><div class="ss-sub">Дансаа тохируулснаар захиалга авах боломжтой</div></div>
+                <div class="ss-arrow">→</div>
+              </a>
+              <a class="setup-step" onclick="gotoTab('settings')" style="cursor:pointer">
+                <div class="ss-ico">🏪</div>
+                <div class="ss-txt"><div class="ss-title">Дэлгүүрийн тохиргоо</div><div class="ss-sub">Лого, нэр, тайлбар тохируулах</div></div>
+                <div class="ss-arrow">→</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan card -->
+        <div class="plan-card">
+          <div class="plan-head">
+            <h4>Одоогийн багц</h4>
+            <span class="plan-badge-free">Үнэгүй турших</span>
+          </div>
+          <div class="plan-body">
+            <div class="plan-days" id="plan-days">30</div>
+            <div class="plan-days-lbl">хоног үлдсэн</div>
+            <div class="plan-row"><span>Борлуулалтын хязгаар</span><span style="color:var(--t3)">Хязгааргүй</span></div>
+            <div class="plan-row"><span>Нийт бараа</span><span id="plan-prods">—</span></div>
+            <div class="plan-row"><span>Комисс</span><span>15%</span></div>
+            <button class="plan-btn">🛒 Багц авах</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="stats-row">
+        <div class="sc" data-icon="💰">
+          <div class="sc-lbl">ЭНЭ САРЫН ОРЛОГО</div>
+          <div class="sc-val" id="s-revenue">—</div>
+          <div class="sc-sub sc-up" id="s-rev-cmp">—</div>
+        </div>
+        <div class="sc" data-icon="🛒">
+          <div class="sc-lbl">ЭНЭ САРЫН ЗАХИАЛГА</div>
+          <div class="sc-val" id="s-month-ord">—</div>
+          <div class="sc-sub sc-neu" id="s-month-cmp">Өмнөх сар: —</div>
+        </div>
+        <div class="sc" data-icon="📦">
+          <div class="sc-lbl">НИЙТ БАРАА</div>
+          <div class="sc-val" id="s-prods">—</div>
+          <div class="sc-sub sc-neu" id="s-prods-sub">Идэвхтэй</div>
+        </div>
+        <div class="sc" data-icon="📢">
+          <div class="sc-lbl">AFFILIATE БОРЛУУЛАЛТ</div>
+          <div class="sc-val" id="s-aff-sales">—</div>
+          <div class="sc-sub sc-neu" id="s-aff-pct">Борлуулагчаар зарагдсан</div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="qa-title">⚡ Түргэн үйлдлүүд</div>
+      <div class="qa-grid">
+        <button class="qa highlight" onclick="openAddModal()">
+          <div class="qa-ico">➕</div>
+          <div class="qa-label">Бараа нэмэх</div>
+          <div class="qa-sub">Шинэ бараа нэмэх</div>
+        </button>
+        <button class="qa" onclick="gotoTab('orders')">
+          <div class="qa-ico">🛒</div>
+          <div class="qa-label">Захиалга удирдах</div>
+          <div class="qa-sub">Хүлээгдэж буй захиалга</div>
+        </button>
+        <button class="qa" onclick="gotoTab('products')">
+          <div class="qa-ico">📦</div>
+          <div class="qa-label">Барааны жагсаалт</div>
+          <div class="qa-sub">Бараагаа засах, харах</div>
+        </button>
+      </div>
+
+      <!-- Two col: recent orders + top products -->
+      <div class="two-col">
+        <div class="card">
+          <div class="card-head">
+            <h3>🛒 Сүүлийн захиалгууд</h3>
+            <button class="ch-more" onclick="gotoTab('orders')">Бүгдийг харах →</button>
+          </div>
+          <div id="recent-orders"><div class="empty-state"><div class="spin"></div><br>Ачааллаж байна...</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>🏆 Шилдэг борлуулалттай бараа</h3>
+            <button class="ch-more" onclick="gotoTab('products')">Бүгдийг харах →</button>
+          </div>
+          <div id="top-products"><div class="empty-state"><div class="spin"></div></div></div>
+        </div>
+      </div>
+
+    </div><!-- /dashboard -->
+
+    <!-- ════ ORDERS PANE ════ -->
+    <div id="pane-orders" style="display:none">
+      <div class="tab-bar">
+        <button class="tab on" id="ot-all"   onclick="filterOrders('all')">Бүгд</button>
+        <button class="tab" id="ot-pending"  onclick="filterOrders('pending')">⏳ Хүлээгдэж буй</button>
+        <button class="tab" id="ot-confirmed" onclick="filterOrders('confirmed')">✅ Баталгаажсан</button>
+        <button class="tab" id="ot-shipped"  onclick="filterOrders('shipped')">🚚 Явсан</button>
+        <button class="tab" id="ot-delivered" onclick="filterOrders('delivered')">📦 Хүргэгдсэн</button>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h3>Захиалгууд</h3>
+          <button class="ch-more" onclick="loadOrders()">🔄 Сэргээх</button>
+        </div>
+        <div id="orders-table"><div class="empty-state"><div class="spin"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ════ PRODUCTS PANE ════ -->
+    <div id="pane-products" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px;flex-wrap:wrap">
+        <input style="border:1.5px solid var(--bo);border-radius:10px;padding:9px 14px;font-size:13px;font-family:inherit;outline:none;min-width:220px;transition:.2s" type="text" placeholder="🔍 Бараа хайх..." oninput="filterProds(this.value)" id="prod-search">
+        <button class="tbtn tbtn-p" onclick="openAddModal()">+ Бараа нэмэх</button>
+      </div>
+      <div class="pgrid" id="prod-grid"><div class="empty-state" style="grid-column:1/-1"><div class="spin"></div></div></div>
+    </div>
+
+    <!-- ════ SETTINGS PANE ════ -->
+    <div id="pane-settings" style="display:none">
+      <!-- Store settings -->
+      <div class="card" style="max-width:600px;margin-bottom:20px">
+        <div class="card-head"><h3>🏪 Дэлгүүрийн мэдээлэл</h3></div>
+        <div style="padding:20px">
+          <div class="fg"><label>Дэлгүүрийн нэр</label><input id="cfg-name" placeholder="Жишээ: FashionMN"></div>
+          <div class="fg"><label>Тайлбар</label><textarea id="cfg-desc" rows="3" placeholder="Дэлгүүрийн тухай товч тайлбар..." style="resize:vertical"></textarea></div>
+          <div class="row2">
+            <div class="fg"><label>Лого URL</label><input id="cfg-logo" placeholder="https://..."></div>
+            <div class="fg"><label>Утас</label><input id="cfg-phone" placeholder="9900 0000"></div>
+          </div>
+          <div class="fg"><label>Хаяг</label><input id="cfg-address" placeholder="Улаанбаатар, Баянгол дүүрэг..."></div>
+          <button class="tbtn tbtn-p" onclick="saveSettings()" id="settings-btn">💾 Хадгалах</button>
+        </div>
+      </div>
+
+      <!-- Commission settings -->
+      <div class="card" style="max-width:600px;margin-bottom:20px">
+        <div class="card-head"><h3>📢 Борлуулагчийн комисс тохиргоо</h3></div>
+        <div style="padding:20px">
+          <p style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:16px">
+            Борлуулагчид таны барааг зарвал авах комиссын хувийг тохируулна.
+            Өндөр комисс = илүү олон борлуулагч сонирхоно.
+          </p>
+          <div class="row2">
+            <div class="fg">
+              <label>Үндсэн комисс (%)</label>
+              <input id="cfg-commission" type="number" min="5" max="50" value="15" placeholder="15">
+            </div>
+            <div class="fg">
+              <label>Хамгийн их комисс (%)</label>
+              <input id="cfg-max-commission" type="number" min="5" max="50" value="25" placeholder="25">
+            </div>
+          </div>
+          <div style="background:var(--al);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--a);font-weight:600;margin-bottom:12px">
+            💡 Жишээ: 15% комисстой бол 100,000₮-ийн бараа зарвал борлуулагч 15,000₮ авна
+          </div>
+          <button class="tbtn tbtn-p" onclick="saveCommission()">💾 Комисс хадгалах</button>
+        </div>
+      </div>
+
+      <!-- Payment settings -->
+      <div class="card" style="max-width:600px">
+        <div class="card-head"><h3>💳 Төлбөрийн тохиргоо</h3></div>
+        <div style="padding:20px">
+          <div class="fg"><label>Банкны нэр</label>
+            <select id="cfg-bank">
+              <option value="">Сонгох...</option>
+              <option value="khan">Хаан банк</option>
+              <option value="golomt">Голомт банк</option>
+              <option value="tdb">ХХБ</option>
+              <option value="state">Төрийн банк</option>
+              <option value="most">Мост мани</option>
+            </select>
+          </div>
+          <div class="row2">
+            <div class="fg"><label>Дансны дугаар</label><input id="cfg-account" placeholder="1234567890"></div>
+            <div class="fg"><label>Дансны нэр</label><input id="cfg-account-name" placeholder="Б. Бат"></div>
+          </div>
+          <button class="tbtn tbtn-p" onclick="savePayment()">💾 Хадгалах</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /main -->
+
+<!-- PRODUCT MODAL -->
+<div class="overlay" id="prod-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="mh">
+      <h3 id="modal-title">📦 Бараа нэмэх</h3>
+      <button class="mx" onclick="closeModal()">✕</button>
+    </div>
+    <div id="img-box" class="img-box" onclick="document.getElementById('m-img').focus()">
+      <div class="img-ph"><div class="pi">🖼️</div><p>Зургийн URL оруулна уу</p></div>
+    </div>
+    <div class="fg"><label>Барааны нэр <span style="color:var(--r)">*</span></label><input id="m-name" placeholder="Барааны нэр"></div>
+    <div class="fg"><label>Тайлбар</label><textarea id="m-desc" placeholder="Дэлгэрэнгүй тайлбар..."></textarea></div>
+    <div class="row2">
+      <div class="fg"><label>Үнэ (₮) <span style="color:var(--r)">*</span></label><input id="m-price" type="number" min="0" placeholder="0"></div>
+      <div class="fg"><label>Хямдралтай үнэ</label><input id="m-sale" type="number" min="0" placeholder="Заавал биш"></div>
+    </div>
+    <div class="row2">
+      <div class="fg">
+        <label>Ангилал</label>
+        <select id="m-cat">
+          <option value="fashion">👗 Хувцас</option>
+          <option value="food">🍔 Хоол</option>
+          <option value="electronics">📱 Электроник</option>
+          <option value="beauty">💄 Гоо сайхан</option>
+          <option value="home">🏡 Гэр</option>
+          <option value="sports">⚽ Спорт</option>
+          <option value="other">📦 Бусад</option>
+        </select>
+      </div>
+      <div class="fg"><label>Нөөц</label><input id="m-stock" type="number" min="0" value="10" placeholder="10"></div>
+    </div>
+    <div class="row2">
+      <div class="fg">
+        <label>Борлуулагчийн комисс (%)</label>
+        <input id="m-commission" type="number" min="0" max="50" value="15" placeholder="15">
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">Борлуулагчид зарсан бараа бүрээс авах хувь</div>
+      </div>
+      <div class="fg">
+        <label>Emoji (зурагүй бол)</label>
+        <input id="m-emoji" placeholder="📦" maxlength="4">
+      </div>
+    </div>
+    <div class="fg"><label>Зургийн URL</label><input id="m-img" placeholder="https://..." oninput="prevImg(this.value)"></div>
+    <div class="mbtns">
+      <button class="mbtn mbtn-s" onclick="closeModal()">Цуцлах</button>
+      <button class="mbtn mbtn-p" id="save-btn" onclick="saveProd()">💾 Хадгалах</button>
+    </div>
+  </div>
+</div>
+<!-- ORDER DETAIL MODAL -->
+<div class="overlay" id="order-modal" onclick="if(event.target===this)closeOrderModal()">
+  <div class="modal" style="max-width:540px">
+    <div class="mh">
+      <h3 id="om-title">📋 Захиалгын дэлгэрэнгүй</h3>
+      <button class="mx" onclick="closeOrderModal()">✕</button>
+    </div>
+    <div id="om-body" style="padding:0 20px 20px">
+      <div class="empty-state">Ачааллаж байна...</div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/seller.js"></script>
+</body>
+</html>

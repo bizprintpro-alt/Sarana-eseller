@@ -1,0 +1,46 @@
+/* ══════════════════════════════════════
+   eseller.mn — Design Tokens & Variables
+   ══════════════════════════════════════ */
+
+:root {
+  /* ── Brand ── */
+  --p: #CC0000;
+  --pd: #A30000;
+  --pl: #FFF0F0;
+
+  /* ── Semantic Colors ── */
+  --g: #059669;
+  --gl: #ECFDF5;
+  --a: #D97706;
+  --al: #FFFBEB;
+  --r: #DC2626;
+  --rl: #FEF2F2;
+  --c: #0891B2;
+  --cl: #E0F7FA;
+
+  /* ── Dark Theme ── */
+  --dark: #08090F;
+  --dark2: #0D1117;
+  --dark3: #161B27;
+
+  /* ── Neutral ── */
+  --bo: #E2E8F0;
+  --bg: #F8FAFC;
+
+  /* ── Text ── */
+  --t1: #0F172A;
+  --t2: #475569;
+  --t3: #94A3B8;
+
+  /* ── Typography ── */
+  --ff: 'Roboto', sans-serif;
+  --fh: 'Black Han Sans', sans-serif;
+
+  /* ── Role Accents ── */
+  --sel: #059669;
+  --sel-l: #ECFDF5;
+  --aff: #D97706;
+  --aff-l: #FFFBEB;
+  --del: #0891B2;
+  --del-l: #E0F7FA;
+}

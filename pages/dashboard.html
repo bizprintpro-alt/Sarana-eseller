@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Самбар — eseller.mn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/dashboard.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <a class="sb-logo" href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+      <svg width="24" height="22" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.15"/>
+        <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.4"/>
+        <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.9" opacity="0.5"/>
+        <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.5"/>
+        <line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.4"/>
+        <line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.4"/>
+      </svg>
+      <span style="font-size:17px;font-weight:900;color:#CC0000;letter-spacing:-0.4px">eseller</span>
+    </a>
+  <div class="sb-menu">
+    <div class="sb-sect">Үндсэн</div>
+    <a class="sb-item on" href="dashboard.html"><span class="sbi">📊</span>Самбар</a>
+    <a class="sb-item" href="storefront.html"><span class="sbi">🛒</span>Дэлгүүр</a>
+    <div class="sb-sect">Миний данс</div>
+    <a class="sb-item" href="#" id="role-link"><span class="sbi">🎯</span>Үндсэн самбар</a>
+    <a class="sb-item" href="#"><span class="sbi">📦</span>Захиалгууд</a>
+    <a class="sb-item" href="#"><span class="sbi">❤️</span>Хүслийн жагсаалт</a>
+    <a class="sb-item" href="#"><span class="sbi">⚙️</span>Тохиргоо</a>
+  </div>
+  <div class="sb-bot">
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-av">?</div>
+      <div><div class="sb-name" id="sb-name">...</div><div class="sb-role" id="sb-role"></div></div>
+    </div>
+    <a class="sb-item" href="#" onclick="Auth.logout()" style="margin-top:6px"><span class="sbi">🚪</span>Системээс гарах</a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pg-title">Самбар</div>
+    <div class="topbar-r">
+      <a class="tb-btn tb-btn-ghost" href="storefront.html">🛒 Дэлгүүр</a>
+      <a class="tb-btn tb-btn-ghost" href="#" onclick="Auth.logout()">Гарах</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="stat-grid">
+      <div class="sc sc-blue"><div class="sc-glow"></div><div class="sc-icon">📦</div><div class="sc-val" id="s-orders">—</div><div class="sc-lbl">Нийт захиалга</div></div>
+      <div class="sc sc-green"><div class="sc-glow"></div><div class="sc-icon">💰</div><div class="sc-val" id="s-revenue">—</div><div class="sc-lbl">Нийт зарцуулалт</div></div>
+      <div class="sc sc-amber"><div class="sc-glow"></div><div class="sc-icon">⏳</div><div class="sc-val" id="s-pending">—</div><div class="sc-lbl">Хүлээгдэж буй</div></div>
+      <div class="sc sc-red"><div class="sc-glow"></div><div class="sc-icon">✅</div><div class="sc-val" id="s-done">—</div><div class="sc-lbl">Хүргэгдсэн</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>🕐 Сүүлийн захиалгууд</h3>
+        <a href="#">Бүгдийг харах →</a>
+      </div>
+      <div id="orders-wrap"><div class="loading-box"><div class="spinner"></div><br>Ачааллаж байна...</div></div>
+    </div>
+  </div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/dashboard.js"></script>
+</body>
+</html>

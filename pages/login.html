@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eseller.mn — Нэвтрэх / Бүртгүүлэх</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/login.css">
+</head>
+<body class="login-page">
+
+<!-- LEFT -->
+<div class="left">
+  <div class="l-grid"></div>
+  <div class="l-orb lo1"></div>
+  <div class="l-orb lo2"></div>
+
+  <a class="l-logo" href="../index.html">
+    <svg width="26" height="24" viewBox="0 0 28 26" fill="none">
+      <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity=".12"/>
+      <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.3"/>
+      <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width=".8" opacity=".5"/>
+    </svg>
+    <span class="l-logo-text">eseller<em>.mn</em></span>
+  </a>
+
+  <h2 class="l-headline">
+    Борлуулалт<br>
+    <em>хамтдаа л байна.</em>
+  </h2>
+  <p class="l-sub">
+    Барааны эзэн дангаараа борлуулж чадахгүй. Борлуулагчтай нэгдэж, хамтдаа ашиг ол. Экосистемд бүгдэд байр бий.
+  </p>
+
+  <div class="role-props">
+    <div class="rp rp-sell">
+      <div class="rp-ic">🏪</div>
+      <div class="rp-body"><h4>Дэлгүүр эзэн</h4><p>Бараагаа байршуул. Борлуулагчдын сүлжээ зарна.</p></div>
+      <span class="rp-earn">70–85%</span>
+    </div>
+    <div class="rp rp-aff">
+      <div class="rp-ic">📢</div>
+      <div class="rp-body"><h4>Борлуулагч</h4><p>Өөрийн сүлжээгээр бараа зарж комисс ол.</p></div>
+      <span class="rp-earn">10–20%</span>
+    </div>
+    <div class="rp rp-buy">
+      <div class="rp-ic">🛍️</div>
+      <div class="rp-body"><h4>Худалдан авагч</h4><p>Хамгийн сайн бараа, шилдэг үнэ, хурдан хүргэлт.</p></div>
+      <span class="rp-earn">2–4ц хүргэлт</span>
+    </div>
+    <div class="rp rp-del">
+      <div class="rp-ic">🚚</div>
+      <div class="rp-body"><h4>Жолооч</h4><p>Цагаа өөрөө тохируулж нэмэлт орлого ол.</p></div>
+      <span class="rp-earn">Хүргэлт бүрт</span>
+    </div>
+  </div>
+
+  <p class="l-foot">© 2026 eseller.mn · Улаанбаатар, Монгол</p>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="box">
+    <a class="mob-logo" href="../index.html">
+      <svg width="24" height="22" viewBox="0 0 28 26" fill="none">
+        <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity=".12"/>
+        <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.3"/>
+      </svg>
+      <span class="mob-logo-text">eseller<em>.mn</em></span>
+    </a>
+
+    <div class="tabs">
+      <button class="tab on" id="t-in" onclick="show('login')">Нэвтрэх</button>
+      <button class="tab" id="t-reg" onclick="show('reg')">Бүртгүүлэх</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="pane-login">
+      <div class="ptitle">Сайн уу! 👋</div>
+      <div class="psub">Данс руугаа нэвтрэх</div>
+      <div class="alert" id="l-alert"></div>
+      <div class="fg">
+        <label>Имэйл хаяг</label>
+        <input id="l-email" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="fg">
+        <label>Нууц үг</label>
+        <div class="pw-wrap">
+          <input id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+          <button class="pw-tog" onclick="togglePw('l-pass',this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <button class="sbtn" id="l-btn" onclick="doLogin()">Нэвтрэх</button>
+      <p class="switch-txt">Данс байхгүй юу? <a href="#" onclick="show('reg')">Бүртгүүлэх</a></p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="pane-reg" style="display:none">
+      <div class="ptitle">Нэгдэцгээе! 🚀</div>
+      <div class="psub">Та ямар үүргээр нэгдэх вэ?</div>
+      <div class="alert" id="r-alert"></div>
+
+      <div class="fg">
+        <label>Үүрэг сонгох</label>
+        <div class="role-selector">
+          <div class="rs-card rp-sell on" data-role="seller" onclick="selectRole(this,'sel-seller')">
+            <div class="rs-radio"></div>
+            <div class="rs-ic">🏪</div>
+            <div class="rs-body"><h5>Дэлгүүр эзэн</h5><p>Бараагаа байршуулж, борлуулагчдаар зарлуул</p></div>
+            <span class="rs-badge">70–85%</span>
+          </div>
+          <div class="rs-card rp-aff" data-role="affiliate" onclick="selectRole(this,'sel-affiliate')">
+            <div class="rs-radio"></div>
+            <div class="rs-ic">📢</div>
+            <div class="rs-body"><h5>Борлуулагч</h5><p>Линкээр зарж комисс ол — агуулах хэрэггүй</p></div>
+            <span class="rs-badge">10–20%</span>
+          </div>
+          <div class="rs-card rp-buy" data-role="buyer" onclick="selectRole(this,'sel-buyer')">
+            <div class="rs-radio"></div>
+            <div class="rs-ic">🛍️</div>
+            <div class="rs-body"><h5>Худалдан авагч</h5><p>Бараа худалдаж авах</p></div>
+            <span class="rs-badge">Үнэгүй</span>
+          </div>
+          <div class="rs-card rp-del" data-role="delivery" onclick="selectRole(this,'sel-delivery')">
+            <div class="rs-radio"></div>
+            <div class="rs-ic">🚚</div>
+            <div class="rs-body"><h5>Жолооч</h5><p>Захиалга хүргэж орлого ол</p></div>
+            <span class="rs-badge">Хүргэлт бүрт</span>
+          </div>
+        </div>
+        <input type="hidden" id="r-role" value="seller">
+      </div>
+
+      <div class="fg"><label>Бүтэн нэр</label>
+        <input id="r-name" type="text" placeholder="Таны нэр" autocomplete="name"></div>
+      <div class="fg"><label>Имэйл хаяг</label>
+        <input id="r-email" type="email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="fg">
+        <label>Нууц үг <span id="pw-hint" style="text-transform:none;font-weight:500;color:var(--t3);font-size:11px"></span></label>
+        <div class="pw-wrap">
+          <input id="r-pass" type="password" placeholder="Дор хаяж 6 тэмдэгт"
+            autocomplete="new-password" oninput="checkPw(this.value)">
+          <button class="pw-tog" onclick="togglePw('r-pass',this)" tabindex="-1">👁</button>
+        </div>
+        <div class="pw-bar"><div class="pw-bar-fill" id="pw-fill"></div></div>
+      </div>
+
+      <button class="sbtn" id="r-btn" onclick="doReg()">Бүртгүүлэх →</button>
+      <p class="switch-txt">Данс байгаа юу? <a href="#" onclick="show('login')">Нэвтрэх</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="m-bnav">
+  <div class="m-bnav-inner">
+    <a class="m-btab" href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Нүүр</span>
+    </a>
+    <a class="m-btab" href="storefront.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span>Дэлгүүр</span>
+    </a>
+    <a class="m-btab active" href="login.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Профайл</span>
+    </a>
+  </div>
+</nav>
+<a class="m-msn" href="https://m.me/eseller.mn" target="_blank">
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.145 2 11.243c0 2.936 1.46 5.56 3.757 7.31v3.59l3.44-1.895c.92.257 1.895.394 2.903.394 5.523 0 10-4.144 10-9.244C22 6.145 17.523 2 12 2zm.97 12.41l-2.54-2.71-4.96 2.71 5.46-5.8 2.61 2.71 4.9-2.71-5.47 5.8z"/></svg>
+</a>
+
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/login.js"></script>
+</body>
+</html>

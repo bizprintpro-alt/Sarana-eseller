@@ -1,0 +1,123 @@
+/* ══════════════════════════════════════
+   eseller.mn — Shared Components
+   Nav, Footer, Mobile Nav, Messenger
+   ══════════════════════════════════════ */
+
+/* ── DESKTOP TOP NAV (dark / landing) ── */
+nav.topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 64px; display: flex; align-items: center;
+  padding: 0 6%; gap: 16px; transition: all .3s;
+}
+nav.topnav.scrolled {
+  background: rgba(8,9,15,.95); backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(255,255,255,.05);
+}
+.nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0; }
+.nav-logo-text { font-size: 21px; font-weight: 900; color: #fff; letter-spacing: -.5px; }
+.nav-logo-text em { color: var(--p); font-style: normal; }
+.nav-sp { flex: 1; }
+.nav-a {
+  color: rgba(255,255,255,.6); text-decoration: none;
+  font-size: 14px; font-weight: 600;
+  padding: 6px 14px; border-radius: 8px; transition: .15s;
+}
+.nav-a:hover { color: #fff; background: rgba(255,255,255,.07); }
+.nav-btn {
+  background: var(--p); color: #fff;
+  font-size: 13px; font-weight: 800;
+  padding: 9px 22px; border-radius: 10px;
+  text-decoration: none; transition: .2s; white-space: nowrap;
+}
+.nav-btn:hover { background: var(--pd); transform: translateY(-1px); }
+
+/* ── LIGHT NAV (storefront pages) ── */
+nav.lightnav {
+  background: #fff; border-bottom: 1px solid var(--bo);
+  height: 60px; display: flex; align-items: center;
+  padding: 0 20px; gap: 12px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+}
+.logo {
+  font-size: 19px; font-weight: 900; color: var(--p);
+  text-decoration: none; letter-spacing: -.5px; flex-shrink: 0;
+}
+.logo em { color: var(--a); font-style: normal; }
+
+/* ── eseller SVG Logo ── */
+.eseller-logo-svg { flex-shrink: 0; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--dark);
+  padding: 44px 6%; text-align: center;
+}
+.ft-logo { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+.ft-logo em { color: var(--p); font-style: normal; }
+footer p { font-size: 13px; color: rgba(255,255,255,.25); }
+footer a { color: rgba(255,255,255,.25); text-decoration: none; }
+footer a:hover { color: rgba(255,255,255,.5); }
+
+/* ══════════════════════════════════════
+   MOBILE BOTTOM NAV + MESSENGER FLOAT
+   ══════════════════════════════════════ */
+.m-bnav {
+  display: none;
+  position: fixed !important;
+  bottom: 0 !important; top: auto !important;
+  left: 0; right: 0;
+  height: 64px; background: #fff;
+  border-top: 1px solid #E2E8F0;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+  z-index: 9999;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.m-bnav-inner { display: flex; align-items: stretch; height: 100%; }
+.m-btab {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 3px;
+  border: none; background: transparent; cursor: pointer;
+  text-decoration: none; color: #94A3B8;
+  font-size: 10px; font-weight: 600; font-family: var(--ff);
+  padding: 6px 4px; transition: color .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.m-btab.active, .m-btab:active { color: #CC0000; }
+.m-btab svg { width: 22px; height: 22px; stroke-width: 1.8; }
+.m-btab .m-badge {
+  position: absolute; top: 8px; right: calc(50% - 14px);
+  background: var(--p); color: #fff;
+  font-size: 9px; font-weight: 800;
+  min-width: 16px; height: 16px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px;
+}
+
+/* ── Messenger Float ── */
+.m-msn {
+  display: none;
+  position: fixed !important;
+  bottom: 76px !important; top: auto !important;
+  right: 16px; width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00C6FF, #0078FF);
+  box-shadow: 0 4px 16px rgba(0,120,255,.4);
+  align-items: center; justify-content: center;
+  z-index: 9998; text-decoration: none;
+  animation: msnpop .3s cubic-bezier(.34,1.56,.64,1) both;
+}
+.m-msn svg { width: 28px; height: 28px; fill: #fff; }
+@keyframes msnpop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .m-bnav { display: flex; }
+  .m-msn  { display: flex; }
+  body { padding-bottom: 64px; }
+  body nav.topnav { display: none !important; }
+}
+@media (min-width: 769px) {
+  .m-bnav { display: none !important; }
+  .m-msn  { display: none !important; }
+}

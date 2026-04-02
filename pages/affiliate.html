@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Борлуулагч — eseller.mn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/variables.css">
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/pages/affiliate.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <a class="sb-logo" href="../index.html">
+    <svg width="22" height="20" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.15"/><polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.4"/><polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.9" opacity="0.5"/><line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.5"/><line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.4"/><line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.4"/></svg><span style="font-size:16px;font-weight:900;color:#CC0000;letter-spacing:-.4px">eseller</span>
+    <span class="sb-badge-aff">Борлуулагч</span>
+  </a>
+  <div class="sb-menu">
+    <div class="sb-sect">Үндсэн</div>
+    <button class="sb-item on" id="nav-overview" onclick="switchTab('overview')"><span class="ico">📊</span>Самбар</button>
+    <button class="sb-item" id="nav-browse" onclick="switchTab('browse')"><span class="ico">🛍️</span>Бараа сонгох</button>
+    <button class="sb-item" id="nav-links" onclick="switchTab('links')"><span class="ico">🔗</span>Миний линкүүд</button>
+    <div class="sb-sect">Санхүү</div>
+    <button class="sb-item" id="nav-earnings" onclick="switchTab('earnings')"><span class="ico">💰</span>Орлого & Татах</button>
+    <div class="sb-sect">Бусад</div>
+    <a class="sb-item" href="storefront.html"><span class="ico">🏪</span>Дэлгүүр</a>
+    <button class="sb-item" onclick="Auth.logout()"><span class="ico">🚪</span>Гарах</button>
+  </div>
+  <div class="sb-bot">
+    <div class="sb-wallet">
+      <div class="sw-lbl">💳 Миний түрийвч</div>
+      <div class="sw-val" id="wallet-bal">₮0</div>
+      <button class="sw-btn" onclick="switchTab('earnings')">💸 Мөнгө татах</button>
+    </div>
+    <div class="sb-user">
+      <div class="sb-av" id="sb-av">?</div>
+      <div>
+        <div style="font-size:13px;font-weight:700" id="sb-name">...</div>
+        <div style="font-size:11px;color:var(--t3)">Борлуулагч</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pg-title">Миний самбар</div>
+    <div class="tb-r">
+      <button class="tb-btn btn-p" onclick="switchTab('browse')">🚀 Start Selling</button>
+      <button class="tb-btn btn-ghost" onclick="Auth.logout()">Гарах</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ── OVERVIEW TAB ── -->
+    <div id="pane-overview">
+      <div class="stat-row">
+        <div class="sc"><div class="sc-icon">🔗</div><div class="sc-val" id="s-links">0</div><div class="sc-lbl">Нийт линк</div></div>
+        <div class="sc"><div class="sc-icon">👆</div><div class="sc-val" id="s-clicks">0</div><div class="sc-lbl">Нийт клик</div></div>
+        <div class="sc"><div class="sc-icon">🛒</div><div class="sc-val" id="s-sales">0</div><div class="sc-lbl">Борлуулалт</div><div class="sc-sub up" id="s-cvr"></div></div>
+        <div class="sc"><div class="sc-icon">💰</div><div class="sc-val" id="s-earned">₮0</div><div class="sc-lbl">Нийт орлого</div><div class="sc-sub up" id="s-pending-earn"></div></div>
+      </div>
+
+      <div class="refbox">
+        <div class="ref-lbl">📎 Таны ерөнхий referral линк</div>
+        <div class="ref-link-row">
+          <div class="ref-link" id="main-ref-link">eseller.mn/ref/...</div>
+          <button class="ref-copy" onclick="copyLink(document.getElementById('main-ref-link').textContent)">📋 Хуулах</button>
+        </div>
+        <div class="share-btns">
+          <button class="share-btn sb-fb" onclick="shareLink('facebook')">Facebook</button>
+          <button class="share-btn sb-ig" onclick="shareLink('instagram')">Instagram</button>
+          <button class="share-btn sb-wa" onclick="shareLink('whatsapp')">WhatsApp</button>
+          <button class="share-btn sb-tw" onclick="shareLink('twitter')">Twitter</button>
+          <button class="share-btn sb-tg" onclick="shareLink('telegram')">Telegram</button>
+        </div>
+      </div>
+
+      <!-- Top performing links -->
+      <div class="card">
+        <div class="card-head"><h3>🔥 Шилдэг линкүүд</h3><button class="tb-btn btn-ghost" style="padding:6px 12px;font-size:12px" onclick="switchTab('links')">Бүгдийг харах →</button></div>
+        <div id="top-links-wrap"><div class="empty"><div class="sp"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ── BROWSE TAB ── -->
+    <div id="pane-browse" style="display:none">
+      <div class="section-head">
+        <div class="section-title">🛍️ Бараа сонгоод зарж эхэл</div>
+        <input type="text" placeholder="🔍 Бараа хайх..." style="border:1.5px solid var(--bo);border-radius:9px;padding:8px 13px;font-size:13px;font-family:inherit;outline:none;width:200px" oninput="filterBrowse(this.value)">
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="cat-filters">
+        <button class="tb-btn on" style="border:1.5px solid var(--p);background:var(--pl);color:var(--p)" onclick="catBrowse(this,'')">Бүгд</button>
+        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'fashion')">👗 Хувцас</button>
+        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'electronics')">📱 Электроник</button>
+        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'food')">🍔 Хоол</button>
+        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'beauty')">💄 Гоо сайхан</button>
+      </div>
+      <div class="pgrid" id="browse-grid"><div style="grid-column:1/-1;text-align:center;padding:32px"><div class="sp"></div></div></div>
+    </div>
+
+    <!-- ── LINKS TAB ── -->
+    <div id="pane-links" style="display:none">
+      <div class="card">
+        <div class="card-head">
+          <h3>🔗 Миний бүх линкүүд</h3>
+          <button class="tb-btn btn-p" onclick="switchTab('browse')">+ Шинэ линк</button>
+        </div>
+        <div id="links-wrap"><div class="empty"><div class="sp"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ── EARNINGS TAB ── -->
+    <div id="pane-earnings" style="display:none">
+      <div class="earn-split">
+        <div class="earn-card">
+          <div class="ec-label">💳 Түрийвч (татаж авах боломжтой)</div>
+          <div class="ec-val" id="e-balance">₮0</div>
+          <div class="ec-sub">Банкны дансруу шилжүүлэх</div>
+        </div>
+        <div class="earn-card">
+          <div class="ec-label">⏳ Хүлээгдэж буй орлого</div>
+          <div class="ec-val" style="color:var(--a)" id="e-pending">₮0</div>
+          <div class="ec-sub">Захиалга хүргэгдсэний дараа баталгаажна</div>
+        </div>
+      </div>
+
+      <div class="withdraw-form">
+        <div class="wf-title">💸 Мөнгө татах хүсэлт</div>
+        <div class="row2">
+          <div class="fg">
+            <label>Банк</label>
+            <select id="w-bank">
+              <option value="golomt">Голомт банк</option>
+              <option value="khan">Хаан банк</option>
+              <option value="tdb">Худалдаа хөгжлийн банк</option>
+              <option value="khas">Хас банк</option>
+              <option value="state">Төрийн банк</option>
+              <option value="bogd">Богд банк</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Дансны дугаар</label>
+            <input id="w-account" type="text" placeholder="1234567890">
+          </div>
+        </div>
+        <div class="fg">
+          <label>Дүн (₮)</label>
+          <input id="w-amount" type="number" placeholder="Татах дүн">
+        </div>
+        <button class="tb-btn btn-g" style="width:100%;justify-content:center;padding:12px" id="withdraw-btn" onclick="requestWithdraw()">
+          💸 Татах хүсэлт илгээх
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>📋 Гүйлгээний түүх</h3></div>
+        <div id="txn-wrap" style="padding:8px 16px">
+          <div class="empty"><div class="sp"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- START SELLING MODAL -->
+<div class="overlay" id="sell-modal" onclick="if(event.target===this)closeSellModal()">
+  <div class="modal">
+    <h3>🚀 Start Selling</h3>
+    <div style="font-size:13px;color:var(--t2);margin-bottom:14px" id="sm-prod-name"></div>
+    <div class="comm-info" id="sm-comm">💰 Комисс: 15% — нэг борлуулалтаас автоматаар орно</div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:8px;font-weight:500">Таны уникал линк:</div>
+    <div class="link-preview" id="sm-link">Үүсгэж байна...</div>
+    <div class="share-btns" id="sm-share-btns">
+      <button class="share-btn sb-fb" onclick="shareProductLink('facebook')">Facebook</button>
+      <button class="share-btn sb-wa" onclick="shareProductLink('whatsapp')">WhatsApp</button>
+      <button class="share-btn sb-tg" onclick="shareProductLink('telegram')">Telegram</button>
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn mbtn-s" onclick="closeSellModal()">Хаах</button>
+      <button class="mbtn mbtn-p" onclick="copyLink(document.getElementById('sm-link').textContent)">📋 Линк хуулах</button>
+    </div>
+  </div>
+</div>
+<script src="../js/api.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/pages/affiliate.js"></script>
+</body>
+</html>
