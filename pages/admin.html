@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="mn">
+<html lang="mn" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -8,301 +8,241 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/variables.css">
 <link rel="stylesheet" href="../css/global.css">
-<link rel="stylesheet" href="../css/components.css">
 <link rel="stylesheet" href="../css/pages/admin.css">
 </head>
 <body>
 
-<div class="sidebar">
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
   <a class="sb-logo" href="../index.html">
-    <svg width="22" height="20" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.15"/>
-      <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.4"/>
-      <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.9" opacity="0.5"/>
-    </svg>
-    <span style="font-size:16px;font-weight:900;color:#CC0000;letter-spacing:-.4px">eseller</span>
-    <span class="sb-admin-tag">ADMIN</span>
+    <svg width="22" height="20" viewBox="0 0 28 26" fill="none"><polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity=".15"/><polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.4"/></svg>
+    <span>eseller<em>.mn</em></span>
+    <span class="sb-admin-badge">ADMIN</span>
   </a>
-  <div class="sb-menu">
-    <div class="sb-sect">Ерөнхий</div>
-    <button class="sb-item on" id="nav-dashboard" onclick="switchTab('dashboard')"><span class="ico">📊</span>Самбар</button>
-    <button class="sb-item" id="nav-orders" onclick="switchTab('orders')"><span class="ico">🛒</span>Захиалгууд<span class="sb-badge" id="ord-badge">!</span></button>
+
+  <nav class="sb-menu">
+    <div class="sb-sect">Тойм</div>
+    <button class="sb-item on" id="nav-dashboard" onclick="switchTab('dashboard')"><span class="si">📊</span>Самбар</button>
+    <button class="sb-item" id="nav-predictions" onclick="switchTab('predictions')"><span class="si">🔮</span>Таамаглал<span class="sb-new">AI</span></button>
+
+    <div class="sb-sect">Удирдлага</div>
+    <button class="sb-item" id="nav-orders" onclick="switchTab('orders')"><span class="si">🛒</span>Захиалга<span class="sb-badge" id="ord-badge"></span></button>
+    <button class="sb-item" id="nav-users" onclick="switchTab('users')"><span class="si">👥</span>Хэрэглэгчид</button>
+    <button class="sb-item" id="nav-shops" onclick="switchTab('shops')"><span class="si">🏪</span>Дэлгүүрүүд</button>
+    <button class="sb-item" id="nav-affiliates" onclick="switchTab('affiliates')"><span class="si">📢</span>Борлуулагчид</button>
+
     <div class="sb-sect">Санхүү</div>
-    <button class="sb-item" id="nav-payouts" onclick="switchTab('payouts')"><span class="ico">💸</span>Мөнгө татах<span class="sb-badge" id="pay-badge" style="display:none"></span></button>
-    <button class="sb-item" id="nav-commission" onclick="switchTab('commission')"><span class="ico">⚙️</span>Комисс тохируулах</button>
-    <div class="sb-sect">Хэрэглэгч</div>
-    <button class="sb-item" id="nav-users" onclick="switchTab('users')"><span class="ico">👥</span>Хэрэглэгчид</button>
-    <button class="sb-item" id="nav-shops" onclick="switchTab('shops')"><span class="ico">🏪</span>Дэлгүүрүүд</button>
-    <button class="sb-item" id="nav-affiliates" onclick="switchTab('affiliates')"><span class="ico">📢</span>Борлуулагчид</button>
-    <div class="sb-sect">Системийн</div>
-    <button class="sb-item" id="nav-reports" onclick="switchTab('reports')"><span class="ico">📈</span>Тайлан</button>
-    <a class="sb-item" href="storefront.html"><span class="ico">🌐</span>Дэлгүүр харах</a>
-    <button class="sb-item" onclick="Auth.logout()"><span class="ico">🚪</span>Гарах</button>
-  </div>
+    <button class="sb-item" id="nav-payouts" onclick="switchTab('payouts')"><span class="si">💸</span>Мөнгө татах<span class="sb-badge" id="pay-badge"></span></button>
+    <button class="sb-item" id="nav-commission" onclick="switchTab('commission')"><span class="si">⚙️</span>Комисс</button>
+    <button class="sb-item" id="nav-reports" onclick="switchTab('reports')"><span class="si">📈</span>Тайлан</button>
+
+    <div class="sb-sect">Систем</div>
+    <button class="sb-item" id="nav-behavior" onclick="switchTab('behavior')"><span class="si">🧠</span>Зан төлөв<span class="sb-new">NEW</span></button>
+    <button class="sb-item" id="nav-chatbot" onclick="switchTab('chatbot')"><span class="si">🤖</span>AI Туслах<span class="sb-new">AI</span></button>
+  </nav>
+
   <div class="sb-bot">
     <div class="sb-user">
-      <div class="sb-av" id="sb-av">A</div>
+      <div class="sb-av" id="sb-av">AD</div>
       <div>
-        <div style="font-size:13px;font-weight:700;color:#fff" id="sb-name">Admin</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.4)">Системийн админ</div>
+        <div class="sb-name" id="sb-name">Admin</div>
+        <div style="font-size:11px;color:var(--t3)">Супер админ</div>
       </div>
     </div>
+    <button class="sb-logout" onclick="Auth.logout()">🚪 Гарах</button>
   </div>
-</div>
+</aside>
 
+<!-- ═══ MAIN ═══ -->
 <div class="main">
-  <div class="topbar">
-    <div class="page-title" id="pg-title">Admin самбар</div>
-    <div class="tb-r">
-      <span style="font-size:12px;color:var(--t3);font-weight:500" id="last-update"></span>
-      <button class="tb-btn btn-ghost" onclick="refreshAll()">🔄 Сэргээх</button>
-      <button class="tb-btn btn-ghost" onclick="Auth.logout()">Гарах</button>
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="page-title" id="pg-title">Админ самбар</div>
+      <div class="tb-sub" id="last-update">Сүүлд: —</div>
     </div>
-  </div>
+    <div class="tb-r">
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Dark/Light горим">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <button class="tbtn tbtn-g" onclick="refreshAll()">🔄 Сэргээх</button>
+      <a class="tbtn tbtn-g" href="storefront.html" target="_blank">🏪 Дэлгүүр</a>
+    </div>
+  </header>
 
   <div class="content">
 
-    <!-- ── DASHBOARD TAB ── -->
+    <!-- ════ DASHBOARD ════ -->
     <div id="pane-dashboard">
-      <div class="stat-grid">
-        <div class="sc sc-p"><div class="sc-glow"></div><div class="sc-icon">💰</div><div class="sc-val" id="d-gmv">₮0</div><div class="sc-lbl">Нийт борлуулалт (GMV)</div><div class="sc-badge badge-up" id="d-gmv-b"></div></div>
-        <div class="sc sc-g"><div class="sc-glow"></div><div class="sc-icon">🏦</div><div class="sc-val" id="d-revenue">₮0</div><div class="sc-lbl">Платформын орлого</div><div class="sc-badge badge-up" id="d-rev-b"></div></div>
-        <div class="sc sc-a"><div class="sc-glow"></div><div class="sc-icon">📦</div><div class="sc-val" id="d-orders">0</div><div class="sc-lbl">Захиалга (сар)</div></div>
-        <div class="sc sc-r"><div class="sc-glow"></div><div class="sc-icon">⏳</div><div class="sc-val" id="d-pending-pay">₮0</div><div class="sc-lbl">Мөнгө татах хүлээгдэж буй</div></div>
-        <div class="sc sc-p"><div class="sc-glow"></div><div class="sc-icon">👥</div><div class="sc-val" id="d-users">0</div><div class="sc-lbl">Нийт хэрэглэгч</div></div>
-        <div class="sc sc-g"><div class="sc-glow"></div><div class="sc-icon">🏪</div><div class="sc-val" id="d-shops">0</div><div class="sc-lbl">Идэвхтэй дэлгүүр</div></div>
-        <div class="sc sc-a"><div class="sc-glow"></div><div class="sc-icon">📢</div><div class="sc-val" id="d-affs">0</div><div class="sc-lbl">Борлуулагч</div></div>
-        <div class="sc sc-r"><div class="sc-glow"></div><div class="sc-icon">🚚</div><div class="sc-val" id="d-drivers">0</div><div class="sc-lbl">Идэвхтэй жолооч</div></div>
+      <div class="stats-row-main">
+        <div class="sc sc-big" data-icon="💰" onclick="drillDown('gmv')">
+          <div class="sc-lbl">НИЙТ GMV</div>
+          <div class="sc-val" id="d-gmv">—</div>
+          <div class="sc-sub sc-up" id="d-gmv-b">—</div>
+          <div class="sc-drill">Дэлгэрэнгүй →</div>
+        </div>
+        <div class="sc sc-big" data-icon="📊" onclick="drillDown('revenue')">
+          <div class="sc-lbl">ПЛАТФОРМ ОРЛОГО</div>
+          <div class="sc-val" id="d-revenue">—</div>
+          <div class="sc-sub sc-up" id="d-rev-b">—</div>
+          <div class="sc-drill">Дэлгэрэнгүй →</div>
+        </div>
+        <div class="sc sc-big" data-icon="🛒" onclick="drillDown('orders')">
+          <div class="sc-lbl">НИЙТ ЗАХИАЛГА</div>
+          <div class="sc-val" id="d-orders">—</div>
+          <div class="sc-sub sc-neu">Бүгд</div>
+          <div class="sc-drill">Дэлгэрэнгүй →</div>
+        </div>
+        <div class="sc sc-big" data-icon="💸" onclick="drillDown('payouts')">
+          <div class="sc-lbl">ХҮЛЭЭГДЭЖ БУЙ ТӨЛБӨР</div>
+          <div class="sc-val" id="d-pending-pay">—</div>
+          <div class="sc-sub sc-neu">Батлах шаардлагатай</div>
+          <div class="sc-drill">Дэлгэрэнгүй →</div>
+        </div>
       </div>
 
-      <div class="grid2">
-        <div class="card">
-          <div class="card-head"><h3>🕐 Сүүлийн захиалгууд</h3><button class="tb-btn btn-ghost" style="padding:5px 10px;font-size:12px" onclick="switchTab('orders')">Бүгдийг харах →</button></div>
-          <div id="recent-orders"><div class="loading"><div class="sp"></div></div></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h3>🔔 Шинэ үйл явдал</h3></div>
-          <div id="activity-list" style="padding:0 16px">
-            <div class="activity-item">
-              <div class="ai-dot ai-g">🛒</div>
-              <div><div class="ai-text">Б. Мөнхбат шинэ захиалга хийлээ</div><div class="ai-time">2 минутын өмнө</div></div>
-            </div>
-            <div class="activity-item">
-              <div class="ai-dot ai-p">📢</div>
-              <div><div class="ai-text">Э. Бат-Эрдэнэ борлуулагчаар бүртгүүллээ</div><div class="ai-time">15 минутын өмнө</div></div>
-            </div>
-            <div class="activity-item">
-              <div class="ai-dot ai-a">💸</div>
-              <div><div class="ai-text">Д. Саран ₮85,000 татах хүсэлт илгээлээ</div><div class="ai-time">32 минутын өмнө</div></div>
-            </div>
-            <div class="activity-item">
-              <div class="ai-dot ai-g">🏪</div>
-              <div><div class="ai-text">FashionMN шинэ дэлгүүр нээлээ</div><div class="ai-time">1 цагийн өмнө</div></div>
-            </div>
-            <div class="activity-item">
-              <div class="ai-dot ai-r">⚠️</div>
-              <div><div class="ai-text">3 захиалга хүлээгдэж байна (48ц+)</div><div class="ai-time">2 цагийн өмнө</div></div>
-            </div>
-          </div>
-        </div>
+      <div class="stats-row">
+        <div class="sc" data-icon="👥"><div class="sc-lbl">ХЭРЭГЛЭГЧИД</div><div class="sc-val" id="d-users">—</div></div>
+        <div class="sc" data-icon="🏪"><div class="sc-lbl">ДЭЛГҮҮР</div><div class="sc-val" id="d-shops">—</div></div>
+        <div class="sc" data-icon="📢"><div class="sc-lbl">БОРЛУУЛАГЧ</div><div class="sc-val" id="d-affs">—</div></div>
+        <div class="sc" data-icon="🚚"><div class="sc-lbl">ЖОЛООЧ</div><div class="sc-val" id="d-drivers">—</div></div>
       </div>
+
+      <div class="section-title">⚡ Шуурхай үйлдэл</div>
+      <div class="qa-grid">
+        <button class="qa qa-pending" onclick="switchTab('orders')">
+          <div class="qa-ico">⏳</div><div class="qa-val" id="qa-pending">0</div><div class="qa-label">Хүлээгдэж буй</div>
+        </button>
+        <button class="qa qa-payouts" onclick="switchTab('payouts')">
+          <div class="qa-ico">💸</div><div class="qa-val" id="qa-payouts">0</div><div class="qa-label">Татах хүсэлт</div>
+        </button>
+        <button class="qa qa-churn" onclick="switchTab('behavior')">
+          <div class="qa-ico">⚠️</div><div class="qa-val" id="qa-churn">0</div><div class="qa-label">Анхаарах</div>
+        </button>
+        <button class="qa qa-new" onclick="switchTab('users')">
+          <div class="qa-ico">🆕</div><div class="qa-val" id="qa-new-users">0</div><div class="qa-label">Шинэ (7 хоног)</div>
+        </button>
+      </div>
+
+      <div class="two-col">
+        <div class="card"><div class="card-head"><h3>🛒 Сүүлийн захиалгууд</h3><button class="ch-more" onclick="switchTab('orders')">Бүгдийг →</button></div><div id="recent-orders"><div class="loading">Ачааллаж байна...</div></div></div>
+        <div class="card"><div class="card-head"><h3>🏆 ТОП 5 бүтээгдэхүүн</h3></div><div id="top5-products"><div class="loading">Ачааллаж байна...</div></div></div>
+      </div>
+      <div class="card"><div class="card-head"><h3>🏪 ТОП 5 дэлгүүр</h3><button class="ch-more" onclick="switchTab('shops')">Бүгдийг →</button></div><div id="top5-shops"><div class="loading">Ачааллаж байна...</div></div></div>
     </div>
 
-    <!-- ── ORDERS TAB ── -->
+    <!-- ════ PREDICTIONS ════ -->
+    <div id="pane-predictions" style="display:none">
+      <div class="pred-grid">
+        <div class="pred-card"><div class="pred-head"><span class="pred-ico">📈</span><h3>Орлогын таамаглал</h3></div><div id="pred-revenue" class="pred-body">Тооцоолж байна...</div></div>
+        <div class="pred-card"><div class="pred-head"><span class="pred-ico">🛒</span><h3>Захиалгын таамаг</h3></div><div id="pred-orders" class="pred-body">Тооцоолж байна...</div></div>
+        <div class="pred-card pred-wide"><div class="pred-head"><span class="pred-ico">💡</span><h3>AI Зөвлөмж</h3><span class="sb-new">AI</span></div><div id="pred-recommendations" class="pred-body">Дүн шинжилгээ хийж байна...</div></div>
+      </div>
+      <div class="card" style="margin-top:16px"><div class="card-head"><h3>📊 Сарын хандлага</h3></div><div id="monthly-trend" style="padding:20px">Тооцоолж байна...</div></div>
+    </div>
+
+    <!-- ════ ORDERS ════ -->
     <div id="pane-orders" style="display:none">
-      <div class="card">
-        <div class="card-head">
-          <h3>📦 Бүх захиалгууд</h3>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input class="search-inp" placeholder="🔍 Хайх..." style="width:180px">
-            <select class="search-inp" style="width:150px" id="order-status-filter" onchange="filterOrdersTable(this.value)">
-              <option value="">Бүгд</option>
-              <option value="pending">Хүлээгдэж буй</option>
-              <option value="confirmed">Баталгаажсан</option>
-              <option value="shipped">Явааны</option>
-              <option value="delivered">Хүргэгдсэн</option>
-              <option value="cancelled">Цуцлагдсан</option>
-            </select>
-          </div>
-        </div>
-        <div id="orders-table"><div class="loading"><div class="sp"></div></div></div>
+      <div class="filter-bar">
+        <button class="fbtn on" onclick="filterOrdersTable('')">Бүгд</button>
+        <button class="fbtn" onclick="filterOrdersTable('pending')">⏳ Хүлээгдэж буй</button>
+        <button class="fbtn" onclick="filterOrdersTable('confirmed')">✅ Баталгаажсан</button>
+        <button class="fbtn" onclick="filterOrdersTable('shipped')">🚚 Явсан</button>
+        <button class="fbtn" onclick="filterOrdersTable('delivered')">📦 Хүргэгдсэн</button>
       </div>
+      <div class="card"><div class="card-head"><h3>Захиалгууд</h3></div><div id="orders-table"><div class="loading">Ачааллаж байна...</div></div></div>
     </div>
 
-    <!-- ── PAYOUTS TAB ── -->
-    <div id="pane-payouts" style="display:none">
-      <div class="card">
-        <div class="card-head">
-          <h3>💸 Мөнгө татах хүсэлтүүд</h3>
-          <div style="display:flex;gap:8px">
-            <button class="tb-btn btn-g" onclick="approveAll()">✅ Бүгдийг батлах</button>
-          </div>
-        </div>
-        <div id="payouts-list"><div class="loading"><div class="sp"></div></div></div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h3>📋 Батлагдсан гүйлгээний түүх</h3></div>
-        <div id="payout-history"><div class="loading"><div class="sp"></div></div></div>
-      </div>
-    </div>
-
-    <!-- ── COMMISSION TAB ── -->
-    <div id="pane-commission" style="display:none">
-
-      <!-- Sub-tabs -->
-      <div style="display:flex;gap:3px;background:var(--bg);border:1px solid var(--bo);border-radius:10px;padding:3px;width:fit-content;margin-bottom:18px">
-        <button class="ctab on" id="ctab-global" onclick="switchCommTab('global')">🌐 Глобал хувь</button>
-        <button class="ctab" id="ctab-category" onclick="switchCommTab('category')">📦 Ангиллаар</button>
-        <button class="ctab" id="ctab-sim" onclick="switchCommTab('sim')">🧮 Тооцоолуур</button>
-      </div>
-
-      <!-- GLOBAL RATES -->
-      <div id="cpane-global">
-        <div class="comm-panel">
-          <div class="comm-title">🌐 Глобал комисс хувь
-            <span style="font-size:12px;color:var(--t3);font-weight:400">Ангилал тохируулагдаагүй бараанд ашиглагдана · Нийт 100% байх ёстой</span>
-          </div>
-          <div class="comm-grid">
-            <div class="comm-item">
-              <div class="who">🏪</div>
-              <label>Дэлгүүр эзэн</label>
-              <div class="comm-input-wrap">
-                <input class="comm-input" type="number" id="c-shop" value="70" min="0" max="100" oninput="updateTotal()">
-                <span style="font-size:16px;font-weight:700;color:var(--t2)">%</span>
-              </div>
-            </div>
-            <div class="comm-item">
-              <div class="who">📢</div>
-              <label>Борлуулагч (Affiliate)</label>
-              <div class="comm-input-wrap">
-                <input class="comm-input" type="number" id="c-affiliate" value="15" min="0" max="100" oninput="updateTotal()">
-                <span style="font-size:16px;font-weight:700;color:var(--t2)">%</span>
-              </div>
-            </div>
-            <div class="comm-item">
-              <div class="who">🏢</div>
-              <label>Платформ (sarana)</label>
-              <div class="comm-input-wrap">
-                <input class="comm-input" type="number" id="c-platform" value="10" min="0" max="100" oninput="updateTotal()">
-                <span style="font-size:16px;font-weight:700;color:var(--t2)">%</span>
-              </div>
-            </div>
-            <div class="comm-item">
-              <div class="who">🚚</div>
-              <label>Жолооч</label>
-              <div class="comm-input-wrap">
-                <input class="comm-input" type="number" id="c-delivery" value="5" min="0" max="100" oninput="updateTotal()">
-                <span style="font-size:16px;font-weight:700;color:var(--t2)">%</span>
-              </div>
-            </div>
-          </div>
-          <div class="comm-total ok" id="comm-total">✅ Нийт: 100% — Зөв тохируулгатай байна</div>
-          <div style="margin-top:14px;display:flex;gap:10px">
-            <button class="tb-btn btn-p" onclick="saveCommission()" style="padding:11px 24px">💾 Хадгалах</button>
-            <button class="tb-btn btn-ghost" onclick="resetCommission()">↩️ Анхны утга</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- CATEGORY RATES -->
-      <div id="cpane-category" style="display:none">
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <h3>📦 Ангиллын комисс тохируулга</h3>
-            <span style="font-size:12px;color:var(--t3)">Тохируулаагүй ангилал глобал хувийг ашиглана</span>
-          </div>
-          <div style="padding:16px 20px">
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px" id="cat-comm-grid"></div>
-            <div style="margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-              <button class="tb-btn btn-p" onclick="saveCatCommission()" style="padding:11px 24px">💾 Ангиллын хувь хадгалах</button>
-              <button class="tb-btn btn-ghost" onclick="resetCatCommission()">↩️ Глобал утга</button>
-              <span style="font-size:12px;color:var(--t3)">* Нийт 100% байх ёстой</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SIMULATOR -->
-      <div id="cpane-sim" style="display:none">
-        <div class="card">
-          <div class="card-head"><h3>🧮 Комисс тооцооны жишээ</h3></div>
-          <div style="padding:16px 20px">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
-              <span style="font-size:13px;color:var(--t2);font-weight:600">Бараа үнэ:</span>
-              <input type="number" id="sim-price" value="100000" style="border:1.5px solid var(--bo);border-radius:8px;padding:7px 12px;font-size:14px;font-family:inherit;outline:none;width:140px" oninput="simulate()">
-              <span style="font-size:13px;color:var(--t2)">₮</span>
-              <span style="font-size:13px;color:var(--t2);font-weight:600;margin-left:12px">Ангилал:</span>
-              <select id="sim-cat" onchange="simulate()" style="border:1.5px solid var(--bo);border-radius:8px;padding:7px 12px;font-size:13px;font-family:inherit;outline:none">
-                <option value="global">🌐 Глобал (default)</option>
-                <option value="fashion">👗 Хувцас</option>
-                <option value="electronics">📱 Электроник</option>
-                <option value="food">🍔 Хоол</option>
-                <option value="beauty">💄 Гоо сайхан</option>
-                <option value="digital">💻 Дижитал</option>
-                <option value="services">🛎️ Үйлчилгээ</option>
-              </select>
-            </div>
-            <div id="sim-result" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── USERS TAB ── -->
+    <!-- ════ USERS ════ -->
     <div id="pane-users" style="display:none">
-      <div class="role-tabs">
-        <button class="rtab on" onclick="loadUsers(this,'all')">Бүгд <span id="ut-all"></span></button>
-        <button class="rtab" onclick="loadUsers(this,'buyer')">🛍️ Худалдан авагч</button>
-        <button class="rtab" onclick="loadUsers(this,'seller')">🏪 Дэлгүүр</button>
-        <button class="rtab" onclick="loadUsers(this,'affiliate')">📢 Борлуулагч</button>
-        <button class="rtab" onclick="loadUsers(this,'delivery')">🚚 Жолооч</button>
+      <div class="filter-bar">
+        <button class="fbtn rtab on" onclick="loadUsers(this,'all')">Бүгд <span id="ut-all"></span></button>
+        <button class="fbtn rtab" onclick="loadUsers(this,'buyer')">🛍️ Худалдан авагч</button>
+        <button class="fbtn rtab" onclick="loadUsers(this,'seller')">🏪 Дэлгүүр</button>
+        <button class="fbtn rtab" onclick="loadUsers(this,'affiliate')">📢 Борлуулагч</button>
+        <button class="fbtn rtab" onclick="loadUsers(this,'delivery')">🚚 Жолооч</button>
       </div>
-      <div class="card">
-        <div class="card-head">
-          <h3>👥 Хэрэглэгчид</h3>
-          <input class="search-inp" placeholder="🔍 Нэр, имэйлээр хайх...">
-        </div>
-        <div id="users-table"><div class="loading"><div class="sp"></div></div></div>
-      </div>
+      <div class="card"><div id="users-table"><div class="loading">Ачааллаж байна...</div></div></div>
     </div>
 
-    <!-- ── SHOPS TAB ── -->
-    <div id="pane-shops" style="display:none">
-      <div class="card">
-        <div class="card-head"><h3>🏪 Дэлгүүрүүд</h3></div>
-        <div id="shops-table"><div class="loading"><div class="sp"></div></div></div>
-      </div>
+    <!-- ════ SHOPS ════ -->
+    <div id="pane-shops" style="display:none"><div class="card"><div class="card-head"><h3>🏪 Дэлгүүрүүд</h3></div><div id="shops-table"><div class="loading">Ачааллаж байна...</div></div></div></div>
+
+    <!-- ════ AFFILIATES ════ -->
+    <div id="pane-affiliates" style="display:none"><div class="card"><div class="card-head"><h3>📢 Борлуулагчид</h3></div><div id="affiliates-table"><div class="loading">Ачааллаж байна...</div></div></div></div>
+
+    <!-- ════ PAYOUTS ════ -->
+    <div id="pane-payouts" style="display:none">
+      <div class="card" style="margin-bottom:16px"><div class="card-head"><h3>💸 Хүлээгдэж буй</h3><button class="tbtn tbtn-p" onclick="approveAll()" style="font-size:12px;padding:6px 14px">✅ Бүгдийг батлах</button></div><div id="payouts-list"><div class="loading">Ачааллаж байна...</div></div></div>
+      <div class="card"><div class="card-head"><h3>📋 Түүх</h3></div><div id="payout-history"><div class="loading">Ачааллаж байна...</div></div></div>
     </div>
 
-    <!-- ── AFFILIATES TAB ── -->
-    <div id="pane-affiliates" style="display:none">
-      <div class="card">
-        <div class="card-head"><h3>📢 Борлуулагчид (Affiliate)</h3></div>
-        <div id="affiliates-table"><div class="loading"><div class="sp"></div></div></div>
+    <!-- ════ COMMISSION ════ -->
+    <div id="pane-commission" style="display:none">
+      <div class="comm-tabs">
+        <button class="fbtn on" id="ctab-global" onclick="switchCommTab('global')">🌐 Глобал</button>
+        <button class="fbtn" id="ctab-category" onclick="switchCommTab('category')">📂 Ангиллаар</button>
+        <button class="fbtn" id="ctab-sim" onclick="switchCommTab('sim')">🧮 Симулятор</button>
       </div>
-    </div>
-
-    <!-- ── REPORTS TAB ── -->
-    <div id="pane-reports" style="display:none">
-      <div class="grid2">
-        <div class="card">
-          <div class="card-head"><h3>📈 Орлогын тайлан</h3>
-            <select class="search-inp" style="width:120px">
-              <option>Энэ сар</option><option>Өнгөрсөн сар</option><option>Q1</option>
-            </select>
+      <div id="cpane-global" class="card" style="max-width:600px">
+        <div class="card-head"><h3>🌐 Глобал комисс</h3></div>
+        <div style="padding:20px">
+          <div class="comm-row"><label>🏪 Дэлгүүр эзэн</label><div class="comm-input"><input type="number" id="c-shop" value="70" min="0" max="100" oninput="updateTotal()"><span>%</span></div></div>
+          <div class="comm-row"><label>📢 Affiliate</label><div class="comm-input"><input type="number" id="c-affiliate" value="15" min="0" max="100" oninput="updateTotal()"><span>%</span></div></div>
+          <div class="comm-row"><label>🏢 Платформ</label><div class="comm-input"><input type="number" id="c-platform" value="10" min="0" max="100" oninput="updateTotal()"><span>%</span></div></div>
+          <div class="comm-row"><label>🚚 Жолооч</label><div class="comm-input"><input type="number" id="c-delivery" value="5" min="0" max="100" oninput="updateTotal()"><span>%</span></div></div>
+          <div class="comm-total ok" id="comm-total">✅ Нийт: 100%</div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="tbtn tbtn-p" onclick="saveCommission()">💾 Хадгалах</button>
+            <button class="tbtn tbtn-g" onclick="resetCommission()">↩️ Анхны утга</button>
           </div>
-          <div style="padding:20px" id="report-revenue"></div>
         </div>
-        <div class="card">
-          <div class="card-head"><h3>🥧 Орлогын хуваарилалт</h3></div>
-          <div style="padding:20px" id="report-split"></div>
+      </div>
+      <div id="cpane-category" style="display:none"><div class="cat-comm-grid" id="cat-comm-grid"></div><div style="display:flex;gap:8px;margin-top:16px"><button class="tbtn tbtn-p" onclick="saveCatCommission()">💾 Хадгалах</button><button class="tbtn tbtn-g" onclick="resetCatCommission()">↩️ Анхны утга</button></div></div>
+      <div id="cpane-sim" style="display:none"><div class="card" style="max-width:600px"><div class="card-head"><h3>🧮 Симулятор</h3></div><div style="padding:20px"><div class="row2" style="margin-bottom:16px"><div class="fg"><label>Дүн (₮)</label><input type="number" id="sim-price" value="100000" oninput="simulate()"></div><div class="fg"><label>Ангилал</label><select id="sim-cat" onchange="simulate()"><option value="global">Глобал</option><option value="fashion">Хувцас</option><option value="electronics">Электроник</option><option value="food">Хоол</option><option value="beauty">Гоо сайхан</option></select></div></div><div class="sim-result" id="sim-result"></div></div></div></div>
+    </div>
+
+    <!-- ════ REPORTS ════ -->
+    <div id="pane-reports" style="display:none">
+      <div class="two-col"><div class="card"><div class="card-head"><h3>📊 Сарын орлого</h3></div><div id="report-revenue" style="padding:16px 20px">Ачааллаж байна...</div></div><div class="card"><div class="card-head"><h3>🥧 Хуваарилалт</h3></div><div id="report-split" style="padding:16px 20px">Ачааллаж байна...</div></div></div>
+    </div>
+
+    <!-- ════ BEHAVIOR ════ -->
+    <div id="pane-behavior" style="display:none">
+      <div class="section-title">🧠 Хэрэглэгчийн зан төлөв</div>
+      <div class="stats-row">
+        <div class="sc" data-icon="📊"><div class="sc-lbl">ИДЭВХТЭЙ (7 ХОНОГ)</div><div class="sc-val" id="bh-active">—</div></div>
+        <div class="sc" data-icon="⚠️"><div class="sc-lbl">ИДЭВХГҮЙ БОЛЖ БУЙ</div><div class="sc-val" style="color:var(--a)" id="bh-churn">—</div></div>
+        <div class="sc" data-icon="🔥"><div class="sc-lbl">ХАМГИЙН ИДЭВХТЭЙ</div><div class="sc-val" id="bh-top-page">—</div></div>
+        <div class="sc" data-icon="📈"><div class="sc-lbl">ДУНДАЖ ЗАХИАЛГА</div><div class="sc-val" id="bh-avg-order">—</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px"><div class="card-head"><h3>⚠️ Анхаарал хандуулах</h3></div><div id="churn-list"><div class="loading">Шинжилж байна...</div></div></div>
+      <div class="card"><div class="card-head"><h3>🗺️ Хандалтын Heatmap</h3></div><div id="heatmap" class="heatmap-grid"></div></div>
+    </div>
+
+    <!-- ════ AI CHATBOT ════ -->
+    <div id="pane-chatbot" style="display:none">
+      <div class="chatbot-container">
+        <div class="chat-header"><div class="chat-av">🤖</div><div><div style="font-weight:700">eseller AI Туслах</div><div style="font-size:11px;color:var(--g)">● Онлайн</div></div></div>
+        <div class="chat-body" id="chat-body">
+          <div class="chat-msg bot"><div class="msg-av">🤖</div><div class="msg-bubble">Сайн байна уу! Би eseller.mn-ийн AI туслах. Асууна уу:<br><br>
+            <button class="chat-suggest" onclick="askAI('Өнгөрсөн сарын нийт орлого хэд вэ?')">💰 Нийт орлого</button>
+            <button class="chat-suggest" onclick="askAI('Хамгийн их борлуулалттай бараа?')">🏆 ТОП бараа</button>
+            <button class="chat-suggest" onclick="askAI('Affiliate систем хэр үр дүнтэй?')">📢 Affiliate</button>
+            <button class="chat-suggest" onclick="askAI('Дараагийн сарын таамаглал')">🔮 Таамаглал</button>
+          </div></div>
         </div>
+        <div class="chat-input"><input type="text" id="chat-input" placeholder="Асуултаа бичнэ үү..." onkeydown="if(event.key==='Enter')askAI(this.value)"><button onclick="askAI(document.getElementById('chat-input').value)">➤</button></div>
       </div>
     </div>
 
   </div>
 </div>
+
+<!-- ═══ DRILL-DOWN MODAL ═══ -->
+<div class="overlay" id="drill-modal" onclick="if(event.target===this)closeDrill()">
+  <div class="modal" style="max-width:640px"><div class="mh"><h3 id="drill-title">Дэлгэрэнгүй</h3><button class="mx" onclick="closeDrill()">✕</button></div><div id="drill-body"></div></div>
+</div>
+
 <script src="../js/api.js"></script>
 <script src="../js/main.js"></script>
 <script src="../js/pages/admin.js"></script>
