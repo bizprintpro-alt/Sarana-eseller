@@ -40,13 +40,13 @@ const DEMO_LINKS = [
 ];
 
 // ── TABS ──────────────────────────
-const tabs = ['overview', 'browse', 'links', 'earnings'];
+const tabs = ['overview', 'browse', 'links', 'earnings', 'coach', 'learn'];
 function switchTab(t) {
   tabs.forEach(id => {
     document.getElementById('pane-' + id).style.display = t === id ? '' : 'none';
     document.getElementById('nav-' + id)?.classList.toggle('on', t === id);
   });
-  const titles = { overview: 'Миний самбар', browse: 'Бараа сонгох', links: 'Миний линкүүд', earnings: 'Орлого & Татах' };
+  const titles = { overview: 'Миний самбар', browse: 'Бараа сонгох', links: 'Миний линкүүд', earnings: 'Орлого & Татах', coach: '🤖 AI Coach', learn: '📚 Сургалт' };
   document.getElementById('pg-title').textContent = titles[t];
   if (t === 'browse' && !browseLoaded) loadBrowse();
   if (t === 'links') renderLinks();
@@ -493,5 +493,220 @@ function shareFrom(linkId) {
 // Keyboard
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSellModal(); });
 
+// ══════════════════════════════════════════════════════════════
+//  AI COACH — Борлуулалтын ухаалаг зөвлөх
+// ══════════════════════════════════════════════════════════════
+function askCoach(q) {
+  if (!q || !q.trim()) return;
+  const input = document.getElementById('coach-input');
+  input.value = '';
+  const body = document.getElementById('coach-body');
+
+  // User message
+  const uav = (user?.name || '?').charAt(0).toUpperCase();
+  body.innerHTML += `<div class="chat-msg user"><div class="msg-av">${uav}</div><div class="msg-bubble">${q}</div></div>`;
+  body.scrollTop = body.scrollHeight;
+
+  // Typing indicator
+  const typingId = 'typing-' + Date.now();
+  body.innerHTML += `<div class="chat-msg bot" id="${typingId}"><div class="msg-av">🤖</div><div class="msg-bubble" style="color:var(--t3)">Бодож байна...</div></div>`;
+  body.scrollTop = body.scrollHeight;
+
+  setTimeout(() => {
+    const answer = generateCoachAnswer(q);
+    const el = document.getElementById(typingId);
+    if (el) el.querySelector('.msg-bubble').innerHTML = answer;
+    body.scrollTop = body.scrollHeight;
+  }, 600 + Math.random() * 800);
+}
+
+function generateCoachAnswer(q) {
+  const ql = q.toLowerCase();
+
+  // ── Эхлэх ──
+  if (ql.includes('эхл') || ql.includes('яаж эхл') || ql.includes('start'))
+    return `<strong>🚀 Борлуулагч болж эхлэх 5 алхам:</strong><br><br>
+    <strong>1.</strong> "Бараа сонгох" хэсгээс өөрт таарах бараа сонго<br>
+    <strong>2.</strong> "Start Selling" дарж уникал линк авах<br>
+    <strong>3.</strong> Toolkit-с постер, QR код үүсгэх<br>
+    <strong>4.</strong> Facebook/Instagram story-д хуваалцах<br>
+    <strong>5.</strong> Захиалга ирэхэд комисс автоматаар орно!<br><br>
+    💡 <em>Зөвлөгөө: Эхлээд 3-5 бараа сонгоод, өдөр бүр 1 story хийгээрэй.</em>`;
+
+  // ── Facebook ──
+  if (ql.includes('facebook') || ql.includes('фэйсбүүк') || ql.includes('fb'))
+    return `<strong>📘 Facebook борлуулалтын стратеги:</strong><br><br>
+    <strong>1. Facebook Group ашиглах</strong><br>Худалдааны группт бараа оруулах (3K+ гишүүнтэй группт)<br><br>
+    <strong>2. Story + Reels</strong><br>Өдөр 2-3 story, долоо хоногт 1 reels. Бараагаа гартаа барьж, үнэ бичих.<br><br>
+    <strong>3. Live хийх</strong><br>Facebook Live дээр бараа танилцуулах — хамгийн өндөр хөрвүүлэлттэй!<br><br>
+    <strong>4. Marketplace</strong><br>Facebook Marketplace-д мөн зарлага нэмэх.<br><br>
+    💡 <em>Хамгийн сайн цаг: Өглөө 8-9, Орой 19-21 цагт пост хийх.</em>`;
+
+  // ── Instagram ──
+  if (ql.includes('instagram') || ql.includes('инста') || ql.includes('story'))
+    return `<strong>📸 Instagram борлуулалтын стратеги:</strong><br><br>
+    <strong>Story (хамгийн чухал!):</strong><br>
+    • Бараагаа гартаа барьж видео<br>
+    • Үнэ + "Линк bio-д" гэж бичих<br>
+    • Poll sticker: "Авмаар байна уу?" ашиглах<br>
+    • Countdown sticker: хямдрал дуусах хугацаа<br><br>
+    <strong>Reels:</strong><br>
+    • 15-30 секундын богино видео<br>
+    • Trending audio ашиглах<br>
+    • Before/After, Unboxing хамгийн сайн<br><br>
+    <strong>Bio optimization:</strong><br>
+    • Линкээ bio-д байршуулах<br>
+    • "🛒 Бараа захиалах ⬇️" гэж бичих<br><br>
+    💡 <em>Хэштаг: 15-20 хэштаг, Монгол + Англи холилдуулах.</em>`;
+
+  // ── TikTok ──
+  if (ql.includes('tiktok') || ql.includes('тикток') || ql.includes('viral'))
+    return `<strong>♪ TikTok viral стратеги:</strong><br><br>
+    <strong>Viral video formula:</strong><br>
+    • Hook (0-3 сек): "Энэ бараа миний амьдралыг өөрчилсөн"<br>
+    • Үзүүлэх (3-15 сек): Бараагаа харуулах<br>
+    • CTA (15-20 сек): "Bio дахь линк дээр дар"<br><br>
+    <strong>Шилдэг контент:</strong><br>
+    • 📦 Unboxing видео<br>
+    • ⭐ Review / Шүүмж<br>
+    • 🆚 Харьцуулалт<br>
+    • 🔥 "TikTok made me buy it" trend<br><br>
+    💡 <em>Өдөрт 1-3 видео, trending sound ашиглах = viral болох магадлал ↑</em>`;
+
+  // ── Постер ──
+  if (ql.includes('постер') || ql.includes('poster') || ql.includes('дизайн') || ql.includes('санаа'))
+    return `<strong>🖼️ Постер үүсгэх санаанууд:</strong><br><br>
+    <strong>1. "Онцлох бараа" постер:</strong><br>Улаан background + бараа зураг + ТОМ үнэ + QR код<br><br>
+    <strong>2. "Хямдрал" постер:</strong><br>Хуучин үнэ (зурсан) + Шинэ үнэ + "Зөвхөн X хоног"<br><br>
+    <strong>3. "Харьцуулалт" постер:</strong><br>Бусад газрын үнэ VS eseller үнэ<br><br>
+    <strong>4. "Шүүмж" постер:</strong><br>Худалдан авагчийн сэтгэгдэл + бараа зураг<br><br>
+    💡 <em>Toolkit → Постер tab-с автомат постер үүсгэж болно!</em><br><br>
+    <button class="coach-suggest" onclick="switchTab('browse')">🛍️ Бараа сонгож постер үүсгэх →</button>`;
+
+  // ── Reels ──
+  if (ql.includes('reels') || ql.includes('видео') || ql.includes('video'))
+    return `<strong>🎬 Reels/Video контент санаанууд:</strong><br><br>
+    <strong>1. "Day in my life" + бараа</strong><br>Өдрийн турш бараагаа ашиглаж буй видео<br><br>
+    <strong>2. "Get ready with me"</strong><br>Гоо сайхны бараанд тохиромжтой<br><br>
+    <strong>3. "Unboxing"</strong><br>Хайрцаг нээж, бараагаа анх удаа харуулах<br><br>
+    <strong>4. "3 reasons why"</strong><br>"Энэ барааг авах 3 шалтгаан" — жагсаалт хэлбэрээр<br><br>
+    <strong>5. "POV" (Point of View)</strong><br>"POV: Чи энэ барааг олоод баярлаж байна" <br><br>
+    💡 <em>Бүх видеоны төгсгөлд: "Линк bio-д / Comment-д" гэж хэлэх!</em>`;
+
+  // ── Caption ──
+  if (ql.includes('caption') || ql.includes('бичих') || ql.includes('текст'))
+    return `<strong>✍️ Борлуулалтын caption бичих formula:</strong><br><br>
+    <strong>AIDA Formula:</strong><br>
+    • <strong>A</strong>ttention: "🔥 Энэ бараа яагаад viral болсон бэ?"<br>
+    • <strong>I</strong>nterest: Бараа тухай сонирхолтой fact<br>
+    • <strong>D</strong>esire: "Хэрвээ чи __ хүсвэл энэ бараа яг чамд"<br>
+    • <strong>A</strong>ction: "Линк bio-д 🛒"<br><br>
+    <strong>Жишээ caption:</strong><br>
+    <em>"🔥 Монголд эрэлт ихтэй байгаа бараа!<br>
+    ✅ Чанар сайн<br>
+    ✅ Үнэ боломжийн<br>
+    ✅ Хүргэлт хурдан<br>
+    <br>
+    🛒 Захиалах: Bio дахь линк дээр дар"</em><br><br>
+    💡 <em>Toolkit → Сошиал tab-с бэлэн caption авч болно!</em>`;
+
+  // ── Орлого ──
+  if (ql.includes('орлого') || ql.includes('нэмэгдүүл') || ql.includes('income') || ql.includes('money'))
+    return `<strong>📈 Орлого нэмэгдүүлэх 7 арга:</strong><br><br>
+    <strong>1.</strong> Өндөр комисстой бараа сонгох (15%+)<br>
+    <strong>2.</strong> Өндөр үнэтэй бараа = өндөр комисс (100K+ бараа)<br>
+    <strong>3.</strong> Олон суваг ашиглах (FB + IG + TikTok + WhatsApp)<br>
+    <strong>4.</strong> Өдөр бүр тогтмол контент хийх<br>
+    <strong>5.</strong> Story + Reels = хамгийн их хүрч чадалт<br>
+    <strong>6.</strong> Хөрвүүлэлт сайтай бараа олох (зарагдаж байгааг харах)<br>
+    <strong>7.</strong> Creator profile үүсгэж, дагагч цуглуулах<br><br>
+    💡 <em>Зорилго: Өдөрт 3 борлуулалт = Сарын 500,000₮+ орлого</em>`;
+
+  // ── Ангилал ──
+  if (ql.includes('ангилал') || ql.includes('зарагд') || ql.includes('топ'))
+    return `<strong>🏆 Хамгийн их зарагддаг ангилал:</strong><br><br>
+    1. 📱 <strong>Электроник</strong> — чихэвч, case, цэнэглэгч (өндөр үнэ = өндөр комисс)<br>
+    2. 💄 <strong>Гоо сайхан</strong> — крем, маск, K-beauty (давтагддаг худалдан авалт)<br>
+    3. 👗 <strong>Хувцас</strong> — trend бараа, улирлын бараа (visual контентод тохиромжтой)<br>
+    4. 🏡 <strong>Гэр</strong> — ургамал, гэрийн чимэглэл (lifestyle контент)<br><br>
+    💡 <em>Эхлэгчдэд: Электроник + Гоо сайхан = хамгийн зарагддаг!</em>`;
+
+  // ── Комисс ──
+  if (ql.includes('комисс'))
+    return `<strong>💎 Комисс нэмэгдүүлэх арга:</strong><br><br>
+    • Өндөр комисстой бараа сонгох (15-20%)<br>
+    • Дэлгүүр эздэд шууд хандаж, хувийн комисс тохирох<br>
+    • Олон борлуулалт хийвэл "ТОП борлуулагч" статус авна → нэмэлт урамшуулал<br>
+    • Bundle бараа (2+ бараа нэг захиалгад) сурталчлах<br><br>
+    💡 <em>100,000₮ бараа × 15% = 15,000₮ нэг борлуулалтаас</em>`;
+
+  // ── Affiliate мэдлэг ──
+  if (ql.includes('affiliate') || ql.includes('гэж юу'))
+    return `<strong>📖 Affiliate маркетинг гэж юу вэ?</strong><br><br>
+    Affiliate = Борлуулагч. Та бусдын барааг өөрийн сүлжээгээр зарна → Зарагдвал комисс авна.<br><br>
+    <strong>Давуу тал:</strong><br>
+    ✅ Агуулах хэрэггүй<br>
+    ✅ Хүргэлт хийхгүй<br>
+    ✅ Хөрөнгө оруулалтгүй<br>
+    ✅ Цагаа өөрөө тохируулна<br><br>
+    <strong>Яаж ажилладаг:</strong><br>
+    Бараа сонгох → Линк авах → Хуваалцах → Борлуулалт → Комисс 💰<br><br>
+    💡 <em>Дэлхий даяар $17 тэрбумын зах зээл. Монголд дөнгөж эхэлж байна!</em>`;
+
+  // ── Хөрвүүлэлт ──
+  if (ql.includes('хөрвүүл') || ql.includes('conversion'))
+    return `<strong>🎯 Хөрвүүлэлт нэмэгдүүлэх 5 арга:</strong><br><br>
+    <strong>1. Urgency (яаралтай байдал)</strong><br>"Зөвхөн өнөөдөр!", "Сүүлийн 3 ширхэг" гэх мэт<br><br>
+    <strong>2. Social proof</strong><br>"500+ хүн авсан", шүүмж хуваалцах<br><br>
+    <strong>3. Шууд CTA</strong><br>"Одоо дар" — тодорхой үйлдэл хэлэх<br><br>
+    <strong>4. Зураг/видео чанар</strong><br>Гэрэлтүүлэг сайн, тодорхой зураг<br><br>
+    <strong>5. Хямдрал тодруулах</strong><br>Хуучин үнэ зурж, шинэ үнэ ТОМ бичих<br><br>
+    💡 <em>Дундаж хөрвүүлэлт: 2-5%. Дээрх аргуудаар 8-12% хүргэж болно!</em>`;
+
+  // ── Default ──
+  return `Таны асуултыг ойлголоо! Надаас дараах сэдвүүдээр асууж болно:<br><br>
+    <button class="coach-suggest" onclick="askCoach('Яаж эхлэх вэ?')">🚀 Эхлэх</button>
+    <button class="coach-suggest" onclick="askCoach('Facebook стратеги')">📘 Facebook</button>
+    <button class="coach-suggest" onclick="askCoach('Instagram story tips')">📸 Instagram</button>
+    <button class="coach-suggest" onclick="askCoach('Орлого нэмэгдүүлэх')">📈 Орлого ↑</button>
+    <button class="coach-suggest" onclick="askCoach('Постерийн санаа')">🖼️ Постер</button>
+    <button class="coach-suggest" onclick="askCoach('Reels санаа')">🎬 Reels</button>`;
+}
+
+// ══════ LEARN — Сургалт ══════
+const completedLessons = new Set(JSON.parse(localStorage.getItem('eseller_lessons') || '[]'));
+
+function updateLearnProgress() {
+  const done = completedLessons.size;
+  const el = document.getElementById('lp-fill');
+  if (el) el.style.width = (done / 8 * 100) + '%';
+  const txt = document.getElementById('lp-done');
+  if (txt) txt.textContent = done;
+}
+
+function openLesson(num) {
+  completedLessons.add(num);
+  localStorage.setItem('eseller_lessons', JSON.stringify([...completedLessons]));
+  updateLearnProgress();
+
+  const lessons = {
+    1: { title: '🚀 Эхлэх гарын авлага', q: 'Шинэ борлуулагч яаж эхлэх вэ?' },
+    2: { title: '📱 Социал медиа стратеги', q: 'Facebook, Instagram, TikTok дээр бараа зарах стратеги' },
+    3: { title: '✍️ Контент бичих', q: 'Борлуулалтын caption бичих арга' },
+    4: { title: '🎯 Хөрвүүлэлт', q: 'Хөрвүүлэлтийн хувийг сайжруулах 5 арга' },
+    5: { title: '📊 Статистик', q: 'Клик, борлуулалт, хөрвүүлэлтийн тоог хэрхэн ойлгох вэ?' },
+    6: { title: '💰 Орлого максимум', q: 'Орлогоо хэрхэн нэмэгдүүлэх вэ?' },
+    7: { title: '🎬 Видео контент', q: 'Reels видео хийх санаа' },
+    8: { title: '🏆 ТОП борлуулагч', q: 'ТОП борлуулагч болохын тулд юу хийх вэ?' },
+  };
+
+  const lesson = lessons[num];
+  if (lesson) {
+    switchTab('coach');
+    setTimeout(() => askCoach(lesson.q), 300);
+  }
+}
+
 // ── INIT ─────────────────────────
 loadOverview();
+updateLearnProgress();

@@ -25,6 +25,9 @@
     <button class="sb-item" id="nav-links" onclick="switchTab('links')"><span class="ico">🔗</span>Миний линкүүд</button>
     <div class="sb-sect">Санхүү</div>
     <button class="sb-item" id="nav-earnings" onclick="switchTab('earnings')"><span class="ico">💰</span>Орлого & Татах</button>
+    <div class="sb-sect">AI Туслах</div>
+    <button class="sb-item" id="nav-coach" onclick="switchTab('coach')"><span class="ico">🤖</span>AI Coach<span class="sb-new" style="background:linear-gradient(135deg,#8B5CF6,#EC4899);font-size:9px;padding:1px 6px;border-radius:4px;color:#fff;margin-left:auto">AI</span></button>
+    <button class="sb-item" id="nav-learn" onclick="switchTab('learn')"><span class="ico">📚</span>Сургалт</button>
     <div class="sb-sect">Бусад</div>
     <a class="sb-item" href="storefront.html"><span class="ico">🏪</span>Дэлгүүр</a>
     <button class="sb-item" onclick="Auth.logout()"><span class="ico">🚪</span>Гарах</button>
@@ -191,6 +194,128 @@
         <div class="card-head"><h3>📋 Гүйлгээний түүх</h3></div>
         <div id="txn-wrap" style="padding:8px 16px">
           <div class="empty"><div class="sp"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ AI COACH ════ -->
+    <div id="pane-coach" style="display:none">
+      <div class="coach-container">
+        <div class="coach-header">
+          <div class="coach-av">🤖</div>
+          <div>
+            <div class="coach-name">eseller AI Coach</div>
+            <div class="coach-status">● Онлайн — Борлуулалтын зөвлөх</div>
+          </div>
+        </div>
+        <div class="coach-body" id="coach-body">
+          <div class="chat-msg bot">
+            <div class="msg-av">🤖</div>
+            <div class="msg-bubble">
+              Сайн байна уу! 👋 Би таны хувийн борлуулалтын зөвлөх AI юм. Надаас дурын зүйл асуугаарай:
+              <div class="coach-topics">
+                <div class="ct-section">📢 Борлуулалт</div>
+                <button class="coach-suggest" onclick="askCoach('Шинэ борлуулагч яаж эхлэх вэ?')">🚀 Яаж эхлэх вэ?</button>
+                <button class="coach-suggest" onclick="askCoach('Facebook дээр бараа зарах хамгийн сайн арга юу вэ?')">📘 Facebook стратеги</button>
+                <button class="coach-suggest" onclick="askCoach('Instagram story-р бараа зарах арга')">📸 Instagram tips</button>
+                <button class="coach-suggest" onclick="askCoach('TikTok дээр viral бараа зарах арга')">♪ TikTok стратеги</button>
+
+                <div class="ct-section">🎨 Контент</div>
+                <button class="coach-suggest" onclick="askCoach('Бараа зарах постерийн санаа өгөөч')">🖼️ Постерийн санаа</button>
+                <button class="coach-suggest" onclick="askCoach('Reels видео хийх санаа')">🎬 Reels санаа</button>
+                <button class="coach-suggest" onclick="askCoach('Бараа зарах caption бичиж өгөөч')">✍️ Caption бичих</button>
+                <button class="coach-suggest" onclick="askCoach('Story хийх 5 арга')">📱 Story tips</button>
+
+                <div class="ct-section">💰 Орлого</div>
+                <button class="coach-suggest" onclick="askCoach('Орлогоо хэрхэн нэмэгдүүлэх вэ?')">📈 Орлого ↑</button>
+                <button class="coach-suggest" onclick="askCoach('Аль ангиллын бараа хамгийн их зарагддаг вэ?')">🏆 ТОП ангилал</button>
+                <button class="coach-suggest" onclick="askCoach('Комиссыг хэрхэн нэмэгдүүлэх вэ?')">💎 Комисс ↑</button>
+
+                <div class="ct-section">📚 Мэдлэг</div>
+                <button class="coach-suggest" onclick="askCoach('Affiliate маркетинг гэж юу вэ?')">📖 Affiliate гэж юу?</button>
+                <button class="coach-suggest" onclick="askCoach('Хөрвүүлэлтийн хувийг сайжруулах 5 арга')">🎯 Хөрвүүлэлт ↑</button>
+                <button class="coach-suggest" onclick="askCoach('Борлуулалтын funnel хэрхэн ажилладаг вэ?')">🔄 Sales funnel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="coach-input">
+          <input type="text" id="coach-input" placeholder="Асуултаа бичнэ үү..." onkeydown="if(event.key==='Enter')askCoach(this.value)">
+          <button onclick="askCoach(document.getElementById('coach-input').value)">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ LEARN / СУРГАЛТ ════ -->
+    <div id="pane-learn" style="display:none">
+      <div class="learn-header">
+        <h2>📚 Борлуулагчийн сургалт</h2>
+        <p>Мэргэжлийн борлуулагч болоход шаардлагатай бүх мэдлэг</p>
+      </div>
+
+      <!-- Progress -->
+      <div class="learn-progress">
+        <div class="lp-bar"><div class="lp-fill" id="lp-fill" style="width:0%"></div></div>
+        <div class="lp-text"><span id="lp-done">0</span>/8 хичээл дууссан</div>
+      </div>
+
+      <!-- Course cards -->
+      <div class="learn-grid">
+        <div class="learn-card" onclick="openLesson(1)">
+          <div class="lc-num">01</div>
+          <div class="lc-ico">🚀</div>
+          <h3>Эхлэх гарын авлага</h3>
+          <p>eseller.mn дээр борлуулагч болох, линк үүсгэх, эхний борлуулалт хийх</p>
+          <div class="lc-meta"><span>📖 5 мин</span><span class="lc-tag lc-beginner">Анхан шат</span></div>
+        </div>
+        <div class="learn-card" onclick="openLesson(2)">
+          <div class="lc-num">02</div>
+          <div class="lc-ico">📱</div>
+          <h3>Социал медиа стратеги</h3>
+          <p>Facebook, Instagram, TikTok дээр бараа зарах дэвшилтэт арга</p>
+          <div class="lc-meta"><span>📖 8 мин</span><span class="lc-tag lc-inter">Дунд шат</span></div>
+        </div>
+        <div class="learn-card" onclick="openLesson(3)">
+          <div class="lc-num">03</div>
+          <div class="lc-ico">✍️</div>
+          <h3>Борлуулалтын контент бичих</h3>
+          <p>Хүмүүсийн анхаарал татах caption, story, reels бичих арга</p>
+          <div class="lc-meta"><span>📖 6 мин</span><span class="lc-tag lc-inter">Дунд шат</span></div>
+        </div>
+        <div class="learn-card" onclick="openLesson(4)">
+          <div class="lc-num">04</div>
+          <div class="lc-ico">🎯</div>
+          <h3>Хөрвүүлэлт нэмэгдүүлэх</h3>
+          <p>Клик → Худалдан авалт хувийг 2-3 дахин нэмэгдүүлэх</p>
+          <div class="lc-meta"><span>📖 7 мин</span><span class="lc-tag lc-advanced">Ахисан</span></div>
+        </div>
+        <div class="learn-card" onclick="openLesson(5)">
+          <div class="lc-num">05</div>
+          <div class="lc-ico">📊</div>
+          <h3>Статистик унших</h3>
+          <p>Клик, борлуулалт, хөрвүүлэлтийн тоог ойлгож, шийдвэр гаргах</p>
+          <div class="lc-meta"><span>📖 5 мин</span><span class="lc-tag lc-beginner">Анхан шат</span></div>
+        </div>
+        <div class="learn-card" onclick="openLesson(6)">
+          <div class="lc-num">06</div>
+          <div class="lc-ico">💰</div>
+          <h3>Орлого максимумчлах</h3>
+          <p>Өндөр комисстой бараа сонгох, олон суваг ашиглах стратеги</p>
+          <div class="lc-meta"><span>📖 6 мин</span><span class="lc-tag lc-advanced">Ахисан</span></div>
+        </div>
+        <div class="learn-card" onclick="openLesson(7)">
+          <div class="lc-num">07</div>
+          <div class="lc-ico">🎬</div>
+          <h3>Видео контент хийх</h3>
+          <p>Reels, TikTok, Story видео хийж борлуулалтаа нэмэгдүүлэх</p>
+          <div class="lc-meta"><span>📖 10 мин</span><span class="lc-tag lc-inter">Дунд шат</span></div>
+        </div>
+        <div class="learn-card" onclick="openLesson(8)">
+          <div class="lc-num">08</div>
+          <div class="lc-ico">🏆</div>
+          <h3>ТОП борлуулагч болох</h3>
+          <p>Сарын 1,000,000₮+ орлого олж буй борлуулагчдын нууц</p>
+          <div class="lc-meta"><span>📖 12 мин</span><span class="lc-tag lc-advanced">Ахисан</span></div>
         </div>
       </div>
     </div>
