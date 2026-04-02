@@ -1,76 +1,71 @@
-/* ══════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    eseller.mn — Shared Components
-   Nav, Footer, Mobile Nav, Messenger
-   ══════════════════════════════════════ */
+   Token-based: Nav, Footer, Mobile Nav, Messenger
+   ══════════════════════════════════════════════════════════════ */
 
-/* ── DESKTOP TOP NAV (dark / landing) ── */
+/* ══════ DESKTOP TOP NAV (dark / landing) ══════ */
 nav.topnav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-fixed);
   height: 64px; display: flex; align-items: center;
-  padding: 0 6%; gap: 16px; transition: all .3s;
+  padding: 0 6%; gap: var(--space-4); transition: all var(--duration-slow);
 }
 nav.topnav.scrolled {
-  background: rgba(8,9,15,.95); backdrop-filter: blur(16px);
+  background: rgba(8,9,15,.95); backdrop-filter: blur(var(--glass-blur));
   box-shadow: 0 1px 0 rgba(255,255,255,.05);
 }
-.nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; flex-shrink: 0; }
-.nav-logo-text { font-size: 21px; font-weight: 900; color: #fff; letter-spacing: -.5px; }
+.nav-logo { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; flex-shrink: 0; }
+.nav-logo-text { font-size: var(--text-xl); font-weight: var(--fw-black); color: #fff; letter-spacing: var(--ls-tight); }
 .nav-logo-text em { color: var(--p); font-style: normal; }
 .nav-sp { flex: 1; }
 .nav-a {
   color: rgba(255,255,255,.6); text-decoration: none;
-  font-size: 14px; font-weight: 600;
-  padding: 6px 14px; border-radius: 8px; transition: .15s;
+  font-size: var(--text-base); font-weight: var(--fw-semi);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-md);
+  transition: all var(--duration-fast);
 }
 .nav-a:hover { color: #fff; background: rgba(255,255,255,.07); }
 .nav-btn {
   background: var(--p); color: #fff;
-  font-size: 13px; font-weight: 800;
-  padding: 9px 22px; border-radius: 10px;
-  text-decoration: none; transition: .2s; white-space: nowrap;
+  font-size: var(--text-sm); font-weight: var(--fw-extra);
+  padding: var(--space-2) var(--space-5); border-radius: var(--radius-lg);
+  text-decoration: none; transition: all var(--duration-normal); white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(var(--p-rgb), .3);
 }
 .nav-btn:hover { background: var(--pd); transform: translateY(-1px); }
 
-/* ── LIGHT NAV (storefront pages) ── */
+/* ══════ LIGHT NAV (storefront) ══════ */
 nav.lightnav {
-  background: #fff; border-bottom: 1px solid var(--bo);
+  background: var(--bg-card); border-bottom: 1px solid var(--bo);
   height: 60px; display: flex; align-items: center;
-  padding: 0 20px; gap: 12px;
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  padding: 0 var(--space-5); gap: var(--space-3);
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  box-shadow: var(--shadow-xs);
 }
 .logo {
-  font-size: 19px; font-weight: 900; color: var(--p);
-  text-decoration: none; letter-spacing: -.5px; flex-shrink: 0;
+  font-size: var(--text-lg); font-weight: var(--fw-black); color: var(--p);
+  text-decoration: none; letter-spacing: var(--ls-tight); flex-shrink: 0;
 }
 .logo em { color: var(--a); font-style: normal; }
 
-/* ── eseller SVG Logo ── */
-.eseller-logo-svg { flex-shrink: 0; }
-
-/* ── FOOTER ── */
+/* ══════ FOOTER ══════ */
 footer {
   background: var(--dark);
-  padding: 44px 6%; text-align: center;
+  padding: var(--space-12) 6%; text-align: center;
 }
-.ft-logo { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 10px; }
+.ft-logo { font-size: var(--text-xl); font-weight: var(--fw-black); color: #fff; margin-bottom: var(--space-3); }
 .ft-logo em { color: var(--p); font-style: normal; }
-footer p { font-size: 13px; color: rgba(255,255,255,.25); }
-footer a { color: rgba(255,255,255,.25); text-decoration: none; }
+footer p { font-size: var(--text-sm); color: rgba(255,255,255,.25); }
+footer a { color: rgba(255,255,255,.25); text-decoration: none; transition: color var(--duration-fast); }
 footer a:hover { color: rgba(255,255,255,.5); }
 
-/* ══════════════════════════════════════
-   MOBILE BOTTOM NAV + MESSENGER FLOAT
-   ══════════════════════════════════════ */
+/* ══════ MOBILE BOTTOM NAV ══════ */
 .m-bnav {
   display: none;
-  position: fixed !important;
-  bottom: 0 !important; top: auto !important;
-  left: 0; right: 0;
-  height: 64px; background: #fff;
-  border-top: 1px solid #E2E8F0;
+  position: fixed !important; bottom: 0 !important; top: auto !important;
+  left: 0; right: 0; height: 64px; background: var(--bg-card);
+  border-top: 1px solid var(--bo);
   box-shadow: 0 -4px 20px rgba(0,0,0,.08);
-  z-index: 9999;
+  z-index: var(--z-toast);
   padding-bottom: env(safe-area-inset-bottom);
 }
 .m-bnav-inner { display: flex; align-items: stretch; height: 100%; }
@@ -78,39 +73,38 @@ footer a:hover { color: rgba(255,255,255,.5); }
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 3px;
   border: none; background: transparent; cursor: pointer;
-  text-decoration: none; color: #94A3B8;
-  font-size: 10px; font-weight: 600; font-family: var(--ff);
-  padding: 6px 4px; transition: color .15s;
+  text-decoration: none; color: var(--t3);
+  font-size: 10px; font-weight: var(--fw-semi); font-family: var(--ff);
+  padding: var(--space-2) var(--space-1); transition: color var(--duration-fast);
   -webkit-tap-highlight-color: transparent;
 }
-.m-btab.active, .m-btab:active { color: #CC0000; }
+.m-btab.active, .m-btab:active { color: var(--p); }
 .m-btab svg { width: 22px; height: 22px; stroke-width: 1.8; }
 .m-btab .m-badge {
   position: absolute; top: 8px; right: calc(50% - 14px);
   background: var(--p); color: #fff;
-  font-size: 9px; font-weight: 800;
-  min-width: 16px; height: 16px; border-radius: 8px;
+  font-size: 9px; font-weight: var(--fw-extra);
+  min-width: 16px; height: 16px; border-radius: var(--radius-full);
   display: flex; align-items: center; justify-content: center;
   padding: 0 4px;
 }
 
-/* ── Messenger Float ── */
+/* ══════ MESSENGER FLOAT ══════ */
 .m-msn {
   display: none;
-  position: fixed !important;
-  bottom: 76px !important; top: auto !important;
-  right: 16px; width: 52px; height: 52px;
-  border-radius: 50%;
+  position: fixed !important; bottom: 76px !important; top: auto !important;
+  right: var(--space-4); width: 52px; height: 52px;
+  border-radius: var(--radius-full);
   background: linear-gradient(135deg, #00C6FF, #0078FF);
   box-shadow: 0 4px 16px rgba(0,120,255,.4);
   align-items: center; justify-content: center;
-  z-index: 9998; text-decoration: none;
-  animation: msnpop .3s cubic-bezier(.34,1.56,.64,1) both;
+  z-index: calc(var(--z-toast) - 1); text-decoration: none;
+  animation: msnpop .3s var(--ease-bounce) both;
 }
 .m-msn svg { width: 28px; height: 28px; fill: #fff; }
 @keyframes msnpop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-/* ── Mobile Responsive ── */
+/* ══════ RESPONSIVE ══════ */
 @media (max-width: 768px) {
   .m-bnav { display: flex; }
   .m-msn  { display: flex; }

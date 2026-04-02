@@ -1,46 +1,160 @@
-/* ══════════════════════════════════════
-   eseller.mn — Design Tokens & Variables
-   ══════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════
+   eseller.mn — Design Token System
+   Premium SaaS Design System inspired by BizPrint architecture
+   Token-driven: spacing, typography, radius, shadows, colors
+   ══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Brand ── */
-  --p: #CC0000;
+  /* ══════ SPACING (8px grid) ══════ */
+  --space-unit: 8px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ══════ TYPOGRAPHY ══════ */
+  --ff: 'Inter', 'Roboto', system-ui, -apple-system, sans-serif;
+  --fh: 'Montserrat', 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+
+  /* Scale */
+  --text-xs:  11px;
+  --text-sm:  13px;
+  --text-base: 14px;
+  --text-md:  15px;
+  --text-lg:  17px;
+  --text-xl:  20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --text-5xl: 48px;
+  --text-6xl: 60px;
+
+  /* Weights */
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semi:   600;
+  --fw-bold:   700;
+  --fw-extra:  800;
+  --fw-black:  900;
+
+  /* Line heights */
+  --lh-tight:  1.1;
+  --lh-snug:   1.25;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.7;
+
+  /* Letter spacing */
+  --ls-tight:  -0.02em;
+  --ls-normal: 0;
+  --ls-wide:   0.05em;
+  --ls-caps:   0.08em;
+
+  /* ══════ BORDER RADIUS ══════ */
+  --radius-sm:  6px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+  --radius-full: 9999px;
+
+  /* ══════ SHADOWS ══════ */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 6px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 10px 15px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.04);
+  --shadow-xl:  0 20px 25px rgba(0,0,0,.1), 0 8px 10px rgba(0,0,0,.04);
+  --shadow-2xl: 0 25px 50px rgba(0,0,0,.15);
+  --shadow-glow: 0 0 20px rgba(204,0,0,.15);
+  --shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.03);
+  --shadow-card-hover: 0 8px 25px rgba(0,0,0,.08), 0 4px 10px rgba(0,0,0,.04);
+
+  /* ══════ TRANSITIONS ══════ */
+  --ease-default: cubic-bezier(.4,0,.2,1);
+  --ease-in:      cubic-bezier(.4,0,1,1);
+  --ease-out:     cubic-bezier(0,0,.2,1);
+  --ease-bounce:  cubic-bezier(.34,1.56,.64,1);
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+
+  /* ══════ BRAND COLORS ══════ */
+  --p:  #CC0000;
   --pd: #A30000;
   --pl: #FFF0F0;
+  --p-rgb: 204,0,0;
 
-  /* ── Semantic Colors ── */
-  --g: #059669;
-  --gl: #ECFDF5;
-  --a: #D97706;
-  --al: #FFFBEB;
-  --r: #DC2626;
-  --rl: #FEF2F2;
-  --c: #0891B2;
-  --cl: #E0F7FA;
+  /* ══════ SEMANTIC COLORS ══════ */
+  --g:  #059669;  --gl: #ECFDF5;  /* success / green */
+  --a:  #D97706;  --al: #FFFBEB;  /* warning / amber */
+  --r:  #DC2626;  --rl: #FEF2F2;  /* error / red */
+  --c:  #0891B2;  --cl: #E0F7FA;  /* info / cyan */
+  --b:  #2563EB;  --bl: #EFF6FF;  /* blue */
 
-  /* ── Dark Theme ── */
-  --dark: #08090F;
+  /* ══════ DARK PALETTE ══════ */
+  --dark:  #08090F;
   --dark2: #0D1117;
   --dark3: #161B27;
 
-  /* ── Neutral ── */
-  --bo: #E2E8F0;
-  --bg: #F8FAFC;
+  /* ══════ NEUTRAL (Light theme) ══════ */
+  --bg:      #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --bg-muted: #F1F5F9;
+  --bg-input: #FFFFFF;
+  --bo:      #E2E8F0;
+  --bo-light: #F1F5F9;
 
-  /* ── Text ── */
-  --t1: #0F172A;
-  --t2: #475569;
-  --t3: #94A3B8;
+  /* ══════ TEXT ══════ */
+  --t1: #0F172A;  /* primary */
+  --t2: #475569;  /* secondary */
+  --t3: #94A3B8;  /* muted */
+  --t4: #CBD5E1;  /* disabled */
 
-  /* ── Typography ── */
-  --ff: 'Roboto', sans-serif;
-  --fh: 'Montserrat', 'Roboto', sans-serif;
+  /* ══════ ROLE ACCENTS ══════ */
+  --sel:   #059669;  --sel-l: #ECFDF5;  /* seller */
+  --aff:   #D97706;  --aff-l: #FFFBEB;  /* affiliate */
+  --del:   #0891B2;  --del-l: #E0F7FA;  /* delivery */
 
-  /* ── Role Accents ── */
-  --sel: #059669;
-  --sel-l: #ECFDF5;
-  --aff: #D97706;
-  --aff-l: #FFFBEB;
-  --del: #0891B2;
-  --del-l: #E0F7FA;
+  /* ══════ GLASSMORPHISM ══════ */
+  --glass-bg: rgba(255,255,255,.7);
+  --glass-border: rgba(255,255,255,.18);
+  --glass-blur: 16px;
+
+  /* ══════ Z-INDEX SCALE ══════ */
+  --z-base:     1;
+  --z-dropdown: 10;
+  --z-sticky:   40;
+  --z-fixed:    50;
+  --z-overlay:  100;
+  --z-modal:    200;
+  --z-toast:    9999;
+}
+
+/* ══════ DARK THEME OVERRIDES ══════ */
+[data-theme="dark"] {
+  --bg:      #0F1117;
+  --bg-card: #1A1D27;
+  --bg-elevated: #1E2230;
+  --bg-muted: #161B27;
+  --bg-input: #1E2230;
+  --bo:      #2D3348;
+  --bo-light: #252A3A;
+  --t1:      #E2E8F0;
+  --t2:      #94A3B8;
+  --t3:      #64748B;
+  --t4:      #475569;
+  --glass-bg: rgba(15,17,23,.7);
+  --glass-border: rgba(255,255,255,.06);
+  --shadow-card: 0 1px 3px rgba(0,0,0,.2);
+  --shadow-card-hover: 0 8px 25px rgba(0,0,0,.3);
 }
