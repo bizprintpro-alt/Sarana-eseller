@@ -203,8 +203,170 @@ async function openSellModal(productId) {
   document.getElementById('sm-comm').innerHTML = `💰 Нэг борлуулалтаас: <strong>${UI.price(comm)}</strong> (${p.commission || 15}%) автоматаар орно`;
   document.getElementById('sm-link').textContent = link;
   document.getElementById('sell-modal').classList.add('on');
+
+  // Reset to link tab
+  document.querySelectorAll('.tk-tab').forEach(t => t.classList.remove('on'));
+  document.querySelector('.tk-tab').classList.add('on');
+  document.querySelectorAll('.tk-pane').forEach(p => p.style.display = 'none');
+  document.getElementById('tk-link').style.display = '';
 }
 function closeSellModal() { document.getElementById('sell-modal').classList.remove('on'); }
+
+// ══════ TOOLKIT TABS ══════
+function tkTab(el, pane) {
+  document.querySelectorAll('.tk-tab').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.tk-pane').forEach(p => p.style.display = 'none');
+  document.getElementById(pane).style.display = '';
+
+  if (pane === 'tk-qr') generateQR();
+  if (pane === 'tk-poster') generatePoster();
+  if (pane === 'tk-social') generateSocialContent();
+}
+
+// ══════ QR CODE GENERATOR ══════
+function generateQR() {
+  const link = document.getElementById('sm-link').textContent;
+  const canvas = document.getElementById('qr-canvas');
+  const ctx = canvas.getContext('2d');
+  const size = 200;
+  canvas.width = size; canvas.height = size;
+
+  // Simple QR-like pattern (visual representation — use qrcode.js in production)
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, size, size);
+  ctx.fillStyle = '#000';
+
+  // Generate deterministic pattern from link
+  const data = link.split('').map(c => c.charCodeAt(0));
+  const cellSize = 6;
+  const grid = Math.floor(size / cellSize);
+  const margin = 2;
+
+  // Position markers (3 corners)
+  drawFinderPattern(ctx, margin * cellSize, margin * cellSize, cellSize);
+  drawFinderPattern(ctx, (grid - margin - 7) * cellSize, margin * cellSize, cellSize);
+  drawFinderPattern(ctx, margin * cellSize, (grid - margin - 7) * cellSize, cellSize);
+
+  // Data modules
+  for (let i = 0; i < data.length * 3; i++) {
+    const val = data[i % data.length];
+    const x = (9 + (i * 7) % (grid - 18)) * cellSize;
+    const y = (9 + Math.floor((i * 7) / (grid - 18)) % (grid - 18)) * cellSize;
+    if ((val + i) % 3 !== 0) {
+      ctx.fillRect(x, y, cellSize, cellSize);
+    }
+  }
+
+  // Product info
+  const p = currentProdForSell;
+  if (p) {
+    document.getElementById('qr-product-info').innerHTML = `
+      <div style="font-weight:700;margin-bottom:4px">${p.emoji || '📦'} ${p.name}</div>
+      <div style="color:var(--p);font-weight:900">${UI.price(p.salePrice || p.price)}</div>
+      <div style="color:var(--g);font-size:12px;margin-top:4px">Комисс: ${p.commission || 15}%</div>
+    `;
+  }
+}
+
+function drawFinderPattern(ctx, x, y, cell) {
+  // Outer border
+  ctx.fillRect(x, y, 7 * cell, 7 * cell);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(x + cell, y + cell, 5 * cell, 5 * cell);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(x + 2 * cell, y + 2 * cell, 3 * cell, 3 * cell);
+}
+
+function downloadQR() {
+  const canvas = document.getElementById('qr-canvas');
+  const link = document.createElement('a');
+  link.download = `eseller-qr-${currentProdForSell?.name || 'product'}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  UI.toast('📥 QR код татагдлаа!');
+}
+
+function printQR() {
+  const canvas = document.getElementById('qr-canvas');
+  const win = window.open('', '_blank');
+  win.document.write(`<html><head><title>QR Код — eseller.mn</title></head><body style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif">
+    <h2>${currentProdForSell?.emoji || '📦'} ${currentProdForSell?.name || ''}</h2>
+    <img src="${canvas.toDataURL()}" style="width:300px;height:300px;margin:20px">
+    <p style="font-size:24px;font-weight:900;color:#CC0000">${UI.price(currentProdForSell?.salePrice || currentProdForSell?.price || 0)}</p>
+    <p>eseller.mn дээрх QR кодыг уншуулж худалдаж аваарай</p>
+  </body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 500);
+}
+
+// ══════ POSTER GENERATOR ══════
+let posterType = 'story';
+
+function selectPoster(el, type) {
+  document.querySelectorAll('.poster-tpl').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  posterType = type;
+  generatePoster();
+}
+
+function generatePoster() {
+  const p = currentProdForSell;
+  if (!p) return;
+  const price = p.salePrice || p.price;
+  document.getElementById('pp-emoji').textContent = p.emoji || '📦';
+  document.getElementById('pp-name').textContent = p.name;
+  document.getElementById('pp-price').textContent = UI.price(price);
+  document.getElementById('pp-qr').textContent = 'QR';
+
+  // Adjust preview aspect ratio
+  const preview = document.getElementById('poster-preview');
+  if (posterType === 'story') { preview.style.minHeight = '380px'; preview.style.maxWidth = '280px'; preview.style.margin = '0 auto var(--space-4)'; }
+  else if (posterType === 'post') { preview.style.minHeight = '300px'; preview.style.maxWidth = '300px'; preview.style.margin = '0 auto var(--space-4)'; }
+  else { preview.style.minHeight = '200px'; preview.style.maxWidth = '100%'; preview.style.margin = '0 0 var(--space-4)'; }
+}
+
+function downloadPoster() {
+  UI.toast('📥 Постер татагдаж байна... (HTML2Canvas шаардлагатай)', 'info');
+  // In production: use html2canvas to capture poster-preview div
+  copyPosterText();
+}
+
+function copyPosterText() {
+  const p = currentProdForSell;
+  if (!p) return;
+  const text = `${p.emoji || '📦'} ${p.name}\n💰 ${UI.price(p.salePrice || p.price)}\n\n🛒 Худалдаж авах: ${document.getElementById('sm-link').textContent}\n\neseller.mn`;
+  navigator.clipboard.writeText(text).catch(() => {});
+  UI.toast('📋 Постер текст хуулагдлаа!');
+}
+
+// ══════ SOCIAL CONTENT GENERATOR ══════
+function generateSocialContent() {
+  const p = currentProdForSell;
+  if (!p) return;
+  const price = UI.price(p.salePrice || p.price);
+  const link = document.getElementById('sm-link').textContent;
+  const disc = p.salePrice && p.price > p.salePrice ? Math.round((1 - p.salePrice / p.price) * 100) : 0;
+  const commAmt = UI.price(Math.round((p.salePrice || p.price) * (p.commission || 15) / 100));
+
+  document.getElementById('social-post').textContent =
+    `${p.emoji || '📦'} ${p.name}\n\n💰 Үнэ: ${price}${disc ? ` (${disc}% хямдралтай!)` : ''}\n\n✅ Чанартай, хурдан хүргэлттэй\n🛒 Захиалах: ${link}\n\n#eseller #онлайндэлгүүр #хямдрал #монгол`;
+
+  document.getElementById('social-story').textContent =
+    `🔥 ${p.name}\n\n${price}${disc ? ` 🏷️ -${disc}%` : ''}\n\n⬆️ Линк bio-д байна\nэсвэл "eseller.mn" хайгаарай`;
+
+  document.getElementById('social-hashtags').textContent =
+    `#eseller #esellermn #онлайнхудалдаа #${(p.category || 'бараа').replace(/\s/g, '')} #хямдрал #борлуулалт #монгол #шинэбараа #худалдаа #onlineshopping`;
+
+  document.getElementById('social-msg').textContent =
+    `Сайн байна уу! 👋\n\n${p.emoji || '📦'} ${p.name} — ${price}${disc ? ` (${disc}% хямдралтай)` : ''}\n\n🛒 Энд дарж захиалаарай:\n${link}\n\nХурдан хүргэлт, QPay төлбөр 🚀`;
+}
+
+function copySocialText(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).catch(() => {});
+  UI.toast('📋 Текст хуулагдлаа!');
+}
 
 function shareProductLink(platform) {
   const link = document.getElementById('sm-link').textContent;

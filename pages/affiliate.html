@@ -198,23 +198,145 @@
   </div>
 </div>
 
-<!-- START SELLING MODAL -->
+<!-- ═══ MARKETING TOOLKIT MODAL ═══ -->
 <div class="overlay" id="sell-modal" onclick="if(event.target===this)closeSellModal()">
-  <div class="modal">
-    <h3>🚀 Start Selling</h3>
-    <div style="font-size:13px;color:var(--t2);margin-bottom:14px" id="sm-prod-name"></div>
-    <div class="comm-info" id="sm-comm">💰 Комисс: 15% — нэг борлуулалтаас автоматаар орно</div>
-    <div style="font-size:12px;color:var(--t2);margin-bottom:8px;font-weight:500">Таны уникал линк:</div>
-    <div class="link-preview" id="sm-link">Үүсгэж байна...</div>
-    <div class="share-btns" id="sm-share-btns">
-      <button class="share-btn sb-fb" onclick="shareProductLink('facebook')">Facebook</button>
-      <button class="share-btn sb-wa" onclick="shareProductLink('whatsapp')">WhatsApp</button>
-      <button class="share-btn sb-tg" onclick="shareProductLink('telegram')">Telegram</button>
+  <div class="modal toolkit-modal">
+    <!-- Header -->
+    <div class="tk-header">
+      <div>
+        <h3>🚀 Борлуулалтын Toolkit</h3>
+        <div class="tk-prod" id="sm-prod-name">Бараа нэр</div>
+      </div>
+      <button class="mx" onclick="closeSellModal()">✕</button>
     </div>
-    <div class="modal-btns">
-      <button class="mbtn mbtn-s" onclick="closeSellModal()">Хаах</button>
-      <button class="mbtn mbtn-p" onclick="copyLink(document.getElementById('sm-link').textContent)">📋 Линк хуулах</button>
+
+    <!-- Commission info -->
+    <div class="tk-comm" id="sm-comm">
+      💰 Нэг борлуулалтаас: <strong>5,250₮</strong> (15%) автоматаар орно
     </div>
+
+    <!-- Tab navigation -->
+    <div class="tk-tabs">
+      <button class="tk-tab on" onclick="tkTab(this,'tk-link')">🔗 Линк</button>
+      <button class="tk-tab" onclick="tkTab(this,'tk-qr')">📱 QR Код</button>
+      <button class="tk-tab" onclick="tkTab(this,'tk-poster')">🖼️ Постер</button>
+      <button class="tk-tab" onclick="tkTab(this,'tk-social')">📢 Сошиал</button>
+    </div>
+
+    <!-- TAB: Link -->
+    <div class="tk-pane" id="tk-link">
+      <div class="tk-label">Таны уникал линк</div>
+      <div class="tk-link-box">
+        <code id="sm-link">Үүсгэж байна...</code>
+        <button class="tk-copy" onclick="copyLink(document.getElementById('sm-link').textContent)">📋 Хуулах</button>
+      </div>
+      <div class="tk-label" style="margin-top:16px">Хуваалцах</div>
+      <div class="tk-share-grid">
+        <button class="tk-share tk-fb" onclick="shareProductLink('facebook')"><span>f</span>Facebook</button>
+        <button class="tk-share tk-ig" onclick="shareProductLink('instagram')"><span>📸</span>Instagram</button>
+        <button class="tk-share tk-wa" onclick="shareProductLink('whatsapp')"><span>💬</span>WhatsApp</button>
+        <button class="tk-share tk-tg" onclick="shareProductLink('telegram')"><span>✈️</span>Telegram</button>
+        <button class="tk-share tk-tt" onclick="shareProductLink('tiktok')"><span>♪</span>TikTok</button>
+        <button class="tk-share tk-tw" onclick="shareProductLink('twitter')"><span>𝕏</span>Twitter</button>
+      </div>
+    </div>
+
+    <!-- TAB: QR Code -->
+    <div class="tk-pane" id="tk-qr" style="display:none">
+      <div class="tk-qr-container">
+        <div class="tk-qr-box" id="qr-box">
+          <canvas id="qr-canvas" width="200" height="200"></canvas>
+        </div>
+        <div class="tk-qr-info">
+          <p>Энэ QR кодыг хэвлэж, дэлгүүрт байршуулж, эсвэл сошиал медиад хуваалцаж болно.</p>
+          <div class="tk-qr-product" id="qr-product-info"></div>
+        </div>
+      </div>
+      <div class="tk-actions">
+        <button class="tk-action-btn" onclick="downloadQR()">📥 QR татах (PNG)</button>
+        <button class="tk-action-btn" onclick="printQR()">🖨️ Хэвлэх</button>
+      </div>
+    </div>
+
+    <!-- TAB: Poster Generator -->
+    <div class="tk-pane" id="tk-poster" style="display:none">
+      <div class="tk-label">📐 Постер загвар сонгох</div>
+      <div class="poster-templates">
+        <div class="poster-tpl on" onclick="selectPoster(this,'story')" data-type="story">
+          <div class="pt-preview pt-story">📱</div>
+          <span>Story (9:16)</span>
+        </div>
+        <div class="poster-tpl" onclick="selectPoster(this,'post')" data-type="post">
+          <div class="pt-preview pt-post">🖼️</div>
+          <span>Post (1:1)</span>
+        </div>
+        <div class="poster-tpl" onclick="selectPoster(this,'banner')" data-type="banner">
+          <div class="pt-preview pt-banner">🏷️</div>
+          <span>Banner (16:9)</span>
+        </div>
+      </div>
+
+      <!-- Poster preview -->
+      <div class="poster-preview" id="poster-preview">
+        <div class="pp-inner" id="pp-inner">
+          <div class="pp-badge">eseller.mn</div>
+          <div class="pp-emoji" id="pp-emoji">📦</div>
+          <div class="pp-name" id="pp-name">Барааны нэр</div>
+          <div class="pp-price" id="pp-price">0₮</div>
+          <div class="pp-cta">Одоо худалдаж аваарай →</div>
+          <div class="pp-qr" id="pp-qr"></div>
+        </div>
+      </div>
+      <div class="tk-actions">
+        <button class="tk-action-btn" onclick="downloadPoster()">📥 Постер татах</button>
+        <button class="tk-action-btn" onclick="copyPosterText()">📋 Текст хуулах</button>
+      </div>
+    </div>
+
+    <!-- TAB: Social Content -->
+    <div class="tk-pane" id="tk-social" style="display:none">
+      <div class="tk-label">📝 Бэлэн контент</div>
+
+      <!-- Ready-made captions -->
+      <div class="social-cards">
+        <div class="social-card">
+          <div class="sc-head"><span>📸</span> Instagram / Facebook Post</div>
+          <div class="sc-text" id="social-post">
+            Ачааллаж байна...
+          </div>
+          <button class="sc-copy" onclick="copySocialText('social-post')">📋 Хуулах</button>
+        </div>
+
+        <div class="social-card">
+          <div class="sc-head"><span>📱</span> Story / Reels текст</div>
+          <div class="sc-text" id="social-story">
+            Ачааллаж байна...
+          </div>
+          <button class="sc-copy" onclick="copySocialText('social-story')">📋 Хуулах</button>
+        </div>
+
+        <div class="social-card">
+          <div class="sc-head"><span>♪</span> TikTok / Reels хэштаг</div>
+          <div class="sc-text" id="social-hashtags">
+            Ачааллаж байна...
+          </div>
+          <button class="sc-copy" onclick="copySocialText('social-hashtags')">📋 Хуулах</button>
+        </div>
+
+        <div class="social-card">
+          <div class="sc-head"><span>💬</span> WhatsApp / Messenger</div>
+          <div class="sc-text" id="social-msg">
+            Ачааллаж байна...
+          </div>
+          <button class="sc-copy" onclick="copySocialText('social-msg')">📋 Хуулах</button>
+        </div>
+      </div>
+
+      <div class="tk-tip">
+        💡 <strong>Зөвлөмж:</strong> Story-д бараагаа гартаа барьж байгаа видео + үнэ + линк = хамгийн их борлуулалт!
+      </div>
+    </div>
+
   </div>
 </div>
 <script src="../js/api.js"></script>
