@@ -13,31 +13,49 @@
 </head>
 <body>
 
-<nav>
-  <a class="logo-wrap" href="../index.html" style="text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0">
-    <svg width="28" height="26" viewBox="0 0 28 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity="0.12"/>
-      <polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.2"/>
-      <polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
-      <line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.5"/>
-      <line x1="7" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
-      <line x1="21" y1="24" x2="14" y2="9" stroke="#CC0000" stroke-width="0.8" opacity="0.4"/>
-    </svg>
-    <span style="font-size:20px;font-weight:900;color:#CC0000;letter-spacing:-0.5px;font-family:'eseller Script',serif">eseller</span>
-  </a>
-  <div class="sw">
-    <span class="sw-ic">🔍</span>
-    <input id="srch" type="text" placeholder="Бараа хайх..." oninput="onSearch(this.value)">
+<!-- ═══ TOP BAR ═══ -->
+<div class="topbar-strip">
+  <div class="strip-inner">
+    <div class="strip-left">
+      <span>📍 Улаанбаатар, Монгол</span>
+      <span class="strip-sep">·</span>
+      <span>🚚 50,000₮+ захиалгад <strong>ҮНЭГҮЙ хүргэлт</strong></span>
+    </div>
+    <div class="strip-right">
+      <a href="login.html">👤 Нэвтрэх</a>
+      <span class="strip-sep">·</span>
+      <a href="login.html#register">📢 Борлуулагч болох</a>
+    </div>
   </div>
-  <div class="nav-r">
-    <a class="nav-a" href="login.html" id="nav-user">Нэвтрэх</a>
-    <button class="cart-btn" onclick="openCart()">
-      🛒 Сагс
-      <span class="cbadge" id="cbadge"></span>
-    </button>
+</div>
+
+<!-- ═══ MAIN NAV ═══ -->
+<nav class="main-nav" id="main-nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../index.html">
+      <svg width="28" height="26" viewBox="0 0 28 26" fill="none"><polygon points="14,0 28,8 22,26 6,26 0,8" fill="#CC0000" opacity=".12"/><polygon points="14,2 26,9 21,24 7,24 2,9" fill="none" stroke="#CC0000" stroke-width="1.2"/><polygon points="14,2 26,9 14,24 2,9" fill="none" stroke="#CC0000" stroke-width=".8" opacity=".5"/><line x1="2" y1="9" x2="26" y2="9" stroke="#CC0000" stroke-width=".8" opacity=".5"/></svg>
+      <span class="nav-logo-text">eseller</span>
+    </a>
+
+    <div class="nav-search">
+      <input id="srch" type="text" placeholder="Бараа хайх..." oninput="onSearch(this.value)">
+      <button class="nav-search-btn">🔍</button>
+    </div>
+
+    <div class="nav-actions">
+      <a class="nav-act" href="login.html" id="nav-user">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Нэвтрэх</span>
+      </a>
+      <button class="nav-cart" onclick="openCart()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cbadge">0</span>
+      </button>
+    </div>
   </div>
 </nav>
 
+<!-- ═══ CATEGORY BAR ═══ -->
 <div class="catbar">
   <div class="catbar-inner">
     <button class="cbt on" onclick="setcat(this,'')">🏠 Бүгд</button>
@@ -51,86 +69,186 @@
   </div>
 </div>
 
+<!-- ═══ PAGE CONTENT ═══ -->
 <div class="page">
 
-  <!-- HERO -->
-  <div class="hero">
+  <!-- HERO BANNER -->
+  <section class="hero-banner">
     <div class="hero-left">
-      <div class="hero-pill"><span class="hero-dot"></span>Шинэ бараанууд нэмэгдлээ</div>
+      <div class="hero-pill"><span class="hero-dot"></span> Шинэ бараанууд нэмэгдлээ</div>
       <h1>Монголын хамгийн<br><em>том дэлгүүр</em></h1>
       <p>Мянга мянган бараанаас хямдарч авах боломжтой.<br>Хурдан хүргэлт, аюулгүй QPay төлбөр.</p>
-      <button class="hero-cta" onclick="scrollDown()">🛍️ Одоо үзэх</button>
+      <button class="hero-cta" onclick="scrollDown()">👍 Одоо үзэх</button>
     </div>
     <div class="hero-emojis">
-      <div class="he">👟</div>
-      <div class="he">📱</div>
-      <div class="he">💄</div>
+      <div class="he">🛍️</div>
+      <div class="he">📦</div>
+      <div class="he">🎁</div>
     </div>
+  </section>
+
+  <!-- PROMO STRIP -->
+  <div class="promo-strip">
+    <div class="promo-item"><span class="promo-ico">🔥</span><div><strong>Хямдралтай бараа</strong><span>50% хүртэл хямдарсан</span></div></div>
+    <div class="promo-item"><span class="promo-ico">🚚</span><div><strong>Хурдан хүргэлт</strong><span>2-4 цагт хүргэнэ</span></div></div>
+    <div class="promo-item"><span class="promo-ico">✨</span><div><strong>Шинэ ирэлтүүд</strong><span>Долоо хоногийн шинэ бараа</span></div></div>
+    <div class="promo-item"><span class="promo-ico">🔒</span><div><strong>Аюулгүй төлбөр</strong><span>QPay, банкны карт</span></div></div>
   </div>
 
-  <!-- MINI BANNERS -->
-  <div class="minibans">
-    <button class="mb mb1" onclick="jumpCat('fashion')">
-      <div class="mb-ico">🔥</div>
-      <div><div class="mb-title">Хямдралтай бараа</div><div class="mb-sub">50% хүртэл хямдарсан</div></div>
-    </button>
-    <button class="mb mb2" onclick="jumpCat('food')">
-      <div class="mb-ico">🚀</div>
-      <div><div class="mb-title">Хурдан хүргэлт</div><div class="mb-sub">30 минутад хүрнэ</div></div>
-    </button>
-    <button class="mb mb3" onclick="jumpCat('electronics')">
-      <div class="mb-ico">✨</div>
-      <div><div class="mb-title">Шинэ ирэлтүүд</div><div class="mb-sub">Долоо хоногийн шинэ бараа</div></div>
-    </button>
+  <!-- SCROLLING ANNOUNCEMENT -->
+  <div class="scroll-announce">
+    <div class="scroll-track">
+      <span>🎉 Үнэгүй хүргэлт 50,000₮+ захиалгад</span>
+      <span>⭐ 100+ брэнд бараа</span>
+      <span>🔥 Өдөр бүр шинэ хямдрал</span>
+      <span>📢 Борлуулагч болж орлого ол</span>
+      <span>🎉 Үнэгүй хүргэлт 50,000₮+ захиалгад</span>
+      <span>⭐ 100+ брэнд бараа</span>
+      <span>🔥 Өдөр бүр шинэ хямдрал</span>
+      <span>📢 Борлуулагч болж орлого ол</span>
+    </div>
   </div>
 
   <!-- SALE SECTION -->
-  <div id="sale-sec">
-    <div class="sh">
-      <div class="sh-title">🔥 Хямдралтай бараа</div>
-      <button class="sh-more" onclick="jumpCat('')">Бүгдийг харах →</button>
+  <section id="sale-sec">
+    <div class="sh"><h2 class="sh-title">🔥 Хямдралтай бараа</h2><button class="sh-more" onclick="jumpCat('')">Бүгдийг харах →</button></div>
+    <div class="hscroll" id="grid-sale"></div>
+  </section>
+
+  <!-- CATEGORY CARDS -->
+  <section class="cat-cards">
+    <div class="sh"><h2 class="sh-title">📂 Ангилалаар харах</h2></div>
+    <div class="cat-grid">
+      <div class="cat-card" onclick="jumpCat('fashion')"><span>👗</span><div>Хувцас</div></div>
+      <div class="cat-card" onclick="jumpCat('electronics')"><span>📱</span><div>Электроник</div></div>
+      <div class="cat-card" onclick="jumpCat('beauty')"><span>💄</span><div>Гоо сайхан</div></div>
+      <div class="cat-card" onclick="jumpCat('food')"><span>🍔</span><div>Хоол</div></div>
+      <div class="cat-card" onclick="jumpCat('sports')"><span>⚽</span><div>Спорт</div></div>
+      <div class="cat-card" onclick="jumpCat('home')"><span>🏡</span><div>Гэр ахуй</div></div>
     </div>
-    <div class="hscroll" id="grid-sale">
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
+  </section>
+
+  <!-- PROMO BANNERS -->
+  <section class="promo-banners">
+    <div class="pbanner pb-1" onclick="jumpCat('electronics')">
+      <div class="pb-content">
+        <span class="pb-badge">50% OFF</span>
+        <h3>Электроник бараа</h3>
+        <p>100+ бүтээгдэхүүн — Шилдэг брэнд</p>
+      </div>
+      <span class="pb-emoji">📱🎧🔋</span>
     </div>
-  </div>
+    <div class="pbanner pb-2" onclick="jumpCat('beauty')">
+      <div class="pb-content">
+        <span class="pb-badge">Шинэ</span>
+        <h3>Гоо сайхны бараа</h3>
+        <p>K-Beauty, Натурал бүтээгдэхүүн</p>
+      </div>
+      <span class="pb-emoji">💄✨🌿</span>
+    </div>
+  </section>
 
   <!-- ALL PRODUCTS -->
-  <div id="all-sec">
-    <div class="sh">
-      <div class="sh-title">✨ Бүх бараа <span id="all-cnt" style="font-size:13px;color:var(--t3);font-weight:500"></span></div>
+  <section id="all-sec">
+    <div class="sh"><h2 class="sh-title">✨ Бүх бараа <span class="sh-count" id="all-cnt">(0)</span></h2><button class="sh-more" onclick="jumpCat('')">Бүгдийг →</button></div>
+    <div class="pgrid" id="grid-all"></div>
+  </section>
+
+  <!-- WHY ESELLER -->
+  <section class="why-section">
+    <div class="sh"><h2 class="sh-title">💎 Яагаад eseller.mn?</h2></div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="wy-ico">🛡️</div>
+        <h4>Баталгаат чанар</h4>
+        <p>Бүх бараа шалгагдсан, чанартай</p>
+      </div>
+      <div class="why-card">
+        <div class="wy-ico">🚚</div>
+        <h4>Хурдан хүргэлт</h4>
+        <p>2-4 цагт хүргэнэ, GPS хянах боломж</p>
+      </div>
+      <div class="why-card">
+        <div class="wy-ico">💰</div>
+        <h4>Хямд үнэ</h4>
+        <p>Шууд үйлдвэрлэгчээс, зуучлагчгүй</p>
+      </div>
+      <div class="why-card">
+        <div class="wy-ico">🔒</div>
+        <h4>Аюулгүй төлбөр</h4>
+        <p>QPay, банкны карт, дансаар</p>
+      </div>
     </div>
-    <div class="pgrid" id="grid-all">
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
-      <div class="sk"><div class="sk-img"></div><div class="sk-b"><div class="sk-l w8"></div><div class="sk-l w6"></div></div></div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="nl-content">
+      <h3>📧 Мэдээлэл авах</h3>
+      <p>Хямдрал, шинэ бараа, урамшууллын мэдээ авах</p>
     </div>
-  </div>
+    <div class="nl-form">
+      <input type="email" placeholder="Имэйл хаягаа оруулна уу...">
+      <button onclick="UI.toast('✅ Бүртгэгдлээ!')">Бүртгүүлэх</button>
+    </div>
+  </section>
 
 </div><!-- /page -->
+
+<!-- FOOTER -->
+<footer class="store-footer">
+  <div class="footer-grid">
+    <div class="ft-col">
+      <div class="ft-logo">eseller<em>.mn</em></div>
+      <p>Монголын борлуулагчдын дижитал экосистем. Барааны эзэн + Борлуулагч = Бодит борлуулалт.</p>
+      <div class="ft-social">
+        <a href="#" title="Facebook">📘</a>
+        <a href="#" title="Instagram">📸</a>
+        <a href="#" title="TikTok">♪</a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <h4>Ангилал</h4>
+      <a href="#" onclick="jumpCat('fashion')">👗 Хувцас</a>
+      <a href="#" onclick="jumpCat('electronics')">📱 Электроник</a>
+      <a href="#" onclick="jumpCat('beauty')">💄 Гоо сайхан</a>
+      <a href="#" onclick="jumpCat('food')">🍔 Хоол</a>
+      <a href="#" onclick="jumpCat('sports')">⚽ Спорт</a>
+    </div>
+    <div class="ft-col">
+      <h4>Үйлчилгээ</h4>
+      <a href="login.html">Нэвтрэх / Бүртгүүлэх</a>
+      <a href="login.html#register">Борлуулагч болох</a>
+      <a href="login.html#register">Дэлгүүр нээх</a>
+      <a href="login.html#register">Жолооч болох</a>
+      <a href="#">Тусламж</a>
+    </div>
+    <div class="ft-col">
+      <h4>Холбоо барих</h4>
+      <a href="#">📍 Улаанбаатар, Монгол</a>
+      <a href="#">📞 7700-0000</a>
+      <a href="#">📧 info@eseller.mn</a>
+      <a href="#">💬 Messenger</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 eseller.mn — Бүх эрх хуулиар хамгаалагдсан</p>
+  </div>
+</footer>
 
 <!-- CART DRAWER -->
 <div class="dbg" id="dbg" onclick="closeCart()"></div>
 <div class="cart-panel" id="cpanel">
   <div class="cp-top">
-    <h3>🛒 Сагс <span id="cp-cnt" style="color:var(--t3);font-size:13px;font-weight:500"></span></h3>
+    <h3>🛒 Сагс <span id="cp-cnt"></span></h3>
     <button class="cp-x" onclick="closeCart()">✕</button>
   </div>
   <div class="cp-body" id="cp-body"></div>
   <div class="cp-foot">
-    <div class="cp-row"><span>Барааны дүн</span><span id="cp-sub">₮0</span></div>
-    <div class="cp-row"><span>Хүргэлт</span><span id="cp-del" style="color:var(--g)">₮3,000</span></div>
-    <div class="cp-total"><span>Нийт дүн</span><span id="cp-tot">₮0</span></div>
-    <button class="go-btn" id="go-btn" onclick="gocheckout()">💳 Захиалах</button>
+    <div class="cp-row"><span>Дүн:</span><span id="cp-sub">0₮</span></div>
+    <div class="cp-row"><span>Хүргэлт:</span><span id="cp-del">0₮</span></div>
+    <div class="cp-total"><span>Нийт:</span><span id="cp-tot">0₮</span></div>
+    <button class="go-btn" id="go-btn" onclick="gocheckout()" disabled>🛒 Захиалга өгөх</button>
   </div>
 </div>
 
@@ -138,6 +256,29 @@
 <div class="mdbg" id="mdbg" onclick="if(event.target===this)closePM()">
   <div class="pmodal" id="pm-inner"></div>
 </div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="m-bnav">
+  <div class="m-bnav-inner">
+    <a class="m-btab" href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Нүүр</span>
+    </a>
+    <a class="m-btab active" href="storefront.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <span>Дэлгүүр</span>
+    </a>
+    <button class="m-btab" onclick="openCart()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      <span>Сагс</span>
+    </button>
+    <a class="m-btab" href="login.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Профайл</span>
+    </a>
+  </div>
+</nav>
+
 <script src="../js/api.js"></script>
 <script src="../js/main.js"></script>
 <script src="../js/pages/storefront.js"></script>
