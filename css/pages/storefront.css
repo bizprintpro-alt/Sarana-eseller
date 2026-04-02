@@ -42,14 +42,14 @@ nav{background:#fff;border-bottom:1px solid var(--bo);height:60px;display:flex;a
 .page{max-width:1280px;margin:0 auto;padding:20px}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(130deg,#1E1B4B 0%,#312E81 50%,#4338CA 100%);border-radius:20px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:relative;overflow:hidden;min-height:190px}
+.hero{background:linear-gradient(130deg,#1a0000 0%,#440000 50%,#CC0000 100%);border-radius:20px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:relative;overflow:hidden;min-height:190px}
 .hero::after{content:'';position:absolute;right:-80px;top:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
 .hero-left{position:relative;z-index:1;max-width:420px}
-.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:#C7D2FE;margin-bottom:12px}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:12px}
 .hero-dot{width:7px;height:7px;border-radius:50%;background:#86EFAC;flex-shrink:0;animation:pulse 1.6s ease infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .hero h1{font-size:26px;font-weight:900;color:#fff;line-height:1.25;letter-spacing:-.5px;margin-bottom:8px}
-.hero h1 em{color:#FCD34D;font-style:normal}
+.hero h1 em{color:#FF6B6B;font-style:normal}
 .hero p{font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:18px}
 .hero-cta{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--p);border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s}
 .hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
@@ -86,7 +86,7 @@ nav{background:#fff;border-bottom:1px solid var(--bo);height:60px;display:flex;a
 /* ── PRODUCT CARD ── */
 .pc{background:#fff;border:1px solid var(--bo);border-radius:16px;overflow:hidden;cursor:pointer;transition:.22s;position:relative;flex-shrink:0;width:176px;scroll-snap-align:start}
 .pgrid .pc{width:auto;flex-shrink:unset}
-.pc:hover{box-shadow:0 8px 28px rgba(79,70,229,.13);transform:translateY(-3px);border-color:rgba(79,70,229,.2)}
+.pc:hover{box-shadow:0 8px 28px rgba(204,0,0,.1);transform:translateY(-3px);border-color:rgba(204,0,0,.2)}
 .pc-flag{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;z-index:2}
 .flag-s{background:var(--r);color:#fff}
 .flag-n{background:var(--g);color:#fff}
