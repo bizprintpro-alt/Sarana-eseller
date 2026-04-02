@@ -87,20 +87,50 @@
       </div>
     </div>
 
-    <!-- ── BROWSE TAB ── -->
+    <!-- ── BROWSE TAB — Premium Redesign ── -->
     <div id="pane-browse" style="display:none">
-      <div class="section-head">
-        <div class="section-title">🛍️ Бараа сонгоод зарж эхэл</div>
-        <input type="text" placeholder="🔍 Бараа хайх..." style="border:1.5px solid var(--bo);border-radius:9px;padding:8px 13px;font-size:13px;font-family:inherit;outline:none;width:200px" oninput="filterBrowse(this.value)">
+      <!-- Header -->
+      <div class="browse-header">
+        <div>
+          <h2 class="browse-title">🛍️ Бараа сонгоод зарж эхэл</h2>
+          <p class="browse-sub">Комисс өндөртэй бараа сонгоод өөрийн сүлжээгээр зарна уу</p>
+        </div>
+        <div class="browse-stats">
+          <div class="bstat"><strong id="bs-total">0</strong><span>Нийт бараа</span></div>
+          <div class="bstat"><strong id="bs-selling">0</strong><span>Зарж байна</span></div>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap" id="cat-filters">
-        <button class="tb-btn on" style="border:1.5px solid var(--p);background:var(--pl);color:var(--p)" onclick="catBrowse(this,'')">Бүгд</button>
-        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'fashion')">👗 Хувцас</button>
-        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'electronics')">📱 Электроник</button>
-        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'food')">🍔 Хоол</button>
-        <button class="tb-btn btn-ghost" onclick="catBrowse(this,'beauty')">💄 Гоо сайхан</button>
+
+      <!-- Search + Filter + Sort bar -->
+      <div class="browse-toolbar">
+        <div class="browse-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="browse-search" placeholder="Бараа хайх..." oninput="filterBrowse(this.value)">
+        </div>
+        <div class="browse-filters" id="cat-filters">
+          <button class="filter-chip on" onclick="catBrowse(this,'')">Бүгд</button>
+          <button class="filter-chip" onclick="catBrowse(this,'fashion')">👗 Хувцас</button>
+          <button class="filter-chip" onclick="catBrowse(this,'electronics')">📱 Электроник</button>
+          <button class="filter-chip" onclick="catBrowse(this,'food')">🍔 Хоол</button>
+          <button class="filter-chip" onclick="catBrowse(this,'beauty')">💄 Гоо сайхан</button>
+          <button class="filter-chip" onclick="catBrowse(this,'sports')">⚽ Спорт</button>
+          <button class="filter-chip" onclick="catBrowse(this,'home')">🏡 Гэр</button>
+        </div>
+        <div class="browse-sort">
+          <select id="browse-sort" onchange="sortBrowse(this.value)">
+            <option value="default">Эрэмбэ: Шинэ</option>
+            <option value="price-low">Үнэ: Бага → Их</option>
+            <option value="price-high">Үнэ: Их → Бага</option>
+            <option value="comm-high">Комисс: Өндөр</option>
+            <option value="popular">Түгээмэл</option>
+          </select>
+        </div>
       </div>
-      <div class="pgrid" id="browse-grid"><div style="grid-column:1/-1;text-align:center;padding:32px"><div class="sp"></div></div></div>
+
+      <!-- Product grid -->
+      <div class="pgrid" id="browse-grid">
+        <div style="grid-column:1/-1;text-align:center;padding:48px"><div class="sp"></div><p style="margin-top:12px;color:var(--t3)">Бараа ачааллаж байна...</p></div>
+      </div>
     </div>
 
     <!-- ── LINKS TAB ── -->

@@ -125,6 +125,12 @@ function renderBrowse() {
   const filtered = browseCat ? browseProds.filter(p => p.category === browseCat) : browseProds;
   const isSelling = id => myLinks.some(l => l.productId === id);
 
+  // Update stats
+  const bsTotal = document.getElementById('bs-total');
+  if (bsTotal) bsTotal.textContent = filtered.length;
+  const bsSelling = document.getElementById('bs-selling');
+  if (bsSelling) bsSelling.textContent = filtered.filter(p => isSelling(p._id)).length;
+
   document.getElementById('browse-grid').innerHTML = filtered.map(p => {
     const selling = isSelling(p._id);
     const price = p.salePrice || p.price;
@@ -161,11 +167,19 @@ function filterBrowse(v) {
 }
 
 function catBrowse(el, cat) {
-  document.querySelectorAll('#cat-filters .tb-btn, #cat-filters .btn-ghost').forEach(b => {
-    b.className = 'tb-btn btn-ghost'; b.style.cssText = '';
-  });
-  el.className = 'tb-btn'; el.style.cssText = 'border:1.5px solid var(--p);background:var(--pl);color:var(--p)';
+  document.querySelectorAll('#cat-filters .filter-chip').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
   browseCat = cat;
+  renderBrowse();
+}
+
+function sortBrowse(method) {
+  const sorted = [...browseProds];
+  if (method === 'price-low')  sorted.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price));
+  if (method === 'price-high') sorted.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price));
+  if (method === 'comm-high')  sorted.sort((a, b) => (b.commission || 15) - (a.commission || 15));
+  if (method === 'popular')    sorted.sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0));
+  browseProds = sorted;
   renderBrowse();
 }
 
