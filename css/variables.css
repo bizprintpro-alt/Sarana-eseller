@@ -34,7 +34,7 @@
 
   /* ── Typography ── */
   --ff: 'Roboto', sans-serif;
-  --fh: 'Black Han Sans', sans-serif;
+  --fh: 'Montserrat', 'Roboto', sans-serif;
 
   /* ── Role Accents ── */
   --sel: #059669;
