@@ -11,10 +11,13 @@ let allProds = [], editId = null, allOrders = [], orderFilter = 'all';
 
 // ── INIT ─────────────────────────────────────────────────────
 const av = (user?.name || 'S').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
-document.getElementById('sb-av').textContent  = av;
-document.getElementById('wc-av').textContent  = av;
-document.getElementById('sb-sname').textContent = user?.name ? user.name + 'ийн дэлгүүр' : 'Миний дэлгүүр';
-document.getElementById('wc-name').textContent  = `Сайн уу, ${user?.name?.split(' ')[0] || 'борлуулагч'}! 👋`;
+document.getElementById('sb-av').textContent   = av;
+document.getElementById('sb-uav').textContent  = av;
+document.getElementById('wc-av').textContent   = av;
+document.getElementById('sb-sname').textContent = user?.store?.name || (user?.name ? user.name + 'ийн дэлгүүр' : 'Миний дэлгүүр');
+document.getElementById('sb-uname').textContent = user?.name || 'Хэрэглэгч';
+document.getElementById('sb-uemail').textContent = user?.email || '';
+document.getElementById('wc-name').textContent  = `Өрлийн мэнд, ${user?.name?.split(' ')[0] || 'борлуулагч'}!`;
 document.getElementById('wc-sub').textContent   = new Date().toLocaleDateString('mn-MN', { weekday: 'long', month: 'long', day: 'numeric' });
 
 // Load settings from localStorage
@@ -25,17 +28,25 @@ loadProds();
 loadOrders();
 
 // ── TABS ──────────────────────────────────────────────────────
-const tabs = ['dashboard', 'orders', 'products', 'settings'];
+const tabs = ['dashboard', 'orders', 'products', 'customers', 'marketing', 'promotions', 'affiliate', 'revenue', 'analytics', 'settings'];
 function gotoTab(t) {
   tabs.forEach(id => {
-    document.getElementById('pane-' + id).style.display = id === t ? '' : 'none';
+    const pane = document.getElementById('pane-' + id);
+    if (pane) pane.style.display = id === t ? '' : 'none';
     const sn = document.getElementById('snav-' + id);
     if (sn) sn.classList.toggle('on', id === t);
   });
-  const titles = { dashboard: 'Самбар', orders: 'Захиалгууд', products: 'Бараа удирдах', settings: 'Тохиргоо' };
+  const titles = {
+    dashboard: 'Самбар', orders: 'Захиалгууд', products: 'Бүтээгдэхүүн',
+    customers: 'Хэрэглэгчид', marketing: 'Маркетинг', promotions: 'Урамшуулал',
+    affiliate: 'Affiliate', revenue: 'Орлого', analytics: 'Хандалт', settings: 'Тохиргоо',
+  };
   document.getElementById('pg-title').textContent = titles[t] || t;
   if (t === 'orders') renderOrdersTable();
   if (t === 'products') renderProds(allProds);
+  if (t === 'revenue') renderRevenue();
+  if (t === 'affiliate') renderAffiliateStats();
+  document.getElementById('pg-sub').textContent = '';
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -440,6 +451,61 @@ function savePayment() {
   s.accountName   = document.getElementById('cfg-account-name').value.trim();
   localStorage.setItem(STORE_KEY, JSON.stringify(s));
   UI.toast('✅ Төлбөрийн мэдээлэл хадгалагдлаа');
+}
+
+// ══════════════════════════════════════════════════════════════
+//  REVENUE
+// ══════════════════════════════════════════════════════════════
+async function renderRevenue() {
+  const totalRev = allOrders.filter(o => o.status !== 'cancelled').reduce((s, o) => s + (o.total || 0), 0);
+  const thisMonth = allOrders.filter(o => {
+    const d = new Date(o.createdAt);
+    return d.getMonth() === new Date().getMonth() && o.status !== 'cancelled';
+  }).reduce((s, o) => s + (o.total || 0), 0);
+  const pendingRev = allOrders.filter(o => o.status === 'pending' || o.status === 'confirmed').reduce((s, o) => s + (o.total || 0), 0);
+
+  document.getElementById('rev-total').textContent = UI.price(totalRev);
+  document.getElementById('rev-month').textContent = UI.price(thisMonth);
+  document.getElementById('rev-pending').textContent = UI.price(pendingRev);
+  document.getElementById('rev-withdrawn').textContent = UI.price(0);
+
+  const list = allOrders.filter(o => o.status !== 'cancelled').slice(0, 10);
+  document.getElementById('rev-history').innerHTML = list.length
+    ? list.map(o => `<div class="order-row">
+        <div class="or-num">#${o.orderNumber || o._id?.slice(-5)}</div>
+        <div class="or-info"><div class="or-buyer">${o.user?.name || '—'}</div><div class="or-items">${new Date(o.createdAt).toLocaleDateString('mn-MN')}</div></div>
+        <div style="font-weight:900;color:var(--g)">+${UI.price(o.total || 0)}</div>
+      </div>`).join('')
+    : '<div class="empty-state">Орлого байхгүй</div>';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  AFFILIATE STATS
+// ══════════════════════════════════════════════════════════════
+function renderAffiliateStats() {
+  const affOrders = allOrders.filter(o => o.referral || o.referralCode);
+  document.getElementById('aff-count').textContent = new Set(affOrders.map(o => o.referral || o.referralCode)).size;
+  document.getElementById('aff-sales').textContent = affOrders.length;
+  const affRev = affOrders.reduce((s, o) => s + (o.commissions?.affiliate || 0), 0);
+  document.getElementById('aff-paid').textContent = UI.price(affRev);
+
+  // Marketing tab stats
+  const mktAffCount = document.getElementById('mkt-aff-count');
+  if (mktAffCount) {
+    mktAffCount.textContent = new Set(affOrders.map(o => o.referral || o.referralCode)).size;
+    document.getElementById('mkt-aff-sales').textContent = affOrders.length;
+    document.getElementById('mkt-aff-rev').textContent = UI.price(affOrders.reduce((s, o) => s + (o.total || 0), 0));
+  }
+}
+
+function shareStore() {
+  const url = `${location.origin}/pages/storefront.html`;
+  if (navigator.share) {
+    navigator.share({ title: 'eseller.mn дэлгүүр', url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).catch(() => {});
+    UI.toast('🔗 Дэлгүүрийн линк хуулагдлаа!');
+  }
 }
 
 // Keyboard shortcut
