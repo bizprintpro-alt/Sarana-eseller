@@ -2,29 +2,42 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { ProductsAPI, Product } from '@/lib/api';
-import { formatPrice, CATEGORIES, DEMO_PRODUCTS } from '@/lib/utils';
+import { formatPrice, CATEGORIES, DEMO_PRODUCTS, cn } from '@/lib/utils';
 import { useToast } from '@/components/shared/Toast';
 import StatCard from '@/components/dashboard/StatCard';
+import {
+  Plus, Search, Edit3, Trash2, X, Package, Image as ImageIcon,
+  FileText, DollarSign, Settings, Upload, GripVertical, Star,
+  ToggleLeft, ToggleRight, Eye,
+} from 'lucide-react';
 
+/* ═══ Types ═══ */
 interface ProductForm {
-  name: string;
-  description: string;
-  price: string;
-  salePrice: string;
-  category: string;
-  stock: string;
-  commission: string;
-  emoji: string;
-  imageUrl: string;
+  name: string; description: string; price: string; salePrice: string;
+  category: string; stock: string; commission: string; emoji: string;
+  images: string[]; videoUrl: string;
+  specs: { key: string; value: string }[];
+  deliveryFee: string; estimatedMins: string;
 }
 
 const EMPTY_FORM: ProductForm = {
   name: '', description: '', price: '', salePrice: '', category: 'other',
-  stock: '10', commission: '10', emoji: '📦', imageUrl: '',
+  stock: '10', commission: '10', emoji: '📦', images: [], videoUrl: '',
+  specs: [], deliveryFee: '', estimatedMins: '',
 };
 
-const EMOJI_OPTIONS = ['📦', '👕', '👟', '🧢', '👜', '🍕', '🍔', '📱', '🎧', '💄', '✨', '🌿', '🧘', '⚽', '🎮', '📚', '🎁', '🧸'];
+const EMOJIS = ['📦', '👕', '👟', '🧢', '👜', '🍕', '🍔', '📱', '🎧', '💄', '✨', '🌿', '🧘', '⚽', '🎮', '📚', '🎁', '🧸', '🖨️', '🔧', '💇', '🎨'];
+type ModalTab = 'info' | 'media' | 'desc' | 'price' | 'settings';
 
+const TABS: { key: ModalTab; label: string; icon: React.ElementType }[] = [
+  { key: 'info', label: 'Үндсэн', icon: Package },
+  { key: 'media', label: 'Медиа', icon: ImageIcon },
+  { key: 'desc', label: 'Тайлбар', icon: FileText },
+  { key: 'price', label: 'Үнэ & Тоо', icon: DollarSign },
+  { key: 'settings', label: 'Тохиргоо', icon: Settings },
+];
+
+/* ═══ Page ═══ */
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,21 +45,16 @@ export default function ProductsPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductForm>(EMPTY_FORM);
+  const [modalTab, setModalTab] = useState<ModalTab>('info');
   const [saving, setSaving] = useState(false);
   const toast = useToast();
 
   useEffect(() => { loadProducts(); }, []);
-
   async function loadProducts() {
     setLoading(true);
-    try {
-      const res = await ProductsAPI.list();
-      setProducts(res.products?.length ? res.products : DEMO_PRODUCTS as Product[]);
-    } catch {
-      setProducts(DEMO_PRODUCTS as Product[]);
-    } finally {
-      setLoading(false);
-    }
+    try { const res = await ProductsAPI.list(); setProducts(res.products?.length ? res.products : DEMO_PRODUCTS as Product[]); }
+    catch { setProducts(DEMO_PRODUCTS as Product[]); }
+    finally { setLoading(false); }
   }
 
   const filtered = useMemo(() => {
@@ -61,160 +69,116 @@ export default function ProductsPage() {
     totalValue: products.reduce((s, p) => s + (p.salePrice || p.price) * (p.stock || 0), 0),
   }), [products]);
 
-  function openAdd() {
-    setForm(EMPTY_FORM);
-    setEditingId(null);
-    setShowModal(true);
-  }
-
+  function openAdd() { setForm(EMPTY_FORM); setEditingId(null); setModalTab('info'); setShowModal(true); }
   function openEdit(p: Product) {
     setForm({
       name: p.name, description: p.description || '', price: String(p.price),
       salePrice: p.salePrice ? String(p.salePrice) : '', category: p.category || 'other',
       stock: String(p.stock || 0), commission: String(p.commission || 10),
-      emoji: p.emoji || '📦', imageUrl: p.images?.[0] || '',
+      emoji: p.emoji || '📦', images: p.images || [], videoUrl: '',
+      specs: [], deliveryFee: '', estimatedMins: '',
     });
-    setEditingId(p._id);
-    setShowModal(true);
+    setEditingId(p._id); setModalTab('info'); setShowModal(true);
   }
 
   async function handleSave() {
-    if (!form.name || !form.price) {
-      toast.show('Нэр, үнэ заавал бөглөнө үү', 'warn');
-      return;
-    }
+    if (!form.name || !form.price) { toast.show('Нэр, үнэ заавал', 'warn'); return; }
     setSaving(true);
     const data: Partial<Product> = {
       name: form.name, description: form.description, price: Number(form.price),
       salePrice: form.salePrice ? Number(form.salePrice) : undefined,
       category: form.category, stock: Number(form.stock), commission: Number(form.commission),
-      emoji: form.emoji, images: form.imageUrl ? [form.imageUrl] : [],
+      emoji: form.emoji, images: form.images.length ? form.images : undefined,
     };
     try {
       if (editingId) {
         const updated = await ProductsAPI.update(editingId, data);
         setProducts((prev) => prev.map((p) => (p._id === editingId ? { ...p, ...updated } : p)));
-        toast.show('Бүтээгдэхүүн шинэчлэгдлээ', 'ok');
+        toast.show('Шинэчлэгдлээ', 'ok');
       } else {
         const created = await ProductsAPI.create(data);
         setProducts((prev) => [created, ...prev]);
-        toast.show('Бүтээгдэхүүн нэмэгдлээ', 'ok');
+        toast.show('Нэмэгдлээ', 'ok');
       }
       setShowModal(false);
     } catch {
-      // Fallback for demo
-      if (editingId) {
-        setProducts((prev) => prev.map((p) => (p._id === editingId ? { ...p, ...data } : p)));
-        toast.show('Бүтээгдэхүүн шинэчлэгдлээ', 'ok');
-      } else {
-        const newP: Product = { _id: 'new_' + Date.now(), ...data } as Product;
-        setProducts((prev) => [newP, ...prev]);
-        toast.show('Бүтээгдэхүүн нэмэгдлээ', 'ok');
-      }
+      if (editingId) { setProducts((prev) => prev.map((p) => (p._id === editingId ? { ...p, ...data } : p))); }
+      else { setProducts((prev) => [{ _id: 'new_' + Date.now(), ...data } as Product, ...prev]); }
+      toast.show(editingId ? 'Шинэчлэгдлээ' : 'Нэмэгдлээ', 'ok');
       setShowModal(false);
-    } finally {
-      setSaving(false);
-    }
+    } finally { setSaving(false); }
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('Устгахдаа итгэлтэй байна уу?')) return;
-    try {
-      await ProductsAPI.delete(id);
-    } catch { /* fallback */ }
+    if (!confirm('Устгах уу?')) return;
+    try { await ProductsAPI.delete(id); } catch {}
     setProducts((prev) => prev.filter((p) => p._id !== id));
-    toast.show('Бүтээгдэхүүн устгагдлаа', 'ok');
+    toast.show('Устгагдлаа', 'ok');
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
-          <div className="h-8 w-56 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="h-56 bg-gray-200 rounded-xl animate-pulse" />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  const addImageUrl = () => {
+    const url = prompt('Зургийн URL оруулна уу:');
+    if (url) setForm((prev) => ({ ...prev, images: [...prev.images, url] }));
+  };
+
+  const removeImage = (idx: number) => setForm((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== idx) }));
+  const addSpec = () => setForm((prev) => ({ ...prev, specs: [...prev.specs, { key: '', value: '' }] }));
+  const updateSpec = (idx: number, field: 'key' | 'value', val: string) => setForm((prev) => ({ ...prev, specs: prev.specs.map((s, i) => i === idx ? { ...s, [field]: val } : s) }));
+  const removeSpec = (idx: number) => setForm((prev) => ({ ...prev, specs: prev.specs.filter((_, i) => i !== idx) }));
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Бүтээгдэхүүн</h1>
-          <p className="text-gray-500 mt-1">Бүтээгдэхүүн нэмэх, засах, устгах</p>
+          <h1 className="text-2xl font-extrabold text-gray-900">Бүтээгдэхүүн</h1>
+          <p className="text-sm text-gray-500">{products.length} бүтээгдэхүүн</p>
         </div>
-        <button onClick={openAdd} className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors text-sm">
-          + Шинэ бүтээгдэхүүн
+        <button onClick={openAdd} className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition border-none cursor-pointer">
+          <Plus className="w-4 h-4" /> Бараа нэмэх
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <StatCard icon="🛍️" label="Нийт бүтээгдэхүүн" value={stats.total} gradient="indigo" />
-        <StatCard icon="⚠️" label="Бага нөөцтэй (<5)" value={stats.lowStock} gradient="amber" />
-        <StatCard icon="💎" label="Нийт үнэ цэнэ" value={formatPrice(stats.totalValue)} gradient="green" />
+      <div className="grid grid-cols-3 gap-4">
+        <StatCard icon="📦" label="Нийт бараа" value={stats.total} gradient="indigo" />
+        <StatCard icon="⚠️" label="Үлдэгдэл бага" value={stats.lowStock} gradient="amber" />
+        <StatCard icon="💰" label="Нийт үнэ" value={formatPrice(stats.totalValue)} gradient="green" />
       </div>
 
       {/* Search */}
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="🔍 Бүтээгдэхүүн хайх..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
+      <div className="relative max-w-sm">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Бараа хайх..."
+          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white" />
       </div>
 
-      {/* Product Grid */}
-      {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <div className="text-4xl mb-3">📦</div>
-          <h3 className="text-lg font-semibold text-gray-700">Бүтээгдэхүүн олдсонгүй</h3>
-          <p className="text-gray-400 mt-1">Шинэ бүтээгдэхүүн нэмнэ үү</p>
-        </div>
+      {/* Product grid */}
+      {loading ? (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">{[1, 2, 3, 4].map((i) => <div key={i} className="h-56 bg-gray-200 rounded-xl animate-pulse" />)}</div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-16"><div className="text-4xl mb-3 opacity-30">📦</div><p className="text-sm text-gray-400">Бараа байхгүй</p></div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((p) => (
-            <div key={p._id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-              <div className="h-32 bg-gray-50 flex items-center justify-center text-5xl">
-                {p.images?.[0] ? (
-                  <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
-                ) : (
-                  <span>{p.emoji || '📦'}</span>
-                )}
+            <div key={p._id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition group">
+              <div className="h-32 bg-gray-50 flex items-center justify-center relative">
+                {p.images?.[0] ? <img src={p.images[0]} alt="" className="w-full h-full object-cover" /> : <span className="text-4xl">{p.emoji || '📦'}</span>}
+                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                  <button onClick={() => openEdit(p)} className="w-7 h-7 rounded-lg bg-white shadow border border-gray-200 flex items-center justify-center cursor-pointer text-gray-400 hover:text-indigo-600"><Edit3 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => handleDelete(p._id)} className="w-7 h-7 rounded-lg bg-white shadow border border-gray-200 flex items-center justify-center cursor-pointer text-gray-400 hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+                {p.salePrice && p.salePrice < p.price && <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">SALE</span>}
               </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-900 text-sm truncate">{p.name}</h3>
-                <div className="flex items-center gap-2 mt-1">
-                  {p.salePrice ? (
-                    <>
-                      <span className="text-sm font-bold text-indigo-600">{formatPrice(p.salePrice)}</span>
-                      <span className="text-xs text-gray-400 line-through">{formatPrice(p.price)}</span>
-                    </>
-                  ) : (
-                    <span className="text-sm font-bold text-gray-900">{formatPrice(p.price)}</span>
-                  )}
+              <div className="p-3">
+                <h3 className="text-sm font-bold text-gray-900 truncate">{p.name}</h3>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-base font-extrabold text-indigo-600">{formatPrice(p.salePrice || p.price)}</span>
+                  {p.salePrice && <span className="text-xs text-gray-400 line-through">{formatPrice(p.price)}</span>}
                 </div>
-                <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
-                  <span>📦 {p.stock ?? 0} ш</span>
-                  <span>💰 {p.commission ?? 10}%</span>
-                  {p.category && <span>{CATEGORIES[p.category] || p.category}</span>}
-                </div>
-                <div className="flex gap-2 mt-3">
-                  <button onClick={() => openEdit(p)} className="flex-1 px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                    ✏️ Засах
-                  </button>
-                  <button onClick={() => handleDelete(p._id)} className="px-3 py-1.5 text-xs font-medium bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
-                    🗑️
-                  </button>
+                <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
+                  <span>Үлдэгдэл: {p.stock || 0}</span>
+                  {p.images && p.images.length > 1 && <span>{p.images.length} зураг</span>}
                 </div>
               </div>
             </div>
@@ -222,82 +186,202 @@ export default function ProductsPage() {
         </div>
       )}
 
-      {/* Add/Edit Modal */}
+      {/* ═══ MODAL — 5 Tab Product Form ═══ */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900">{editingId ? 'Бүтээгдэхүүн засах' : 'Шинэ бүтээгдэхүүн'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+        <>
+          <div className="fixed inset-0 bg-black/40 z-[998]" onClick={() => setShowModal(false)} />
+          <div className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl bg-white rounded-2xl z-[999] flex flex-col max-h-[90vh] shadow-xl overflow-hidden">
+            {/* Modal header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
+              <h3 className="text-lg font-bold text-gray-900">{editingId ? 'Бараа засах' : 'Шинэ бараа'}</h3>
+              <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center cursor-pointer border-none bg-transparent"><X className="w-4 h-4 text-gray-400" /></button>
             </div>
-            <div className="p-6 space-y-4">
-              {/* Emoji */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Emoji</label>
-                <div className="flex flex-wrap gap-2">
-                  {EMOJI_OPTIONS.map((e) => (
-                    <button
-                      key={e}
-                      type="button"
-                      onClick={() => setForm({ ...form, emoji: e })}
-                      className={`w-10 h-10 rounded-lg text-xl flex items-center justify-center transition-colors ${form.emoji === e ? 'bg-indigo-100 ring-2 ring-indigo-500' : 'bg-gray-50 hover:bg-gray-100'}`}
-                    >
-                      {e}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Нэр *</label>
-                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            {/* Tabs */}
+            <div className="flex border-b border-gray-100 px-6 shrink-0">
+              {TABS.map((t) => (
+                <button key={t.key} onClick={() => setModalTab(t.key)}
+                  className={cn('flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold border-b-2 transition cursor-pointer bg-transparent border-none -mb-px',
+                    modalTab === t.key ? 'border-b-indigo-600 text-indigo-600' : 'border-transparent text-gray-400 hover:text-gray-600')}>
+                  <t.icon className="w-3.5 h-3.5" /> {t.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab content */}
+            <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+              {/* Tab 1: Info */}
+              {modalTab === 'info' && (
+                <>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Дүрс</label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {EMOJIS.map((e) => (
+                        <button key={e} onClick={() => setForm({ ...form, emoji: e })}
+                          className={cn('w-9 h-9 rounded-lg text-lg flex items-center justify-center cursor-pointer border transition',
+                            form.emoji === e ? 'bg-indigo-100 ring-2 ring-indigo-500 border-transparent' : 'bg-gray-50 border-gray-200 hover:bg-gray-100')}>
+                          {e}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Нэр *</label>
+                    <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Бүтээгдэхүүний нэр"
+                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Ангилал</label>
+                    <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
+                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                      {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                    </select>
+                  </div>
+                </>
+              )}
+
+              {/* Tab 2: Media */}
+              {modalTab === 'media' && (
+                <>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Зурагнууд ({form.images.length}/10)</label>
+
+                    {/* Image grid */}
+                    {form.images.length > 0 && (
+                      <div className="grid grid-cols-5 gap-2 mb-3">
+                        {form.images.map((img, i) => (
+                          <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 group/img">
+                            <img src={img} alt="" className="w-full h-full object-cover" />
+                            {i === 0 && <span className="absolute top-1 left-1 text-[8px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded">Гол</span>}
+                            <button onClick={() => removeImage(i)}
+                              className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center border-none cursor-pointer opacity-0 group-hover/img:opacity-100 transition text-[10px]">✕</button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Upload area */}
+                    <div onClick={addImageUrl}
+                      className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition">
+                      <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                      <p className="text-sm text-gray-500">Зураг нэмэх (URL)</p>
+                      <p className="text-[10px] text-gray-400 mt-1">JPG, PNG, WEBP · 10MB хүртэл · 10 ширхэг хүртэл</p>
+                    </div>
+                  </div>
+
+                  {/* Video */}
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Видео (заавал биш)</label>
+                    <input type="url" value={form.videoUrl} onChange={(e) => setForm({ ...form, videoUrl: e.target.value })} placeholder="https://youtube.com/watch?v=..."
+                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  </div>
+                </>
+              )}
+
+              {/* Tab 3: Description + Specs */}
+              {modalTab === 'desc' && (
+                <>
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Тайлбар</label>
+                    <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={6}
+                      placeholder="Бүтээгдэхүүний дэлгэрэнгүй тайлбар..."
+                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" />
+                    <div className="text-[10px] text-gray-400 text-right">{form.description.length} тэмдэгт</div>
+                  </div>
+
+                  {/* Specs */}
+                  <div>
+                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Үзүүлэлтүүд</label>
+                    <div className="space-y-2">
+                      {form.specs.map((spec, i) => (
+                        <div key={i} className="flex gap-2">
+                          <input placeholder="Нэр (жш: Жин)" value={spec.key} onChange={(e) => updateSpec(i, 'key', e.target.value)}
+                            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                          <input placeholder="Утга (жш: 0.5 кг)" value={spec.value} onChange={(e) => updateSpec(i, 'value', e.target.value)}
+                            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                          <button onClick={() => removeSpec(i)} className="text-red-400 hover:text-red-600 bg-transparent border-none cursor-pointer px-2">✕</button>
+                        </div>
+                      ))}
+                      <button onClick={addSpec} className="text-sm text-indigo-600 font-semibold bg-transparent border-none cursor-pointer hover:underline">
+                        + Үзүүлэлт нэмэх
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Tab 4: Price & Stock */}
+              {modalTab === 'price' && (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Үнэ (₮) *</label>
+                      <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="0"
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Хямдрал үнэ (₮)</label>
+                      <input type="number" value={form.salePrice} onChange={(e) => setForm({ ...form, salePrice: e.target.value })} placeholder="Хоосон = хямдралгүй"
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                  </div>
+                  {form.salePrice && Number(form.salePrice) < Number(form.price) && (
+                    <div className="bg-green-50 rounded-lg p-3 text-sm text-green-700">
+                      -{Math.round((1 - Number(form.salePrice) / Number(form.price)) * 100)}% хямдрал · Хэмнэлт: {formatPrice(Number(form.price) - Number(form.salePrice))}
+                    </div>
+                  )}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Нөөц (ширхэг)</label>
+                      <input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Комисс (%)</label>
+                      <input type="number" value={form.commission} onChange={(e) => setForm({ ...form, commission: e.target.value })} min="1" max="50"
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Tab 5: Settings */}
+              {modalTab === 'settings' && (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Хүргэлтийн төлбөр (₮)</label>
+                      <input type="number" value={form.deliveryFee} onChange={(e) => setForm({ ...form, deliveryFee: e.target.value })} placeholder="0 = үнэгүй"
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Хүргэлтийн хугацаа (мин)</label>
+                      <input type="number" value={form.estimatedMins} onChange={(e) => setForm({ ...form, estimatedMins: e.target.value })} placeholder="30"
+                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                  </div>
+                  <div className="bg-indigo-50 rounded-xl p-4">
+                    <h4 className="text-xs font-bold text-indigo-700 mb-2">Модификатор & Нэмэлт</h4>
+                    <p className="text-xs text-indigo-600">Бараа хадгалсны дараа Modifier бүлэг, Add-on нэмж болно. Бараагаа засах товч дарж нэмнэ үү.</p>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 shrink-0">
+              <div className="text-[10px] text-gray-400">{modalTab === 'info' ? '1/5' : modalTab === 'media' ? '2/5' : modalTab === 'desc' ? '3/5' : modalTab === 'price' ? '4/5' : '5/5'}</div>
+              <div className="flex gap-2">
+                <button onClick={() => setShowModal(false)} className="px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition">Болих</button>
+                <button onClick={handleSave} disabled={saving || !form.name || !form.price}
+                  className={cn('px-5 py-2.5 text-sm font-semibold text-white rounded-lg border-none cursor-pointer transition',
+                    !form.name || !form.price ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700')}>
+                  {saving ? 'Хадгалж байна...' : editingId ? 'Хадгалах' : 'Нэмэх'}
+                </button>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Тайлбар</label>
-                <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Үнэ *</label>
-                  <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Хямдралтай үнэ</label>
-                  <input type="number" value={form.salePrice} onChange={(e) => setForm({ ...form, salePrice: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ангилал</label>
-                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                  {Object.entries(CATEGORIES).map(([k, v]) => (
-                    <option key={k} value={k}>{v}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Нөөц</label>
-                  <input type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Шимтгэл %</label>
-                  <input type="number" value={form.commission} onChange={(e) => setForm({ ...form, commission: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Зурагны URL</label>
-                <input value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} placeholder="https://..." className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-              </div>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
-              >
-                {saving ? 'Хадгалж байна...' : editingId ? 'Шинэчлэх' : 'Нэмэх'}
-              </button>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
