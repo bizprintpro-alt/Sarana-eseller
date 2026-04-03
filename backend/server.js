@@ -21,6 +21,9 @@ app.use(cors({
     'http://localhost:3000',
     'http://localhost:5500',
     'http://127.0.0.1:5500',
+    'https://nextjs-biz6.vercel.app',
+    'https://eseller.mn',
+    'https://www.eseller.mn',
   ].filter(Boolean),
   credentials: true,
 }));
