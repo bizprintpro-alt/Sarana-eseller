@@ -174,6 +174,7 @@ const ADMIN_SECTIONS: SidebarSection[] = [
     title: 'Тохиргоо',
     items: [
       { href: '/dashboard/admin/reference-id', icon: '🔢', label: 'Reference ID', isNew: true },
+      { href: '/dashboard/admin/announcements', icon: '📢', label: 'Мэдэгдлийн мөр', isNew: true },
       { href: '/dashboard/admin/settings', icon: '⚙️', label: 'Системийн тохиргоо' },
     ],
   },

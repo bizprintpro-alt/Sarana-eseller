@@ -500,3 +500,16 @@ model AffiliateConversion {
 
   link AffiliateLink @relation(fields: [linkId], references: [id])
 }
+
+// ══════════════════════════════════════════════════════════════
+// WISHLIST
+// ══════════════════════════════════════════════════════════════
+
+model WishlistItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
