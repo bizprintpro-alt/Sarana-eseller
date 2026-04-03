@@ -5,33 +5,21 @@
     "version": "1.0.0",
     "scheme": "eseller",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
       "backgroundColor": "#0A0A0A"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "mn.eseller.customer",
-      "infoPlist": {
-        "NSFaceIDUsageDescription": "Eseller нэвтрэхэд FaceID ашиглана",
-        "NSCameraUsageDescription": "QR код уншихад камер ашиглана"
-      }
+      "bundleIdentifier": "mn.eseller.customer"
     },
     "android": {
       "package": "mn.eseller.customer",
-      "adaptiveIcon": { "foregroundImage": "./assets/adaptive-icon.png", "backgroundColor": "#0A0A0A" },
-      "permissions": ["CAMERA", "ACCESS_FINE_LOCATION", "RECEIVE_BOOT_COMPLETED", "VIBRATE"]
+      "adaptiveIcon": { "backgroundColor": "#0A0A0A" },
+      "edgeToEdgeEnabled": true
     },
-    "plugins": [
-      "expo-router",
-      "expo-secure-store",
-      "expo-local-authentication",
-      ["expo-camera", { "cameraPermission": "QR код уншихад камер ашиглана" }],
-      ["expo-location", { "locationAlwaysAndWhenInUsePermission": "Хүргэлтийн мөрдлөгөнд байршил ашиглана" }],
-      ["expo-notifications", { "icon": "./assets/notification-icon.png", "color": "#E8242C" }]
-    ]
+    "plugins": ["expo-router", "expo-secure-store", "expo-local-authentication"],
+    "experiments": { "typedRoutes": true }
   }
 }
