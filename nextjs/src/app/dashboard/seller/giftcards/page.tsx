@@ -1,0 +1,187 @@
+'use client';
+
+import { useState } from 'react';
+import { formatPrice } from '@/lib/utils';
+import { useToast } from '@/components/shared/Toast';
+import StatCard from '@/components/dashboard/StatCard';
+
+interface GiftCard {
+  id: string;
+  code: string;
+  amount: number;
+  status: 'active' | 'used' | 'expired';
+  createdAt: string;
+  usedAt?: string;
+  usedBy?: string;
+  expiresAt: string;
+}
+
+const STATUS_STYLES: Record<string, [string, string]> = {
+  active: ['bg-green-100 text-green-700', 'Идэвхтэй'],
+  used: ['bg-gray-100 text-gray-500', 'Хэрэглэсэн'],
+  expired: ['bg-red-100 text-red-600', 'Дууссан'],
+};
+
+const INITIAL_CARDS: GiftCard[] = [
+  { id: '1', code: 'GIFT-A1B2-C3D4', amount: 50000, status: 'active', createdAt: '2026-04-01T10:00:00Z', expiresAt: '2026-07-01' },
+  { id: '2', code: 'GIFT-E5F6-G7H8', amount: 100000, status: 'used', createdAt: '2026-03-15T09:00:00Z', usedAt: '2026-03-28T14:00:00Z', usedBy: 'Бат-Эрдэнэ', expiresAt: '2026-06-15' },
+  { id: '3', code: 'GIFT-I9J0-K1L2', amount: 25000, status: 'active', createdAt: '2026-04-02T11:00:00Z', expiresAt: '2026-07-02' },
+  { id: '4', code: 'GIFT-M3N4-O5P6', amount: 75000, status: 'expired', createdAt: '2025-12-01T10:00:00Z', expiresAt: '2026-03-01' },
+];
+
+function generateCode() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const seg = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  return `GIFT-${seg()}-${seg()}`;
+}
+
+export default function GiftCardsPage() {
+  const [cards, setCards] = useState<GiftCard[]>(INITIAL_CARDS);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ amount: '50000', code: generateCode(), expiresAt: '' });
+  const toast = useToast();
+
+  function handleCreate() {
+    if (!form.amount || Number(form.amount) <= 0) {
+      toast.show('Зөв дүн оруулна уу', 'warn');
+      return;
+    }
+    if (!form.expiresAt) {
+      toast.show('Дуусах огноо оруулна уу', 'warn');
+      return;
+    }
+    const newCard: GiftCard = {
+      id: Date.now().toString(),
+      code: form.code,
+      amount: Number(form.amount),
+      status: 'active',
+      createdAt: new Date().toISOString(),
+      expiresAt: form.expiresAt,
+    };
+    setCards((prev) => [newCard, ...prev]);
+    setForm({ amount: '50000', code: generateCode(), expiresAt: '' });
+    setShowModal(false);
+    toast.show('Бэлгийн карт үүсгэлээ', 'ok');
+  }
+
+  function deleteCard(id: string) {
+    if (!confirm('Устгахдаа итгэлтэй байна уу?')) return;
+    setCards((prev) => prev.filter((c) => c.id !== id));
+    toast.show('Бэлгийн карт устгагдлаа', 'ok');
+  }
+
+  function copyCode(code: string) {
+    navigator.clipboard.writeText(code).then(() => {
+      toast.show('Код хуулагдлаа', 'ok');
+    });
+  }
+
+  const activeValue = cards.filter((c) => c.status === 'active').reduce((s, c) => s + c.amount, 0);
+  const usedValue = cards.filter((c) => c.status === 'used').reduce((s, c) => s + c.amount, 0);
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Бэлгийн карт</h1>
+          <p className="text-gray-500 mt-1">Бэлгийн карт үүсгэх, удирдах</p>
+        </div>
+        <button onClick={() => { setForm({ ...form, code: generateCode() }); setShowModal(true); }} className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors text-sm">
+          + Шинэ бэлгийн карт
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <StatCard icon="🎁" label="Нийт карт" value={cards.length} gradient="indigo" />
+        <StatCard icon="✅" label="Идэвхтэй" value={cards.filter((c) => c.status === 'active').length} gradient="green" />
+        <StatCard icon="💰" label="Идэвхтэй үнэ цэнэ" value={formatPrice(activeValue)} gradient="amber" />
+        <StatCard icon="📊" label="Хэрэглэсэн" value={formatPrice(usedValue)} gradient="pink" />
+      </div>
+
+      {cards.length === 0 ? (
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+          <div className="text-4xl mb-3">🎁</div>
+          <h3 className="text-lg font-semibold text-gray-700">Бэлгийн карт байхгүй</h3>
+          <p className="text-gray-400 mt-1">Шинэ бэлгийн карт үүсгээрэй</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {cards.map((card) => {
+            const [cls, label] = STATUS_STYLES[card.status];
+            return (
+              <div key={card.id} className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${card.status !== 'active' ? 'opacity-70' : ''}`}>
+                <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-5 text-white">
+                  <div className="flex justify-between items-start">
+                    <span className="text-2xl">🎁</span>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${card.status === 'active' ? 'bg-white/20 text-white' : 'bg-black/10 text-white/70'}`}>
+                      {label}
+                    </span>
+                  </div>
+                  <p className="text-2xl font-black mt-3">{formatPrice(card.amount)}</p>
+                  <p className="text-sm font-mono mt-1 text-white/80">{card.code}</p>
+                </div>
+                <div className="p-4">
+                  <div className="flex justify-between text-xs text-gray-500 mb-3">
+                    <span>Үүсгэсэн: {new Date(card.createdAt).toLocaleDateString('mn-MN')}</span>
+                    <span>Дуусах: {new Date(card.expiresAt).toLocaleDateString('mn-MN')}</span>
+                  </div>
+                  {card.usedBy && (
+                    <p className="text-xs text-gray-400 mb-2">Хэрэглэсэн: {card.usedBy}</p>
+                  )}
+                  <div className="flex gap-2">
+                    <button onClick={() => copyCode(card.code)} className="flex-1 px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                      Код хуулах
+                    </button>
+                    <button onClick={() => deleteCard(card.id)} className="px-3 py-1.5 text-xs font-medium bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
+                      Устгах
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
+          <div className="bg-white rounded-2xl max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-gray-900">Шинэ бэлгийн карт</h2>
+              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Код</label>
+                <div className="flex gap-2">
+                  <input readOnly value={form.code} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-gray-50 font-mono" />
+                  <button onClick={() => setForm({ ...form, code: generateCode() })} className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+                    Шинэ
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Дүн (₮)</label>
+                <input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <div className="flex gap-2 mt-2">
+                  {[10000, 25000, 50000, 100000].map((v) => (
+                    <button key={v} onClick={() => setForm({ ...form, amount: String(v) })} className="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors">
+                      {formatPrice(v)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Дуусах огноо</label>
+                <input type="date" value={form.expiresAt} onChange={(e) => setForm({ ...form, expiresAt: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              </div>
+              <button onClick={handleCreate} className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
+                Үүсгэх
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

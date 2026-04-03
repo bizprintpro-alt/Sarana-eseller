@@ -1,0 +1,150 @@
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
+import { OrdersAPI, Order } from '@/lib/api';
+import { formatPrice, timeAgo } from '@/lib/utils';
+import StatCard from '@/components/dashboard/StatCard';
+
+const MOCK_ORDERS: Order[] = [
+  { _id: '1', orderNumber: 'ORD-1001', user: { name: 'Бат-Эрдэнэ' }, total: 70000, status: 'delivered', createdAt: '2026-04-02T10:00:00Z' },
+  { _id: '2', orderNumber: 'ORD-1002', user: { name: 'Сарангэрэл' }, total: 99000, status: 'delivered', createdAt: '2026-04-01T14:30:00Z' },
+  { _id: '3', orderNumber: 'ORD-1003', user: { name: 'Ганбаатар' }, total: 91000, status: 'shipped', createdAt: '2026-03-30T09:15:00Z' },
+  { _id: '4', orderNumber: 'ORD-1004', user: { name: 'Оюунчимэг' }, total: 84000, status: 'delivered', createdAt: '2026-03-28T16:45:00Z' },
+  { _id: '5', orderNumber: 'ORD-1005', user: { name: 'Тэмүүлэн' }, total: 44000, status: 'pending', createdAt: '2026-04-03T08:00:00Z' },
+  { _id: '6', orderNumber: 'ORD-1006', user: { name: 'Болормаа' }, total: 75000, status: 'delivered', createdAt: '2026-03-25T11:20:00Z' },
+  { _id: '7', orderNumber: 'ORD-1007', user: { name: 'Энхтүвшин' }, total: 125000, status: 'delivered', createdAt: '2026-03-15T12:00:00Z' },
+  { _id: '8', orderNumber: 'ORD-1008', user: { name: 'Нарантуяа' }, total: 55000, status: 'delivered', createdAt: '2026-03-10T09:00:00Z' },
+];
+
+export default function RevenuePage() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
+  async function loadOrders() {
+    setLoading(true);
+    try {
+      const res = await OrdersAPI.list();
+      setOrders(res.orders?.length ? res.orders : MOCK_ORDERS);
+    } catch {
+      setOrders(MOCK_ORDERS);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const stats = useMemo(() => {
+    const delivered = orders.filter((o) => o.status === 'delivered');
+    const totalRevenue = delivered.reduce((s, o) => s + (o.total || 0), 0);
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const thisMonth = delivered.filter((o) => new Date(o.createdAt) >= monthStart).reduce((s, o) => s + (o.total || 0), 0);
+    const pending = orders.filter((o) => o.status === 'shipped' || o.status === 'confirmed').reduce((s, o) => s + (o.total || 0), 0);
+    const withdrawn = 350000; // Mock
+    return { totalRevenue, thisMonth, pending, withdrawn };
+  }, [orders]);
+
+  const revenueHistory = useMemo(() => {
+    return orders
+      .filter((o) => o.status === 'delivered' || o.status === 'shipped' || o.status === 'confirmed')
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }, [orders]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+          <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
+          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          {[1, 2, 3, 4].map((i) => <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />)}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Орлого</h1>
+        <p className="text-gray-500 mt-1">Борлуулалтын орлого, статистик</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <StatCard icon="💰" label="Нийт орлого" value={formatPrice(stats.totalRevenue)} gradient="green" />
+        <StatCard icon="📅" label="Энэ сарын" value={formatPrice(stats.thisMonth)} gradient="indigo" />
+        <StatCard icon="⏳" label="Хүлээгдэж буй" value={formatPrice(stats.pending)} gradient="amber" />
+        <StatCard icon="🏦" label="Татсан" value={formatPrice(stats.withdrawn)} gradient="pink" />
+      </div>
+
+      {/* Revenue Summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Орлогын түүх</h2>
+          {revenueHistory.length === 0 ? (
+            <div className="p-8 text-center">
+              <div className="text-3xl mb-2">💸</div>
+              <p className="text-gray-400">Одоогоор орлого бүртгэгдээгүй байна</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {revenueHistory.map((order) => (
+                <div key={order._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                      order.status === 'delivered' ? 'bg-green-100' : 'bg-amber-100'
+                    }`}>
+                      {order.status === 'delivered' ? '✅' : '⏳'}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {order.orderNumber || `#${order._id.slice(-6).toUpperCase()}`}
+                      </p>
+                      <p className="text-xs text-gray-500">{order.user?.name || 'Хэрэглэгч'} — {timeAgo(order.createdAt)}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-sm font-bold ${order.status === 'delivered' ? 'text-green-600' : 'text-amber-600'}`}>
+                      +{formatPrice(order.total || 0)}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {order.status === 'delivered' ? 'Хүргэгдсэн' : order.status === 'shipped' ? 'Явсан' : 'Баталгаажсан'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Товч мэдээлэл</h2>
+          <div className="space-y-4">
+            <div className="p-4 bg-green-50 rounded-lg">
+              <p className="text-xs text-green-600 font-medium">Дундаж захиалга</p>
+              <p className="text-xl font-bold text-green-700">
+                {formatPrice(revenueHistory.length ? Math.round(revenueHistory.reduce((s, o) => s + (o.total || 0), 0) / revenueHistory.length) : 0)}
+              </p>
+            </div>
+            <div className="p-4 bg-indigo-50 rounded-lg">
+              <p className="text-xs text-indigo-600 font-medium">Хүргэгдсэн захиалга</p>
+              <p className="text-xl font-bold text-indigo-700">{orders.filter((o) => o.status === 'delivered').length}</p>
+            </div>
+            <div className="p-4 bg-amber-50 rounded-lg">
+              <p className="text-xs text-amber-600 font-medium">Хүлээгдэж буй</p>
+              <p className="text-xl font-bold text-amber-700">{orders.filter((o) => o.status === 'pending').length}</p>
+            </div>
+            <div className="p-4 bg-purple-50 rounded-lg">
+              <p className="text-xs text-purple-600 font-medium">Шимтгэлийн орлого (10%)</p>
+              <p className="text-xl font-bold text-purple-700">{formatPrice(Math.round(stats.totalRevenue * 0.1))}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

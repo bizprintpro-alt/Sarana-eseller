@@ -1,0 +1,199 @@
+'use client';
+
+import { useState } from 'react';
+import { useAuth } from '@/lib/auth';
+import { useToast } from '@/components/shared/Toast';
+import StatCard from '@/components/dashboard/StatCard';
+
+const SOCIAL_TEMPLATES = [
+  {
+    platform: 'Facebook',
+    icon: '📘',
+    color: 'bg-blue-100 text-blue-700',
+    template: (url: string, name: string) =>
+      `🛍️ ${name} дэлгүүрээс шилдэг бүтээгдэхүүнүүдийг үзээрэй!\n\n✅ Чанартай бараа\n🚚 Хурдан хүргэлт\n💰 Хямд үнэ\n\n👉 ${url}`,
+  },
+  {
+    platform: 'Instagram',
+    icon: '📸',
+    color: 'bg-pink-100 text-pink-700',
+    template: (url: string, name: string) =>
+      `✨ ${name} — Онлайн дэлгүүр\n\n🔥 Шинэ бүтээгдэхүүн нэмэгдлээ!\n💎 Чанарын баталгаатай\n📦 Хүргэлттэй\n\n🔗 Линк bio-д\n\n#eseller #onlineshop #mongolia #shopping`,
+  },
+  {
+    platform: 'TikTok',
+    icon: '🎵',
+    color: 'bg-gray-100 text-gray-700',
+    template: (url: string, name: string) =>
+      `🎬 ${name} дэлгүүрийн шинэ бараанууд!\n\n💥 Хямдралтай\n⭐ Шилдэг чанар\n🚀 Шууд захиалаарай\n\n${url}\n\n#eseller #online #shopping #mongolia`,
+  },
+];
+
+export default function MarketingPage() {
+  const { user } = useAuth();
+  const toast = useToast();
+  const storeName = user?.store?.name || user?.name || 'Миний дэлгүүр';
+  const storeUrl = `https://eseller.mn/store/${user?.username || 'mystore'}`;
+  const referralUrl = `${storeUrl}?ref=${user?.username || 'myref'}`;
+
+  const [bannerText, setBannerText] = useState('🔥 Хямдрал! 20% хөнгөлөлт бүх бараанд!');
+  const [bannerColor, setBannerColor] = useState('#6366F1');
+  const [copied, setCopied] = useState<string | null>(null);
+
+  function copyToClipboard(text: string, label: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(label);
+      toast.show(`${label} хуулагдлаа!`, 'ok');
+      setTimeout(() => setCopied(null), 2000);
+    });
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      {/* Header */}
+      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Маркетинг</h1>
+        <p className="text-gray-500 mt-1">Дэлгүүрээ сурталчлах хэрэгслүүд</p>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <StatCard icon="🔗" label="Реферал линк клик" value={142} gradient="indigo" />
+        <StatCard icon="📱" label="Сошиал хуваалцсан" value={38} gradient="pink" />
+        <StatCard icon="🎯" label="Шинэ захиалагч" value={12} gradient="green" />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Referral Link */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">🔗 Реферал линк</h2>
+          <p className="text-sm text-gray-500 mb-3">Энэ линкээр орсон хэрэглэгчид таны дэлгүүрийг харж, захиалга өгнө.</p>
+          <div className="flex gap-2">
+            <input
+              readOnly
+              value={referralUrl}
+              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-gray-50"
+            />
+            <button
+              onClick={() => copyToClipboard(referralUrl, 'Реферал линк')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                copied === 'Реферал линк' ? 'bg-green-500 text-white' : 'bg-indigo-600 text-white hover:bg-indigo-700'
+              }`}
+            >
+              {copied === 'Реферал линк' ? '✓ Хуулсан' : 'Хуулах'}
+            </button>
+          </div>
+          <div className="mt-4 p-3 bg-indigo-50 rounded-lg">
+            <p className="text-xs text-indigo-700">
+              💡 Реферал линкээр орсон хэрэглэгчийн захиалгад таны шимтгэл тооцогдоно
+            </p>
+          </div>
+        </div>
+
+        {/* QR Code */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">📱 QR Код</h2>
+          <p className="text-sm text-gray-500 mb-3">Дэлгүүрийн QR код — хэвлэж, хуваалцаарай.</p>
+          <div className="flex flex-col items-center">
+            <div className="w-48 h-48 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center">
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(storeUrl)}`}
+                alt="QR Code"
+                className="w-40 h-40 rounded"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            </div>
+            <p className="text-xs text-gray-400 mt-2">{storeUrl}</p>
+            <button
+              onClick={() => copyToClipboard(storeUrl, 'Дэлгүүрийн линк')}
+              className="mt-3 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+            >
+              Линк хуулах
+            </button>
+          </div>
+        </div>
+
+        {/* Social Media Templates */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">📣 Сошиал медиа загвар</h2>
+          <p className="text-sm text-gray-500 mb-4">Бэлэн текст хуулж, сошиал хуудас дээрээ нийтлээрэй.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {SOCIAL_TEMPLATES.map((tmpl) => {
+              const text = tmpl.template(referralUrl, storeName);
+              return (
+                <div key={tmpl.platform} className="border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${tmpl.color}`}>
+                      {tmpl.icon} {tmpl.platform}
+                    </span>
+                  </div>
+                  <pre className="text-xs text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-3 mb-3 max-h-40 overflow-y-auto font-sans">
+                    {text}
+                  </pre>
+                  <button
+                    onClick={() => copyToClipboard(text, tmpl.platform)}
+                    className={`w-full py-2 rounded-lg text-sm font-medium transition-colors ${
+                      copied === tmpl.platform ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {copied === tmpl.platform ? '✓ Хуулсан' : 'Текст хуулах'}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Banner Creator */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">🎨 Баннер үүсгэгч</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Баннер текст</label>
+                <input
+                  value={bannerText}
+                  onChange={(e) => setBannerText(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Өнгө</label>
+                <div className="flex gap-2">
+                  {['#6366F1', '#EC4899', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'].map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setBannerColor(color)}
+                      className={`w-8 h-8 rounded-full transition-transform ${bannerColor === color ? 'scale-125 ring-2 ring-offset-2 ring-gray-400' : ''}`}
+                      style={{ background: color }}
+                    />
+                  ))}
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  copyToClipboard(bannerText, 'Баннер текст');
+                }}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+              >
+                Текст хуулах
+              </button>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Урьдчилан харах</label>
+              <div
+                className="rounded-xl p-6 text-white text-center font-bold text-lg shadow-md"
+                style={{ background: `linear-gradient(135deg, ${bannerColor}, ${bannerColor}dd)` }}
+              >
+                <p>{bannerText}</p>
+                <p className="text-sm font-normal mt-2 opacity-80">{storeName} — eseller.mn</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
