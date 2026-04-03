@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Eseller Driver",
+    "slug": "eseller-driver",
+    "version": "1.0.0",
+    "scheme": "eseller-driver",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": { "supportsTablet": false, "bundleIdentifier": "mn.eseller.driver", "infoPlist": { "UIBackgroundModes": ["location"] } },
+    "android": { "package": "mn.eseller.driver", "adaptiveIcon": { "backgroundColor": "#0A0A0A" }, "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "CAMERA", "VIBRATE"] },
+    "plugins": ["expo-router", "expo-secure-store", "expo-camera", "expo-notifications", ["expo-location", { "locationAlwaysAndWhenInUsePermission": "Хүргэлтийн мөрдлөгөнд байршил ашиглана" }]]
+  }
+}
