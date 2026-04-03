@@ -1,33 +1,21 @@
 @import "tailwindcss";
 
 /* ══════════════════════════════════════════════════════════════
-   eseller.mn — Design System v2.0
-   Visual Identity: Indigo Blue + Clean Slate + Red Accent
+   eseller.mn — Dark Design System v3.0
+   Brand: Dark marketplace with red accent (#E8242C)
    ══════════════════════════════════════════════════════════════ */
 
 @theme inline {
-  /* Primary — Indigo (dashboard, admin) */
-  --color-primary: #4F46E5;
-  --color-primary-dark: #4338CA;
-  --color-primary-light: #EEF2FF;
-  --color-primary-500: #6366F1;
-  --color-primary-600: #4F46E5;
-  --color-primary-700: #4338CA;
-
-  /* Brand — eseller Red (landing, CTA, buttons) */
-  --color-brand: #CC0000;
-  --color-brand-dark: #A30000;
-  --color-brand-light: #FFF0F0;
+  /* Brand */
+  --color-brand: #E8242C;
+  --color-brand-dark: #C41E25;
+  --color-brand-light: #FF4D53;
 
   /* Semantic */
-  --color-success: #059669;
-  --color-success-light: #ECFDF5;
-  --color-warning: #D97706;
-  --color-warning-light: #FFFBEB;
-  --color-error: #DC2626;
-  --color-error-light: #FEF2F2;
-  --color-info: #0284C7;
-  --color-info-light: #E0F2FE;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #E8242C;
+  --color-info: #3B82F6;
 
   /* Stat Card Gradients */
   --color-stat-indigo-from: #6366F1;
@@ -39,101 +27,93 @@
   --color-stat-amber-from: #F59E0B;
   --color-stat-amber-to: #D97706;
 
-  /* Dashboard Dark */
-  --color-dash-bg: #0F172A;
-  --color-dash-sidebar: #111527;
-  --color-dash-card: #161B2E;
-  --color-dash-elevated: #1E2440;
-  --color-dash-accent: #6366F1;
-  --color-dash-accent-dark: #4338CA;
+  /* Dashboard */
+  --color-dash-bg: #0A0A0A;
+  --color-dash-sidebar: #111111;
+  --color-dash-card: #1A1A1A;
+  --color-dash-elevated: #2A2A2A;
+  --color-dash-accent: #E8242C;
+  --color-dash-accent-dark: #C41E25;
 
   /* Fonts */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Inter', 'Montserrat', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* ══════ ROOT ══════ */
+/* ══════ DESIGN TOKENS ══════ */
 @layer base {
   :root {
-    --p: #CC0000;
-    --pd: #A30000;
-    --pl: #FFF0F0;
-    --p-rgb: 204, 0, 0;
-    --g: #059669;
-    --a: #D97706;
-    --r: #DC2626;
-    --bg: #F8FAFC;
-    --bg-card: #FFFFFF;
-    --bo: #E2E8F0;
-    --t1: #0F172A;
-    --t2: #475569;
-    --t3: #94A3B8;
+    /* Backgrounds */
+    --esl-bg-page: #0A0A0A;
+    --esl-bg-surface: #1A1A1A;
+    --esl-bg-elevated: #2A2A2A;
+
+    /* Borders */
+    --esl-border: #3D3D3D;
+    --esl-border-strong: #555555;
+
+    /* Text */
+    --esl-text-primary: #FFFFFF;
+    --esl-text-secondary: #E0E0E0;
+    --esl-text-muted: #A0A0A0;
+
+    /* Brand shortcuts */
+    --p: #E8242C;
+    --pd: #C41E25;
+    --pl: rgba(232, 36, 44, 0.15);
+    --bg: #0A0A0A;
+    --bg-card: #1A1A1A;
+    --bo: #3D3D3D;
+    --t1: #FFFFFF;
+    --t2: #E0E0E0;
+    --t3: #A0A0A0;
   }
 }
 
-/* ══════ BASE (inside @layer so Tailwind utilities can override) ══════ */
+/* ══════ BASE ══════ */
 @layer base {
   html { scroll-behavior: smooth; }
 
   body {
+    background-color: #0A0A0A;
+    color: #E0E0E0;
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.6;
-    color: var(--t1);
+    -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF;
     font-family: var(--font-heading);
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: -0.02em;
   }
+
+  a { color: #FF4D53; text-decoration: none; }
+  a:hover { color: #E8242C; }
 }
 
 /* ══════ SCROLLBAR ══════ */
 @layer base {
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.1); border-radius: 3px; }
-  .dash-dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); }
+  ::-webkit-scrollbar-track { background: #0A0A0A; }
+  ::-webkit-scrollbar-thumb { background: #3D3D3D; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #555; }
 }
 
 /* ══════ ANIMATIONS ══════ */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes countUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes sparkGrow { from { height: 0 !important; } }
-@keyframes pulseRing {
-  0% { transform: scale(.8); opacity: .6; }
-  100% { transform: scale(2); opacity: 0; }
-}
-@keyframes emptyFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  to { opacity: 1; transform: translateX(-50%); }
-}
-@keyframes scrollMarquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-@keyframes shimmer {
-  from { background-position: -200% 0; }
-  to { background-position: 200% 0; }
-}
-@keyframes msnpop {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
+@keyframes pulseRing { 0% { transform: scale(.8); opacity: .6; } 100% { transform: scale(2); opacity: 0; } }
+@keyframes emptyFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%); } }
+@keyframes scrollMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
 
 @layer components {
   .animate-fade-up { animation: fadeUp 0.4s ease both; }
@@ -141,28 +121,21 @@
   .animate-float { animation: emptyFloat 3s ease-in-out infinite; }
 
   .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    z-index: 99999;
-    box-shadow: 0 8px 32px rgba(0,0,0,.16);
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    color: #fff; padding: 10px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; z-index: 99999;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
     animation: toastIn .25s ease;
   }
 
   .card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
+    background: #1A1A1A;
+    border: 0.5px solid #3D3D3D;
+    border-radius: 10px;
   }
 
   .skeleton {
-    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background: linear-gradient(90deg, #1A1A1A 25%, #2A2A2A 50%, #1A1A1A 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
     border-radius: 8px;

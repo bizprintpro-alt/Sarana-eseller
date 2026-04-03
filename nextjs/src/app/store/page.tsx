@@ -78,14 +78,14 @@ export default function StorePage() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-[#F5F5F5]">
+      <div className="min-h-screen bg-[#0A0A0A]">
         <Toast />
         <div className="bg-[#1A1A2E] text-white/80 text-xs"><div className="max-w-[1320px] mx-auto px-4 h-9 flex items-center justify-between"><span>🚚 50,000₮+ үнэгүй хүргэлт</span>{isLoggedIn ? <Link href={roleHome(user?.role)} className="text-white/80 no-underline">{user?.name}</Link> : <Link href="/login" className="text-[#FCD34D] no-underline font-medium">Нэвтрэх</Link>}</div></div>
 
-        <header className="sticky top-0 z-50 bg-white shadow-[0_2px_12px_rgba(0,0,0,.06)]">
+        <header className="sticky top-0 z-50 bg-[#111111] border-b border-[#2A2A2A]">
           <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-5">
-            <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0"><EsellerLogo size={32} /><span className="text-xl font-black text-[#1A1A2E] hidden sm:block">eseller<span className="text-[#E31E24]">.mn</span></span></Link>
-            <div className="flex-1 max-w-2xl relative flex"><input ref={searchRef} type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Бараа хайх..." className="w-full h-11 pl-4 pr-12 rounded-xl bg-[#F5F5F5] border-2 border-transparent text-sm outline-none focus:border-[#E31E24] focus:bg-white transition-all" /><button className="absolute right-1 top-1 bottom-1 px-3 bg-[#E31E24] text-white rounded-lg border-none cursor-pointer"><Search className="w-4 h-4" /></button></div>
+            <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0"><EsellerLogo size={32} /><span className="text-xl font-black text-white hidden sm:block">eseller<span className="text-[#E31E24]">.mn</span></span></Link>
+            <div className="flex-1 max-w-2xl relative flex"><input ref={searchRef} type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Бараа хайх..." className="w-full h-11 pl-4 pr-12 rounded-xl bg-[#2A2A2A] border border-[#3D3D3D] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#A0A0A0] transition-all" /><button className="absolute right-1 top-1 bottom-1 px-3 bg-[#E31E24] text-white rounded-lg border-none cursor-pointer"><Search className="w-4 h-4" /></button></div>
             <div className="flex items-center gap-2">
               {isLoggedIn && <Link href={roleHome(user?.role)} className="hidden md:flex w-10 h-10 rounded-xl hover:bg-[#F5F5F5] items-center justify-center text-[#475569] no-underline"><User className="w-5 h-5" /></Link>}
               <button onClick={() => setCartOpen(true)} className="relative w-10 h-10 rounded-xl hover:bg-[#F5F5F5] border-none cursor-pointer bg-transparent flex items-center justify-center text-[#475569]"><ShoppingCart className="w-5 h-5" />{cartCount > 0 && <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full bg-[#E31E24] text-white text-[10px] font-bold flex items-center justify-center px-1">{cartCount}</span>}</button>

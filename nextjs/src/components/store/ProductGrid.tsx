@@ -43,17 +43,17 @@ export default function ProductGrid({
   onProductClick, onQuickAdd, wishlist, onToggleWish,
 }: ProductGridProps) {
   return (
-    <section className="bg-white">
+    <section className="bg-[#0A0A0A]">
       <div className="max-w-[1320px] mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-1 h-6 rounded-full bg-[#E31E24]" />
-            <h2 className="text-xl font-black text-[#1A1A2E]">
+            <div className="w-1 h-6 rounded-full bg-[#E8242C]" />
+            <h2 className="text-xl font-black text-white">
               {activeType === 'service' ? 'Үйлчилгээ' : activeType === 'product' ? 'Бараа бүтээгдэхүүн' : 'Бүх бараа & үйлчилгээ'}
             </h2>
           </div>
-          <span className="text-sm text-[#94A3B8] font-medium bg-[#F5F5F5] px-3 py-1 rounded-lg">
+          <span className="text-sm text-[#A0A0A0] font-medium bg-[#1A1A1A] px-3 py-1 rounded-lg">
             {products.length} {activeType === 'service' ? 'үйлчилгээ' : 'бараа'}
           </span>
         </div>
@@ -63,7 +63,7 @@ export default function ProductGrid({
           {TYPE_TABS.map((t) => (
             <button key={t.key} onClick={() => onTypeChange(t.key)}
               className={cn('flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold border-none cursor-pointer transition-all',
-                activeType === t.key ? 'bg-[#1A1A2E] text-white shadow-sm' : 'bg-white text-[#475569] border border-[#E2E8F0] hover:bg-[#F5F5F5]')}>
+                activeType === t.key ? 'bg-[#E8242C] text-white shadow-sm' : 'bg-[#1A1A1A] text-[#A0A0A0] border border-[#3D3D3D] hover:bg-[#2A2A2A]')}>
               <t.icon className="w-4 h-4" /> {t.label}
             </button>
           ))}
@@ -74,7 +74,7 @@ export default function ProductGrid({
           {FILTER_CATEGORIES.map((c) => (
             <button key={c.key} onClick={() => onCatChange(c.key)}
               className={cn('shrink-0 px-4 py-2 rounded-full text-xs font-semibold border cursor-pointer transition-all whitespace-nowrap',
-                activeCat === c.key ? 'bg-[#E31E24] text-white border-[#E31E24]' : 'bg-white text-[#475569] border-[#E2E8F0] hover:border-[#E31E24]')}>
+                activeCat === c.key ? 'bg-[#E8242C] text-white border-[#E8242C]' : 'bg-[#1A1A1A] text-[#A0A0A0] border-[#3D3D3D] hover:border-[#E8242C]')}>
               {c.emoji} {c.label}
             </button>
           ))}
@@ -89,13 +89,13 @@ export default function ProductGrid({
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20">
-            <div className="w-20 h-20 rounded-2xl bg-[#F5F5F5] flex items-center justify-center mx-auto mb-4">
-              <Search className="w-8 h-8 text-[#CBD5E1]" />
+            <div className="w-20 h-20 rounded-2xl bg-[#1A1A1A] flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-[#3D3D3D]" />
             </div>
-            <h3 className="text-base font-bold text-[#475569] mb-1">Бараа олдсонгүй</h3>
-            <p className="text-sm text-[#94A3B8] mb-4">Өөр хайлтаар дахин оролдоно уу</p>
+            <h3 className="text-base font-bold text-white mb-1">Бараа олдсонгүй</h3>
+            <p className="text-sm text-[#A0A0A0] mb-4">Өөр хайлтаар дахин оролдоно уу</p>
             <button onClick={() => { onCatChange('all'); onTypeChange('all'); }}
-              className="text-sm font-bold text-[#E31E24] bg-[#FEF2F2] px-5 py-2.5 rounded-xl border-none cursor-pointer hover:bg-[#FEE2E2] transition">
+              className="text-sm font-bold text-[#FF4D53] bg-[rgba(232,36,44,0.15)] px-5 py-2.5 rounded-xl border-none cursor-pointer hover:bg-[rgba(232,36,44,0.25)] transition">
               Шүүлтүүр цэвэрлэх
             </button>
           </div>

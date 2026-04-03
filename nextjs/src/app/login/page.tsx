@@ -110,13 +110,13 @@ export default function LoginPage() {
             { ic: '🛍️', t: 'Худалдан авагч', d: 'Хамгийн сайн бараа, шилдэг үнэ.', earn: '2–4ц хүргэлт' },
             { ic: '🚚', t: 'Жолооч', d: 'Цагаа тохируулж орлого ол.', earn: 'Хүргэлт бүрт' },
           ].map((r) => (
-            <div key={r.t} className="flex items-center gap-3 bg-white/[.03] border border-white/[.06] rounded-2xl px-4 py-3">
+            <div key={r.t} className="flex items-center gap-3 bg-[#1A1A1A]/[.03] border border-white/[.06] rounded-2xl px-4 py-3">
               <span className="text-xl">{r.ic}</span>
               <div className="flex-1 min-w-0">
                 <h4 className="text-sm font-bold">{r.t}</h4>
                 <p className="text-xs text-white/40">{r.d}</p>
               </div>
-              <span className="text-xs font-bold text-white/50 bg-white/5 px-2.5 py-1 rounded-lg">{r.earn}</span>
+              <span className="text-xs font-bold text-white/50 bg-[#1A1A1A]/5 px-2.5 py-1 rounded-lg">{r.earn}</span>
             </div>
           ))}
         </div>
@@ -127,20 +127,20 @@ export default function LoginPage() {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-[#F8FAFC]">
+      <div className="flex-1 flex items-center justify-center p-6 bg-[#0A0A0A]">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <Link href="/" className="flex items-center gap-2 no-underline mb-8 lg:hidden justify-center">
             <EsellerLogo size={24} />
-            <span className="text-lg font-black text-[#0F172A]">eseller<em className="text-brand not-italic">.mn</em></span>
+            <span className="text-lg font-black text-white">eseller<em className="text-brand not-italic">.mn</em></span>
           </Link>
 
           {/* Tabs */}
-          <div className="flex bg-white rounded-2xl p-1 shadow-sm border border-[#E2E8F0] mb-8">
+          <div className="flex bg-[#1A1A1A] rounded-2xl p-1 shadow-sm border border-[#3D3D3D] mb-8">
             <button
               onClick={() => { setMode('login'); setError(''); setSuccess(''); }}
               className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all ${
-                mode === 'login' ? 'bg-brand text-white shadow-md' : 'bg-transparent text-[#94A3B8]'
+                mode === 'login' ? 'bg-brand text-white shadow-md' : 'bg-transparent text-[#A0A0A0]'
               }`}
             >
               Нэвтрэх
@@ -148,7 +148,7 @@ export default function LoginPage() {
             <button
               onClick={() => { setMode('register'); setError(''); setSuccess(''); }}
               className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all ${
-                mode === 'register' ? 'bg-brand text-white shadow-md' : 'bg-transparent text-[#94A3B8]'
+                mode === 'register' ? 'bg-brand text-white shadow-md' : 'bg-transparent text-[#A0A0A0]'
               }`}
             >
               Бүртгүүлэх
@@ -169,29 +169,29 @@ export default function LoginPage() {
 
           {mode === 'login' ? (
             <>
-              <div className="text-xl font-black text-[#0F172A] mb-1">Сайн уу! 👋</div>
-              <div className="text-sm text-[#94A3B8] mb-6">Данс руугаа нэвтрэх</div>
+              <div className="text-xl font-black text-white mb-1">Сайн уу! 👋</div>
+              <div className="text-sm text-[#A0A0A0] mb-6">Данс руугаа нэвтрэх</div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-[#475569] uppercase tracking-widest mb-2">Имэйл хаяг</label>
+                  <label className="block text-[10px] font-bold text-[#A0A0A0] uppercase tracking-widest mb-2">Имэйл хаяг</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full border-[1.5px] border-[#E2E8F0] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    className="w-full border-[1.5px] border-[#3D3D3D] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-[#475569] uppercase tracking-widest mb-2">Нууц үг</label>
+                  <label className="block text-[10px] font-bold text-[#A0A0A0] uppercase tracking-widest mb-2">Нууц үг</label>
                   <div className="relative">
                     <input
                       type={showPw ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full border-[1.5px] border-[#E2E8F0] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
+                      className="w-full border-[1.5px] border-[#3D3D3D] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
                       onKeyDown={(e) => e.key === 'Enter' && doLogin()}
                     />
                     <button
@@ -213,7 +213,7 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-[#94A3B8] mt-6">
+              <p className="text-center text-sm text-[#A0A0A0] mt-6">
                 Данс байхгүй юу?{' '}
                 <button onClick={() => setMode('register')} className="text-brand font-bold bg-transparent border-none cursor-pointer">
                   Бүртгүүлэх
@@ -222,22 +222,22 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              <div className="text-xl font-black text-[#0F172A] mb-1">Нэгдэцгээе! 🚀</div>
-              <div className="text-sm text-[#94A3B8] mb-6">Та ямар үүргээр нэгдэх вэ?</div>
+              <div className="text-xl font-black text-white mb-1">Нэгдэцгээе! 🚀</div>
+              <div className="text-sm text-[#A0A0A0] mb-6">Та ямар үүргээр нэгдэх вэ?</div>
 
               <div className="space-y-4">
                 {/* Role selector */}
                 <div>
-                  <label className="block text-[10px] font-bold text-[#475569] uppercase tracking-widest mb-2">Үүрэг сонгох</label>
+                  <label className="block text-[10px] font-bold text-[#A0A0A0] uppercase tracking-widest mb-2">Үүрэг сонгох</label>
                   <div className="space-y-2">
                     {ROLES.map((r) => (
                       <button
                         key={r.value}
                         onClick={() => setRole(r.value)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-[1.5px] text-left cursor-pointer transition-all bg-white ${
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-[1.5px] text-left cursor-pointer transition-all bg-[#1A1A1A] ${
                           role === r.value
                             ? 'border-brand shadow-[0_0_0_3px_rgba(204,0,0,.12)]'
-                            : 'border-[#E2E8F0] hover:border-[#94A3B8]'
+                            : 'border-[#3D3D3D] hover:border-[#94A3B8]'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
@@ -247,10 +247,10 @@ export default function LoginPage() {
                         </div>
                         <span className="text-lg">{r.icon}</span>
                         <div className="flex-1 min-w-0">
-                          <h5 className="text-sm font-bold text-[#0F172A]">{r.label}</h5>
-                          <p className="text-xs text-[#94A3B8]">{r.desc}</p>
+                          <h5 className="text-sm font-bold text-white">{r.label}</h5>
+                          <p className="text-xs text-[#A0A0A0]">{r.desc}</p>
                         </div>
-                        <span className="text-[10px] font-bold text-[#475569] bg-[#F1F5F9] px-2 py-1 rounded-lg">
+                        <span className="text-[10px] font-bold text-[#A0A0A0] bg-[#2A2A2A] px-2 py-1 rounded-lg">
                           {r.badge}
                         </span>
                       </button>
@@ -259,27 +259,27 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-[#475569] uppercase tracking-widest mb-2">Бүтэн нэр</label>
+                  <label className="block text-[10px] font-bold text-[#A0A0A0] uppercase tracking-widest mb-2">Бүтэн нэр</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Таны нэр"
-                    className="w-full border-[1.5px] border-[#E2E8F0] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    className="w-full border-[1.5px] border-[#3D3D3D] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-[#475569] uppercase tracking-widest mb-2">Имэйл хаяг</label>
+                  <label className="block text-[10px] font-bold text-[#A0A0A0] uppercase tracking-widest mb-2">Имэйл хаяг</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full border-[1.5px] border-[#E2E8F0] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    className="w-full border-[1.5px] border-[#3D3D3D] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-[#475569] uppercase tracking-widest mb-2">
+                  <label className="block text-[10px] font-bold text-[#A0A0A0] uppercase tracking-widest mb-2">
                     Нууц үг{' '}
                     {password && <span style={{ color: pw.color }} className="text-[11px] font-medium normal-case tracking-normal">{pw.label}</span>}
                   </label>
@@ -289,7 +289,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Дор хаяж 6 тэмдэгт"
-                      className="w-full border-[1.5px] border-[#E2E8F0] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
+                      className="w-full border-[1.5px] border-[#3D3D3D] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
                       onKeyDown={(e) => e.key === 'Enter' && doRegister()}
                     />
                     <button
@@ -319,7 +319,7 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-[#94A3B8] mt-6">
+              <p className="text-center text-sm text-[#A0A0A0] mt-6">
                 Данс байгаа юу?{' '}
                 <button onClick={() => setMode('login')} className="text-brand font-bold bg-transparent border-none cursor-pointer">
                   Нэвтрэх

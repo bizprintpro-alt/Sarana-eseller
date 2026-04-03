@@ -26,13 +26,13 @@ export default function ProductCard({
 
   return (
     <div
-      className="group bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,.08)] hover:border-transparent hover:-translate-y-1 relative"
+      className="group bg-[#1A1A1A] border border-[#3D3D3D] rounded-[10px] overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,.3)] hover:border-[#555] hover:-translate-y-1 relative"
       onClick={() => onClick?.(p._id)}
     >
       {/* Badges */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
         {disc > 0 && (
-          <span className="bg-[#CC0000] text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">
+          <span className="bg-[#E8242C] text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
             -{disc}%
           </span>
         )}
@@ -48,8 +48,8 @@ export default function ProductCard({
         <button
           className={`absolute top-3 right-3 z-10 w-8 h-8 rounded-full backdrop-blur-md flex items-center justify-center border-none cursor-pointer transition-all duration-200 hover:scale-110 ${
             isWished
-              ? 'bg-red-50 text-[#CC0000]'
-              : 'bg-white/80 text-[#94A3B8] hover:text-[#CC0000] hover:bg-red-50'
+              ? 'bg-[rgba(232,36,44,0.2)] text-[#FF4D53]'
+              : 'bg-black/60 text-white/60 hover:text-[#FF4D53] hover:bg-[rgba(232,36,44,0.2)]'
           }`}
           onClick={(e) => {
             e.stopPropagation();
@@ -61,7 +61,7 @@ export default function ProductCard({
       )}
 
       {/* Image */}
-      <div className="relative h-48 bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] flex items-center justify-center overflow-hidden">
+      <div className="relative h-48 bg-[#2A2A2A] flex items-center justify-center overflow-hidden">
         {p.images?.[0] ? (
           <img
             src={p.images[0]}
@@ -93,9 +93,9 @@ export default function ProductCard({
       {/* Body */}
       <div className="p-4">
         {p.store?.name && (
-          <div className="text-[11px] text-[#94A3B8] font-medium mb-1 truncate">{p.store.name}</div>
+          <div className="text-[11px] text-[#A0A0A0] font-medium mb-1 truncate">{p.store.name}</div>
         )}
-        <div className="text-sm font-bold text-[#0F172A] mb-2 line-clamp-2 leading-snug group-hover:text-[#CC0000] transition-colors">
+        <div className="text-sm font-bold text-white mb-2 line-clamp-2 leading-snug group-hover:text-[#FF4D53] transition-colors">
           {p.name}
         </div>
 
@@ -104,20 +104,20 @@ export default function ProductCard({
           <div className="flex items-center gap-1.5 mb-2">
             <div className="flex gap-px">
               {Array.from({ length: 5 }).map((_, i) => (
-                <svg key={i} className={`w-3 h-3 ${i < stars ? 'text-amber-400' : 'text-[#E2E8F0]'}`} fill="currentColor" viewBox="0 0 20 20">
+                <svg key={i} className={`w-3 h-3 ${i < stars ? 'text-amber-400' : 'text-[#3D3D3D]'}`} fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
-            <span className="text-[10px] text-[#94A3B8]">({p.reviewCount || 0})</span>
+            <span className="text-[10px] text-[#A0A0A0]">({p.reviewCount || 0})</span>
           </div>
         )}
 
         {/* Price */}
         <div className="flex items-baseline gap-2">
-          <span className="text-lg font-black text-[#CC0000]">{formatPrice(px)}</span>
+          <span className="text-lg font-black text-[#E8242C]">{formatPrice(px)}</span>
           {disc > 0 && (
-            <span className="text-xs text-[#94A3B8] line-through">{formatPrice(p.price)}</span>
+            <span className="text-xs text-[#555] line-through">{formatPrice(p.price)}</span>
           )}
         </div>
       </div>
