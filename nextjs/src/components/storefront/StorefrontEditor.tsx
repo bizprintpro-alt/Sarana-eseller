@@ -15,7 +15,10 @@ interface StorefrontEditorProps {
   initialConfig: StorefrontConfig;
   onSave: (config: StorefrontConfig) => void;
   onRegenerate?: () => void;
+  onPublish?: () => void;
   previewUrl?: string;
+  isPublished?: boolean;
+  publishedUrl?: string;
 }
 
 const MOODS: { key: Mood; label: string; emoji: string }[] = [
@@ -44,7 +47,7 @@ const SECTION_LABELS: Record<SectionType, string> = {
   contact_map: 'Холбоо барих',
 };
 
-export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, previewUrl }: StorefrontEditorProps) {
+export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, onPublish, previewUrl, isPublished, publishedUrl }: StorefrontEditorProps) {
   const [config, setConfig] = useState<StorefrontConfig>(initialConfig);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [saving, setSaving] = useState(false);
@@ -227,12 +230,19 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
           </div>
         </div>
 
-        {/* Save button */}
-        <div className="px-4 py-3 border-t border-gray-200 shrink-0">
+        {/* Save + Publish */}
+        <div className="px-4 py-3 border-t border-gray-200 shrink-0 space-y-2">
           <button onClick={handleSave} disabled={saving}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 border-none cursor-pointer transition disabled:opacity-50">
             <Save className="w-4 h-4" /> {saving ? 'Хадгалж байна...' : 'Хадгалах'}
           </button>
+          {onPublish && (
+            <button onClick={() => { handleSave(); onPublish(); }}
+              className={cn('w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border-none cursor-pointer transition',
+                isPublished ? 'bg-green-50 text-green-700 hover:bg-green-100' : 'bg-emerald-600 text-white hover:bg-emerald-700')}>
+              {isPublished ? <><ExternalLink className="w-4 h-4" /> Нийтлэгдсэн — {publishedUrl}</> : <><Sparkles className="w-4 h-4" /> Нийтлэх</>}
+            </button>
+          )}
         </div>
       </div>
 

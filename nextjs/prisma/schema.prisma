@@ -474,3 +474,29 @@ model Review {
 
   product Product @relation(fields: [productId], references: [id])
 }
+
+// ══════════════════════════════════════════════════════════════
+// AFFILIATE SYSTEM
+// ══════════════════════════════════════════════════════════════
+
+model AffiliateLink {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  affiliateId String   @db.ObjectId
+  productId   String   @db.ObjectId
+  code        String   @unique
+  clicks      Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  conversions AffiliateConversion[]
+}
+
+model AffiliateConversion {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  linkId     String   @db.ObjectId
+  orderId    String   @db.ObjectId
+  commission Int
+  status     String   @default("pending") // pending | paid
+  createdAt  DateTime @default(now())
+
+  link AffiliateLink @relation(fields: [linkId], references: [id])
+}
