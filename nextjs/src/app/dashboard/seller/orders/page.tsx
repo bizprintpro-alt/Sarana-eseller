@@ -6,19 +6,24 @@ import { formatPrice, STATUS_MAP, timeAgo } from '@/lib/utils';
 import { useToast } from '@/components/shared/Toast';
 import StatCard from '@/components/dashboard/StatCard';
 
-type OrderFilter = 'all' | 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+type OrderFilter = 'all' | 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivering' | 'delivered' | 'cancelled';
 
 const FILTER_TABS: { key: OrderFilter; label: string }[] = [
   { key: 'all', label: 'Бүгд' },
   { key: 'pending', label: '⏳ Хүлээгдэж буй' },
   { key: 'confirmed', label: '✅ Баталгаажсан' },
-  { key: 'shipped', label: '🚚 Явсан' },
-  { key: 'delivered', label: '📦 Хүргэгдсэн' },
+  { key: 'preparing', label: '👨‍🍳 Бэлтгэж байна' },
+  { key: 'ready', label: '📦 Бэлэн' },
+  { key: 'delivering', label: '🚚 Хүргэж байна' },
+  { key: 'delivered', label: '✓ Хүргэгдсэн' },
 ];
 
 const LIGHT_STATUS: Record<string, string> = {
   pending: 'bg-amber-100 text-amber-700',
   confirmed: 'bg-green-100 text-green-700',
+  preparing: 'bg-orange-100 text-orange-700',
+  ready: 'bg-indigo-100 text-indigo-700',
+  delivering: 'bg-blue-100 text-blue-700',
   shipped: 'bg-blue-100 text-blue-700',
   delivered: 'bg-emerald-100 text-emerald-700',
   cancelled: 'bg-red-100 text-red-700',
@@ -203,8 +208,10 @@ export default function OrdersPage() {
                       >
                         <option value="pending">⏳ Хүлээгдэж буй</option>
                         <option value="confirmed">✅ Баталгаажсан</option>
-                        <option value="shipped">🚚 Явсан</option>
-                        <option value="delivered">📦 Хүргэгдсэн</option>
+                        <option value="preparing">👨‍🍳 Бэлтгэж байна</option>
+                        <option value="ready">📦 Бэлэн</option>
+                        <option value="delivering">🚚 Хүргэж байна</option>
+                        <option value="delivered">✓ Хүргэгдсэн</option>
                         <option value="cancelled">❌ Цуцлагдсан</option>
                       </select>
                     </td>

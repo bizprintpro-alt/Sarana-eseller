@@ -110,7 +110,23 @@ export default function StorePage() {
         {selProduct && <ProductModal product={selProduct} onClose={() => setSelProduct(null)} isAffiliate={isLoggedIn && user?.role === 'affiliate'} onShare={() => { navigator.clipboard.writeText(`${window.location.origin}/store/${selProduct._id}?ref=${user?.username || ''}`).then(() => toast.show('Линк хуулагдлаа!', 'ok')); }} />}
 
         <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
-        <footer className="bg-[#1A1A2E] text-white pt-8 pb-24 md:pb-8"><div className="max-w-[1320px] mx-auto px-4 text-center"><span className="text-xs text-white/25">&copy; 2026 eseller.mn</span></div></footer>
+        <footer className="bg-[#1A1A2E] text-white pt-10 pb-24 md:pb-10">
+          <div className="max-w-[1320px] mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+              <div>
+                <div className="flex items-center gap-2 mb-3"><EsellerLogo size={22} /><span className="text-base font-black">eseller<span className="text-[#E31E24]">.mn</span></span></div>
+                <p className="text-xs text-white/40 leading-relaxed">Монголын хамгийн том онлайн marketplace.</p>
+              </div>
+              <div><h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Дэлгүүр</h4><ul className="list-none space-y-1.5">{['Бүх бараа', 'Хямдрал', 'Шинэ ирэлт'].map(t => <li key={t}><span className="text-xs text-white/35 hover:text-white cursor-pointer transition">{t}</span></li>)}</ul></div>
+              <div><h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Платформ</h4><ul className="list-none space-y-1.5">{[{t:'Бүх дэлгүүрүүд',h:'/shops'},{t:'Борлуулагч болох',h:'/become-seller'},{t:'Нэвтрэх',h:'/login'}].map(l => <li key={l.t}><Link href={l.h} className="text-xs text-white/35 hover:text-white no-underline transition">{l.t}</Link></li>)}</ul></div>
+              <div><h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Тусламж</h4><ul className="list-none space-y-1.5">{['Холбоо барих', 'Нөхцөл', 'Нууцлал'].map(t => <li key={t}><span className="text-xs text-white/35 hover:text-white cursor-pointer transition">{t}</span></li>)}</ul></div>
+            </div>
+            <div className="border-t border-white/10 pt-5 flex flex-col md:flex-row items-center justify-between gap-3">
+              <span className="text-xs text-white/25">&copy; 2026 eseller.mn — Бүх эрх хуулиар хамгаалагдсан</span>
+              <div className="flex items-center gap-4"><span className="text-xs font-bold text-white/40">QPay</span><span className="text-xs font-bold text-white/40">Visa</span><span className="text-xs font-bold text-white/40">Mastercard</span></div>
+            </div>
+          </div>
+        </footer>
         <MobileNav />
       </div>
     </ErrorBoundary>

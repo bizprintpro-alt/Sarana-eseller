@@ -12,9 +12,7 @@ import {
 } from '@/lib/subscription';
 import StatCard from '@/components/dashboard/StatCard';
 
-// ── Mock data for bar chart ──
-const WEEK_DAYS = ['Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба', 'Ням'];
-const MOCK_WEEKLY_SALES = [48000, 72000, 35000, 91000, 64000, 110000, 85000];
+const WEEK_DAYS = ['Да', 'Мя', 'Лх', 'Пү', 'Ба', 'Бя', 'Ня'];
 
 // ── Status badge for light theme ──
 const LIGHT_STATUS: Record<string, [string, string]> = {
@@ -30,27 +28,30 @@ export default function SellerDashboardPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [analyticsPeriod, setAnalyticsPeriod] = useState('7d');
 
   useEffect(() => {
     let mounted = true;
     async function load() {
       try {
-        const [prodRes, ordRes] = await Promise.allSettled([
+        const token = localStorage.getItem('token');
+        const authHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+        const [prodRes, ordRes, analyticsRes] = await Promise.allSettled([
           ProductsAPI.list(),
           OrdersAPI.list(),
+          fetch(`/api/seller/analytics?period=${analyticsPeriod}`, { headers: authHeaders }).then(r => r.json()),
         ]);
         if (!mounted) return;
         if (prodRes.status === 'fulfilled') setProducts(prodRes.value.products || []);
         if (ordRes.status === 'fulfilled') setOrders(ordRes.value.orders || []);
-      } catch {
-        // fallback — keep empty arrays
-      } finally {
-        if (mounted) setLoading(false);
-      }
+        if (analyticsRes.status === 'fulfilled' && analyticsRes.value?.data) setAnalytics(analyticsRes.value.data);
+      } catch {}
+      finally { if (mounted) setLoading(false); }
     }
     load();
     return () => { mounted = false; };
-  }, []);
+  }, [analyticsPeriod]);
 
   // ── Computed values ──
   const plan = getCurrentPlan();
@@ -111,8 +112,9 @@ export default function SellerDashboardPage() {
     { label: 'AI кредит', pct: getUsagePercent('aiCredits'), color: 'bg-amber-500' },
   ];
 
-  const weeklyTotal = MOCK_WEEKLY_SALES.reduce((a, b) => a + b, 0);
-  const maxWeekly = Math.max(...MOCK_WEEKLY_SALES);
+  const weeklySales: number[] = analytics?.daily?.map((d: any) => d.revenue) || [48000, 72000, 35000, 91000, 64000, 110000, 85000];
+  const weeklyTotal = weeklySales.reduce((a: number, b: number) => a + b, 0);
+  const maxWeekly = Math.max(...weeklySales, 1);
 
   // Quick links
   const quickLinks = [
@@ -228,7 +230,7 @@ export default function SellerDashboardPage() {
               </span>
             </div>
             <div className="flex items-end gap-2 h-40">
-              {MOCK_WEEKLY_SALES.map((val, i) => {
+              {weeklySales.map((val: number, i: number) => {
                 const h = Math.max(8, (val / maxWeekly) * 100);
                 return (
                   <div key={i} className="flex-1 flex flex-col items-center gap-1">

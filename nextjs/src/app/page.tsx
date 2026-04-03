@@ -498,13 +498,13 @@ export default function LandingPage() {
           </motion.p>
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-5">
             <Link
-              href="/login#register"
+              href="/become-seller"
               className="bg-gradient-to-br from-[#CC0000] to-[#E53E3E] text-white px-8 py-4 rounded-2xl font-extrabold no-underline shadow-[0_8px_32px_rgba(204,0,0,.3)] hover:shadow-[0_12px_40px_rgba(204,0,0,.4)] hover:-translate-y-[3px] transition-all duration-200"
             >
               🏪 Дэлгүүр нээх — Үнэгүй
             </Link>
             <Link
-              href="/login#register"
+              href="/shops"
               className="border-2 border-[#E2E8F0] hover:border-[#CC0000] text-[#0F172A] hover:text-[#CC0000] px-8 py-4 rounded-2xl font-bold no-underline transition-all duration-200"
             >
               📢 Борлуулагч болох <ArrowRight className="inline w-4 h-4" />
