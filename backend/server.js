@@ -16,15 +16,20 @@ connectDB();
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(mongoSanitize());
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL,
-    'http://localhost:3000',
-    'http://localhost:5500',
-    'http://127.0.0.1:5500',
-    'https://nextjs-biz6.vercel.app',
-    'https://eseller.mn',
-    'https://www.eseller.mn',
-  ].filter(Boolean),
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc)
+    if (!origin) return callback(null, true);
+    // Allow all Vercel deployments
+    if (origin.includes('vercel.app')) return callback(null, true);
+    // Allow eseller.mn and subdomains
+    if (origin.includes('eseller.mn')) return callback(null, true);
+    // Allow localhost
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return callback(null, true);
+    // Allow custom FRONTEND_URL
+    if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) return callback(null, true);
+    // Block others
+    callback(null, false);
+  },
   credentials: true,
 }));
 
