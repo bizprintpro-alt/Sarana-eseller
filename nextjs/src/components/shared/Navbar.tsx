@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/lib/auth';
 import EsellerLogo from './EsellerLogo';
 
 export default function Navbar() {
@@ -19,14 +18,14 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 h-16 flex items-center px-[6%] gap-4 transition-all duration-300 ${
         scrolled
-          ? 'bg-[rgba(8,9,15,0.95)] backdrop-blur-2xl shadow-[0_1px_0_rgba(255,255,255,0.05)]'
+          ? 'bg-[rgba(7,8,13,0.97)] backdrop-blur-2xl shadow-[0_1px_0_rgba(255,255,255,0.05)]'
           : ''
       }`}
     >
       <Link href="/" className="flex items-center gap-2 no-underline shrink-0">
         <EsellerLogo />
         <span className="text-xl font-black text-white tracking-tight">
-          eseller<em className="text-brand not-italic">.mn</em>
+          eseller<em className="text-[#CC0000] not-italic">.mn</em>
         </span>
       </Link>
 
@@ -34,19 +33,19 @@ export default function Navbar() {
 
       <Link
         href="/store"
-        className="text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
+        className="hidden sm:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
       >
         Дэлгүүр
       </Link>
       <Link
         href="/login"
-        className="text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
+        className="hidden sm:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
       >
         Нэвтрэх
       </Link>
       <Link
         href="/login#register"
-        className="bg-brand text-white text-sm font-extrabold px-5 py-2 rounded-xl no-underline shadow-[0_2px_8px_rgba(204,0,0,.3)] hover:bg-brand-dark hover:-translate-y-0.5 transition-all whitespace-nowrap"
+        className="bg-[#CC0000] text-white text-sm font-extrabold px-5 py-2 rounded-xl no-underline shadow-[0_2px_8px_rgba(204,0,0,.3)] hover:bg-[#A30000] hover:-translate-y-0.5 transition-all whitespace-nowrap"
       >
         Борлуулагч болох →
       </Link>

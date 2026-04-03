@@ -100,7 +100,9 @@ export default function StoreSettingsPage() {
     { id: 'seo' as const, label: 'SEO', icon: '🔍' },
   ];
 
-  const storeUrl = (config.storeName || 'store').toLowerCase().replace(/\s+/g, '-') + '.eseller.mn';
+  const storeSlug = (config.storeName || 'store').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  const storeUrl = storeSlug + '.eseller.mn';
+  const storePreviewUrl = `/s/${storeSlug}`;
 
   return (
     <div className="min-h-screen">
@@ -158,7 +160,7 @@ export default function StoreSettingsPage() {
                   <p className="text-sm text-gray-500">{storeUrl}</p>
                 </div>
                 <a
-                  href={`https://${storeUrl}`}
+                  href={storePreviewUrl}
                   target="_blank"
                   className="bg-white text-gray-600 px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 no-underline hover:border-brand hover:text-brand transition-all"
                 >

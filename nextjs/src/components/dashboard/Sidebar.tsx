@@ -11,6 +11,7 @@ import {
   Megaphone, Palette, Sparkles, Brain, Bot, Wallet,
   Globe, Building2, UserCog, Settings, Bell, ScrollText,
   ChevronDown, ExternalLink, LogOut, Crown, Zap,
+  CalendarDays, Clock, Scissors,
 } from 'lucide-react';
 
 // ═══ Icon Map ═══
@@ -21,6 +22,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   '✨': Sparkles, '🤖': Bot, '💰': Wallet, '💵': Wallet,
   '🌐': Globe, '🏪': Building2, '👔': UserCog, '⚙️': Settings,
   '🔔': Bell, '👑': Crown, '📈': BarChart3,
+  '🛎️': Scissors, '📅': CalendarDays, '🕐': Clock,
 };
 
 // ═══ Types ═══

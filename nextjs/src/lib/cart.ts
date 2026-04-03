@@ -1,20 +1,45 @@
 // ══════════════════════════════════════════════════════════════
-// eseller.mn — Cart Store (Zustand)
+// eseller.mn — Cart Store (Zustand) — with Modifiers + Add-ons
 // ══════════════════════════════════════════════════════════════
 
 import { create } from 'zustand';
 import type { Product } from './api';
 
-export interface CartItem extends Product {
+// ═══ Modifier/Add-on Selection Types ═══
+
+export interface SelectedModifier {
+  groupId: string;
+  groupName: string;
+  optionId: string;
+  optionName: string;
+  price: number;
+}
+
+export interface SelectedAddOn {
+  addOnId: string;
+  name: string;
+  price: number;
   qty: number;
 }
+
+// ═══ Cart Item ═══
+
+export interface CartItem extends Product {
+  qty: number;
+  selectedModifiers: SelectedModifier[];
+  selectedAddOns: SelectedAddOn[];
+  unitPrice: number;   // base price + modifier total
+  lineTotal: number;   // unitPrice * qty + addon totals
+}
+
+// ═══ Store Interface ═══
 
 interface CartStore {
   items: CartItem[];
   load: () => void;
-  add: (product: Product, qty?: number) => void;
-  updateQty: (id: string, qty: number) => void;
-  remove: (id: string) => void;
+  add: (product: Product, qty?: number, modifiers?: SelectedModifier[], addOns?: SelectedAddOn[]) => void;
+  updateQty: (lineIndex: number, qty: number) => void;
+  remove: (lineIndex: number) => void;
   clear: () => void;
   count: () => number;
   total: () => number;
@@ -28,6 +53,24 @@ function persist(items: CartItem[]) {
   }
 }
 
+function calcUnitPrice(product: Product, modifiers: SelectedModifier[]): number {
+  const base = product.salePrice || product.price;
+  const modTotal = modifiers.reduce((s, m) => s + m.price, 0);
+  return base + modTotal;
+}
+
+function calcLineTotal(unitPrice: number, qty: number, addOns: SelectedAddOn[]): number {
+  const addOnTotal = addOns.reduce((s, a) => s + a.price * a.qty, 0);
+  return unitPrice * qty + addOnTotal;
+}
+
+function isSameLine(a: CartItem, b: { product: Product; modifiers: SelectedModifier[] }): boolean {
+  if (a._id !== b.product._id) return false;
+  const aIds = a.selectedModifiers.map((m) => m.optionId).sort().join(',');
+  const bIds = b.modifiers.map((m) => m.optionId).sort().join(',');
+  return aIds === bIds;
+}
+
 export const useCartStore = create<CartStore>((set, get) => ({
   items: [],
 
@@ -35,40 +78,61 @@ export const useCartStore = create<CartStore>((set, get) => ({
     if (typeof window === 'undefined') return;
     try {
       const raw = localStorage.getItem(CART_KEY);
-      set({ items: raw ? JSON.parse(raw) : [] });
+      const parsed = raw ? JSON.parse(raw) : [];
+      // Migrate old cart items that don't have modifier fields
+      const items = parsed.map((item: any) => ({
+        ...item,
+        selectedModifiers: item.selectedModifiers || [],
+        selectedAddOns: item.selectedAddOns || [],
+        unitPrice: item.unitPrice || (item.salePrice || item.price),
+        lineTotal: item.lineTotal || ((item.salePrice || item.price) * (item.qty || 1)),
+      }));
+      set({ items });
     } catch {
       set({ items: [] });
     }
   },
 
-  add: (product, qty = 1) => {
+  add: (product, qty = 1, modifiers = [], addOns = []) => {
     const items = [...get().items];
-    const idx = items.findIndex((i) => i._id === product._id);
-    if (idx >= 0) {
-      items[idx].qty += qty;
+    const unitPrice = calcUnitPrice(product, modifiers);
+
+    // Check if same product + same modifiers already in cart
+    const existingIdx = items.findIndex((item) => isSameLine(item, { product, modifiers }));
+
+    if (existingIdx >= 0) {
+      items[existingIdx].qty += qty;
+      items[existingIdx].lineTotal = calcLineTotal(unitPrice, items[existingIdx].qty, items[existingIdx].selectedAddOns);
     } else {
-      items.push({ ...product, qty });
+      const lineTotal = calcLineTotal(unitPrice, qty, addOns);
+      items.push({
+        ...product,
+        qty,
+        selectedModifiers: modifiers,
+        selectedAddOns: addOns,
+        unitPrice,
+        lineTotal,
+      });
     }
     persist(items);
     set({ items });
   },
 
-  updateQty: (id, qty) => {
-    let items = [...get().items];
-    const idx = items.findIndex((i) => i._id === id);
-    if (idx >= 0) {
-      if (qty <= 0) {
-        items.splice(idx, 1);
-      } else {
-        items[idx].qty = qty;
-      }
+  updateQty: (lineIndex, qty) => {
+    const items = [...get().items];
+    if (lineIndex < 0 || lineIndex >= items.length) return;
+    if (qty <= 0) {
+      items.splice(lineIndex, 1);
+    } else {
+      items[lineIndex].qty = qty;
+      items[lineIndex].lineTotal = calcLineTotal(items[lineIndex].unitPrice, qty, items[lineIndex].selectedAddOns);
     }
     persist(items);
     set({ items });
   },
 
-  remove: (id) => {
-    const items = get().items.filter((i) => i._id !== id);
+  remove: (lineIndex) => {
+    const items = get().items.filter((_, i) => i !== lineIndex);
     persist(items);
     set({ items });
   },
@@ -80,9 +144,5 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   count: () => get().items.reduce((s, i) => s + (i.qty || 1), 0),
 
-  total: () =>
-    get().items.reduce(
-      (s, i) => s + (i.salePrice || i.price) * (i.qty || 1),
-      0
-    ),
+  total: () => get().items.reduce((s, i) => s + (i.lineTotal || (i.salePrice || i.price) * (i.qty || 1)), 0),
 }));
