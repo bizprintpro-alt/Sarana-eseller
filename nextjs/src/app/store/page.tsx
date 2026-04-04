@@ -79,7 +79,7 @@ export default function StorePage() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-[#0A0A0A]">
+      <div className="min-h-screen" style={{ background: 'var(--esl-bg-page)' }}>
         <Toast />
         <div className="bg-[#1A1A2E] text-white/80 text-xs"><div className="max-w-[1320px] mx-auto px-4 h-9 flex items-center justify-between"><span>🚚 50,000₮+ үнэгүй хүргэлт</span>{isLoggedIn ? <Link href={roleHome(user?.role)} className="text-white/80 no-underline">{user?.name}</Link> : <Link href="/login" className="text-[#FCD34D] no-underline font-medium">Нэвтрэх</Link>}</div></div>
 

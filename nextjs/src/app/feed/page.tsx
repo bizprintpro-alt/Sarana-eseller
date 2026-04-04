@@ -189,7 +189,7 @@ export default function FeedPage() {
   const vipCount = filtered.filter(i => i.tier === 'vip').length;
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className="min-h-screen" style={{ background: "var(--esl-bg-page)" }}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#111111] border-b border-[#2A2A2A]">
         <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-5">

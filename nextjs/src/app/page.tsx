@@ -249,7 +249,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════════
           HOW IT WORKS — White section
           ═══════════════════════════════════════════ */}
-      <section className="bg-white py-24 px-[6%]">
+      <section style={{ background: "var(--esl-bg-card)" }} className="py-24 px-[6%]">
         <div className="max-w-[1100px] mx-auto">
           <motion.div
             initial="hidden"

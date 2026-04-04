@@ -13,6 +13,7 @@ import {
   ChevronDown, ExternalLink, LogOut, Crown, Zap,
   CalendarDays, Clock, Scissors,
 } from 'lucide-react';
+import { ThemeSelector } from '@/components/ui/ThemeToggle';
 
 // ═══ Icon Map ═══
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -242,6 +243,14 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
           </button>
         )}
       </div>
+
+      {/* ═══ Theme Selector ═══ */}
+      {!collapsed && (
+        <div className="px-3 pb-3 border-t border-[#3D3D3D] pt-3">
+          <p className="text-[10px] text-[#A0A0A0] mb-2 uppercase tracking-wider px-1">Горим</p>
+          <ThemeSelector />
+        </div>
+      )}
 
       {/* ═══ Collapse Toggle ═══ */}
       <button
