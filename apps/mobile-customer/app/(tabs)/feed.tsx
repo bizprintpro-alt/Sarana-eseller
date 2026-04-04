@@ -261,17 +261,36 @@ export default function FeedScreen() {
       )}
 
       {/* Category pills */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 10 }}>
-        {CATEGORIES.map((c, i) => (
-          <TouchableOpacity key={c.key}
-            style={[s.catPill, activeCat === c.key && s.catPillActive, { marginRight: 8 }]}
+      <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={CATEGORIES}
+        keyExtractor={(item) => item.key}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 10 }}
+        renderItem={({ item: c }) => (
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: 16,
+              height: 38,
+              borderRadius: 19,
+              backgroundColor: activeCat === c.key ? BRAND : '#1A1A1A',
+              borderWidth: 1,
+              borderColor: activeCat === c.key ? BRAND : '#3D3D3D',
+              marginRight: 10,
+            }}
             onPress={() => setActiveCat(c.key)}>
-            <Ionicons name={c.icon} size={14} color={activeCat === c.key ? '#FFF' : '#A0A0A0'} />
-            <Text style={[s.catPillText, activeCat === c.key && s.catPillTextActive]}>{c.label}</Text>
+            <Ionicons name={c.icon} size={15} color={activeCat === c.key ? '#FFF' : '#999'} style={{ marginRight: 7 }} />
+            <Text style={{
+              fontSize: 14,
+              fontWeight: '700',
+              color: activeCat === c.key ? '#FFFFFF' : '#CCCCCC',
+              includeFontPadding: false,
+            }}>{c.label}</Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
+        )}
+      />
 
       {/* Result info */}
       <View style={s.resultBar}>
