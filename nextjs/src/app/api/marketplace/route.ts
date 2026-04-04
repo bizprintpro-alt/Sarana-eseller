@@ -1,9 +1,14 @@
-﻿import { NextRequest } from 'next/server';
+﻿export const runtime = 'nodejs';
+
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { json } from '@/lib/api-auth';
 
-// GET /api/marketplace?type=all|product|service&category=...&sort=newest|price_asc|price_desc&search=...&limit=40&cursor=...
 export async function GET(req: NextRequest) {
+  console.log('DB_URL exists:', !!process.env.DATABASE_URL);
+  console.log('DB_URL prefix:', process.env.DATABASE_URL?.substring(0, 30));
+  try { const c = await prisma.product.count(); console.log('Product count:', c); } catch(e: any) { console.error('DB_ERR:', e.message); }
+
   const sp = req.nextUrl.searchParams;
   const type = sp.get('type') || 'all';
   const category = sp.get('category');
