@@ -14,10 +14,10 @@ function getTier(lifetime: number) {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const { userId } = params;
+    const { userId } = await params;
 
     const account = await prisma.loyaltyAccount.upsert({
       where: { userId },
