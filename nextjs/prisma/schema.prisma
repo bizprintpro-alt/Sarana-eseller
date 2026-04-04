@@ -66,11 +66,13 @@ model User {
   company   Company?
   autoDealer AutoDealer?
   serviceProvider ServiceProvider?
+
+  @@map("users")
 }
 
 model Product {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String   @db.ObjectId
+  userId        String?  @db.ObjectId
   name          String
   price         Int
   salePrice     Int?
@@ -89,10 +91,12 @@ model Product {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  user           User            @relation(fields: [userId], references: [id])
+  user           User?           @relation(fields: [userId], references: [id])
   modifierGroups ModifierGroup[]
   addOns         AddOn[]
   reviews        Review[]
+
+  @@map("products")
 }
 
 model ModifierGroup {
@@ -164,6 +168,8 @@ model Order {
   updatedAt        DateTime         @updatedAt
 
   user User @relation(fields: [userId], references: [id])
+
+  @@map("orders")
 }
 
 model Wallet {
@@ -176,12 +182,16 @@ model Wallet {
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
+
+  @@map("wallets")
 }
 
 model Commission {
   id         String @id @default(auto()) @map("_id") @db.ObjectId
   defaultRate Float @default(15)
   categories  Json?
+
+  @@map("commissions")
 }
 
 model AffiliateClick {
@@ -226,6 +236,8 @@ model Shop {
   workingHours WorkingHours[]
   storefront   SellerStorefront?
   subscription ShopSubscription?
+
+  @@map("stores")
 }
 
 model ShopType {
