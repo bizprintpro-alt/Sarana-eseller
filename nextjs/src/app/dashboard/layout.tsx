@@ -207,30 +207,31 @@ function getSellerSections(shopType: ShopType, entityType?: string): SidebarSect
 
 const ADMIN_SECTIONS: SidebarSection[] = [
   {
-    title: 'Платформ',
+    title: 'Удирдлага',
     items: [
       { href: '/dashboard/admin', icon: '📊', label: 'Самбар' },
       { href: '/dashboard/admin/users', icon: '👥', label: 'Хэрэглэгчид' },
-      { href: '/dashboard/admin/orders', icon: '📦', label: 'Бүх захиалга' },
-      { href: '/dashboard/admin/stores', icon: '🏪', label: 'Дэлгүүрүүд' },
-      { href: '/dashboard/admin/entities', icon: '🏢', label: 'Бүх нэгж', isNew: true },
-      { href: '/dashboard/admin/locations', icon: '📍', label: 'Байршил удирдлага', isNew: true },
-      { href: '/dashboard/admin/revenue', icon: '💵', label: 'Орлого', isNew: true },
-      { href: '/dashboard/admin/shops', icon: '🏪', label: 'Дэлгүүрүүд', isNew: true },
-      { href: '/dashboard/admin/homepage', icon: '🏠', label: 'Нүүр хуудас', isNew: true },
-      { href: '/dashboard/admin/marketing', icon: '📢', label: 'Маркетинг', isNew: true },
-      { href: '/dashboard/admin/chat-monitor', icon: '💬', label: 'Чат хяналт', isNew: true },
-      { href: '/dashboard/admin/config', icon: '⚙️', label: 'Тохиргоо', isNew: true },
-      { href: '/dashboard/admin/ai', icon: '🧠', label: 'Claude AI', isNew: true },
-      { href: '/dashboard/admin/analytics-dashboard', icon: '📈', label: 'Аналитик', isNew: true },
+      { href: '/dashboard/admin/sellers', icon: '🏷️', label: 'Борлуулагчид', isNew: true },
+      { href: '/dashboard/admin/shops', icon: '🏪', label: 'Дэлгүүрүүд' },
+      { href: '/dashboard/admin/revenue', icon: '💵', label: 'Орлого' },
+      { href: '/dashboard/admin/banners', icon: '🖼️', label: 'Баннер' },
     ],
   },
   {
-    title: 'Тохиргоо',
+    title: 'Контент & Маркетинг',
     items: [
-      { href: '/dashboard/admin/reference-id', icon: '🔢', label: 'Reference ID', isNew: true },
-      { href: '/dashboard/admin/announcements', icon: '📢', label: 'Мэдэгдлийн мөр', isNew: true },
-      { href: '/dashboard/admin/settings', icon: '⚙️', label: 'Системийн тохиргоо' },
+      { href: '/dashboard/admin/homepage', icon: '🏠', label: 'Нүүр хуудас' },
+      { href: '/dashboard/admin/marketing', icon: '📢', label: 'Маркетинг' },
+      { href: '/dashboard/admin/locations', icon: '📍', label: 'Байршил' },
+      { href: '/dashboard/admin/chat-monitor', icon: '💬', label: 'Чат хяналт' },
+    ],
+  },
+  {
+    title: 'Систем',
+    items: [
+      { href: '/dashboard/admin/config', icon: '⚙️', label: 'Тохиргоо' },
+      { href: '/dashboard/admin/ai', icon: '🧠', label: 'Claude AI' },
+      { href: '/dashboard/admin/analytics-dashboard', icon: '📈', label: 'Аналитик' },
     ],
   },
 ];
