@@ -130,14 +130,14 @@ export default function BecomeSellerPage() {
   // ─── Success Screen ───
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--esl-bg-page)] flex items-center justify-center px-4">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-          className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-8 max-w-md w-full text-center">
+          className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-8 max-w-md w-full text-center">
           <div className="w-16 h-16 rounded-full bg-[rgba(16,185,129,0.15)] flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-[#10B981]" />
           </div>
           <h2 className="text-xl font-black text-white mb-2">Амжилттай илгээлээ!</h2>
-          <p className="text-sm text-[#A0A0A0] mb-6">Таны хүсэлтийг хянаж байна. Баталгаажуулалт дууссаны дараа имэйлээр мэдэгдэнэ.</p>
+          <p className="text-sm text-[var(--esl-text-muted)] mb-6">Таны хүсэлтийг хянаж байна. Баталгаажуулалт дууссаны дараа имэйлээр мэдэгдэнэ.</p>
           <div className="bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] rounded-xl p-3 mb-6">
             <p className="text-xs text-[#F59E0B]"><Shield className="w-3.5 h-3.5 inline mr-1" /> Баталгаажуулалт 1-3 ажлын өдөрт хийгдэнэ</p>
           </div>
@@ -150,15 +150,15 @@ export default function BecomeSellerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className="min-h-screen bg-[var(--esl-bg-page)]">
       {/* Header */}
-      <nav className="bg-[#111111] border-b border-[#2A2A2A] h-14 flex items-center px-4">
+      <nav className="bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)] h-14 flex items-center px-4">
         <div className="max-w-3xl mx-auto w-full flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 no-underline">
             <EsellerLogo size={22} />
             <span className="text-base font-black text-white">eseller<span className="text-[#E31E24]">.mn</span></span>
           </Link>
-          <span className="text-xs text-[#777]">Борлуулагч бүртгэл</span>
+          <span className="text-xs text-[var(--esl-text-muted)]">Борлуулагч бүртгэл</span>
         </div>
       </nav>
 
@@ -166,11 +166,11 @@ export default function BecomeSellerPage() {
         {/* Progress */}
         <div className="flex items-center gap-1 mb-8">
           {STEPS.map((_, i) => (
-            <div key={i} className={cn('h-1.5 flex-1 rounded-full transition-colors', i <= step ? 'bg-[#E8242C]' : 'bg-[#2A2A2A]')} />
+            <div key={i} className={cn('h-1.5 flex-1 rounded-full transition-colors', i <= step ? 'bg-[#E8242C]' : 'bg-[var(--esl-bg-elevated)]')} />
           ))}
         </div>
         <div className="text-center mb-6">
-          <span className="text-xs text-[#777]">Алхам {step + 1}/{STEPS.length}</span>
+          <span className="text-xs text-[var(--esl-text-muted)]">Алхам {step + 1}/{STEPS.length}</span>
           <h2 className="text-xl font-black text-white mt-1">{STEPS[step]}</h2>
         </div>
 
@@ -185,7 +185,7 @@ export default function BecomeSellerPage() {
                   return (
                     <button key={key} onClick={() => { setEntityType(key); if (!d.planOptions.includes(selectedPlan)) setSelectedPlan(d.planOptions[0]); }}
                       className={cn('w-full flex items-start gap-4 p-5 rounded-2xl border text-left cursor-pointer transition-all',
-                        isSelected ? 'border-[#E8242C] bg-[rgba(232,36,44,0.06)]' : 'border-[#2A2A2A] bg-[#1A1A1A] hover:border-[#3D3D3D]')}>
+                        isSelected ? 'border-[#E8242C] bg-[rgba(232,36,44,0.06)]' : 'border-[var(--esl-border)] bg-[var(--esl-bg-card)] hover:border-[var(--esl-border)]')}>
                       <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: d.color + '15', color: d.color }}>
                         <d.Icon className="w-6 h-6" />
                       </div>
@@ -194,10 +194,10 @@ export default function BecomeSellerPage() {
                           <span className="text-sm font-bold text-white">{d.label}</span>
                           {d.badge && <span className="text-[10px] font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded-full">{d.badge}</span>}
                         </div>
-                        <p className="text-xs text-[#A0A0A0] mb-2">{d.subtitle}</p>
+                        <p className="text-xs text-[var(--esl-text-muted)] mb-2">{d.subtitle}</p>
                         <div className="flex flex-wrap gap-1.5">
                           {d.tags.map(tag => (
-                            <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#2A2A2A] text-[#A0A0A0]">{tag}</span>
+                            <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[var(--esl-bg-elevated)] text-[var(--esl-text-muted)]">{tag}</span>
                           ))}
                         </div>
                       </div>
@@ -215,31 +215,31 @@ export default function BecomeSellerPage() {
 
             {/* ═══ Step 1: Basic Info (dynamic per entity) ═══ */}
             {step === 1 && def && (
-              <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-6 space-y-4">
+              <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Нэр *</label>
+                  <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Нэр *</label>
                   <input type="text" value={form.name} onChange={(e) => handleNameChange(e.target.value)}
                     placeholder={entityType === 'agent' ? 'Овог нэр' : 'Бизнесийн нэр'}
-                    className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555] transition" />
+                    className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555] transition" />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Slug (URL)</label>
+                  <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Slug (URL)</label>
                   <div className="flex">
-                    <span className="px-4 py-3 bg-[#2A2A2A] border border-r-0 border-[#3D3D3D] rounded-l-xl text-xs text-[#777]">eseller.mn/</span>
+                    <span className="px-4 py-3 bg-[var(--esl-bg-elevated)] border border-r-0 border-[var(--esl-border)] rounded-l-xl text-xs text-[var(--esl-text-muted)]">eseller.mn/</span>
                     <input type="text" value={form.slug} onChange={(e) => updateForm('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                      className="flex-1 px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-r-xl text-sm font-mono text-white outline-none focus:border-[#E8242C]" />
+                      className="flex-1 px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-r-xl text-sm font-mono text-white outline-none focus:border-[#E8242C]" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Phone className="w-3 h-3 inline mr-1" />Утас *</label>
+                    <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block"><Phone className="w-3 h-3 inline mr-1" />Утас *</label>
                     <input type="tel" value={form.phone} onChange={(e) => updateForm('phone', e.target.value)} placeholder="9911-2233"
-                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                      className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Mail className="w-3 h-3 inline mr-1" />Имэйл</label>
+                    <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block"><Mail className="w-3 h-3 inline mr-1" />Имэйл</label>
                     <input type="email" value={form.email} onChange={(e) => updateForm('email', e.target.value)}
-                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                      className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                 </div>
 
@@ -248,38 +248,38 @@ export default function BecomeSellerPage() {
                   <>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Эх улс</label>
+                        <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Эх улс</label>
                         <select value={form.sourceCountry} onChange={(e) => updateForm('sourceCountry', e.target.value)}
-                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none cursor-pointer">
+                          className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none cursor-pointer">
                           <option value="">Сонгох...</option>
                           {['🇨🇳 Хятад', '🇰🇷 Солонгос', '🇯🇵 Япон', '🇺🇸 АНУ', '🇹🇷 Турк', '🇩🇪 Герман', '🇬🇧 Их Британи'].map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Хүргэлтийн хоног</label>
+                        <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Хүргэлтийн хоног</label>
                         <input type="number" value={form.deliveryDays} onChange={(e) => updateForm('deliveryDays', e.target.value)} placeholder="14"
-                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                          className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Мин. захиалга (ш)</label>
+                        <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Мин. захиалга (ш)</label>
                         <input type="number" value={form.minimumOrderQty} onChange={(e) => updateForm('minimumOrderQty', e.target.value)} placeholder="1"
-                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                          className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Урьдчилгаа %</label>
+                        <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Урьдчилгаа %</label>
                         <input type="number" value={form.advancePaymentPct} onChange={(e) => updateForm('advancePaymentPct', e.target.value)} placeholder="30"
-                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                          className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                       </div>
                     </div>
                   </>
                 )}
 
                 <div>
-                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Товч тайлбар</label>
+                  <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Товч тайлбар</label>
                   <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={3} placeholder="Бизнесийн тухай товчхон..."
-                    maxLength={200} className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555] resize-none" />
+                    maxLength={200} className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555] resize-none" />
                   <div className="text-[10px] text-[#555] text-right">{form.description.length}/200</div>
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function BecomeSellerPage() {
 
             {/* ═══ Step 2: KYC ═══ */}
             {step === 2 && def && (
-              <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-6 space-y-4">
+              <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
                 <div className="bg-[rgba(59,130,246,0.08)] border border-[rgba(59,130,246,0.2)] rounded-xl p-3 text-xs text-[#60A5FA]">
                   <Shield className="w-3.5 h-3.5 inline mr-1" />
                   Баримт бичиг оруулснаар баталгаажуулалт хурдан хийгдэнэ. Заавал биш.
@@ -296,13 +296,13 @@ export default function BecomeSellerPage() {
                 {def.kycDocs.includes('business_certificate') && (
                   <>
                     <div>
-                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">ААН бүртгэлийн дугаар</label>
+                      <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">ААН бүртгэлийн дугаар</label>
                       <input type="text" value={form.regNumber} onChange={(e) => updateForm('regNumber', e.target.value)} placeholder="1234567"
-                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                        className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                     </div>
-                    <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                    <div className="border-2 border-dashed border-[var(--esl-border)] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
                       <Upload className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
-                      <p className="text-sm text-[#A0A0A0]">Улсын бүртгэлийн гэрчилгээ</p>
+                      <p className="text-sm text-[var(--esl-text-muted)]">Улсын бүртгэлийн гэрчилгээ</p>
                       <p className="text-[10px] text-[#555] mt-1">PDF, JPG, PNG — 10MB хүртэл</p>
                     </div>
                   </>
@@ -311,30 +311,30 @@ export default function BecomeSellerPage() {
                 {def.kycDocs.includes('license') && (
                   <>
                     <div>
-                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Зуучийн лицензийн дугаар</label>
+                      <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Зуучийн лицензийн дугаар</label>
                       <input type="text" value={form.licenseNumber} onChange={(e) => updateForm('licenseNumber', e.target.value)} placeholder="RE-2024-XXXX"
-                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                        className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                     </div>
-                    <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                    <div className="border-2 border-dashed border-[var(--esl-border)] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
                       <FileText className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
-                      <p className="text-sm text-[#A0A0A0]">Лицензийн хуулбар</p>
+                      <p className="text-sm text-[var(--esl-text-muted)]">Лицензийн хуулбар</p>
                       <p className="text-[10px] text-[#555] mt-1">PDF, JPG — 10MB хүртэл</p>
                     </div>
                   </>
                 )}
 
                 {def.kycDocs.includes('id_card') && (
-                  <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                  <div className="border-2 border-dashed border-[var(--esl-border)] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
                     <Upload className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
-                    <p className="text-sm text-[#A0A0A0]">Иргэний үнэмлэхний хуулбар</p>
+                    <p className="text-sm text-[var(--esl-text-muted)]">Иргэний үнэмлэхний хуулбар</p>
                     <p className="text-[10px] text-[#555] mt-1">PDF, JPG, PNG — 10MB хүртэл</p>
                   </div>
                 )}
 
                 {def.kycDocs.includes('customs_certificate') && (
-                  <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                  <div className="border-2 border-dashed border-[var(--esl-border)] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
                     <Upload className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
-                    <p className="text-sm text-[#A0A0A0]">Гаалийн бүртгэлийн гэрчилгээ</p>
+                    <p className="text-sm text-[var(--esl-text-muted)]">Гаалийн бүртгэлийн гэрчилгээ</p>
                     <p className="text-[10px] text-[#555] mt-1">PDF, JPG — 10MB хүртэл</p>
                   </div>
                 )}
@@ -343,10 +343,10 @@ export default function BecomeSellerPage() {
 
             {/* ═══ Step 3: Profile ═══ */}
             {step === 3 && (
-              <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-6 space-y-4">
+              <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Camera className="w-3 h-3 inline mr-1" />Cover зураг</label>
-                  <div className="h-32 border-2 border-dashed border-[#3D3D3D] rounded-xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
+                  <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block"><Camera className="w-3 h-3 inline mr-1" />Cover зураг</label>
+                  <div className="h-32 border-2 border-dashed border-[var(--esl-border)] rounded-xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
                     <div className="text-center">
                       <Upload className="w-6 h-6 text-[#3D3D3D] mx-auto mb-1" />
                       <p className="text-xs text-[#555]">1200×400 px санал болгоно</p>
@@ -354,22 +354,22 @@ export default function BecomeSellerPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Лого / Профайл</label>
-                  <div className="w-20 h-20 border-2 border-dashed border-[#3D3D3D] rounded-2xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
+                  <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Лого / Профайл</label>
+                  <div className="w-20 h-20 border-2 border-dashed border-[var(--esl-border)] rounded-2xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
                     <Camera className="w-6 h-6 text-[#3D3D3D]" />
                   </div>
                 </div>
                 {def?.step2Fields.includes('address') && (
                   <>
                     <div>
-                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><MapPin className="w-3 h-3 inline mr-1" />Хаяг</label>
+                      <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block"><MapPin className="w-3 h-3 inline mr-1" />Хаяг</label>
                       <input type="text" value={form.address} onChange={(e) => updateForm('address', e.target.value)} placeholder="Дэлгэрэнгүй хаяг"
-                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                        className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                     </div>
                     <div>
-                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Дүүрэг</label>
+                      <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Дүүрэг</label>
                       <select value={form.district} onChange={(e) => updateForm('district', e.target.value)}
-                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none cursor-pointer">
+                        className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none cursor-pointer">
                         <option value="">Сонгох...</option>
                         {DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
                       </select>
@@ -378,14 +378,14 @@ export default function BecomeSellerPage() {
                 )}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Globe className="w-3 h-3 inline mr-1" />Вэбсайт</label>
+                    <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block"><Globe className="w-3 h-3 inline mr-1" />Вэбсайт</label>
                     <input type="url" value={form.website} onChange={(e) => updateForm('website', e.target.value)} placeholder="https://..."
-                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                      className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Facebook</label>
+                    <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Facebook</label>
                     <input type="text" value={form.socialFb} onChange={(e) => updateForm('socialFb', e.target.value)} placeholder="fb.com/..."
-                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                      className="w-full px-4 py-3 bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                 </div>
               </div>
@@ -401,7 +401,7 @@ export default function BecomeSellerPage() {
                     return (
                       <button key={planKey} onClick={() => setSelectedPlan(planKey)}
                         className={cn('relative p-5 rounded-2xl border text-left cursor-pointer transition-all',
-                          isSelected ? 'border-[#E8242C] bg-[rgba(232,36,44,0.06)]' : 'border-[#2A2A2A] bg-[#1A1A1A] hover:border-[#3D3D3D]')}>
+                          isSelected ? 'border-[#E8242C] bg-[rgba(232,36,44,0.06)]' : 'border-[var(--esl-border)] bg-[var(--esl-bg-card)] hover:border-[var(--esl-border)]')}>
                         {plan.popular && (
                           <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-[#E8242C] text-white px-3 py-0.5 rounded-full">Түгээмэл</span>
                         )}
@@ -412,7 +412,7 @@ export default function BecomeSellerPage() {
                         <p className="text-lg font-black mt-1" style={{ color: plan.color }}>{plan.price}</p>
                         <ul className="mt-3 space-y-1.5">
                           {plan.features.map(f => (
-                            <li key={f} className="text-xs text-[#A0A0A0] flex items-center gap-2">
+                            <li key={f} className="text-xs text-[var(--esl-text-muted)] flex items-center gap-2">
                               <Check className="w-3 h-3 text-[#10B981] shrink-0" /> {f}
                             </li>
                           ))}
@@ -428,7 +428,7 @@ export default function BecomeSellerPage() {
                 </div>
 
                 {/* Review summary */}
-                <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-5 space-y-2 text-sm">
+                <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-5 space-y-2 text-sm">
                   <h3 className="text-sm font-bold text-white mb-3">Шалгаж баталгаажуулна уу</h3>
                   {[
                     ['Төрөл', `${def.label}`],
@@ -439,8 +439,8 @@ export default function BecomeSellerPage() {
                     ...(form.district ? [['Дүүрэг', form.district]] : []),
                     ...(entityType === 'pre_order' && form.sourceCountry ? [['Эх улс', form.sourceCountry]] : []),
                   ].map(([label, value]) => (
-                    <div key={label} className="flex justify-between py-2 border-b border-[#2A2A2A]">
-                      <span className="text-[#777]">{label}</span>
+                    <div key={label} className="flex justify-between py-2 border-b border-[var(--esl-border)]">
+                      <span className="text-[var(--esl-text-muted)]">{label}</span>
                       <span className="font-semibold text-white">{value}</span>
                     </div>
                   ))}
@@ -448,7 +448,7 @@ export default function BecomeSellerPage() {
 
                 <label className="flex items-start gap-2 cursor-pointer">
                   <input type="checkbox" className="mt-1 rounded accent-[#E8242C]" />
-                  <span className="text-xs text-[#777]">
+                  <span className="text-xs text-[var(--esl-text-muted)]">
                     <a href="#" className="text-[#E8242C] no-underline">Үйлчилгээний нөхцөл</a> болон <a href="#" className="text-[#E8242C] no-underline">нууцлалын бодлого</a>-г зөвшөөрч байна.
                   </span>
                 </label>
@@ -462,7 +462,7 @@ export default function BecomeSellerPage() {
         <div className="flex items-center justify-between mt-8">
           {step > 0 ? (
             <button onClick={() => setStep(s => s - 1)}
-              className="text-sm text-[#A0A0A0] hover:text-white transition-colors bg-transparent border-none cursor-pointer">
+              className="text-sm text-[var(--esl-text-muted)] hover:text-white transition-colors bg-transparent border-none cursor-pointer">
               ← Өмнөх
             </button>
           ) : <span />}
@@ -470,7 +470,7 @@ export default function BecomeSellerPage() {
           {step < 4 ? (
             <button onClick={() => canNext() && setStep(s => s + 1)} disabled={!canNext()}
               className={cn('flex items-center gap-1.5 px-8 py-3 rounded-xl text-sm font-bold transition border-none cursor-pointer',
-                canNext() ? 'bg-[#E8242C] text-white hover:bg-[#CC0000]' : 'bg-[#2A2A2A] text-[#555] cursor-not-allowed')}>
+                canNext() ? 'bg-[#E8242C] text-white hover:bg-[#CC0000]' : 'bg-[var(--esl-bg-elevated)] text-[#555] cursor-not-allowed')}>
               Дараах <ChevronRight className="w-4 h-4" />
             </button>
           ) : (
@@ -482,7 +482,7 @@ export default function BecomeSellerPage() {
         </div>
 
         {step === 4 && (
-          <p className="text-center text-xs text-[#555] mt-4 cursor-pointer hover:text-[#A0A0A0]" onClick={handleSubmit}>
+          <p className="text-center text-xs text-[#555] mt-4 cursor-pointer hover:text-[var(--esl-text-muted)]" onClick={handleSubmit}>
             Одоохондоо үнэгүй эхлэх → Dashboard-аас дараа upgrade хийнэ
           </p>
         )}

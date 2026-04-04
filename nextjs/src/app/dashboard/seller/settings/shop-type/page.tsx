@@ -106,7 +106,7 @@ export default function ShopTypePage() {
     <div className="max-w-3xl space-y-6">
       <div>
         <h1 className="text-2xl font-extrabold text-white tracking-tight">Дэлгүүрийн төрөл</h1>
-        <p className="text-sm text-[#A0A0A0] mt-1">Таны бизнесийн төрлийг сонговол sidebar болон dashboard тохирч өөрчлөгдөнө.</p>
+        <p className="text-sm text-[var(--esl-text-muted)] mt-1">Таны бизнесийн төрлийг сонговол sidebar болон dashboard тохирч өөрчлөгдөнө.</p>
       </div>
 
       {/* Type cards */}
@@ -122,7 +122,7 @@ export default function ShopTypePage() {
                 'w-full flex items-start gap-4 p-5 rounded-2xl border text-left cursor-pointer transition-all',
                 isSelected
                   ? 'border-[#E8242C] bg-[rgba(232,36,44,0.06)]'
-                  : 'border-[#2A2A2A] bg-[#1A1A1A] hover:border-[#3D3D3D]'
+                  : 'border-[var(--esl-border)] bg-[var(--esl-bg-card)] hover:border-[var(--esl-border)]'
               )}
             >
               <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
@@ -139,10 +139,10 @@ export default function ShopTypePage() {
                     <span className="text-[10px] font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded-full">{t.badge}</span>
                   )}
                 </div>
-                <p className="text-xs text-[#A0A0A0] mt-0.5">{t.desc}</p>
+                <p className="text-xs text-[var(--esl-text-muted)] mt-0.5">{t.desc}</p>
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {t.features.map((f) => (
-                    <span key={f} className="text-[10px] font-medium bg-[#2A2A2A] text-[#A0A0A0] px-2 py-0.5 rounded">{f}</span>
+                    <span key={f} className="text-[10px] font-medium bg-[var(--esl-bg-elevated)] text-[var(--esl-text-muted)] px-2 py-0.5 rounded">{f}</span>
                   ))}
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default function ShopTypePage() {
             </p>
             <div className="flex gap-2 mt-3">
               <button onClick={() => setShowWarning(false)}
-                className="px-4 py-2 text-sm font-semibold text-[#A0A0A0] bg-[#2A2A2A] border border-[#3D3D3D] rounded-lg hover:bg-[#3D3D3D] cursor-pointer transition">
+                className="px-4 py-2 text-sm font-semibold text-[var(--esl-text-muted)] bg-[var(--esl-bg-elevated)] border border-[var(--esl-border)] rounded-lg hover:bg-[#3D3D3D] cursor-pointer transition">
                 Болих
               </button>
               <button onClick={handleSave} disabled={saving}
@@ -184,7 +184,7 @@ export default function ShopTypePage() {
         <button onClick={handleSave} disabled={saving || selected === (currentOption?.key || currentType)}
           className={cn('flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold border-none cursor-pointer transition',
             saved ? 'bg-[#22C55E] text-white'
-              : saving || selected === (currentOption?.key || currentType) ? 'bg-[#2A2A2A] text-[#555] cursor-not-allowed'
+              : saving || selected === (currentOption?.key || currentType) ? 'bg-[var(--esl-bg-elevated)] text-[#555] cursor-not-allowed'
               : 'bg-[#E8242C] text-white hover:bg-[#CC0000]')}>
           {saved ? <><Check className="w-4 h-4" /> Хадгалагдлаа!</> : 'Хадгалах'}
         </button>

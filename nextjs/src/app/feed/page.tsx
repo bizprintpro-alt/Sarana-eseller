@@ -19,7 +19,7 @@ const TIER_CONFIG: Record<ItemTier, { label: string; badge: string; color: strin
   vip: { label: 'ВИП', badge: '👑', color: '#D4AF37', border: 'border-amber-500/30', bg: 'bg-amber-500/5' },
   featured: { label: 'Онцлох', badge: '⭐', color: '#3B82F6', border: 'border-blue-500/30', bg: 'bg-blue-500/5' },
   discounted: { label: 'Хямдрал', badge: '🔥', color: '#EF4444', border: 'border-red-500/30', bg: 'bg-red-500/5' },
-  normal: { label: 'Энгийн', badge: '', color: '#6B7280', border: 'border-[#2A2A2A]', bg: '' },
+  normal: { label: 'Энгийн', badge: '', color: '#6B7280', border: 'border-[var(--esl-border)]', bg: '' },
 };
 
 const ENTITY_LABELS: Record<EntityType, { label: string; emoji: string }> = {
@@ -96,10 +96,10 @@ function FeedCard({ item }: { item: typeof DEMO_FEED[0] }) {
   const disc = item.originalPrice ? Math.round((1 - item.price / item.originalPrice) * 100) : 0;
 
   return (
-    <div className={`group rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,.3)] hover:-translate-y-0.5 cursor-pointer ${tier.border} ${tier.bg || 'bg-[#1A1A1A]'}`}>
+    <div className={`group rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,.3)] hover:-translate-y-0.5 cursor-pointer ${tier.border} ${tier.bg || 'bg-[var(--esl-bg-card)]'}`}>
       <div className="flex flex-col sm:flex-row">
         {/* Image */}
-        <div className={`relative h-48 sm:h-auto sm:w-56 shrink-0 flex items-center justify-center ${isVip ? 'bg-[#1A1500]' : 'bg-[#2A2A2A]'}`}>
+        <div className={`relative h-48 sm:h-auto sm:w-56 shrink-0 flex items-center justify-center ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
           <span className="text-6xl transition-transform duration-300 group-hover:scale-110">{categoryEmoji(item.category)}</span>
           {item.tier !== 'normal' && (
             <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold" style={{ backgroundColor: tier.color + '20', color: tier.color }}>
@@ -117,7 +117,7 @@ function FeedCard({ item }: { item: typeof DEMO_FEED[0] }) {
         {/* Content */}
         <div className="flex-1 p-4 sm:p-5">
           {/* Entity + district */}
-          <div className="flex items-center gap-2 text-xs text-[#A0A0A0] mb-2">
+          <div className="flex items-center gap-2 text-xs text-[var(--esl-text-muted)] mb-2">
             <span>{entity.emoji} {item.entityName}</span>
             {item.verified && <span className="text-blue-400">✓</span>}
             {item.district && (
@@ -139,11 +139,11 @@ function FeedCard({ item }: { item: typeof DEMO_FEED[0] }) {
           {/* Metadata chips */}
           {item.metadata && (
             <div className="flex flex-wrap gap-1.5 mb-3">
-              {item.metadata.sqm && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[#2A2A2A] px-2 py-1 rounded">{item.metadata.sqm}м²</span>}
-              {item.metadata.rooms && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[#2A2A2A] px-2 py-1 rounded">{item.metadata.rooms} өрөө</span>}
-              {item.metadata.year && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[#2A2A2A] px-2 py-1 rounded">{item.metadata.year} он</span>}
-              {item.metadata.mileage && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[#2A2A2A] px-2 py-1 rounded">{(item.metadata.mileage / 1000).toFixed(0)}мян км</span>}
-              {item.metadata.fuel && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[#2A2A2A] px-2 py-1 rounded">{item.metadata.fuel}</span>}
+              {item.metadata.sqm && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.sqm}м²</span>}
+              {item.metadata.rooms && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.rooms} өрөө</span>}
+              {item.metadata.year && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.year} он</span>}
+              {item.metadata.mileage && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{(item.metadata.mileage / 1000).toFixed(0)}мян км</span>}
+              {item.metadata.fuel && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.fuel}</span>}
             </div>
           )}
 
@@ -191,15 +191,15 @@ export default function FeedPage() {
   return (
     <div className="min-h-screen" style={{ background: "var(--esl-bg-page)" }}>
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#111111] border-b border-[#2A2A2A]">
+      <header className="sticky top-0 z-50 bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]">
         <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-5">
           <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0">
             <EsellerLogo size={32} />
             <span className="text-xl font-black text-white hidden sm:block">eseller<span className="text-[#E31E24]">.mn</span></span>
           </Link>
           <div className="flex-1" />
-          <Link href="/store" className="text-sm font-semibold text-[#A0A0A0] hover:text-white no-underline transition">Дэлгүүр</Link>
-          <Link href="/shops" className="text-sm font-semibold text-[#A0A0A0] hover:text-white no-underline transition">Дэлгүүрүүд</Link>
+          <Link href="/store" className="text-sm font-semibold text-[var(--esl-text-muted)] hover:text-white no-underline transition">Дэлгүүр</Link>
+          <Link href="/shops" className="text-sm font-semibold text-[var(--esl-text-muted)] hover:text-white no-underline transition">Дэлгүүрүүд</Link>
           <Link href="/feed" className="text-sm font-bold text-[#E8242C] no-underline">Зарын булан</Link>
         </div>
       </header>
@@ -211,7 +211,7 @@ export default function FeedPage() {
             <h1 className="text-2xl font-black text-white flex items-center gap-3">
               📋 Зарын булан
             </h1>
-            <p className="text-sm text-[#777] mt-1">Бараа, үйлчилгээ, орон сууц, авто — бүгдийг нэг дор</p>
+            <p className="text-sm text-[var(--esl-text-muted)] mt-1">Бараа, үйлчилгээ, орон сууц, авто — бүгдийг нэг дор</p>
           </div>
           <Link href="/feed/post" className="flex items-center gap-2 px-5 py-3 bg-[#E8242C] text-white text-sm font-bold rounded-xl no-underline hover:bg-[#CC0000] transition-colors">
             <Plus className="w-4 h-4" /> Зар оруулах
@@ -227,7 +227,7 @@ export default function FeedPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Зар хайх..."
-              className="w-full h-11 pl-11 pr-4 rounded-xl bg-[#1A1A1A] border border-[#3D3D3D] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
+              className="w-full h-11 pl-11 pr-4 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
             />
             {search && (
               <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] bg-transparent border-none cursor-pointer">
@@ -239,7 +239,7 @@ export default function FeedPage() {
           <select
             value={activeDistrict}
             onChange={(e) => setActiveDistrict(e.target.value)}
-            className="h-11 px-4 rounded-xl bg-[#1A1A1A] border border-[#3D3D3D] text-[#E0E0E0] text-sm outline-none cursor-pointer"
+            className="h-11 px-4 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] text-[var(--esl-text-secondary)] text-sm outline-none cursor-pointer"
           >
             {DISTRICTS.map(d => <option key={d} value={d}>{d === 'Бүгд' ? '📍 Бүх дүүрэг' : d}</option>)}
           </select>
@@ -247,7 +247,7 @@ export default function FeedPage() {
           <select
             value={activeSort}
             onChange={(e) => setActiveSort(e.target.value)}
-            className="h-11 px-4 rounded-xl bg-[#1A1A1A] border border-[#3D3D3D] text-[#E0E0E0] text-sm outline-none cursor-pointer"
+            className="h-11 px-4 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] text-[var(--esl-text-secondary)] text-sm outline-none cursor-pointer"
           >
             {SORT_OPTIONS.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
           </select>
@@ -265,7 +265,7 @@ export default function FeedPage() {
                 className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#E8242C] border-[#E8242C] text-white'
-                    : 'bg-[#1A1A1A] border-[#3D3D3D] text-[#A0A0A0] hover:border-[#555] hover:text-white'
+                    : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555] hover:text-white'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -277,7 +277,7 @@ export default function FeedPage() {
 
         {/* Result bar */}
         <div className="flex items-center justify-between mb-4">
-          <p className="text-sm text-[#777]">
+          <p className="text-sm text-[var(--esl-text-muted)]">
             <span className="font-extrabold text-white">{filtered.length}</span> зар олдлоо
             {vipCount > 0 && <span className="text-[#D4AF37]"> · 👑 {vipCount} ВИП</span>}
           </p>
@@ -294,13 +294,13 @@ export default function FeedPage() {
           <div className="text-center py-20">
             <span className="text-5xl block mb-4">📋</span>
             <p className="text-lg font-bold text-white">Зар олдсонгүй</p>
-            <p className="text-sm text-[#777] mt-2">Шүүлтүүрээ өөрчилнө үү</p>
+            <p className="text-sm text-[var(--esl-text-muted)] mt-2">Шүүлтүүрээ өөрчилнө үү</p>
           </div>
         )}
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#111111] border-t border-[#2A2A2A] py-8 mt-12">
+      <footer className="bg-[var(--esl-bg-section)] border-t border-[var(--esl-border)] py-8 mt-12">
         <div className="max-w-[1320px] mx-auto px-4 text-center">
           <p className="text-xs text-[#555]">© 2026 eseller.mn — Зарын булан</p>
         </div>

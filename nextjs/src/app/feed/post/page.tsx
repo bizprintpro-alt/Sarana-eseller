@@ -62,16 +62,16 @@ export default function PostAdPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className="min-h-screen bg-[var(--esl-bg-page)]">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#111111] border-b border-[#2A2A2A]">
+      <header className="sticky top-0 z-50 bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]">
         <div className="max-w-3xl mx-auto px-4 h-16 flex items-center gap-4">
-          <button onClick={() => router.back()} className="w-10 h-10 rounded-xl bg-[#1A1A1A] border border-[#3D3D3D] flex items-center justify-center text-white cursor-pointer hover:bg-[#2A2A2A] transition">
+          <button onClick={() => router.back()} className="w-10 h-10 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] flex items-center justify-center text-white cursor-pointer hover:bg-[var(--esl-bg-elevated)] transition">
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-black text-white">Зар оруулах</h1>
-            <p className="text-xs text-[#777]">Зурагтай зар илүү олон хүнд хүрнэ</p>
+            <p className="text-xs text-[var(--esl-text-muted)]">Зурагтай зар илүү олон хүнд хүрнэ</p>
           </div>
           <Link href="/" className="flex items-center gap-2 no-underline">
             <EsellerLogo size={24} />
@@ -82,18 +82,18 @@ export default function PostAdPage() {
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Images */}
         <div className="mb-8">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-3 block">Зураг (10 хүртэл)</label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Зураг (10 хүртэл)</label>
           <div className="flex gap-3 flex-wrap">
             <button
               onClick={addImage}
-              className="w-28 h-28 rounded-xl border-2 border-dashed border-[#3D3D3D] bg-[#1A1A1A] flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-[#E8242C] hover:bg-[#1A1A1A] transition-colors text-[#777]"
+              className="w-28 h-28 rounded-xl border-2 border-dashed border-[var(--esl-border)] bg-[var(--esl-bg-card)] flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-[#E8242C] hover:bg-[var(--esl-bg-card)] transition-colors text-[var(--esl-text-muted)]"
             >
               <Camera className="w-6 h-6" />
               <span className="text-xs font-semibold">Нэмэх</span>
               <span className="text-[10px] text-[#555]">{images.length}/10</span>
             </button>
             {images.map((img, i) => (
-              <div key={i} className="relative w-28 h-28 rounded-xl bg-[#2A2A2A] flex items-center justify-center">
+              <div key={i} className="relative w-28 h-28 rounded-xl bg-[var(--esl-bg-elevated)] flex items-center justify-center">
                 <span className="text-4xl">{img}</span>
                 <button onClick={() => setImages(images.filter((_, idx) => idx !== i))} className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#E8242C] text-white flex items-center justify-center border-none cursor-pointer">
                   <X className="w-3 h-3" />
@@ -106,21 +106,21 @@ export default function PostAdPage() {
 
         {/* Title */}
         <div className="mb-6">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-2 block">Гарчиг <span className="text-[#E8242C]">*</span></label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2 block">Гарчиг <span className="text-[#E8242C]">*</span></label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Жишээ: iPhone 15 Pro, бараг шинэ"
             maxLength={100}
-            className="w-full h-12 px-4 rounded-xl bg-[#1A1A1A] border border-[#3D3D3D] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
+            className="w-full h-12 px-4 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
           />
           <p className="text-right text-[11px] text-[#555] mt-1">{title.length}/100</p>
         </div>
 
         {/* Category */}
         <div className="mb-6">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-3 block">Ангилал <span className="text-[#E8242C]">*</span></label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Ангилал <span className="text-[#E8242C]">*</span></label>
           <div className="grid grid-cols-5 gap-2">
             {CATEGORIES.map((c) => {
               const isActive = category === c.key;
@@ -131,7 +131,7 @@ export default function PostAdPage() {
                   className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border cursor-pointer transition-all ${
                     isActive
                       ? 'bg-[rgba(232,36,44,0.15)] border-[#E8242C] text-white'
-                      : 'bg-[#1A1A1A] border-[#2A2A2A] text-[#A0A0A0] hover:border-[#3D3D3D]'
+                      : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[var(--esl-border)]'
                   }`}
                 >
                   <span className="text-xl">{c.emoji}</span>
@@ -144,16 +144,16 @@ export default function PostAdPage() {
 
         {/* Price */}
         <div className="mb-6">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-2 block">Үнэ <span className="text-[#E8242C]">*</span></label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2 block">Үнэ <span className="text-[#E8242C]">*</span></label>
           <div className="flex">
             <input
               type="text"
               value={price}
               onChange={(e) => setPrice(e.target.value.replace(/[^0-9]/g, ''))}
               placeholder="0"
-              className="flex-1 h-12 px-4 rounded-l-xl bg-[#1A1A1A] border border-r-0 border-[#3D3D3D] text-white text-lg font-bold outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
+              className="flex-1 h-12 px-4 rounded-l-xl bg-[var(--esl-bg-card)] border border-r-0 border-[var(--esl-border)] text-white text-lg font-bold outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
             />
-            <div className="h-12 px-5 bg-[#2A2A2A] border border-l-0 border-[#3D3D3D] rounded-r-xl flex items-center">
+            <div className="h-12 px-5 bg-[var(--esl-bg-elevated)] border border-l-0 border-[var(--esl-border)] rounded-r-xl flex items-center">
               <span className="text-lg font-black text-white">₮</span>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default function PostAdPage() {
 
         {/* Condition */}
         <div className="mb-6">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-3 block">Нөхцөл байдал</label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Нөхцөл байдал</label>
           <div className="flex flex-wrap gap-2">
             {CONDITIONS.map((c) => (
               <button
@@ -170,7 +170,7 @@ export default function PostAdPage() {
                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold border cursor-pointer transition-all ${
                   condition === c.key
                     ? 'bg-[#E8242C] border-[#E8242C] text-white'
-                    : 'bg-[#1A1A1A] border-[#3D3D3D] text-[#A0A0A0] hover:border-[#555]'
+                    : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
                 }`}
               >
                 {c.label}
@@ -181,7 +181,7 @@ export default function PostAdPage() {
 
         {/* District */}
         <div className="mb-6">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-3 block">Дүүрэг <span className="text-[#E8242C]">*</span></label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Дүүрэг <span className="text-[#E8242C]">*</span></label>
           <div className="flex flex-wrap gap-2">
             {DISTRICTS.map((d) => (
               <button
@@ -190,7 +190,7 @@ export default function PostAdPage() {
                 className={`px-5 py-2.5 rounded-xl text-sm font-semibold border cursor-pointer transition-all ${
                   district === d
                     ? 'bg-[#E8242C] border-[#E8242C] text-white'
-                    : 'bg-[#1A1A1A] border-[#3D3D3D] text-[#A0A0A0] hover:border-[#555]'
+                    : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
                 }`}
               >
                 {d}
@@ -201,37 +201,37 @@ export default function PostAdPage() {
 
         {/* Description */}
         <div className="mb-6">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-2 block">Дэлгэрэнгүй тайлбар</label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2 block">Дэлгэрэнгүй тайлбар</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Барааны нөхцөл, онцлог, тоо ширхэг гэх мэт..."
             maxLength={1000}
             rows={5}
-            className="w-full px-4 py-3 rounded-xl bg-[#1A1A1A] border border-[#3D3D3D] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all resize-y leading-relaxed"
+            className="w-full px-4 py-3 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all resize-y leading-relaxed"
           />
           <p className="text-right text-[11px] text-[#555] mt-1">{description.length}/1000</p>
         </div>
 
         {/* Phone */}
         <div className="mb-8">
-          <label className="text-sm font-bold text-[#E0E0E0] mb-2 block">Холбоо барих утас</label>
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2 block">Холбоо барих утас</label>
           <div className="flex">
-            <div className="h-12 px-4 bg-[#2A2A2A] border border-r-0 border-[#3D3D3D] rounded-l-xl flex items-center">
-              <span className="text-sm text-[#A0A0A0]">🇲🇳 +976</span>
+            <div className="h-12 px-4 bg-[var(--esl-bg-elevated)] border border-r-0 border-[var(--esl-border)] rounded-l-xl flex items-center">
+              <span className="text-sm text-[var(--esl-text-muted)]">🇲🇳 +976</span>
             </div>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 8))}
               placeholder="9911 2233"
-              className="flex-1 h-12 px-4 rounded-r-xl bg-[#1A1A1A] border border-l-0 border-[#3D3D3D] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
+              className="flex-1 h-12 px-4 rounded-r-xl bg-[var(--esl-bg-card)] border border-l-0 border-[var(--esl-border)] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
             />
           </div>
         </div>
 
         {/* VIP Upgrade */}
-        <div className="p-5 rounded-2xl bg-[#1A1A1A] border border-[rgba(212,175,55,0.25)] flex items-center gap-4 mb-6 cursor-pointer hover:border-[rgba(212,175,55,0.5)] transition-colors">
+        <div className="p-5 rounded-2xl bg-[var(--esl-bg-card)] border border-[rgba(212,175,55,0.25)] flex items-center gap-4 mb-6 cursor-pointer hover:border-[rgba(212,175,55,0.5)] transition-colors">
           <span className="text-3xl">👑</span>
           <div className="flex-1">
             <p className="text-sm font-extrabold text-[#FFD700]">ВИП зар болгох</p>
@@ -254,7 +254,7 @@ export default function PostAdPage() {
 
         {/* Submit */}
         <div className="flex gap-3">
-          <button onClick={() => router.back()} className="h-12 px-8 rounded-xl bg-[#2A2A2A] text-[#A0A0A0] text-sm font-bold border-none cursor-pointer hover:bg-[#3D3D3D] transition">
+          <button onClick={() => router.back()} className="h-12 px-8 rounded-xl bg-[var(--esl-bg-elevated)] text-[var(--esl-text-muted)] text-sm font-bold border-none cursor-pointer hover:bg-[#3D3D3D] transition">
             Болих
           </button>
           <button

@@ -297,8 +297,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (!ready) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
-        <div className="text-[#A0A0A0] text-sm">Ачааллаж байна...</div>
+      <div className="min-h-screen bg-[var(--esl-bg-page)] flex items-center justify-center">
+        <div className="text-[var(--esl-text-muted)] text-sm">Ачааллаж байна...</div>
       </div>
     );
   }
@@ -319,7 +319,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     : undefined;
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className="min-h-screen bg-[var(--esl-bg-page)]">
       <Sidebar sections={sections} storeInfo={storeInfo} />
       <main className="ml-[260px] min-h-screen transition-all duration-300 p-6 lg:p-8">
         {children}

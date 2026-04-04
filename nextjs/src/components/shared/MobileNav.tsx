@@ -19,7 +19,7 @@ export default function MobileNav() {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 bg-[#111111]/95 backdrop-blur-xl border-t border-[#2A2A2A] z-[9999] pb-[env(safe-area-inset-bottom)] md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 bg-[var(--esl-bg-section)]/95 backdrop-blur-xl border-t border-[var(--esl-border)] z-[9999] pb-[env(safe-area-inset-bottom)] md:hidden">
         <div className="flex items-stretch h-14">
           {tabs.map((tab) => {
             const isActive = pathname === tab.href || (tab.href !== '/' && pathname.startsWith(tab.href));

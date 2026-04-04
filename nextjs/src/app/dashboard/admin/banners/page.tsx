@@ -241,7 +241,7 @@ export default function AdminBannersPage() {
      ═══════════════════════════════════════════════════════ */
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white p-6 space-y-6">
+    <div className="min-h-screen bg-[var(--esl-bg-page)] text-white p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -266,7 +266,7 @@ export default function AdminBannersPage() {
           { label: 'Энэ сарын орлого', value: formatCurrency(stats.revenueThisMonth), icon: DollarSign, color: 'text-[#E8242C]', iconBg: 'bg-[#E8242C]/15' },
           { label: 'Нийт харагдалт', value: formatNumber(stats.totalImpressions), icon: BarChart3, color: 'text-purple-400', iconBg: 'bg-purple-500/15' },
         ] as const).map((s) => (
-          <div key={s.label} className="bg-[#1A1A1A] border border-[#2A2A2A] rounded-2xl p-5 flex items-start gap-4">
+          <div key={s.label} className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-5 flex items-start gap-4">
             <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', s.iconBg)}>
               <s.icon className={cn('w-5 h-5', s.color)} />
             </div>
@@ -287,7 +287,7 @@ export default function AdminBannersPage() {
           {slots.map((s) => {
             const ratio = s.currentCount / s.maxConcurrent;
             return (
-              <div key={s.slot} className="bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl p-4 space-y-3">
+              <div key={s.slot} className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold">{s.label}</span>
                   <span className="text-[11px] text-white/40">макс {s.maxConcurrent}</span>
@@ -310,9 +310,9 @@ export default function AdminBannersPage() {
       </div>
 
       {/* ── Banners Table Section ── */}
-      <div className="bg-[#1A1A1A] border border-[#2A2A2A] rounded-2xl overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         {/* Filters */}
-        <div className="p-4 border-b border-[#2A2A2A] space-y-3">
+        <div className="p-4 border-b border-[var(--esl-border)] space-y-3">
           {/* Status pills */}
           <div className="flex items-center gap-2 flex-wrap">
             {Object.entries(STATUS_LABELS).map(([key, label]) => (
@@ -323,7 +323,7 @@ export default function AdminBannersPage() {
                   'px-3.5 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer',
                   statusFilter === key
                     ? 'bg-[#E8242C] border-[#E8242C] text-white'
-                    : 'bg-transparent border-[#2A2A2A] text-white/50 hover:border-white/30 hover:text-white/80'
+                    : 'bg-transparent border-[var(--esl-border)] text-white/50 hover:border-white/30 hover:text-white/80'
                 )}
               >
                 {label}
@@ -335,7 +335,7 @@ export default function AdminBannersPage() {
               <select
                 value={slotFilter}
                 onChange={(e) => setSlotFilter(e.target.value)}
-                className="appearance-none bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg px-3 py-1.5 pr-8 text-xs text-white/70 cursor-pointer focus:outline-none focus:border-[#E8242C]"
+                className="appearance-none bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-lg px-3 py-1.5 pr-8 text-xs text-white/70 cursor-pointer focus:outline-none focus:border-[#E8242C]"
               >
                 <option value="all">Бүх байршил</option>
                 {Object.entries(SLOT_LABELS).map(([key, label]) => (
@@ -354,7 +354,7 @@ export default function AdminBannersPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Баннер хайх..."
-              className="w-full bg-[#0A0A0A] border border-[#2A2A2A] rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-[#E8242C] transition-colors"
+              className="w-full bg-[var(--esl-bg-page)] border border-[var(--esl-border)] rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-[#E8242C] transition-colors"
             />
           </div>
         </div>
@@ -363,7 +363,7 @@ export default function AdminBannersPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#2A2A2A]">
+              <tr className="border-b border-[var(--esl-border)]">
                 <th className="text-left text-[11px] uppercase tracking-wider text-white/30 font-medium px-4 py-3">Баннер</th>
                 <th className="text-left text-[11px] uppercase tracking-wider text-white/30 font-medium px-4 py-3">Байршил</th>
                 <th className="text-left text-[11px] uppercase tracking-wider text-white/30 font-medium px-4 py-3">Нэгж</th>
@@ -384,11 +384,11 @@ export default function AdminBannersPage() {
                 banners.map((b) => {
                   const sc = STATUS_COLORS[b.status];
                   return (
-                    <tr key={b.id} className="border-b border-[#2A2A2A]/60 hover:bg-white/[0.02] transition-colors">
+                    <tr key={b.id} className="border-b border-[var(--esl-border)]/60 hover:bg-white/[0.02] transition-colors">
                       {/* Thumbnail + title + refId */}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-8 rounded-md bg-[#2A2A2A] flex items-center justify-center shrink-0 overflow-hidden">
+                          <div className="w-12 h-8 rounded-md bg-[var(--esl-bg-elevated)] flex items-center justify-center shrink-0 overflow-hidden">
                             {b.thumbnailUrl ? (
                               <img src={b.thumbnailUrl} alt="" className="w-full h-full object-cover" />
                             ) : (
@@ -403,7 +403,7 @@ export default function AdminBannersPage() {
                       </td>
                       {/* Slot badge */}
                       <td className="px-4 py-3">
-                        <span className="px-2 py-1 rounded-md bg-[#2A2A2A] text-[11px] font-medium text-white/60">
+                        <span className="px-2 py-1 rounded-md bg-[var(--esl-bg-elevated)] text-[11px] font-medium text-white/60">
                           {SLOT_LABELS[b.slot] ?? b.slot}
                         </span>
                       </td>
@@ -466,7 +466,7 @@ export default function AdminBannersPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-[#2A2A2A]">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--esl-border)]">
           <span className="text-xs text-white/30">
             Нийт {total} баннер, хуудас {page}/{totalPages}
           </span>
@@ -474,7 +474,7 @@ export default function AdminBannersPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page <= 1}
-              className="w-8 h-8 rounded-lg border border-[#2A2A2A] bg-transparent text-white/50 hover:bg-white/5 disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer transition"
+              className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-transparent text-white/50 hover:bg-white/5 disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer transition"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -486,7 +486,7 @@ export default function AdminBannersPage() {
                   'w-8 h-8 rounded-lg text-xs font-semibold border transition-colors cursor-pointer',
                   page === p
                     ? 'bg-[#E8242C] border-[#E8242C] text-white'
-                    : 'bg-transparent border-[#2A2A2A] text-white/40 hover:border-white/30'
+                    : 'bg-transparent border-[var(--esl-border)] text-white/40 hover:border-white/30'
                 )}
               >
                 {p}
@@ -495,7 +495,7 @@ export default function AdminBannersPage() {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page >= totalPages}
-              className="w-8 h-8 rounded-lg border border-[#2A2A2A] bg-transparent text-white/50 hover:bg-white/5 disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer transition"
+              className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-transparent text-white/50 hover:bg-white/5 disabled:opacity-20 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer transition"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
