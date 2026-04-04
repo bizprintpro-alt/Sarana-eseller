@@ -1,4 +1,4 @@
-﻿// ══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 // eseller.mn — Prisma Schema (MongoDB)
 // ══════════════════════════════════════════════════════════════
 
@@ -71,7 +71,6 @@ model User {
 }
 
 model Product {
-  @@map("products")
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   userId        String?  @db.ObjectId
   name          String
