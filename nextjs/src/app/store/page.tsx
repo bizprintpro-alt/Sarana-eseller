@@ -268,6 +268,9 @@ export default function StorePage() {
         {/* ━━━ Hero ━━━ */}
         <HeroBanner onSearch={() => searchRef.current?.focus()} />
 
+        {/* ━━━ Announcement marquee ━━━ */}
+        <AnnouncementMarquee />
+
         {/* ━━━ Compact trust strip ━━━ */}
         <div style={{ background: 'var(--esl-bg-section)', borderBottom: '1px solid var(--esl-border)' }}>
           <div className="max-w-[1320px] mx-auto px-4 py-2 flex items-center justify-center gap-6 md:gap-10 overflow-x-auto scrollbar-none">
