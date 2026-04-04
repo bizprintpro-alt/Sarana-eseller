@@ -5,56 +5,110 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
-import { ENTITY_LABELS, type EntityType } from '@/lib/types/entity';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import {
-  Store, Building2, Car, Scissors, Users, ChevronRight, ChevronLeft,
-  Check, Upload, MapPin, Globe, Phone, Mail, Camera, FileText,
-  Shield, Sparkles, ArrowRight,
+  Store, Building2, Car, Scissors, Users, Clock, Download,
+  ChevronRight, ChevronLeft, Check, Upload, MapPin, Globe, Phone, Mail,
+  Camera, FileText, Shield, Sparkles, ArrowRight, Crown, Zap, Star,
 } from 'lucide-react';
 
-const STEPS = ['Төрөл сонгох', 'Үндсэн мэдээлэл', 'Баримт бичиг', 'Профайл', 'Илгээх'];
+/* ═══ Entity Type Definitions ═══ */
+type EntityType = 'store' | 'pre_order' | 'agent' | 'company' | 'auto_dealer' | 'service' | 'digital';
 
-const ENTITY_OPTIONS: { key: EntityType; icon: React.ElementType; label: string; desc: string; features: string[] }[] = [
-  { key: 'store', icon: Store, label: 'Дэлгүүр', desc: 'Бараа бүтээгдэхүүн борлуулах онлайн дэлгүүр', features: ['Бараа удирдлага', 'Захиалгын систем', 'Хүргэлт', 'Хямдрал & купон'] },
-  { key: 'agent', icon: Users, label: 'Үл хөдлөхийн агент', desc: 'Орон сууц, газар, оффисийн зуучлал', features: ['Зар байршуулах', 'Мэргэжлийн профайл', 'Харилцагч удирдлага', 'Аналитик'] },
-  { key: 'company', icon: Building2, label: 'Барилгын компани', desc: 'Шинэ барилга, орон сууцны төсөл', features: ['Төслийн удирдлага', 'Галерей', 'Баримт бичиг', 'VIP байршил'] },
-  { key: 'auto_dealer', icon: Car, label: 'Авто худалдаа', desc: 'Шинэ болон хуучин автомашин', features: ['Машины жагсаалт', 'Техник тодорхойлолт', 'Үнийн харьцуулалт', 'Тест драйв'] },
-  { key: 'service', icon: Scissors, label: 'Үйлчилгээ', desc: 'Салон, засвар, хэвлэл, сургалт г.м.', features: ['Цаг захиалга', 'Үйлчилгээний жагсаалт', 'Хуанли', 'Портфолио'] },
-];
+const ENTITY_DEFS: Record<EntityType, {
+  label: string; subtitle: string; Icon: React.ElementType; color: string;
+  badge?: string; tags: string[];
+  step2Fields: string[]; kycDocs: string[]; planOptions: string[];
+}> = {
+  store: {
+    label: 'Дэлгүүр', subtitle: 'Бараа бүтээгдэхүүн зарах онлайн дэлгүүр',
+    Icon: Store, color: '#3B82F6',
+    tags: ['Бараа удирдлага', 'Захиалгын систем', 'Хүргэлт', 'Хямдрал & купон'],
+    step2Fields: ['businessName', 'slug', 'category', 'description', 'address'],
+    kycDocs: ['business_certificate'], planOptions: ['free', 'pro', 'business'],
+  },
+  pre_order: {
+    label: 'Захиалгын дэлгүүр', subtitle: 'Гадаадаас захиалж оруулдаг бараа',
+    Icon: Clock, color: '#E8242C', badge: 'Шинэ',
+    tags: ['Pre-order систем', 'Хүлээх хугацаа', 'Минимум захиалга', 'Урьдчилгаа төлбөр'],
+    step2Fields: ['businessName', 'slug', 'sourceCountry', 'deliveryDays', 'minimumOrderQty', 'advancePaymentPct', 'category', 'description'],
+    kycDocs: ['id_card', 'customs_certificate'], planOptions: ['pro', 'business'],
+  },
+  agent: {
+    label: 'Үл хөдлөхийн агент', subtitle: 'Орон сууц, газар, оффисийн зуучлал',
+    Icon: Users, color: '#10B981',
+    tags: ['Зар байршуулах', 'Мэргэжлийн профайл', 'Харилцагч удирдлага', 'Аналитик'],
+    step2Fields: ['businessName', 'slug', 'category', 'description', 'address'],
+    kycDocs: ['license'], planOptions: ['free', 'pro'],
+  },
+  company: {
+    label: 'Барилгын компани', subtitle: 'Шинэ барилга, орон сууцны төсөл',
+    Icon: Building2, color: '#6366F1',
+    tags: ['Төслийн удирдлага', 'Галерей', 'Баримт бичиг', 'VIP байршил'],
+    step2Fields: ['businessName', 'slug', 'category', 'description', 'address'],
+    kycDocs: ['business_certificate'], planOptions: ['pro', 'business'],
+  },
+  auto_dealer: {
+    label: 'Авто худалдаа', subtitle: 'Шинэ болон хуучин автомашин',
+    Icon: Car, color: '#F59E0B',
+    tags: ['Машины жагсаалт', 'Техник тодорхойлолт', 'Үнийн харьцуулалт', 'Тест драйв'],
+    step2Fields: ['businessName', 'slug', 'category', 'description', 'address'],
+    kycDocs: ['business_certificate'], planOptions: ['free', 'pro'],
+  },
+  service: {
+    label: 'Үйлчилгээ', subtitle: 'Салон, засвар, хэвлэл, сургалт г.м.',
+    Icon: Scissors, color: '#EC4899',
+    tags: ['Цаг захиалга', 'Үйлчилгээний жагсаалт', 'Хуанли', 'Портфолио'],
+    step2Fields: ['businessName', 'slug', 'category', 'description', 'address'],
+    kycDocs: ['id_card'], planOptions: ['free', 'pro'],
+  },
+  digital: {
+    label: 'Файл / Дижитал бараа', subtitle: 'Татаж авах дижитал контент зарах',
+    Icon: Download, color: '#8B5CF6', badge: 'Шинэ',
+    tags: ['PDF, ZIP, видео', 'Instant download', 'Subscription', 'License key'],
+    step2Fields: ['businessName', 'slug', 'category', 'description'],
+    kycDocs: ['id_card'], planOptions: ['free', 'pro'],
+  },
+};
 
-const DISTRICTS = ['СБД', 'ЧД', 'БЗД', 'ХУД', 'СХД', 'БГД', 'НД', 'Хан-Уул', 'Налайх', 'Багануур', 'Багахангай'];
+const STEPS = ['Төрөл сонгох', 'Үндсэн мэдээлэл', 'Баталгаажуулалт', 'Профайл тохируулах', 'Үнийн төлөвлөгөө'];
+const DISTRICTS = ['СБД', 'ЧД', 'БЗД', 'ХУД', 'СХД', 'БГД', 'НД', 'Хан-Уул', 'Налайх', 'Багануур'];
 
+const PLANS: Record<string, { name: string; price: string; priceNum: number; features: string[]; Icon: React.ElementType; color: string; popular?: boolean }> = {
+  free:     { name: 'Үнэгүй', price: '0₮/сар', priceNum: 0, Icon: Zap, color: '#10B981', features: ['10 бараа хүртэл', 'Үндсэн аналитик', 'Стандарт дэмжлэг'] },
+  pro:      { name: 'Pro', price: '29,900₮/сар', priceNum: 29900, Icon: Star, color: '#3B82F6', popular: true, features: ['Хязгааргүй бараа', 'Дэлгэрэнгүй аналитик', 'Хямдрал & купон', 'Тэргүүлэх дэмжлэг', 'Custom domain'] },
+  business: { name: 'Business', price: '99,900₮/сар', priceNum: 99900, Icon: Crown, color: '#D4AF37', features: ['Pro бүх боломж', 'VIP байршил', 'API хандалт', 'Олон ажилтан', 'Зориулалтын менежер', 'Сурталчилгааны кредит'] },
+};
+
+/* ═══ Main Page ═══ */
 export default function BecomeSellerPage() {
   const { user } = useAuth();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
-  // Form state
   const [entityType, setEntityType] = useState<EntityType | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState('free');
+
   const [form, setForm] = useState({
     name: '', slug: '', phone: '', email: user?.email || '',
-    category: '', description: '',
-    // KYC
-    regNumber: '', licenseNumber: '', idNumber: '',
-    // Profile
-    address: '', district: '', socialFb: '', socialIg: '', website: '',
+    category: '', description: '', address: '', district: '',
+    socialFb: '', socialIg: '', website: '',
+    regNumber: '', licenseNumber: '',
+    // Pre-order specific
+    sourceCountry: '', deliveryDays: '', minimumOrderQty: '', advancePaymentPct: '30',
   });
 
-  const updateForm = (key: string, value: string) => setForm((prev) => ({ ...prev, [key]: value }));
+  const def = entityType ? ENTITY_DEFS[entityType] : null;
+  const updateForm = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
 
-  // Auto-generate slug
   const handleNameChange = (name: string) => {
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').slice(0, 40);
-    setForm((prev) => ({ ...prev, name, slug }));
+    setForm(prev => ({ ...prev, name, slug }));
   };
 
   const canNext = () => {
     if (step === 0) return !!entityType;
     if (step === 1) return form.name.length >= 2 && form.phone.length >= 4;
-    if (step === 2) return true; // KYC optional for now
-    if (step === 3) return true;
     return true;
   };
 
@@ -63,33 +117,32 @@ export default function BecomeSellerPage() {
     setSubmitting(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/entities/register', {
+      await fetch('/api/entities/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-        body: JSON.stringify({ entityType, ...form }),
+        body: JSON.stringify({ entityType, plan: selectedPlan, ...form }),
       });
-      if (res.ok) {
-        setSubmitted(true);
-      }
+      setSubmitted(true);
     } catch {}
     finally { setSubmitting(false); }
   };
 
-  // Success screen
+  // ─── Success Screen ───
   if (submitted) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4">
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl border border-gray-200 p-8 max-w-md w-full text-center shadow-sm">
-          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <Check className="w-8 h-8 text-green-600" />
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center px-4">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+          className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-8 max-w-md w-full text-center">
+          <div className="w-16 h-16 rounded-full bg-[rgba(16,185,129,0.15)] flex items-center justify-center mx-auto mb-4">
+            <Check className="w-8 h-8 text-[#10B981]" />
           </div>
-          <h2 className="text-xl font-black text-gray-900 mb-2">Амжилттай илгээлээ!</h2>
-          <p className="text-sm text-gray-500 mb-6">Таны хүсэлтийг хянаж байна. Баталгаажуулалт дууссаны дараа имэйлээр мэдэгдэнэ.</p>
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-6">
-            <p className="text-xs text-amber-700"><Shield className="w-3.5 h-3.5 inline mr-1" /> Баталгаажуулалт 1-3 ажлын өдөрт хийгдэнэ</p>
+          <h2 className="text-xl font-black text-white mb-2">Амжилттай илгээлээ!</h2>
+          <p className="text-sm text-[#A0A0A0] mb-6">Таны хүсэлтийг хянаж байна. Баталгаажуулалт дууссаны дараа имэйлээр мэдэгдэнэ.</p>
+          <div className="bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] rounded-xl p-3 mb-6">
+            <p className="text-xs text-[#F59E0B]"><Shield className="w-3.5 h-3.5 inline mr-1" /> Баталгаажуулалт 1-3 ажлын өдөрт хийгдэнэ</p>
           </div>
-          <Link href="/dashboard" className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl text-sm font-semibold no-underline hover:bg-indigo-700 transition">
-            Самбар руу очих <ArrowRight className="w-4 h-4" />
+          <Link href="/dashboard" className="inline-flex items-center gap-2 bg-[#E8242C] text-white px-6 py-3 rounded-xl text-sm font-bold no-underline hover:bg-[#CC0000] transition">
+            Dashboard руу очих <ArrowRight className="w-4 h-4" />
           </Link>
         </motion.div>
       </div>
@@ -97,264 +150,342 @@ export default function BecomeSellerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#0A0A0A]">
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200 h-14 flex items-center px-4">
+      <nav className="bg-[#111111] border-b border-[#2A2A2A] h-14 flex items-center px-4">
         <div className="max-w-3xl mx-auto w-full flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 no-underline">
             <EsellerLogo size={22} />
-            <span className="text-base font-black text-gray-900">eseller<span className="text-[#E31E24]">.mn</span></span>
+            <span className="text-base font-black text-white">eseller<span className="text-[#E31E24]">.mn</span></span>
           </Link>
-          <span className="text-xs text-gray-400">Бүртгэл</span>
+          <span className="text-xs text-[#777]">Борлуулагч бүртгэл</span>
         </div>
       </nav>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Progress */}
         <div className="flex items-center gap-1 mb-8">
-          {STEPS.map((s, i) => (
-            <div key={s} className="flex-1 flex items-center gap-1">
-              <div className={cn('h-1.5 flex-1 rounded-full transition-colors', i <= step ? 'bg-indigo-600' : 'bg-gray-200')} />
-            </div>
+          {STEPS.map((_, i) => (
+            <div key={i} className={cn('h-1.5 flex-1 rounded-full transition-colors', i <= step ? 'bg-[#E8242C]' : 'bg-[#2A2A2A]')} />
           ))}
         </div>
         <div className="text-center mb-6">
-          <span className="text-xs text-gray-400">Алхам {step + 1}/{STEPS.length}</span>
-          <h2 className="text-xl font-black text-gray-900 mt-1">{STEPS[step]}</h2>
+          <span className="text-xs text-[#777]">Алхам {step + 1}/{STEPS.length}</span>
+          <h2 className="text-xl font-black text-white mt-1">{STEPS[step]}</h2>
         </div>
 
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
 
-            {/* ═══ Step 0: Entity type ═══ */}
+            {/* ═══ Step 0: Entity Type ═══ */}
             {step === 0 && (
               <div className="space-y-3">
-                {ENTITY_OPTIONS.map((opt) => {
-                  const isSelected = entityType === opt.key;
+                {(Object.entries(ENTITY_DEFS) as [EntityType, typeof ENTITY_DEFS[EntityType]][]).map(([key, d]) => {
+                  const isSelected = entityType === key;
                   return (
-                    <button key={opt.key} onClick={() => setEntityType(opt.key)}
-                      className={cn('w-full flex items-start gap-4 p-5 rounded-2xl border-2 text-left cursor-pointer transition-all bg-white',
-                        isSelected ? 'border-indigo-500 shadow-[0_0_0_3px_rgba(99,102,241,.12)]' : 'border-gray-200 hover:border-gray-300')}>
-                      <div className={cn('w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition',
-                        isSelected ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-400')}>
-                        <opt.icon className="w-6 h-6" />
+                    <button key={key} onClick={() => { setEntityType(key); if (!d.planOptions.includes(selectedPlan)) setSelectedPlan(d.planOptions[0]); }}
+                      className={cn('w-full flex items-start gap-4 p-5 rounded-2xl border text-left cursor-pointer transition-all',
+                        isSelected ? 'border-[#E8242C] bg-[rgba(232,36,44,0.06)]' : 'border-[#2A2A2A] bg-[#1A1A1A] hover:border-[#3D3D3D]')}>
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: d.color + '15', color: d.color }}>
+                        <d.Icon className="w-6 h-6" />
                       </div>
-                      <div className="flex-1">
-                        <div className="text-base font-bold text-gray-900">{opt.label}</div>
-                        <p className="text-sm text-gray-500 mt-0.5">{opt.desc}</p>
-                        <div className="flex flex-wrap gap-1.5 mt-2">
-                          {opt.features.map((f) => (
-                            <span key={f} className="text-[10px] bg-gray-50 text-gray-500 px-2 py-0.5 rounded border border-gray-100">{f}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm font-bold text-white">{d.label}</span>
+                          {d.badge && <span className="text-[10px] font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded-full">{d.badge}</span>}
+                        </div>
+                        <p className="text-xs text-[#A0A0A0] mb-2">{d.subtitle}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {d.tags.map(tag => (
+                            <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#2A2A2A] text-[#A0A0A0]">{tag}</span>
                           ))}
                         </div>
                       </div>
-                      {isSelected && <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center shrink-0"><Check className="w-4 h-4 text-white" /></div>}
+                      {isSelected && (
+                        <div className="w-5 h-5 rounded-full bg-[#E8242C] flex items-center justify-center shrink-0">
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                      )}
                     </button>
                   );
                 })}
+                <p className="text-center text-xs text-[#555] mt-2">Dashboard-аас хүссэн үедээ нэмэлт дэлгүүрийн төрөл нэмж болно</p>
               </div>
             )}
 
-            {/* ═══ Step 1: Basic info ═══ */}
-            {step === 1 && (
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
+            {/* ═══ Step 1: Basic Info (dynamic per entity) ═══ */}
+            {step === 1 && def && (
+              <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-6 space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Нэр *</label>
-                  <input type="text" value={form.name} onChange={(e) => handleNameChange(e.target.value)} placeholder={entityType === 'agent' ? 'Овог нэр' : 'Бизнесийн нэр'}
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Нэр *</label>
+                  <input type="text" value={form.name} onChange={(e) => handleNameChange(e.target.value)}
+                    placeholder={entityType === 'agent' ? 'Овог нэр' : 'Бизнесийн нэр'}
+                    className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555] transition" />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Slug (URL)</label>
-                  <div className="flex items-center gap-0">
-                    <span className="px-3 py-2.5 bg-gray-50 border border-r-0 border-gray-200 rounded-l-lg text-xs text-gray-400">eseller.mn/</span>
+                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Slug (URL)</label>
+                  <div className="flex">
+                    <span className="px-4 py-3 bg-[#2A2A2A] border border-r-0 border-[#3D3D3D] rounded-l-xl text-xs text-[#777]">eseller.mn/</span>
                     <input type="text" value={form.slug} onChange={(e) => updateForm('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                      className="flex-1 px-3 py-2.5 border border-gray-200 rounded-r-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      className="flex-1 px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-r-xl text-sm font-mono text-white outline-none focus:border-[#E8242C]" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block"><Phone className="w-3 h-3 inline mr-1" />Утас *</label>
+                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Phone className="w-3 h-3 inline mr-1" />Утас *</label>
                     <input type="tel" value={form.phone} onChange={(e) => updateForm('phone', e.target.value)} placeholder="9911-2233"
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block"><Mail className="w-3 h-3 inline mr-1" />Имэйл</label>
+                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Mail className="w-3 h-3 inline mr-1" />Имэйл</label>
                     <input type="email" value={form.email} onChange={(e) => updateForm('email', e.target.value)}
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                 </div>
+
+                {/* Pre-order specific fields */}
+                {entityType === 'pre_order' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Эх улс</label>
+                        <select value={form.sourceCountry} onChange={(e) => updateForm('sourceCountry', e.target.value)}
+                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none cursor-pointer">
+                          <option value="">Сонгох...</option>
+                          {['🇨🇳 Хятад', '🇰🇷 Солонгос', '🇯🇵 Япон', '🇺🇸 АНУ', '🇹🇷 Турк', '🇩🇪 Герман', '🇬🇧 Их Британи'].map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Хүргэлтийн хоног</label>
+                        <input type="number" value={form.deliveryDays} onChange={(e) => updateForm('deliveryDays', e.target.value)} placeholder="14"
+                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Мин. захиалга (ш)</label>
+                        <input type="number" value={form.minimumOrderQty} onChange={(e) => updateForm('minimumOrderQty', e.target.value)} placeholder="1"
+                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Урьдчилгаа %</label>
+                        <input type="number" value={form.advancePaymentPct} onChange={(e) => updateForm('advancePaymentPct', e.target.value)} placeholder="30"
+                          className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                      </div>
+                    </div>
+                  </>
+                )}
+
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Товч тайлбар</label>
-                  <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={3} placeholder="Бизнесийн тухай товчхон... (200 тэмдэгт)"
-                    maxLength={200} className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" />
-                  <div className="text-[10px] text-gray-400 text-right">{form.description.length}/200</div>
+                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Товч тайлбар</label>
+                  <textarea value={form.description} onChange={(e) => updateForm('description', e.target.value)} rows={3} placeholder="Бизнесийн тухай товчхон..."
+                    maxLength={200} className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555] resize-none" />
+                  <div className="text-[10px] text-[#555] text-right">{form.description.length}/200</div>
                 </div>
               </div>
             )}
 
-            {/* ═══ Step 2: KYC / Verification ═══ */}
-            {step === 2 && (
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-                <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-3 text-xs text-indigo-700">
+            {/* ═══ Step 2: KYC ═══ */}
+            {step === 2 && def && (
+              <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-6 space-y-4">
+                <div className="bg-[rgba(59,130,246,0.08)] border border-[rgba(59,130,246,0.2)] rounded-xl p-3 text-xs text-[#60A5FA]">
                   <Shield className="w-3.5 h-3.5 inline mr-1" />
                   Баримт бичиг оруулснаар баталгаажуулалт хурдан хийгдэнэ. Заавал биш.
                 </div>
 
-                {(entityType === 'store' || entityType === 'company' || entityType === 'auto_dealer') && (
+                {def.kycDocs.includes('business_certificate') && (
                   <>
                     <div>
-                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">ААН бүртгэлийн дугаар</label>
+                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">ААН бүртгэлийн дугаар</label>
                       <input type="text" value={form.regNumber} onChange={(e) => updateForm('regNumber', e.target.value)} placeholder="1234567"
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                     </div>
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:bg-gray-50 transition">
-                      <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                      <p className="text-sm text-gray-500">Улсын бүртгэлийн гэрчилгээ</p>
-                      <p className="text-[10px] text-gray-400 mt-1">PDF, JPG, PNG — 10MB хүртэл</p>
+                    <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                      <Upload className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
+                      <p className="text-sm text-[#A0A0A0]">Улсын бүртгэлийн гэрчилгээ</p>
+                      <p className="text-[10px] text-[#555] mt-1">PDF, JPG, PNG — 10MB хүртэл</p>
                     </div>
                   </>
                 )}
 
-                {entityType === 'agent' && (
+                {def.kycDocs.includes('license') && (
                   <>
                     <div>
-                      <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Зуучийн лицензийн дугаар</label>
+                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Зуучийн лицензийн дугаар</label>
                       <input type="text" value={form.licenseNumber} onChange={(e) => updateForm('licenseNumber', e.target.value)} placeholder="RE-2024-XXXX"
-                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                     </div>
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:bg-gray-50 transition">
-                      <FileText className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                      <p className="text-sm text-gray-500">Лицензийн хуулбар</p>
-                      <p className="text-[10px] text-gray-400 mt-1">PDF, JPG — 10MB хүртэл</p>
+                    <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                      <FileText className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
+                      <p className="text-sm text-[#A0A0A0]">Лицензийн хуулбар</p>
+                      <p className="text-[10px] text-[#555] mt-1">PDF, JPG — 10MB хүртэл</p>
                     </div>
                   </>
                 )}
 
-                {entityType === 'service' && (
-                  <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:bg-gray-50 transition">
-                    <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500">Холбогдох баримт бичиг (заавал биш)</p>
-                    <p className="text-[10px] text-gray-400 mt-1">PDF, JPG, PNG — 10MB хүртэл</p>
+                {def.kycDocs.includes('id_card') && (
+                  <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                    <Upload className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
+                    <p className="text-sm text-[#A0A0A0]">Иргэний үнэмлэхний хуулбар</p>
+                    <p className="text-[10px] text-[#555] mt-1">PDF, JPG, PNG — 10MB хүртэл</p>
+                  </div>
+                )}
+
+                {def.kycDocs.includes('customs_certificate') && (
+                  <div className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-6 text-center cursor-pointer hover:border-[#555] transition">
+                    <Upload className="w-8 h-8 text-[#3D3D3D] mx-auto mb-2" />
+                    <p className="text-sm text-[#A0A0A0]">Гаалийн бүртгэлийн гэрчилгээ</p>
+                    <p className="text-[10px] text-[#555] mt-1">PDF, JPG — 10MB хүртэл</p>
                   </div>
                 )}
               </div>
             )}
 
-            {/* ═══ Step 3: Profile setup ═══ */}
+            {/* ═══ Step 3: Profile ═══ */}
             {step === 3 && (
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-                {/* Cover image */}
+              <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-6 space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1.5 block"><Camera className="w-3 h-3 inline mr-1" />Cover зураг</label>
-                  <div className="h-32 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
+                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Camera className="w-3 h-3 inline mr-1" />Cover зураг</label>
+                  <div className="h-32 border-2 border-dashed border-[#3D3D3D] rounded-xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
                     <div className="text-center">
-                      <Upload className="w-6 h-6 text-gray-300 mx-auto mb-1" />
-                      <p className="text-xs text-gray-400">1200×400 px санал болгоно</p>
+                      <Upload className="w-6 h-6 text-[#3D3D3D] mx-auto mb-1" />
+                      <p className="text-xs text-[#555]">1200×400 px санал болгоно</p>
                     </div>
                   </div>
                 </div>
-
-                {/* Logo */}
                 <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Лого / Профайл зураг</label>
-                  <div className="w-20 h-20 border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                    <Camera className="w-6 h-6 text-gray-300" />
+                  <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Лого / Профайл</label>
+                  <div className="w-20 h-20 border-2 border-dashed border-[#3D3D3D] rounded-2xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
+                    <Camera className="w-6 h-6 text-[#3D3D3D]" />
                   </div>
                 </div>
-
-                {/* Address */}
-                <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1.5 block"><MapPin className="w-3 h-3 inline mr-1" />Хаяг</label>
-                  <input type="text" value={form.address} onChange={(e) => updateForm('address', e.target.value)} placeholder="Дэлгэрэнгүй хаяг"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Дүүрэг</label>
-                  <select value={form.district} onChange={(e) => updateForm('district', e.target.value)}
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="">Сонгох...</option>
-                    {DISTRICTS.map((d) => <option key={d} value={d}>{d}</option>)}
-                  </select>
-                </div>
-
-                {/* Social */}
+                {def?.step2Fields.includes('address') && (
+                  <>
+                    <div>
+                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><MapPin className="w-3 h-3 inline mr-1" />Хаяг</label>
+                      <input type="text" value={form.address} onChange={(e) => updateForm('address', e.target.value)} placeholder="Дэлгэрэнгүй хаяг"
+                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Дүүрэг</label>
+                      <select value={form.district} onChange={(e) => updateForm('district', e.target.value)}
+                        className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none cursor-pointer">
+                        <option value="">Сонгох...</option>
+                        {DISTRICTS.map(d => <option key={d} value={d}>{d}</option>)}
+                      </select>
+                    </div>
+                  </>
+                )}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block"><Globe className="w-3 h-3 inline mr-1" />Вэбсайт</label>
+                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block"><Globe className="w-3 h-3 inline mr-1" />Вэбсайт</label>
                     <input type="url" value={form.website} onChange={(e) => updateForm('website', e.target.value)} placeholder="https://..."
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Facebook</label>
+                    <label className="text-xs font-semibold text-[#A0A0A0] mb-1.5 block">Facebook</label>
                     <input type="text" value={form.socialFb} onChange={(e) => updateForm('socialFb', e.target.value)} placeholder="fb.com/..."
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                      className="w-full px-4 py-3 bg-[#0A0A0A] border border-[#3D3D3D] rounded-xl text-sm text-white outline-none focus:border-[#E8242C] placeholder:text-[#555]" />
                   </div>
                 </div>
               </div>
             )}
 
-            {/* ═══ Step 4: Review ═══ */}
-            {step === 4 && (
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-gray-900">Шалгаж баталгаажуулна уу</h3>
+            {/* ═══ Step 4: Plan Selector ═══ */}
+            {step === 4 && def && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {def.planOptions.map((planKey) => {
+                    const plan = PLANS[planKey];
+                    const isSelected = selectedPlan === planKey;
+                    return (
+                      <button key={planKey} onClick={() => setSelectedPlan(planKey)}
+                        className={cn('relative p-5 rounded-2xl border text-left cursor-pointer transition-all',
+                          isSelected ? 'border-[#E8242C] bg-[rgba(232,36,44,0.06)]' : 'border-[#2A2A2A] bg-[#1A1A1A] hover:border-[#3D3D3D]')}>
+                        {plan.popular && (
+                          <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-[#E8242C] text-white px-3 py-0.5 rounded-full">Түгээмэл</span>
+                        )}
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: plan.color + '15', color: plan.color }}>
+                          <plan.Icon className="w-5 h-5" />
+                        </div>
+                        <h3 className="text-base font-extrabold text-white">{plan.name}</h3>
+                        <p className="text-lg font-black mt-1" style={{ color: plan.color }}>{plan.price}</p>
+                        <ul className="mt-3 space-y-1.5">
+                          {plan.features.map(f => (
+                            <li key={f} className="text-xs text-[#A0A0A0] flex items-center gap-2">
+                              <Check className="w-3 h-3 text-[#10B981] shrink-0" /> {f}
+                            </li>
+                          ))}
+                        </ul>
+                        {isSelected && (
+                          <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-[#E8242C] flex items-center justify-center">
+                            <Check className="w-3 h-3 text-white" />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
 
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-500">Төрөл</span>
-                    <span className="font-semibold text-gray-900">{ENTITY_LABELS[entityType!]?.emoji} {ENTITY_LABELS[entityType!]?.label}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-500">Нэр</span>
-                    <span className="font-semibold text-gray-900">{form.name}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-500">URL</span>
-                    <span className="font-mono text-xs text-indigo-600">eseller.mn/{form.slug}</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-100">
-                    <span className="text-gray-500">Утас</span>
-                    <span className="font-semibold text-gray-900">{form.phone}</span>
-                  </div>
-                  {form.district && (
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-500">Дүүрэг</span>
-                      <span className="font-semibold text-gray-900">{form.district}</span>
+                {/* Review summary */}
+                <div className="bg-[#1A1A1A] rounded-2xl border border-[#2A2A2A] p-5 space-y-2 text-sm">
+                  <h3 className="text-sm font-bold text-white mb-3">Шалгаж баталгаажуулна уу</h3>
+                  {[
+                    ['Төрөл', `${def.label}`],
+                    ['Нэр', form.name],
+                    ['URL', `eseller.mn/${form.slug}`],
+                    ['Утас', form.phone],
+                    ['Төлөвлөгөө', PLANS[selectedPlan].name + ' — ' + PLANS[selectedPlan].price],
+                    ...(form.district ? [['Дүүрэг', form.district]] : []),
+                    ...(entityType === 'pre_order' && form.sourceCountry ? [['Эх улс', form.sourceCountry]] : []),
+                  ].map(([label, value]) => (
+                    <div key={label} className="flex justify-between py-2 border-b border-[#2A2A2A]">
+                      <span className="text-[#777]">{label}</span>
+                      <span className="font-semibold text-white">{value}</span>
                     </div>
-                  )}
+                  ))}
                 </div>
 
                 <label className="flex items-start gap-2 cursor-pointer">
-                  <input type="checkbox" className="mt-1 rounded" />
-                  <span className="text-xs text-gray-500">
-                    <a href="#" className="text-indigo-600 no-underline">Үйлчилгээний нөхцөл</a> болон <a href="#" className="text-indigo-600 no-underline">нууцлалын бодлого</a>-г зөвшөөрч байна.
+                  <input type="checkbox" className="mt-1 rounded accent-[#E8242C]" />
+                  <span className="text-xs text-[#777]">
+                    <a href="#" className="text-[#E8242C] no-underline">Үйлчилгээний нөхцөл</a> болон <a href="#" className="text-[#E8242C] no-underline">нууцлалын бодлого</a>-г зөвшөөрч байна.
                   </span>
                 </label>
               </div>
             )}
+
           </motion.div>
         </AnimatePresence>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between mt-6">
-          <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0}
-            className={cn('flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer border-none',
-              step === 0 ? 'text-gray-300 bg-transparent cursor-not-allowed' : 'text-gray-600 bg-white border border-gray-200 hover:bg-gray-50')}>
-            <ChevronLeft className="w-4 h-4" /> Өмнөх
-          </button>
+        <div className="flex items-center justify-between mt-8">
+          {step > 0 ? (
+            <button onClick={() => setStep(s => s - 1)}
+              className="text-sm text-[#A0A0A0] hover:text-white transition-colors bg-transparent border-none cursor-pointer">
+              ← Өмнөх
+            </button>
+          ) : <span />}
 
           {step < 4 ? (
-            <button onClick={() => canNext() && setStep(step + 1)} disabled={!canNext()}
-              className={cn('flex items-center gap-1.5 px-6 py-2.5 rounded-xl text-sm font-semibold transition border-none cursor-pointer',
-                canNext() ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-200 text-gray-400 cursor-not-allowed')}>
+            <button onClick={() => canNext() && setStep(s => s + 1)} disabled={!canNext()}
+              className={cn('flex items-center gap-1.5 px-8 py-3 rounded-xl text-sm font-bold transition border-none cursor-pointer',
+                canNext() ? 'bg-[#E8242C] text-white hover:bg-[#CC0000]' : 'bg-[#2A2A2A] text-[#555] cursor-not-allowed')}>
               Дараах <ChevronRight className="w-4 h-4" />
             </button>
           ) : (
             <button onClick={handleSubmit} disabled={submitting}
-              className="flex items-center gap-1.5 px-6 py-2.5 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition border-none cursor-pointer">
-              {submitting ? 'Илгээж байна...' : <><Sparkles className="w-4 h-4" /> Хүсэлт илгээх</>}
+              className="flex items-center gap-1.5 px-8 py-3 bg-[#E8242C] text-white rounded-xl text-sm font-bold hover:bg-[#CC0000] transition border-none cursor-pointer">
+              {submitting ? 'Илгээж байна...' : <><Sparkles className="w-4 h-4" /> Бүртгэл дуусгах</>}
             </button>
           )}
         </div>
+
+        {step === 4 && (
+          <p className="text-center text-xs text-[#555] mt-4 cursor-pointer hover:text-[#A0A0A0]" onClick={handleSubmit}>
+            Одоохондоо үнэгүй эхлэх → Dashboard-аас дараа upgrade хийнэ
+          </p>
+        )}
       </div>
     </div>
   );

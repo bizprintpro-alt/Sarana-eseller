@@ -107,48 +107,94 @@ const PACKAGE: SidebarSection = {
 };
 
 // ═══════════════════════════════════════════════════════
-// Build seller sidebar based on shopType
+// Entity-specific sidebar sections
 // ═══════════════════════════════════════════════════════
 
-function getSellerSections(shopType: ShopType): SidebarSection[] {
-  if (shopType === 'service') {
-    return [
-      SAMBAR_SERVICE,
-      SERVICE_MANAGEMENT,
-      CUSTOMER_SALES,
-      CONTENT,
-      AI_SECTION,
-      FINANCE,
-      STORE_SETTINGS,
-      PACKAGE,
-    ];
+const PRE_ORDER_MANAGEMENT: SidebarSection = {
+  title: 'Захиалгын удирдлага',
+  items: [
+    { href: '/dashboard/seller/catalog', icon: '📖', label: 'Бараа каталог' },
+    { href: '/dashboard/seller/queue', icon: '📋', label: 'Захиалгын дараалал', isNew: true },
+    { href: '/dashboard/seller/batches', icon: '📦', label: 'Багцын захиалга', isNew: true },
+    { href: '/dashboard/seller/tracking', icon: '📍', label: 'Ирааны мөрдөлт', isNew: true },
+    { href: '/dashboard/seller/deposits', icon: '💳', label: 'Урьдчилгаа', isNew: true },
+    { href: '/dashboard/seller/waitlist', icon: '👥', label: 'Хүлээлтийн жагсаалт' },
+  ],
+};
+
+const AGENT_MANAGEMENT: SidebarSection = {
+  title: 'Агентын удирдлага',
+  items: [
+    { href: '/dashboard/seller/listings', icon: '🏠', label: 'Зарууд' },
+    { href: '/dashboard/seller/listings/new', icon: '➕', label: 'Зар нэмэх' },
+    { href: '/dashboard/seller/map', icon: '🗺️', label: 'Байршлын зураг' },
+    { href: '/dashboard/seller/inquiries', icon: '📩', label: 'Хариу хүсэлт' },
+    { href: '/dashboard/seller/profile', icon: '👤', label: 'Профайл' },
+  ],
+};
+
+const COMPANY_MANAGEMENT: SidebarSection = {
+  title: 'Компанийн удирдлага',
+  items: [
+    { href: '/dashboard/seller/projects', icon: '🏗️', label: 'Төслүүд' },
+    { href: '/dashboard/seller/gallery', icon: '🖼️', label: 'Бүтээгдэхүүний галерей' },
+    { href: '/dashboard/seller/documents', icon: '📄', label: 'Баримт бичиг' },
+    { href: '/dashboard/seller/inquiries', icon: '📩', label: 'Хүсэлт / Inquiry' },
+    { href: '/dashboard/seller/promote', icon: '⭐', label: 'VIP байршил' },
+  ],
+};
+
+const AUTO_DEALER_MANAGEMENT: SidebarSection = {
+  title: 'Авто удирдлага',
+  items: [
+    { href: '/dashboard/seller/vehicles', icon: '🚗', label: 'Машины жагсаалт' },
+    { href: '/dashboard/seller/test-drives', icon: '📅', label: 'Тест драйв захиалга' },
+    { href: '/dashboard/seller/specs', icon: '📄', label: 'Техник үзүүлэлт' },
+    { href: '/dashboard/seller/pricing', icon: '📊', label: 'Үнийн харьцуулалт' },
+  ],
+};
+
+const DIGITAL_MANAGEMENT: SidebarSection = {
+  title: 'Дижитал удирдлага',
+  items: [
+    { href: '/dashboard/seller/files', icon: '📁', label: 'Файлууд' },
+    { href: '/dashboard/seller/downloads', icon: '⬇️', label: 'Татаж авалтууд' },
+    { href: '/dashboard/seller/licenses', icon: '🔑', label: 'Лицензүүд' },
+  ],
+};
+
+// ═══════════════════════════════════════════════════════
+// Build seller sidebar based on shopType + entityType
+// ═══════════════════════════════════════════════════════
+
+function getSellerSections(shopType: ShopType, entityType?: string): SidebarSection[] {
+  // Entity-specific dashboards
+  if (entityType === 'pre_order') {
+    return [SAMBAR_PRODUCT, PRE_ORDER_MANAGEMENT, CUSTOMER_SALES, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
+  }
+  if (entityType === 'agent') {
+    return [SAMBAR_PRODUCT, AGENT_MANAGEMENT, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
+  }
+  if (entityType === 'company') {
+    return [SAMBAR_PRODUCT, COMPANY_MANAGEMENT, CUSTOMER_SALES, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
+  }
+  if (entityType === 'auto_dealer') {
+    return [SAMBAR_PRODUCT, AUTO_DEALER_MANAGEMENT, CUSTOMER_SALES, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
+  }
+  if (entityType === 'digital') {
+    return [SAMBAR_PRODUCT, DIGITAL_MANAGEMENT, CUSTOMER_SALES, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
   }
 
+  // ShopType-based (original logic)
+  if (shopType === 'service') {
+    return [SAMBAR_SERVICE, SERVICE_MANAGEMENT, CUSTOMER_SALES, CONTENT, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
+  }
   if (shopType === 'hybrid') {
-    return [
-      SAMBAR_PRODUCT,
-      PRODUCT_MANAGEMENT,
-      SERVICE_MANAGEMENT,
-      CUSTOMER_SALES,
-      CONTENT,
-      AI_SECTION,
-      FINANCE,
-      STORE_SETTINGS,
-      PACKAGE,
-    ];
+    return [SAMBAR_PRODUCT, PRODUCT_MANAGEMENT, SERVICE_MANAGEMENT, CUSTOMER_SALES, CONTENT, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
   }
 
   // product (default)
-  return [
-    SAMBAR_PRODUCT,
-    PRODUCT_MANAGEMENT,
-    CUSTOMER_SALES,
-    CONTENT,
-    AI_SECTION,
-    FINANCE,
-    STORE_SETTINGS,
-    PACKAGE,
-  ];
+  return [SAMBAR_PRODUCT, PRODUCT_MANAGEMENT, CUSTOMER_SALES, CONTENT, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
 }
 
 // ═══════════════════════════════════════════════════════
@@ -258,8 +304,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   const role = user?.role || 'buyer';
+  const userEntityType = (user as any)?.entityType || undefined;
   const sections = role === 'seller'
-    ? getSellerSections(shopType)
+    ? getSellerSections(shopType, userEntityType)
     : OTHER_ROLE_SECTIONS[role] || BUYER_SECTIONS;
 
   const storeInfo = user?.role === 'seller'
