@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 const PLAN_DURATIONS: Record<string, { duration: number; price: number }> = {
   MONTHLY: { duration: 30, price: 19900 },

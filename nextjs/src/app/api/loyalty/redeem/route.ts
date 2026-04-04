@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 const POINT_VALUE = 5; // 1 point = 5₮
 const MIN_REDEEM = 200;
