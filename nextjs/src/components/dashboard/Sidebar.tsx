@@ -75,13 +75,13 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-screen bg-[#111111] flex flex-col transition-all duration-200 z-40 ${
+      className={`fixed top-0 left-0 h-screen bg-[var(--esl-bg-section)] flex flex-col transition-all duration-200 z-40 ${
         collapsed ? 'w-[68px]' : 'w-[260px]'
       }`}
-      style={{ borderRight: '1px solid #2A2A2A' }}
+      style={{ borderRight: '1px solid var(--esl-border)' }}
     >
       {/* ═══ Logo ═══ */}
-      <div className={`flex items-center h-[56px] border-b border-[#2A2A2A] shrink-0 ${collapsed ? 'justify-center px-3' : 'px-5'}`}>
+      <div className={`flex items-center h-[56px] border-b border-[var(--esl-border)] shrink-0 ${collapsed ? 'justify-center px-3' : 'px-5'}`}>
         <Link href="/" className="flex items-center gap-2.5 no-underline">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E8242C] to-[#C41E25] flex items-center justify-center shrink-0">
             <Zap className="w-4 h-4 text-white" />
@@ -96,28 +96,28 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
 
       {/* ═══ Store Info ═══ */}
       {storeInfo && !collapsed && (
-        <div className="px-4 py-3 border-b border-[#2A2A2A]">
+        <div className="px-4 py-3 border-b border-[var(--esl-border)]">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E8242C] to-[#FF4D53] flex items-center justify-center text-white text-[11px] font-bold shrink-0">
               {getInitials(storeInfo.name)}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[13px] font-semibold text-[#E0E0E0] truncate leading-tight">{storeInfo.name}</div>
+              <div className="text-[13px] font-semibold text-[var(--esl-text-secondary)] truncate leading-tight">{storeInfo.name}</div>
               {storeInfo.url && (
-                <div className="text-[11px] text-[#555] truncate leading-tight mt-0.5">{storeInfo.url}</div>
+                <div className="text-[11px] text-[var(--esl-text-disabled)] truncate leading-tight mt-0.5">{storeInfo.url}</div>
               )}
             </div>
             <Link
               href="/store"
               target="_blank"
-              className="w-6 h-6 rounded-md bg-[#1A1A1A] hover:bg-[rgba(232,36,44,0.12)] flex items-center justify-center text-[#555] hover:text-[#E8242C] transition-colors no-underline"
+              className="w-6 h-6 rounded-md bg-[var(--esl-bg-card)] hover:bg-[rgba(232,36,44,0.12)] flex items-center justify-center text-[var(--esl-text-disabled)] hover:text-[#E8242C] transition-colors no-underline"
             >
               <ExternalLink className="w-3 h-3" />
             </Link>
           </div>
           {storeInfo.plan && (
             <div className="flex items-center gap-2 mt-2">
-              <div className="flex-1 h-1 bg-[#2A2A2A] rounded-full overflow-hidden">
+              <div className="flex-1 h-1 bg-[var(--esl-bg-elevated)] rounded-full overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" style={{ width: '100%' }} />
               </div>
               <span className="text-[10px] font-semibold text-[#E8242C] bg-[rgba(232,36,44,0.12)] px-1.5 py-0.5 rounded">
@@ -140,10 +140,10 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
                   onClick={() => toggleSection(section.title)}
                   className="w-full flex items-center justify-between px-2.5 py-1.5 mt-1 mb-0.5 cursor-pointer bg-transparent border-none group"
                 >
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#555] group-hover:text-[#A0A0A0] transition-colors">
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--esl-text-disabled)] group-hover:text-[var(--esl-text-muted)] transition-colors">
                     {section.title}
                   </span>
-                  <ChevronDown className={`w-3 h-3 text-[#3D3D3D] transition-transform duration-200 ${isCollapsed ? '-rotate-90' : ''}`} />
+                  <ChevronDown className={`w-3 h-3 text-[var(--esl-border)] transition-transform duration-200 ${isCollapsed ? '-rotate-90' : ''}`} />
                 </button>
               )}
 
@@ -162,13 +162,13 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
                     } ${
                       isActive
                         ? 'bg-[rgba(232,36,44,0.12)] text-[#FF4D53] font-semibold shadow-[inset_0_0_0_1px_rgba(79,70,229,0.1)]'
-                        : 'text-[#A0A0A0] hover:bg-[#1A1A1A] hover:text-[#E0E0E0]'
+                        : 'text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-card)] hover:text-[var(--esl-text-secondary)]'
                     }`}
                   >
                     <IconComponent className={`shrink-0 transition-colors duration-150 ${
                       collapsed ? 'w-[18px] h-[18px]' : 'w-4 h-4'
                     } ${
-                      isActive ? 'text-[#E8242C]' : 'text-[#555] group-hover:text-[#A0A0A0]'
+                      isActive ? 'text-[#E8242C]' : 'text-[var(--esl-text-disabled)] group-hover:text-[var(--esl-text-muted)]'
                     }`} />
                     {!collapsed && (
                       <>
@@ -177,7 +177,7 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
                           <span className={`text-[10px] font-semibold px-1.5 py-px rounded-md leading-tight ${
                             typeof item.badge === 'number' && item.badge > 0
                               ? 'bg-rose-50 text-rose-600'
-                              : 'bg-[#2A2A2A] text-[#555]'
+                              : 'bg-[var(--esl-bg-elevated)] text-[var(--esl-text-disabled)]'
                           }`}>
                             {item.badge}
                           </span>
@@ -216,19 +216,19 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
       )}
 
       {/* ═══ User ═══ */}
-      <div className="border-t border-[#2A2A2A] p-3 shrink-0">
+      <div className="border-t border-[var(--esl-border)] p-3 shrink-0">
         {!collapsed ? (
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-[#2A2A2A] flex items-center justify-center text-[#A0A0A0] text-[11px] font-semibold shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-[var(--esl-bg-elevated)] flex items-center justify-center text-[var(--esl-text-muted)] text-[11px] font-semibold shrink-0">
               {getInitials(user?.name)}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[12px] font-semibold text-[#E0E0E0] truncate leading-tight">{user?.name || '...'}</div>
-              <div className="text-[10px] text-[#555] truncate leading-tight mt-0.5">{user?.email || ''}</div>
+              <div className="text-[12px] font-semibold text-[var(--esl-text-secondary)] truncate leading-tight">{user?.name || '...'}</div>
+              <div className="text-[10px] text-[var(--esl-text-disabled)] truncate leading-tight mt-0.5">{user?.email || ''}</div>
             </div>
             <button
               onClick={logout}
-              className="w-7 h-7 rounded-md bg-transparent hover:bg-[rgba(232,36,44,0.15)] flex items-center justify-center text-[#555] hover:text-[#E8242C] transition-colors border-none cursor-pointer"
+              className="w-7 h-7 rounded-md bg-transparent hover:bg-[rgba(232,36,44,0.15)] flex items-center justify-center text-[var(--esl-text-disabled)] hover:text-[#E8242C] transition-colors border-none cursor-pointer"
               title="Гарах"
             >
               <LogOut className="w-3.5 h-3.5" />
@@ -237,7 +237,7 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
         ) : (
           <button
             onClick={logout}
-            className="flex items-center justify-center w-full py-2 rounded-lg text-[#555] hover:bg-[rgba(232,36,44,0.15)] hover:text-[#E8242C] transition-colors border-none bg-transparent cursor-pointer"
+            className="flex items-center justify-center w-full py-2 rounded-lg text-[var(--esl-text-disabled)] hover:bg-[rgba(232,36,44,0.15)] hover:text-[#E8242C] transition-colors border-none bg-transparent cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -246,8 +246,8 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
 
       {/* ═══ Theme Selector ═══ */}
       {!collapsed && (
-        <div className="px-3 pb-3 border-t border-[#3D3D3D] pt-3">
-          <p className="text-[10px] text-[#A0A0A0] mb-2 uppercase tracking-wider px-1">Горим</p>
+        <div className="px-3 pb-3 border-t border-[var(--esl-border)] pt-3">
+          <p className="text-[10px] text-[var(--esl-text-muted)] mb-2 uppercase tracking-wider px-1">Горим</p>
           <ThemeSelector />
         </div>
       )}
@@ -255,7 +255,7 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
       {/* ═══ Collapse Toggle ═══ */}
       <button
         onClick={toggle}
-        className="absolute top-4 -right-3 w-6 h-6 rounded-full bg-[#111111] border border-[#3D3D3D] flex items-center justify-center text-[#555] hover:text-[#E8242C] hover:border-indigo-200 cursor-pointer text-[10px] transition-all z-50 shadow-xs"
+        className="absolute top-4 -right-3 w-6 h-6 rounded-full bg-[var(--esl-bg-section)] border border-[var(--esl-border)] flex items-center justify-center text-[var(--esl-text-disabled)] hover:text-[#E8242C] hover:border-indigo-200 cursor-pointer text-[10px] transition-all z-50 shadow-xs"
       >
         {collapsed ? '→' : '←'}
       </button>

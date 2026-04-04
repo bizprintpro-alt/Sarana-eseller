@@ -26,7 +26,12 @@ export default function ProductCard({
 
   return (
     <div
-      className="group bg-[#1A1A1A] border border-[#3D3D3D] rounded-[10px] overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_12px_40px_rgba(0,0,0,.3)] hover:border-[#555] hover:-translate-y-1 relative"
+      className="group rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 relative"
+      style={{
+        background: 'var(--esl-bg-card)',
+        border: '1px solid var(--esl-border)',
+        boxShadow: 'var(--esl-shadow-card)',
+      }}
       onClick={() => onClick?.(p._id)}
     >
       {/* Badges */}
@@ -61,7 +66,7 @@ export default function ProductCard({
       )}
 
       {/* Image */}
-      <div className="relative h-48 bg-[#2A2A2A] flex items-center justify-center overflow-hidden">
+      <div className="relative h-48 flex items-center justify-center overflow-hidden" style={{ background: 'var(--esl-bg-section)' }}>
         {p.images?.[0] ? (
           <img
             src={p.images[0]}
@@ -77,7 +82,7 @@ export default function ProductCard({
         {onQuickAdd && (
           <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 p-3">
             <button
-              className="w-full bg-[#0F172A] text-white text-xs font-bold py-2.5 rounded-xl border-none cursor-pointer flex items-center justify-center gap-2 hover:bg-[#CC0000] transition-colors shadow-lg"
+              className="w-full bg-[#E8242C] text-white text-xs font-bold py-2.5 rounded-xl border-none cursor-pointer flex items-center justify-center gap-2 hover:bg-[#CC0000] transition-colors shadow-lg"
               onClick={(e) => {
                 e.stopPropagation();
                 onQuickAdd(p);
@@ -93,9 +98,9 @@ export default function ProductCard({
       {/* Body */}
       <div className="p-4">
         {p.store?.name && (
-          <div className="text-[11px] text-[#A0A0A0] font-medium mb-1 truncate">{p.store.name}</div>
+          <div className="text-[11px] font-medium mb-1 truncate" style={{ color: 'var(--esl-text-muted)' }}>{p.store.name}</div>
         )}
-        <div className="text-sm font-bold text-white mb-2 line-clamp-2 leading-snug group-hover:text-[#FF4D53] transition-colors">
+        <div className="text-sm font-bold mb-2 line-clamp-2 leading-snug group-hover:text-[#FF4D53] transition-colors" style={{ color: 'var(--esl-text-primary)' }}>
           {p.name}
         </div>
 
@@ -104,12 +109,12 @@ export default function ProductCard({
           <div className="flex items-center gap-1.5 mb-2">
             <div className="flex gap-px">
               {Array.from({ length: 5 }).map((_, i) => (
-                <svg key={i} className={`w-3 h-3 ${i < stars ? 'text-amber-400' : 'text-[#3D3D3D]'}`} fill="currentColor" viewBox="0 0 20 20">
+                <svg key={i} className={`w-3 h-3 ${i < stars ? 'text-amber-400' : ''}`} style={i >= stars ? { color: 'var(--esl-border)' } : undefined} fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               ))}
             </div>
-            <span className="text-[10px] text-[#A0A0A0]">({p.reviewCount || 0})</span>
+            <span className="text-[10px]" style={{ color: 'var(--esl-text-muted)' }}>({p.reviewCount || 0})</span>
           </div>
         )}
 
@@ -117,7 +122,7 @@ export default function ProductCard({
         <div className="flex items-baseline gap-2">
           <span className="text-lg font-black text-[#E8242C]">{formatPrice(px)}</span>
           {disc > 0 && (
-            <span className="text-xs text-[#555] line-through">{formatPrice(p.price)}</span>
+            <span className="text-xs line-through" style={{ color: 'var(--esl-text-disabled)' }}>{formatPrice(p.price)}</span>
           )}
         </div>
       </div>
