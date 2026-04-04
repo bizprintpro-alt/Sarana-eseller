@@ -47,7 +47,7 @@ export default function LoginScreen() {
           <Text style={s.btnText}>{loading ? 'Нэвтрэж байна...' : 'Нэвтрэх'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push('/(auth)/register' as any)} style={{ marginTop: 20, alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => Alert.alert('Бүртгүүлэх', 'Бүртгэлийн хэсэг удахгүй нэмэгдэнэ')} style={{ marginTop: 20, alignItems: 'center' }}>
           <Text style={{ color: '#A0A0A0', fontSize: 13 }}>Данс байхгүй юу? <Text style={{ color: '#FF4D53', fontWeight: '700' }}>Бүртгүүлэх</Text></Text>
         </TouchableOpacity>
       </View>
