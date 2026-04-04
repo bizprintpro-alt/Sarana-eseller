@@ -39,6 +39,18 @@ export default function Navbar() {
         Дэлгүүр
       </Link>
       <Link
+        href="/feed"
+        className="hidden sm:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
+      >
+        Зарын булан
+      </Link>
+      <Link
+        href="/gold"
+        className="hidden sm:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
+      >
+        Gold
+      </Link>
+      <Link
         href="/login"
         className="hidden sm:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
       >
