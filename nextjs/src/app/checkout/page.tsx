@@ -304,9 +304,9 @@ export default function CheckoutPage() {
 
                 {/* Payment status */}
                 <div className="flex items-center justify-center gap-2">
-                  <span className={`inline-block w-2 h-2 rounded-full ${qpayStatus === 'paid' ? 'bg-[var(--esl-success)]' : 'bg-yellow-500 animate-pulse'}`} />
+                  <span className="inline-block w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
                   <span className="text-sm text-[var(--esl-text-secondary)]">
-                    {qpayStatus === 'paid' ? 'Төлбөр хийгдсэн' : 'Төлбөр хүлээгдэж байна...'}
+                    Төлбөр хүлээгдэж байна...
                   </span>
                 </div>
 

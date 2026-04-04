@@ -57,6 +57,16 @@ export function requireSeller(req: NextRequest): AuthUser | NextResponse {
   return result;
 }
 
+/** Require admin role */
+export function requireAdmin(req: NextRequest): AuthUser | NextResponse {
+  const result = requireAuth(req);
+  if (result instanceof NextResponse) return result;
+  if (result.role !== 'admin') {
+    return errorJson('Зөвхөн админ хандах боломжтой', 403);
+  }
+  return result;
+}
+
 /** Get shopId for authenticated seller */
 export async function getShopForUser(userId: string): Promise<string | null> {
   const shop = await prisma.shop.findUnique({ where: { userId } });

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/components/shared/Toast';
-import { PLANS } from '@/lib/subscription';
+import { PLANS_LIST as PLANS } from '@/lib/subscription';
 import { formatPrice, getInitials } from '@/lib/utils';
 import { Check, ChevronRight, Store, Palette, Package, Zap, Crown } from 'lucide-react';
 

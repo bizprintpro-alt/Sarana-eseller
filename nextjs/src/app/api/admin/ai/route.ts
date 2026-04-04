@@ -1,0 +1,28 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/lib/api-auth';
+
+// GET /api/admin/ai — list all AI insights
+export async function GET(req: NextRequest) {
+  const admin = requireAdmin(req);
+  if (admin instanceof NextResponse) return admin;
+
+  try {
+    const insights = await prisma.aiInsight.findMany({
+      where: { status: { not: 'DONE' } },
+      orderBy: [{ priority: 'asc' }, { createdAt: 'desc' }],
+      include: { tasks: true },
+    });
+
+    const stats = {
+      pending: insights.filter(i => i.status === 'PENDING').length,
+      critical: insights.filter(i => i.priority === 'CRITICAL').length,
+      approved: insights.filter(i => i.status === 'APPROVED').length,
+      total: insights.length,
+    };
+
+    return NextResponse.json({ insights, stats });
+  } catch (e: unknown) {
+    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+  }
+}

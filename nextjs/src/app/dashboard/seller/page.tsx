@@ -11,6 +11,7 @@ import {
   getUsagePercent,
 } from '@/lib/subscription';
 import StatCard from '@/components/dashboard/StatCard';
+import { LocationCoordReminder } from '@/components/seller/LocationCoordReminder';
 
 const WEEK_DAYS = ['Да', 'Мя', 'Лх', 'Пү', 'Ба', 'Бя', 'Ня'];
 
@@ -155,6 +156,9 @@ export default function SellerDashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+        {/* ═══ Координат reminder ═══ */}
+        <LocationCoordReminder />
 
         {/* ═══ Header ═══ */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

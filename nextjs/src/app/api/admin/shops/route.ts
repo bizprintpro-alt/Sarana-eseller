@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
   const [shops, total] = await Promise.all([
     prisma.shop.findMany({
       where,
-      include: { user: { select: { name: true, email: true } }, shopType: true },
+      include: { user: { select: { name: true, email: true } }, shopType: true, subscription: true },
       skip,
       take: limit,
       orderBy: { createdAt: 'desc' },
@@ -46,11 +46,20 @@ export async function GET(req: NextRequest) {
     prisma.shop.count({ where: { lat: null } }),
   ]);
 
+  // Plan breakdown
+  const planBreakdown = {
+    free: await prisma.shopSubscription.count({ where: { planKey: 'free' } }),
+    standard: await prisma.shopSubscription.count({ where: { planKey: 'standard' } }),
+    ultimate: await prisma.shopSubscription.count({ where: { planKey: 'ultimate' } }),
+    ai_pro: await prisma.shopSubscription.count({ where: { planKey: 'ai_pro' } }),
+  };
+
   return json({
     shops,
     total,
     page,
     pages: Math.ceil(total / limit),
     stats: { total: totalShops, verified, pending: pendingCount, noCoords },
+    planBreakdown,
   });
 }

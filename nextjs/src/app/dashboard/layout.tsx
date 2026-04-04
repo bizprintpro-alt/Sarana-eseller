@@ -15,6 +15,7 @@ const SAMBAR_PRODUCT: SidebarSection = {
   items: [
     { href: '/dashboard/seller', icon: '📊', label: 'Самбар' },
     { href: '/dashboard/seller/orders', icon: '📋', label: 'Захиалга' },
+    { href: '/dashboard/seller/chat', icon: '💬', label: 'Чат', isNew: true },
   ],
 };
 
@@ -23,6 +24,7 @@ const SAMBAR_SERVICE: SidebarSection = {
   items: [
     { href: '/dashboard/seller', icon: '📊', label: 'Самбар' },
     { href: '/dashboard/seller/orders', icon: '📋', label: 'Захиалга' },
+    { href: '/dashboard/seller/chat', icon: '💬', label: 'Чат', isNew: true },
   ],
 };
 
@@ -90,8 +92,10 @@ const STORE_SETTINGS: SidebarSection = {
   items: [
     { href: '/dashboard/seller/store-settings', icon: '🎨', label: 'Нүүр хуудас & Дизайн' },
     { href: '/dashboard/seller/storefront-editor', icon: '✨', label: 'AI Дэлгүүр засварлагч', isNew: true },
+    { href: '/dashboard/seller/themes', icon: '🎭', label: 'Theme store', isNew: true },
     { href: '/dashboard/seller/settings/shop-type', icon: '🏪', label: 'Дэлгүүрийн төрөл' },
     { href: '/dashboard/seller/settings/domain', icon: '🌐', label: 'Домайн тохиргоо' },
+    { href: '/dashboard/seller/locations', icon: '📍', label: 'Байршлууд', isNew: true },
     { href: '/dashboard/seller/branches', icon: '🏪', label: 'Салбар удирдах' },
     { href: '/dashboard/seller/staff', icon: '👔', label: 'Ажилтан' },
     { href: '/dashboard/seller/settings', icon: '⚙️', label: 'Ерөнхий тохиргоо' },
@@ -211,8 +215,13 @@ const ADMIN_SECTIONS: SidebarSection[] = [
       { href: '/dashboard/admin/stores', icon: '🏪', label: 'Дэлгүүрүүд' },
       { href: '/dashboard/admin/entities', icon: '🏢', label: 'Бүх нэгж', isNew: true },
       { href: '/dashboard/admin/locations', icon: '📍', label: 'Байршил удирдлага', isNew: true },
+      { href: '/dashboard/admin/revenue', icon: '💵', label: 'Орлого', isNew: true },
+      { href: '/dashboard/admin/shops', icon: '🏪', label: 'Дэлгүүрүүд', isNew: true },
+      { href: '/dashboard/admin/homepage', icon: '🏠', label: 'Нүүр хуудас', isNew: true },
+      { href: '/dashboard/admin/marketing', icon: '📢', label: 'Маркетинг', isNew: true },
       { href: '/dashboard/admin/chat-monitor', icon: '💬', label: 'Чат хяналт', isNew: true },
-      { href: '/dashboard/admin/commission', icon: '💰', label: 'Комисс' },
+      { href: '/dashboard/admin/config', icon: '⚙️', label: 'Тохиргоо', isNew: true },
+      { href: '/dashboard/admin/ai', icon: '🧠', label: 'Claude AI', isNew: true },
       { href: '/dashboard/admin/analytics-dashboard', icon: '📈', label: 'Аналитик', isNew: true },
     ],
   },

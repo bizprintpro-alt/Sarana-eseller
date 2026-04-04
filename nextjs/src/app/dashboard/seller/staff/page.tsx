@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import StatCard from '@/components/dashboard/StatCard';
 
@@ -36,6 +36,15 @@ export default function StaffPage() {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', role: 'viewer' as StaffMember['role'] });
   const toast = useToast();
+
+  // Fetch from DB, fallback to demo
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    fetch('/api/seller/staff', { headers: token ? { Authorization: `Bearer ${token}` } : {} })
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data) && data.length > 0) setStaff(data); })
+      .catch(() => {});
+  }, []);
 
   function handleAdd() {
     if (!form.name || !form.email) {

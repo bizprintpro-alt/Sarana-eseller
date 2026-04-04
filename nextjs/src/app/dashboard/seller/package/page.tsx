@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { formatPrice } from '@/lib/utils';
 import {
-  PLANS,
+  PLANS_LIST as PLANS,
   PlanId,
   getSubscription,
   saveSubscription,

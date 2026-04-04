@@ -154,6 +154,10 @@ model Order {
   referralCode     String?
   delivery         DeliveryInfo?
   commissions      OrderCommissions?
+  platformAmount   Int?     @default(0)
+  sellerAmount     Int?     @default(0)
+  affiliateAmount  Int?     @default(0)
+  shopId           String?  @db.ObjectId
   statusHistory    Json[]
   estimatedMinutes Int?
   createdAt        DateTime         @default(now())
@@ -211,6 +215,9 @@ model Shop {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  isBlocked    Boolean  @default(false)
+  blockReason  String?
+
   user         User               @relation(fields: [userId], references: [id])
   shopType     ShopType?
   services     Service[]
@@ -218,6 +225,7 @@ model Shop {
   shopDomain   ShopDomain?
   workingHours WorkingHours[]
   storefront   SellerStorefront?
+  subscription ShopSubscription?
 }
 
 model ShopType {
@@ -904,4 +912,319 @@ model PaymentTransaction {
   metadata    Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// ══════════════════════════════════════════════════════════════
+// STORE LOCATION SYSTEM
+// ══════════════════════════════════════════════════════════════
+
+model StoreLocation {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  entityId    String   @db.ObjectId
+  name        String                        // "Sarana Fashion — Хан-Уул салбар"
+  isPrimary   Boolean  @default(false)      // Үндсэн байршил эсэх
+
+  // Хаяг
+  district    String                        // Дүүрэг
+  khoroo      String                        // Хороо
+  address     String                        // Дэлгэрэнгүй хаяг
+  landmark    String?                       // Ойрхон тэмдэгт газар
+  lat         Float?                        // Газрын зургийн координат
+  lng         Float?
+
+  // Цагийн хуваарь
+  hours       Json     @default("{}")
+
+  // Холбоо барих
+  phone       String
+  phone2      String?
+  email       String?
+  website     String?
+  facebook    String?
+  instagram   String?
+  whatsapp    String?
+
+  // Онцлог
+  features    String[] @default([])
+  // ["parking", "elevator", "card_payment", "foreign_lang", "delivery", "returns", "security", "wheelchair"]
+
+  notes       String?
+  isActive    Boolean  @default(true)
+
+  // Координат шалгалтын field-үүд
+  coordStatus      String?  @default("missing")
+  coordNeedsUpdate Boolean  @default(true)
+  coordCheckedAt   DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ══════════════════════════════════════════════════════════════
+// CHAT / MESSAGING SYSTEM
+// ══════════════════════════════════════════════════════════════
+
+model Conversation {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId       String   @db.ObjectId          // Дэлгүүрийн ID
+  customerId   String   @db.ObjectId          // Хэрэглэгчийн User ID
+  customerName String                         // Хэрэглэгчийн нэр (cache)
+
+  // Холбоос
+  orderId      String?  @db.ObjectId          // Захиалгатай холбоотой бол
+  orderNumber  String?                        // "#1042"
+  productName  String?                        // Барааны нэр (reference)
+  productPrice Int?                           // Барааны үнэ
+
+  // Статус
+  status       String   @default("active")    // active | archived | blocked
+  tag          String?                        // order | question | complaint
+  lastMessage  String?                        // Сүүлийн мессеж (preview)
+  lastAt       DateTime @default(now())       // Сүүлийн мессеж огноо
+
+  // Уншаагүй тоо (seller талаас)
+  unreadCount  Int      @default(0)
+
+  messages     Message[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Message {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId String   @db.ObjectId
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  senderId       String   @db.ObjectId        // User ID
+  senderRole     String                       // "customer" | "seller"
+  text           String?
+  imageUrl       String?
+
+  isRead         Boolean  @default(false)
+  readAt         DateTime?
+
+  createdAt      DateTime @default(now())
+}
+
+// ══════════════════════════════════════════════════════════════
+// SUBSCRIPTION & PLAN ENFORCEMENT
+// ══════════════════════════════════════════════════════════════
+
+model ShopSubscription {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  shopId         String    @unique @db.ObjectId
+  shop           Shop      @relation(fields: [shopId], references: [id])
+  planKey        String    @default("free")    // free | standard | ultimate | ai_pro
+  status         String    @default("active")  // active | expired | cancelled
+  startedAt      DateTime  @default(now())
+  expiresAt      DateTime?                     // null = never expires
+  billingCycle   String    @default("monthly") // monthly | yearly
+  commissionRate Float?                        // null = plan default. Admin override.
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model AdminLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  adminId   String   @db.ObjectId
+  action    String   // plan.change | commission.override | shop.block | shop.unblock
+  shopId    String?  @db.ObjectId
+  before    Json?
+  after     Json?
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+model PlatformConfig {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// ══════════════════════════════════════════════════════════════
+// CLAUDE AI — SYSTEM DEVELOPER
+// ══════════════════════════════════════════════════════════════
+
+model AiInsight {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  type        String   // BUG | PERFORMANCE | UX_ISSUE | SECURITY | DATA_QUALITY | FEATURE_REQUEST | OPTIMIZATION | SYSTEM_HEALTH
+  priority    String   @default("MEDIUM") // CRITICAL | HIGH | MEDIUM | LOW
+  title       String
+  description String
+  evidence    Json?
+  suggestion  String?
+  impact      String?  // "248 хэрэглэгчид нөлөөлнө"
+  effort      String?  // "2-4 цаг"
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | DONE | AUTO_FIXED
+  resolvedAt  DateTime?
+  resolvedBy  String?
+  rejectedAt  DateTime?
+  rejectedReason String?
+  autoFixed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tasks       AiTask[]
+}
+
+model AiTask {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  insightId   String    @db.ObjectId
+  title       String
+  description String
+  fileChanges Json?
+  status      String    @default("pending")
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  insight     AiInsight @relation(fields: [insightId], references: [id])
+}
+
+model AiActivityLog {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  action      String   // detected_bug | sent_proposal | applied_fix | daily_scan | manual_scan
+  description String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+}
+
+model UserBehaviorPattern {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  pattern   String   @unique // cart_abandon_checkout | search_no_results | checkout_drop_at_payment
+  frequency Int      @default(1)
+  userCount Int      @default(0)
+  firstSeen DateTime @default(now())
+  lastSeen  DateTime @default(now())
+  analyzed  Boolean  @default(false)
+  insightId String?
+  data      Json?
+  createdAt DateTime @default(now())
+}
+
+// ══════════════════════════════════════════════════════════════
+// THEME STORE
+// ══════════════════════════════════════════════════════════════
+
+model ThemeTemplate {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String   @unique
+  style       String   // minimal | bold | modern | luxury
+  price       Int      @default(0)        // 0 = Үнэгүй
+  description String
+  previewClass String  // CSS preview gradient class
+  entityTypes String[] // store | preorder | agent | company | auto | service | digital
+  features    String[] // dark_mode | gallery | map | video_hero | infinite_scroll
+  industry    String[] // fashion | food | tech | realestate | auto | service | digital
+  rating      Int      @default(90)       // 0-100
+  reviewCount Int      @default(0)
+  isNew       Boolean  @default(false)
+  isPopular   Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+  config      Json?    // StorefrontConfig default values
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ══════════════════════════════════════════════════════════════
+// REVENUE ENGINE — 14+ орлогын эх үүсвэр
+// ══════════════════════════════════════════════════════════════
+
+model BannerSlot {
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  position     String          // hero | sidebar | infeed | featured
+  pricingModel String          // flat | cpm
+  priceFlat    Int?
+  priceCpm     Int?
+  maxDays      Int             @default(30)
+  isActive     Boolean         @default(true)
+  sortOrder    Int             @default(0)
+  createdAt    DateTime        @default(now())
+  bookings     BannerBooking[]
+}
+
+model BannerBooking {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  slotId      String     @db.ObjectId
+  slot        BannerSlot @relation(fields: [slotId], references: [id])
+  shopId      String     @db.ObjectId
+  imageUrl    String
+  linkUrl     String?
+  startDate   DateTime
+  endDate     DateTime
+  totalPrice  Int
+  status      String     @default("pending")
+  impressions Int        @default(0)
+  clicks      Int        @default(0)
+  createdAt   DateTime   @default(now())
+}
+
+model MarketingCampaign {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  shopId         String?   @db.ObjectId
+  type           String    // sms | email | push
+  title          String
+  body           String
+  targetSegment  Json?
+  recipientCount Int       @default(0)
+  sentCount      Int       @default(0)
+  openCount      Int       @default(0)
+  clickCount     Int       @default(0)
+  totalCost      Int       @default(0)
+  status         String    @default("draft")
+  scheduledAt    DateTime?
+  sentAt         DateTime?
+  createdAt      DateTime  @default(now())
+}
+
+model HomepageConfig {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+}
+
+model PlatformRevenue {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  date   DateTime
+  source String
+  amount Int
+  count  Int      @default(1)
+  meta   Json?
+}
+
+// ══════════════════════════════════════════════════════════════
+// STAFF MANAGEMENT
+// ══════════════════════════════════════════════════════════════
+
+model Staff {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId    String   @db.ObjectId
+  userId    String?  @db.ObjectId  // linked user account (optional)
+  name      String
+  email     String?
+  phone     String?
+  role      String   @default("staff") // owner | manager | staff | cashier | driver
+  pin       String?                    // POS login PIN
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ══════════════════════════════════════════════════════════════
+// ORDER TRACKING
+// ══════════════════════════════════════════════════════════════
+
+model OrderEvent {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String   @db.ObjectId
+  status    String   // pending | confirmed | preparing | ready | delivering | delivered | cancelled
+  note      String?
+  updatedBy String?  @db.ObjectId
+  createdAt DateTime @default(now())
 }

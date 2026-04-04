@@ -1,6 +1,23 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { json, errorJson, requireAuth } from '@/lib/api-auth';
+
+// GET /api/reviews?productId=xxx
+export async function GET(req: NextRequest) {
+  const productId = new URL(req.url).searchParams.get('productId');
+  if (!productId) return NextResponse.json({ error: 'productId шаардлагатай' }, { status: 400 });
+
+  const reviews = await prisma.review.findMany({
+    where: { productId },
+    orderBy: { createdAt: 'desc' },
+    take: 50,
+  });
+
+  const avg = reviews.length > 0
+    ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
+
+  return NextResponse.json({ reviews, average: Math.round(avg * 10) / 10, total: reviews.length });
+}
 
 // POST /api/reviews — create review
 export async function POST(req: NextRequest) {
