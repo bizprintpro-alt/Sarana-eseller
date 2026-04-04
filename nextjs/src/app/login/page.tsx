@@ -84,7 +84,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* LEFT PANEL - Desktop only */}
-      <div className="hidden lg:flex flex-col justify-between w-[48%] bg-[#08090F] text-white p-10 relative overflow-hidden">
+      <div
+        className="hidden lg:flex flex-col justify-between w-[48%] p-10 relative overflow-hidden"
+        style={{ background: 'var(--esl-bg-page)', color: 'var(--esl-text-primary)' }}
+      >
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
         <div className="absolute top-[30%] left-[20%] w-[300px] h-[300px] rounded-full bg-brand/8 blur-[100px]" />
         <div className="absolute bottom-[20%] right-[10%] w-[200px] h-[200px] rounded-full bg-blue-600/6 blur-[80px]" />
@@ -92,13 +95,13 @@ export default function LoginPage() {
         <div className="relative z-10">
           <Link href="/" className="flex items-center gap-2 no-underline mb-12">
             <EsellerLogo size={26} />
-            <span className="text-xl font-black text-white">eseller<em className="text-brand not-italic">.mn</em></span>
+            <span className="text-xl font-black" style={{ color: 'var(--esl-text-primary)' }}>eseller<em className="text-brand not-italic">.mn</em></span>
           </Link>
 
           <h2 className="text-4xl font-black leading-[1.1] mb-4">
             Борлуулалт<br /><em className="text-brand not-italic">хамтдаа л байна.</em>
           </h2>
-          <p className="text-white/40 text-sm leading-relaxed max-w-sm">
+          <p className="text-sm leading-relaxed max-w-sm" style={{ color: 'var(--esl-text-muted)' }}>
             Барааны эзэн дангаараа борлуулж чадахгүй. Борлуулагчтай нэгдэж, хамтдаа ашиг ол.
           </p>
         </div>
@@ -110,46 +113,48 @@ export default function LoginPage() {
             { ic: '🛍️', t: 'Худалдан авагч', d: 'Хамгийн сайн бараа, шилдэг үнэ.', earn: '2–4ц хүргэлт' },
             { ic: '🚚', t: 'Жолооч', d: 'Цагаа тохируулж орлого ол.', earn: 'Хүргэлт бүрт' },
           ].map((r) => (
-            <div key={r.t} className="flex items-center gap-3 bg-[var(--esl-bg-card)]/[.03] border border-white/[.06] rounded-2xl px-4 py-3">
+            <div key={r.t} className="flex items-center gap-3 rounded-2xl px-4 py-3" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)' }}>
               <span className="text-xl">{r.ic}</span>
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-bold">{r.t}</h4>
-                <p className="text-xs text-white/40">{r.d}</p>
+                <h4 className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>{r.t}</h4>
+                <p className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>{r.d}</p>
               </div>
-              <span className="text-xs font-bold text-white/50 bg-[var(--esl-bg-card)]/5 px-2.5 py-1 rounded-lg">{r.earn}</span>
+              <span className="text-xs font-bold px-2.5 py-1 rounded-lg" style={{ color: 'var(--esl-text-muted)', background: 'var(--esl-bg-elevated)' }}>{r.earn}</span>
             </div>
           ))}
         </div>
 
-        <p className="relative z-10 text-xs text-white/20">
+        <p className="relative z-10 text-xs" style={{ color: 'var(--esl-text-muted)' }}>
           &copy; 2026 eseller.mn &middot; Улаанбаатар, Монгол
         </p>
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-[var(--esl-bg-page)]">
+      <div className="flex-1 flex items-center justify-center p-6" style={{ background: 'var(--esl-bg-page)' }}>
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <Link href="/" className="flex items-center gap-2 no-underline mb-8 lg:hidden justify-center">
             <EsellerLogo size={24} />
-            <span className="text-lg font-black text-white">eseller<em className="text-brand not-italic">.mn</em></span>
+            <span className="text-lg font-black" style={{ color: 'var(--esl-text-primary)' }}>eseller<em className="text-brand not-italic">.mn</em></span>
           </Link>
 
           {/* Tabs */}
-          <div className="flex bg-[var(--esl-bg-card)] rounded-2xl p-1 shadow-sm border border-[var(--esl-border)] mb-8">
+          <div className="flex rounded-2xl p-1 shadow-sm mb-8" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)' }}>
             <button
               onClick={() => { setMode('login'); setError(''); setSuccess(''); }}
               className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all ${
-                mode === 'login' ? 'bg-brand text-white shadow-md' : 'bg-transparent text-[var(--esl-text-muted)]'
+                mode === 'login' ? 'bg-brand text-white shadow-md' : 'bg-transparent'
               }`}
+              style={mode !== 'login' ? { color: 'var(--esl-text-muted)' } : undefined}
             >
               Нэвтрэх
             </button>
             <button
               onClick={() => { setMode('register'); setError(''); setSuccess(''); }}
               className={`flex-1 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer transition-all ${
-                mode === 'register' ? 'bg-brand text-white shadow-md' : 'bg-transparent text-[var(--esl-text-muted)]'
+                mode === 'register' ? 'bg-brand text-white shadow-md' : 'bg-transparent'
               }`}
+              style={mode !== 'register' ? { color: 'var(--esl-text-muted)' } : undefined}
             >
               Бүртгүүлэх
             </button>
@@ -169,29 +174,31 @@ export default function LoginPage() {
 
           {mode === 'login' ? (
             <>
-              <div className="text-xl font-black text-white mb-1">Сайн уу! 👋</div>
-              <div className="text-sm text-[var(--esl-text-muted)] mb-6">Данс руугаа нэвтрэх</div>
+              <div className="text-xl font-black mb-1" style={{ color: 'var(--esl-text-primary)' }}>Сайн уу! 👋</div>
+              <div className="text-sm mb-6" style={{ color: 'var(--esl-text-muted)' }}>Данс руугаа нэвтрэх</div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-[var(--esl-text-muted)] uppercase tracking-widest mb-2">Имэйл хаяг</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--esl-text-muted)' }}>Имэйл хаяг</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full border-[1.5px] border-[var(--esl-border)] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    className="w-full rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    style={{ border: '1.5px solid var(--esl-border)', background: 'var(--esl-bg-card)', color: 'var(--esl-text-primary)' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-[var(--esl-text-muted)] uppercase tracking-widest mb-2">Нууц үг</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--esl-text-muted)' }}>Нууц үг</label>
                   <div className="relative">
                     <input
                       type={showPw ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full border-[1.5px] border-[var(--esl-border)] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
+                      className="w-full rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
+                      style={{ border: '1.5px solid var(--esl-border)', background: 'var(--esl-bg-card)', color: 'var(--esl-text-primary)' }}
                       onKeyDown={(e) => e.key === 'Enter' && doLogin()}
                     />
                     <button
@@ -213,7 +220,25 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-[var(--esl-text-muted)] mt-6">
+              {/* DAN OAuth separator and button */}
+              <div className="flex items-center gap-3 my-6">
+                <div className="flex-1 h-px" style={{ background: 'var(--esl-border)' }} />
+                <span className="text-xs font-medium" style={{ color: 'var(--esl-text-muted)' }}>эсвэл</span>
+                <div className="flex-1 h-px" style={{ background: 'var(--esl-border)' }} />
+              </div>
+
+              <a
+                href="/api/auth/dan"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-base text-white border-none cursor-pointer transition-all hover:opacity-90 no-underline"
+                style={{ background: '#2563EB' }}
+              >
+                🇲🇳 ДАН-аар нэвтрэх
+              </a>
+              <p className="text-center text-xs mt-2" style={{ color: 'var(--esl-text-muted)' }}>
+                E-Mongolia иргэний нэвтрэлт
+              </p>
+
+              <p className="text-center text-sm mt-6" style={{ color: 'var(--esl-text-muted)' }}>
                 Данс байхгүй юу?{' '}
                 <button onClick={() => setMode('register')} className="text-brand font-bold bg-transparent border-none cursor-pointer">
                   Бүртгүүлэх
@@ -222,35 +247,40 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              <div className="text-xl font-black text-white mb-1">Нэгдэцгээе! 🚀</div>
-              <div className="text-sm text-[var(--esl-text-muted)] mb-6">Та ямар үүргээр нэгдэх вэ?</div>
+              <div className="text-xl font-black mb-1" style={{ color: 'var(--esl-text-primary)' }}>Нэгдэцгээе! 🚀</div>
+              <div className="text-sm mb-6" style={{ color: 'var(--esl-text-muted)' }}>Та ямар үүргээр нэгдэх вэ?</div>
 
               <div className="space-y-4">
                 {/* Role selector */}
                 <div>
-                  <label className="block text-[10px] font-bold text-[var(--esl-text-muted)] uppercase tracking-widest mb-2">Үүрэг сонгох</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--esl-text-muted)' }}>Үүрэг сонгох</label>
                   <div className="space-y-2">
                     {ROLES.map((r) => (
                       <button
                         key={r.value}
                         onClick={() => setRole(r.value)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-[1.5px] text-left cursor-pointer transition-all bg-[var(--esl-bg-card)] ${
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left cursor-pointer transition-all ${
                           role === r.value
-                            ? 'border-brand shadow-[0_0_0_3px_rgba(204,0,0,.12)]'
-                            : 'border-[var(--esl-border)] hover:border-[#94A3B8]'
+                            ? 'shadow-[0_0_0_3px_rgba(204,0,0,.12)]'
+                            : 'hover:opacity-80'
                         }`}
+                        style={{
+                          background: 'var(--esl-bg-card)',
+                          border: role === r.value ? '1.5px solid var(--brand, #CC0000)' : '1.5px solid var(--esl-border)',
+                        }}
                       >
-                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 ${
-                          role === r.value ? 'border-brand' : 'border-[#CBD5E1]'
-                        }`}>
+                        <div
+                          className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+                          style={{ border: role === r.value ? '2px solid var(--brand, #CC0000)' : '2px solid var(--esl-border)' }}
+                        >
                           {role === r.value && <div className="w-2 h-2 rounded-full bg-brand" />}
                         </div>
                         <span className="text-lg">{r.icon}</span>
                         <div className="flex-1 min-w-0">
-                          <h5 className="text-sm font-bold text-white">{r.label}</h5>
-                          <p className="text-xs text-[var(--esl-text-muted)]">{r.desc}</p>
+                          <h5 className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>{r.label}</h5>
+                          <p className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>{r.desc}</p>
                         </div>
-                        <span className="text-[10px] font-bold text-[var(--esl-text-muted)] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded-lg">
+                        <span className="text-[10px] font-bold px-2 py-1 rounded-lg" style={{ color: 'var(--esl-text-muted)', background: 'var(--esl-bg-elevated)' }}>
                           {r.badge}
                         </span>
                       </button>
@@ -259,27 +289,29 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-[var(--esl-text-muted)] uppercase tracking-widest mb-2">Бүтэн нэр</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--esl-text-muted)' }}>Бүтэн нэр</label>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Таны нэр"
-                    className="w-full border-[1.5px] border-[var(--esl-border)] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    className="w-full rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    style={{ border: '1.5px solid var(--esl-border)', background: 'var(--esl-bg-card)', color: 'var(--esl-text-primary)' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-[var(--esl-text-muted)] uppercase tracking-widest mb-2">Имэйл хаяг</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--esl-text-muted)' }}>Имэйл хаяг</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full border-[1.5px] border-[var(--esl-border)] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    className="w-full rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition"
+                    style={{ border: '1.5px solid var(--esl-border)', background: 'var(--esl-bg-card)', color: 'var(--esl-text-primary)' }}
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-[var(--esl-text-muted)] uppercase tracking-widest mb-2">
+                  <label className="block text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--esl-text-muted)' }}>
                     Нууц үг{' '}
                     {password && <span style={{ color: pw.color }} className="text-[11px] font-medium normal-case tracking-normal">{pw.label}</span>}
                   </label>
@@ -289,7 +321,8 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Дор хаяж 6 тэмдэгт"
-                      className="w-full border-[1.5px] border-[var(--esl-border)] rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
+                      className="w-full rounded-xl px-4 py-3 text-sm outline-none focus:border-brand focus:shadow-[0_0_0_3px_rgba(204,0,0,.12)] transition pr-12"
+                      style={{ border: '1.5px solid var(--esl-border)', background: 'var(--esl-bg-card)', color: 'var(--esl-text-primary)' }}
                       onKeyDown={(e) => e.key === 'Enter' && doRegister()}
                     />
                     <button
@@ -301,7 +334,7 @@ export default function LoginPage() {
                     </button>
                   </div>
                   {password && (
-                    <div className="h-1 bg-[#E2E8F0] rounded-full mt-2 overflow-hidden">
+                    <div className="h-1 rounded-full mt-2 overflow-hidden" style={{ background: 'var(--esl-bg-elevated)' }}>
                       <div
                         className="h-full rounded-full transition-all duration-300"
                         style={{ width: `${(pw.score / 3) * 100}%`, background: pw.color }}
@@ -319,7 +352,25 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              <p className="text-center text-sm text-[var(--esl-text-muted)] mt-6">
+              {/* DAN OAuth separator and button */}
+              <div className="flex items-center gap-3 my-6">
+                <div className="flex-1 h-px" style={{ background: 'var(--esl-border)' }} />
+                <span className="text-xs font-medium" style={{ color: 'var(--esl-text-muted)' }}>эсвэл</span>
+                <div className="flex-1 h-px" style={{ background: 'var(--esl-border)' }} />
+              </div>
+
+              <a
+                href="/api/auth/dan"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-base text-white border-none cursor-pointer transition-all hover:opacity-90 no-underline"
+                style={{ background: '#2563EB' }}
+              >
+                🇲🇳 ДАН-аар нэвтрэх
+              </a>
+              <p className="text-center text-xs mt-2" style={{ color: 'var(--esl-text-muted)' }}>
+                E-Mongolia иргэний нэвтрэлт
+              </p>
+
+              <p className="text-center text-sm mt-6" style={{ color: 'var(--esl-text-muted)' }}>
                 Данс байгаа юу?{' '}
                 <button onClick={() => setMode('login')} className="text-brand font-bold bg-transparent border-none cursor-pointer">
                   Нэвтрэх
