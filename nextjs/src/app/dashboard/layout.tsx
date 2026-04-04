@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -275,6 +275,7 @@ const BUYER_SECTIONS: SidebarSection[] = [
 
 const OTHER_ROLE_SECTIONS: Record<string, SidebarSection[]> = {
   admin: ADMIN_SECTIONS,
+  superadmin: ADMIN_SECTIONS,
   affiliate: AFFILIATE_SECTIONS,
   delivery: DELIVERY_SECTIONS,
   buyer: BUYER_SECTIONS,
