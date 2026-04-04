@@ -54,11 +54,28 @@ export default function LoginPage() {
     if (!email || !password) { setError('Бүх талбарыг бөглөнө үү'); return; }
     setLoading(true); setError('');
     try {
-      const data = await AuthAPI.login(email, password);
-      if (data.token) {
+      // Try Next.js API first (direct DB), then backend
+      let data: any = null;
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const json = await res.json();
+        if (json.token) data = json;
+      } catch {}
+
+      if (!data) {
+        data = await AuthAPI.login(email, password);
+      }
+
+      if (data?.token) {
         login(data.token, data.user);
         setSuccess('Амжилттай нэвтэрлээ!');
         setTimeout(() => router.push(roleHome(data.user.role)), 700);
+      } else {
+        setError('Имэйл эсвэл нууц үг буруу');
       }
     } catch (e: any) {
       setError(e.message || 'Холболтын алдаа');
