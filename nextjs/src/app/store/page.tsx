@@ -16,11 +16,17 @@ import MegaMenu from '@/components/store/MegaMenu';
 import HeroBanner from '@/components/store/HeroBanner';
 import ProductGrid from '@/components/store/ProductGrid';
 import ProductModal from '@/components/store/ProductModal';
-import ProductCard from '@/components/store/ProductCard';
 import SaleSlider from '@/components/store/SaleSlider';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
-import { Search, ShoppingCart, User, ChevronDown, Tag, ChevronRight } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import {
+  Search, ShoppingCart, User, ChevronDown, Tag, ChevronRight,
+  ShieldCheck, Truck, RefreshCw, Lock,
+  UtensilsCrossed, Shirt, Cpu, Sparkles, Home, Dumbbell, Scissors, Wrench,
+  Store, Newspaper, Crown,
+} from 'lucide-react';
 
+/* ─── Constants ─── */
 const NAV_CATS = [
   { key: 'food', label: 'Хоол хүнс' }, { key: 'fashion', label: 'Хувцас' },
   { key: 'electronics', label: 'Электроник' }, { key: 'beauty', label: 'Гоо сайхан' },
@@ -28,9 +34,61 @@ const NAV_CATS = [
   { key: 'salon', label: 'Салон' }, { key: 'repair', label: 'Засвар' },
 ];
 
+const CATEGORY_ICONS = [
+  { key: 'food', label: 'Хоол хүнс', icon: UtensilsCrossed, color: '#059669' },
+  { key: 'fashion', label: 'Хувцас', icon: Shirt, color: '#7C3AED' },
+  { key: 'electronics', label: 'Электроник', icon: Cpu, color: '#0891B2' },
+  { key: 'beauty', label: 'Гоо сайхан', icon: Sparkles, color: '#DB2777' },
+  { key: 'home', label: 'Гэр ахуй', icon: Home, color: '#D97706' },
+  { key: 'sports', label: 'Спорт', icon: Dumbbell, color: '#2563EB' },
+  { key: 'salon', label: 'Салон', icon: Scissors, color: '#9333EA' },
+  { key: 'repair', label: 'Засвар', icon: Wrench, color: '#DC2626' },
+];
+
+const TRUST_ITEMS = [
+  { icon: ShieldCheck, label: 'Баталгаат', sub: 'Бүх бараа баталгаатай', color: '#059669' },
+  { icon: Truck, label: 'Хурдан хүргэлт', sub: '2-4 цагийн дотор', color: '#0891B2' },
+  { icon: RefreshCw, label: '48 цагийн буцаалт', sub: 'Эрсдэлгүй худалдан авалт', color: '#D97706' },
+  { icon: Lock, label: 'Аюулгүй төлбөр', sub: 'QPay, Visa, Mastercard', color: '#7C3AED' },
+];
+
+const MARQUEE_ITEMS = [
+  'Электроник бараанд 50% хямдрал',
+  'Шинэ хэрэглэгчдэд 10,000₮ купон',
+  '50,000₮-с дээш үнэгүй хүргэлт',
+  'Гоо сайхны бүтээгдэхүүн 1+1 урамшуулал',
+  'Gold гишүүнчлэлтэй хамт давуу эрх',
+  'Долоо хоног бүр шинэ ирэлт',
+];
+
 const WL_KEY = 'eseller_wishlist';
 function loadWL(): Set<string> { try { const r = localStorage.getItem(WL_KEY); return r ? new Set(JSON.parse(r)) : new Set(); } catch { return new Set(); } }
 
+/* ─── Marquee component ─── */
+function AnnouncementMarquee() {
+  const doubled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+  return (
+    <div style={{ background: 'var(--esl-bg-card)', borderBottom: '1px solid var(--esl-border)' }} className="overflow-hidden">
+      <div className="max-w-full py-2.5 relative">
+        <div className="flex animate-marquee whitespace-nowrap">
+          {doubled.map((item, i) => (
+            <span key={i} className="inline-flex items-center gap-3 mx-6 text-xs font-medium" style={{ color: 'var(--esl-text-secondary)' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E8242C] shrink-0" />
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+      <style>{`
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .animate-marquee { animation: marquee 35s linear infinite; }
+        .animate-marquee:hover { animation-play-state: paused; }
+      `}</style>
+    </div>
+  );
+}
+
+/* ─── Main page ─── */
 export default function StorePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -81,50 +139,329 @@ export default function StorePage() {
     <ErrorBoundary>
       <div className="min-h-screen" style={{ background: 'var(--esl-bg-page)' }}>
         <Toast />
-        <div className="bg-[#1A1A2E] text-white/80 text-xs"><div className="max-w-[1320px] mx-auto px-4 h-9 flex items-center justify-between"><span>🚚 50,000₮+ үнэгүй хүргэлт</span>{isLoggedIn ? <Link href={roleHome(user?.role)} className="text-white/80 no-underline">{user?.name}</Link> : <Link href="/login" className="text-[#FCD34D] no-underline font-medium">Нэвтрэх</Link>}</div></div>
 
-        <header className="sticky top-0 z-50 bg-[#111111] border-b border-[#2A2A2A]">
-          <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-5">
-            <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0"><EsellerLogo size={32} /><span className="text-xl font-black text-white hidden sm:block">eseller<span className="text-[#E31E24]">.mn</span></span></Link>
-            <div className="flex-1 max-w-2xl relative flex"><input ref={searchRef} type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Бараа хайх..." className="w-full h-11 pl-4 pr-12 rounded-xl bg-[#2A2A2A] border border-[#3D3D3D] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#A0A0A0] transition-all" /><button className="absolute right-1 top-1 bottom-1 px-3 bg-[#E31E24] text-white rounded-lg border-none cursor-pointer"><Search className="w-4 h-4" /></button></div>
-            <div className="flex items-center gap-2">
-              {isLoggedIn && <Link href={roleHome(user?.role)} className="hidden md:flex w-10 h-10 rounded-xl hover:bg-[#F5F5F5] items-center justify-center text-[#475569] no-underline"><User className="w-5 h-5" /></Link>}
-              <button onClick={() => setCartOpen(true)} className="relative w-10 h-10 rounded-xl hover:bg-[#F5F5F5] border-none cursor-pointer bg-transparent flex items-center justify-center text-[#475569]"><ShoppingCart className="w-5 h-5" />{cartCount > 0 && <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full bg-[#E31E24] text-white text-[10px] font-bold flex items-center justify-center px-1">{cartCount}</span>}</button>
+        {/* ━━━ Top utility bar ━━━ */}
+        <div style={{ background: 'var(--esl-bg-card)', borderBottom: '1px solid var(--esl-border)' }}>
+          <div className="max-w-[1320px] mx-auto px-4 h-9 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="text-xs font-medium" style={{ color: 'var(--esl-text-secondary)' }}>
+                <Truck className="w-3 h-3 inline mr-1 opacity-60" />50,000₮+ үнэгүй хүргэлт
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Link href="/feed" className="text-xs font-medium no-underline transition-colors hover:opacity-80" style={{ color: 'var(--esl-text-secondary)' }}>
+                <Newspaper className="w-3 h-3 inline mr-1 opacity-60" />Зар
+              </Link>
+              <span className="text-xs" style={{ color: 'var(--esl-border)' }}>|</span>
+              <Link href="/gold" className="text-xs font-semibold no-underline" style={{ color: '#D97706' }}>
+                <Crown className="w-3 h-3 inline mr-1" />Gold
+              </Link>
+              <span className="text-xs" style={{ color: 'var(--esl-border)' }}>|</span>
+              <Link href="/shops" className="text-xs font-medium no-underline transition-colors hover:opacity-80" style={{ color: 'var(--esl-text-secondary)' }}>
+                <Store className="w-3 h-3 inline mr-1 opacity-60" />Дэлгүүрүүд
+              </Link>
+              <span className="text-xs" style={{ color: 'var(--esl-border)' }}>|</span>
+              {isLoggedIn
+                ? <Link href={roleHome(user?.role)} className="text-xs font-medium no-underline" style={{ color: 'var(--esl-text-primary)' }}>{user?.name}</Link>
+                : <Link href="/login" className="text-xs font-semibold no-underline" style={{ color: '#E8242C' }}>Нэвтрэх</Link>
+              }
             </div>
           </div>
-          <div className="bg-[#E31E24] relative"><div className="max-w-[1320px] mx-auto px-4 flex items-center h-10 overflow-x-auto scrollbar-none">
-            <button onClick={() => setMegaOpen(!megaOpen)} className={cn('shrink-0 h-full px-4 text-sm font-semibold border-none cursor-pointer flex items-center gap-1.5 text-white', megaOpen ? 'bg-white/25' : 'bg-white/10')}>Ангилал <ChevronDown className={cn('w-3.5 h-3.5 transition-transform', megaOpen && 'rotate-180')} /></button>
-            {NAV_CATS.map(c => <button key={c.key} onClick={() => { setActiveCat(c.key); setMegaOpen(false); }} className={cn('shrink-0 h-full px-4 text-sm font-semibold border-none cursor-pointer whitespace-nowrap', activeCat === c.key ? 'bg-white/20 text-white' : 'bg-transparent text-white/85 hover:bg-white/10')}>{c.label}</button>)}
-            <div className="flex-1" /><button onClick={() => setActiveCat('all')} className="shrink-0 h-full px-4 text-sm font-bold border-none cursor-pointer bg-transparent text-[#FCD34D] flex items-center gap-1.5 whitespace-nowrap"><Tag className="w-3.5 h-3.5" />Хямдралтай</button>
-          </div><MegaMenu open={megaOpen} onClose={() => setMegaOpen(false)} onSelectCategory={setActiveCat} onSelectType={setActiveType} /></div>
+        </div>
+
+        {/* ━━━ Sticky header ━━━ */}
+        <header className="sticky top-0 z-50" style={{ background: 'var(--esl-bg-card)', borderBottom: '1px solid var(--esl-border)' }}>
+          <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-4 md:gap-5">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0">
+              <EsellerLogo size={32} />
+              <span className="text-xl font-black hidden sm:block" style={{ color: 'var(--esl-text-primary)' }}>
+                eseller<span className="text-[#E8242C]">.mn</span>
+              </span>
+            </Link>
+
+            {/* Search */}
+            <div className="flex-1 max-w-2xl relative flex">
+              <input
+                ref={searchRef}
+                type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Бараа, дэлгүүр хайх..."
+                className="w-full h-11 pl-4 pr-12 rounded-xl text-sm outline-none transition-all"
+                style={{
+                  background: 'var(--esl-bg-input, var(--esl-bg-page))',
+                  border: '1.5px solid var(--esl-border)',
+                  color: 'var(--esl-text-primary)',
+                }}
+              />
+              <button className="absolute right-1 top-1 bottom-1 px-3 bg-[#E8242C] text-white rounded-lg border-none cursor-pointer hover:bg-[#D31E25] transition-colors">
+                <Search className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Right actions */}
+            <div className="flex items-center gap-1.5">
+              <ThemeToggle />
+              {isLoggedIn && (
+                <Link href={roleHome(user?.role)} className="hidden md:flex w-10 h-10 rounded-xl items-center justify-center no-underline transition-colors" style={{ color: 'var(--esl-text-secondary)' }}>
+                  <User className="w-5 h-5" />
+                </Link>
+              )}
+              <button
+                onClick={() => setCartOpen(true)}
+                className="relative w-10 h-10 rounded-xl border-none cursor-pointer bg-transparent flex items-center justify-center transition-colors"
+                style={{ color: 'var(--esl-text-secondary)' }}
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full bg-[#E8242C] text-white text-[10px] font-bold flex items-center justify-center px-1">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Category nav strip */}
+          <div className="bg-[#E8242C] relative">
+            <div className="max-w-[1320px] mx-auto px-4 flex items-center h-10 overflow-x-auto scrollbar-none">
+              <button
+                onClick={() => setMegaOpen(!megaOpen)}
+                className={cn(
+                  'shrink-0 h-full px-4 text-sm font-semibold border-none cursor-pointer flex items-center gap-1.5 text-white',
+                  megaOpen ? 'bg-white/25' : 'bg-white/10'
+                )}
+              >
+                Ангилал <ChevronDown className={cn('w-3.5 h-3.5 transition-transform', megaOpen && 'rotate-180')} />
+              </button>
+              {NAV_CATS.map(c => (
+                <button
+                  key={c.key}
+                  onClick={() => { setActiveCat(c.key); setMegaOpen(false); }}
+                  className={cn(
+                    'shrink-0 h-full px-4 text-sm font-semibold border-none cursor-pointer whitespace-nowrap transition-colors',
+                    activeCat === c.key ? 'bg-white/20 text-white' : 'bg-transparent text-white/85 hover:bg-white/10'
+                  )}
+                >
+                  {c.label}
+                </button>
+              ))}
+              <div className="flex-1" />
+              <button
+                onClick={() => setActiveCat('all')}
+                className="shrink-0 h-full px-4 text-sm font-bold border-none cursor-pointer bg-transparent text-[#FCD34D] flex items-center gap-1.5 whitespace-nowrap"
+              >
+                <Tag className="w-3.5 h-3.5" />Хямдралтай
+              </button>
+            </div>
+            <MegaMenu open={megaOpen} onClose={() => setMegaOpen(false)} onSelectCategory={setActiveCat} onSelectType={setActiveType} />
+          </div>
         </header>
 
+        {/* ━━━ Hero ━━━ */}
         <HeroBanner onSearch={() => searchRef.current?.focus()} />
 
-        {saleProducts.length > 0 && <SaleSlider products={saleProducts} quickAdd={quickAdd} findProduct={findProduct} setSelProduct={setSelProduct} wishlist={wishlist} toggleWL={toggleWL} setActiveCat={setActiveCat} />}
+        {/* ━━━ Trust bar ━━━ */}
+        <section style={{ background: 'var(--esl-bg-card)', borderBottom: '1px solid var(--esl-border)' }}>
+          <div className="max-w-[1320px] mx-auto px-4 py-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {TRUST_ITEMS.map(item => (
+                <div key={item.label} className="flex items-center gap-3 py-1 group cursor-default">
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
+                    style={{ background: item.color + '14', color: item.color }}
+                  >
+                    <item.icon className="w-5 h-5" strokeWidth={2.2} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>{item.label}</div>
+                    <div className="text-xs" style={{ color: 'var(--esl-text-muted, var(--esl-text-secondary))' }}>{item.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-        <ProductGrid products={filtered} loading={loading} activeType={activeType} activeCat={activeCat} onTypeChange={setActiveType} onCatChange={setActiveCat} onProductClick={id => setSelProduct(findProduct(id))} onQuickAdd={quickAdd} wishlist={wishlist} onToggleWish={toggleWL} />
+        {/* ━━━ Announcement marquee ━━━ */}
+        <AnnouncementMarquee />
 
-        {selProduct && <ProductModal product={selProduct} onClose={() => setSelProduct(null)} isAffiliate={isLoggedIn && user?.role === 'affiliate'} onShare={() => { navigator.clipboard.writeText(`${window.location.origin}/store/${selProduct._id}?ref=${user?.username || ''}`).then(() => toast.show('Линк хуулагдлаа!', 'ok')); }} />}
+        {/* ━━━ Sale slider ━━━ */}
+        {saleProducts.length > 0 && (
+          <SaleSlider
+            products={saleProducts}
+            quickAdd={quickAdd}
+            findProduct={findProduct}
+            setSelProduct={setSelProduct}
+            wishlist={wishlist}
+            toggleWL={toggleWL}
+            setActiveCat={setActiveCat}
+          />
+        )}
+
+        {/* ━━━ Category bar with icons ━━━ */}
+        <section className="py-6" style={{ background: 'var(--esl-bg-page)' }}>
+          <div className="max-w-[1320px] mx-auto px-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-bold m-0" style={{ color: 'var(--esl-text-primary)' }}>Ангилалаар хайх</h2>
+              <button
+                onClick={() => setActiveCat('all')}
+                className="text-xs font-semibold border-none bg-transparent cursor-pointer flex items-center gap-1 transition-colors"
+                style={{ color: '#E8242C' }}
+              >
+                Бүгдийг харах <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+              {CATEGORY_ICONS.map(cat => {
+                const isActive = activeCat === cat.key;
+                return (
+                  <button
+                    key={cat.key}
+                    onClick={() => setActiveCat(isActive ? 'all' : cat.key)}
+                    className="flex flex-col items-center gap-2 py-3 px-2 rounded-xl border-none cursor-pointer transition-all group"
+                    style={{
+                      background: isActive ? cat.color + '14' : 'var(--esl-bg-card)',
+                      border: isActive ? `1.5px solid ${cat.color}40` : '1.5px solid var(--esl-border)',
+                    }}
+                  >
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
+                      style={{
+                        background: isActive ? cat.color + '22' : cat.color + '10',
+                        color: cat.color,
+                      }}
+                    >
+                      <cat.icon className="w-5 h-5" strokeWidth={2} />
+                    </div>
+                    <span
+                      className="text-xs font-semibold text-center leading-tight"
+                      style={{ color: isActive ? cat.color : 'var(--esl-text-primary)' }}
+                    >
+                      {cat.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* ━━━ Product grid ━━━ */}
+        <ProductGrid
+          products={filtered}
+          loading={loading}
+          activeType={activeType}
+          activeCat={activeCat}
+          onTypeChange={setActiveType}
+          onCatChange={setActiveCat}
+          onProductClick={id => setSelProduct(findProduct(id))}
+          onQuickAdd={quickAdd}
+          wishlist={wishlist}
+          onToggleWish={toggleWL}
+        />
+
+        {/* ━━━ Product modal ━━━ */}
+        {selProduct && (
+          <ProductModal
+            product={selProduct}
+            onClose={() => setSelProduct(null)}
+            isAffiliate={isLoggedIn && user?.role === 'affiliate'}
+            onShare={() => {
+              navigator.clipboard.writeText(`${window.location.origin}/store/${selProduct._id}?ref=${user?.username || ''}`)
+                .then(() => toast.show('Линк хуулагдлаа!', 'ok'));
+            }}
+          />
+        )}
 
         <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
-        <footer className="bg-[#1A1A2E] text-white pt-10 pb-24 md:pb-10">
+
+        {/* ━━━ Footer ━━━ */}
+        <footer style={{ background: 'var(--esl-footer-bg, #0A0A0A)' }} className="text-white pt-12 pb-24 md:pb-12">
           <div className="max-w-[1320px] mx-auto px-4">
+            {/* Footer top: newsletter + branding */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 mb-8" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+              <div>
+                <div className="flex items-center gap-2.5 mb-2">
+                  <EsellerLogo size={26} />
+                  <span className="text-lg font-black">eseller<span className="text-[#E8242C]">.mn</span></span>
+                </div>
+                <p className="text-xs text-white/40 leading-relaxed m-0 max-w-xs">
+                  Монголын хамгийн том онлайн marketplace. Баталгаатай бараа, хурдан хүргэлт, найдвартай худалдан авалт.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 w-full md:w-auto">
+                <input
+                  type="email"
+                  placeholder="И-мэйл хаяг оруулах"
+                  className="flex-1 md:w-64 h-10 px-4 rounded-lg text-xs outline-none"
+                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                />
+                <button className="h-10 px-5 bg-[#E8242C] text-white text-xs font-bold rounded-lg border-none cursor-pointer hover:bg-[#D31E25] transition-colors shrink-0">
+                  Бүртгүүлэх
+                </button>
+              </div>
+            </div>
+
+            {/* Footer columns */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
               <div>
-                <div className="flex items-center gap-2 mb-3"><EsellerLogo size={22} /><span className="text-base font-black">eseller<span className="text-[#E31E24]">.mn</span></span></div>
-                <p className="text-xs text-white/40 leading-relaxed">Монголын хамгийн том онлайн marketplace.</p>
+                <h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Дэлгүүр</h4>
+                <ul className="list-none p-0 m-0 space-y-2">
+                  {[
+                    { t: 'Бүх бараа', h: '/store' },
+                    { t: 'Хямдрал', h: '/store' },
+                    { t: 'Шинэ ирэлт', h: '/store' },
+                    { t: 'Зар сурталчилгаа', h: '/feed' },
+                  ].map(l => (
+                    <li key={l.t}><Link href={l.h} className="text-xs text-white/35 hover:text-white no-underline transition">{l.t}</Link></li>
+                  ))}
+                </ul>
               </div>
-              <div><h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Дэлгүүр</h4><ul className="list-none space-y-1.5">{['Бүх бараа', 'Хямдрал', 'Шинэ ирэлт'].map(t => <li key={t}><span className="text-xs text-white/35 hover:text-white cursor-pointer transition">{t}</span></li>)}</ul></div>
-              <div><h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Платформ</h4><ul className="list-none space-y-1.5">{[{t:'Бүх дэлгүүрүүд',h:'/shops'},{t:'Борлуулагч болох',h:'/become-seller'},{t:'Нэвтрэх',h:'/login'}].map(l => <li key={l.t}><Link href={l.h} className="text-xs text-white/35 hover:text-white no-underline transition">{l.t}</Link></li>)}</ul></div>
-              <div><h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Тусламж</h4><ul className="list-none space-y-1.5">{['Холбоо барих', 'Нөхцөл', 'Нууцлал'].map(t => <li key={t}><span className="text-xs text-white/35 hover:text-white cursor-pointer transition">{t}</span></li>)}</ul></div>
+              <div>
+                <h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Платформ</h4>
+                <ul className="list-none p-0 m-0 space-y-2">
+                  {[
+                    { t: 'Бүх дэлгүүрүүд', h: '/shops' },
+                    { t: 'Gold гишүүнчлэл', h: '/gold' },
+                    { t: 'Борлуулагч болох', h: '/become-seller' },
+                    { t: 'Нэвтрэх', h: '/login' },
+                  ].map(l => (
+                    <li key={l.t}><Link href={l.h} className="text-xs text-white/35 hover:text-white no-underline transition">{l.t}</Link></li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Тусламж</h4>
+                <ul className="list-none p-0 m-0 space-y-2">
+                  {['Холбоо барих', 'Түгээмэл асуулт', 'Хүргэлтийн бодлого', 'Буцаалтын бодлого'].map(t => (
+                    <li key={t}><span className="text-xs text-white/35 hover:text-white cursor-pointer transition">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white/60 mb-3 uppercase tracking-wider">Хууль эрхзүй</h4>
+                <ul className="list-none p-0 m-0 space-y-2">
+                  {['Үйлчилгээний нөхцөл', 'Нууцлалын бодлого', 'Зохиогчийн эрх'].map(t => (
+                    <li key={t}><span className="text-xs text-white/35 hover:text-white cursor-pointer transition">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div className="border-t border-white/10 pt-5 flex flex-col md:flex-row items-center justify-between gap-3">
+
+            {/* Footer bottom */}
+            <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
               <span className="text-xs text-white/25">&copy; 2026 eseller.mn — Бүх эрх хуулиар хамгаалагдсан</span>
-              <div className="flex items-center gap-4"><span className="text-xs font-bold text-white/40">QPay</span><span className="text-xs font-bold text-white/40">Visa</span><span className="text-xs font-bold text-white/40">Mastercard</span></div>
+              <div className="flex items-center gap-5">
+                {['QPay', 'Visa', 'Mastercard', 'SocialPay'].map(name => (
+                  <span key={name} className="text-xs font-bold text-white/30 tracking-wide">{name}</span>
+                ))}
+              </div>
             </div>
           </div>
         </footer>
+
         <MobileNav />
       </div>
     </ErrorBoundary>
