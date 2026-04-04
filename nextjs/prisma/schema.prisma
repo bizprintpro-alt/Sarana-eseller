@@ -579,3 +579,295 @@ model PreOrderBatch {
 
   product PreOrderProduct @relation(fields: [productId], references: [id])
 }
+
+// ══════════════════════════════════════════════════════════════
+// BANNER MANAGEMENT SYSTEM
+// ══════════════════════════════════════════════════════════════
+
+model Banner {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  refId       String   @unique
+  title       String
+  slot        String   // HERO|ANNOUNCEMENT|MID_PAGE|IN_FEED|SIDEBAR_RIGHT|SECTION_SEPARATOR|CATEGORY_TOP|PRODUCT_BELOW
+  imageUrl    String
+  imageMobile String?
+  linkUrl     String
+  altText     String?
+  bgColor     String?
+  entityId    String?  @db.ObjectId
+  entityName  String?
+  status      String   @default("DRAFT") // DRAFT|PENDING|SCHEDULED|ACTIVE|PAUSED|EXPIRED|REJECTED
+  startsAt    DateTime
+  endsAt      DateTime
+  sortOrder   Int      @default(0)
+  isPaid      Boolean  @default(false)
+  planId      String?  @db.ObjectId
+  paymentId   String?
+  price       Float?
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?  @db.ObjectId
+  analytics   BannerAnalytic[]
+}
+
+model BannerPlan {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  slot         String
+  durationDays Int
+  price        Float
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  maxPerPeriod Int?
+  description  String?
+  features     String[]
+  createdAt    DateTime @default(now())
+}
+
+model BannerAnalytic {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  bannerId    String   @db.ObjectId
+  date        DateTime
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  ctr         Float?
+  banner      Banner   @relation(fields: [bannerId], references: [id])
+  @@unique([bannerId, date])
+}
+
+model Announcement {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
+  icon      String?
+  linkUrl   String?
+  isActive  Boolean   @default(true)
+  sortOrder Int       @default(0)
+  startsAt  DateTime?
+  endsAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+// ══════════════════════════════════════════════════════════════
+// MARKETING AUTOMATION SYSTEM
+// ══════════════════════════════════════════════════════════════
+
+model Campaign {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  refId         String   @unique
+  name          String
+  type          String   // SMS|EMAIL|PUSH|MULTI_CHANNEL
+  status        String   @default("DRAFT") // DRAFT|SCHEDULED|SENDING|SENT|PAUSED|CANCELLED|FAILED
+  entityId      String?  @db.ObjectId
+  createdById   String   @db.ObjectId
+  subject       String?
+  previewText   String?
+  smsText       String?
+  emailHtml     String?
+  emailJson     Json?
+  pushTitle     String?
+  pushBody      String?
+  audienceType  String   @default("ALL") // ALL|SEGMENT|MANUAL_LIST|CART_ABANDONERS|WISHLIST|INACTIVE
+  segmentId     String?  @db.ObjectId
+  audienceCount Int      @default(0)
+  scheduledAt   DateTime?
+  sentAt        DateTime?
+  completedAt   DateTime?
+  totalSent     Int      @default(0)
+  delivered     Int      @default(0)
+  opened        Int      @default(0)
+  clicked       Int      @default(0)
+  bounced       Int      @default(0)
+  unsubscribed  Int      @default(0)
+  converted     Int      @default(0)
+  revenue       Float    @default(0)
+  estimatedCost Float?
+  actualCost    Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  sends         CampaignSend[]
+  events        CampaignEvent[]
+}
+
+model AutomationFlow {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  trigger       String     // CART_ABANDONED|ORDER_PLACED|ORDER_DELIVERED|FIRST_PURCHASE|WISHLIST_PRICE_DROP|USER_REGISTERED|USER_INACTIVE|MANUAL
+  triggerConfig Json?
+  isActive      Boolean    @default(false)
+  entityId      String?    @db.ObjectId
+  steps         AutoStep[]
+  runs          AutoRun[]
+  createdAt     DateTime   @default(now())
+}
+
+model AutoStep {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  flowId       String         @db.ObjectId
+  order        Int
+  type         String         // SEND_SMS|SEND_EMAIL|SEND_PUSH|WAIT|CONDITION_BRANCH|UPDATE_SEGMENT
+  config       Json
+  delayMinutes Int            @default(0)
+  condition    Json?
+  flow         AutomationFlow @relation(fields: [flowId], references: [id])
+}
+
+model AutoRun {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  flowId      String         @db.ObjectId
+  userId      String         @db.ObjectId
+  triggeredAt DateTime       @default(now())
+  completedAt DateTime?
+  status      String         @default("running") // running|completed|stopped
+  currentStep Int            @default(0)
+  metadata    Json?
+  flow        AutomationFlow @relation(fields: [flowId], references: [id])
+}
+
+model Segment {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  entityId    String?         @db.ObjectId
+  filters     Json
+  memberCount Int             @default(0)
+  lastBuiltAt DateTime?
+  createdAt   DateTime        @default(now())
+  members     SegmentMember[]
+}
+
+model SegmentMember {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  segmentId String   @db.ObjectId
+  userId    String   @db.ObjectId
+  addedAt   DateTime @default(now())
+  segment   Segment  @relation(fields: [segmentId], references: [id])
+  @@unique([segmentId, userId])
+}
+
+model CampaignSend {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  campaignId  String    @db.ObjectId
+  userId      String    @db.ObjectId
+  channel     String
+  recipient   String
+  status      String    @default("pending")
+  sentAt      DateTime?
+  deliveredAt DateTime?
+  errorMsg    String?
+  messageId   String?
+  campaign    Campaign  @relation(fields: [campaignId], references: [id])
+}
+
+model CampaignEvent {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  campaignId String   @db.ObjectId
+  userId     String?  @db.ObjectId
+  sendId     String?
+  type       String   // opened|clicked|bounced|unsubscribed|converted
+  metadata   Json?
+  occurredAt DateTime @default(now())
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+}
+
+model MarketingOptOut {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String?  @db.ObjectId
+  phone      String?
+  email      String?
+  channel    String   // sms|email|push|all
+  reason     String?
+  optedOutAt DateTime @default(now())
+}
+
+// ══════════════════════════════════════════════════════════════
+// LOYALTY POINTS + GOLD MEMBERSHIP
+// ══════════════════════════════════════════════════════════════
+
+model LoyaltyAccount {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @unique @db.ObjectId
+  balance        Int      @default(0)
+  lifetimeEarned Int      @default(0)
+  lifetimeSpent  Int      @default(0)
+  tier           String   @default("BRONZE") // BRONZE|SILVER|GOLD|PLATINUM
+  tierUpdatedAt  DateTime @default(now())
+  expiresAt      DateTime?
+  lastActivityAt DateTime @default(now())
+  createdAt      DateTime @default(now())
+  transactions   LoyaltyTransaction[]
+  redemptions    LoyaltyRedemption[]
+}
+
+model LoyaltyTransaction {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  accountId   String         @db.ObjectId
+  type        String         // EARN_PURCHASE|EARN_REVIEW|EARN_REFERRAL|EARN_BIRTHDAY|EARN_STREAK|EARN_BONUS|REDEEM_DISCOUNT|EXPIRE|ADJUST
+  points      Int
+  description String
+  refType     String?
+  refId       String?
+  expiresAt   DateTime?
+  createdAt   DateTime       @default(now())
+  account     LoyaltyAccount @relation(fields: [accountId], references: [id])
+}
+
+model LoyaltyRedemption {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  accountId   String         @db.ObjectId
+  userId      String         @db.ObjectId
+  type        String         // discount|free_shipping|product
+  pointsUsed  Int
+  valueAmount Float
+  orderId     String?
+  couponCode  String?        @unique
+  isUsed      Boolean        @default(false)
+  usedAt      DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime       @default(now())
+  account     LoyaltyAccount @relation(fields: [accountId], references: [id])
+}
+
+model GoldMembership {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String            @unique @db.ObjectId
+  plan            String            // MONTHLY|QUARTERLY|ANNUAL
+  status          String            @default("ACTIVE") // TRIAL|ACTIVE|CANCELLED|EXPIRED|PAUSED
+  startsAt        DateTime          @default(now())
+  endsAt          DateTime
+  autoRenew       Boolean           @default(true)
+  paymentMethodId String?
+  ordersThisTerm  Int               @default(0)
+  savedAmount     Float             @default(0)
+  freeDeliveries  Int               @default(0)
+  isTrial         Boolean           @default(false)
+  trialEndsAt     DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  payments        MembershipPayment[]
+}
+
+model MembershipPayment {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  membershipId String         @db.ObjectId
+  amount       Float
+  plan         String
+  paidAt       DateTime       @default(now())
+  method       String
+  refId        String?
+  invoiceId    String?
+  membership   GoldMembership @relation(fields: [membershipId], references: [id])
+}
+
+model Referral {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  referrerId     String    @db.ObjectId
+  referredId     String?   @db.ObjectId
+  code           String    @unique
+  status         String    @default("pending") // pending|completed|rewarded
+  referrerPoints Int       @default(0)
+  referredPoints Int       @default(0)
+  completedAt    DateTime?
+  createdAt      DateTime  @default(now())
+}

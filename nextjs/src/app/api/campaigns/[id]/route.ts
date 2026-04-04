@@ -1,0 +1,59 @@
+import { NextRequest } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { json, errorJson } from '@/lib/api-auth';
+
+type Ctx = { params: Promise<{ id: string }> };
+
+// GET /api/campaigns/[id]
+export async function GET(_req: NextRequest, ctx: Ctx) {
+  try {
+    const { id } = await ctx.params;
+    const campaign = await prisma.campaign.findUnique({ where: { id } });
+    if (!campaign) return errorJson('Campaign not found', 404);
+    return json(campaign);
+  } catch (e: unknown) {
+    return errorJson((e as Error).message, 500);
+  }
+}
+
+// PATCH /api/campaigns/[id]
+export async function PATCH(req: NextRequest, ctx: Ctx) {
+  try {
+    const { id } = await ctx.params;
+    const existing = await prisma.campaign.findUnique({ where: { id } });
+    if (!existing) return errorJson('Campaign not found', 404);
+
+    const body = await req.json();
+    const { name, subject, content, recipients, status, scheduledAt } = body;
+
+    const campaign = await prisma.campaign.update({
+      where: { id },
+      data: {
+        ...(name !== undefined && { name }),
+        ...(subject !== undefined && { subject }),
+        ...(content !== undefined && { content }),
+        ...(recipients !== undefined && { recipients }),
+        ...(status !== undefined && { status }),
+        ...(scheduledAt !== undefined && { scheduledAt: scheduledAt ? new Date(scheduledAt) : null }),
+      },
+    });
+
+    return json(campaign);
+  } catch (e: unknown) {
+    return errorJson((e as Error).message, 500);
+  }
+}
+
+// DELETE /api/campaigns/[id]
+export async function DELETE(_req: NextRequest, ctx: Ctx) {
+  try {
+    const { id } = await ctx.params;
+    const existing = await prisma.campaign.findUnique({ where: { id } });
+    if (!existing) return errorJson('Campaign not found', 404);
+
+    await prisma.campaign.delete({ where: { id } });
+    return json({ deleted: true });
+  } catch (e: unknown) {
+    return errorJson((e as Error).message, 500);
+  }
+}
