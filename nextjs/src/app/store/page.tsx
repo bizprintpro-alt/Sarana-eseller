@@ -268,30 +268,17 @@ export default function StorePage() {
         {/* ━━━ Hero ━━━ */}
         <HeroBanner onSearch={() => searchRef.current?.focus()} />
 
-        {/* ━━━ Trust bar ━━━ */}
-        <section style={{ background: 'var(--esl-bg-card)', borderBottom: '1px solid var(--esl-border)' }}>
-          <div className="max-w-[1320px] mx-auto px-4 py-5">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              {TRUST_ITEMS.map(item => (
-                <div key={item.label} className="flex items-center gap-3 py-1 group cursor-default">
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110"
-                    style={{ background: item.color + '14', color: item.color }}
-                  >
-                    <item.icon className="w-5 h-5" strokeWidth={2.2} />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>{item.label}</div>
-                    <div className="text-xs" style={{ color: 'var(--esl-text-muted, var(--esl-text-secondary))' }}>{item.sub}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* ━━━ Compact trust strip ━━━ */}
+        <div style={{ background: 'var(--esl-bg-section)', borderBottom: '1px solid var(--esl-border)' }}>
+          <div className="max-w-[1320px] mx-auto px-4 py-2 flex items-center justify-center gap-6 md:gap-10 overflow-x-auto scrollbar-none">
+            {TRUST_ITEMS.map(item => (
+              <div key={item.label} className="flex items-center gap-1.5 shrink-0">
+                <item.icon className="w-3.5 h-3.5" style={{ color: item.color }} strokeWidth={2} />
+                <span className="text-xs font-medium" style={{ color: 'var(--esl-text-secondary)' }}>{item.label}</span>
+              </div>
+            ))}
           </div>
-        </section>
-
-        {/* ━━━ Announcement marquee ━━━ */}
-        <AnnouncementMarquee />
+        </div>
 
         {/* ━━━ Sale slider ━━━ */}
         {saleProducts.length > 0 && (
@@ -399,6 +386,17 @@ export default function StorePage() {
         )}
 
         <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+
+        {/* ━━━ Pre-footer trust banner ━━━ */}
+        <div style={{ background: 'linear-gradient(135deg, #E8242C 0%, #D91E24 100%)' }} className="py-3">
+          <div className="max-w-[1320px] mx-auto px-4 flex items-center justify-center gap-6 text-white text-xs font-medium">
+            <span>50,000₮+ захиалгад үнэгүй хүргэлт</span>
+            <span className="opacity-40">·</span>
+            <span>Баталгаатай бараа</span>
+            <span className="opacity-40">·</span>
+            <span>48 цагийн буцаалт</span>
+          </div>
+        </div>
 
         {/* ━━━ Footer ━━━ */}
         <footer style={{ background: 'var(--esl-footer-bg, #0A0A0A)' }} className="text-white pt-12 pb-24 md:pb-12">
