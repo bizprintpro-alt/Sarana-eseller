@@ -12,20 +12,27 @@ export async function POST(req: NextRequest) {
     const campaign = await prisma.campaign.findUnique({ where: { id: campaignId } });
     if (!campaign) return NextResponse.json({ received: true });
 
-    const stats = (campaign.stats as Record<string, number>) || {};
-    const eventMap: Record<string, string> = {
-      'email.delivered': 'delivered',
-      'email.opened': 'opened',
-      'email.clicked': 'clicked',
-      'email.bounced': 'bounced',
+    const updateMap: Record<string, Record<string, { increment: number }>> = {
+      'email.delivered': { delivered: { increment: 1 } },
+      'email.opened':    { opened: { increment: 1 } },
+      'email.clicked':   { clicked: { increment: 1 } },
+      'email.bounced':   { bounced: { increment: 1 } },
     };
 
-    const field = eventMap[type];
-    if (field) {
-      stats[field] = (stats[field] || 0) + 1;
+    const update = updateMap[type];
+    if (update) {
       await prisma.campaign.update({
         where: { id: campaignId },
-        data: { stats },
+        data: update,
+      });
+
+      await prisma.campaignEvent.create({
+        data: {
+          campaignId,
+          userId: data?.userId || null,
+          type: type.replace('email.', ''),
+          occurredAt: new Date(),
+        },
       });
     }
 

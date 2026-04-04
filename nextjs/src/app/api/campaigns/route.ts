@@ -12,9 +12,8 @@ export async function GET(req: NextRequest) {
     const page = Math.max(1, Number(sp.get('page') || 1));
     const limit = Math.min(100, Math.max(1, Number(sp.get('limit') || 20)));
 
-    if (!entityId) return errorJson('entityId required');
-
-    const where: Record<string, unknown> = { entityId };
+    const where: Record<string, unknown> = {};
+    if (entityId) where.entityId = entityId;
     if (type) where.type = type;
     if (status) where.status = status;
 
@@ -38,9 +37,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { entityId, name, type, subject, content, recipients, scheduledAt } = body;
+    const { entityId, createdById, name, type, subject, smsText, emailHtml, pushTitle, pushBody, audienceType, scheduledAt } = body;
 
-    if (!entityId || !name || !type) return errorJson('entityId, name, type required');
+    if (!name || !type) return errorJson('name, type required');
 
     // Generate refId: CMP-YYMM-NNNN
     const now = new Date();
@@ -49,23 +48,24 @@ export async function POST(req: NextRequest) {
       where: { refId: { startsWith: prefix } },
       orderBy: { refId: 'desc' },
     });
-    const seq = lastCampaign
-      ? Number(lastCampaign.refId.split('-')[2]) + 1
-      : 1;
+    const seq = lastCampaign ? Number(lastCampaign.refId.split('-')[2]) + 1 : 1;
     const refId = `${prefix}-${String(seq).padStart(4, '0')}`;
 
     const campaign = await prisma.campaign.create({
       data: {
         refId,
-        entityId,
+        entityId: entityId || null,
+        createdById: createdById || 'system',
         name,
         type,
         subject: subject || null,
-        content: content || null,
-        recipients: recipients || [],
+        smsText: smsText || null,
+        emailHtml: emailHtml || null,
+        pushTitle: pushTitle || null,
+        pushBody: pushBody || null,
+        audienceType: audienceType || 'ALL',
         status: 'DRAFT',
         scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
-        stats: { sent: 0, delivered: 0, opened: 0, clicked: 0, bounced: 0 },
       },
     });
 

@@ -24,15 +24,18 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
     if (!existing) return errorJson('Campaign not found', 404);
 
     const body = await req.json();
-    const { name, subject, content, recipients, status, scheduledAt } = body;
+    const { name, subject, smsText, emailHtml, pushTitle, pushBody, audienceType, status, scheduledAt } = body;
 
     const campaign = await prisma.campaign.update({
       where: { id },
       data: {
         ...(name !== undefined && { name }),
         ...(subject !== undefined && { subject }),
-        ...(content !== undefined && { content }),
-        ...(recipients !== undefined && { recipients }),
+        ...(smsText !== undefined && { smsText }),
+        ...(emailHtml !== undefined && { emailHtml }),
+        ...(pushTitle !== undefined && { pushTitle }),
+        ...(pushBody !== undefined && { pushBody }),
+        ...(audienceType !== undefined && { audienceType }),
         ...(status !== undefined && { status }),
         ...(scheduledAt !== undefined && { scheduledAt: scheduledAt ? new Date(scheduledAt) : null }),
       },
