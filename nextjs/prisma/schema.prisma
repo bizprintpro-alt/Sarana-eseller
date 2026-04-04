@@ -871,3 +871,37 @@ model Referral {
   completedAt    DateTime?
   createdAt      DateTime  @default(now())
 }
+
+// ══════════════════════════════════════════════════════════════
+// EBARIMT + PAYMENT
+// ══════════════════════════════════════════════════════════════
+
+model TaxReceipt {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String   @db.ObjectId
+  billId      String   @unique
+  qrData      String
+  lottery     String?
+  amount      Float
+  vatAmount   Float
+  cityTax     Float
+  buyerTIN    String?
+  items       Json
+  status      String   @default("SUCCESS")
+  createdAt   DateTime @default(now())
+}
+
+model PaymentTransaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String   @db.ObjectId
+  method      String   // qpay|card|bank|cash
+  invoiceId   String?  @unique
+  amount      Float
+  status      String   @default("PENDING") // PENDING|PAID|FAILED|REFUNDED
+  qrImage     String?
+  qrText      String?
+  paidAt      DateTime?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
