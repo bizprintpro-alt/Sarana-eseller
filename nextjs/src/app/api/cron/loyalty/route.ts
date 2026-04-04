@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 const PLAN_DURATIONS: Record<string, { duration: number; price: number }> = {
   MONTHLY: { duration: 30, price: 19900 },
@@ -11,16 +11,21 @@ export async function GET() {
   try {
     const now = new Date();
 
-    // 1. Expire old points
+    // 1. Expire old points (where expiresAt passed and points still positive)
     const expiredTxns = await prisma.loyaltyTransaction.findMany({
       where: { expiresAt: { lt: now }, points: { gt: 0 } },
+      include: { account: true },
     });
 
     let expiredCount = 0;
     for (const txn of expiredTxns) {
+      if (!txn.account || txn.account.balance <= 0) continue;
+      const expireAmount = Math.min(txn.points, txn.account.balance);
+      if (expireAmount <= 0) continue;
+
       await prisma.loyaltyAccount.update({
-        where: { userId: txn.userId },
-        data: { balance: { decrement: txn.points } },
+        where: { id: txn.accountId },
+        data: { balance: { decrement: expireAmount } },
       });
       await prisma.loyaltyTransaction.update({
         where: { id: txn.id },
@@ -32,7 +37,7 @@ export async function GET() {
     // 2. Auto-renew gold memberships expiring within next day
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
     const renewals = await prisma.goldMembership.findMany({
-      where: { endsAt: { lte: tomorrow }, autoRenew: true, status: "ACTIVE" },
+      where: { endsAt: { lte: tomorrow }, autoRenew: true, status: 'ACTIVE' },
     });
 
     let renewedCount = 0;
@@ -40,9 +45,7 @@ export async function GET() {
       const planConfig = PLAN_DURATIONS[m.plan];
       if (!planConfig) continue;
 
-      const newEndsAt = new Date(
-        new Date(m.endsAt).getTime() + planConfig.duration * 24 * 60 * 60 * 1000
-      );
+      const newEndsAt = new Date(m.endsAt.getTime() + planConfig.duration * 24 * 60 * 60 * 1000);
 
       await prisma.goldMembership.update({
         where: { id: m.id },
@@ -52,11 +55,10 @@ export async function GET() {
       await prisma.membershipPayment.create({
         data: {
           membershipId: m.id,
-          userId: m.userId,
           plan: m.plan,
           amount: planConfig.price,
-          paymentId: `auto-renew-${m.id}-${Date.now()}`,
-          status: "COMPLETED",
+          method: 'auto-renew',
+          refId: `auto-${m.id}-${Date.now()}`,
         },
       });
       renewedCount++;
@@ -67,7 +69,7 @@ export async function GET() {
       renewedMemberships: renewedCount,
       timestamp: now.toISOString(),
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }
