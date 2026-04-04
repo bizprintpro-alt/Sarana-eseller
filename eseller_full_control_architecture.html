@@ -1,0 +1,264 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:16px;font-family:var(--font-sans)}
+.layer{margin-bottom:14px;border-radius:12px;border:0.5px solid var(--color-border-tertiary);overflow:hidden}
+.layer-header{padding:10px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.layer-title{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.layer-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.layer-body{display:none;padding:0 14px 12px}
+.layer-body.open{display:block}
+.chevron{width:14px;height:14px;transition:transform .2s;color:var(--color-text-tertiary);flex-shrink:0}
+.chevron.open{transform:rotate(90deg)}
+.role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.role-card{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 12px;background:var(--color-background-primary)}
+.role-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.role-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.role-items{list-style:none}
+.role-items li{font-size:11px;color:var(--color-text-secondary);padding:2px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.role-items li:last-child{border-bottom:none}
+.status-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.status-pill{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.s-done{background:#D1FAE5;color:#065F46}
+.s-partial{background:#FEF3C7;color:#92400E}
+.s-missing{background:#FEE2E2;color:#991B1B}
+.section-title{font-size:11px;color:var(--color-text-tertiary);margin:10px 0 6px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.app-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.app-card{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:8px 10px;background:var(--color-background-secondary);text-align:center;cursor:pointer}
+.app-card:hover{background:var(--color-background-primary)}
+.app-name{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-top:4px}
+.app-sub{font-size:10px;color:var(--color-text-tertiary)}
+.app-icon{width:24px;height:24px;border-radius:6px;margin:0 auto 4px;display:flex;align-items:center;justify-content:center}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:10px 0}
+</style>
+
+<div class="wrap">
+
+<div class="layer">
+<div class="layer-header" style="background:#F0FDF4" onclick="toggle(this)">
+<div class="role-dot" style="background:#1D9E75"></div>
+<span class="layer-title">Superadmin — платформын бүрэн эрх</span>
+<span class="layer-badge" style="background:#DCFCE7;color:#166534">Tier 1</span>
+<svg class="chevron open" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+</div>
+<div class="layer-body open">
+<div class="status-row">
+<span class="status-pill s-done">Байршил удирдлага ✓</span>
+<span class="status-pill s-done">Seller жагсаалт ✓</span>
+<span class="status-pill s-partial">Commission тохиргоо ~ </span>
+<span class="status-pill s-missing">Plan enforcement ✗</span>
+<span class="status-pill s-missing">Дизайн удирдлага ✗</span>
+<span class="status-pill s-missing">App удирдлага ✗</span>
+<span class="status-pill s-missing">Audit log ✗</span>
+</div>
+<div class="section-title">Дутуу — нэмэх шаардлагатай</div>
+<div class="role-grid">
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#E24B4A"></div>Дизайн/Загвар удирдлага</div>
+<ul class="role-items">
+<li>Нүүр хуудасны banner upload</li>
+<li>Өнгө, фонт глобал тохиргоо</li>
+<li>Промо блок нэмэх/засах</li>
+<li>Категорийн зураг upload</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#E24B4A"></div>Хэрэглэгч удирдлага</div>
+<ul class="role-items">
+<li>Бүх user жагсаалт + хайлт</li>
+<li>Role өөрчлөх (buyer→seller)</li>
+<li>Хориглох / нээх</li>
+<li>Нэвтрэлтийн лог харах</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#E24B4A"></div>App удирдлага</div>
+<ul class="role-items">
+<li>Жолооч app бүртгэл</li>
+<li>POS app тохиргоо</li>
+<li>Mobile app version удирдлага</li>
+<li>Push notification илгээх</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#E24B4A"></div>Санхүүгийн удирдлага</div>
+<ul class="role-items">
+<li>Бүх commission тооцоо</li>
+<li>Payout батлах/татгалзах</li>
+<li>Буцаан олголт удирдах</li>
+<li>Platform орлогын тайлан</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="layer">
+<div class="layer-header" style="background:#EFF6FF" onclick="toggle(this)">
+<div class="role-dot" style="background:#378ADD"></div>
+<span class="layer-title">Seller dashboard — дэлгүүрийн бүрэн удирдлага</span>
+<span class="layer-badge" style="background:#DBEAFE;color:#1D4ED8">Tier 2</span>
+<svg class="chevron" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+</div>
+<div class="layer-body">
+<div class="status-row">
+<span class="status-pill s-done">Dashboard ✓</span>
+<span class="status-pill s-done">Storefront editor ✓</span>
+<span class="status-pill s-done">Shop type selector ✓</span>
+<span class="status-pill s-done">AI tools ✓</span>
+<span class="status-pill s-partial">Plan enforcement ~</span>
+<span class="status-pill s-missing">Modifier/add-on ✗</span>
+<span class="status-pill s-missing">Staff roles ✗</span>
+</div>
+<div class="section-title">Seller-ийн хянах боломжтой зүйлс</div>
+<div class="role-grid">
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#378ADD"></div>Нүүр хуудас удирдлага</div>
+<ul class="role-items">
+<li>Hero banner upload/засах</li>
+<li>Онцлох бараа сонгох</li>
+<li>Зарлал текст тохируулах</li>
+<li>Категори харагдах эрэмбэ</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#378ADD"></div>Ажилтан удирдлага</div>
+<ul class="role-items">
+<li>Ажилтан нэмэх/хасах</li>
+<li>Role: cashier/manager/driver</li>
+<li>Цагийн хуваарь тохируулах</li>
+<li>Хандах эрх тохируулах</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="layer">
+<div class="layer-header" style="background:#FAEEDA" onclick="toggle(this)">
+<div class="role-dot" style="background:#BA7517"></div>
+<span class="layer-title">Buyer app — хэрэглэгчийн нүүр хуудас</span>
+<span class="layer-badge" style="background:#FEF3C7;color:#92400E">Tier 3</span>
+<svg class="chevron" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+</div>
+<div class="layer-body">
+<div class="status-row">
+<span class="status-pill s-done">Store page ✓</span>
+<span class="status-pill s-done">Product modal ✓</span>
+<span class="status-pill s-done">Cart ✓</span>
+<span class="status-pill s-partial">Checkout ~</span>
+<span class="status-pill s-missing">Order tracking ✗</span>
+<span class="status-pill s-missing">Review ✗</span>
+<span class="status-pill s-missing">Wishlist ✗</span>
+</div>
+<div class="app-grid">
+<div class="app-card" onclick="sendPrompt('Buyer нүүр хуудасны дутуу зүйлсийн промпт бэлтгэ')">
+<div class="app-icon" style="background:#FEF3C7"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#92400E" stroke-width="1.5"><circle cx="7" cy="7" r="5"/></svg></div>
+<div class="app-name">Web app</div>
+<div class="app-sub">Одоо байгаа</div>
+</div>
+<div class="app-card" onclick="sendPrompt('Mobile PWA промпт бэлтгэ')">
+<div class="app-icon" style="background:#FEE2E2"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#991B1B" stroke-width="1.5"><rect x="3" y="1" width="8" height="12" rx="2"/></svg></div>
+<div class="app-name">Mobile PWA</div>
+<div class="app-sub">Дутуу</div>
+</div>
+<div class="app-card">
+<div class="app-icon" style="background:#D1FAE5"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#065F46" stroke-width="1.5"><path d="M2 7l3 3 7-7"/></svg></div>
+<div class="app-name">Order tracking</div>
+<div class="app-sub">Байхгүй</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="layer">
+<div class="layer-header" style="background:#F0F9FF" onclick="toggle(this)">
+<div class="role-dot" style="background:#0369A1"></div>
+<span class="layer-title">Жолооч app — хүргэлтийн удирдлага</span>
+<span class="layer-badge" style="background:#E0F2FE;color:#0369A1">Tier 4</span>
+<svg class="chevron" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+</div>
+<div class="layer-body">
+<div class="status-row">
+<span class="status-pill s-done">Dashboard UI ✓</span>
+<span class="status-pill s-missing">Захиалга авах ✗</span>
+<span class="status-pill s-missing">GPS tracking ✗</span>
+<span class="status-pill s-missing">Орлого тооцоо ✗</span>
+<span class="status-pill s-missing">Mobile app ✗</span>
+</div>
+<div class="role-grid">
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#0369A1"></div>Жолооч харах зүйлс</div>
+<ul class="role-items">
+<li>Шинэ захиалга мэдэгдэл</li>
+<li>Маршрут харах (map)</li>
+<li>Хүргэлт баталгаажуулах</li>
+<li>Өдрийн орлого харах</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#0369A1"></div>Admin жолооч харах</div>
+<ul class="role-items">
+<li>Идэвхтэй жолооч map</li>
+<li>Хүргэлтийн статус бүгд</li>
+<li>Жолооч rating удирдах</li>
+<li>Payout батлах</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="layer">
+<div class="layer-header" style="background:#FDF4FF" onclick="toggle(this)">
+<div class="role-dot" style="background:#9333EA"></div>
+<span class="layer-title">POS app — дэлгүүрийн кассын систем</span>
+<span class="layer-badge" style="background:#F3E8FF;color:#7E22CE">Tier 5</span>
+<svg class="chevron" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3l4 4-4 4"/></svg>
+</div>
+<div class="layer-body">
+<div class="status-row">
+<span class="status-pill s-missing">Бүгд байхгүй ✗</span>
+</div>
+<div class="role-grid">
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#9333EA"></div>POS онцлог</div>
+<ul class="role-items">
+<li>Бараа scan / хурдан нэмэх</li>
+<li>Offline горим (sync хожим)</li>
+<li>QPay/SocialPay terminal</li>
+<li>Өдрийн тайлан хэвлэх</li>
+</ul>
+</div>
+<div class="role-card">
+<div class="role-name"><div class="role-dot" style="background:#9333EA"></div>Superadmin POS харах</div>
+<ul class="role-items">
+<li>Бүх terminal жагсаалт</li>
+<li>Transaction log бүгд</li>
+<li>Offline sync статус</li>
+<li>Terminal идэвхгүй болгох</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div style="margin-top:8px;padding:10px 12px;background:var(--color-background-secondary);border-radius:8px">
+<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:6px;font-weight:500">Тайлбар</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<span style="font-size:11px;display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#D1FAE5;display:inline-block"></span>Бэлэн ✓</span>
+<span style="font-size:11px;display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#FEF3C7;display:inline-block"></span>Хэсэгчлэн ~</span>
+<span style="font-size:11px;display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:#FEE2E2;display:inline-block"></span>Байхгүй ✗</span>
+</div>
+</div>
+</div>
+
+<script>
+function toggle(header){
+  const body=header.nextElementSibling;
+  const ch=header.querySelector('.chevron');
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  ch.classList.toggle('open',!open);
+}
+</script>

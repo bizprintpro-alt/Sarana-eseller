@@ -1,0 +1,376 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{background:var(--color-background-secondary);border-radius:var(--border-radius-xl);overflow:hidden;border:0.5px solid var(--color-border-tertiary);display:grid;grid-template-columns:280px 1fr 260px;min-height:640px;font-family:var(--font-sans,sans-serif)}
+
+/* LEFT — conversation list */
+.col-left{border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;background:var(--color-background-primary)}
+.cl-head{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between}
+.cl-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.cl-search{margin:10px 12px;position:relative}
+.cl-search input{width:100%;padding:7px 10px 7px 30px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:12px;outline:none}
+.cl-search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%)}
+.cl-filters{display:flex;gap:4px;padding:0 12px 10px;flex-wrap:wrap}
+.cf{padding:3px 10px;border-radius:99px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary);white-space:nowrap}
+.cf.active{background:rgba(232,36,44,0.1);color:#E8242C;border-color:rgba(232,36,44,0.3)}
+.conv-list{flex:1;overflow-y:auto}
+.conv-item{display:flex;gap:10px;padding:10px 14px;cursor:pointer;border-bottom:0.5px solid var(--color-border-tertiary);transition:background .12s;position:relative}
+.conv-item:hover{background:var(--color-background-secondary)}
+.conv-item.active{background:rgba(232,36,44,0.06);border-left:2px solid #E8242C}
+.conv-item.active .conv-name{color:#E8242C}
+.av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.conv-body{flex:1;min-width:0}
+.conv-row{display:flex;align-items:baseline;justify-content:space-between;gap:4px;margin-bottom:2px}
+.conv-name{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-time{font-size:10px;color:var(--color-text-tertiary);flex-shrink:0}
+.conv-preview{font-size:11px;color:var(--color-text-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unread-dot{position:absolute;right:14px;bottom:14px;width:8px;height:8px;border-radius:50%;background:#E8242C}
+.unread-count{position:absolute;right:14px;bottom:12px;background:#E8242C;color:#fff;border-radius:99px;font-size:9px;font-weight:700;padding:1px 5px;min-width:16px;text-align:center}
+
+/* MIDDLE — chat */
+.col-mid{display:flex;flex-direction:column;background:var(--color-background-primary)}
+.chat-head{padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.ch-back{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--border-radius-md);cursor:pointer;color:var(--color-text-secondary)}
+.ch-back:hover{background:var(--color-background-secondary)}
+.ch-info{flex:1}
+.ch-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.ch-sub{font-size:11px;color:var(--color-text-tertiary)}
+.ch-actions{display:flex;gap:4px}
+.icon-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:var(--border-radius-md);cursor:pointer;color:var(--color-text-secondary);border:none;background:none;transition:background .12s}
+.icon-btn:hover{background:var(--color-background-secondary)}
+
+/* Product reference bar */
+.prod-bar{margin:10px 14px;padding:10px 12px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.prod-img{width:40px;height:40px;border-radius:8px;background:var(--color-background-tertiary);flex-shrink:0;display:flex;align-items:center;justify-content:center;border:0.5px solid var(--color-border-tertiary)}
+.prod-info{flex:1;min-width:0}
+.prod-name{font-size:12px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-price{font-size:13px;font-weight:500;color:#E8242C;margin-top:1px}
+.prod-actions{display:flex;gap:6px}
+.pa-btn{padding:5px 10px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500;cursor:pointer;border:none;white-space:nowrap}
+.pa-primary{background:#E8242C;color:#fff}
+.pa-ghost{background:var(--color-background-primary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+
+/* Messages */
+.msgs{flex:1;overflow-y:auto;padding:14px}
+.date-sep{text-align:center;margin:12px 0;position:relative}
+.date-sep::before{content:'';position:absolute;top:50%;left:0;right:0;height:0.5px;background:var(--color-border-tertiary)}
+.date-sep span{background:var(--color-background-primary);padding:0 10px;font-size:10px;color:var(--color-text-tertiary);position:relative;z-index:1}
+.msg{display:flex;gap:8px;margin-bottom:12px}
+.msg.me{flex-direction:row-reverse}
+.msg-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;margin-top:2px}
+.bubble{max-width:72%;padding:9px 12px;border-radius:14px;font-size:13px;line-height:1.55;position:relative}
+.bubble.them{background:var(--color-background-secondary);color:var(--color-text-primary);border-radius:4px 14px 14px 14px}
+.bubble.me{background:#E8242C;color:#fff;border-radius:14px 4px 14px 14px}
+.msg-meta{font-size:10px;margin-top:4px;color:var(--color-text-tertiary)}
+.msg.me .msg-meta{text-align:right;color:rgba(255,255,255,0.6)}
+.msg-img{width:180px;height:120px;border-radius:10px;background:var(--color-background-tertiary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.typing{display:flex;gap:3px;padding:10px 14px;align-items:center}
+.typing span{width:7px;height:7px;border-radius:50%;background:var(--color-text-tertiary);animation:bounce 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+/* Input */
+.chat-input{padding:12px 14px;border-top:0.5px solid var(--color-border-tertiary);display:flex;gap:8px;align-items:flex-end}
+.input-wrap{flex:1;display:flex;align-items:center;gap:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:7px 12px}
+.input-wrap input{flex:1;border:none;background:none;outline:none;font-size:13px;color:var(--color-text-primary);font-family:var(--font-sans)}
+.send-btn{width:34px;height:34px;border-radius:50%;background:#E8242C;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* RIGHT — order/product info panel */
+.col-right{border-left:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);display:flex;flex-direction:column}
+.rp-head{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.rp-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.rp-sec{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.rp-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.info-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.info-key{color:var(--color-text-secondary)}
+.info-val{color:var(--color-text-primary);font-weight:500}
+.status-pill{display:inline-flex;font-size:10px;font-weight:500;padding:3px 9px;border-radius:99px}
+.sp-wait{background:var(--color-background-warning);color:var(--color-text-warning)}
+.sp-paid{background:var(--color-background-success);color:var(--color-text-success)}
+.sp-ship{background:var(--color-background-info);color:var(--color-text-info)}
+.quick-reply{margin:10px 16px}
+.qr-label{font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.qr-btn{width:100%;text-align:left;padding:7px 10px;margin-bottom:5px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:11px;cursor:pointer;transition:all .12s}
+.qr-btn:hover{border-color:#E8242C;color:#E8242C;background:rgba(232,36,44,0.06)}
+.seller-actions{padding:14px 16px;margin-top:auto;border-top:0.5px solid var(--color-border-tertiary)}
+.sa-label{font-size:10px;color:var(--color-text-tertiary);margin-bottom:8px;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.sa-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sa-btn{padding:7px 8px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500;cursor:pointer;text-align:center;border:none}
+.sa-confirm{background:#E8242C;color:#fff}
+.sa-ship{background:var(--color-background-info);color:var(--color-text-info);border:0.5px solid var(--color-border-info)}
+.sa-refund{background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning)}
+.sa-block{background:var(--color-background-danger);color:var(--color-text-danger);border:0.5px solid var(--color-border-danger)}
+</style>
+
+<div class="shell">
+
+<!-- LEFT: conversation list -->
+<div class="col-left">
+  <div class="cl-head">
+    <span class="cl-title">Чат</span>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span style="font-size:11px;padding:2px 8px;border-radius:99px;background:rgba(232,36,44,0.1);color:#E8242C;font-weight:500">3 шинэ</span>
+      <button class="icon-btn" style="width:26px;height:26px">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 2v10M2 7h10"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="cl-search">
+    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.5" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><path d="M10 10l2.5 2.5"/></svg>
+    <input placeholder="Хэрэглэгч, захиалга хайх..." />
+  </div>
+
+  <div class="cl-filters">
+    <button class="cf active" onclick="filterConv(this,'all')">Бүгд</button>
+    <button class="cf" onclick="filterConv(this,'unread')">Уншаагүй</button>
+    <button class="cf" onclick="filterConv(this,'order')">Захиалга</button>
+    <button class="cf" onclick="filterConv(this,'question')">Асуулт</button>
+  </div>
+
+  <div class="conv-list" id="conv-list"></div>
+</div>
+
+<!-- MIDDLE: active chat -->
+<div class="col-mid">
+  <div class="chat-head">
+    <div class="ch-back">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 3L5 8l5 5"/></svg>
+    </div>
+    <div class="av" style="width:34px;height:34px;font-size:12px;background:#E6F1FB;color:#0C447C">БТ</div>
+    <div class="ch-info">
+      <div class="ch-name">Болд Тэгшбаяр</div>
+      <div class="ch-sub">Сүүлд идэвхтэй 5 минутын өмнө</div>
+    </div>
+    <div class="ch-actions">
+      <button class="icon-btn" title="Утсаар залгах">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 3c0 7.7 6.3 14 14 14v-3l-4-1-1.5 1.5C9 12.8 7.2 11 6.5 9.5L8 8 7 4 3 2 2 3z"/></svg>
+      </button>
+      <button class="icon-btn" title="Захиалга харах">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M5 3V2a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
+      </button>
+      <button class="icon-btn" title="Дэлгэрэнгүй">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="3" r="1"/><circle cx="8" cy="8" r="1"/><circle cx="8" cy="13" r="1"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Product reference bar -->
+  <div class="prod-bar">
+    <div class="prod-img">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M6 4V3a1 1 0 011-1h6a1 1 0 011 1v1"/></svg>
+    </div>
+    <div class="prod-info">
+      <div class="prod-name">Sporty гутал Air — Цагаан, 42</div>
+      <div class="prod-price">69,000₮</div>
+    </div>
+    <div class="prod-actions">
+      <button class="pa-btn pa-ghost">Захиалга #1042</button>
+      <button class="pa-btn pa-primary">Нотлох</button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="msgs" id="msgs">
+    <div class="date-sep"><span>Өнөөдөр, 2026 оны 4 сарын 4</span></div>
+  </div>
+
+  <!-- Typing indicator -->
+  <div style="padding:0 14px 4px;display:flex;gap:8px;align-items:center">
+    <div class="av" style="width:24px;height:24px;font-size:9px;background:#E6F1FB;color:#0C447C">БТ</div>
+    <div style="background:var(--color-background-secondary);border-radius:12px;padding:8px 12px;display:flex;gap:4px;align-items:center">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--color-text-tertiary);display:inline-block;animation:bounce 1.2s infinite .0s"></span>
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--color-text-tertiary);display:inline-block;animation:bounce 1.2s infinite .2s"></span>
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--color-text-tertiary);display:inline-block;animation:bounce 1.2s infinite .4s"></span>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="chat-input">
+    <button class="icon-btn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1v14M1 8h14"/></svg>
+    </button>
+    <div class="input-wrap">
+      <button class="icon-btn" style="width:24px;height:24px;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="12" height="12" rx="2"/><circle cx="5.5" cy="5.5" r="1"/><path d="M2 11l3.5-3.5L8 10l2.5-2 3.5 3"/></svg>
+      </button>
+      <input placeholder="Мессеж бичих..." id="msg-input" onkeydown="sendMsg(event)" />
+      <button class="icon-btn" style="width:24px;height:24px;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M6 7c.3-.8 1.7-.8 2 0 .3.8-.8 1.5-.8 2.5"/><circle cx="8" cy="12" r=".5" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <button class="send-btn" onclick="sendMsg({key:'Enter'})">
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8H2M14 8L9 3M14 8l-5 5"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- RIGHT: info panel -->
+<div class="col-right">
+  <div class="rp-head">
+    <div class="rp-title">Дэлгэрэнгүй мэдээлэл</div>
+  </div>
+
+  <!-- Buyer info -->
+  <div class="rp-sec">
+    <div class="rp-label">Хэрэглэгч</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="av" style="background:#E6F1FB;color:#0C447C">БТ</div>
+      <div>
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">Болд Тэгшбаяр</div>
+        <div style="font-size:11px;color:var(--color-text-tertiary)">Гишүүн · 14 сар</div>
+      </div>
+    </div>
+    <div class="info-row"><span class="info-key">Нийт захиалга</span><span class="info-val">23</span></div>
+    <div class="info-row"><span class="info-key">Зарцуулсан дүн</span><span class="info-val">1.2M₮</span></div>
+    <div class="info-row"><span class="info-key">Утас</span><span class="info-val">+976 9911 2233</span></div>
+    <div class="info-row" style="margin-bottom:0"><span class="info-key">Tier</span>
+      <span style="font-size:10px;padding:2px 8px;border-radius:99px;background:#FEFCE8;color:#854D0E;font-weight:500">Алт ⭐</span>
+    </div>
+  </div>
+
+  <!-- Order info -->
+  <div class="rp-sec">
+    <div class="rp-label">Захиалга #1042</div>
+    <div class="info-row">
+      <span class="info-key">Статус</span>
+      <span class="status-pill sp-wait">Хүлээгдэж буй</span>
+    </div>
+    <div class="info-row"><span class="info-key">Бараа</span><span class="info-val">Sporty Air 42</span></div>
+    <div class="info-row"><span class="info-key">Дүн</span><span class="info-val" style="color:#E8242C">69,000₮</span></div>
+    <div class="info-row"><span class="info-key">Төлбөр</span>
+      <span class="status-pill sp-paid">QPay ✓</span>
+    </div>
+    <div class="info-row" style="margin-bottom:0"><span class="info-key">Огноо</span><span class="info-val">2026/04/04 09:41</span></div>
+  </div>
+
+  <!-- Quick replies -->
+  <div class="quick-reply">
+    <div class="qr-label">Хурдан хариу</div>
+    <button class="qr-btn" onclick="insertReply('Таны захиалга баталгаажлаа. 2-4 цагийн дотор хүргэнэ.')">Захиалга баталгаажлаа ✓</button>
+    <button class="qr-btn" onclick="insertReply('Таны бараа хүргэлтэнд гарлаа. Хаяг руугаа хүлээнэ үү.')">Хүргэлтэнд гарлаа</button>
+    <button class="qr-btn" onclick="insertReply('Уучлаарай, бараа дууссан байна. Дахин нөхөн авахад мэдэгдье.')">Бараа дууссан</button>
+    <button class="qr-btn" onclick="insertReply('Хэдэн хэмжээ авах вэ? Хэрвээ 2+ авбал 5% хямдарна.')">Хэмжээ асуух</button>
+  </div>
+
+  <!-- Seller actions -->
+  <div class="seller-actions">
+    <div class="sa-label">Үйлдэл</div>
+    <div class="sa-grid">
+      <button class="sa-btn sa-confirm">Нотлох</button>
+      <button class="sa-btn sa-ship">Хүргэлт</button>
+      <button class="sa-btn sa-refund">Буцаалт</button>
+      <button class="sa-btn sa-block">Блоклох</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const CONVS = [
+  {id:1,name:'Болд Тэгшбаяр',init:'БТ',bg:'#E6F1FB',tc:'#0C447C',preview:'Захиалгаа хэзээ хүргэх вэ?',time:'09:41',unread:2,tag:'order',active:true},
+  {id:2,name:'Номин Баярмаа',init:'НБ',bg:'#E1F5EE',tc:'#085041',preview:'42 дугаар байна уу?',time:'08:22',unread:1,tag:'question',active:false},
+  {id:3,name:'Ганбаяр Эрдэнэ',init:'ГЭ',bg:'#FBEAF0',tc:'#72243E',preview:'Баярлалаа!',time:'Өчигдөр',unread:0,tag:'',active:false},
+  {id:4,name:'Туяа Дорж',init:'ТД',bg:'#EEEDFE',tc:'#3C3489',preview:'Захиалга цуцалж болох уу?',time:'Өчигдөр',unread:1,tag:'order',active:false},
+  {id:5,name:'Сүхбаатар М.',init:'СМ',bg:'#FAEEDA',tc:'#633806',preview:'Зураг илгээгдсэн',time:'Да 3',unread:0,tag:'',active:false},
+  {id:6,name:'Оюунтулга Б.',init:'ОБ',bg:'#FCEBEB',tc:'#791F1F',preview:'Хэмжээ буруу ирлээ',time:'Да 2',unread:0,tag:'order',active:false},
+]
+
+const MSGS = [
+  {me:false,text:'Сайн байна уу! Sporty гутал 42 дугаар захиалсан байсан шүү дээ, хэзээ ирэх вэ?',time:'09:32'},
+  {me:true, text:'Сайн уу Болд! Таны захиалга #1042 баталгаажсан байна. Өнөөдөр 12:00-14:00 цагт хүргэнэ.',time:'09:35'},
+  {me:false,text:'За ойлголоо. Гэрт байна уу гэж асуугаарай жолооч надад залгаад хүргэж болох уу?',time:'09:37'},
+  {me:true, text:'Мэдээж! Жолооч хүргэхийн өмнө залгана. Утас дугаар зөв байна уу: 9911-2233?',time:'09:38'},
+  {me:false,text:'Тийм зөв байна. Баярлалаа!',time:'09:40'},
+  {me:false,text:'Нэг дахин асуумаар байна — хэрэв 44 дугаар авмаар бол боломжтой юу?',time:'09:41',img:true},
+]
+
+function buildConvList() {
+  const el = document.getElementById('conv-list')
+  el.innerHTML = CONVS.map(c => `
+    <div class="conv-item${c.active?' active':''}" onclick="selectConv(${c.id},this)">
+      <div class="av" style="background:${c.bg};color:${c.tc}">${c.init}</div>
+      <div class="conv-body">
+        <div class="conv-row">
+          <span class="conv-name">${c.name}</span>
+          <span class="conv-time">${c.time}</span>
+        </div>
+        <div class="conv-preview">${c.preview}</div>
+      </div>
+      ${c.unread > 0 ? `<div class="unread-count">${c.unread}</div>` : ''}
+    </div>
+  `).join('')
+}
+
+function buildMsgs() {
+  const el = document.getElementById('msgs')
+  const existing = el.querySelector('.date-sep')
+  el.innerHTML = ''
+  if(existing) el.appendChild(existing)
+  MSGS.forEach(m => {
+    const div = document.createElement('div')
+    div.className = 'msg' + (m.me ? ' me' : '')
+    if(m.img) {
+      div.innerHTML = `
+        <div class="msg-av" style="background:#E6F1FB;color:#0C447C">БТ</div>
+        <div>
+          <div class="msg-img">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="msg-meta">${m.time} · Зураг</div>
+          <div class="bubble them" style="margin-top:6px">${m.text}</div>
+          <div class="msg-meta">${m.time}</div>
+        </div>`
+    } else if(m.me) {
+      div.innerHTML = `
+        <div>
+          <div class="bubble me">${m.text}</div>
+          <div class="msg-meta">${m.time} · Илгээгдсэн ✓✓</div>
+        </div>
+        <div class="msg-av" style="background:#FCEBEB;color:#A32D2D">Та</div>`
+    } else {
+      div.innerHTML = `
+        <div class="msg-av" style="background:#E6F1FB;color:#0C447C">БТ</div>
+        <div>
+          <div class="bubble them">${m.text}</div>
+          <div class="msg-meta">${m.time}</div>
+        </div>`
+    }
+    el.appendChild(div)
+  })
+  el.scrollTop = el.scrollHeight
+}
+
+function selectConv(id, el) {
+  document.querySelectorAll('.conv-item').forEach(i => i.classList.remove('active'))
+  el.classList.add('active')
+  const uc = el.querySelector('.unread-count')
+  if(uc) uc.remove()
+}
+
+function filterConv(btn, filter) {
+  document.querySelectorAll('.cf').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+}
+
+function sendMsg(e) {
+  if(e.key !== 'Enter') return
+  const inp = document.getElementById('msg-input')
+  const text = inp.value.trim()
+  if(!text) return
+  MSGS.push({me:true, text, time: new Date().toLocaleTimeString('mn',{hour:'2-digit',minute:'2-digit'})})
+  buildMsgs()
+  inp.value = ''
+}
+
+function insertReply(text) {
+  const inp = document.getElementById('msg-input')
+  inp.value = text
+  inp.focus()
+}
+
+buildConvList()
+buildMsgs()
+</script>

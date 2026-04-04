@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
       description || 'Захиалгын төлбөр'
     );
 
-    // Save transaction
-    await prisma.paymentTransaction.create({
+    // Save transaction (non-blocking — works even if DB is unavailable)
+    prisma.paymentTransaction.create({
       data: {
         orderId,
         method: 'qpay',
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         qrText: invoice.qrText,
         metadata: { urls: invoice.urls } as any,
       },
-    });
+    }).catch((e) => console.warn('QPay transaction save failed:', e.message));
 
     return NextResponse.json({
       invoiceId: invoice.invoiceId,

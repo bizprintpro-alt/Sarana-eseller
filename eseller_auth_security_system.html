@@ -1,0 +1,1469 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);z-index:2}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.card-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-teal{background:#E1F5EE;color:#0F6E56}
+.card-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6;margin-bottom:6px}
+.card-list{font-size:11px;color:var(--color-text-secondary);line-height:1.9}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;margin-top:14px}
+.st:first-child{margin-top:0}
+.flow{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.flow-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.fb{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:3px 9px;font-size:11px;color:var(--color-text-primary);white-space:nowrap}
+.fb-red{background:var(--color-background-danger);border-color:var(--color-border-danger);color:var(--color-text-danger)}
+.fb-green{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.fb-warn{background:var(--color-background-warning);border-color:var(--color-border-warning);color:var(--color-text-warning)}
+.fa{font-size:11px;color:var(--color-text-tertiary)}
+.layer-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.layer-row:last-child{border-bottom:none}
+.layer-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;margin-top:1px}
+.layer-body{flex:1}
+.layer-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.layer-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Eseller.mn — Нэвтрэлт & Аюулгүй байдлын бүрэн архитектур</div>
+    <div class="ps">Passwordless · Zero-trust · Санхүүгийн хамгаалалт · Claude Code prompt</div>
+  </div>
+  <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Бүгдийг хуулах</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Архитектур</button>
+  <button class="tab" onclick="show('p26')">Prompt 26 · Passwordless Auth</button>
+  <button class="tab" onclick="show('p27')">Prompt 27 · Санхүүгийн хамгаалалт</button>
+  <button class="tab" onclick="show('p28')">Prompt 28 · Zero-trust & Monitoring</button>
+  <button class="tab" onclick="show('p29')">Prompt 29 · Байгууллагын аюулгүй байдал</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="panel-overview" class="panel active">
+  <div class="st">Нэвтрэлтийн аргуудын харьцуулалт — Монголын зах зээлд</div>
+  <div class="grid3">
+    <div class="card" style="border-color:var(--color-border-success);border-width:1.5px">
+      <div class="card-head"><span class="card-name">SMS OTP</span><span class="badge b-green">Санал болгох #1</span></div>
+      <div class="card-desc">Утасны дугаар → 6 оронтой код → нэвтрэх. Zary.mn-ийн загвар. Монголын хэрэглэгчдэд хамгийн танил.</div>
+      <div class="card-list">✓ Нууц үг шаардахгүй<br>✓ SIM-тэй бол ажилна<br>✓ Монголын бүх оператор<br>✗ SMS intercept эрсдэл<br>✗ Үнэтэй (1 SMS ≈ 50-100₮)</div>
+    </div>
+    <div class="card" style="border-color:var(--color-border-success);border-width:1.5px">
+      <div class="card-head"><span class="card-name">Биометр (апп)</span><span class="badge b-green">Санал болгох #2</span></div>
+      <div class="card-desc">Мобайл аппд FaceID / TouchID. Хоёр дахь нэвтрэлтэд SMS шаардахгүй болно.</div>
+      <div class="card-list">✓ Хамгийн хурдан UX<br>✓ Phishing боломжгүй<br>✓ Device-bound — хулгайлах боломжгүй<br>✗ Зөвхөн мобайл апп дээр<br>✗ Нэг удаа SMS шаардлагатай</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-name">Magic Link</span><span class="badge b-blue">Нэмэлт сонголт</span></div>
+      <div class="card-desc">И-мэйлд нэг удаагийн холбоос. Нууц үг байхгүй — зөвхөн inbox-д байвал нэвтэрнэ.</div>
+      <div class="card-list">✓ Нууц үг дурсах шаардлагагүй<br>✓ Энгийн UI<br>✗ И-мэйл нэвтрэлтийн хамаарал<br>✗ Монголчуудад Gmail-ийн хандалт харилцан адилгүй</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-name">Passkey (WebAuthn)</span><span class="badge b-purple">Ирээдүйн стандарт</span></div>
+      <div class="card-desc">FIDO2/WebAuthn. Төхөөрөмжийн биометрийг веб дээр ашиглах. Google, Apple дэмжиж байна.</div>
+      <div class="card-list">✓ Хамгийн аюулгүй<br>✓ Phishing-100% хамгаалалт<br>✓ SMS зардалгүй<br>✗ Шинэ технологи — хэрэглэгчид мэддэггүй<br>✗ Fallback хэрэгтэй</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-name">ДАН OAuth</span><span class="badge b-teal">Монгол онцлог</span></div>
+      <div class="card-desc">E-Mongolia-ийн ДАН системийн OAuth2. Иргэний баталгаажуулалт нэгэн зэрэг.</div>
+      <div class="card-list">✓ Нэгэн зэрэг KYC<br>✓ Регистрийн дугаар баталгаажна<br>✓ Засгийн газрын итгэл<br>✗ Бүгд E-Mongolia-д бүртгэлтэй биш<br>✗ Fallback хэрэгтэй</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span class="card-name">Social OAuth</span><span class="badge b-blue">Нэмэлт</span></div>
+      <div class="card-desc">Facebook, Google нэвтрэлт. Регистрийн үйлдлийг хялбарчилна.</div>
+      <div class="card-list">✓ Хурдан бүртгэл<br>✓ Профайл зураг, нэр автоматаар<br>✗ Гуравдагч талд хамааралтай<br>✗ Монголд зарим FB хаалттай байх</div>
+    </div>
+  </div>
+
+  <div class="st">Нэвтрэлтийн аюулгүй байдлын давхаргууд</div>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:14px">
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</div>
+      <div class="layer-body"><div class="layer-title">Нэвтрэлтийн давхарга — Passwordless first</div><div class="layer-desc">SMS OTP → Биометр (дараагийн нэвтрэлтэнд) → Passkey (сонголтоор) → ДАН (KYC шаарддаг үйлдэлд)</div></div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</div>
+      <div class="layer-body"><div class="layer-title">Токений давхарга — Zero-trust JWT</div><div class="layer-desc">Access token 15 мин, Refresh 7 хоног rotation, Device fingerprint, Сэжигтэй үйлдэл → бүх session устгах</div></div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--color-background-info);color:var(--color-text-info)">3</div>
+      <div class="layer-body"><div class="layer-title">Санхүүгийн давхарга — Step-up authentication</div><div class="layer-desc">50,000₮+ гүйлгээ → нэмэлт OTP шаардна. Шинэ банкны карт нэмэх → биометр + OTP. Нэхэмжлэл татах → session шинэ байх шаардлагатай.</div></div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--color-background-success);color:var(--color-text-success)">4</div>
+      <div class="layer-body"><div class="layer-title">Байгууллагын давхарга — RBAC + Row-level security</div><div class="layer-desc">Байгууллагын admin нь өөрийн entity-ийн мэдээлэлд л хандана. Super admin тусдаа auth flow. Audit log бүх үйлдэлд.</div></div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-num" style="background:#EEEDFE;color:#3C3489">5</div>
+      <div class="layer-body"><div class="layer-title">Мониторингийн давхарга — Real-time threat detection</div><div class="layer-desc">Velocity check (1 цагт 5+ амжилтгүй OTP), Geo anomaly (өмнө байгаагүй IP/улс), Bot detection (hCaptcha), Suspicious pattern → auto lock + alert</div></div>
+    </div>
+  </div>
+
+  <div class="st">Санхүүгийн гүйлгээний аюулгүй байдлын урсгал</div>
+  <div class="flow">
+    <div class="flow-row"><div class="fb">Хэрэглэгч захиалга хийх</div><div class="fa">→</div><div class="fb">Session шинэлэг шалгах (30 мин)</div><div class="fa">→</div><div class="fb fb-warn">Хуучин бол: Re-auth шаардах</div></div>
+    <div class="flow-row"><div class="fb">Дүн ≥ 50,000₮</div><div class="fa">→</div><div class="fb fb-warn">Step-up: OTP дахин оруулах</div><div class="fa">→</div><div class="fb">Signed payment intent үүсгэх</div><div class="fa">→</div><div class="fb fb-green">QPay/Stripe</div></div>
+    <div class="flow-row"><div class="fb">Шинэ карт/дансны мэдээлэл нэмэх</div><div class="fa">→</div><div class="fb fb-red">Биометр + OTP заавал</div><div class="fa">→</div><div class="fb">Encrypted хадгалах (tokenization)</div></div>
+    <div class="flow-row"><div class="fb">Refund хүсэлт</div><div class="fa">→</div><div class="fb fb-warn">Identity verify</div><div class="fa">→</div><div class="fb">Admin approve (100,000₮+)</div><div class="fa">→</div><div class="fb">Audit log</div></div>
+  </div>
+</div>
+
+<!-- PROMPT 26 -->
+<div id="panel-p26" class="panel">
+<div class="st">Prompt 26 — Passwordless нэвтрэлтийн бүрэн систем</div>
+<div class="prompt-box" id="p26text">
+<button class="copy-btn" onclick="copyPrompt('p26text')">Хуулах</button>## PASSWORDLESS AUTH SYSTEM — SMS OTP + Biometric + Passkey + DAN
+
+Build a complete passwordless authentication system for eseller.mn.
+Primary: SMS OTP (like Zary.mn). Progressive upgrade to biometric/passkey.
+
+---
+
+### 1. AUTH FLOW ARCHITECTURE
+
+```
+FIRST LOGIN / REGISTER:
+Phone → SMS OTP (6 digit, 5 min) → Profile setup → JWT issued
+
+SUBSEQUENT LOGINS (web):
+Phone → SMS OTP (cached 30 days on trusted device)
+
+SUBSEQUENT LOGINS (mobile app):
+Biometric (FaceID/TouchID) → JWT from secure refresh token
+
+ENTITY ACCOUNTS (store/agent/company):
+Same as above + entity selection after auth
+
+STEP-UP (sensitive actions):
+Re-verify via SMS OTP regardless of session age
+```
+
+---
+
+### 2. PRISMA SCHEMA
+
+```prisma
+model User {
+  id              String    @id @default(cuid())
+  phone           String    @unique
+  email           String?   @unique
+  name            String?
+  avatar          String?
+  role            UserRole  @default(USER)
+  isPhoneVerified Boolean   @default(false)
+  danVerified     Boolean   @default(false)
+  danRegNoHash    String?   // Argon2 hash of регистрийн дугаар
+
+  otpCodes        OTPCode[]
+  sessions        Session[]
+  passkeys        Passkey[]
+  devices         TrustedDevice[]
+  securityLogs    SecurityLog[]
+  createdAt       DateTime  @default(now())
+}
+
+model OTPCode {
+  id          String   @id @default(cuid())
+  userId      String?           // null if phone not yet registered
+  phone       String
+  codeHash    String            // Argon2 hash of OTP — NEVER store plaintext
+  purpose     OTPPurpose
+  expiresAt   DateTime          // +5 minutes from creation
+  attempts    Int      @default(0)
+  usedAt      DateTime?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+}
+
+model TrustedDevice {
+  id            String   @id @default(cuid())
+  userId        String
+  deviceId      String   @unique  // random UUID stored in client cookie (HttpOnly)
+  deviceName    String?           // "iPhone 15 Pro · Safari"
+  fingerprint   String            // browser/device fingerprint hash
+  lastSeenAt    DateTime @default(now())
+  lastSeenIp    String?
+  trustedAt     DateTime @default(now())
+  expiresAt     DateTime          // 30 days
+  isRevoked     Boolean  @default(false)
+}
+
+model Passkey {
+  id                String   @id @default(cuid())
+  userId            String
+  credentialId      Bytes    @unique
+  publicKey         Bytes
+  counter           Int      @default(0)
+  deviceType        String   // "platform" | "cross-platform"
+  backedUp          Boolean
+  transports        String[]
+  name              String?  // "Миний MacBook"
+  createdAt         DateTime @default(now())
+  lastUsedAt        DateTime?
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  refreshToken String   @unique  // encrypted
+  deviceId     String?
+  ipAddress    String?
+  userAgent    String?
+  expiresAt    DateTime
+  lastActiveAt DateTime @default(now())
+  isRevoked    Boolean  @default(false)
+}
+
+enum OTPPurpose {
+  LOGIN | REGISTER | STEP_UP | PAYMENT | WITHDRAW | PHONE_CHANGE | ACCOUNT_DELETE
+}
+```
+
+---
+
+### 3. SMS OTP SERVICE
+
+```typescript
+// lib/auth/OTPService.ts
+import argon2 from 'argon2'
+import { createClient } from 'redis'
+
+class OTPService {
+  private redis = createClient({ url: process.env.REDIS_URL })
+
+  // Generate and send OTP
+  async send(phone: string, purpose: OTPPurpose, ip: string): Promise<void> {
+
+    // Rate limit: max 3 OTP per phone per 10 minutes
+    const rateLimitKey = `otp_rate:${phone}`
+    const count = await this.redis.incr(rateLimitKey)
+    if (count === 1) await this.redis.expire(rateLimitKey, 600)
+    if (count > 3) throw new TooManyRequestsError(
+      'Хэт олон хүсэлт. 10 минутын дараа дахин оролдоно уу.'
+    )
+
+    // Generate cryptographically secure 6-digit OTP
+    const otp = crypto.randomInt(100000, 999999).toString()
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000) // 5 min
+
+    // Hash before storing — NEVER store plaintext OTP
+    const codeHash = await argon2.hash(otp, { type: argon2.argon2id })
+
+    await db.oTPCode.create({
+      data: {
+        phone,
+        codeHash,
+        purpose,
+        expiresAt,
+        ipAddress: ip,
+      }
+    })
+
+    // Send via SMS gateway
+    // Primary: Unitel MobiFinance API
+    // Fallback: MobiCom SMS API
+    await smsGateway.send({
+      to: phone,
+      message: `Eseller нэвтрэх код: ${otp}\n5 минутад хүчинтэй. Бусдад хэлэх хэрэггүй!`,
+    })
+  }
+
+  // Verify OTP
+  async verify(phone: string, code: string, purpose: OTPPurpose): Promise<boolean> {
+    const record = await db.oTPCode.findFirst({
+      where: {
+        phone,
+        purpose,
+        expiresAt: { gt: new Date() },
+        usedAt: null,
+        attempts: { lt: 5 },
+      },
+      orderBy: { createdAt: 'desc' },
+    })
+
+    if (!record) throw new OTPExpiredError('Код хүчинтэй хугацаа дууссан эсвэл олдсонгүй.')
+
+    // Increment attempt count
+    await db.oTPCode.update({
+      where: { id: record.id },
+      data: { attempts: { increment: 1 } }
+    })
+
+    const isValid = await argon2.verify(record.codeHash, code)
+
+    if (!isValid) {
+      if (record.attempts + 1 >= 5) {
+        throw new OTPLockedError('5 удаа буруу код оруулсан. Шинэ код хүс.')
+      }
+      throw new OTPInvalidError(`Код буруу байна. ${4 - record.attempts} оролдлого үлдсэн.`)
+    }
+
+    // Mark as used (one-time use)
+    await db.oTPCode.update({
+      where: { id: record.id },
+      data: { usedAt: new Date() }
+    })
+
+    return true
+  }
+}
+```
+
+---
+
+### 4. PASSKEY (WebAuthn) SUPPORT
+
+```typescript
+// lib/auth/PasskeyService.ts
+import {
+  generateRegistrationOptions,
+  verifyRegistrationResponse,
+  generateAuthenticationOptions,
+  verifyAuthenticationResponse,
+} from '@simplewebauthn/server'
+
+const RP_NAME = 'Eseller.mn'
+const RP_ID  = 'eseller.mn'
+const ORIGIN = 'https://eseller.mn'
+
+class PasskeyService {
+  // Register new passkey
+  async generateRegistrationChallenge(userId: string) {
+    const user = await db.user.findUnique({ where: { id: userId } })
+    const existingPasskeys = await db.passkey.findMany({ where: { userId } })
+
+    const options = await generateRegistrationOptions({
+      rpName: RP_NAME,
+      rpID: RP_ID,
+      userName: user.phone,
+      userDisplayName: user.name || user.phone,
+      attestationType: 'none',
+      excludeCredentials: existingPasskeys.map(pk => ({
+        id: pk.credentialId,
+        transports: pk.transports as AuthenticatorTransport[],
+      })),
+      authenticatorSelection: {
+        residentKey: 'preferred',
+        userVerification: 'preferred',
+        authenticatorAttachment: 'platform', // device biometrics only
+      },
+    })
+
+    // Store challenge in Redis (1 min TTL)
+    await redis.setex(`pk_challenge:${userId}`, 60, options.challenge)
+
+    return options
+  }
+
+  // Verify and save passkey
+  async verifyRegistration(userId: string, response: RegistrationResponseJSON) {
+    const challenge = await redis.get(`pk_challenge:${userId}`)
+    const verification = await verifyRegistrationResponse({
+      response,
+      expectedChallenge: challenge,
+      expectedOrigin: ORIGIN,
+      expectedRPID: RP_ID,
+    })
+
+    if (!verification.verified) throw new Error('Passkey баталгаажуулалт амжилтгүй')
+
+    const { credentialID, credentialPublicKey, counter, credentialDeviceType, credentialBackedUp } =
+      verification.registrationInfo!
+
+    await db.passkey.create({
+      data: {
+        userId,
+        credentialId: Buffer.from(credentialID),
+        publicKey:    Buffer.from(credentialPublicKey),
+        counter,
+        deviceType:   credentialDeviceType,
+        backedUp:     credentialBackedUp,
+        transports:   response.response.transports ?? [],
+      }
+    })
+  }
+}
+```
+
+---
+
+### 5. AUTH API ROUTES
+
+```typescript
+// POST /api/auth/otp/send
+// Body: { phone, purpose }
+// Rate: 3/10min per phone, 10/min per IP
+
+// POST /api/auth/otp/verify
+// Body: { phone, code, purpose }
+// Returns: { userId, isNewUser, accessToken, refreshToken }
+
+// POST /api/auth/refresh
+// Cookie: refreshToken (HttpOnly)
+// Returns: new accessToken (rotates refresh)
+
+// POST /api/auth/passkey/register/challenge
+// POST /api/auth/passkey/register/verify
+
+// POST /api/auth/passkey/login/challenge
+// POST /api/auth/passkey/login/verify
+
+// POST /api/auth/step-up
+// Body: { purpose: 'PAYMENT' | 'STEP_UP' }
+// Requires active session, sends OTP
+
+// POST /api/auth/logout
+// Revokes session + clears HttpOnly cookies
+
+// GET /api/auth/sessions
+// Returns: all active sessions for current user
+
+// DELETE /api/auth/sessions/[id]
+// Revoke specific session
+```
+
+---
+
+### 6. LOGIN PAGE UI — /app/(auth)/login/page.tsx
+
+```tsx
+'use client'
+export default function LoginPage() {
+  const [step, setStep] = useState<'phone' | 'otp' | 'profile'>('phone')
+  const [phone, setPhone] = useState('')
+  const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [countdown, setCountdown] = useState(0)
+
+  // Phone input step
+  if (step === 'phone') return (
+    <AuthLayout>
+      <h1>Нэвтрэх</h1>
+      <p>Утасны дугаараа оруулна уу</p>
+
+      <PhoneInput
+        value={phone}
+        onChange={setPhone}
+        prefix="+976"
+      />
+
+      <Button variant="primary" size="xl" className="w-full"
+        onClick={async () => {
+          await sendOTP(phone)
+          setCountdown(300)
+          setStep('otp')
+        }}>
+        Код авах
+      </Button>
+
+      <Divider>эсвэл</Divider>
+
+      <Button variant="secondary" className="w-full" onClick={loginWithGoogle}>
+        <GoogleIcon /> Google-ээр нэвтрэх
+      </Button>
+
+      <Button variant="secondary" className="w-full" onClick={loginWithFacebook}>
+        <FacebookIcon /> Facebook-ээр нэвтрэх
+      </Button>
+
+      <Button variant="ghost" className="w-full" onClick={loginWithDan}>
+        <DanIcon /> ДАН-аар нэвтрэх
+      </Button>
+    </AuthLayout>
+  )
+
+  // OTP verification step
+  if (step === 'otp') return (
+    <AuthLayout>
+      <h1>Код оруулах</h1>
+      <p>{phone} дугаарт <strong>{countdown}с</strong> хүчинтэй код илгээлээ</p>
+
+      <OTPInput
+        length={6}
+        value={otp}
+        onChange={setOtp}
+        onComplete={async (code) => {
+          await verifyOTP(phone, code)
+          setStep('profile')
+        }}
+        autoFocus
+      />
+
+      <Button variant="ghost" disabled={countdown > 0}
+        onClick={async () => { await sendOTP(phone); setCountdown(300) }}>
+        {countdown > 0 ? `Дахин илгээх (${countdown}с)` : 'Дахин код авах'}
+      </Button>
+
+      <Button variant="link" onClick={() => setStep('phone')}>
+        ← Утасны дугаар засах
+      </Button>
+    </AuthLayout>
+  )
+}
+```
+
+---
+
+### 7. TRUSTED DEVICE + BIOMETRIC UPGRADE
+
+```typescript
+// After successful OTP login:
+async function handleSuccessfulLogin(userId: string, req: Request) {
+  const deviceId = req.cookies.get('device_id')?.value || nanoid()
+
+  // Check if device is trusted
+  const trustedDevice = deviceId
+    ? await db.trustedDevice.findUnique({
+        where: { deviceId, isRevoked: false, expiresAt: { gt: new Date() } }
+      })
+    : null
+
+  if (!trustedDevice) {
+    // First time on this device — prompt to trust
+    // "Энэ төхөөрөмжийг 30 хоног итгэмжлэх үү?" → YES → create TrustedDevice
+    await db.trustedDevice.create({
+      data: {
+        userId,
+        deviceId,
+        deviceName: getDeviceName(req.headers),
+        fingerprint: await generateFingerprint(req),
+        expiresAt: addDays(new Date(), 30),
+        lastSeenIp: getClientIP(req),
+      }
+    })
+  }
+
+  // Issue tokens
+  const accessToken  = issueAccessToken(userId)
+  const refreshToken = await issueRefreshToken(userId, deviceId)
+
+  // Mobile app: prompt to enable biometric after first OTP
+  // → "Дараагийн нэвтрэлтэнд биометр ашиглах уу?" → stores encrypted refresh token in Keychain
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 27 -->
+<div id="panel-p27" class="panel">
+<div class="st">Prompt 27 — Санхүүгийн гүйлгээний аюулгүй байдал</div>
+<div class="prompt-box" id="p27text">
+<button class="copy-btn" onclick="copyPrompt('p27text')">Хуулах</button>## FINANCIAL SECURITY — STEP-UP AUTH + PAYMENT PROTECTION
+
+All financial operations require additional verification beyond active session.
+Implement step-up authentication, payment tokenization, and fraud detection.
+
+---
+
+### 1. STEP-UP AUTHENTICATION MIDDLEWARE
+
+```typescript
+// lib/security/StepUpAuth.ts
+
+const STEP_UP_RULES: Record<string, StepUpRule> = {
+  // Capture: require re-verify if session older than threshold
+  'payment.create': {
+    maxSessionAge: 30 * 60,          // 30 минут
+    threshold: 0,                     // Бүх дүнд
+    methods: ['OTP'],
+  },
+  'payment.high_value': {
+    maxSessionAge: 5 * 60,           // 5 минут
+    threshold: 50_000,               // 50,000₮+
+    methods: ['OTP', 'BIOMETRIC'],
+  },
+  'payment.method.add': {
+    maxSessionAge: 0,                // Заавал шинэ verify
+    threshold: 0,
+    methods: ['OTP', 'BIOMETRIC'],
+  },
+  'withdrawal.request': {
+    maxSessionAge: 0,
+    threshold: 0,
+    methods: ['OTP'],
+    cooldown: 60 * 60,              // Сүүлийн 1 цагт зөвхөн 1 удаа
+  },
+  'account.delete': {
+    maxSessionAge: 0,
+    methods: ['OTP'],
+    additionalDelay: 24 * 60 * 60,  // 24 цагийн cooling period
+  },
+  'seller.payout': {
+    maxSessionAge: 0,
+    threshold: 0,
+    methods: ['OTP'],
+    adminApprovalRequired: true,    // 100,000₮+
+  },
+}
+
+// Middleware для sensitive routes
+export function requireStepUp(action: string) {
+  return async (req: Request) => {
+    const rule = STEP_UP_RULES[action]
+    if (!rule) return // no rule = no step-up required
+
+    const session = await getSession(req)
+    const sessionAge = (Date.now() - session.lastActiveAt.getTime()) / 1000
+
+    if (sessionAge > rule.maxSessionAge) {
+      throw new StepUpRequiredError({
+        action,
+        methods: rule.methods,
+        message: 'Аюулгүй байдлын үүднээс дахин баталгаажуулна уу.',
+      })
+    }
+
+    // Check amount threshold
+    const amount = req.body?.amount || 0
+    if (rule.threshold > 0 && amount >= rule.threshold) {
+      // Check if step-up was completed for this session
+      const stepUpKey = `stepup:${session.userId}:${action}`
+      const completed = await redis.get(stepUpKey)
+      if (!completed) {
+        throw new StepUpRequiredError({ action, methods: rule.methods })
+      }
+    }
+  }
+}
+```
+
+### 2. PAYMENT TOKENIZATION — Never store raw card numbers
+
+```typescript
+// lib/payment/CardVault.ts
+// We NEVER store actual card numbers — use provider tokenization
+
+class CardVault {
+  // Stripe: create SetupIntent to save card
+  async saveCard(userId: string, setupIntentId: string): Promise<SavedCard> {
+    const setupIntent = await stripe.setupIntents.retrieve(setupIntentId)
+    const paymentMethod = await stripe.paymentMethods.retrieve(
+      setupIntent.payment_method as string
+    )
+
+    // Store only the token + last4 + brand — NEVER the full number
+    return db.savedPaymentMethod.create({
+      data: {
+        userId,
+        provider: 'STRIPE',
+        tokenRef:     paymentMethod.id,      // pm_xxx — Stripe-ийн token
+        last4:        paymentMethod.card!.last4,
+        brand:        paymentMethod.card!.brand,
+        expMonth:     paymentMethod.card!.exp_month,
+        expYear:      paymentMethod.card!.exp_year,
+        fingerprint:  paymentMethod.card!.fingerprint!, // Duplicate detection
+        isDefault:    false,
+      }
+    })
+  }
+
+  // Use saved card — charge via token, never expose number
+  async chargeWithSavedCard(userId: string, cardId: string, amount: number) {
+    const card = await db.savedPaymentMethod.findFirst({
+      where: { id: cardId, userId }  // Ownership check
+    })
+    if (!card) throw new ForbiddenError('Карт олдсонгүй.')
+
+    return stripe.paymentIntents.create({
+      amount,
+      currency: 'mnt',
+      payment_method: card.tokenRef,
+      confirm: true,
+      customer: await getStripeCustomerId(userId),
+    })
+  }
+}
+```
+
+### 3. FRAUD DETECTION
+
+```typescript
+// lib/security/FraudDetector.ts
+
+interface RiskSignal {
+  type: string
+  score: number    // 0-100, higher = more risky
+  reason: string
+}
+
+class FraudDetector {
+  async assess(userId: string, action: string, context: Record<string, unknown>): Promise<RiskAssessment> {
+    const signals: RiskSignal[] = []
+
+    // Signal 1: New device
+    const deviceAge = await this.getDeviceAge(userId, context.deviceId as string)
+    if (deviceAge < 24 * 60 * 60) {
+      signals.push({ type: 'new_device', score: 30, reason: 'Шинэ төхөөрөмж' })
+    }
+
+    // Signal 2: New location (different city/country)
+    const locationChange = await this.detectLocationChange(userId, context.ip as string)
+    if (locationChange.isDifferentCountry) {
+      signals.push({ type: 'geo_anomaly', score: 60, reason: `Шинэ улс: ${locationChange.country}` })
+    } else if (locationChange.isDifferentCity) {
+      signals.push({ type: 'geo_soft', score: 20, reason: `Шинэ хот: ${locationChange.city}` })
+    }
+
+    // Signal 3: Velocity — too many payments in short time
+    const recentPayments = await db.order.count({
+      where: {
+        buyerId: userId,
+        createdAt: { gt: subHours(new Date(), 1) },
+        paymentStatus: 'PAID',
+      }
+    })
+    if (recentPayments > 5) {
+      signals.push({ type: 'velocity', score: 50, reason: '1 цагт 5+ гүйлгээ' })
+    }
+
+    // Signal 4: Large amount for new account
+    const accountAge = await this.getAccountAge(userId)
+    const amount = context.amount as number
+    if (accountAge < 7 * 24 * 60 * 60 && amount > 100_000) {
+      signals.push({ type: 'new_account_large_txn', score: 40, reason: 'Шинэ бүртгэл, их дүн' })
+    }
+
+    const totalScore = Math.min(100, signals.reduce((s, sig) => s + sig.score, 0))
+
+    return {
+      score: totalScore,
+      action: totalScore >= 70 ? 'BLOCK'
+            : totalScore >= 40 ? 'CHALLENGE'    // Step-up OTP шаардах
+            : 'ALLOW',
+      signals,
+      requiresReview: totalScore >= 70,
+    }
+  }
+}
+
+// Usage in payment flow:
+const risk = await fraudDetector.assess(userId, 'payment.create', { deviceId, ip, amount })
+
+if (risk.action === 'BLOCK') {
+  await notifyUser(userId, 'SUSPICIOUS_ACTIVITY')
+  await securityLog(userId, 'PAYMENT_BLOCKED', risk)
+  throw new FraudBlockError('Аюулгүй байдлын шалтгаанаар гүйлгээ түр хориглогдлоо.')
+}
+
+if (risk.action === 'CHALLENGE') {
+  throw new StepUpRequiredError({ action: 'payment.create', reason: 'fraud_risk' })
+}
+```
+
+### 4. SELLER PAYOUT PROTECTION
+
+```typescript
+// lib/payment/PayoutService.ts
+
+async function requestPayout(sellerId: string, amount: number, bankAccount: string) {
+  // 1. Step-up verify (OTP required for all payouts)
+  await requireStepUpCompletion(sellerId, 'seller.payout')
+
+  // 2. Seller identity check
+  const seller = await db.entity.findUnique({ where: { id: sellerId } })
+  if (!seller.isVerified) throw new ForbiddenError('Баталгаажаагүй дэлгүүр payout хийж болохгүй.')
+
+  // 3. Balance check
+  const balance = await getSellerBalance(sellerId)
+  if (balance < amount) throw new InsufficientBalanceError()
+
+  // 4. Minimum payout amount
+  if (amount < 10_000) throw new ValidationError('Хамгийн бага payout: 10,000₮')
+
+  // 5. Bank account verification (is it the seller's own account?)
+  const verifiedAccount = await db.bankAccount.findFirst({
+    where: { entityId: sellerId, accountNumber: bankAccount, isVerified: true }
+  })
+  if (!verifiedAccount) throw new ForbiddenError('Баталгаажаагүй данс руу payout хийж болохгүй.')
+
+  // 6. Large payout requires admin approval
+  const requiresApproval = amount >= 1_000_000  // 1 сая+
+  const payout = await db.payout.create({
+    data: {
+      entityId: sellerId,
+      amount,
+      bankAccountId: verifiedAccount.id,
+      status: requiresApproval ? 'PENDING_APPROVAL' : 'PENDING',
+      requestedAt: new Date(),
+    }
+  })
+
+  if (requiresApproval) {
+    await notifyAdmins('LARGE_PAYOUT_APPROVAL_REQUIRED', { payoutId: payout.id, amount })
+  }
+
+  await auditLog(sellerId, 'PAYOUT_REQUESTED', { amount, requiresApproval })
+  return payout
+}
+```
+
+### 5. FINANCIAL DATA ENCRYPTION
+
+```typescript
+// lib/security/Encryption.ts
+// All PII and financial data encrypted at rest
+
+const ENCRYPTION_KEY = Buffer.from(process.env.ENCRYPTION_KEY!, 'base64') // 32 bytes AES-256
+
+export function encrypt(plaintext: string): string {
+  const iv = crypto.randomBytes(16)
+  const cipher = crypto.createCipheriv('aes-256-gcm', ENCRYPTION_KEY, iv)
+  const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()])
+  const tag = cipher.getAuthTag()
+  // iv + tag + ciphertext, base64 encoded
+  return Buffer.concat([iv, tag, encrypted]).toString('base64')
+}
+
+export function decrypt(ciphertext: string): string {
+  const buf = Buffer.from(ciphertext, 'base64')
+  const iv  = buf.subarray(0, 16)
+  const tag = buf.subarray(16, 32)
+  const enc = buf.subarray(32)
+  const decipher = crypto.createDecipheriv('aes-256-gcm', ENCRYPTION_KEY, iv)
+  decipher.setAuthTag(tag)
+  return decipher.update(enc) + decipher.final('utf8')
+}
+
+// Fields encrypted at rest:
+// - User.danRegNo (before hashing)
+// - SocialConnection.accessToken / pageToken
+// - SavedPaymentMethod.tokenRef
+// - BankAccount.accountNumber
+// - Payout.bankDetails
+// - Any PII fields in logs
+```
+</div>
+</div>
+
+<!-- PROMPT 28 -->
+<div id="panel-p28" class="panel">
+<div class="st">Prompt 28 — Zero-trust хамгаалалт + Real-time мониторинг</div>
+<div class="prompt-box" id="p28text">
+<button class="copy-btn" onclick="copyPrompt('p28text')">Хуулах</button>## ZERO-TRUST SECURITY + REAL-TIME THREAT MONITORING
+
+Implement defense-in-depth: every request verified, every anomaly detected,
+every sensitive action logged and alertable.
+
+---
+
+### 1. ZERO-TRUST REQUEST PIPELINE
+
+```typescript
+// middleware.ts — Every request goes through this pipeline
+
+export async function middleware(req: NextRequest) {
+  const path = req.nextUrl.pathname
+
+  // ── Layer 1: IP reputation check ──
+  const ip = getClientIP(req)
+  const isBlockedIP = await redis.get(`blocked_ip:${ip}`)
+  if (isBlockedIP) {
+    return new Response('Access denied', { status: 403 })
+  }
+
+  // ── Layer 2: Bot detection ──
+  if (isSensitivePath(path)) {
+    const botScore = await checkBotScore(req)
+    if (botScore > 0.8) {
+      return NextResponse.redirect(new URL('/captcha', req.url))
+    }
+  }
+
+  // ── Layer 3: Rate limiting ──
+  const rateLimitResult = await checkRateLimit(ip, path)
+  if (rateLimitResult.exceeded) {
+    return new Response('Rate limit exceeded', {
+      status: 429,
+      headers: { 'Retry-After': rateLimitResult.retryAfter.toString() }
+    })
+  }
+
+  // ── Layer 4: Auth verification ──
+  if (isProtectedPath(path)) {
+    const token = req.cookies.get('access_token')?.value
+    if (!token) return NextResponse.redirect(new URL('/login', req.url))
+
+    try {
+      const payload = jwt.verify(token, process.env.JWT_PUBLIC_KEY!, { algorithms: ['ES256'] })
+      // Attach user info to request headers for downstream use
+      req.headers.set('x-user-id',   payload.sub as string)
+      req.headers.set('x-user-role', payload.role as string)
+    } catch {
+      // Token expired — redirect to refresh
+      return NextResponse.redirect(new URL('/api/auth/refresh', req.url))
+    }
+  }
+
+  // ── Layer 5: CSRF protection ──
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+    const csrfToken = req.headers.get('x-csrf-token')
+    const sessionCsrf = req.cookies.get('csrf_token')?.value
+    if (!csrfToken || csrfToken !== sessionCsrf) {
+      return new Response('CSRF token mismatch', { status: 403 })
+    }
+  }
+
+  return NextResponse.next()
+}
+```
+
+### 2. RATE LIMITING — Layered rules
+
+```typescript
+// lib/security/RateLimiter.ts
+
+const RATE_LIMITS: Record<string, RateLimit> = {
+  // Auth endpoints — strictest
+  'POST /api/auth/otp/send':    { window: 600, max: 3,   key: 'phone' },
+  'POST /api/auth/otp/verify':  { window: 300, max: 5,   key: 'phone' },
+  'POST /api/auth/refresh':     { window: 60,  max: 10,  key: 'user' },
+
+  // Payment endpoints
+  'POST /api/payment/create':   { window: 3600, max: 10, key: 'user' },
+  'POST /api/payment/refund':   { window: 86400, max: 3, key: 'user' },
+
+  // API general
+  'GET  /api/*':                { window: 60,   max: 100, key: 'ip' },
+  'POST /api/*':                { window: 60,   max: 30,  key: 'ip' },
+
+  // Search (public)
+  'GET  /api/search/*':         { window: 60,   max: 60,  key: 'ip' },
+
+  // File upload
+  'POST /api/files/*':          { window: 3600, max: 50,  key: 'user' },
+}
+
+// Sliding window algorithm with Redis
+async function checkRateLimit(key: string, endpoint: string): Promise<RateLimitResult> {
+  const rule = matchRule(endpoint, RATE_LIMITS)
+  if (!rule) return { exceeded: false }
+
+  const redisKey = `rl:${rule.key === 'ip' ? key : userId}:${endpoint}`
+  const now = Date.now()
+  const windowStart = now - rule.window * 1000
+
+  // Sorted set: add current request, remove old ones
+  await redis.zremrangebyscore(redisKey, 0, windowStart)
+  const count = await redis.zcard(redisKey)
+
+  if (count >= rule.max) {
+    const oldestRequest = await redis.zrange(redisKey, 0, 0, { withScores: true })
+    const retryAfter = Math.ceil((oldestRequest[0].score + rule.window * 1000 - now) / 1000)
+    return { exceeded: true, retryAfter, current: count, limit: rule.max }
+  }
+
+  await redis.zadd(redisKey, { score: now, member: `${now}-${nanoid(6)}` })
+  await redis.expire(redisKey, rule.window)
+
+  return { exceeded: false, remaining: rule.max - count - 1 }
+}
+```
+
+### 3. SECURITY EVENT MONITORING
+
+```typescript
+// lib/security/SecurityMonitor.ts
+
+const ALERT_RULES = [
+  {
+    event: 'LOGIN_FAILED',
+    threshold: 5,
+    window: 300,    // 5 failures in 5 min
+    action: 'LOCKOUT',
+    alertAdmin: false,
+  },
+  {
+    event: 'OTP_FAILED',
+    threshold: 3,
+    window: 600,
+    action: 'BLOCK_PHONE',
+    alertAdmin: false,
+  },
+  {
+    event: 'PAYMENT_FAILED',
+    threshold: 3,
+    window: 3600,
+    action: 'REQUIRE_STEP_UP',
+    alertAdmin: true,
+  },
+  {
+    event: 'GEO_ANOMALY',
+    threshold: 1,
+    window: 0,
+    action: 'NOTIFY_USER',
+    alertAdmin: false,
+  },
+  {
+    event: 'ADMIN_LOGIN',
+    threshold: 1,
+    window: 0,
+    action: 'NOTIFY_ADMIN',
+    alertAdmin: true,
+  },
+  {
+    event: 'LARGE_PAYMENT',         // 500,000₮+
+    threshold: 1,
+    window: 0,
+    action: 'NOTIFY_ADMIN',
+    alertAdmin: true,
+  },
+  {
+    event: 'BULK_DATA_EXPORT',
+    threshold: 1,
+    window: 0,
+    action: 'NOTIFY_ADMIN',
+    alertAdmin: true,
+  },
+  {
+    event: 'MULTIPLE_FAILED_REFUNDS',
+    threshold: 2,
+    window: 86400,
+    action: 'FREEZE_ACCOUNT',
+    alertAdmin: true,
+  },
+]
+
+class SecurityMonitor {
+  async record(userId: string, event: string, metadata: Record<string, unknown> = {}) {
+    // Save to DB
+    await db.securityLog.create({
+      data: {
+        userId,
+        event,
+        metadata: JSON.stringify(metadata),
+        ip: metadata.ip as string,
+        userAgent: metadata.userAgent as string,
+        createdAt: new Date(),
+      }
+    })
+
+    // Check alert rules
+    for (const rule of ALERT_RULES) {
+      if (rule.event !== event) continue
+
+      if (rule.threshold > 1) {
+        const count = await this.countEvents(userId, event, rule.window)
+        if (count < rule.threshold) continue
+      }
+
+      await this.executeAction(userId, rule.action, { event, metadata })
+      if (rule.alertAdmin) await this.alertAdmins(userId, event, metadata)
+    }
+  }
+
+  private async executeAction(userId: string, action: string, context: unknown) {
+    switch (action) {
+      case 'LOCKOUT':
+        await redis.setex(`locked:${userId}`, 1800, '1')  // 30 min
+        await this.notifyUser(userId, 'ACCOUNT_LOCKED_TEMP')
+        break
+
+      case 'BLOCK_PHONE':
+        const user = await db.user.findUnique({ where: { id: userId } })
+        await redis.setex(`blocked_phone:${user.phone}`, 3600, '1')
+        break
+
+      case 'FREEZE_ACCOUNT':
+        await db.user.update({ where: { id: userId }, data: { status: 'FROZEN' } })
+        await this.notifyUser(userId, 'ACCOUNT_FROZEN')
+        await this.alertAdmins(userId, 'ACCOUNT_FROZEN', context)
+        break
+
+      case 'NOTIFY_USER':
+        await this.notifyUser(userId, 'SUSPICIOUS_ACTIVITY')
+        break
+    }
+  }
+
+  private async alertAdmins(userId: string, event: string, metadata: unknown) {
+    const admins = await db.user.findMany({ where: { role: { in: ['ADMIN', 'SUPER_ADMIN'] } } })
+    for (const admin of admins) {
+      await sendEmail(admin.email!, 'SECURITY_ALERT', { userId, event, metadata })
+      await createAdminNotification(admin.id, `Аюулгүй байдлын анхааруулга: ${event}`, userId)
+    }
+  }
+}
+```
+
+### 4. CONTENT SECURITY POLICY + SECURITY HEADERS
+
+```typescript
+// next.config.ts
+const securityHeaders = [
+  { key: 'X-DNS-Prefetch-Control', value: 'on' },
+  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+  { key: 'X-Content-Type-Options',  value: 'nosniff' },
+  { key: 'X-Frame-Options',         value: 'DENY' },
+  { key: 'X-XSS-Protection',        value: '1; mode=block' },
+  { key: 'Referrer-Policy',         value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy',      value: 'camera=(), microphone=(), geolocation=(self)' },
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://res.cloudinary.com https://*.r2.cloudflarestorage.com",
+      "connect-src 'self' https://api.stripe.com https://qpay.mn",
+      "frame-src https://js.stripe.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join('; '),
+  },
+]
+```
+
+### 5. SQL INJECTION + INPUT SANITIZATION
+
+```typescript
+// lib/security/InputValidator.ts
+import { z } from 'zod'
+import DOMPurify from 'isomorphic-dompurify'
+
+// All API inputs go through Zod validation
+export const schemas = {
+  phone: z.string().regex(/^\+?976[0-9]{8}$/, 'Монгол утасны дугаар буруу'),
+  otp: z.string().length(6).regex(/^[0-9]+$/, 'Зөвхөн тоо'),
+  price: z.number().int().min(100).max(100_000_000),
+  productName: z.string().min(2).max(200).trim(),
+  description: z.string().max(10000),
+  slug: z.string().regex(/^[a-z0-9-]+$/).min(2).max(100),
+  amount: z.number().int().min(100).max(10_000_000),
+}
+
+// HTML sanitization for rich text
+export function sanitizeHtml(html: string): string {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p', 'br', 'b', 'i', 'u', 'ul', 'ol', 'li', 'h2', 'h3', 'table', 'tr', 'td', 'th', 'img', 'a'],
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'target'],
+    FORBID_SCRIPTS: true,
+    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'style'],
+  })
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 29 -->
+<div id="panel-p29" class="panel">
+<div class="st">Prompt 29 — Байгууллагын мэдээллийн аюулгүй байдал + өргөжүүлэлт</div>
+<div class="prompt-box" id="p29text">
+<button class="copy-btn" onclick="copyPrompt('p29text')">Хуулах</button>## ENTERPRISE DATA SECURITY + SCALABILITY EXTENSIONS
+
+Secure multi-tenant data isolation, compliance, and future-proof
+security architecture for eseller.mn.
+
+---
+
+### 1. MULTI-TENANT DATA ISOLATION (Row-Level Security)
+
+```sql
+-- Postgres RLS — entity owner зөвхөн өөрийн мэдээлэлд хандана
+
+-- Products table RLS
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY products_owner_policy ON products
+  USING (
+    seller_id = current_setting('app.current_entity_id')::text
+    OR current_setting('app.current_role')::text IN ('ADMIN', 'SUPER_ADMIN')
+  );
+
+-- Orders: seller sees their own, buyer sees their own
+CREATE POLICY orders_isolation ON orders
+  USING (
+    seller_id = current_setting('app.current_entity_id')::text
+    OR buyer_id = current_setting('app.current_user_id')::text
+    OR current_setting('app.current_role')::text IN ('ADMIN', 'SUPER_ADMIN')
+  );
+
+-- Financial data: even more restricted
+CREATE POLICY payouts_strict ON payouts
+  USING (
+    entity_id = current_setting('app.current_entity_id')::text
+    OR current_setting('app.current_role')::text = 'SUPER_ADMIN'
+  );
+-- Note: Regular ADMIN cannot see payout details — SUPER_ADMIN only
+```
+
+```typescript
+// Set RLS context on every DB connection
+async function getDBWithRLS(userId: string, role: string, entityId?: string) {
+  const db = new PrismaClient()
+  await db.$executeRaw`SET app.current_user_id = ${userId}`
+  await db.$executeRaw`SET app.current_role = ${role}`
+  await db.$executeRaw`SET app.current_entity_id = ${entityId ?? ''}`
+  return db
+}
+```
+
+### 2. PERSONAL DATA MINIMIZATION (GDPR-aligned, Mongolian Law)
+
+```typescript
+// Mongolian Personal Data Protection Law (PDPL) compliance
+
+// Data retention policies
+const RETENTION_POLICIES = {
+  userSessions:     7 * 24 * 60 * 60,   // 7 хоног
+  otpCodes:         24 * 60 * 60,        // 24 цаг
+  securityLogs:     2 * 365 * 24 * 60 * 60, // 2 жил (хууль шаардлага)
+  auditLogs:        3 * 365 * 24 * 60 * 60, // 3 жил
+  paymentRecords:   10 * 365 * 24 * 60 * 60, // 10 жил (татварын шаардлага)
+  deletedUserData:  30 * 24 * 60 * 60,   // 30 хоног (recovery period)
+}
+
+// User data export (right to access)
+async function exportUserData(userId: string): Promise<UserDataExport> {
+  const [user, orders, reviews, listings, chats] = await Promise.all([
+    db.user.findUnique({ where: { id: userId }, omit: { passwordHash: true, danRegNoHash: true } }),
+    db.order.findMany({ where: { buyerId: userId } }),
+    db.review.findMany({ where: { userId } }),
+    db.listing.findMany({ where: { userId } }),
+    db.chat.findMany({ where: { buyerId: userId } }),
+  ])
+
+  return { user, orders, reviews, listings, chats, exportedAt: new Date() }
+}
+
+// Account deletion — full wipe + audit trail
+async function deleteUserAccount(userId: string): Promise<void> {
+  // 24-hour cooling period
+  const existing = await db.accountDeletion.findFirst({ where: { userId, status: 'PENDING' } })
+  if (!existing) {
+    await db.accountDeletion.create({
+      data: { userId, scheduledAt: addDays(new Date(), 1) }
+    })
+    await notifyUser(userId, 'DELETION_SCHEDULED')
+    return
+  }
+
+  // Execute deletion
+  await db.$transaction([
+    // Anonymize, don't delete orders (legal requirement)
+    db.order.updateMany({
+      where: { buyerId: userId },
+      data: { buyerName: '[Устгагдсан]', buyerPhone: null, buyerEmail: null }
+    }),
+    // Delete personal data
+    db.user.update({
+      where: { id: userId },
+      data: {
+        phone: `deleted_${userId}`,
+        email: null, name: null, avatar: null,
+        danVerified: false, danRegNoHash: null,
+        deletedAt: new Date(),
+      }
+    }),
+    db.session.deleteMany({ where: { userId } }),
+    db.passkey.deleteMany({ where: { userId } }),
+    db.savedPaymentMethod.deleteMany({ where: { userId } }),
+  ])
+
+  await auditLog('SYSTEM', 'USER_ACCOUNT_DELETED', { userId })
+}
+```
+
+### 3. SECURITY COMPLIANCE CHECKLIST — automated
+
+```typescript
+// lib/security/ComplianceChecker.ts
+// Run daily, report to super admin
+
+class ComplianceChecker {
+  async runDailyChecks(): Promise<ComplianceReport> {
+    const issues = []
+
+    // Check 1: Expired sessions not cleaned up
+    const expiredSessions = await db.session.count({
+      where: { expiresAt: { lt: new Date() }, isRevoked: false }
+    })
+    if (expiredSessions > 0) {
+      issues.push({ level: 'HIGH', check: 'expired_sessions', count: expiredSessions })
+      await db.session.updateMany({
+        where: { expiresAt: { lt: new Date() } },
+        data: { isRevoked: true }
+      })
+    }
+
+    // Check 2: Failed OTP codes older than 24h
+    await db.oTPCode.deleteMany({
+      where: { createdAt: { lt: subDays(new Date(), 1) } }
+    })
+
+    // Check 3: Users with no 2FA
+    const noMfaEntities = await db.user.count({
+      where: {
+        role: { in: ['STORE', 'AGENT', 'COMPANY', 'AUTO_DEALER'] },
+        mfaEnabled: false,
+        createdAt: { lt: subDays(new Date(), 30) }
+      }
+    })
+    if (noMfaEntities > 0) {
+      issues.push({ level: 'MEDIUM', check: 'entities_without_mfa', count: noMfaEntities })
+    }
+
+    // Check 4: Unprocessed failed webhooks
+    const failedWebhooks = await db.webhookEvent.count({
+      where: { processed: false, receivedAt: { lt: subHours(new Date(), 1) } }
+    })
+    if (failedWebhooks > 0) {
+      issues.push({ level: 'MEDIUM', check: 'failed_webhooks', count: failedWebhooks })
+    }
+
+    // Check 5: Large pending payouts > 24h
+    const stalePendingPayouts = await db.payout.count({
+      where: {
+        status: 'PENDING_APPROVAL',
+        requestedAt: { lt: subDays(new Date(), 1) }
+      }
+    })
+    if (stalePendingPayouts > 0) {
+      issues.push({ level: 'HIGH', check: 'stale_pending_payouts', count: stalePendingPayouts })
+    }
+
+    if (issues.length > 0) {
+      await this.notifyAdmins(issues)
+    }
+
+    return { checkedAt: new Date(), issues, healthy: issues.length === 0 }
+  }
+}
+```
+
+### 4. SECURITY EXPANSION ROADMAP
+
+```
+PHASE 1 — Одоо хэрэгжүүлэх (суурь):
+  ✓ SMS OTP (Passwordless)
+  ✓ JWT + Refresh token rotation
+  ✓ Rate limiting (Redis sliding window)
+  ✓ HTTPS enforced (HSTS)
+  ✓ CSP headers
+  ✓ Input validation (Zod)
+  ✓ Argon2id password/OTP hashing
+  ✓ AES-256-GCM sensitive data encryption
+  ✓ RLS (Row-level security)
+  ✓ Audit log
+
+PHASE 2 — 3 сарын дотор:
+  □ Passkey (WebAuthn) — passwordless upgrade
+  □ Biometric auth (mobile apps)
+  □ Step-up authentication (payment flows)
+  □ Fraud detection (risk scoring)
+  □ ДАН OAuth (KYC)
+  □ Trusted device management
+  □ Session management UI (/settings/security)
+
+PHASE 3 — 6 сарын дотор:
+  □ SOC2-aligned controls
+  □ Penetration testing (3rd party)
+  □ Bug bounty program
+  □ Real-time anomaly detection (ML-based)
+  □ SIEM integration (Splunk/Datadog)
+  □ Disaster recovery plan + testing
+  □ ISO 27001 preparation
+
+PHASE 4 — Ирээдүй:
+  □ Hardware security keys (FIDO2 YubiKey) for admins
+  □ Zero-knowledge proof for balance verification
+  □ Homomorphic encryption for analytics (without exposing PII)
+  □ Blockchain-based audit trail (immutable)
+```
+
+### 5. INCIDENT RESPONSE PLAYBOOK
+
+```typescript
+// lib/security/IncidentResponse.ts
+
+const INCIDENT_PLAYBOOKS = {
+  'CREDENTIAL_STUFFING': {
+    detect: 'Олон account дээр нэгэн зэрэг амжилтгүй login',
+    actions: [
+      'Block IP ranges',
+      'Enable captcha for all logins',
+      'Force re-auth for all active sessions',
+      'Notify affected users',
+      'Alert admin',
+    ],
+    severity: 'CRITICAL',
+    responseTime: '< 15 мин',
+  },
+  'DATA_BREACH_SUSPECTED': {
+    detect: 'Ер бусын их хэмжээний мэдээлэл export / хандалт',
+    actions: [
+      'Freeze affected accounts',
+      'Revoke all sessions',
+      'Preserve logs for investigation',
+      'Notify PDPC (Хувийн мэдээлэл хамгаалах хороо)',
+      'Notify affected users within 72h',
+    ],
+    severity: 'CRITICAL',
+    responseTime: '< 1 цаг',
+  },
+  'PAYMENT_FRAUD': {
+    detect: 'Velocity check + geo anomaly + large amount',
+    actions: [
+      'Block specific transactions',
+      'Freeze buyer account',
+      'Notify seller',
+      'Initiate chargeback prevention',
+    ],
+    severity: 'HIGH',
+    responseTime: '< 30 мин',
+  },
+}
+```
+</div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyPrompt(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.innerText.replace('Хуулах','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа!';
+    setTimeout(()=>btn.textContent='Хуулах',2000);
+  });
+}
+function copyAll(){
+  const ids=['p26text','p27text','p28text','p29text'];
+  const all=ids.map(id=>{
+    const el=document.getElementById(id);
+    return el?el.innerText.replace('Хуулах','').trim():'';
+  }).join('\n\n---\n\n');
+  navigator.clipboard.writeText(all).then(()=>alert('Бүх 4 prompt хуулагдлаа!'));
+}
+</script>

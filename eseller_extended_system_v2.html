@@ -1,0 +1,1292 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);z-index:2}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.arch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.arch-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.arch-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.arch-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+.arch-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:10px;padding:2px 6px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.flow{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.flow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fb{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px 10px;font-size:11px;color:var(--color-text-primary);white-space:nowrap}
+.fa{font-size:11px;color:var(--color-text-tertiary)}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;margin-top:14px}
+.section-title:first-child{margin-top:0}
+.stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.sl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.sv{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Eseller.mn — Өргөтгөсөн систем v2</div>
+    <div class="ps">Файл, төлбөр, хүргэлт, супер админ · Claude Code prompt багц</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Бүгдийг хуулах</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Архитектур</button>
+  <button class="tab" onclick="show('p6')">Prompt 6 · Файл</button>
+  <button class="tab" onclick="show('p7')">Prompt 7 · Дэлгүүр эрх</button>
+  <button class="tab" onclick="show('p8')">Prompt 8 · Онцлог бараа</button>
+  <button class="tab" onclick="show('p9')">Prompt 9 · Төлбөр</button>
+  <button class="tab" onclick="show('p10')">Prompt 10 · Хүргэлт API</button>
+  <button class="tab" onclick="show('p11')">Prompt 11 · Супер Админ</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="panel-overview" class="panel active">
+  <div class="section-title">Нэмэлт 6 модулийн тойм</div>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-name"><span class="badge b-blue">6</span>Файл удирдлага</div>
+      <div class="arch-desc">S3/R2 суурь. Дэлгүүрийн эрхтэй хэрэглэгч файл байршуулах, татах, устгах. Signed URL, access control, quota тохиргоо.</div>
+      <div class="arch-tags"><span class="tag">S3/R2</span><span class="tag">signed URL</span><span class="tag">quota</span><span class="tag">download</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name"><span class="badge b-green">7</span>Дэлгүүр эрх үүсгэх</div>
+      <div class="arch-desc">Хэрэглэгч → Дэлгүүрийн эрх хүсэх wizard. Admin баталгаажуулалт, slug үүсгэх, онцлог бараа цэс тохируулах.</div>
+      <div class="arch-tags"><span class="tag">wizard</span><span class="tag">KYC</span><span class="tag">slug</span><span class="tag">onboarding</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name"><span class="badge b-purple">8</span>Онцлог бараа цэс</div>
+      <div class="arch-desc">VIP/Featured/Хямдрал бараануудын дэлгүүр дотоод удирдлага. Онцлог бараа тохируулах, файл хавсаргах, download товч.</div>
+      <div class="arch-tags"><span class="tag">featured</span><span class="tag">catalog</span><span class="tag">file attach</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name"><span class="badge b-warn">9</span>Төлбөрийн систем</div>
+      <div class="arch-desc">QPay + Stripe. Нэхэмжлэл, буцаалт, webhook, invoice PDF. Супер админаас бүрэн удирдах боломж.</div>
+      <div class="arch-tags"><span class="tag">QPay</span><span class="tag">Stripe</span><span class="tag">webhook</span><span class="tag">invoice</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name"><span class="badge b-red">10</span>Хүргэлтийн API</div>
+      <div class="arch-desc">Provider-agnostic хүргэлтийн интерфейс. Ачааны компанитай webhook/API холболт, захиалгын мөрдөлт, статус шинэчлэлт.</div>
+      <div class="arch-tags"><span class="tag">webhook</span><span class="tag">tracking</span><span class="tag">multi-provider</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name"><span class="badge b-gray">11</span>Супер Админ</div>
+      <div class="arch-desc">Бүх системийн дээд удирдлага. Төлбөр, хүргэлт, файл, entity, монетизаци — нэг самбарт бүрэн хяналт.</div>
+      <div class="arch-tags"><span class="tag">super-admin</span><span class="tag">audit log</span><span class="tag">finance</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Файлын урсгал</div>
+  <div class="flow">
+    <div class="flow-row"><div class="fb">Дэлгүүрийн эрхтэй хэрэглэгч</div><div class="fa">→</div><div class="fb">Файл upload хүсэлт</div><div class="fa">→</div><div class="fb">Backend: presigned URL үүсгэх</div><div class="fa">→</div><div class="fb">S3/R2 шууд upload</div><div class="fa">→</div><div class="fb">DB-д metadata хадгалах</div></div>
+    <div class="flow-row"><div class="fb">Хэрэглэгч татах хүсэлт</div><div class="fa">→</div><div class="fb">Эрх шалгах (role + quota)</div><div class="fa">→</div><div class="fb">Signed download URL (15 мин)</div><div class="fa">→</div><div class="fb">Шууд татаж авах</div></div>
+  </div>
+
+  <div class="section-title">Төлбөрийн урсгал</div>
+  <div class="flow">
+    <div class="flow-row"><div class="fb">Хэрэглэгч захиалга</div><div class="fa">→</div><div class="fb">Order үүсгэх</div><div class="fa">→</div><div class="fb">QPay / Stripe intent</div><div class="fa">→</div><div class="fb">Төлбөр хийгдэх</div><div class="fa">→</div><div class="fb">Webhook хүлээн авах</div><div class="fa">→</div><div class="fb">Order баталгаажих</div></div>
+    <div class="flow-row"><div class="fb">Webhook: payment.success</div><div class="fa">→</div><div class="fb">Inventory шинэчлэх</div><div class="fa">→</div><div class="fb">Invoice PDF үүсгэх</div><div class="fa">→</div><div class="fb">Хүргэлтийн захиалга үүсгэх</div><div class="fa">→</div><div class="fb">Мэдэгдэл илгээх</div></div>
+  </div>
+
+  <div class="section-title">Хүргэлтийн provider урсгал</div>
+  <div class="flow">
+    <div class="flow-row"><div class="fb">Order баталгаажсан</div><div class="fa">→</div><div class="fb">DeliveryService.createShipment()</div><div class="fa">→</div><div class="fb">Идэвхтэй provider API</div><div class="fa">→</div><div class="fb">Tracking код авах</div><div class="fa">→</div><div class="fb">Хэрэглэгчид мэдэгдэх</div></div>
+    <div class="flow-row"><div class="fb">Provider webhook: status update</div><div class="fa">→</div><div class="fb">/api/delivery/webhook/[provider]</div><div class="fa">→</div><div class="fb">Order статус шинэчлэх</div><div class="fa">→</div><div class="fb">Push мэдэгдэл</div></div>
+  </div>
+</div>
+
+<!-- PROMPT 6 -->
+<div id="panel-p6" class="panel">
+  <div class="section-title">Prompt 6 — Файл удирдлагын систем (S3/R2 суурь)</div>
+  <div class="prompt-box" id="p6text">
+<button class="copy-btn" onclick="copyPrompt('p6text')">Хуулах</button>## FILE MANAGEMENT SYSTEM
+
+Build a production-grade file storage system using Cloudflare R2 (or AWS S3).
+This system serves: product catalogs, company documents, agent portfolios,
+downloadable resources, and user uploads.
+
+---
+
+### STORAGE ARCHITECTURE
+
+```typescript
+// Storage providers — swappable via env config
+// STORAGE_PROVIDER=r2 | s3 | local (dev only)
+
+interface StorageProvider {
+  getPresignedUploadUrl(key: string, opts: UploadOptions): Promise<PresignedUrl>
+  getPresignedDownloadUrl(key: string, expiresIn: number): Promise<string>
+  deleteObject(key: string): Promise<void>
+  listObjects(prefix: string): Promise<StorageObject[]>
+  copyObject(source: string, dest: string): Promise<void>
+}
+
+// Key naming convention:
+// uploads/{entityType}/{entityId}/{category}/{filename}
+// e.g. uploads/store/clx123/products/product-photo-001.jpg
+//      uploads/company/clx456/documents/license-2026.pdf
+//      uploads/agent/clx789/portfolio/project-hero.jpg
+```
+
+### PRISMA SCHEMA — File model
+
+```prisma
+model StoredFile {
+  id           String     @id @default(cuid())
+  key          String     @unique   // S3/R2 object key
+  filename     String               // original filename
+  mimeType     String
+  size         Int                  // bytes
+  category     FileCategory
+  entityType   EntityType?
+  entityId     String?              // store/agent/company id
+  uploadedById String               // user who uploaded
+  isPublic     Boolean  @default(false)
+  downloadCount Int     @default(0)
+  metadata     Json?                // extra info (dimensions, duration...)
+  createdAt    DateTime @default(now())
+  deletedAt    DateTime?            // soft delete
+
+  uploadedBy   User    @relation(...)
+  productFiles ProductFile[]
+  orderFiles   OrderFile[]
+}
+
+enum FileCategory {
+  PRODUCT_IMAGE
+  PRODUCT_CATALOG     // downloadable PDF catalog
+  STORE_DOCUMENT      // license, cert, etc.
+  COMPANY_DOCUMENT
+  AGENT_PORTFOLIO
+  PROJECT_GALLERY
+  PROJECT_FLOORPLAN
+  INVOICE_PDF
+  USER_AVATAR
+  COVER_IMAGE
+  GENERAL
+}
+```
+
+### QUOTA SYSTEM per entity role
+
+```typescript
+const STORAGE_QUOTA = {
+  USER:         50 * 1024 * 1024,    // 50MB
+  STORE:       500 * 1024 * 1024,    // 500MB
+  AGENT:       200 * 1024 * 1024,    // 200MB
+  COMPANY:    2000 * 1024 * 1024,    // 2GB
+  AUTO_DEALER: 500 * 1024 * 1024,    // 500MB
+  SERVICE:     200 * 1024 * 1024,    // 200MB
+  ADMIN:       Infinity,
+}
+
+// Admin can override per entity from /admin/storage
+interface StorageQuotaOverride {
+  entityId: string
+  customQuotaBytes: number
+  reason: string
+  setByAdminId: string
+}
+```
+
+### API ROUTES
+
+```
+POST   /api/files/upload-url          — get presigned upload URL
+POST   /api/files/confirm             — confirm upload complete, save to DB
+GET    /api/files/download/[fileId]   — get signed download URL (auth check)
+DELETE /api/files/[fileId]            — soft delete (owner or admin)
+GET    /api/files/list                — list files for entity (paginated)
+GET    /api/files/quota               — get usage + quota for current entity
+PATCH  /api/files/[fileId]/metadata   — update title, category, isPublic
+```
+
+### UPLOAD COMPONENT (React)
+
+```tsx
+// Reusable <FileUploader> component
+interface FileUploaderProps {
+  category: FileCategory
+  entityId: string
+  accept?: string           // "image/*" | ".pdf,.doc" | "*"
+  maxSize?: number          // bytes, default from role quota
+  multiple?: boolean
+  onUploadComplete: (file: StoredFile) => void
+}
+
+// Behavior:
+// 1. Drag & drop or click to select
+// 2. Client-side validation (type, size, quota check)
+// 3. GET /api/files/upload-url → presigned URL
+// 4. PUT directly to R2/S3 (no server proxy)
+// 5. POST /api/files/confirm → save metadata
+// 6. Show progress bar, preview, success state
+
+// Shows quota meter: "234MB / 500MB ашиглагдсан"
+```
+
+### DOWNLOAD PAGE — /files/[fileId]
+
+```tsx
+// Public downloadable file page (for catalogs, brochures)
+// If isPublic=true: no auth required
+// If isPublic=false: must be logged in + have access
+
+<DownloadPage>
+  <FilePreview>    — PDF preview (iframe) or image preview
+  <FileInfo>       — filename, size, uploadedAt, downloadCount
+  <DownloadButton> — calls /api/files/download/[id] → redirect to signed URL
+  <RelatedFiles>   — other files from same entity
+</DownloadPage>
+
+// Track downloads:
+// On each download: increment downloadCount, log to DownloadLog
+model DownloadLog {
+  id         String   @id @default(cuid())
+  fileId     String
+  userId     String?  // null if public download
+  ipAddress  String
+  userAgent  String
+  downloadedAt DateTime @default(now())
+}
+```
+
+### PRODUCT CATALOG FEATURE
+
+Allow stores/companies to attach downloadable catalogs to products:
+
+```tsx
+// In product edit form:
+<ProductForm>
+  ...existing fields...
+  <CatalogSection>
+    <label>Татан авах файлууд (PDF каталог, гарын авлага...)</label>
+    <FileUploader
+      category="PRODUCT_CATALOG"
+      accept=".pdf,.xlsx,.docx"
+      multiple={true}
+      maxFiles={5}
+    />
+    <AttachedFileList>
+      — shows attached files with download count
+      — reorder, remove buttons
+      — toggle public/private
+    </AttachedFileList>
+  </CatalogSection>
+</ProductForm>
+
+// Product detail page shows:
+<ProductDownloads>
+  {product.files.map(f => (
+    <DownloadRow key={f.id}>
+      <FileIcon type={f.mimeType} />
+      <span>{f.filename}</span>
+      <span>{formatBytes(f.size)}</span>
+      <DownloadButton fileId={f.id} />
+    </DownloadRow>
+  ))}
+</ProductDownloads>
+```
+
+Implement with:
+- Multipart upload support for files &gt;100MB
+- Image optimization pipeline (Sharp): auto-resize, WebP conversion
+- Virus scan hook (configurable, ClamAV or SaaS)
+- CDN cache headers for public files
+- Admin storage dashboard at /admin/storage
+</div>
+</div>
+
+<!-- PROMPT 7 -->
+<div id="panel-p7" class="panel">
+  <div class="section-title">Prompt 7 — Дэлгүүрийн эрх үүсгэх wizard</div>
+  <div class="prompt-box" id="p7text">
+<button class="copy-btn" onclick="copyPrompt('p7text')">Хуулах</button>## STORE REGISTRATION WIZARD — /become-seller
+
+Multi-step wizard for users to create a Store, Agent, Company,
+AutoDealer, or Service entity account.
+
+---
+
+### WIZARD STEPS (5 steps, progress bar)
+
+```
+Step 1: Entity type selection
+  — Visual cards: Дэлгүүр | Агент | Барилгын компани | Авто | Үйлчилгээ
+  — Brief description of each + what you can do
+  — Select one → continue
+
+Step 2: Basic information
+  — Business name (+ slug auto-generated, editable)
+  — Phone, email (pre-filled from user account)
+  — Category selection (dropdown per entity type)
+  — Short description (max 200 chars)
+
+Step 3: Identity verification (KYC)
+  — Entity type = STORE/COMPANY/AUTO: 
+      Company registration number (ААН дугаар)
+      Upload: State registration certificate (PDF/image)
+      Upload: Business license (optional but recommended)
+  — Entity type = AGENT:
+      Full name, national ID number
+      Agent license number (үл хөдлөхийн зуучийн)
+      Upload: License scan
+  — All uploads go through FileUploader → S3/R2
+
+Step 4: Profile setup
+  — Cover image upload (recommended 1200x400px)
+  — Logo / Profile photo upload
+  — Social links (Facebook, Instagram, Website)
+  — Address + map location picker (Google Maps)
+
+Step 5: Review & submit
+  — Summary of all entered info
+  — Pricing plan selection (optional — can upgrade later):
+      Free | Basic | Pro (plans from DB)
+  — Terms of service checkbox
+  — Submit → creates entity in PENDING status
+```
+
+### STATE MACHINE
+
+```typescript
+type RegistrationStatus =
+  | 'DRAFT'          // wizard not completed
+  | 'PENDING_REVIEW' // submitted, awaiting admin
+  | 'INFO_REQUESTED' // admin asked for more docs
+  | 'APPROVED'       // active, can publish
+  | 'REJECTED'       // rejected with reason
+  | 'SUSPENDED'      // was active, now suspended
+
+// On submit:
+// 1. Create entity record (status: PENDING_REVIEW)
+// 2. Notify admins (email + in-app)
+// 3. User sees "Хүлээгдэж буй" dashboard
+
+// On admin approve:
+// 1. entity.status = APPROVED, isVerified = true
+// 2. user.role updated to entity type
+// 3. Welcome email with onboarding checklist
+// 4. Unlock /dashboard/* routes
+```
+
+### ONBOARDING CHECKLIST (post-approval)
+
+```tsx
+// Shown in /dashboard/overview until all items completed
+const ONBOARDING_STEPS = [
+  { id: 'cover',    label: 'Cover зураг байршуулах',        done: !!entity.coverImage },
+  { id: 'logo',     label: 'Лого/профайл зураг оруулах',   done: !!entity.logo },
+  { id: 'desc',     label: 'Дэлгэрэнгүй тайлбар бичих',   done: entity.description?.length > 50 },
+  { id: 'location', label: 'Байршлын мэдээлэл нэмэх',      done: !!(entity.lat && entity.lng) },
+  { id: 'first',    label: 'Эхний бараа/зар байршуулах',   done: entity.itemCount > 0 },
+  { id: 'payment',  label: 'Төлбөрийн мэдээлэл тохируулах', done: !!entity.paymentSetup },
+]
+
+// Progress bar: X/6 дууссан
+// Each step links to relevant settings page
+```
+
+### ADMIN REVIEW INTERFACE — /admin/entities/pending
+
+```tsx
+<PendingEntitiesPage>
+  <FilterBar> — by entity type, submission date, KYC doc status
+  <ReviewTable>
+    columns: [entity name, type, owner, submitted date, docs, action]
+    row actions:
+      "Харах" → opens ReviewModal
+      "Баталгаажуулах" → one-click approve
+      "Мэдээлэл хүсэх" → opens MessageModal (sends email to user)
+      "Татгалзах" → opens RejectModal (requires reason)
+
+  <ReviewModal>
+    — Full entity info
+    — KYC documents (inline PDF/image preview)
+    — Document verification checklist:
+        [ ] Бизнесийн гэрчилгээ
+        [ ] Лицензи
+        [ ] Хаяг баталгаажсан
+    — Admin notes (internal)
+    — Action buttons: Approve / Request Info / Reject
+    — All actions logged to AuditLog
+```
+
+### ENTITY SETTINGS PAGE — /dashboard/settings
+
+```tsx
+<EntitySettings>
+  <Tabs>
+    "Ерөнхий"     — name, slug, description, category
+    "Профайл"     — cover, logo/photo, social links
+    "Байршил"     — map picker, address fields
+    "Баримт бичиг" — KYC docs, re-upload if expired
+    "Мэдэгдэл"    — notification preferences
+    "Аюулгүй байдал" — 2FA, active sessions
+    "Төлбөр"      — billing info, saved cards
+    "Хаах"        — deactivate / delete account
+
+  // Each tab saves independently (no full-page reload)
+  // Unsaved changes warning before navigation
+```
+</div>
+</div>
+
+<!-- PROMPT 8 -->
+<div id="panel-p8" class="panel">
+  <div class="section-title">Prompt 8 — Онцлог бараа цэс + файл хавсаргах</div>
+  <div class="prompt-box" id="p8text">
+<button class="copy-btn" onclick="copyPrompt('p8text')">Хуулах</button>## FEATURED PRODUCT MANAGEMENT + FILE ATTACHMENTS
+
+Build the complete featured/VIP/discount product management system
+within the entity owner dashboard.
+
+---
+
+### PRODUCT MANAGEMENT — /dashboard/products (STORE)
+### LISTING MANAGEMENT  — /dashboard/listings (AGENT)
+### PROJECT MANAGEMENT  — /dashboard/projects (COMPANY/AUTO)
+
+All share the same base structure, extended per type.
+
+---
+
+### PRODUCT TABLE VIEW
+
+```tsx
+<ProductsPage>
+  <StatsRow>
+    — Total: X бараа | Active: Y | Draft: Z | Archived: W
+    — VIP: A | Featured: B | Discounted: C
+    — Storage used: XMB / QUOTA
+
+  <Toolbar>
+    — Search input
+    — Filter: tier (VIP|Featured|Discounted|Normal)
+    — Filter: status (Active|Draft|Archived)
+    — Filter: category
+    — Sort: Newest | Price | ViewCount
+    — Bulk actions: Archive | Feature | Delete | Export CSV
+
+  <ProductTable>
+    columns: [
+      checkbox,
+      image thumbnail (40x40),
+      name + refId (mono font),
+      category badge,
+      price,
+      tier badge (VIP gold | Featured blue | Discounted red | Normal gray),
+      status badge,
+      viewCount,
+      downloadCount (if has files),
+      files count (paperclip icon + number),
+      actions
+    ]
+
+  <Pagination>
+```
+
+### PRODUCT EDIT PAGE — /dashboard/products/[id]/edit
+
+```tsx
+<ProductEditPage>
+  <Tabs>
+    "Үндсэн мэдээлэл"
+    "Зурагнууд"
+    "Татан авах файлууд"     ← new
+    "Онцлог тохируулга"      ← new
+    "Хямдрал тохируулга"     ← new
+    "Ангилал & шошго"
+
+  // Tab: "Татан авах файлууд"
+  <DownloadFilesTab>
+    <FileUploader
+      category="PRODUCT_CATALOG"
+      accept=".pdf,.xlsx,.docx,.zip"
+      multiple={true}
+      maxFiles={10}
+    />
+    <FileList>
+      — Each file row:
+        [icon] [filename] [size] [uploadDate] [downloads: 42]
+        [Toggle: Нийтэд нээлттэй / Зөвхөн бүртгэлтэй хэрэглэгч]
+        [Edit label] [Delete]
+      — Drag to reorder
+    <DownloadPagePreview>
+      — Live preview of how download section looks on product page
+
+  // Tab: "Онцлог тохируулга"
+  <FeaturedConfigTab>
+    <CurrentStatus>
+      — Tier: NORMAL (upgrade available)
+      — Or: "ВИП — 12 хоног үлдсэн"
+
+    <PromotionOptions>
+      — VIP 7 хоног: 49,900₮  [Сонгох]
+      — VIP 30 хоног: 149,900₮ [Сонгох]
+      — Онцлох 7 хоног: 19,900₮ [Сонгох]
+      — Онцлох 30 хоног: 59,900₮ [Сонгох]
+
+    — On select → goes to /dashboard/promote/checkout?itemId=X&planId=Y
+
+  // Tab: "Хямдрал тохируулга"
+  <DiscountTab>
+    <DiscountForm>
+      originalPrice: (auto-filled, readonly)
+      discountType: PERCENT | FIXED
+      discountValue: input
+      → calculatedPrice shown live
+      startDate: DatePicker (optional, schedule)
+      endDate: DatePicker (required for timed discounts)
+      [Save Discount] → sets tier=DISCOUNTED, saves discount record
+
+    <ActiveDiscount>
+      — Current discount summary
+      — Countdown: "8 хоног 14 цаг үлдсэн"
+      — [Дуусгавар болгох] button
+```
+
+### FEATURED PRODUCTS SECTION — public-facing
+
+```tsx
+// On entity profile page /store/[slug]:
+<EntityProfilePage>
+  ...cover, info...
+  
+  <FeaturedProductsRow>     ← new section
+    title="Онцлох бараанууд"
+    — Horizontal scroll of FEATURED/VIP items from this entity
+    — Gold border for VIP, blue for Featured
+    — Max 6 shown, "Бүгдийг харах →" link
+
+  <AllProductsGrid>
+    — Rest of products (DISCOUNTED then NORMAL)
+    — Filter/sort controls
+    — Load more pagination
+```
+
+### BULK OPERATIONS
+
+```typescript
+// POST /api/products/bulk
+interface BulkAction {
+  productIds: string[]
+  action:
+    | { type: 'ARCHIVE' }
+    | { type: 'SET_DISCOUNT', percent: number, endDate: Date }
+    | { type: 'REMOVE_DISCOUNT' }
+    | { type: 'EXPORT_CSV' }
+    | { type: 'DELETE' }         // soft delete
+}
+
+// Export CSV includes all product fields + file list + stats
+// Downloadable immediately as file attachment
+```
+</div>
+</div>
+
+<!-- PROMPT 9 -->
+<div id="panel-p9" class="panel">
+  <div class="section-title">Prompt 9 — Төлбөрийн систем (QPay + Stripe + webhook)</div>
+  <div class="prompt-box" id="p9text">
+<button class="copy-btn" onclick="copyPrompt('p9text')">Хуулах</button>## PAYMENT SYSTEM — FULL IMPLEMENTATION
+
+Build a robust, extensible payment system supporting QPay (primary)
+and Stripe (fallback), with webhooks, invoicing, and admin controls.
+
+---
+
+### PRISMA SCHEMA
+
+```prisma
+model Order {
+  id              String      @id @default(cuid())
+  refId           String      @unique   // ORD-2604-001234
+  buyerId         String
+  sellerId        String      // store/entity id
+  status          OrderStatus @default(PENDING)
+  items           OrderItem[]
+  subtotal        Float
+  discountAmount  Float       @default(0)
+  deliveryFee     Float       @default(0)
+  total           Float
+  currency        String      @default("MNT")
+  paymentMethod   PaymentMethod?
+  paymentStatus   PaymentStatus @default(UNPAID)
+  paidAt          DateTime?
+  notes           String?
+  deliveryAddress Json?
+  invoice         Invoice?
+  shipment        Shipment?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  orderId         String
+  provider        PaymentProvider  // QPAY | STRIPE | MANUAL
+  providerRef     String?          // QPay invoice_id / Stripe payment_intent
+  amount          Float
+  currency        String           @default("MNT")
+  status          PaymentStatus
+  metadata        Json?            // raw provider response
+  createdAt       DateTime         @default(now())
+  webhookEvents   WebhookEvent[]
+}
+
+model WebhookEvent {
+  id          String   @id @default(cuid())
+  provider    String
+  eventType   String   // payment.success | payment.failed | refund.created
+  payload     Json
+  processed   Boolean  @default(false)
+  error       String?
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+}
+
+model Invoice {
+  id          String   @id @default(cuid())
+  orderId     String   @unique
+  number      String   @unique    // INV-2026-004821
+  pdfKey      String?             // S3/R2 key for PDF
+  issuedAt    DateTime @default(now())
+  dueAt       DateTime?
+  paidAt      DateTime?
+  metadata    Json?
+}
+
+enum PaymentProvider { QPAY | STRIPE | MANUAL | BANK_TRANSFER }
+enum PaymentStatus   { UNPAID | PENDING | PAID | FAILED | REFUNDED | PARTIAL_REFUND }
+enum OrderStatus     { PENDING | CONFIRMED | PROCESSING | SHIPPED | DELIVERED | CANCELLED | REFUNDED }
+```
+
+### QPAY INTEGRATION
+
+```typescript
+// lib/payment/providers/qpay.ts
+class QPay implements PaymentProvider {
+  private baseUrl = process.env.QPAY_BASE_URL!  // https://merchant.qpay.mn/v2
+  private token: string
+
+  async authenticate(): Promise<void> {
+    const res = await fetch(`${this.baseUrl}/auth/token`, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${btoa(user+':'+pass)}` }
+    })
+    this.token = (await res.json()).access_token
+  }
+
+  async createInvoice(order: Order): Promise<QPay Invoice> {
+    return fetch(`${this.baseUrl}/invoice`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${this.token}` },
+      body: JSON.stringify({
+        invoice_code: process.env.QPAY_INVOICE_CODE,
+        sender_invoice_no: order.refId,
+        invoice_receiver_code: order.buyerId,
+        invoice_description: `Eseller.mn захиалга ${order.refId}`,
+        amount: order.total,
+        callback_url: `${process.env.APP_URL}/api/payment/webhook/qpay`
+      })
+    })
+  }
+
+  async checkPayment(invoiceId: string): Promise<boolean> {
+    // Poll payment status from QPay
+  }
+
+  async refund(paymentId: string, amount: number): Promise<void> {
+    // QPay refund API
+  }
+}
+```
+
+### STRIPE INTEGRATION
+
+```typescript
+// lib/payment/providers/stripe.ts
+class StripeProvider implements PaymentProvider {
+  async createPaymentIntent(order: Order): Promise<PaymentIntent> {
+    return stripe.paymentIntents.create({
+      amount: Math.round(order.total),  // MNT = no conversion needed
+      currency: 'mnt',
+      metadata: { orderId: order.id, refId: order.refId },
+    })
+  }
+
+  async handleWebhook(payload: string, signature: string): Promise<void> {
+    const event = stripe.webhooks.constructEvent(payload, signature, secret)
+    switch(event.type) {
+      case 'payment_intent.succeeded': await this.onSuccess(event.data)
+      case 'payment_intent.payment_failed': await this.onFailed(event.data)
+      case 'charge.refunded': await this.onRefund(event.data)
+    }
+  }
+}
+```
+
+### WEBHOOK ENDPOINTS
+
+```typescript
+// POST /api/payment/webhook/qpay
+// POST /api/payment/webhook/stripe
+// POST /api/payment/webhook/[provider]  ← extensible
+
+// Webhook handler pattern (idempotent):
+async function handleWebhook(provider, rawBody, headers) {
+  // 1. Verify signature (HMAC or provider-specific)
+  // 2. Save raw event to WebhookEvent table (always, even if processing fails)
+  // 3. Check if already processed (idempotency key)
+  // 4. Process event:
+  //    payment.success → confirmOrder() → generateInvoice() → triggerDelivery()
+  //    payment.failed  → markOrderFailed() → notify buyer
+  //    refund.created  → updateOrderStatus() → notify seller
+  // 5. Mark WebhookEvent.processed = true
+  // 6. Return 200 immediately (async processing via queue)
+}
+
+// Retry logic: if processing fails, webhook event stays processed=false
+// Background job retries every 5 min for up to 24 hours
+```
+
+### INVOICE PDF GENERATION
+
+```typescript
+// lib/invoice/generator.ts
+// Uses @react-pdf/renderer for PDF generation
+
+async function generateInvoice(orderId: string): Promise<string> {
+  const order = await getOrderWithDetails(orderId)
+  
+  const pdf = await renderToBuffer(
+    <InvoiceDocument
+      invoiceNumber={order.invoice.number}
+      date={order.paidAt}
+      buyer={{ name, address, phone }}
+      seller={{ name, logo, address, registerNumber }}
+      items={order.items.map(i => ({
+        name: i.product.name,
+        qty: i.quantity,
+        unitPrice: i.unitPrice,
+        total: i.total,
+      }))}
+      subtotal={order.subtotal}
+      discountAmount={order.discountAmount}
+      deliveryFee={order.deliveryFee}
+      total={order.total}
+      vatAmount={order.total * 0.1}    // 10% НӨАТ
+    />
+  )
+
+  // Upload PDF to S3/R2
+  const key = `invoices/${order.refId}/invoice.pdf`
+  await storage.upload(key, pdf, { ContentType: 'application/pdf' })
+
+  // Update invoice record
+  await db.invoice.update({ where: { orderId }, data: { pdfKey: key } })
+
+  return key
+}
+```
+
+### PAYMENT API ROUTES
+
+```
+POST   /api/payment/create           — create order + payment intent
+GET    /api/payment/status/[orderId] — poll payment status
+POST   /api/payment/webhook/[prov]   — provider webhooks
+POST   /api/payment/refund           — initiate refund (admin or seller)
+GET    /api/payment/invoice/[orderId] — get signed invoice PDF URL
+```
+</div>
+</div>
+
+<!-- PROMPT 10 -->
+<div id="panel-p10" class="panel">
+  <div class="section-title">Prompt 10 — Хүргэлтийн API (Provider-agnostic + webhook)</div>
+  <div class="prompt-box" id="p10text">
+<button class="copy-btn" onclick="copyPrompt('p10text')">Хуулах</button>## DELIVERY SYSTEM — PROVIDER-AGNOSTIC ARCHITECTURE
+
+Build a flexible delivery integration layer that can connect to any
+Mongolian delivery company (Unegui Express, Murkh, iPost, etc.)
+via a standard interface, with tracking and webhook support.
+
+---
+
+### CORE INTERFACE — extensible for any provider
+
+```typescript
+// lib/delivery/DeliveryProvider.interface.ts
+
+interface DeliveryProvider {
+  name: string           // "unegui_express" | "murkh" | "ipost"
+  displayName: string    // "Унэгүй Экспресс"
+  isActive: boolean
+
+  // Create a shipment and get tracking code
+  createShipment(params: CreateShipmentParams): Promise<ShipmentResult>
+
+  // Get live tracking status
+  trackShipment(trackingCode: string): Promise<TrackingStatus>
+
+  // Cancel a shipment (before pickup)
+  cancelShipment(trackingCode: string): Promise<void>
+
+  // Calculate delivery fee before ordering
+  calculateFee(params: FeeParams): Promise<DeliveryFee>
+
+  // Validate webhook signature from provider
+  verifyWebhook(payload: string, signature: string): boolean
+}
+
+interface CreateShipmentParams {
+  orderId: string
+  sender: { name, phone, address, lat?, lng? }
+  recipient: { name, phone, address, lat?, lng? }
+  packageInfo: {
+    weight: number      // grams
+    dimensions?: { w, h, d }  // cm
+    description: string
+    declaredValue: number      // MNT, for insurance
+  }
+  serviceType: 'STANDARD' | 'EXPRESS' | 'SAME_DAY'
+  paymentSide: 'SENDER' | 'RECIPIENT'
+}
+
+interface TrackingStatus {
+  trackingCode: string
+  status: DeliveryStatus
+  estimatedDelivery?: Date
+  currentLocation?: string
+  events: TrackingEvent[]
+}
+
+type DeliveryStatus =
+  | 'AWAITING_PICKUP'
+  | 'PICKED_UP'
+  | 'IN_TRANSIT'
+  | 'OUT_FOR_DELIVERY'
+  | 'DELIVERED'
+  | 'FAILED_ATTEMPT'
+  | 'RETURNED'
+  | 'CANCELLED'
+```
+
+### PRISMA SCHEMA
+
+```prisma
+model DeliveryProvider {
+  id            String  @id @default(cuid())
+  name          String  @unique   // internal key
+  displayName   String
+  logoUrl       String?
+  isActive      Boolean @default(false)
+  config        Json    // API keys, base URLs (encrypted)
+  webhookSecret String? // for signature verification
+  capabilities  String[] // ['STANDARD','EXPRESS','SAME_DAY','COD']
+  coverageAreas String[] // ['UB', 'Darkhan', 'Erdenet', ...]
+  shipments     Shipment[]
+}
+
+model Shipment {
+  id              String           @id @default(cuid())
+  orderId         String           @unique
+  providerId      String
+  trackingCode    String?          @unique
+  status          DeliveryStatus   @default(AWAITING_PICKUP)
+  serviceType     String
+  fee             Float
+  feePaidBy       String           // SENDER | RECIPIENT
+  estimatedAt     DateTime?
+  pickedUpAt      DateTime?
+  deliveredAt     DateTime?
+  failedReason    String?
+  senderAddress   Json
+  recipientAddress Json
+  packageInfo     Json
+  trackingEvents  TrackingEvent[]
+  webhookEvents   DeliveryWebhookEvent[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model TrackingEvent {
+  id          String   @id @default(cuid())
+  shipmentId  String
+  status      DeliveryStatus
+  description String
+  location    String?
+  occurredAt  DateTime
+  rawPayload  Json?
+}
+```
+
+### DELIVERY SERVICE — main entry point
+
+```typescript
+// lib/delivery/DeliveryService.ts
+
+class DeliveryService {
+  private providers: Map<string, DeliveryProvider> = new Map()
+
+  // Load active providers from DB on startup
+  async initialize(): Promise<void>
+
+  // Get best available provider for order (based on coverage + service type)
+  async selectProvider(params: CreateShipmentParams): Promise<DeliveryProvider>
+
+  // Create shipment — tries primary provider, falls back to secondary
+  async createShipment(orderId: string): Promise<Shipment> {
+    const order = await getOrder(orderId)
+    const provider = await this.selectProvider(...)
+    
+    try {
+      const result = await provider.createShipment(params)
+      return await db.shipment.create({ data: { ...result, providerId: provider.id } })
+    } catch (err) {
+      // Log failure, try fallback provider if configured
+      await this.tryFallback(orderId, err)
+    }
+  }
+
+  // Called by webhook endpoint
+  async handleWebhook(providerName: string, payload: unknown): Promise<void> {
+    const provider = this.providers.get(providerName)
+    // Normalize to internal TrackingEvent format
+    // Update Shipment.status
+    // Update Order.status if DELIVERED
+    // Send notification to buyer
+  }
+}
+```
+
+### WEBHOOK ENDPOINTS
+
+```typescript
+// POST /api/delivery/webhook/[provider]
+// e.g. /api/delivery/webhook/unegui_express
+//      /api/delivery/webhook/murkh
+//      /api/delivery/webhook/ipost
+
+export async function POST(req, { params }) {
+  const rawBody = await req.text()
+  const signature = req.headers.get('x-webhook-signature')
+
+  const provider = await getProvider(params.provider)
+  if (!provider.verifyWebhook(rawBody, signature)) {
+    return new Response('Invalid signature', { status: 401 })
+  }
+
+  // Save raw event immediately
+  const event = await db.deliveryWebhookEvent.create({
+    data: { providerId: provider.id, payload: JSON.parse(rawBody) }
+  })
+
+  // Process async (don't block webhook response)
+  deliveryService.handleWebhook(params.provider, event).catch(console.error)
+
+  return new Response('OK', { status: 200 })
+}
+```
+
+### TRACKING PAGE — /track/[trackingCode]
+
+```tsx
+// Public page, no auth required
+<TrackingPage>
+  <TrackingHeader>
+    — Tracking code (large, copyable)
+    — Current status badge (color-coded)
+    — Estimated delivery date
+    — Provider logo + name
+
+  <ProgressTimeline>
+    — Visual steps: Order → Pickup → Transit → Out for delivery → Delivered
+    — Completed steps filled, current step animated pulse
+    — Failed step shows red with reason
+
+  <EventLog>
+    — Full list of tracking events (newest first)
+    — Each: timestamp, status, location, description
+
+  <MapPreview>
+    — If provider supports GPS: show last known location
+    — Otherwise: show route from sender to recipient
+
+  // Auto-refresh every 5 minutes if status is not DELIVERED
+  // Share button: copy link or share to social
+```
+
+### ADMIN DELIVERY PANEL — /admin/delivery
+
+```tsx
+<DeliveryAdminPage>
+  <Tabs>
+    "Провайдерууд"
+      — Provider list with on/off toggle
+      — Config each: API key (encrypted), webhook URL, capabilities
+      — Test connection button
+
+    "Идэвхтэй хүргэлтүүд"
+      — Live shipments table with status
+      — Manual status override (for edge cases)
+      — Retry failed shipments
+
+    "Webhook лог"
+      — All incoming webhooks, processed/failed
+      — Retry failed events
+
+    "Статистик"
+      — Delivery rate by provider
+      — Average delivery time
+      — Failed delivery % by district
+```
+</div>
+</div>
+
+<!-- PROMPT 11 -->
+<div id="panel-p11" class="panel">
+  <div class="section-title">Prompt 11 — Супер Админ: нэгдсэн санхүүгийн удирдлага</div>
+  <div class="prompt-box" id="p11text">
+<button class="copy-btn" onclick="copyPrompt('p11text')">Хуулах</button>## SUPER ADMIN PANEL — /super-admin/*
+
+A separate high-privilege dashboard accessible ONLY to SUPER_ADMIN role.
+Separate from the regular /admin panel — controls system-wide financial,
+infrastructure, and configuration settings.
+
+---
+
+### ROLE SEPARATION
+
+```typescript
+enum UserRole {
+  USER
+  STORE | AGENT | COMPANY | AUTO_DEALER | SERVICE  // entity roles
+  ADMIN          // can manage entities, content, chat
+  SUPER_ADMIN    // can manage finances, system config, all admins
+}
+
+// Route guard:
+// /admin/*       → ADMIN + SUPER_ADMIN
+// /super-admin/* → SUPER_ADMIN only (separate JWT claim check)
+```
+
+### SUPER ADMIN SIDEBAR
+
+```
+/super-admin
+├── /dashboard          — System-wide KPIs
+├── /finance            — Revenue, payouts, reconciliation
+│   ├── /revenue        — All income by source
+│   ├── /payouts        — Seller payout management
+│   ├── /refunds        — Refund approval & processing
+│   └── /tax            — VAT reports, tax export
+├── /payment-config     — Payment provider settings
+├── /delivery-config    — Delivery provider settings
+├── /storage-admin      — Storage quota, costs, cleanup
+├── /pricing-plans      — Manage all monetization plans
+├── /promotions         — Global promos, coupon codes
+├── /system-config      — Feature flags, maintenance mode
+├── /audit-log          — Full audit trail (all admins)
+└── /admins             — Manage admin accounts + roles
+```
+
+### /super-admin/finance/revenue
+
+```tsx
+<RevenueCenter>
+  <DateRangePicker /> + <ExportButton format="xlsx|csv|pdf" />
+
+  <MetricGrid>
+    — Gross Revenue (all time | this month | today)
+    — Platform fee revenue (% from each transaction)
+    — VIP/Featured placement revenue
+    — Subscription revenue (Pro plans)
+    — Refunds issued (negative)
+    — Net Revenue = Gross - Refunds - Payouts
+
+  <RevenueChart>
+    — Line chart: daily revenue (last 90 days)
+    — Bar chart: by source (orders | promotions | subscriptions)
+    — By entity type breakdown
+
+  <TransactionTable>
+    columns: [date, refId, type, entity, amount, fee, net, status, action]
+    Filterable by: type, entity, date, status, amount range
+    Export to Excel with one click
+```
+
+### /super-admin/finance/payouts
+
+```tsx
+// Seller payout management
+<PayoutsPage>
+  <PendingPayouts>
+    — Sellers with balance ≥ payout threshold (default 10,000₮)
+    — Each row: entity name, pending amount, bank account, last payout
+    — Bulk select → "Payout хийх" → bank transfer or QPay send
+
+  <PayoutHistory>
+    — All completed payouts
+    — Status: PENDING | PROCESSING | COMPLETED | FAILED
+
+  // Auto-payout rules (configurable):
+  // - Weekly every Friday (if balance > X)
+  // - Monthly on 1st
+  // - Manual only
+  // Admin can configure per entity or globally
+```
+
+### /super-admin/payment-config
+
+```tsx
+<PaymentConfigPage>
+  <ProviderList>
+    Each provider (QPay, Stripe, Bank Transfer):
+      — Enable/Disable toggle
+      — API credentials (masked, edit mode)
+      — Webhook secret + webhook URL (auto-generated)
+      — Test payment button → sends 1₮ test transaction
+      — Fee structure:
+          Platform fee: X% per transaction
+          Fixed fee: Y₮ per transaction
+      — Daily/monthly limit settings
+
+  <FeeSchedule>
+    — By entity type: STORE 2.5% | AGENT 1.5% | ...
+    — By payment method: QPay 0% | Card 1.5% | ...
+    — Configurable discount brackets (volume discounts)
+
+  <WebhookMonitor>
+    — Live incoming webhooks (last 100)
+    — Success rate chart (last 7 days)
+    — Failed webhook alerts + retry button
+```
+
+### /super-admin/pricing-plans (full CRUD)
+
+```tsx
+<PricingPlanManager>
+  <PlanTable>
+    — All plans from DB (VIP, Featured, Subscription, etc.)
+    — Toggle active/inactive per plan
+    — Edit: name, price, duration, features, entity types allowed
+    — Duplicate plan (for quick creation of variants)
+    — Archive (soft delete)
+
+  <CreatePlanModal>
+    name: input
+    tier: select (VIP | FEATURED | SUBSCRIPTION | ADDON)
+    entityTypes: multi-select checkboxes
+    price: number (MNT)
+    durationDays: number (or 0 for subscription)
+    maxItems: number
+    features: dynamic list (add/remove text items)
+    isActive: toggle
+    trialDays: number (0 = no trial)
+    sortOrder: number (display order)
+
+  <PromotionalPricing>
+    — Temporary discounts on plans
+    — "50% хямдрал 7 хоног" → set promo start/end + discount %
+    — Auto-reverts after end date
+```
+
+### /super-admin/system-config
+
+```typescript
+// Feature flags — toggle without deployment
+interface SystemConfig {
+  maintenanceMode: boolean       // shows maintenance page to all
+  newRegistrationsOpen: boolean  // close signups temporarily
+  maxFileUploadMB: number
+  defaultStorageQuotaByRole: Record<UserRole, number>
+  paymentProviderPriority: string[]  // ['qpay', 'stripe']
+  deliveryProviderPriority: string[]
+  autoApproveEntities: boolean   // skip manual review (dev/test)
+  chatEnabled: boolean
+  vipSlotsMax: number            // max VIP items on homepage
+  featuredSlotsMax: number
+  invoicePrefix: string          // "INV" | "ESL" etc.
+  supportEmail: string
+  supportPhone: string
+}
+
+// All configs stored in DB, cached in Redis, editable from UI
+// Changes take effect within 30 seconds (cache TTL)
+// All config changes logged to AuditLog with before/after values
+```
+
+### AUDIT LOG — /super-admin/audit-log
+
+```prisma
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorId     String           // who did it
+  actorRole   UserRole
+  action      String           // "ENTITY_APPROVED" | "PLAN_UPDATED" | ...
+  targetType  String           // "Entity" | "Payment" | "Config"
+  targetId    String?
+  before      Json?            // previous state
+  after       Json?            // new state
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+}
+
+// Full-text searchable
+// Filterable by actor, action type, target, date range
+// Export to PDF for compliance
+// Retention: 2 years (auto-archive older to cold storage)
+```
+</div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyPrompt(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.innerText.replace('Хуулах','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа!';
+    setTimeout(()=>btn.textContent='Хуулах',2000);
+  });
+}
+function copyAll(){
+  const ids=['p6text','p7text','p8text','p9text','p10text','p11text'];
+  const all=ids.map(id=>{
+    const el=document.getElementById(id);
+    return el?el.innerText.replace('Хуулах','').trim():'';
+  }).join('\n\n---\n\n');
+  navigator.clipboard.writeText(all).then(()=>alert('Бүх 6 prompt хуулагдлаа!'));
+}
+</script>

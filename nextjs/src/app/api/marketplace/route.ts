@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
 
       const products = await prisma.product.findMany({
         where: productWhere,
-        include: { user: { select: { name: true, username: true, store: true } } },
+        include: { user: { select: { name: true, username: true } } },
         take: limit,
         orderBy: sort === 'price_asc' ? { price: 'asc' } : sort === 'price_desc' ? { price: 'desc' } : { createdAt: 'desc' },
       });
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
           images: p.images,
           rating: p.rating,
           reviewCount: p.reviewCount,
-          sellerName: p.user?.store?.name || p.user?.name,
+          sellerName: p.user?.name,
           sellerSlug: p.user?.username,
           stock: p.stock,
           commission: p.commission,
@@ -106,3 +106,5 @@ export async function GET(req: NextRequest) {
     hasMore: items.length >= limit,
   });
 }
+
+

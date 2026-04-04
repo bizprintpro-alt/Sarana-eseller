@@ -1,0 +1,1060 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:8px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative;margin-bottom:14px}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);z-index:2}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;margin-top:18px}
+.st:first-child{margin-top:0}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-teal{background:#E1F5EE;color:#0F6E56}
+.b-coral{background:#FAECE7;color:#993C1D}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px;transition:border-color .12s}
+.card:hover{border-color:var(--color-border-secondary)}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;gap:8px}
+.cn{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.cd{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:8px}
+.cl{font-size:11px;color:var(--color-text-secondary);line-height:1.9}
+.sep{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:16px 0}
+.type-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.type-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;cursor:pointer;transition:all .15s}
+.type-card:hover{border-color:var(--color-border-secondary)}
+.type-card.selected{border-color:var(--color-border-info);border-width:1.5px;background:var(--color-background-info)}
+.type-icon{width:32px;height:32px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.type-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.type-sub{font-size:11px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:8px}
+.type-tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag-sm{font-size:10px;padding:2px 6px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;transition:background .12s;color:var(--color-text-secondary)}
+.nav-item:hover{background:var(--color-background-secondary)}
+.nav-item.active{background:var(--color-background-secondary);color:var(--color-text-primary);font-weight:500}
+.nav-dot{width:6px;height:6px;border-radius:50%}
+.dash-section{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:10px}
+.dash-title{font-size:12px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.dash-item{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.dash-item:last-child{border-bottom:none}
+.dash-key{color:var(--color-text-secondary)}
+.dash-val{color:var(--color-text-primary);font-weight:500}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Eseller.mn — Дэлгүүрийн төрлийн систем</div>
+    <div class="ps">7 төрлийн дэлгүүр · Тус тусын dashboard · Wizard шинэчлэлт · Claude Code prompt</div>
+  </div>
+  <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Бүгдийг хуулах</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('types')">7 төрлийн тойм</button>
+  <button class="tab" onclick="show('wizard')">Wizard шинэчлэлт</button>
+  <button class="tab" onclick="show('dashboards')">Dashboard preview</button>
+  <button class="tab" onclick="show('p-wizard')">Prompt · Wizard</button>
+  <button class="tab" onclick="show('p-dash')">Prompt · Dashboard</button>
+  <button class="tab" onclick="show('p-order')">Prompt · Захиалгын дэлгүүр</button>
+</div>
+
+<!-- TYPES -->
+<div id="panel-types" class="panel active">
+  <div class="st">Өмнөх 5 + 2 шинэ — нийт 7 дэлгүүрийн төрөл</div>
+  <div class="type-grid">
+
+    <div class="type-card">
+      <div class="type-icon" style="background:var(--color-background-info)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-info)" stroke-width="1.5"><path d="M2 4h12l-1 8H3L2 4z"/><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
+      </div>
+      <div class="type-name">Дэлгүүр</div>
+      <div class="type-sub">Бараа бүтээгдэхүүн зарах онлайн дэлгүүр</div>
+      <div class="type-tags">
+        <span class="tag-sm">Бараа удирдлага</span>
+        <span class="tag-sm">Захиалга</span>
+        <span class="tag-sm">Хүргэлт</span>
+        <span class="tag-sm">Хямдрал</span>
+      </div>
+    </div>
+
+    <div class="type-card" style="border-color:var(--color-border-danger);border-width:1.5px;background:var(--color-background-danger)">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+        <span class="badge b-red">Шинэ</span>
+      </div>
+      <div class="type-icon" style="background:var(--color-background-primary);margin-bottom:6px">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-danger)" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/><path d="M2 2l12 12" stroke-width="1" stroke-dasharray="2 2"/></svg>
+      </div>
+      <div class="type-name">Захиалгын дэлгүүр</div>
+      <div class="type-sub">Гадаадаас захиалж оруулдаг бараа</div>
+      <div class="type-tags">
+        <span class="tag-sm" style="background:rgba(255,255,255,0.2)">Pre-order</span>
+        <span class="tag-sm" style="background:rgba(255,255,255,0.2)">Хүлээх хугацаа</span>
+        <span class="tag-sm" style="background:rgba(255,255,255,0.2)">Минимум захиалга</span>
+      </div>
+    </div>
+
+    <div class="type-card">
+      <div class="type-icon" style="background:#EEEDFE">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#534AB7" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </div>
+      <div class="type-name">Үл хөдлөхийн агент</div>
+      <div class="type-sub">Орон сууц, газар, оффис зуучлал</div>
+      <div class="type-tags">
+        <span class="tag-sm">Зар байршуулах</span>
+        <span class="tag-sm">Pro профайл</span>
+        <span class="tag-sm">Аналитик</span>
+      </div>
+    </div>
+
+    <div class="type-card">
+      <div class="type-icon" style="background:var(--color-background-success)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-success)" stroke-width="1.5"><rect x="2" y="8" width="12" height="6" rx="1"/><path d="M5 8V6a3 3 0 016 0v2"/></svg>
+      </div>
+      <div class="type-name">Барилгын компани</div>
+      <div class="type-sub">Шинэ барилга, орон сууцны төсөл</div>
+      <div class="type-tags">
+        <span class="tag-sm">Төслийн удирдлага</span>
+        <span class="tag-sm">Галерей</span>
+        <span class="tag-sm">VIP</span>
+      </div>
+    </div>
+
+    <div class="type-card">
+      <div class="type-icon" style="background:var(--color-background-warning)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-warning)" stroke-width="1.5"><path d="M1 11l2-6h10l2 6H1z"/><circle cx="5" cy="13" r="1"/><circle cx="11" cy="13" r="1"/></svg>
+      </div>
+      <div class="type-name">Авто худалдаа</div>
+      <div class="type-sub">Шинэ болон хуучин автомашин</div>
+      <div class="type-tags">
+        <span class="tag-sm">Машины жагсаалт</span>
+        <span class="tag-sm">Техник үзүүлэлт</span>
+        <span class="tag-sm">Тест драйв</span>
+      </div>
+    </div>
+
+    <div class="type-card">
+      <div class="type-icon" style="background:var(--color-background-secondary)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><circle cx="8" cy="8" r="2"/><path d="M8 2v2M8 12v2M2 8h2M12 8h2"/></svg>
+      </div>
+      <div class="type-name">Үйлчилгээ</div>
+      <div class="type-sub">Салон, засвар, хэвлэл, сургалт</div>
+      <div class="type-tags">
+        <span class="tag-sm">Цаг захиалга</span>
+        <span class="tag-sm">Портфолио</span>
+        <span class="tag-sm">Үнэлгээ</span>
+      </div>
+    </div>
+
+    <div class="type-card" style="border-color:var(--color-border-info);border-width:1.5px;background:var(--color-background-info)">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+        <span class="badge b-blue">Шинэ</span>
+      </div>
+      <div class="type-icon" style="background:var(--color-background-primary);margin-bottom:6px">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-info)" stroke-width="1.5"><path d="M4 2h8l2 4H2L4 2z"/><rect x="2" y="6" width="12" height="8" rx="1"/><path d="M8 9v3M6 11h4"/></svg>
+      </div>
+      <div class="type-name">Файл / Дижитал бараа</div>
+      <div class="type-sub">Татаж авах дижитал контент зарах</div>
+      <div class="type-tags">
+        <span class="tag-sm" style="background:rgba(255,255,255,0.3)">PDF, ZIP, видео</span>
+        <span class="tag-sm" style="background:rgba(255,255,255,0.3)">Нэг удаагийн</span>
+        <span class="tag-sm" style="background:rgba(255,255,255,0.3)">Subscription</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="st">Нэмэлт функцийн матриц</div>
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead>
+        <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+          <th style="text-align:left;padding:8px 10px;font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-transform:uppercase;letter-spacing:.06em">Функц</th>
+          <th style="padding:6px;font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-align:center">Дэлгүүр</th>
+          <th style="padding:6px;font-size:10px;color:var(--color-text-danger);font-weight:500;text-align:center">Захиалга</th>
+          <th style="padding:6px;font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-align:center">Агент</th>
+          <th style="padding:6px;font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-align:center">Барилга</th>
+          <th style="padding:6px;font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-align:center">Авто</th>
+          <th style="padding:6px;font-size:10px;color:var(--color-text-tertiary);font-weight:500;text-align:center">Үйлч</th>
+          <th style="padding:6px;font-size:10px;color:var(--color-text-info);font-weight:500;text-align:center">Файл</th>
+        </tr>
+      </thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- WIZARD -->
+<div id="panel-wizard" class="panel">
+  <div class="st">Шинэчлэгдсэн wizard — 7 төрлийн сонголттой</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:20px;margin-bottom:14px">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px">Алхам 1/5</div>
+      <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px">Төрөл сонгох</div>
+      <div style="display:flex;gap:4px;justify-content:center;margin-bottom:16px">
+        <div style="width:60px;height:3px;border-radius:99px;background:var(--color-text-info)"></div>
+        <div style="width:60px;height:3px;border-radius:99px;background:var(--color-border-tertiary)"></div>
+        <div style="width:60px;height:3px;border-radius:99px;background:var(--color-border-tertiary)"></div>
+        <div style="width:60px;height:3px;border-radius:99px;background:var(--color-border-tertiary)"></div>
+        <div style="width:60px;height:3px;border-radius:99px;background:var(--color-border-tertiary)"></div>
+      </div>
+    </div>
+
+    <div id="wizard-types" style="display:flex;flex-direction:column;gap:8px">
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+      <span style="font-size:12px;color:var(--color-text-tertiary)">← Өмнөх</span>
+      <button id="wizard-next" disabled style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 24px;font-size:13px;font-weight:500;color:var(--color-text-tertiary);cursor:not-allowed">Дараах →</button>
+    </div>
+  </div>
+
+  <div class="st">Wizard-ийн 5 алхам — төрлөөс хамааран өөрчлөгдөнө</div>
+  <div class="g3">
+    <div class="card">
+      <div class="ch"><span class="cn">Алхам 1 — Төрөл</span><span class="badge b-blue">Бүх төрөл</span></div>
+      <div class="cl">7 сонголтоос нэгийг сонгох<br>Сонголт хийсний дараа алхам 2-5 өөрчлөгдөнө<br>Capture-хийхгүй бол draft хадгалагдана</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Алхам 2 — Мэдээлэл</span><span class="badge b-gray">Динамик</span></div>
+      <div class="cl">Дэлгүүр: нэр, ангилал, slug<br>Захиалга: delivery хугацаа, минимум захиалга<br>Агент: лицензийн дугаар, туршлага<br>Барилга: ААН бүртгэл, тусгай зөвшөөрөл</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Алхам 3 — KYC</span><span class="badge b-gray">Баталгаажуулалт</span></div>
+      <div class="cl">Иргэний үнэмлэх / ААН гэрчилгээ<br>Байгууллага: Улсын бүртгэлийн гэрчилгээ<br>Агент: Зуучийн лиценз<br>ДАН-аар нэг товчлол</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Алхам 4 — Профайл</span><span class="badge b-gray">Медиа</span></div>
+      <div class="cl">Cover зураг, лого/про зураг<br>Байршлын газрын зураг<br>Нийгмийн сүлжээ холбоос<br>Танилцуулга текст</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Алхам 5 — Үнийн төлөвлөгөө</span><span class="badge b-gray">Сонголтоор</span></div>
+      <div class="cl">Үнэгүй / Pro / Business<br>Сонгоогүй ч нэвтэрч болно<br>Дараа нь dashboard-аас upgrade<br>Эхний 30 хоног Pro үнэгүй санал болгох</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">+ Нэмэлт эрх</span><span class="badge b-green">Дараа нэмэх</span></div>
+      <div class="cl">Dashboard-аас аль ч дэлгүүрийн эрхийг нэмж нээж болно<br>"+ Шинэ дэлгүүр нэмэх" товч<br>Бүх эрхүүд нэг бүртгэл дээр<br>Тусдаа dashboard цэс</div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARDS PREVIEW -->
+<div id="panel-dashboards" class="panel">
+  <div class="st">Дэлгүүрийн төрлөөр өөрчлөгдөх sidebar навигаци</div>
+
+  <div id="dash-switcher" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+    <button class="dash-btn active" onclick="switchDash('store',this)" style="padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-info);background:var(--color-background-info);color:var(--color-text-info)">Дэлгүүр</button>
+    <button class="dash-btn" onclick="switchDash('preorder',this)" style="padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-danger);background:none;color:var(--color-text-secondary)">Захиалгын</button>
+    <button class="dash-btn" onclick="switchDash('agent',this)" style="padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary)">Агент</button>
+    <button class="dash-btn" onclick="switchDash('company',this)" style="padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary)">Барилга</button>
+    <button class="dash-btn" onclick="switchDash('auto',this)" style="padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary)">Авто</button>
+    <button class="dash-btn" onclick="switchDash('service',this)" style="padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary)">Үйлчилгээ</button>
+    <button class="dash-btn" onclick="switchDash('digital',this)" style="padding:6px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary)">Файл</button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:12px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px;min-height:360px">
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px">
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px" id="dash-type-label">Дэлгүүр</div>
+      <div id="sidebar-nav" style="display:flex;flex-direction:column;gap:2px"></div>
+    </div>
+    <div>
+      <div id="dash-content" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT WIZARD -->
+<div id="panel-p-wizard" class="panel">
+  <div class="st">Prompt — Wizard + Store type шинэчлэлт</div>
+  <div class="prompt-box" id="pt-wizard">
+<button class="copy-btn" onclick="cp('pt-wizard')">Хуулах</button>## SELLER REGISTRATION WIZARD — 7 ENTITY TYPES + DYNAMIC STEPS
+
+Rebuild /become-seller wizard to support 7 entity types.
+Step 2-5 content changes dynamically based on step 1 selection.
+
+---
+
+### NEW ENTITY TYPES (add to existing 5)
+
+```typescript
+enum EntityType {
+  STORE       = 'store',        // Дэлгүүр (existing)
+  PRE_ORDER   = 'pre_order',    // Захиалгын дэлгүүр (NEW)
+  AGENT       = 'agent',        // Үл хөдлөхийн агент (existing)
+  COMPANY     = 'company',      // Барилгын компани (existing)
+  AUTO_DEALER = 'auto_dealer',  // Авто худалдаа (existing)
+  SERVICE     = 'service',      // Үйлчилгээ (existing)
+  DIGITAL     = 'digital',      // Файл/Дижитал бараа (NEW)
+}
+```
+
+### ENTITY TYPE DEFINITIONS
+
+```typescript
+const ENTITY_DEFINITIONS = {
+  store: {
+    label:    'Дэлгүүр',
+    subtitle: 'Бараа бүтээгдэхүүн зарах онлайн дэлгүүр',
+    icon:     'ShoppingBag',
+    color:    'blue',
+    tags:     ['Бараа удирдлага', 'Захиалга систем', 'Хүргэлт', 'Хямдрал & купон'],
+    step2Fields: ['businessName', 'slug', 'category', 'description', 'address'],
+    kycDocs:  ['business_certificate'],
+    planOptions: ['free', 'pro', 'business'],
+  },
+
+  pre_order: {
+    label:    'Захиалгын дэлгүүр',
+    subtitle: 'Гадаадаас захиалж оруулдаг бараа',
+    icon:     'Clock',
+    color:    'red',
+    badge:    'Шинэ',
+    tags:     ['Pre-order систем', 'Хүлээх хугацаа', 'Минимум захиалга', 'Урьдчилгаа төлбөр'],
+    step2Fields: [
+      'businessName', 'slug', 'sourceCountry',      // Хаанаас оруулдаг
+      'deliveryDays',                                 // Хүргэлтийн хоног: 14-60
+      'minimumOrderQty',                             // Минимум захиалга
+      'advancePaymentPct',                           // Урьдчилгаа %: 30-100
+      'category', 'description',
+    ],
+    kycDocs:  ['id_card', 'customs_certificate'],   // Гаалийн гэрчилгээ нэмэлт
+    planOptions: ['pro', 'business'],
+    specialFeatures: [
+      'PREORDER_QUEUE',    // Захиалгын дараалал
+      'BATCH_ORDER',       // Багцаар захиалга
+      'ADVANCE_PAYMENT',   // Урьдчилгаа авах
+      'DELIVERY_TRACKER',  // Ачааны мөрдөлт
+      'WAITING_LIST',      // Хүлээлтийн жагсаалт
+    ],
+  },
+
+  digital: {
+    label:    'Файл / Дижитал бараа',
+    subtitle: 'Татаж авах дижитал контент зарах',
+    icon:     'Download',
+    color:    'info',
+    badge:    'Шинэ',
+    tags:     ['PDF, ZIP, видео', 'Instant download', 'Subscription', 'License key'],
+    step2Fields: ['displayName', 'slug', 'category', 'description'],
+    kycDocs:  ['id_card'],
+    planOptions: ['free', 'pro'],
+    specialFeatures: [
+      'INSTANT_DELIVERY',  // Төлбөр → шууд татах линк
+      'DRM_PROTECTION',    // Хуулахаас хамгаалах
+      'DOWNLOAD_LIMIT',    // Татах тоо хязгаарлах
+      'SUBSCRIPTION',      // Сарын гишүүнчлэл
+      'PREVIEW_MODE',      // Урьдчилж харах
+    ],
+  },
+
+  agent: { ...existing config... },
+  company: { ...existing config... },
+  auto_dealer: { ...existing config... },
+  service: { ...existing config... },
+}
+```
+
+### WIZARD COMPONENT — dynamic steps
+
+```tsx
+// app/(auth)/become-seller/page.tsx
+'use client'
+
+const TOTAL_STEPS = 5
+
+export default function BecomeSellerPage() {
+  const [step, setStep]         = useState(1)
+  const [entityType, setType]   = useState<EntityType | null>(null)
+  const [formData, setFormData] = useState({})
+
+  const def = entityType ? ENTITY_DEFINITIONS[entityType] : null
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4"
+      style={{ background: 'var(--esl-bg-page)' }}>
+
+      {/* Progress bar */}
+      <ProgressBar current={step} total={TOTAL_STEPS} />
+
+      <div className="w-full max-w-2xl">
+        <p className="text-center text-sm text-[#A0A0A0] mb-1">Алхам {step}/{TOTAL_STEPS}</p>
+        <h1 className="text-center text-2xl font-black text-white mb-8">
+          {step === 1 ? 'Төрөл сонгох' :
+           step === 2 ? 'Үндсэн мэдээлэл' :
+           step === 3 ? 'Баталгаажуулалт' :
+           step === 4 ? 'Профайл тохируулах' :
+           'Үнийн төлөвлөгөө'}
+        </h1>
+
+        {/* Step 1: Type selection */}
+        {step === 1 && (
+          <EntityTypeSelector
+            selected={entityType}
+            onSelect={(type) => setType(type)}
+          />
+        )}
+
+        {/* Step 2: Dynamic fields by type */}
+        {step === 2 && def && (
+          <DynamicInfoForm
+            fields={def.step2Fields}
+            entityType={entityType}
+            values={formData}
+            onChange={(vals) => setFormData(prev => ({ ...prev, ...vals }))}
+          />
+        )}
+
+        {/* Step 3: KYC docs */}
+        {step === 3 && def && (
+          <KYCDocumentUpload
+            requiredDocs={def.kycDocs}
+            entityType={entityType}
+          />
+        )}
+
+        {/* Step 4: Profile media */}
+        {step === 4 && (
+          <ProfileSetup entityType={entityType} />
+        )}
+
+        {/* Step 5: Plan selection */}
+        {step === 5 && def && (
+          <PlanSelector
+            plans={def.planOptions}
+            entityType={entityType}
+            trialDays={30}
+          />
+        )}
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between mt-8">
+          {step > 1 ? (
+            <button onClick={() => setStep(s => s - 1)}
+              className="text-sm text-[#A0A0A0] hover:text-white transition-colors">
+              ← Өмнөх
+            </button>
+          ) : <span />}
+
+          <button
+            disabled={step === 1 && !entityType}
+            onClick={() => step < TOTAL_STEPS ? setStep(s => s + 1) : handleSubmit()}
+            style={{ background: entityType || step > 1 ? '#E8242C' : '#2A2A2A' }}
+            className="px-8 py-3 rounded-lg text-sm font-bold text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-[0.98]">
+            {step === TOTAL_STEPS ? 'Бүртгэл дуусгах' : 'Дараах →'}
+          </button>
+        </div>
+
+        {/* Skip plan */}
+        {step === 5 && (
+          <p className="text-center text-xs text-[#555] mt-4 cursor-pointer hover:text-[#A0A0A0]"
+            onClick={handleSubmit}>
+            Одоохондоо үнэгүй эхлэх → Dashboard-аас дараа upgrade хийнэ
+          </p>
+        )}
+      </div>
+    </div>
+  )
+}
+```
+
+### ENTITY TYPE SELECTOR CARD — updated UI
+
+```tsx
+export function EntityTypeSelector({ selected, onSelect }) {
+  return (
+    <div className="flex flex-col gap-3">
+      {Object.entries(ENTITY_DEFINITIONS).map(([key, def]) => (
+        <button
+          key={key}
+          onClick={() => onSelect(key as EntityType)}
+          className={`w-full text-left p-4 rounded-xl border transition-all ${
+            selected === key
+              ? 'border-[#E8242C] bg-[rgba(232,36,44,0.08)]'
+              : 'border-[#3D3D3D] bg-[#1A1A1A] hover:border-[#555]'
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            <EntityIcon type={key} />
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm font-bold text-white">{def.label}</span>
+                {def.badge && (
+                  <span className="text-[10px] font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded-full">
+                    {def.badge}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-[#A0A0A0] mb-2">{def.subtitle}</p>
+              <div className="flex gap-1.5 flex-wrap">
+                {def.tags.map(tag => (
+                  <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-[#2A2A2A] text-[#A0A0A0]">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+            {selected === key && (
+              <div className="w-5 h-5 rounded-full bg-[#E8242C] flex items-center justify-center flex-shrink-0">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="2">
+                  <path d="M2 5l2.5 2.5L8 2.5"/>
+                </svg>
+              </div>
+            )}
+          </div>
+        </button>
+      ))}
+
+      {/* Add more entity later hint */}
+      <p className="text-center text-xs text-[#555] mt-2">
+        Dashboard-аас хүссэн үедээ нэмэлт дэлгүүрийн эрх нэмж болно
+      </p>
+    </div>
+  )
+}
+```</div>
+</div>
+
+<!-- PROMPT DASHBOARD -->
+<div id="panel-p-dash" class="panel">
+  <div class="st">Prompt — Тус тусын Dashboard + Multi-entity</div>
+  <div class="prompt-box" id="pt-dash">
+<button class="copy-btn" onclick="cp('pt-dash')">Хуулах</button>## ENTITY-SPECIFIC DASHBOARD SYSTEM
+
+Each entity type gets a customized dashboard with relevant nav,
+widgets, and quick actions. One user can have multiple entities.
+
+---
+
+### DASHBOARD ROUTING
+
+```typescript
+// /dashboard/[entityId]/* — entity-specific dashboard
+// Nav items determined by entity.type
+
+// app/dashboard/[entityId]/layout.tsx
+export default async function DashboardLayout({ params, children }) {
+  const entity = await getEntity(params.entityId)
+  const navItems = NAV_CONFIG[entity.type]  // type-specific nav
+
+  return (
+    <DashboardShell entity={entity} navItems={navItems}>
+      {children}
+    </DashboardShell>
+  )
+}
+```
+
+### NAV CONFIG — per entity type
+
+```typescript
+const NAV_CONFIG: Record<EntityType, NavItem[]> = {
+
+  store: [
+    { label: 'Тойм',         icon: 'LayoutDashboard', href: '/dashboard/[id]' },
+    { label: 'Бараанууд',    icon: 'Package',         href: '/dashboard/[id]/products' },
+    { label: 'Захиалгууд',   icon: 'ShoppingCart',    href: '/dashboard/[id]/orders' },
+    { label: 'Хямдрал',      icon: 'Tag',             href: '/dashboard/[id]/discounts' },
+    { label: 'Хүргэлт',      icon: 'Truck',           href: '/dashboard/[id]/shipping' },
+    { label: 'Аналитик',     icon: 'BarChart',        href: '/dashboard/[id]/analytics' },
+    { label: 'Сурталчилгаа', icon: 'Megaphone',       href: '/dashboard/[id]/promotions' },
+    { label: 'Чат',          icon: 'MessageSquare',   href: '/dashboard/[id]/messages' },
+    { label: 'Тохиргоо',     icon: 'Settings',        href: '/dashboard/[id]/settings' },
+  ],
+
+  pre_order: [
+    { label: 'Тойм',             icon: 'LayoutDashboard', href: '...' },
+    { label: 'Бараа каталог',    icon: 'BookOpen',        href: '.../catalog' },
+    { label: 'Захиалгын дараалал',icon: 'ClipboardList',  href: '.../queue',   badge: 'Шинэ' },
+    { label: 'Багцын захиалга',  icon: 'Layers',          href: '.../batches', badge: 'Шинэ' },
+    { label: 'Ачааны мөрдөлт',   icon: 'MapPin',          href: '.../tracking',badge: 'Шинэ' },
+    { label: 'Урьдчилгаа',       icon: 'CreditCard',      href: '.../deposits',badge: 'Шинэ' },
+    { label: 'Хүлээлтийн жагсаалт',icon:'Users',          href: '.../waitlist' },
+    { label: 'Чат',              icon: 'MessageSquare',   href: '.../messages' },
+    { label: 'Тохиргоо',         icon: 'Settings',        href: '.../settings' },
+  ],
+
+  agent: [
+    { label: 'Тойм',           icon: 'LayoutDashboard', href: '...' },
+    { label: 'Зарууд',         icon: 'Home',            href: '.../listings' },
+    { label: 'Зар нэмэх',      icon: 'PlusCircle',      href: '.../listings/new' },
+    { label: 'Байршлын зураг', icon: 'Map',             href: '.../map' },
+    { label: 'Хариу хүсэлт',   icon: 'Mail',            href: '.../inquiries' },
+    { label: 'Профайл',        icon: 'User',            href: '.../profile' },
+    { label: 'Аналитик',       icon: 'BarChart',        href: '.../analytics' },
+    { label: 'Тохиргоо',       icon: 'Settings',        href: '.../settings' },
+  ],
+
+  company: [
+    { label: 'Тойм',            icon: 'LayoutDashboard', href: '...' },
+    { label: 'Төслүүд',         icon: 'Building',        href: '.../projects' },
+    { label: 'Зургийн галлерей',icon: 'Image',           href: '.../gallery' },
+    { label: 'Баримт бичиг',    icon: 'FileText',        href: '.../documents' },
+    { label: 'Хүсэлт / Inquiry',icon: 'Mail',            href: '.../inquiries' },
+    { label: 'VIP байршил',     icon: 'Star',            href: '.../promote' },
+    { label: 'Тохиргоо',        icon: 'Settings',        href: '.../settings' },
+  ],
+
+  service: [
+    { label: 'Тойм',            icon: 'LayoutDashboard', href: '...' },
+    { label: 'Үйлчилгээ жагсаалт',icon:'Wrench',        href: '.../services' },
+    { label: 'Цаг захиалга',    icon: 'Calendar',        href: '.../bookings' },
+    { label: 'Хийсэн ажлууд',   icon: 'Briefcase',       href: '.../portfolio' },
+    { label: 'Үнэлгээ',         icon: 'Star',            href: '.../reviews' },
+    { label: 'Тохиргоо',        icon: 'Settings',        href: '.../settings' },
+  ],
+
+  digital: [
+    { label: 'Тойм',            icon: 'LayoutDashboard', href: '...' },
+    { label: 'Файлууд',         icon: 'Files',           href: '.../files' },
+    { label: 'Татаж авалтууд',  icon: 'Download',        href: '.../downloads' },
+    { label: 'Лицензүүд',       icon: 'Key',             href: '.../licenses' },
+    { label: 'Орлого',          icon: 'DollarSign',      href: '.../revenue' },
+    { label: 'Аналитик',        icon: 'BarChart',        href: '.../analytics' },
+    { label: 'Тохиргоо',        icon: 'Settings',        href: '.../settings' },
+  ],
+}
+```
+
+### MULTI-ENTITY SWITCHER
+
+```tsx
+// User can have multiple entities — switcher in top navbar
+export function EntitySwitcher({ currentEntity, userEntities }) {
+  return (
+    <Dropdown>
+      <DropdownTrigger>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#2A2A2A] hover:bg-[#3D3D3D] cursor-pointer">
+          <EntityIcon type={currentEntity.type} size={16} />
+          <span className="text-sm text-white font-medium">{currentEntity.name}</span>
+          <EntityTypeBadge type={currentEntity.type} />
+          <ChevronDown size={12} className="text-[#A0A0A0]" />
+        </div>
+      </DropdownTrigger>
+
+      <DropdownContent>
+        {userEntities.map(entity => (
+          <DropdownItem key={entity.id}
+            onClick={() => router.push(`/dashboard/${entity.id}`)}>
+            <EntityIcon type={entity.type} size={14} />
+            <div>
+              <p className="text-sm text-white">{entity.name}</p>
+              <p className="text-xs text-[#A0A0A0]">{ENTITY_DEFINITIONS[entity.type].label}</p>
+            </div>
+            {entity.id === currentEntity.id && <CheckIcon size={12} />}
+          </DropdownItem>
+        ))}
+
+        <DropdownSeparator />
+
+        {/* Add new entity */}
+        <DropdownItem onClick={() => router.push('/become-seller')}>
+          <PlusCircle size={14} className="text-[#E8242C]" />
+          <span className="text-sm text-[#E8242C] font-medium">+ Шинэ дэлгүүр нэмэх</span>
+        </DropdownItem>
+      </DropdownContent>
+    </Dropdown>
+  )
+}
+```
+
+### DASHBOARD OVERVIEW — type-specific stats
+
+```typescript
+// Each entity type has different key metrics
+const DASHBOARD_STATS: Record<EntityType, StatConfig[]> = {
+  store: [
+    { key: 'totalOrders',   label: 'Нийт захиалга',     color: 'blue' },
+    { key: 'revenue',       label: 'Сарын орлого',       color: 'green' },
+    { key: 'activeProducts',label: 'Идэвхтэй бараа',    color: 'info' },
+    { key: 'avgRating',     label: 'Дундаж үнэлгээ',    color: 'warn' },
+  ],
+  pre_order: [
+    { key: 'pendingOrders', label: 'Хүлээгдэж буй захиалга', color: 'warn' },
+    { key: 'inTransit',     label: 'Ачаанд явж буй',         color: 'info' },
+    { key: 'deposits',      label: 'Урьдчилгаа дүн',         color: 'green' },
+    { key: 'waitlistCount', label: 'Хүлээлтийн жагсаалт',   color: 'purple' },
+  ],
+  agent: [
+    { key: 'activeListings',label: 'Идэвхтэй зар',     color: 'blue' },
+    { key: 'inquiries',     label: 'Хариу хүсэлт',     color: 'info' },
+    { key: 'viewCount',     label: 'Нийт үзэгдэлт',    color: 'teal' },
+    { key: 'dealsClosed',   label: 'Гүйцэтгэсэн зар',  color: 'green' },
+  ],
+  digital: [
+    { key: 'totalDownloads',label: 'Нийт татаж авалт', color: 'blue' },
+    { key: 'revenue',       label: 'Орлого',            color: 'green' },
+    { key: 'activeFiles',   label: 'Идэвхтэй файл',    color: 'info' },
+    { key: 'subscribers',   label: 'Гишүүд',            color: 'purple' },
+  ],
+}
+```</div>
+</div>
+
+<!-- PROMPT PRE-ORDER -->
+<div id="panel-p-order" class="panel">
+  <div class="st">Prompt — Захиалгын дэлгүүр (Pre-order system)</div>
+  <div class="prompt-box" id="pt-order">
+<button class="copy-btn" onclick="cp('pt-order')">Хуулах</button>## PRE-ORDER STORE — FULL SYSTEM
+
+Build a complete pre-order store system for sellers who import goods
+from abroad. Unique flow: customer orders → seller batches → imports → delivers.
+
+---
+
+### PRISMA SCHEMA
+
+```prisma
+model PreOrderProduct {
+  id               String   @id @default(cuid())
+  entityId         String
+  refId            String   @unique
+  name             String
+  description      String?
+  images           String[]
+  sourceCountry    String               // 🇨🇳 CN | 🇰🇷 KR | 🇺🇸 US | 🇯🇵 JP
+  priceEstimate    Float                // Тооцоолол үнэ (өөрчлөгдөж болно)
+  priceFinal       Float?               // Эцсийн батлагдсан үнэ
+  advancePct       Int      @default(30) // Урьдчилгааны %
+  minOrderQty      Int      @default(1)
+  maxOrderQty      Int?
+  deliveryDays     Int                  // Хүргэлтийн ориентир хоног
+  deliveryDaysMax  Int?
+  status           PreOrderStatus @default(OPEN)
+  batchDeadline    DateTime?            // Захиалга авах эцсийн хугацаа
+  currentOrders    Int      @default(0) // Одоогийн захиалгын тоо
+  targetOrders     Int?                 // Зорилтот тоо (batch дүүрэх)
+  shippingTracking String?              // Ачааны мөрдөх код
+  customsInfo      Json?
+  createdAt        DateTime @default(now())
+
+  orders    PreOrderItem[]
+  batches   PreOrderBatch[]
+}
+
+enum PreOrderStatus {
+  DRAFT         // Ноорог
+  OPEN          // Захиалга авч байна
+  BATCH_FULL    // Batch дүүрсэн, боловсруулж байна
+  ORDERED       // Нийлүүлэгчид захиалсан
+  IN_TRANSIT    // Ачаанд явж байна
+  CUSTOMS       // Гаалийн шалгалтад
+  ARRIVED       // Монголд ирсэн
+  DELIVERING    // Хүргэж байна
+  COMPLETED     // Бүгд хүргэгдсэн
+  CANCELLED     // Цуцлагдсан
+}
+
+model PreOrderItem {
+  id             String   @id @default(cuid())
+  productId      String
+  buyerId        String
+  quantity       Int
+  unitPrice      Float    // Захиалах үеийн үнэ
+  advanceAmount  Float    // Урьдчилгаа төлсөн
+  remainingAmount Float   // Үлдэгдэл төлбөр
+  advancePaidAt  DateTime?
+  finalPaidAt    DateTime?
+  status         PreOrderItemStatus @default(PENDING)
+  notes          String?
+  createdAt      DateTime @default(now())
+}
+
+enum PreOrderItemStatus {
+  PENDING          // Урьдчилгаа хүлээгдэж байна
+  ADVANCE_PAID     // Урьдчилгаа төлсөн
+  IN_BATCH         // Batch-д орсон
+  SHIPPED          // Ачаанд явж байна
+  ARRIVED          // Ирсэн, үлдэгдэл хүлээгдэж байна
+  FINAL_PAID       // Бүгд төлсөн
+  DELIVERED        // Хүргэгдсэн
+  CANCELLED        // Цуцлагдсан (буцаалт хийгдэнэ)
+}
+
+model PreOrderBatch {
+  id          String   @id @default(cuid())
+  productId   String
+  batchNumber Int
+  orderCount  Int
+  totalQty    Int
+  orderedAt   DateTime?     // Нийлүүлэгчид захиалсан огноо
+  eta         DateTime?     // Ирэх тооцоолол
+  trackingCode String?
+  status      BatchStatus  @default(COLLECTING)
+  createdAt   DateTime @default(now())
+}
+```
+
+### PRE-ORDER PRODUCT PAGE — unique UX
+
+```tsx
+// /product/[slug] — pre-order variant
+export function PreOrderProductPage({ product }) {
+  const daysLeft = differenceInDays(product.batchDeadline, new Date())
+  const progress = product.targetOrders
+    ? Math.min(100, (product.currentOrders / product.targetOrders) * 100)
+    : null
+
+  return (
+    <div>
+      <MediaGallery items={product.images} />
+
+      {/* Pre-order specific info block */}
+      <div className="rounded-xl p-4 mb-4"
+        style={{ background: 'rgba(232,36,44,0.08)', border: '1px solid rgba(232,36,44,0.2)' }}>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-[10px] font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded-full">
+            PRE-ORDER
+          </span>
+          <span className="text-xs text-[#A0A0A0]">
+            Гадаадаас {product.sourceCountry}-с захиална
+          </span>
+        </div>
+
+        {/* Delivery estimate */}
+        <div className="flex items-center gap-3 mb-3 text-sm">
+          <ClockIcon className="text-[#F59E0B]" size={16} />
+          <span className="text-[#E0E0E0]">
+            Хүлээх хугацаа: <strong className="text-white">
+              {product.deliveryDays}–{product.deliveryDaysMax || product.deliveryDays + 7} хоног
+            </strong>
+          </span>
+        </div>
+
+        {/* Batch progress */}
+        {progress !== null && (
+          <div className="mb-3">
+            <div className="flex justify-between text-xs text-[#A0A0A0] mb-1">
+              <span>{product.currentOrders} захиалга</span>
+              <span>Зорилго: {product.targetOrders}</span>
+            </div>
+            <div className="h-1.5 bg-[#2A2A2A] rounded-full overflow-hidden">
+              <div className="h-full bg-[#E8242C] rounded-full transition-all"
+                style={{ width: `${progress}%` }} />
+            </div>
+          </div>
+        )}
+
+        {/* Deadline countdown */}
+        {daysLeft > 0 && (
+          <p className="text-xs text-[#F59E0B]">
+            Захиалга авах хугацаа: {daysLeft} хоног үлдсэн
+          </p>
+        )}
+      </div>
+
+      {/* Price block */}
+      <div className="mb-4">
+        <div className="text-2xl font-black text-[#E8242C] mb-1">
+          {product.priceFinal?.toLocaleString() || product.priceEstimate.toLocaleString()}₮
+          {!product.priceFinal && (
+            <span className="text-xs font-normal text-[#A0A0A0] ml-2">~ тооцоолол үнэ</span>
+          )}
+        </div>
+        <p className="text-xs text-[#A0A0A0]">
+          Урьдчилгаа: {product.advancePct}% =
+          {Math.ceil(product.priceEstimate * product.advancePct / 100).toLocaleString()}₮
+        </p>
+        <p className="text-xs text-[#555]">
+          Үлдэгдэл ачаа ирэхэд төлнө
+        </p>
+      </div>
+
+      {/* Order button */}
+      <Button variant="primary" size="xl" className="w-full" onClick={handlePreOrder}>
+        Урьдчилгаа ({product.advancePct}%) төлж захиалах
+      </Button>
+    </div>
+  )
+}
+```
+
+### PRE-ORDER DASHBOARD — seller view
+
+```tsx
+// Unique dashboard sections for pre_order entity type:
+
+// 1. QUEUE MANAGEMENT — batch дүүрэхийг хянах
+<PreOrderQueuePanel>
+  {products.map(p => (
+    <QueueCard product={p}>
+      <ProgressBar current={p.currentOrders} target={p.targetOrders} />
+      <StatusBadge status={p.status} />
+      <Button onClick={() => processBatch(p.id)}>Batch эхлүүлэх</Button>
+    </QueueCard>
+  ))}
+</PreOrderQueuePanel>
+
+// 2. BATCH TRACKER — ачааны мөрдөлт
+<BatchTrackerPanel>
+  {batches.map(b => (
+    <BatchRow>
+      <TrackingTimeline status={b.status} />
+      <TrackingInput value={b.trackingCode} onChange={updateTracking} />
+      <ETA>{b.eta}</ETA>
+    </BatchRow>
+  ))}
+</BatchTrackerPanel>
+
+// 3. PAYMENT COLLECTION — урьдчилгаа + үлдэгдэл
+<PaymentCollectionPanel>
+  Pending advance payments: X зах × Y₮
+  Pending final payments: Z зах × W₮ (ачаа ирсэн)
+  <Button>Үлдэгдэл төлбөр нэхэмжлэх blast илгээх</Button>
+</PaymentCollectionPanel>
+```
+
+### PRE-ORDER BUYER FLOW
+
+```
+1. Бараа харах → "Pre-order" тэмдэглэгдсэн
+2. Урьдчилгаа % тооцоолол харах
+3. QPay-р урьдчилгаа төлөх
+4. "Захиалга хүлээгдэж байна" статус
+5. Batch дүүрвэл → "Нийлүүлэгчид захиалагдлаа" мэдэгдэл
+6. Ачаа гарвал → Tracking код мэдэгдэл
+7. Монголд ирвэл → "Үлдэгдэл төлбөр хийнэ үү" мэдэгдэл
+8. Үлдэгдэл төлвөл → Хүргэлт эхэлнэ
+```</div>
+</div>
+
+</div>
+
+<script>
+const MATRIX_DATA = [
+  ['Бараа / Продукт удирдлага','✓','✓','–','–','–','–','✓'],
+  ['Захиалга систем','✓','✓','–','–','–','–','✓'],
+  ['Pre-order / Batch захиалга','–','✓','–','–','–','–','–'],
+  ['Урьдчилгаа төлбөр','–','✓','–','–','–','–','–'],
+  ['Ачааны мөрдөлт','–','✓','–','–','–','–','–'],
+  ['Зар байршуулах','–','–','✓','✓','✓','–','–'],
+  ['Байршлын газрын зураг','✓','✓','✓','✓','✓','✓','–'],
+  ['Зургийн галлерей','✓','✓','–','✓','✓','✓','–'],
+  ['Файл / Татаж авах','–','–','✓','✓','–','✓','✓'],
+  ['Цаг захиалга','–','–','–','–','–','✓','–'],
+  ['Портфолио','–','–','✓','✓','✓','✓','–'],
+  ['Instant download','–','–','–','–','–','–','✓'],
+  ['License key','–','–','–','–','–','–','✓'],
+  ['Subscription орлого','–','–','–','–','–','–','✓'],
+]
+function renderMatrix(){
+  const tbody=document.getElementById('matrix-body')
+  tbody.innerHTML=MATRIX_DATA.map(row=>{
+    const [feat,...cells]=row
+    return `<tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+      <td style="padding:7px 10px;color:var(--color-text-secondary);font-size:12px">${feat}</td>
+      ${cells.map((c,i)=>`<td style="text-align:center;padding:7px 6px;font-size:13px">${
+        c==='✓'
+          ? `<span style="color:var(--color-text-success);font-weight:500">✓</span>`
+          : i===1&&c==='✓'
+            ? `<span style="color:var(--color-text-danger);font-weight:500">✓</span>`
+            : `<span style="color:var(--color-border-tertiary)">–</span>`
+      }</td>`).join('')}
+    </tr>`
+  }).join('')
+}
+renderMatrix()
+
+const WIZARD_TYPES=[
+  {key:'store',label:'Дэлгүүр',sub:'Бараа бүтээгдэхүүн зарах',tags:['Бараа','Захиалга','Хүргэлт'],badge:null,color:'var(--color-text-info)'},
+  {key:'preorder',label:'Захиалгын дэлгүүр',sub:'Гадаадаас захиалж оруулдаг',tags:['Pre-order','Урьдчилгаа','Ачааны мөрдөлт'],badge:'Шинэ',color:'var(--color-text-danger)'},
+  {key:'agent',label:'Үл хөдлөхийн агент',sub:'Орон сууц, газар, оффис',tags:['Зар','Профайл','Аналитик'],badge:null,color:'#7F77DD'},
+  {key:'company',label:'Барилгын компани',sub:'Шинэ барилга, орон сууцны төсөл',tags:['Төсөл','Галлерей','VIP'],badge:null,color:'var(--color-text-success)'},
+  {key:'auto',label:'Авто худалдаа',sub:'Шинэ болон хуучин автомашин',tags:['Жагсаалт','Specs','Тест драйв'],badge:null,color:'var(--color-text-warning)'},
+  {key:'service',label:'Үйлчилгээ',sub:'Салон, засвар, хэвлэл, сургалт',tags:['Цаг захиалга','Портфолио'],badge:null,color:'var(--color-text-secondary)'},
+  {key:'digital',label:'Файл / Дижитал бараа',sub:'Татаж авах дижитал контент',tags:['Instant DL','License','Subscription'],badge:'Шинэ',color:'var(--color-text-info)'},
+]
+let selected=null
+function renderWizard(){
+  const c=document.getElementById('wizard-types')
+  c.innerHTML=WIZARD_TYPES.map(t=>`
+    <div onclick="selectType('${t.key}')" style="cursor:pointer;padding:12px 14px;border-radius:10px;border:${selected===t.key?'1.5px solid var(--color-border-info)':'0.5px solid var(--color-border-tertiary)'};background:${selected===t.key?'var(--color-background-info)':'var(--color-background-primary)'};transition:all .15s">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+        <span style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${t.label}</span>
+        ${t.badge?`<span style="font-size:10px;font-weight:500;padding:1px 7px;border-radius:99px;background:var(--color-background-danger);color:var(--color-text-danger)">${t.badge}</span>`:''}
+      </div>
+      <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:6px">${t.sub}</p>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">${t.tags.map(g=>`<span style="font-size:10px;padding:2px 6px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)">${g}</span>`).join('')}</div>
+    </div>`).join('')
+}
+function selectType(k){
+  selected=k
+  renderWizard()
+  const btn=document.getElementById('wizard-next')
+  btn.disabled=false
+  btn.style.background='#E8242C'
+  btn.style.color='white'
+  btn.style.cursor='pointer'
+}
+renderWizard()
+
+const DASH_CONFIG={
+  store:{label:'Дэлгүүр',nav:['Тойм','Бараанууд','Захиалгууд','Хямдрал','Хүргэлт','Аналитик','Сурталчилгаа','Чат','Тохиргоо'],stats:[['Нийт захиалга','142'],['Сарын орлого','4,280,000₮'],['Идэвхтэй бараа','89'],['Дундаж үнэлгээ','4.7 ★']]},
+  preorder:{label:'Захиалгын дэлгүүр',nav:['Тойм','Бараа каталог','Захиалгын дараалал ✦','Багцын захиалга ✦','Ачааны мөрдөлт ✦','Урьдчилгаа ✦','Хүлээлтийн жагсаалт','Чат','Тохиргоо'],stats:[['Хүлээгдэж буй','23 захиалга'],['Ачаанд явж буй','2 batch'],['Урьдчилгаа дүн','1,150,000₮'],['Хүлээлтийн жагсаалт','47 хүн']]},
+  agent:{label:'Агент',nav:['Тойм','Зарууд','Зар нэмэх','Байршлын зураг','Хариу хүсэлт','Профайл','Аналитик','Тохиргоо'],stats:[['Идэвхтэй зар','12'],['Хариу хүсэлт','8'],['Нийт үзэгдэлт','2,340'],['Гүйцэтгэсэн','3']]},
+  company:{label:'Барилгын компани',nav:['Тойм','Төслүүд','Зургийн галлерей','Баримт бичиг','Хүсэлт / Inquiry','VIP байршил','Тохиргоо'],stats:[['Идэвхтэй төсөл','3'],['Нийт нэгж','240'],['Зарагдсан','82%'],['Inquiry','14']]},
+  auto:{label:'Авто худалдаа',nav:['Тойм','Машины жагсаалт','Тест драйв захиалга','Техник үзүүлэлт','Үнийн карьалт','Тохиргоо'],stats:[['Нийт машин','34'],['Тест драйв','7'],['Борлуулалт','5'],['Дундаж үнэ','48,500,000₮']]},
+  service:{label:'Үйлчилгээ',nav:['Тойм','Үйлчилгээ жагсаалт','Цаг захиалга','Хийсэн ажлууд','Үнэлгээ','Тохиргоо'],stats:[['Нийт захиалга','28'],['Өнөөдрийн цаг','5'],['Портфолио','14'],['Үнэлгээ','4.9 ★']]},
+  digital:{label:'Файл / Дижитал',nav:['Тойм','Файлууд','Татаж авалтууд','Лицензүүд','Орлого','Аналитик','Тохиргоо'],stats:[['Нийт татаж авалт','834'],['Энэ сарын орлого','210,000₮'],['Идэвхтэй файл','12'],['Гишүүд','23']]},
+}
+function switchDash(key,btn){
+  document.querySelectorAll('.dash-btn').forEach(b=>{
+    b.style.background='none'
+    b.style.color='var(--color-text-secondary)'
+    b.style.borderColor='var(--color-border-tertiary)'
+  })
+  btn.style.background='var(--color-background-info)'
+  btn.style.color='var(--color-text-info)'
+  btn.style.borderColor='var(--color-border-info)'
+  const cfg=DASH_CONFIG[key]
+  document.getElementById('dash-type-label').textContent=cfg.label
+  document.getElementById('sidebar-nav').innerHTML=cfg.nav.map((n,i)=>`
+    <div class="nav-item ${i===0?'active':''}" style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:12px;cursor:pointer">
+      <div class="nav-dot" style="background:${i===0?'var(--color-text-info)':'var(--color-border-secondary)'}"></div>
+      <span style="color:${i===0?'var(--color-text-primary)':'var(--color-text-secondary)'}">${n}</span>
+    </div>`).join('')
+  document.getElementById('dash-content').innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+      ${cfg.stats.map(([l,v])=>`
+        <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px">
+          <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px">${l}</div>
+          <div style="font-size:18px;font-weight:500;color:var(--color-text-primary)">${v}</div>
+        </div>`).join('')}
+    </div>
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px">
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Сүүлийн үйл ажиллагаа</div>
+      ${[1,2,3].map(i=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px"><div style="width:6px;height:6px;border-radius:50%;background:var(--color-text-info);flex-shrink:0"></div><span style="color:var(--color-text-secondary);flex:1">Жишээ үйл ажиллагаа ${i}</span><span style="color:var(--color-text-tertiary);font-size:11px">1 цагийн өмнө</span></div>`).join('')}
+    </div>`
+}
+switchDash('store',document.querySelector('.dash-btn'))
+
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.getElementById('panel-'+id).classList.add('active')
+  event.target.classList.add('active')
+}
+function cp(id){
+  const el=document.getElementById(id)
+  const btn=el.querySelector('.copy-btn')
+  const text=el.innerText.replace('Хуулах','').trim()
+  navigator.clipboard.writeText(text).then(()=>{btn.textContent='Хуулагдлаа ✓';setTimeout(()=>btn.textContent='Хуулах',2000)})
+}
+function copyAll(){
+  const ids=['pt-wizard','pt-dash','pt-order']
+  const all=ids.map(id=>document.getElementById(id).innerText.replace('Хуулах','').trim()).join('\n\n---\n\n')
+  navigator.clipboard.writeText(all).then(()=>alert('Бүх 3 prompt хуулагдлаа!'))
+}
+</script>

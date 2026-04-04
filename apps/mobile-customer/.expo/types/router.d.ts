@@ -7,11 +7,11 @@ declare module "expo-router" {
   export * from 'expo-router/build';
 
   // prettier-ignore
-  type StaticRoutes = `/` | `/(auth)/login` | `/login` | `/(tabs)/cart` | `/cart` | `/(tabs)/` | `/(tabs)` | `/(tabs)/orders` | `/orders` | `/(tabs)/profile` | `/profile` | `/(tabs)/search` | `/search` | `/checkout/` | `/(tabs)/shops` | `/shops` | `/(tabs)/feed` | `/feed` | `/post-ad` | `/lib/roleStore` | `/components/RoleSwitcher` | `/components/RoleHeaderButton` | `/(seller)/` | `/(seller)` | `/(seller)/orders` | `/(seller)/products` | `/products` | `/(seller)/analytics` | `/analytics` | `/(seller)/settings` | `/settings` | `/(driver)/` | `/(driver)` | `/(driver)/history` | `/history` | `/(driver)/earnings` | `/earnings`;
+  type StaticRoutes = `/` | `/(auth)/login` | `/login` | `/(tabs)/cart` | `/cart` | `/(tabs)/` | `/(tabs)` | `/(tabs)/orders` | `/orders` | `/(tabs)/profile` | `/profile` | `/(tabs)/search` | `/search` | `/checkout/` | `/(tabs)/shops` | `/shops` | `/(tabs)/feed` | `/feed` | `/post-ad` | `/lib/roleStore` | `/components/RoleSwitcher` | `/components/RoleHeaderButton` | `/(seller)/` | `/(seller)` | `/(seller)/orders` | `/(seller)/products` | `/products` | `/(seller)/analytics` | `/analytics` | `/(seller)/settings` | `/settings` | `/(driver)/` | `/(driver)` | `/(driver)/history` | `/history` | `/(driver)/earnings` | `/earnings` | `/lib/api`;
   // prettier-ignore
-  type DynamicRoutes<T extends string> = `/order/${SingleRoutePart<T>}` | `/product/${SingleRoutePart<T>}`;
+  type DynamicRoutes<T extends string> = `/order/${SingleRoutePart<T>}` | `/product/${SingleRoutePart<T>}` | `/store/${SingleRoutePart<T>}`;
   // prettier-ignore
-  type DynamicRouteTemplate = `/order/[id]` | `/product/[id]`;
+  type DynamicRouteTemplate = `/order/[id]` | `/product/[id]` | `/store/[slug]`;
 
   type RelativePathString = `./${string}` | `../${string}` | '..';
   type AbsoluteRoute = DynamicRouteTemplate | StaticRoutes;

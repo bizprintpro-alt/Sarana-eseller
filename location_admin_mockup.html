@@ -1,0 +1,355 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1.5rem 0;font-family:var(--font-sans,sans-serif)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;gap:12px;flex-wrap:wrap}
+.topbar-left{display:flex;flex-direction:column;gap:2px}
+.page-title{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:13px;color:var(--color-text-secondary)}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.stats-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.stat-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.stat-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:14px;align-items:start}
+.table-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.table-toolbar{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.search-wrap{flex:1;position:relative}
+.search-wrap input{width:100%;padding-left:28px;font-size:13px}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--color-text-tertiary)}
+.filter-select{font-size:13px;padding:0 10px;height:36px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer}
+tbl{width:100%;border-collapse:collapse;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap}
+td{padding:10px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.selected td{background:var(--color-background-info)}
+tr:not(.selected):hover td{background:var(--color-background-secondary);cursor:pointer}
+.store-name{font-weight:500;font-size:13px;color:var(--color-text-primary)}
+.store-cat{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.b-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-err{background:var(--color-background-danger);color:var(--color-text-danger)}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.dot-ok{background:var(--color-text-success)}
+.dot-warn{background:var(--color-text-warning)}
+.dot-err{background:var(--color-text-danger)}
+.action-row{display:flex;gap:4px}
+.act{border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:4px 10px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;transition:background .12s}
+.act:hover{background:var(--color-background-secondary)}
+.act-primary{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info)}
+.act-primary:hover{opacity:.85}
+.right-panel{display:flex;flex-direction:column;gap:12px}
+.panel-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.panel-header{padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;justify-content:space-between}
+.panel-body{padding:14px}
+.map-mock{background:var(--color-background-secondary);border-radius:var(--border-radius-md);height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;overflow:hidden}
+.map-grid{position:absolute;inset:0;background-image:linear-gradient(var(--color-border-tertiary) 1px,transparent 1px),linear-gradient(90deg,var(--color-border-tertiary) 1px,transparent 1px);background-size:20px 20px}
+.map-pin{position:absolute;top:44%;left:52%;transform:translate(-50%,-50%)}
+.pin-dot{width:16px;height:16px;border-radius:50%;background:var(--color-text-info);border:3px solid var(--color-background-primary)}
+.pin-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;border:1.5px solid var(--color-border-info);opacity:.5}
+.map-label{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--color-text-tertiary);white-space:nowrap;background:var(--color-background-primary);padding:2px 8px;border-radius:99px;border:0.5px solid var(--color-border-tertiary)}
+.coord-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.coord-field label{font-size:11px;color:var(--color-text-tertiary);display:block;margin-bottom:3px}
+.coord-field input{width:100%;font-size:12px;padding:0 8px;height:30px}
+.detail-rows{display:flex;flex-direction:column;gap:0}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.detail-row:last-child{border-bottom:none}
+.detail-key{color:var(--color-text-tertiary)}
+.detail-val{color:var(--color-text-primary);text-align:right}
+.bulk-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--color-background-info);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-info);margin-bottom:12px}
+.bulk-bar span{flex:1}
+.progress-wrap{margin-bottom:10px}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px}
+.progress-bar{height:4px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px}
+.fill-ok{background:var(--color-text-success)}
+.fill-warn{background:var(--color-text-warning)}
+.fill-err{background:var(--color-text-danger)}
+.pager{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:0.5px solid var(--color-border-tertiary);font-size:12px;color:var(--color-text-secondary)}
+.pager-btns{display:flex;gap:4px}
+.pager-btn{border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:4px 10px;font-size:12px;color:var(--color-text-secondary);cursor:pointer}
+.pager-btn.cur{background:var(--color-background-secondary);font-weight:500;color:var(--color-text-primary)}
+</style>
+
+<div class="wrap">
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="page-title">Байршил удирдлага</div>
+    <div class="page-sub">Админ · Дэлгүүр / байршил баталгаажуулалт</div>
+  </div>
+  <div class="topbar-right">
+    <button class="act" onclick="sendPrompt('Байршил импортын CSV загвар хийж өгнө үү')">CSV импорт</button>
+    <button class="act act-primary" onclick="sendPrompt('Шинэ дэлгүүр байршил нэмэх формын дизайн хийж өгнө үү')">+ Дэлгүүр нэмэх</button>
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-label">Нийт дэлгүүр</div>
+    <div class="stat-val">312</div>
+    <div class="stat-sub">Бүртгэлтэй</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Байршил баталгаажсан</div>
+    <div class="stat-val" style="color:var(--color-text-success)">241</div>
+    <div class="stat-sub">77% хувь</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Хүлээгдэж буй</div>
+    <div class="stat-val" style="color:var(--color-text-warning)">48</div>
+    <div class="stat-sub">Шалгах шаардлагатай</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Координатгүй</div>
+    <div class="stat-val" style="color:var(--color-text-danger)">23</div>
+    <div class="stat-sub">Засах шаардлагатай</div>
+  </div>
+</div>
+
+<div class="bulk-bar" id="bulk-bar" style="display:none">
+  <span id="bulk-label">2 дэлгүүр сонгогдсон</span>
+  <button class="act act-primary" style="font-size:11px;padding:3px 10px" onclick="sendPrompt('Олон дэлгүүрийн байршлыг нэгэн зэрэг шалгах логик хийж өгнө үү')">Байршил шалгах</button>
+  <button class="act" style="font-size:11px;padding:3px 10px" onclick="hideBulk()">Болих</button>
+</div>
+
+<div class="layout">
+  <div>
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+          <input type="text" placeholder="Дэлгүүр хайх..." oninput="filterTable(this.value)">
+        </div>
+        <select class="filter-select" onchange="filterStatus(this.value)">
+          <option value="all">Бүгд</option>
+          <option value="ok">Баталгаажсан</option>
+          <option value="warn">Хүлээгдэж буй</option>
+          <option value="err">Координатгүй</option>
+        </select>
+      </div>
+
+      <div class="progress-wrap" style="padding:10px 14px 0">
+        <div class="progress-label"><span>Байршлын бүрэн байдал</span><span>77%</span></div>
+        <div class="progress-bar" style="height:6px">
+          <div style="display:flex;height:100%;border-radius:99px;overflow:hidden">
+            <div class="fill-ok" style="width:77%"></div>
+            <div class="fill-warn" style="width:15%"></div>
+            <div class="fill-err" style="width:8%"></div>
+          </div>
+        </div>
+      </div>
+
+      <table id="store-table">
+        <thead>
+          <tr>
+            <th style="width:32px"><input type="checkbox" id="chk-all" onchange="toggleAll(this.checked)" style="cursor:pointer"></th>
+            <th>Дэлгүүр</th>
+            <th>Байршил</th>
+            <th>Координат</th>
+            <th>Төлөв</th>
+            <th>Үйлдэл</th>
+          </tr>
+        </thead>
+        <tbody id="store-tbody">
+        </tbody>
+      </table>
+      <div class="pager">
+        <span>312-с 1–10 харагдаж байна</span>
+        <div class="pager-btns">
+          <button class="pager-btn">‹</button>
+          <button class="pager-btn cur">1</button>
+          <button class="pager-btn">2</button>
+          <button class="pager-btn">3</button>
+          <button class="pager-btn">›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="panel-card">
+      <div class="panel-header">
+        <span id="panel-title">Дэлгүүр сонгоно уу</span>
+        <span id="panel-badge" class="badge" style="display:none"></span>
+      </div>
+      <div class="panel-body">
+        <div class="map-mock">
+          <div class="map-grid"></div>
+          <div class="map-pin" id="map-pin" style="display:none">
+            <div class="pin-ring"></div>
+            <div class="pin-dot"></div>
+          </div>
+          <span id="map-placeholder" style="font-size:12px;color:var(--color-text-tertiary);position:relative;z-index:1">Дэлгүүр сонгоно уу</span>
+          <div class="map-label" id="map-label" style="display:none">Улаанбаатар</div>
+        </div>
+        <div class="coord-row">
+          <div class="coord-field">
+            <label>Өргөрөг (lat)</label>
+            <input type="text" id="inp-lat" placeholder="47.9077..." onchange="updateCoord()">
+          </div>
+          <div class="coord-field">
+            <label>Уртраг (lng)</label>
+            <input type="text" id="inp-lng" placeholder="106.8832..." onchange="updateCoord()">
+          </div>
+        </div>
+        <div class="detail-rows" id="detail-rows" style="margin-bottom:12px">
+          <div class="detail-row"><span class="detail-key">Дүүрэг</span><span class="detail-val" id="d-district">—</span></div>
+          <div class="detail-row"><span class="detail-key">Хороо</span><span class="detail-val" id="d-khoroo">—</span></div>
+          <div class="detail-row"><span class="detail-key">Ойролцоох газар</span><span class="detail-val" id="d-near">—</span></div>
+          <div class="detail-row"><span class="detail-key">Сүүлд шинэчлэгдсэн</span><span class="detail-val" id="d-updated">—</span></div>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="act act-primary" style="flex:1;justify-content:center" id="btn-save" disabled onclick="saveLocation()">Хадгалах</button>
+          <button class="act" id="btn-gmaps" style="padding:0 10px" onclick="sendPrompt('Google Maps дээр байршил шалгах API интеграци хийж өгнө үү')" title="Maps дээр нээх">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2C5.8 2 4 3.8 4 6c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4z"/><circle cx="8" cy="6" r="1.5"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-header">Хурдан шүүлтүүр</div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
+        <button class="act" style="text-align:left;font-size:12px;width:100%;padding:7px 10px" onclick="filterStatus('err')">
+          <span class="dot dot-err" style="margin-right:6px"></span>Координатгүй дэлгүүрүүд (23)
+        </button>
+        <button class="act" style="text-align:left;font-size:12px;width:100%;padding:7px 10px" onclick="filterStatus('warn')">
+          <span class="dot dot-warn" style="margin-right:6px"></span>Баталгаажуулалт хүлээгдэж буй (48)
+        </button>
+        <button class="act" style="text-align:left;font-size:12px;width:100%;padding:7px 10px" onclick="sendPrompt('Хуучин координаттай дэлгүүрийг шалгах логик хийж өгнө үү')">
+          <span class="dot" style="background:var(--color-text-tertiary);margin-right:6px"></span>6 сараас дээш шинэчлээгүй
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const stores = [
+  {id:1,name:"Misheel Market",cat:"Хүнсний дэлгүүр",district:"Хан-Уул",khoroo:"19-р хороо",near:"Зайсан толгой ~1.3км",lat:"47.8894",lng:"106.9175",status:"ok",updated:"2026-03-12"},
+  {id:2,name:"TechUB Store",cat:"Электроник",district:"СБД",khoroo:"1-р хороо",near:"Сүхбаатарын талбай ~0.4км",lat:"47.9168",lng:"106.9177",status:"ok",updated:"2026-02-28"},
+  {id:3,name:"FashionMN",cat:"Хувцас",district:"БЗД",khoroo:"3-р хороо",near:"Их дэлгүүр ~0.2км",lat:"47.9088",lng:"106.9204",status:"warn",updated:"2026-01-15"},
+  {id:4,name:"BeautyMN",cat:"Гоо сайхан",district:"ЧД",khoroo:"14-р хороо",near:"Номин супермаркет ~0.5км",lat:"",lng:"",status:"err",updated:"—"},
+  {id:5,name:"SportsMN",cat:"Спорт",district:"СХД",khoroo:"2-р хороо",near:"Яармагийн зах ~0.8км",lat:"47.9231",lng:"106.9413",status:"ok",updated:"2026-03-20"},
+  {id:6,name:"GreenMN",cat:"Гэр ахуй",district:"НД",khoroo:"5-р хороо",near:"Их наран ~1.1км",lat:"",lng:"",status:"err",updated:"—"},
+  {id:7,name:"LuxuryMN",cat:"Хувцас",district:"СБД",khoroo:"8-р хороо",near:"Монголын их дэлгүүр ~0.3км",lat:"47.9145",lng:"106.9092",status:"warn",updated:"2026-01-05"},
+  {id:8,name:"BurgerMN",cat:"Хоол хүнс",district:"БЗД",khoroo:"7-р хороо",near:"Номин ~0.3км",lat:"47.9052",lng:"106.9301",status:"ok",updated:"2026-03-18"},
+  {id:9,name:"PizzaMN",cat:"Хоол хүнс",district:"ЧД",khoroo:"11-р хороо",near:"Гэгээн цогцолбор ~0.6км",lat:"",lng:"",status:"err",updated:"—"},
+  {id:10,name:"HomeDecorMN",cat:"Гэр ахуй",district:"ХУД",khoroo:"2-р хороо",near:"Дархан зах ~1.2км",lat:"47.9312",lng:"106.8754",status:"ok",updated:"2026-03-01"},
+];
+
+let selectedId = null;
+let checkedIds = new Set();
+let filterQ = '';
+let filterS = 'all';
+
+function renderTable() {
+  const tbody = document.getElementById('store-tbody');
+  const rows = stores.filter(s => {
+    const matchQ = s.name.toLowerCase().includes(filterQ.toLowerCase()) || s.cat.toLowerCase().includes(filterQ.toLowerCase());
+    const matchS = filterS === 'all' || s.status === filterS;
+    return matchQ && matchS;
+  });
+  tbody.innerHTML = rows.map(s => {
+    const isSel = s.id === selectedId;
+    const isChk = checkedIds.has(s.id);
+    const badge = s.status === 'ok'
+      ? `<span class="badge b-ok"><span class="dot dot-ok"></span>Баталгаажсан</span>`
+      : s.status === 'warn'
+      ? `<span class="badge b-warn"><span class="dot dot-warn"></span>Хүлээгдэж буй</span>`
+      : `<span class="badge b-err"><span class="dot dot-err"></span>Координатгүй</span>`;
+    const coord = s.lat ? `${s.lat}, ${s.lng}` : `<span style="color:var(--color-text-danger);font-size:11px">Оруулаагүй</span>`;
+    return `<tr class="${isSel?'selected':''}" onclick="selectStore(${s.id})">
+      <td onclick="event.stopPropagation()"><input type="checkbox" ${isChk?'checked':''} onchange="toggleCheck(${s.id},this.checked)" style="cursor:pointer"></td>
+      <td><div class="store-name">${s.name}</div><div class="store-cat">${s.cat}</div></td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${s.district}<br><span style="color:var(--color-text-tertiary)">${s.khoroo}</span></td>
+      <td style="font-size:12px;font-family:var(--font-mono)">${coord}</td>
+      <td>${badge}</td>
+      <td><div class="action-row">
+        <button class="act" onclick="event.stopPropagation();selectStore(${s.id})" style="font-size:11px">Засах</button>
+        ${s.status==='err'?`<button class="act act-primary" onclick="event.stopPropagation();selectStore(${s.id})" style="font-size:11px">Нэмэх</button>`:''}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function selectStore(id) {
+  selectedId = id;
+  const s = stores.find(x => x.id === id);
+  document.getElementById('panel-title').textContent = s.name;
+  const pb = document.getElementById('panel-badge');
+  pb.style.display = '';
+  pb.className = 'badge ' + (s.status==='ok'?'b-ok':s.status==='warn'?'b-warn':'b-err');
+  pb.textContent = s.status==='ok'?'Баталгаажсан':s.status==='warn'?'Хүлээгдэж буй':'Координатгүй';
+  document.getElementById('inp-lat').value = s.lat;
+  document.getElementById('inp-lng').value = s.lng;
+  document.getElementById('d-district').textContent = s.district;
+  document.getElementById('d-khoroo').textContent = s.khoroo;
+  document.getElementById('d-near').textContent = s.near;
+  document.getElementById('d-updated').textContent = s.updated;
+  document.getElementById('btn-save').disabled = false;
+  const hasCoord = s.lat && s.lng;
+  document.getElementById('map-pin').style.display = hasCoord ? '' : 'none';
+  document.getElementById('map-placeholder').style.display = hasCoord ? 'none' : '';
+  document.getElementById('map-label').style.display = hasCoord ? '' : 'none';
+  renderTable();
+}
+
+function updateCoord() {
+  document.getElementById('btn-save').disabled = false;
+}
+
+function saveLocation() {
+  if (!selectedId) return;
+  const s = stores.find(x => x.id === selectedId);
+  const lat = document.getElementById('inp-lat').value;
+  const lng = document.getElementById('inp-lng').value;
+  if (lat && lng) {
+    s.lat = lat; s.lng = lng; s.status = 'ok';
+    s.updated = new Date().toISOString().slice(0,10);
+    document.getElementById('map-pin').style.display = '';
+    document.getElementById('map-placeholder').style.display = 'none';
+    document.getElementById('map-label').style.display = '';
+  }
+  renderTable();
+}
+
+function filterTable(q) { filterQ = q; renderTable(); }
+function filterStatus(s) { filterS = s; renderTable(); document.querySelector('.filter-select').value = s; }
+
+function toggleCheck(id, checked) {
+  if (checked) checkedIds.add(id); else checkedIds.delete(id);
+  const bar = document.getElementById('bulk-bar');
+  if (checkedIds.size > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('bulk-label').textContent = checkedIds.size + ' дэлгүүр сонгогдсон';
+  } else {
+    bar.style.display = 'none';
+  }
+  renderTable();
+}
+
+function toggleAll(checked) {
+  stores.forEach(s => checked ? checkedIds.add(s.id) : checkedIds.delete(s.id));
+  const bar = document.getElementById('bulk-bar');
+  if (checked && checkedIds.size > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('bulk-label').textContent = checkedIds.size + ' дэлгүүр сонгогдсон';
+  } else { bar.style.display = 'none'; }
+  renderTable();
+}
+
+function hideBulk() {
+  checkedIds.clear();
+  document.getElementById('chk-all').checked = false;
+  document.getElementById('bulk-bar').style.display = 'none';
+  renderTable();
+}
+
+renderTable();
+</script>

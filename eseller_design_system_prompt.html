@@ -1,0 +1,721 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);z-index:2}
+.copy-btn:hover{background:var(--color-background-secondary)}
+
+.swatch-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:16px}
+.swatch{border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.swatch-color{height:48px}
+.swatch-info{padding:6px 8px;background:var(--color-background-primary)}
+.swatch-name{font-size:10px;font-weight:500;color:var(--color-text-primary)}
+.swatch-hex{font-size:10px;color:var(--color-text-tertiary);font-family:var(--font-mono)}
+.swatch-role{font-size:9px;color:var(--color-text-tertiary);margin-top:1px}
+
+.token-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:16px}
+.token-table th{text-align:left;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);padding:6px 10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.token-table td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle}
+.token-table tr:last-child td{border-bottom:none}
+.swatch-dot{width:16px;height:16px;border-radius:4px;display:inline-block;border:0.5px solid rgba(0,0,0,.1);flex-shrink:0}
+.mono{font-family:var(--font-mono);font-size:11px;color:var(--color-text-secondary)}
+.role-badge{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary);white-space:nowrap}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;margin-top:16px}
+.section-title:first-child{margin-top:0}
+
+.preview-section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.preview-card{border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.preview-header{padding:10px 14px;font-size:12px;font-weight:500;color:#fff}
+.preview-body{padding:12px 14px;background:var(--color-background-primary)}
+.preview-body p{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:8px}
+.preview-body p:last-child{margin-bottom:0}
+
+.btn-preview{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;border:none;cursor:pointer;margin:4px}
+.btn-primary{background:#E8242C;color:#fff}
+.btn-secondary{background:#1A1A1A;color:#fff}
+.btn-outline{background:transparent;color:#E8242C;border:1.5px solid #E8242C}
+.btn-ghost{background:#2A2A2A;color:#fff}
+
+.component-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.tag-pill{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:500}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Eseller.mn — Design System</div>
+    <div class="ps">Баталгаажсан брэнд өнгө · Бүх системд нэгдсэн CSS токен · Claude Code prompt</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Prompt хуулах</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('colors')">Өнгөний систем</button>
+  <button class="tab" onclick="show('tokens')">CSS токенууд</button>
+  <button class="tab" onclick="show('components')">Компонент preview</button>
+  <button class="tab" onclick="show('prompt')">Claude Code Prompt</button>
+</div>
+
+<!-- COLORS -->
+<div id="panel-colors" class="panel active">
+  <div class="section-title">Үндсэн брэнд палитр — зургаас задласан</div>
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#E8242C"></div>
+      <div class="swatch-info"><div class="swatch-name">Red Primary</div><div class="swatch-hex">#E8242C</div><div class="swatch-role">CTA, Logo, Accent</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#C41E25"></div>
+      <div class="swatch-info"><div class="swatch-name">Red Dark</div><div class="swatch-hex">#C41E25</div><div class="swatch-role">Hover state</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FF4D53"></div>
+      <div class="swatch-info"><div class="swatch-name">Red Light</div><div class="swatch-hex">#FF4D53</div><div class="swatch-role">Italic accent text</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0A0A0A"></div>
+      <div class="swatch-info"><div class="swatch-name">Black</div><div class="swatch-hex">#0A0A0A</div><div class="swatch-role">Page background</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1A1A1A"></div>
+      <div class="swatch-info"><div class="swatch-name">Surface</div><div class="swatch-hex">#1A1A1A</div><div class="swatch-role">Card / Nav bg</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#2A2A2A"></div>
+      <div class="swatch-info"><div class="swatch-name">Elevated</div><div class="swatch-hex">#2A2A2A</div><div class="swatch-role">Hover / Input</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#3D3D3D"></div>
+      <div class="swatch-info"><div class="swatch-name">Border</div><div class="swatch-hex">#3D3D3D</div><div class="swatch-role">Divider, Border</div></div>
+    </div>
+  </div>
+
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FFFFFF"></div>
+      <div class="swatch-info"><div class="swatch-name">White</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-role">Primary text</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#E0E0E0"></div>
+      <div class="swatch-info"><div class="swatch-name">Gray 100</div><div class="swatch-hex">#E0E0E0</div><div class="swatch-role">Secondary text</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#A0A0A0"></div>
+      <div class="swatch-info"><div class="swatch-name">Gray 400</div><div class="swatch-hex">#A0A0A0</div><div class="swatch-role">Tertiary text</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#22C55E"></div>
+      <div class="swatch-info"><div class="swatch-name">Green</div><div class="swatch-hex">#22C55E</div><div class="swatch-role">Success / Active</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#F59E0B"></div>
+      <div class="swatch-info"><div class="swatch-name">Amber</div><div class="swatch-hex">#F59E0B</div><div class="swatch-role">Warning / VIP</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FFD700"></div>
+      <div class="swatch-info"><div class="swatch-name">Gold</div><div class="swatch-hex">#FFD700</div><div class="swatch-role">VIP badge</div></div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#3B82F6"></div>
+      <div class="swatch-info"><div class="swatch-name">Blue</div><div class="swatch-hex">#3B82F6</div><div class="swatch-role">Info / Link</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Брэнд ашиглалтын дүрэм</div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px">
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">CTA товч</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);line-height:1.7">#E8242C дэвсгэр<br>Hover: #C41E25<br>Текст: цагаан #FFFFFF<br>Radius: 6px<br>Font-weight: 700</div>
+    </div>
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px">
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Карт / Хуудас</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);line-height:1.7">Дэвсгэр: #1A1A1A<br>Хүрээ: #3D3D3D 0.5px<br>Hover: #2A2A2A<br>Radius: 12px<br>Shadow: none</div>
+    </div>
+    <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px">
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px">Типографи</div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);line-height:1.7">Heading: #FFFFFF bold<br>Body: #E0E0E0 regular<br>Muted: #A0A0A0<br>Accent italic: #FF4D53<br>Font: Inter / Геометр</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOKENS -->
+<div id="panel-tokens" class="panel">
+  <div class="section-title">CSS Design Tokens — globals.css</div>
+  <table class="token-table">
+    <thead><tr><th>Токен нэр</th><th>Утга</th><th>Өнгө</th><th>Хэрэглэгдэх газар</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">--esl-brand</td><td class="mono">#E8242C</td><td><span class="swatch-dot" style="background:#E8242C"></span></td><td><span class="role-badge">Лого, CTA, Highlight</span></td></tr>
+      <tr><td class="mono">--esl-brand-dark</td><td class="mono">#C41E25</td><td><span class="swatch-dot" style="background:#C41E25"></span></td><td><span class="role-badge">CTA hover</span></td></tr>
+      <tr><td class="mono">--esl-brand-light</td><td class="mono">#FF4D53</td><td><span class="swatch-dot" style="background:#FF4D53"></span></td><td><span class="role-badge">Accent italic, badge</span></td></tr>
+      <tr><td class="mono">--esl-bg-page</td><td class="mono">#0A0A0A</td><td><span class="swatch-dot" style="background:#0A0A0A;border:0.5px solid #555"></span></td><td><span class="role-badge">html, body bg</span></td></tr>
+      <tr><td class="mono">--esl-bg-surface</td><td class="mono">#1A1A1A</td><td><span class="swatch-dot" style="background:#1A1A1A;border:0.5px solid #555"></span></td><td><span class="role-badge">Card, nav, modal</span></td></tr>
+      <tr><td class="mono">--esl-bg-elevated</td><td class="mono">#2A2A2A</td><td><span class="swatch-dot" style="background:#2A2A2A;border:0.5px solid #555"></span></td><td><span class="role-badge">Input, hover, dropdown</span></td></tr>
+      <tr><td class="mono">--esl-border</td><td class="mono">#3D3D3D</td><td><span class="swatch-dot" style="background:#3D3D3D"></span></td><td><span class="role-badge">Хүрээ, хуваагч</span></td></tr>
+      <tr><td class="mono">--esl-border-strong</td><td class="mono">#555555</td><td><span class="swatch-dot" style="background:#555555"></span></td><td><span class="role-badge">Focus, active border</span></td></tr>
+      <tr><td class="mono">--esl-text-primary</td><td class="mono">#FFFFFF</td><td><span class="swatch-dot" style="background:#FFFFFF"></span></td><td><span class="role-badge">Heading, label</span></td></tr>
+      <tr><td class="mono">--esl-text-secondary</td><td class="mono">#E0E0E0</td><td><span class="swatch-dot" style="background:#E0E0E0"></span></td><td><span class="role-badge">Body text</span></td></tr>
+      <tr><td class="mono">--esl-text-muted</td><td class="mono">#A0A0A0</td><td><span class="swatch-dot" style="background:#A0A0A0"></span></td><td><span class="role-badge">Placeholder, hint</span></td></tr>
+      <tr><td class="mono">--esl-text-disabled</td><td class="mono">#555555</td><td><span class="swatch-dot" style="background:#555555"></span></td><td><span class="role-badge">Disabled state</span></td></tr>
+      <tr><td class="mono">--esl-success</td><td class="mono">#22C55E</td><td><span class="swatch-dot" style="background:#22C55E"></span></td><td><span class="role-badge">Амжилттай, active</span></td></tr>
+      <tr><td class="mono">--esl-warning</td><td class="mono">#F59E0B</td><td><span class="swatch-dot" style="background:#F59E0B"></span></td><td><span class="role-badge">Анхааруулга</span></td></tr>
+      <tr><td class="mono">--esl-vip</td><td class="mono">#FFD700</td><td><span class="swatch-dot" style="background:#FFD700"></span></td><td><span class="role-badge">VIP badge, gold</span></td></tr>
+      <tr><td class="mono">--esl-info</td><td class="mono">#3B82F6</td><td><span class="swatch-dot" style="background:#3B82F6"></span></td><td><span class="role-badge">Link, info state</span></td></tr>
+      <tr><td class="mono">--esl-radius-sm</td><td class="mono">6px</td><td>—</td><td><span class="role-badge">Button, input, tag</span></td></tr>
+      <tr><td class="mono">--esl-radius-md</td><td class="mono">10px</td><td>—</td><td><span class="role-badge">Card, dropdown</span></td></tr>
+      <tr><td class="mono">--esl-radius-lg</td><td class="mono">16px</td><td>—</td><td><span class="role-badge">Modal, large card</span></td></tr>
+      <tr><td class="mono">--esl-radius-full</td><td class="mono">9999px</td><td>—</td><td><span class="role-badge">Pill, avatar, badge</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- COMPONENTS -->
+<div id="panel-components" class="panel">
+  <div class="section-title">Товчны систем</div>
+  <div style="background:#0A0A0A;border-radius:12px;padding:20px;margin-bottom:14px">
+    <div class="component-row">
+      <button class="btn-preview btn-primary">Борлуулагч болох</button>
+      <button class="btn-preview btn-secondary">Дэлгүүр нээх</button>
+      <button class="btn-preview btn-outline">Дэлгүүр харах</button>
+      <button class="btn-preview btn-ghost">Нэвтрэх</button>
+    </div>
+    <div style="font-size:11px;color:#A0A0A0;margin-top:8px">Primary: #E8242C · Secondary: #1A1A1A · Outline: #E8242C border · Ghost: #2A2A2A</div>
+  </div>
+
+  <div class="section-title">Badge / Статус тэмдэглэгч</div>
+  <div style="background:#0A0A0A;border-radius:12px;padding:20px;margin-bottom:14px">
+    <div class="component-row">
+      <span class="tag-pill" style="background:#E8242C;color:#fff">Шинэ</span>
+      <span class="tag-pill" style="background:rgba(232,36,44,0.15);color:#FF4D53;border:1px solid rgba(232,36,44,0.3)">Онцлох</span>
+      <span class="tag-pill" style="background:#FFD700;color:#0A0A0A">ВИП</span>
+      <span class="tag-pill" style="background:rgba(34,197,94,0.15);color:#22C55E;border:1px solid rgba(34,197,94,0.3)">Идэвхтэй</span>
+      <span class="tag-pill" style="background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3)">Хүлээгдэж буй</span>
+      <span class="tag-pill" style="background:#2A2A2A;color:#A0A0A0;border:1px solid #3D3D3D">Архивлагдсан</span>
+    </div>
+  </div>
+
+  <div class="section-title">Input талбар</div>
+  <div style="background:#0A0A0A;border-radius:12px;padding:20px;margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap">
+    <input type="text" placeholder="Бараа хайх..." style="background:#1A1A1A;border:0.5px solid #3D3D3D;border-radius:6px;color:#fff;padding:0 12px;height:38px;font-size:13px;width:200px;outline:none">
+    <select style="background:#1A1A1A;border:0.5px solid #3D3D3D;border-radius:6px;color:#E0E0E0;padding:0 12px;height:38px;font-size:13px;width:160px;outline:none">
+      <option>Ангилал сонгох</option>
+      <option>Электроник</option>
+    </select>
+  </div>
+
+  <div class="section-title">Карт бүтэц</div>
+  <div style="background:#0A0A0A;border-radius:12px;padding:20px;margin-bottom:14px">
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+      <div style="background:#1A1A1A;border:0.5px solid #3D3D3D;border-radius:10px;overflow:hidden">
+        <div style="height:80px;background:#2A2A2A;display:flex;align-items:center;justify-content:center;font-size:11px;color:#555">Зураг</div>
+        <div style="padding:10px">
+          <div style="font-size:12px;font-weight:500;color:#fff;margin-bottom:4px">Барааны нэр</div>
+          <div style="font-size:13px;font-weight:700;color:#E8242C">₮49,900</div>
+          <div style="display:flex;gap:4px;margin-top:6px">
+            <span style="font-size:10px;padding:2px 6px;border-radius:99px;background:rgba(232,36,44,0.15);color:#FF4D53;border:1px solid rgba(232,36,44,0.3)">Онцлох</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:#1A1A1A;border:1.5px solid #FFD700;border-radius:10px;overflow:hidden">
+        <div style="height:80px;background:#2A2A2A;display:flex;align-items:center;justify-content:center;font-size:11px;color:#555">Зураг</div>
+        <div style="padding:10px">
+          <div style="font-size:12px;font-weight:500;color:#fff;margin-bottom:4px">ВИП бараа</div>
+          <div style="font-size:13px;font-weight:700;color:#E8242C">₮149,900</div>
+          <div style="display:flex;gap:4px;margin-top:6px">
+            <span style="font-size:10px;padding:2px 6px;border-radius:99px;background:#FFD700;color:#0A0A0A;font-weight:600">ВИП</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:#1A1A1A;border:0.5px solid #3D3D3D;border-radius:10px;overflow:hidden">
+        <div style="height:80px;background:#2A2A2A;position:relative;display:flex;align-items:center;justify-content:center;font-size:11px;color:#555">
+          Зураг
+          <span style="position:absolute;top:6px;left:6px;font-size:10px;padding:2px 7px;border-radius:99px;background:#E8242C;color:#fff;font-weight:600">-30%</span>
+        </div>
+        <div style="padding:10px">
+          <div style="font-size:12px;font-weight:500;color:#fff;margin-bottom:4px">Хямдралтай</div>
+          <div style="display:flex;align-items:baseline;gap:6px">
+            <span style="font-size:13px;font-weight:700;color:#E8242C">₮35,000</span>
+            <span style="font-size:11px;color:#555;text-decoration:line-through">₮50,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT -->
+<div id="panel-prompt" class="panel">
+  <div class="section-title">Claude Code — Design System нэгдсэн prompt</div>
+  <div class="prompt-box" id="mainprompt">
+<button class="copy-btn" onclick="copyPrompt('mainprompt')">Хуулах</button>## ESELLER.MN — UNIFIED DESIGN SYSTEM IMPLEMENTATION
+
+You are implementing the official eseller.mn brand design system across
+the ENTIRE codebase. The brand colors have been approved (dark marketplace
+aesthetic with red accent). Apply consistently to every component, page,
+and module without exception.
+
+---
+
+## BRAND SPECIFICATION — APPROVED
+
+Logo: eseller.mn (lowercase, "eseller" white bold + ".mn" red)
+Visual language: Dark, bold, premium marketplace
+Inspired by: Dark mode e-commerce (similar energy to Vercel/Linear but Mongolian market)
+
+---
+
+## 1. DESIGN TOKENS — /styles/tokens.css (or tailwind.config.ts)
+
+Create this as the SINGLE SOURCE OF TRUTH. Every color in the app
+must reference these tokens — NO hardcoded hex values anywhere else.
+
+```css
+/* /styles/tokens.css */
+:root {
+  /* ── Brand ── */
+  --esl-brand:          #E8242C;   /* Primary red — CTA, logo accent, highlights */
+  --esl-brand-dark:     #C41E25;   /* Hover/pressed state */
+  --esl-brand-light:    #FF4D53;   /* Italic accent, subtle highlight */
+  --esl-brand-muted:    rgba(232, 36, 44, 0.15); /* Transparent badge bg */
+  --esl-brand-border:   rgba(232, 36, 44, 0.30); /* Transparent badge border */
+
+  /* ── Backgrounds ── */
+  --esl-bg-page:        #0A0A0A;   /* html, body — deepest dark */
+  --esl-bg-surface:     #1A1A1A;   /* Cards, nav, sidebar, modals */
+  --esl-bg-elevated:    #2A2A2A;   /* Inputs, hover states, dropdowns */
+  --esl-bg-overlay:     rgba(0, 0, 0, 0.70); /* Modal backdrop */
+
+  /* ── Borders ── */
+  --esl-border:         #3D3D3D;   /* Default — dividers, card borders */
+  --esl-border-strong:  #555555;   /* Focus rings, active borders */
+  --esl-border-subtle:  rgba(255, 255, 255, 0.06); /* Very subtle separator */
+
+  /* ── Text ── */
+  --esl-text-primary:   #FFFFFF;   /* Headings, labels, prices */
+  --esl-text-secondary: #E0E0E0;   /* Body text, descriptions */
+  --esl-text-muted:     #A0A0A0;   /* Metadata, hints, placeholders */
+  --esl-text-disabled:  #555555;   /* Disabled inputs/buttons */
+  --esl-text-accent:    #FF4D53;   /* Italic red accent (hero text) */
+
+  /* ── Semantic ── */
+  --esl-success:        #22C55E;
+  --esl-success-muted:  rgba(34, 197, 94, 0.15);
+  --esl-warning:        #F59E0B;
+  --esl-warning-muted:  rgba(245, 158, 11, 0.15);
+  --esl-error:          #E8242C;   /* Same as brand — intentional */
+  --esl-info:           #3B82F6;
+  --esl-info-muted:     rgba(59, 130, 246, 0.15);
+
+  /* ── Special tiers ── */
+  --esl-vip:            #FFD700;   /* VIP gold */
+  --esl-vip-bg:         rgba(255, 215, 0, 0.12);
+  --esl-featured:       var(--esl-brand);
+  --esl-featured-bg:    var(--esl-brand-muted);
+
+  /* ── Spacing (8px grid) ── */
+  --esl-space-1:  4px;
+  --esl-space-2:  8px;
+  --esl-space-3:  12px;
+  --esl-space-4:  16px;
+  --esl-space-5:  20px;
+  --esl-space-6:  24px;
+  --esl-space-8:  32px;
+  --esl-space-10: 40px;
+  --esl-space-12: 48px;
+
+  /* ── Border radius ── */
+  --esl-radius-xs:   4px;
+  --esl-radius-sm:   6px;    /* Buttons, inputs, small tags */
+  --esl-radius-md:   10px;   /* Cards, panels */
+  --esl-radius-lg:   16px;   /* Modals, large cards, hero sections */
+  --esl-radius-full: 9999px; /* Pills, avatars, badges */
+
+  /* ── Typography ── */
+  --esl-font-sans:  'Inter', -apple-system, sans-serif;
+  --esl-font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Font sizes */
+  --esl-text-xs:   11px;
+  --esl-text-sm:   12px;
+  --esl-text-base: 14px;
+  --esl-text-md:   16px;
+  --esl-text-lg:   18px;
+  --esl-text-xl:   22px;
+  --esl-text-2xl:  28px;
+  --esl-text-3xl:  36px;
+  --esl-text-hero: 64px;   /* Hero section */
+
+  /* ── Transitions ── */
+  --esl-transition: 150ms ease;
+  --esl-transition-slow: 300ms ease;
+}
+```
+
+---
+
+## 2. TAILWIND CONFIG — tailwind.config.ts
+
+```typescript
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  darkMode: 'class',
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          DEFAULT: '#E8242C',
+          dark:    '#C41E25',
+          light:   '#FF4D53',
+        },
+        surface: {
+          page:     '#0A0A0A',
+          card:     '#1A1A1A',
+          elevated: '#2A2A2A',
+          border:   '#3D3D3D',
+        },
+        esl: {
+          vip:     '#FFD700',
+          success: '#22C55E',
+          warning: '#F59E0B',
+          info:    '#3B82F6',
+        },
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      borderRadius: {
+        'esl-sm': '6px',
+        'esl-md': '10px',
+        'esl-lg': '16px',
+      },
+      animation: {
+        'pulse-brand': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+    },
+  },
+  plugins: [],
+}
+export default config
+```
+
+---
+
+## 3. GLOBAL BASE STYLES — /app/globals.css
+
+```css
+@import './tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    background-color: var(--esl-bg-page);
+    color: var(--esl-text-secondary);
+    font-family: var(--esl-font-sans);
+    font-size: var(--esl-text-base);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--esl-text-primary);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h1 { font-size: var(--esl-text-3xl); }
+  h2 { font-size: var(--esl-text-2xl); }
+  h3 { font-size: var(--esl-text-xl); }
+  h4 { font-size: var(--esl-text-lg); }
+
+  a {
+    color: var(--esl-brand-light);
+    text-decoration: none;
+    transition: color var(--esl-transition);
+  }
+  a:hover { color: var(--esl-brand); }
+
+  input, select, textarea {
+    background: var(--esl-bg-elevated);
+    border: 0.5px solid var(--esl-border);
+    border-radius: var(--esl-radius-sm);
+    color: var(--esl-text-primary);
+    font-family: var(--esl-font-sans);
+    transition: border-color var(--esl-transition);
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--esl-border-strong);
+    box-shadow: 0 0 0 3px rgba(232, 36, 44, 0.15);
+  }
+  ::placeholder { color: var(--esl-text-muted); }
+
+  * { box-sizing: border-box; }
+  *::-webkit-scrollbar { width: 6px; height: 6px; }
+  *::-webkit-scrollbar-track { background: var(--esl-bg-surface); }
+  *::-webkit-scrollbar-thumb { background: var(--esl-border-strong); border-radius: 99px; }
+}
+```
+
+---
+
+## 4. COMPONENT LIBRARY — /components/ui/
+
+### Button — /components/ui/Button.tsx
+
+```tsx
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
+
+const buttonVariants = cva(
+  'inline-flex items-center justify-center gap-2 font-semibold transition-all duration-150 cursor-pointer select-none disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]',
+  {
+    variants: {
+      variant: {
+        primary:   'bg-[#E8242C] text-white hover:bg-[#C41E25] rounded-[6px]',
+        secondary: 'bg-[#1A1A1A] text-white border border-[#3D3D3D] hover:bg-[#2A2A2A] rounded-[6px]',
+        outline:   'bg-transparent text-[#E8242C] border border-[#E8242C] hover:bg-[rgba(232,36,44,0.1)] rounded-[6px]',
+        ghost:     'bg-[#2A2A2A] text-[#E0E0E0] hover:bg-[#3D3D3D] rounded-[6px]',
+        link:      'bg-transparent text-[#FF4D53] hover:text-[#E8242C] p-0 h-auto',
+        vip:       'bg-[#FFD700] text-[#0A0A0A] hover:bg-[#FFC800] font-bold rounded-[6px]',
+      },
+      size: {
+        sm:  'h-8  px-3  text-[12px]',
+        md:  'h-10 px-4  text-[13px]',
+        lg:  'h-12 px-6  text-[14px]',
+        xl:  'h-14 px-8  text-[16px]',
+        icon:'h-10 w-10  text-[16px]',
+      },
+    },
+    defaultVariants: { variant: 'primary', size: 'md' },
+  }
+)
+
+export function Button({ variant, size, className, ...props }) {
+  return <button className={cn(buttonVariants({ variant, size }), className)} {...props} />
+}
+```
+
+### Badge — /components/ui/Badge.tsx
+
+```tsx
+const badgeVariants = cva(
+  'inline-flex items-center gap-1 font-medium rounded-full',
+  {
+    variants: {
+      variant: {
+        brand:    'bg-[#E8242C] text-white text-[11px] px-2.5 py-0.5',
+        featured: 'bg-[rgba(232,36,44,0.15)] text-[#FF4D53] border border-[rgba(232,36,44,0.3)] text-[11px] px-2.5 py-0.5',
+        vip:      'bg-[#FFD700] text-[#0A0A0A] font-bold text-[11px] px-2.5 py-0.5',
+        success:  'bg-[rgba(34,197,94,0.15)] text-[#22C55E] border border-[rgba(34,197,94,0.3)] text-[11px] px-2.5 py-0.5',
+        warning:  'bg-[rgba(245,158,11,0.15)] text-[#F59E0B] border border-[rgba(245,158,11,0.3)] text-[11px] px-2.5 py-0.5',
+        info:     'bg-[rgba(59,130,246,0.15)] text-[#3B82F6] border border-[rgba(59,130,246,0.3)] text-[11px] px-2.5 py-0.5',
+        neutral:  'bg-[#2A2A2A] text-[#A0A0A0] border border-[#3D3D3D] text-[11px] px-2.5 py-0.5',
+        discount: 'bg-[#E8242C] text-white font-bold text-[11px] px-2 py-0.5',
+      },
+    },
+    defaultVariants: { variant: 'brand' },
+  }
+)
+```
+
+### Card — /components/ui/Card.tsx
+
+```tsx
+export function Card({ children, className, vip = false, featured = false }) {
+  return (
+    <div className={cn(
+      'bg-[#1A1A1A] rounded-[10px] overflow-hidden',
+      'border transition-all duration-150',
+      vip      ? 'border-[#FFD700] border-[1.5px]' :
+      featured ? 'border-[#E8242C] border-[1px]' :
+                 'border-[#3D3D3D] border-[0.5px] hover:border-[#555555]',
+      className
+    )}>
+      {children}
+    </div>
+  )
+}
+```
+
+---
+
+## 5. AUDIT CHECKLIST — apply to every existing component
+
+Go through EVERY component file and replace:
+
+```
+REPLACE                          WITH
+─────────────────────────────────────────────────────
+bg-white                    →   bg-[#1A1A1A]
+bg-gray-50 / bg-gray-100    →   bg-[#2A2A2A]
+text-gray-900 / text-black  →   text-white / text-[#E0E0E0]
+text-gray-500 / text-gray-400 → text-[#A0A0A0]
+border-gray-200             →   border-[#3D3D3D]
+focus:ring-blue-500         →   focus:ring-[#E8242C] focus:ring-opacity-30
+bg-blue-600 (CTA buttons)   →   bg-[#E8242C]
+bg-blue-50 (info bg)        →   bg-[rgba(59,130,246,0.15)]
+text-blue-600 (links)       →   text-[#FF4D53]
+```
+
+Files to audit in priority order:
+1. /components/ui/* (all base components)
+2. /app/(tabs)/index.tsx (home feed)
+3. /app/product/[id].tsx
+4. /app/(auth)/login.tsx + register.tsx
+5. /components/layout/Navbar.tsx + Footer.tsx
+6. /app/admin/* (admin panel)
+7. /app/dashboard/* (seller dashboard)
+8. Mobile apps: /apps/mobile-*/
+
+---
+
+## 6. NAVBAR — /components/layout/Navbar.tsx
+
+```tsx
+export function Navbar() {
+  return (
+    <nav style={{
+      background: 'rgba(10,10,10,0.90)',
+      backdropFilter: 'blur(12px)',
+      borderBottom: '0.5px solid #3D3D3D',
+      position: 'sticky', top: 0, zIndex: 50,
+    }}>
+      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+        <Logo />
+        <NavLinks />
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="sm">Нэвтрэх</Button>
+          <Button variant="primary" size="sm">Борлуулагч болох →</Button>
+        </div>
+      </div>
+    </nav>
+  )
+}
+```
+
+Logo component:
+```tsx
+export function Logo() {
+  return (
+    <span style={{ fontWeight: 800, fontSize: '18px', letterSpacing: '-0.03em' }}>
+      <span style={{ color: '#FFFFFF' }}>eseller</span>
+      <span style={{ color: '#E8242C' }}>.mn</span>
+    </span>
+  )
+}
+```
+
+---
+
+## 7. ADMIN PANEL SIDEBAR — override Claude Code prompt default
+
+Admin sidebar must use brand colors, NOT default light theme:
+
+```tsx
+// /app/admin/layout.tsx sidebar
+const sidebarStyle = {
+  width: '220px',
+  background: '#1A1A1A',
+  borderRight: '0.5px solid #3D3D3D',
+  height: '100vh',
+}
+
+const activeNavItem = {
+  background: 'rgba(232, 36, 44, 0.15)',
+  color: '#FF4D53',
+  borderLeft: '2px solid #E8242C',
+  borderRadius: '0 6px 6px 0',
+}
+
+const inactiveNavItem = {
+  color: '#A0A0A0',
+  borderLeft: '2px solid transparent',
+}
+```
+
+---
+
+## 8. MOBILE APPS — React Native tokens
+
+```typescript
+// /packages/ui/src/tokens.ts — shared across all 4 apps
+export const colors = {
+  brand:        '#E8242C',
+  brandDark:    '#C41E25',
+  brandLight:   '#FF4D53',
+  bgPage:       '#0A0A0A',
+  bgSurface:    '#1A1A1A',
+  bgElevated:   '#2A2A2A',
+  border:       '#3D3D3D',
+  textPrimary:  '#FFFFFF',
+  textSecond:   '#E0E0E0',
+  textMuted:    '#A0A0A0',
+  success:      '#22C55E',
+  warning:      '#F59E0B',
+  vip:          '#FFD700',
+  info:         '#3B82F6',
+} as const
+
+// NativeWind className support (if using NativeWind v4):
+// className="bg-[#1A1A1A] text-white border-[#3D3D3D]"
+// — same token values as web, consistent visual language
+```
+
+---
+
+## IMPLEMENTATION ORDER
+
+1. Create tokens.css + update globals.css
+2. Update tailwind.config.ts
+3. Build Button, Badge, Card, Input, Modal base components
+4. Update Navbar + Footer
+5. Audit all existing pages (home → product → auth → dashboard → admin)
+6. Update mobile app shared tokens package
+7. Run visual regression check: every page screenshot vs brand reference
+
+All components must pass this check:
+- No white/light backgrounds anywhere
+- All primary CTAs use #E8242C
+- All cards use #1A1A1A background
+- All borders use #3D3D3D
+- Typography hierarchy: white heading → #E0E0E0 body → #A0A0A0 muted
+</div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyPrompt(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.innerText.replace('Хуулах','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа!';
+    setTimeout(()=>btn.textContent='Хуулах',2000);
+  });
+}
+function copyAll(){
+  copyPrompt('mainprompt');
+}
+</script>

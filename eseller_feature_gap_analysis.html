@@ -1,0 +1,556 @@
+
+<style>
+:root { --gap: 16px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans, sans-serif); }
+
+.doc-wrap { padding: 1.5rem 0; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+.page-sub {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  margin-bottom: 1.5rem;
+}
+.tab {
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -0.5px;
+  transition: color .15s;
+}
+.tab.active {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Feature cards */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.feat-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 14px 16px;
+}
+.feat-card:hover { border-color: var(--color-border-secondary); }
+
+.feat-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.feat-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+.priority {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 99px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.p-high { background: var(--color-background-danger); color: var(--color-text-danger); }
+.p-med  { background: var(--color-background-warning); color: var(--color-text-warning); }
+.p-low  { background: var(--color-background-success); color: var(--color-text-success); }
+
+.feat-desc {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.feat-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tag {
+  font-size: 11px;
+  background: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+/* Architecture diagram */
+.arch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+.arch-col {
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: 14px;
+}
+.arch-col-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+.arch-item {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.arch-item:hover { border-color: var(--color-border-secondary); }
+.arch-item small {
+  display: block;
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  margin-top: 2px;
+}
+
+/* Pages list */
+.pages-list { display: flex; flex-direction: column; gap: 10px; }
+.page-row {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.page-row:hover { border-color: var(--color-border-secondary); }
+.page-icon {
+  width: 36px; height: 36px;
+  border-radius: var(--border-radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.page-info { flex: 1; }
+.page-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.page-path { font-size: 12px; color: var(--color-text-tertiary); margin-top: 1px; }
+.page-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+.status-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-weight: 500;
+}
+.s-new { background: var(--color-background-info); color: var(--color-text-info); }
+.s-exists { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+.s-enhance { background: var(--color-background-warning); color: var(--color-text-warning); }
+
+/* Admin table */
+.admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-table th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-tertiary);
+  padding: 8px 10px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.admin-table td {
+  padding: 10px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  color: var(--color-text-primary);
+  vertical-align: top;
+}
+.admin-table tr:last-child td { border-bottom: none; }
+
+.action-btn {
+  background: none;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: background .15s;
+}
+.action-btn:hover { background: var(--color-background-secondary); }
+
+.sprint-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+.sprint-item {
+  flex: 1;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 12px 14px;
+}
+.sprint-num {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.sprint-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+.sprint-items { font-size: 12px; color: var(--color-text-secondary); line-height: 1.8; }
+</style>
+
+<div class="doc-wrap">
+  <div class="section-label">Eseller.mn · Системийн судалгаа</div>
+  <div class="page-title">Нэмэх боломжтой функцуудын баримт бичиг</div>
+  <div class="page-sub">Zary.mn-д байгаа боловч eseller.mn-д байхгүй функцуудын дүн шинжилгээ, архитектур болон хөгжүүлэлтийн төлөвлөгөө</div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="show('features')">Функц судалгаа</button>
+    <button class="tab" onclick="show('pages')">Хуудасны бүтэц</button>
+    <button class="tab" onclick="show('admin')">Админ панел</button>
+    <button class="tab" onclick="show('sprint')">Хөгжүүлэлтийн төлөвлөгөө</button>
+  </div>
+
+  <!-- FEATURES PANEL -->
+  <div id="panel-features" class="panel active">
+    <div class="section-label" style="margin-bottom:12px">Нэмэх шаардлагатай функцууд — 8 зүйл</div>
+    <div class="feature-grid">
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Байршлын газрын зураг</div>
+          <span class="priority p-high">Өндөр</span>
+        </div>
+        <div class="feat-desc">Дэлгүүр бүрийн байршлыг Google Maps эсвэл OpenStreetMap ашиглан харуулах. Хэрэглэгч ойролцоох дэлгүүрийг олоход туслана.</div>
+        <div class="feat-meta">
+          <span class="tag">Google Maps API</span><span class="tag">Дэлгүүр хуудас</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Борлуулагчтай шууд чат</div>
+          <span class="priority p-high">Өндөр</span>
+        </div>
+        <div class="feat-desc">Бараа бүрийн хуудсанд борлуулагч/дэлгүүртэй шууд мессеж солилцох боломж. Худалдан авахаас өмнө асуух, тохиролцох боломж олгоно.</div>
+        <div class="feat-meta">
+          <span class="tag">WebSocket</span><span class="tag">Бараа хуудас</span><span class="tag">Профайл</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Хэрэглэгчийн үзсэн тоо</div>
+          <span class="priority p-med">Дунд</span>
+        </div>
+        <div class="feat-desc">Бараа хэдэн хэрэглэгч үзсэнийг харуулах. "120 хүн үзсэн" гэх мэт нийгмийн баталгааг бий болгож, борлуулалтыг дэмжинэ.</div>
+        <div class="feat-meta">
+          <span class="tag">Analytics</span><span class="tag">Бараа хуудас</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Зарын дугаар / Reference ID</div>
+          <span class="priority p-med">Дунд</span>
+        </div>
+        <div class="feat-desc">Бараа бүрт өвөрмөц дугаар (#1950352 гэх мэт) оноох. Дэмжих үйлчилгээ, лавлах, хайхад хялбар болно.</div>
+        <div class="feat-meta">
+          <span class="tag">Backend</span><span class="tag">UUID / Auto-increment</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Ойролцоох алдартай газрууд</div>
+          <span class="priority p-low">Бага</span>
+        </div>
+        <div class="feat-desc">Дэлгүүрийн байршлаас ойролцоох сургууль, тээврийн зогсоол, нийтийн газруудыг харуулах. Places API ашиглана.</div>
+        <div class="feat-meta">
+          <span class="tag">Google Places API</span><span class="tag">Дэлгүүр хуудас</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Агаарын чанар + Цаг агаар</div>
+          <span class="priority p-low">Бага</span>
+        </div>
+        <div class="feat-desc">Дэлгүүр/бараа байршлын цаг агаар болон агаарын чанарын мэдээлэл. Гадна барааны дэлгүүр, зах зээлийн хуудсанд хэрэгтэй.</div>
+        <div class="feat-meta">
+          <span class="tag">OpenWeather API</span><span class="tag">AQI API</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Утасны дугаар харуулах товч</div>
+          <span class="priority p-med">Дунд</span>
+        </div>
+        <div class="feat-desc">"Дугаар харах" товч дарснаар л борлуулагчийн утас харагдах. Spam болон бот хамгаалалт, мөн click tracking хийх боломж.</div>
+        <div class="feat-meta">
+          <span class="tag">Privacy UX</span><span class="tag">Дэлгүүр / Бараа хуудас</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-header">
+          <div class="feat-title">Хуваалцах + Хадгалах товч</div>
+          <span class="priority p-med">Дунд</span>
+        </div>
+        <div class="feat-desc">Бараа болон дэлгүүрийн хуудсыг нийгмийн сүлжээнд хуваалцах, хүслийн жагсаалтад хадгалах функц.</div>
+        <div class="feat-meta">
+          <span class="tag">Social share</span><span class="tag">Wishlist</span><span class="tag">Auth шаардлагатай</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PAGES PANEL -->
+  <div id="panel-pages" class="panel">
+    <div class="section-label" style="margin-bottom:12px">Шинэ болон сайжруулах хуудаснууд</div>
+    <div class="pages-list">
+
+      <div class="page-row" onclick="sendPrompt('Дэлгүүрийн дэлгэрэнгүй хуудасны дизайн мокап хийж өгнө үү')">
+        <div class="page-icon" style="background:var(--color-background-info)">🏪</div>
+        <div class="page-info">
+          <div class="page-name">Дэлгүүрийн дэлгэрэнгүй хуудас</div>
+          <div class="page-path">/store/:id</div>
+          <div class="page-tags">
+            <span class="status-badge s-new">Шинэ</span>
+            <span class="tag">Байршил зураг</span><span class="tag">Чат</span><span class="tag">Ойролцоох газрууд</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-row" onclick="sendPrompt('Бараа хуудасны дизайн мокап хийж өгнө үү')">
+        <div class="page-icon" style="background:var(--color-background-success)">📦</div>
+        <div class="page-info">
+          <div class="page-name">Бараа дэлгэрэнгүй хуудас</div>
+          <div class="page-path">/product/:id</div>
+          <div class="page-tags">
+            <span class="status-badge s-enhance">Сайжруулах</span>
+            <span class="tag">Reference ID</span><span class="tag">Үзсэн тоо</span><span class="tag">Хуваалцах</span><span class="tag">Дугаар харах</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-row" onclick="sendPrompt('Нүүр хуудасны дизайн мокап хийж өгнө үү')">
+        <div class="page-icon" style="background:var(--color-background-warning)">🏠</div>
+        <div class="page-info">
+          <div class="page-name">Нүүр хуудас</div>
+          <div class="page-path">/</div>
+          <div class="page-tags">
+            <span class="status-badge s-exists">Байгаа</span>
+            <span class="tag">Промо баннер</span><span class="tag">Ангилал</span><span class="tag">Хямдрал</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-row" onclick="sendPrompt('Хэрэглэгчийн чатны хуудасны дизайн хийж өгнө үү')">
+        <div class="page-icon" style="background:var(--color-background-secondary)">💬</div>
+        <div class="page-info">
+          <div class="page-name">Чат / Мессеж хуудас</div>
+          <div class="page-path">/messages</div>
+          <div class="page-tags">
+            <span class="status-badge s-new">Шинэ</span>
+            <span class="tag">Real-time</span><span class="tag">Борлуулагч ↔ Хэрэглэгч</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-row" onclick="sendPrompt('Хүслийн жагсаалтын хуудасны дизайн хийж өгнө үү')">
+        <div class="page-icon" style="background:var(--color-background-danger)">❤️</div>
+        <div class="page-info">
+          <div class="page-name">Хүслийн жагсаалт</div>
+          <div class="page-path">/wishlist</div>
+          <div class="page-tags">
+            <span class="status-badge s-new">Шинэ</span>
+            <span class="tag">Хадгалсан бараанууд</span><span class="tag">Auth шаардлагатай</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-row" onclick="sendPrompt('Борлуулагчийн профайл хуудасны дизайн хийж өгнө үү')">
+        <div class="page-icon" style="background:var(--color-background-info)">👤</div>
+        <div class="page-info">
+          <div class="page-name">Борлуулагчийн профайл</div>
+          <div class="page-path">/seller/:id</div>
+          <div class="page-tags">
+            <span class="status-badge s-new">Шинэ</span>
+            <span class="tag">Бүх бараа</span><span class="tag">Үнэлгээ</span><span class="tag">Утас / Чат</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="panel-admin" class="panel">
+    <div class="section-label" style="margin-bottom:12px">Админ панелийн модулиуд</div>
+    <div class="arch-grid" style="margin-bottom:1.5rem">
+      <div class="arch-col">
+        <div class="arch-col-title">Бараа / Дэлгүүр</div>
+        <div class="arch-item">Бараа удирдлага<small>Нэмэх, засах, устгах</small></div>
+        <div class="arch-item">Дэлгүүр баталгаажуулалт<small>KYC, баримт шалгах</small></div>
+        <div class="arch-item">Ангилал удирдлага<small>Шаталсан ангилал</small></div>
+        <div class="arch-item">Үнэлгээ, сэтгэгдэл<small>Зөвшөөрөх / устгах</small></div>
+      </div>
+      <div class="arch-col">
+        <div class="arch-col-title">Хэрэглэгч / Чат</div>
+        <div class="arch-item">Хэрэглэгч удирдлага<small>Блоклох, эрх олгох</small></div>
+        <div class="arch-item">Чат хяналт<small>Spam шүүлт, лог</small></div>
+        <div class="arch-item">Мэдэгдэл илгээх<small>Push, Email, SMS</small></div>
+        <div class="arch-item">Борлуулагч хүсэлт<small>Шинэ дэлгүүр хүлээх</small></div>
+      </div>
+      <div class="arch-col">
+        <div class="arch-col-title">Тайлан / Систем</div>
+        <div class="arch-item">Борлуулалтын тайлан<small>График, экспорт</small></div>
+        <div class="arch-item">Хандалтын аналитик<small>Үзсэн тоо, клик</small></div>
+        <div class="arch-item">Систем тохиргоо<small>Баннер, промо, купон</small></div>
+        <div class="arch-item">API лог хяналт<small>Алдаа, хурд</small></div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:10px">Шинэ модулиуд (нэмэх шаардлагатай)</div>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Модуль</th>
+          <th>Тайлбар</th>
+          <th>Эрэмбэ</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:500">Байршил / Зураг удирдлага</td>
+          <td style="color:var(--color-text-secondary)">Дэлгүүр бүрийн координат оруулах, баталгаажуулах</td>
+          <td><span class="priority p-high" style="font-size:11px">Өндөр</span></td>
+          <td><button class="action-btn" onclick="sendPrompt('Байршил удирдлагын админ хуудасны дизайн хийж өгнө үү')">Дизайн харах ↗</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Чат хяналтын самбар</td>
+          <td style="color:var(--color-text-secondary)">Бүх чатын лог, spam filter, дуусгавар болгох</td>
+          <td><span class="priority p-high" style="font-size:11px">Өндөр</span></td>
+          <td><button class="action-btn" onclick="sendPrompt('Чат хяналтын админ самбарын дизайн хийж өгнө үү')">Дизайн харах ↗</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Reference ID тохиргоо</td>
+          <td style="color:var(--color-text-secondary)">Форматыг тохируулах, дахин дугаарлах</td>
+          <td><span class="priority p-med" style="font-size:11px">Дунд</span></td>
+          <td><button class="action-btn" onclick="sendPrompt('Reference ID тохиргооны хуудасны дизайн хийж өгнө үү')">Дизайн харах ↗</button></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500">Аналитик самбар</td>
+          <td style="color:var(--color-text-secondary)">Үзсэн тоо, хуваалцалт, хадгалсан тооны статистик</td>
+          <td><span class="priority p-med" style="font-size:11px">Дунд</span></td>
+          <td><button class="action-btn" onclick="sendPrompt('Аналитикийн админ самбарын дизайн хийж өгнө үү')">Дизайн харах ↗</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SPRINT PLAN -->
+  <div id="panel-sprint" class="panel">
+    <div class="section-label" style="margin-bottom:12px">Хөгжүүлэлтийн ээлж (3 спринт)</div>
+
+    <div class="sprint-row">
+      <div class="sprint-item">
+        <div class="sprint-num">Sprint 1 · 2 долоо хоног</div>
+        <div class="sprint-title">Үндсэн суурь</div>
+        <div class="sprint-items">
+          ✦ Reference ID систем<br>
+          ✦ Үзсэн тоо (Redis counter)<br>
+          ✦ Утасны дугаар харуулах товч<br>
+          ✦ Хуваалцах / Хадгалах товч<br>
+          ✦ Дэлгүүрийн профайл хуудас
+        </div>
+      </div>
+      <div class="sprint-item">
+        <div class="sprint-num">Sprint 2 · 2 долоо хоног</div>
+        <div class="sprint-title">Байршил + Чат</div>
+        <div class="sprint-items">
+          ✦ Google Maps интеграци<br>
+          ✦ Дэлгүүрийн координат оруулах<br>
+          ✦ Ойролцоох газрууд (Places API)<br>
+          ✦ Real-time чат (WebSocket)<br>
+          ✦ Чатын мэдэгдэл
+        </div>
+      </div>
+      <div class="sprint-item">
+        <div class="sprint-num">Sprint 3 · 1 долоо хоног</div>
+        <div class="sprint-title">Аналитик + Цаг агаар</div>
+        <div class="sprint-items">
+          ✦ Аналитикийн самбар (Админ)<br>
+          ✦ Цаг агаар виджет<br>
+          ✦ Агаарын чанар API<br>
+          ✦ Хяналтын самбар нэгтгэх
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px 16px;font-size:13px;color:var(--color-text-secondary);line-height:1.8">
+      <span style="font-weight:500;color:var(--color-text-primary)">Техникийн стек санал:</span>
+      WebSocket чатанд <strong>Socket.io</strong> · Байршилд <strong>Google Maps JS SDK</strong> · Үзсэн тоонд <strong>Redis</strong> · Аналитикт <strong>PostHog</strong> эсвэл <strong>Mixpanel</strong> · Цаг агаарт <strong>OpenWeatherMap API</strong>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

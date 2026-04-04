@@ -1,0 +1,282 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:16px;font-family:var(--font-sans)}
+.tab-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tab{font-size:11px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary);transition:all .15s}
+.tab.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.panel{display:none}.panel.active{display:block}
+
+.section-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.5px;text-transform:uppercase;margin:12px 0 6px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.card-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.card-title{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.b-green{background:#D1FAE5;color:#065F46}
+.b-blue{background:#DBEAFE;color:#1D4ED8}
+.b-amber{background:#FEF3C7;color:#92400E}
+.b-red{background:#FEE2E2;color:#991B1B}
+.b-purple{background:#EDE9FE;color:#5B21B6}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.items{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.item{font-size:11px;color:var(--color-text-secondary);padding:4px 8px;background:var(--color-background-secondary);border-radius:6px;display:flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.rev-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.rev-row:last-child{border-bottom:none}
+.rev-name{font-size:12px;color:var(--color-text-primary);flex:1}
+.rev-bar-wrap{width:120px;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+.rev-bar{height:100%;border-radius:3px;transition:width .6s}
+.rev-amt{font-size:12px;font-weight:500;color:var(--color-text-primary);width:52px;text-align:right}
+.rev-admin{font-size:10px;color:var(--color-text-tertiary);width:80px;text-align:right}
+.flow-box{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.flow-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.flow-sub{font-size:11px;color:var(--color-text-secondary)}
+.arrow-down{text-align:center;color:var(--color-text-tertiary);font-size:14px;margin:2px 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metric{background:var(--color-background-secondary);border-radius:8px;padding:10px 12px}
+.metric-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.metric-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+</style>
+
+<div class="wrap">
+<div class="tab-row">
+<div class="tab active" onclick="showTab('revenue')">Орлогын 14+ эх үүсвэр</div>
+<div class="tab" onclick="showTab('admin')">Superadmin хэрэгсэл</div>
+<div class="tab" onclick="showTab('claude')">Claude API давхарга</div>
+<div class="tab" onclick="showTab('flow')">Мөнгөний урсгал</div>
+</div>
+
+<div id="panel-revenue" class="panel active">
+<div class="two-col" style="margin-bottom:12px">
+<div class="metric"><div class="metric-val">~42М₮</div><div class="metric-label">Жилийн потенциал MRR</div></div>
+<div class="metric"><div class="metric-val">14+</div><div class="metric-label">Орлогын эх үүсвэр</div></div>
+</div>
+
+<div class="section-label">Гол орлого — superadmin удирддаг</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#E24B4A"></div><span class="card-title">Баннер / байршил орлого</span><span class="badge b-red">9М₮/cap</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Hero баннер (7/30 хоног)</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>VIP байршил (онцлох)</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Sidebar баннер</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>In-feed native ad</div>
+</div>
+<div style="margin-top:6px;font-size:11px;color:var(--color-text-tertiary)">Admin: байршил нэмэх, үнэ тохируулах, CPM/flat-rate сонгох, идэвхжих огноо</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#EF9F27"></div><span class="card-title">Онцлох / Featured байршил</span><span class="badge b-amber">7М₮/cap</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Нүүр хуудас "Онцлох"</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Категорийн эхний байр</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Хайлтын дээд байр</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Push "Онцлох" нэмэх</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#1D9E75"></div><span class="card-title">Гүйлгээний комисс (2–5%)</span><span class="badge b-green">6М₮/cap</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Free plan: 5%</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Standard: 4%</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Ultimate: 3%</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>AI Pro: 2%</div>
+</div>
+<div style="margin-top:6px;font-size:11px;color:var(--color-text-tertiary)">Admin: хувь тохируулах, seller override, автомат тооцоо</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#378ADD"></div><span class="card-title">Subscription төлбөр</span><span class="badge b-blue">5М₮/cap</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#378ADD"></div>Standard: 29,900₮/сар</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>Ultimate: 59,900₮/сар</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>AI Pro: 99,900₮/сар</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>Жилийн урьдчилгаа −17%</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#7C3AED"></div><span class="card-title">Маркетинг кампани</span><span class="badge b-purple">4М₮/cap</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#7C3AED"></div>SMS blast: 50₮/хүн</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>Email: 20₮/хүн</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>Push: 10₮/хүн</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>Автомат кампани</div>
+</div>
+</div>
+
+<div class="section-label">Нэмэлт орлого</div>
+<div class="card">
+<div class="items">
+<div class="item"><div class="dot" style="background:#888"></div>Push notification: 3М₮</div>
+<div class="item"><div class="dot" style="background:#888"></div>Affiliate/referral: 2.5М₮</div>
+<div class="item"><div class="dot" style="background:#888"></div>Native content: 2.2М₮</div>
+<div class="item"><div class="dot" style="background:#888"></div>Хүргэлтийн комисс: 1.8М₮</div>
+<div class="item"><div class="dot" style="background:#888"></div>Data/Analytics тайлан: 1.4М₮</div>
+<div class="item"><div class="dot" style="background:#888"></div>AI кредит худалдаа: 1М₮</div>
+<div class="item"><div class="dot" style="background:#888"></div>Escrow төлбөр: 0.8М₮</div>
+<div class="item"><div class="dot" style="background:#888"></div>Certification/Badge: 0.5М₮</div>
+</div>
+</div>
+</div>
+
+<div id="panel-admin" class="panel">
+<div class="section-label">Superadmin — орлого удирдах хэрэгсэл</div>
+
+<div class="card">
+<div class="card-head"><span class="card-title">Баннер менежмент</span><span class="badge b-red">Хамгийн өндөр</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Байршил нэмэх/засах</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Үнэ + огноо тохируулах</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Seller-ийн захиалга батлах</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>CPM/flat-rate сонгох</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Баннер зураг upload</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Performance статистик</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-title">Маркетинг кампани удирдлага</span><span class="badge b-purple">Claude API</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#7C3AED"></div>SMS/Email кампани үүсгэх</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>Хэрэглэгч сегмент</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI текст генерация</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>Автомат илгээх schedule</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>Нээлт/click тайлан</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>A/B тест</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-title">Нүүр хуудас дизайн удирдлага</span><span class="badge b-amber">Шинэ</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Hero блок засах</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Промо баннер upload</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Категори эрэмбэ</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Онцлох seller сонгох</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Popup/announcement</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Prompt ашиглаад дизайн AI</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-title">Seller / хэрэглэгч удирдлага</span><span class="badge b-green">Enforcement</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Plan өөрчлөх</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Commission override</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Block/unblock</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Payout батлах</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Verification батлах</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Audit log харах</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><span class="card-title">Санхүүгийн тайлан</span><span class="badge b-blue">Real-time</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#378ADD"></div>Өдрийн орлого</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>Орлогын эх үүсвэрээр</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>Commission тооцоо</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>Payout queue</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>MRR/ARR тооцоо</div>
+<div class="item"><div class="dot" style="background:#378ADD"></div>Subscription тайлан</div>
+</div>
+</div>
+</div>
+
+<div id="panel-claude" class="panel">
+<div class="section-label">Claude API — системд хаана ашиглагдах</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#7C3AED"></div><span class="card-title">Seller талд — бүтээгч хэрэгсэл</span><span class="badge b-purple">Одоо байгаа</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI Постер үүсгэгч</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI Лого үүсгэгч</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI Тайлбар бичигч</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI Storefront builder</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI Зөвлөгч (борлуулалт)</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI Ангилал таних</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#E24B4A"></div><span class="card-title">Superadmin талд — удирдлага + шинжилгээ</span><span class="badge b-red">Шинэ нэмэх</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Нүүр хуудас промптоор засах</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Маркетинг текст генерация</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Аномали илрүүлэх</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Seller fraud detection</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>AI тайлан + дүн шинжилгээ</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Автомат модерация</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#1D9E75"></div><span class="card-title">Buyer талд — ухаалаг туслах</span><span class="badge b-green">Дараагийн фаз</span></div>
+<div class="items">
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Хайлт ойлгох (NLU)</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Бараа зөвлөх chatbot</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Автомат орчуулга</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Review шинжилгээ</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-head"><div class="dot" style="background:#EF9F27"></div><span class="card-title">Claude кредит = орлогын эх үүсвэр</span><span class="badge b-amber">Бизнес модел</span></div>
+<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-top:4px">
+Seller-д AI кредит зарах: Free=0, Standard=50/сар, Ultimate=200/сар, AI Pro=хязгааргүй.<br>
+Нэмэлт кредит худалдаа: 1,000 кредит = 9,900₮.<br>
+Энэ нь subscription орлогыг нэмэгдүүлж, Claude API зардлыг нөхнө.
+</div>
+</div>
+</div>
+
+<div id="panel-flow" class="panel">
+<div class="section-label">Мөнгөний урсгал — нэг захиалгад юу болох вэ</div>
+
+<div class="flow-box" style="border-color:#378ADD">
+<div class="flow-title">Buyer захиалга өгнө — 100,000₮</div>
+<div class="flow-sub">Checkout → QPay/SocialPay → баталгаажна</div>
+</div>
+<div class="arrow-down">↓</div>
+<div class="two-col">
+<div class="flow-box" style="border-color:#1D9E75">
+<div class="flow-title" style="color:#1D9E75">Seller авна: ~92,000₮</div>
+<div class="flow-sub">Free plan: 95% · Standard: 96% · Pro: 97% · AI Pro: 98%</div>
+</div>
+<div class="flow-box" style="border-color:#E24B4A">
+<div class="flow-title" style="color:#E24B4A">Platform авна: ~5,000₮</div>
+<div class="flow-sub">Commission 2–5% + хэрэв affiliate байвал тэднээс нэмэлт</div>
+</div>
+</div>
+<div class="arrow-down">↓</div>
+<div class="flow-box" style="border-color:#7C3AED">
+<div class="flow-title">Platform орлого хаашаа явах вэ</div>
+<div class="flow-sub">Claude API зардал · Хостинг · Хүргэлт субсиди · Маркетинг · Ашиг</div>
+</div>
+<div class="arrow-down">↓</div>
+
+<div class="section-label">Давхар орлого — нэг seller-ээс</div>
+<div class="card">
+<div class="items">
+<div class="item"><div class="dot" style="background:#378ADD"></div>Subscription: 29,900–99,900₮/сар</div>
+<div class="item"><div class="dot" style="background:#E24B4A"></div>Баннер: 500K–1.5М₮/сар</div>
+<div class="item"><div class="dot" style="background:#1D9E75"></div>Commission: захиалга бүрээс</div>
+<div class="item"><div class="dot" style="background:#7C3AED"></div>AI кредит: нэмэлт худалдаа</div>
+<div class="item"><div class="dot" style="background:#EF9F27"></div>Онцлох байршил: сард</div>
+<div class="item"><div class="dot" style="background:#888"></div>SMS/Email кампани: хэрэгт</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

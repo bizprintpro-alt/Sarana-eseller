@@ -1,0 +1,335 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:8px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#E8242C;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:11px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.d-done{background:var(--color-text-success)}
+.d-part{background:var(--color-text-warning)}
+.d-no{background:var(--color-text-danger)}
+.d-prep{background:var(--color-text-info)}
+.rbody{flex:1}
+.rtitle{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.b-done{background:var(--color-background-success);color:var(--color-text-success)}
+.b-part{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-no{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-prep{background:var(--color-background-info);color:var(--color-text-info)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:20px}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center}
+.sn{font-size:22px;font-weight:500;margin-bottom:3px}
+.sl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em}
+.prog-bar{height:6px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden;margin:10px 0}
+.prog-fill{height:100%;border-radius:99px;transition:width .5s}
+.file-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);margin-bottom:5px;font-size:12px}
+.file-name{flex:1;font-family:var(--font-mono);color:var(--color-text-primary)}
+.file-lines{color:var(--color-text-muted);font-family:var(--font-mono)}
+.next-row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:8px}
+.next-num{width:20px;height:20px;border-radius:50%;background:#E8242C;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.next-head{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.next-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.next-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.65;margin-left:28px}
+.code{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;font-family:var(--font-mono);font-size:11px;line-height:1.8;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-all;margin:6px 0 0 28px}
+</style>
+
+<div class="w">
+<div class="tabs">
+  <button class="tab active" onclick="show('summary')">Нийт тайлан</button>
+  <button class="tab" onclick="show('done')">Хийгдсэн ✓</button>
+  <button class="tab" onclick="show('partial')">Хагас хийгдсэн</button>
+  <button class="tab" onclick="show('missing')">Хийгдээгүй</button>
+  <button class="tab" onclick="show('files')">Prompt файлууд</button>
+  <button class="tab" onclick="show('next')">Дараагийн алхам</button>
+</div>
+
+<!-- SUMMARY -->
+<div id="panel-summary" class="panel active">
+  <div class="sum">
+    <div class="sc"><div class="sn" style="color:var(--color-text-success)">17</div><div class="sl">Хийгдсэн</div></div>
+    <div class="sc"><div class="sn" style="color:var(--color-text-warning)">8</div><div class="sl">Хагас</div></div>
+    <div class="sc"><div class="sn" style="color:var(--color-text-danger)">9</div><div class="sl">Хийгдээгүй</div></div>
+    <div class="sc"><div class="sn" style="color:var(--color-text-info)">8</div><div class="sl">Prompt бэлэн</div></div>
+  </div>
+
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">Нийт явц</div>
+  <div class="prog-bar"><div class="prog-fill" style="width:50%;background:#E8242C"></div></div>
+  <div style="font-size:11px;color:var(--color-text-muted);margin-bottom:16px">~50% · 17/34 чиглэл хийгдсэн</div>
+
+  <div class="st">Системийн блокуудын байдал</div>
+
+  <div class="row">
+    <div class="dot d-done"></div>
+    <div class="rbody">
+      <div class="rtitle">Суурь систем<span class="badge b-done">Бүрэн ✓</span></div>
+      <div class="rdesc">Next.js 14, Prisma, NextAuth, Vercel deploy — ажиллаж байна. Build 15s амжилттай.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-done"></div>
+    <div class="rbody">
+      <div class="rtitle">Нүүр хуудас (/store)<span class="badge b-part">Хагас ✓</span></div>
+      <div class="rdesc">Hero, category nav, feature pills, announcement, feed — ажиллана. Карт дэвсгэр CSS var ашиглаагүй — засах шаардлагатай.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-done"></div>
+    <div class="rbody">
+      <div class="rtitle">7 дэлгүүрийн төрөл<span class="badge b-done">Хийгдсэн ✓</span></div>
+      <div class="rdesc">Захиалгын дэлгүүр (Шинэ), Файл/Дижитал (Шинэ) нэмэгдсэн. Claude Code амжилттай хэрэгжүүлсэн.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">Dark/Light горим<span class="badge b-part">Хагас ✓</span></div>
+      <div class="rdesc">Toggle UI ажиллана (navbar + sidebar). Гэхдээ ProductCard, Landing page, Dashboard sidebar CSS var ашиглаагүй — hardcoded #1A1A1A хэвээр.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-done"></div>
+    <div class="rbody">
+      <div class="rtitle">AI Дэлгүүр засварлах<span class="badge b-done">Ажиллана ✓</span></div>
+      <div class="rdesc">Загвар, өнгө, фонт, хэсгүүд — бүгд ажиллана. Light/dark preview харуулна.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-no"></div>
+    <div class="rbody">
+      <div class="rtitle">Баннер систем<span class="badge b-prep">Prompt бэлэн</span></div>
+      <div class="rdesc">8 байршил, Admin CRUD, Cloudinary upload, cron auto-expire — prompt файл бэлэн. Claude Code-д оруулаагүй.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-no"></div>
+    <div class="rbody">
+      <div class="rtitle">SMS/Email маркетинг<span class="badge b-prep">Prompt бэлэн</span></div>
+      <div class="rdesc">Campaign builder, 5 автомат урсгал, BullMQ worker — prompt файл бэлэн. Хэрэгжүүлэгдээгүй.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-no"></div>
+    <div class="rbody">
+      <div class="rtitle">Loyalty + Gold membership<span class="badge b-prep">Prompt бэлэн</span></div>
+      <div class="rdesc">4 tier оноо, Gold membership, Amazon Prime загвар — prompt файл бэлэн. Хэрэгжүүлэгдээгүй.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-no"></div>
+    <div class="rbody">
+      <div class="rtitle">eБаримт + ДАН<span class="badge b-no">Хэрэгжүүлэгдээгүй</span></div>
+      <div class="rdesc">МТА DDTD API, НӨАТ 10%, хотын татвар 2%, ДАН OAuth — prompt бэлэн байсан ч кодод ороогүй.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-no"></div>
+    <div class="rbody">
+      <div class="rtitle">Single app multi-role (mobile)<span class="badge b-prep">Prompt бэлэн</span></div>
+      <div class="rdesc">RoleSwitcher, 3 tab navigator, Zustand role store — prompt бэлэн. Mobile апп дээр хэрэгжүүлэгдээгүй.</div>
+    </div>
+  </div>
+</div>
+
+<!-- DONE -->
+<div id="panel-done" class="panel">
+  <div class="st">Амжилттай хийгдсэн 17 зүйл</div>
+
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Next.js 14 + Prisma суурь</div><div class="rdesc">Build ажиллана, Vercel deploy амжилттай (15s)</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Hero banner — улаан, цагаан товчнууд</div><div class="rdesc">Зургаас батлагдсан брэнд загвар зөв хэрэгжсэн</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Category nav — #E8242C улаан</div><div class="rdesc">Ангилал цэс зөв өнгөтэй</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Feature pills — кремийн #FFF9F0</div><div class="rdesc">Үнэгүй хүргэлт, QPay, Хурдан хүргэлт section</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Announcement bar — хар #1A1A1A marquee</div><div class="rdesc">Хөдөлгөөнтэй мессеж мөр ажиллана</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Бараа feed — VIP/Featured/Discounted/Normal</div><div class="rdesc">Tier-ийн дагуу эрэмбэлэгдсэн feed ажиллана</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">7 дэлгүүрийн төрөл</div><div class="rdesc">Захиалгын дэлгүүр + Файл/Дижитал шинэ нэмэгдсэн</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">AI Дэлгүүр засварлах</div><div class="rdesc">Загвар, өнгө, фонт, хэсгүүд — ажиллана</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Dark/Light toggle UI</div><div class="rdesc">Navbar + sidebar доод хэсэгт toggle байна</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">ThemeProvider + ThemeScript (flash prevention)</div><div class="rdesc">Page reload дээр flash байхгүй</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Дэлгүүрийн тохиргоо (store-settings)</div><div class="rdesc">Нэр, тайлбар, лого, брэнд өнгө — ажиллана</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Prisma schema алдаа засагдсан</div><div class="rdesc">GoldMembership plan TRIAL→MONTHLY+isTrial, LoyaltyTransaction userId→account relation</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Build + Runtime алдаа засагдсан</div><div class="rdesc">gold/trial/route.ts, loyalty/[userId]/history/route.ts — Claude Code засав</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Дэлгүүр засварлах wizard (become-seller)</div><div class="rdesc">5 алхамт wizard ажиллана</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">CSS globals.css tokens үүсгэгдсэн</div><div class="rdesc">:root + [data-theme="dark"] + @media prefers-color-scheme</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Tailwind config шинэчлэгдсэн</div><div class="rdesc">darkMode class + data-theme attribute</div></div></div>
+  <div class="row"><div class="dot d-done"></div><div class="rbody"><div class="rtitle">Prompt багц 8 файл бэлтгэгдсэн</div><div class="rdesc">~7,000 мөр код, бүх систем хамрагдсан</div></div></div>
+</div>
+
+<!-- PARTIAL -->
+<div id="panel-partial" class="panel">
+  <div class="st">Хагас хийгдсэн — засах шаардлагатай 8 зүйл</div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">ProductCard — hardcoded #1A1A1A<span class="badge b-part">CSS var засах</span></div>
+      <div class="rdesc">Карт дэвсгэр хар хэвээр — toggle хийхэд солигдохгүй.<br>Засах: background → var(--esl-bg-card), image area → var(--esl-bg-section)</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">Landing page (nextjs-biz6.vercel.app) — бүхэлдээ хар<span class="badge b-part">CSS var засах</span></div>
+      <div class="rdesc">app/page.tsx-д var(--esl-bg-page) ашиглаагүй байна. ThemeProvider ажиллаж байгаа ч hardcoded хар дэвсгэр override хийж байна.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">Dashboard sidebar — light mode дээр хар<span class="badge b-part">CSS var засах</span></div>
+      <div class="rdesc">store-settings зургаас харагдаж байна — sidebar #1A1A1A hardcoded. var(--esl-bg-card) болгох.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">/store DiscountedSection дэвсгэр хар<span class="badge b-part">CSS var засах</span></div>
+      <div class="rdesc">Hero улаан → pills кремийн → карт section гэнэт хар болдог. var(--esl-bg-page) болгох.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">Дэлгүүрийн тохиргоо — custom hex color picker байхгүй<span class="badge b-part">UX дутуу</span></div>
+      <div class="rdesc">Зөвхөн 8 preset өнгө байна. Дэлгүүр эзэн өөрийн брэнд өнгийг оруулах custom color picker байхгүй.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">Mobile app — React Native tokens хэрэгжүүлэгдээгүй<span class="badge b-part">Prompt бэлэн</span></div>
+      <div class="rdesc">useColors() hook, themeStore — prompt бэлэн ч mobile app дээр хэрэгжүүлэгдээгүй.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">Feed — infinite scroll байхгүй<span class="badge b-part">Хэрэгжүүлэгдээгүй</span></div>
+      <div class="rdesc">IntersectionObserver + useInfiniteQuery — prompt 22-д бэлэн ч кодод ороогүй.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="dot d-part"></div>
+    <div class="rbody">
+      <div class="rtitle">Хайлт — real-time typeahead байхгүй<span class="badge b-part">Хэрэгжүүлэгдээгүй</span></div>
+      <div class="rdesc">Debounce 300ms suggest — prompt 22-д бэлэн ч кодод ороогүй. Submit дарахад л ажилладаг.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MISSING -->
+<div id="panel-missing" class="panel">
+  <div class="st">Хийгдээгүй — prompt бэлэн, кодод ороогүй 9 зүйл</div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">Баннер систем — 8 slot CRUD<span class="badge b-prep">eseller_banner_admin_crud_prompt.md</span></div><div class="rdesc">Hero carousel, announcement, in-feed native, sidebar — бүгд static. Admin CRUD, Cloudinary upload, cron auto-expire хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">SMS / Email / Push кампани<span class="badge b-prep">eseller_marketing_automation_prompt.md</span></div><div class="rdesc">Campaign builder, 5 автомат урсгал (cart abandoned, welcome, price drop...), BullMQ worker — хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">Loyalty points + Gold membership<span class="badge b-prep">eseller_loyalty_gold_membership_prompt.md</span></div><div class="rdesc">4 tier оноо, Gold trial/subscribe/cancel, checkout integration, cron expiry — хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">eБаримт + ДАН интеграци<span class="badge b-no">Prompt-д байсан</span></div><div class="rdesc">МТА DDTD API, НӨАТ 10%+хотын татвар 2%, ДАН OAuth2 KYC — хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">Mobile app multi-role (RoleSwitcher)<span class="badge b-prep">eseller_single_app_multi_role_prompt.md</span></div><div class="rdesc">Customer/Seller/Driver нэг апп — RoleSwitcher, tab navigator, role store — хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">Бараа дэлгэрэнгүй хуудас (MediaGallery, Spec)<span class="badge b-prep">eseller_homepage_full_audit.html</span></div><div class="rdesc">Олон зураг, видео, specification table, JSON-LD SEO, generateMetadata — хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">Дэлгүүр эзний бараа нэмэх форм (multi-media)<span class="badge b-prep">Prompt 25</span></div><div class="rdesc">Drag-drop зураг reorder, видео upload/link, Tiptap rich text, spec builder, auto-save — хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">Wishlist API ажиллах<span class="badge b-no">UI байгаа, backend байхгүй</span></div><div class="rdesc">♡ товч UI дээр байна, гэхдээ /api/wishlist POST/DELETE endpoint, auth check, DB хадгалалт хэрэгжүүлэгдээгүй.</div></div></div>
+
+  <div class="row"><div class="dot d-no"></div><div class="rbody"><div class="rtitle">QPay / Stripe төлбөрийн систем<span class="badge b-no">Хэрэгжүүлэгдээгүй</span></div><div class="rdesc">Checkout flow, payment webhook, order status update — хэрэгжүүлэгдээгүй.</div></div></div>
+</div>
+
+<!-- FILES -->
+<div id="panel-files" class="panel">
+  <div class="st">Бэлтгэгдсэн 8 prompt файл — нийт ~7,160 мөр</div>
+
+  <div class="file-row"><div class="dot d-part" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_unified_color_darkmode_prompt.md</div><div class="file-lines">955 мөр</div><span class="badge b-part">Хагас хэрэгжсэн</span></div>
+  <div class="file-row"><div class="dot d-no" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_marketing_automation_prompt.md</div><div class="file-lines">1,360 мөр</div><span class="badge b-prep">Хүлээгдэж байна</span></div>
+  <div class="file-row"><div class="dot d-no" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_banner_admin_crud_prompt.md</div><div class="file-lines">1,223 мөр</div><span class="badge b-prep">Хүлээгдэж байна</span></div>
+  <div class="file-row"><div class="dot d-no" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_loyalty_gold_membership_prompt.md</div><div class="file-lines">1,185 мөр</div><span class="badge b-prep">Хүлээгдэж байна</span></div>
+  <div class="file-row"><div class="dot d-no" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_app_master_integration_prompt.md</div><div class="file-lines">1,081 мөр</div><span class="badge b-prep">Хүлээгдэж байна</span></div>
+  <div class="file-row"><div class="dot d-no" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_single_app_multi_role_prompt.md</div><div class="file-lines">913 мөр</div><span class="badge b-prep">Хүлээгдэж байна</span></div>
+  <div class="file-row"><div class="dot d-part" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_brand_color_fix_prompt.md</div><div class="file-lines">776 мөр</div><span class="badge b-part">Хагас хэрэгжсэн</span></div>
+  <div class="file-row"><div class="dot d-done" style="width:8px;height:8px;border-radius:50%;flex-shrink:0"></div><div class="file-name">eseller_seller_types_dashboard_prompts.md</div><div class="file-lines">672 мөр</div><span class="badge b-done">Хэрэгжсэн ✓</span></div>
+</div>
+
+<!-- NEXT -->
+<div id="panel-next" class="panel">
+  <div class="st">Дараагийн 4 алхам — дараалалтайгаар</div>
+
+  <div class="next-row">
+    <div class="next-head"><div class="next-num">1</div><div class="next-title">CSS var засвар — яаралтай (30 мин)</div></div>
+    <div class="next-desc">ProductCard, Landing page, Dashboard sidebar дахь hardcoded hex-ийг CSS var болго.</div>
+    <div class="code">Claude Code-д өгөх:
+"eseller_unified_color_darkmode_prompt.md файлын
+13-р хэсгийн grep командуудыг ажиллуулж
+hardcoded #1A1A1A, #0A0A0A, #2A2A2A-г
+var(--esl-bg-card), var(--esl-bg-page), var(--esl-bg-elevated)
+болгон орлуул — footer, announcement, globals-аас бусад"</div>
+  </div>
+
+  <div class="next-row">
+    <div class="next-head"><div class="next-num">2</div><div class="next-title">Wishlist + Infinite scroll + Typeahead (1-2 өдөр)</div></div>
+    <div class="next-desc">Хамгийн их хэрэглэгчийн UX нэмэгдүүлэх зүйлс. Prompt 22, 23-д бэлэн.</div>
+    <div class="code">Claude Code-д өгөх:
+"eseller_homepage_full_audit.html файлын
+Prompt 22, 23-ыг хэрэгжүүл:
+- /api/wishlist POST/DELETE + auth check
+- SearchBar debounce 300ms typeahead
+- useInfiniteQuery + IntersectionObserver feed"</div>
+  </div>
+
+  <div class="next-row">
+    <div class="next-head"><div class="next-num">3</div><div class="next-title">Баннер Admin CRUD (2-3 өдөр)</div></div>
+    <div class="next-desc">Орлогын хамгийн чухал feature. eseller_banner_admin_crud_prompt.md бүрэн бэлэн.</div>
+    <div class="code">Claude Code-д өгөх:
+"eseller_banner_admin_crud_prompt.md файлыг
+бүрэн хэрэгжүүл — Phase 1 (Core):
+Prisma migration, /admin/banners CRUD,
+/api/banners/[slot] endpoint, HeroBanner component,
+cron auto-activate + auto-expire"</div>
+  </div>
+
+  <div class="next-row">
+    <div class="next-head"><div class="next-num">4</div><div class="next-title">Loyalty + Gold membership (3-4 өдөр)</div></div>
+    <div class="next-desc">LTV нэмэгдүүлэх хамгийн чухал feature. eseller_loyalty_gold_membership_prompt.md бэлэн.</div>
+    <div class="code">Claude Code-д өгөх:
+"eseller_loyalty_gold_membership_prompt.md файлыг
+Week 1 хэсгийг хэрэгжүүл:
+Prisma migration, LoyaltyService, earnFromOrder hook,
+/api/loyalty/* routes, LoyaltyWidget, /gold хуудас"</div>
+  </div>
+</div>
+
+</div>
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.getElementById('panel-'+id).classList.add('active')
+  event.target.classList.add('active')
+}
+</script>

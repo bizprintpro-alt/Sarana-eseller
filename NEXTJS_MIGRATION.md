@@ -18,7 +18,7 @@
 Colors:
   brand: #CC0000 (--p), #A30000 (--pd), #FFF0F0 (--pl)
   success: #059669, warning: #D97706, error: #DC2626, info: #0891B2
-  dark: #0F172A (dashboard bg), #111527 (sidebar), #161B2E (cards)
+  dark: #4a64a0 (dashboard bg), #283881 (sidebar), #3a487c (cards)
   accent: #6366F1 (indigo - dashboard active)
 
 Typography:

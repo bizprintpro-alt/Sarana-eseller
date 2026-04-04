@@ -1,0 +1,404 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:8px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#E8242C;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:18px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:10px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.ctitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.cdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.65}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start;margin-bottom:14px}
+.vs-col{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px}
+.vs-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.vs-mid{display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--color-text-tertiary);padding-top:40px}
+.row-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;font-size:12px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.d-green{background:var(--color-text-success)}
+.d-red{background:var(--color-text-danger)}
+.d-blue{background:var(--color-text-info)}
+.d-gray{background:var(--color-border-secondary)}
+.arch-box{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:12px}
+.arch-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px}
+.arch-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.arch-chip{padding:4px 10px;border-radius:var(--border-radius-md);font-size:11px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:var(--color-background-primary)}
+.phase{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:8px}
+.ph-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ph-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.ph-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.ph-week{font-size:10px;color:var(--color-text-tertiary);margin-left:auto}
+.check-list{display:flex;flex-direction:column;gap:5px}
+.ci{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--color-text-secondary)}
+.ci input[type=checkbox]{flex-shrink:0;margin-top:1px;accent-color:#E8242C}
+.revenue-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.rv{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px;text-align:center}
+.rv-amount{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.rv-label{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em}
+</style>
+
+<div class="w">
+<div class="tabs">
+  <button class="tab active" onclick="show('vision')">Алсын хараа</button>
+  <button class="tab" onclick="show('vs')">Shopify-тай харьцуул</button>
+  <button class="tab" onclick="show('arch')">Систем архитектур</button>
+  <button class="tab" onclick="show('revenue')">Орлогын загвар</button>
+  <button class="tab" onclick="show('roadmap')">Хэрэгжилтийн план</button>
+</div>
+
+<!-- VISION -->
+<div id="panel-vision" class="panel active">
+  <div class="st">Eseller.mn — Юу болохыг зорьж байна вэ?</div>
+
+  <div class="card">
+    <div class="ctitle">Нэг өгүүлбэрт: <span class="badge b-red" style="margin-left:4px">Монголын Shopify + Amazon hybrid</span></div>
+    <div class="cdesc" style="margin-top:6px;line-height:1.9">
+      Дэлгүүрийн эзэн <strong style="color:var(--color-text-primary)">вэб сайт авдаг</strong> (custom domain + theme) —
+      Shopify шиг. Борлуулагчид тэр дэлгүүрийн бараагаа <strong style="color:var(--color-text-primary)">affiliate-аар зарж</strong>
+      commission авдаг — Amazon Associates шиг. Хэрэглэгч, дэлгүүрийн эзэн, борлуулагч
+      <strong style="color:var(--color-text-primary)">НЭГ апп</strong>-д нэгдэнэ.
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card">
+      <div class="ctitle">🛍 Хэрэглэгч</div>
+      <div class="cdesc">Бараа хайх, захиалах, loyalty оноо цуглуулах, хүргэлт хянах</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">🏪 Дэлгүүрийн эзэн</div>
+      <div class="cdesc">Вэб сайт авах, custom domain, 7 төрлийн онцлог, борлуулагч зөвшөөрөх</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">📢 Борлуулагч</div>
+      <div class="cdesc">Бараа сонгож link/QR share хийх, захиалга орвол commission авах</div>
+    </div>
+  </div>
+
+  <div class="st">7 дэлгүүрийн төрлийн storefront онцлог</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ctitle">🏪 Дэлгүүр <span class="badge b-blue">Default</span></div>
+      <div class="cdesc">Hero + бараа grid + cart + checkout. Shopify-тай хамгийн ойр. Theme сонголт, custom domain.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">📦 Захиалгын дэлгүүр <span class="badge b-red">Unique</span></div>
+      <div class="cdesc">Batch progress bar, хүлээлтийн хоног, урьдчилгаа % харуулна. Монголд өвөрмөц.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">🏠 Үл хөдлөхийн агент</div>
+      <div class="cdesc">Зарын жагсаалт, байршлын газрын зураг, агентийн профайл, гэрэл зургийн галерей.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">🏗 Барилгын компани</div>
+      <div class="cdesc">Төслийн жагсаалт, нэгж байшингийн map, VIP байршил, баримт бичиг татах.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">🚗 Авто худалдаа</div>
+      <div class="cdesc">Машины жагсаалт, specs хүснэгт, тест драйв захиалга, үнийн харьцуулалт.</div>
+    </div>
+    <div class="card">
+      <div class="ctitle">💾 Файл / Дижитал</div>
+      <div class="cdesc">Instant download, license key, preview mode. Төлбөр хийгдмэгц автомат линк.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VS SHOPIFY -->
+<div id="panel-vs" class="panel">
+  <div class="st">Eseller.mn vs Shopify — ялгаа</div>
+
+  <div class="vs">
+    <div class="vs-col" style="border-color:var(--color-border-secondary)">
+      <div class="vs-label" style="color:var(--color-text-success)">Eseller.mn давуу тал</div>
+      <div class="row-item"><div class="dot d-green"></div><span>Монгол хэл, МНТ төгрөг native дэмжлэг</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>QPay, карт, банк шилжүүлэг нэгдмэл</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>eБаримт (МТА) автомат — татвар</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>ДАН OAuth — иргэний үнэмлэх KYC</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>Affiliate seller систем нэгдмэл</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>7 entity type — зар, агент, барилга...</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>Pre-order batch систем (Монголд өвөрмөц)</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>Нэг апп — хэрэглэгч/дэлгүүр/жолооч</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>Loyalty + Gold (Amazon Prime загвар)</span></div>
+      <div class="row-item"><div class="dot d-green"></div><span>Зардал хямд — Монголын зах зээлд</span></div>
+    </div>
+    <div class="vs-mid">VS</div>
+    <div class="vs-col">
+      <div class="vs-label" style="color:var(--color-text-danger)">Shopify давуу тал (одоогоор)</div>
+      <div class="row-item"><div class="dot d-red"></div><span>Theme marketplace (1000+ theme)</span></div>
+      <div class="row-item"><div class="dot d-red"></div><span>App store (8000+ app)</span></div>
+      <div class="row-item"><div class="dot d-red"></div><span>Олон хэлний дэмжлэг</span></div>
+      <div class="row-item"><div class="dot d-red"></div><span>Дэлхийн payment gateway</span></div>
+      <div class="row-item"><div class="dot d-red"></div><span>SEO tools</span></div>
+      <div class="row-item" style="margin-top:14px"><div class="dot d-gray"></div><span style="color:var(--color-text-tertiary)">Монгол бизнест тохиромжгүй зүйлс:</span></div>
+      <div class="row-item"><div class="dot d-gray"></div><span style="color:var(--color-text-tertiary)">МНТ, QPay дэмжихгүй</span></div>
+      <div class="row-item"><div class="dot d-gray"></div><span style="color:var(--color-text-tertiary)">eБаримт байхгүй</span></div>
+      <div class="row-item"><div class="dot d-gray"></div><span style="color:var(--color-text-tertiary)">Үнэ өндөр ($29+/сар)</span></div>
+      <div class="row-item"><div class="dot d-gray"></div><span style="color:var(--color-text-tertiary)">Монгол хэрэглэгч мэддэггүй</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(232,36,44,0.3);background:rgba(232,36,44,0.04)">
+    <div class="ctitle" style="color:#E8242C">Eseller.mn-ийн гол стратеги</div>
+    <div class="cdesc" style="margin-top:4px;line-height:1.9">
+      Shopify-тай өрсөлдөхгүй — <strong style="color:var(--color-text-primary)">Монгол зах зээлд</strong> тохирсон нэгдсэн экосистем болно.
+      Дэлгүүрийн эзэн 1 газраас: вэб сайт + апп + борлуулагч + loyalty + eБаримт + хүргэлт бүгдийг авна.
+      Shopify дээр эдгээрийг нэгтгэхэд 10+ app + developer хэрэгтэй.
+    </div>
+  </div>
+</div>
+
+<!-- ARCHITECTURE -->
+<div id="panel-arch" class="panel">
+  <div class="st">Платформын бүрэн архитектур</div>
+
+  <div class="arch-box">
+    <div class="arch-title">Layer 1 — Хэрэглэгчийн гадна харагдах хуудсууд</div>
+    <div class="arch-row">
+      <span class="arch-chip">eseller.mn (marketplace)</span>
+      <span class="arch-chip">eseller.mn/[slug] (storefront)</span>
+      <span class="arch-chip">eseller.mn/seller/[name] (affiliate)</span>
+      <span class="arch-chip">mystore.mn (custom domain)</span>
+      <span class="arch-chip">eseller.mn/feed (зарын булан)</span>
+      <span class="arch-chip">eseller.mn/shops</span>
+    </div>
+  </div>
+
+  <div class="arch-box">
+    <div class="arch-title">Layer 2 — Dashboard (borluulагч/эзэн/admin)</div>
+    <div class="arch-row">
+      <span class="arch-chip">Storefront editor (drag-drop)</span>
+      <span class="arch-chip">Theme сонгох</span>
+      <span class="arch-chip">Custom domain холбох</span>
+      <span class="arch-chip">Бараа удирдлага</span>
+      <span class="arch-chip">Борлуулагч approval</span>
+      <span class="arch-chip">Commission тайлан</span>
+      <span class="arch-chip">Баннер CRUD</span>
+      <span class="arch-chip">Analytics</span>
+    </div>
+  </div>
+
+  <div class="arch-box">
+    <div class="arch-title">Layer 3 — Mobile App (1 апп, 3 роль)</div>
+    <div class="arch-row">
+      <span class="arch-chip">Customer tab</span>
+      <span class="arch-chip">Seller tab</span>
+      <span class="arch-chip">Driver tab</span>
+      <span class="arch-chip">Role switcher</span>
+      <span class="arch-chip">Push notification</span>
+      <span class="arch-chip">QR scanner</span>
+      <span class="arch-chip">Deep link</span>
+    </div>
+  </div>
+
+  <div class="arch-box">
+    <div class="arch-title">Layer 4 — Backend services</div>
+    <div class="arch-row">
+      <span class="arch-chip">QPay + Stripe</span>
+      <span class="arch-chip">eБаримт (МТА)</span>
+      <span class="arch-chip">ДАН OAuth</span>
+      <span class="arch-chip">Unitel SMS</span>
+      <span class="arch-chip">Resend email</span>
+      <span class="arch-chip">Cloudinary</span>
+      <span class="arch-chip">Google Maps</span>
+      <span class="arch-chip">BullMQ worker</span>
+      <span class="arch-chip">Redis cache</span>
+      <span class="arch-chip">Prisma + PostgreSQL</span>
+    </div>
+  </div>
+
+  <div class="st">Storefront theme систем</div>
+  <div class="g4">
+    <div class="card" style="text-align:center">
+      <div style="height:48px;background:var(--color-background-secondary);border-radius:6px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--color-text-tertiary)">Minimal</div>
+      <div class="cdesc">Цэвэр цагаан, бараа онцолсон</div>
+    </div>
+    <div class="card" style="text-align:center;border-color:rgba(232,36,44,0.3)">
+      <div style="height:48px;background:#E8242C;border-radius:6px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff">Bold</div>
+      <div class="cdesc">Хүчтэй улаан, том typography</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="height:48px;background:var(--color-background-secondary);border-radius:6px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--color-text-tertiary)">Modern</div>
+      <div class="cdesc">Card-based, grid layout</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="height:48px;background:var(--color-background-secondary);border-radius:6px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--color-text-tertiary)">Luxury</div>
+      <div class="cdesc">Хар, алт — premium брэнд</div>
+    </div>
+  </div>
+</div>
+
+<!-- REVENUE -->
+<div id="panel-revenue" class="panel">
+  <div class="st">Орлогын загвар — давхаргалсан</div>
+
+  <div class="revenue-grid">
+    <div class="rv"><div class="rv-amount" style="color:#E8242C">2.5%</div><div class="rv-label">Гүйлгээний комисс</div></div>
+    <div class="rv"><div class="rv-amount">29,900₮</div><div class="rv-label">Pro subscription/сар</div></div>
+    <div class="rv"><div class="rv-amount">19,900₮</div><div class="rv-label">Gold membership/сар</div></div>
+    <div class="rv"><div class="rv-amount" style="color:#F59E0B">500K–1.5M₮</div><div class="rv-label">Hero баннер</div></div>
+    <div class="rv"><div class="rv-amount">CPM</div><div class="rv-label">Native ad (in-feed)</div></div>
+    <div class="rv"><div class="rv-amount">2.5%</div><div class="rv-label">Affiliate platform fee</div></div>
+  </div>
+
+  <div class="st">Дэлгүүрийн эзэнд хамгийн чухал санал</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ctitle">Free tier <span class="badge b-green">Суурь</span></div>
+      <div class="cdesc" style="line-height:1.8">
+        ✓ Eseller.mn/[slug] хуудас<br>
+        ✓ 10 бараа<br>
+        ✓ 1 байршил<br>
+        ✓ Basic theme<br>
+        ✗ Custom domain<br>
+        ✗ Advanced analytics<br>
+        ✗ Borлуулагч нэмэх<br>
+        <strong style="color:#E8242C">→ Upgrade хийхийг урамшуулна</strong>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(232,36,44,0.3)">
+      <div class="ctitle">Pro tier — 29,900₮/сар <span class="badge b-red">Гол орлого</span></div>
+      <div class="cdesc" style="line-height:1.8">
+        ✓ Custom domain (mystore.mn)<br>
+        ✓ Хязгааргүй бараа<br>
+        ✓ Бүх theme + customization<br>
+        ✓ Борлуулагч нэмэх (5 хүртэл)<br>
+        ✓ Advanced analytics<br>
+        ✓ SMS/Email marketing<br>
+        ✓ Priority support<br>
+        ✓ eБаримт автомат<br>
+        <strong style="color:#22C55E">Монгол бизнест Shopify-с 3x хямд</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ctitle">Affiliate funnel — вирусын өсөлт</div>
+    <div class="cdesc" style="line-height:1.9">
+      Борлуулагч → бараагаа Instagram-д share → хэрэглэгч link дарж захиална →
+      захиалга eseller.mn-д ирнэ → борлуулагч commission авна, дэлгүүр орлого авна, систем fee авна.
+      <strong style="color:var(--color-text-primary)"> Борлуулагч маркетингийн хэрэгсэл болж, эзэд marketing хийхгүйгээр борлуулалт өснө.</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div id="panel-roadmap" class="panel">
+  <div class="st">Хэрэгжилтийн 8 долоо хоног</div>
+
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</div>
+      <div class="ph-title">Суурь storefront</div>
+      <div class="ph-week">1-р долоо хоног</div>
+    </div>
+    <div class="check-list">
+      <label class="ci"><input type="checkbox"/> /[slug] public storefront page (7 entity type)</label>
+      <label class="ci"><input type="checkbox"/> StorefrontHero — entity type-т тохирсон</label>
+      <label class="ci"><input type="checkbox"/> SellerProfile, SellerProduct, Commission schema</label>
+      <label class="ci"><input type="checkbox"/> /seller/[username] affiliate page + QR</label>
+      <label class="ci"><input type="checkbox"/> Share button + QR modal (web + mobile)</label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</div>
+      <div class="ph-title">Theme систем</div>
+      <div class="ph-week">2-р долоо хоног</div>
+    </div>
+    <div class="check-list">
+      <label class="ci"><input type="checkbox"/> 4 theme (Minimal, Bold, Modern, Luxury)</label>
+      <label class="ci"><input type="checkbox"/> Storefront editor — drag-drop sections</label>
+      <label class="ci"><input type="checkbox"/> Color, font, logo customization</label>
+      <label class="ci"><input type="checkbox"/> Section toggle (hero, products, reviews, map, CTA)</label>
+      <label class="ci"><input type="checkbox"/> Live preview desktop/mobile</label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-info);color:var(--color-text-info)">3</div>
+      <div class="ph-title">Affiliate + commission</div>
+      <div class="ph-week">3-р долоо хоног</div>
+    </div>
+    <div class="check-list">
+      <label class="ci"><input type="checkbox"/> Seller request → entity owner approval flow</label>
+      <label class="ci"><input type="checkbox"/> Commission calculation + auto record</label>
+      <label class="ci"><input type="checkbox"/> Seller dashboard (my products, earnings)</label>
+      <label class="ci"><input type="checkbox"/> Click + conversion tracking</label>
+      <label class="ci"><input type="checkbox"/> Commission payout (QPay шилжүүлэг)</label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-success);color:var(--color-text-success)">4</div>
+      <div class="ph-title">Custom domain + SEO</div>
+      <div class="ph-week">4-р долоо хоног</div>
+    </div>
+    <div class="check-list">
+      <label class="ci"><input type="checkbox"/> Custom domain middleware (mystore.mn → eseller.mn/slug)</label>
+      <label class="ci"><input type="checkbox"/> Domain verification (DNS TXT record)</label>
+      <label class="ci"><input type="checkbox"/> SSL автомат (Vercel)</label>
+      <label class="ci"><input type="checkbox"/> JSON-LD structured data</label>
+      <label class="ci"><input type="checkbox"/> OpenGraph, Twitter card</label>
+      <label class="ci"><input type="checkbox"/> Sitemap автомат үүсгэх</label>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">5-8</div>
+      <div class="ph-title">Гүйцээх ажлууд</div>
+      <div class="ph-week">5–8-р долоо хоног</div>
+    </div>
+    <div class="check-list">
+      <label class="ci"><input type="checkbox"/> Loyalty + Gold membership хэрэгжүүлэх</label>
+      <label class="ci"><input type="checkbox"/> Banner CRUD + homepage placement</label>
+      <label class="ci"><input type="checkbox"/> SMS/Email marketing campaign builder</label>
+      <label class="ci"><input type="checkbox"/> eБаримт + ДАН интеграци</label>
+      <label class="ci"><input type="checkbox"/> Mobile multi-role app (customer+seller+driver)</label>
+      <label class="ci"><input type="checkbox"/> QPay checkout бүрэн хэрэгжүүлэх</label>
+      <label class="ci"><input type="checkbox"/> Analytics dashboard</label>
+      <label class="ci"><input type="checkbox"/> Admin panel бүрэн</label>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:rgba(232,36,44,0.3);background:rgba(232,36,44,0.04);margin-top:4px">
+    <div class="ctitle" style="color:#E8242C">Claude Code-д ямар дарааллаар өгөх вэ?</div>
+    <div class="cdesc" style="margin-top:6px;line-height:1.9">
+      <strong style="color:var(--color-text-primary)">Энэ долоо хоног (яаралтай):</strong><br>
+      1. eseller_seller_storefront_system_prompt.md → Долоо хоног 1 хэрэгжүүл<br>
+      2. eseller_unified_color_darkmode_prompt.md → CSS var засвар<br><br>
+      <strong style="color:var(--color-text-primary)">Дараагийн долоо хоног:</strong><br>
+      3. Theme editor → Storefront design system<br>
+      4. eseller_banner_admin_crud_prompt.md<br>
+      5. eseller_loyalty_gold_membership_prompt.md
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.getElementById('panel-'+id).classList.add('active')
+  event.target.classList.add('active')
+}
+</script>

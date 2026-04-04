@@ -1,0 +1,1215 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);z-index:2}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.arch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.arch-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.arch-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.arch-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+.arch-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:10px;padding:2px 6px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-teal{background:#E1F5EE;color:#0F6E56}
+.b-coral{background:#FAECE7;color:#993C1D}
+.flow{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.flow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fb{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px 10px;font-size:11px;color:var(--color-text-primary);white-space:nowrap}
+.fa{font-size:11px;color:var(--color-text-tertiary)}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;margin-top:14px}
+.section-title:first-child{margin-top:0}
+.partner-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.partner-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.partner-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.partner-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.partner-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6;margin-bottom:6px}
+.partner-tags{display:flex;gap:4px;flex-wrap:wrap}
+.stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.sl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.sv{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.sd{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.integration-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.integration-row:last-child{border-bottom:none}
+.int-icon{width:36px;height:36px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.int-body{flex:1}
+.int-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.int-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+.int-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.priority-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.pri-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pri-hi{background:var(--color-text-danger)}
+.pri-med{background:var(--color-text-warning)}
+.pri-lo{background:var(--color-text-success)}
+.pri-text{font-size:12px;color:var(--color-text-secondary)}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Eseller.mn — Сошиал + Нэмэлт интеграци</div>
+    <div class="ps">Facebook, Instagram, хамтрах салбар · Claude Code prompt багц</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Бүгдийг хуулах</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Тойм</button>
+  <button class="tab" onclick="show('p12')">Prompt 12 · FB/IG OAuth</button>
+  <button class="tab" onclick="show('p13')">Prompt 13 · FB Shop sync</button>
+  <button class="tab" onclick="show('p14')">Prompt 14 · IG Shopping</button>
+  <button class="tab" onclick="show('p15')">Prompt 15 · Нэмэлт интеграци</button>
+  <button class="tab" onclick="show('partners')">Хамтрах салбарууд</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="panel-overview" class="panel active">
+
+  <div class="section-title">Сошиал медиа интеграцийн тойм</div>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-name" style="display:flex;align-items:center;gap:6px"><span class="badge b-blue">FB</span>Facebook Login</div>
+      <div class="arch-desc">OAuth 2.0 нэвтрэлт. Нэг товчоор бүртгүүлэх, FB профайлаас мэдээлэл авах, Page холболт.</div>
+      <div class="arch-tags"><span class="tag">OAuth2</span><span class="tag">Graph API</span><span class="tag">Page token</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name" style="display:flex;align-items:center;gap:6px"><span class="badge b-coral">IG</span>Instagram Login</div>
+      <div class="arch-desc">Instagram Basic Display API + Business API. Профайл холбох, медиа синк, shopping tag.</div>
+      <div class="arch-tags"><span class="tag">Basic Display</span><span class="tag">Business API</span><span class="tag">Shopping</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name" style="display:flex;align-items:center;gap:6px"><span class="badge b-blue">FB Shop</span>Catalog sync</div>
+      <div class="arch-desc">Дэлгүүрийн бараа → FB Commerce Manager-т автоматаар sync. Нэмэх, засах, устгах бүгд тусгагдана.</div>
+      <div class="arch-tags"><span class="tag">Catalog API</span><span class="tag">Webhook</span><span class="tag">Auto-sync</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name" style="display:flex;align-items:center;gap:6px"><span class="badge b-coral">IG</span>Instagram Shopping</div>
+      <div class="arch-desc">IG зурагт бараа tag хийх, shop tab харуулах. Product catalog-аас шууд IG-д байршуулах.</div>
+      <div class="arch-tags"><span class="tag">Product Tag</span><span class="tag">Shop Tab</span><span class="tag">Reels</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name" style="display:flex;align-items:center;gap:6px"><span class="badge b-gray">MSG</span>Messenger чат</div>
+      <div class="arch-desc">FB Messenger-ийг eseller чаттай холбох. Хэрэглэгч FB-ээс мессеж илгээхэд дэлгүүрийн dashboard-д харагдана.</div>
+      <div class="arch-tags"><span class="tag">Messenger API</span><span class="tag">Webhook</span><span class="tag">Unified inbox</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-name" style="display:flex;align-items:center;gap:6px"><span class="badge b-teal">+</span>Нэмэлт</div>
+      <div class="arch-desc">Google Merchant, TikTok Shop, Viber бизнес, WhatsApp Business, Google Analytics 4, Hotjar.</div>
+      <div class="arch-tags"><span class="tag">Google</span><span class="tag">TikTok</span><span class="tag">Analytics</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Facebook Page → FB Shop автоматик sync урсгал</div>
+  <div class="flow">
+    <div class="flow-row">
+      <div class="fb">Дэлгүүр эзэмшигч</div><div class="fa">→</div>
+      <div class="fb">FB Page холбох (OAuth)</div><div class="fa">→</div>
+      <div class="fb">Page access token авах</div><div class="fa">→</div>
+      <div class="fb">FB Catalog үүсгэх</div>
+    </div>
+    <div class="flow-row">
+      <div class="fb">Eseller-т бараа нэмэх/засах</div><div class="fa">→</div>
+      <div class="fb">SyncQueue-д нэмэх</div><div class="fa">→</div>
+      <div class="fb">FB Catalog API PATCH/POST</div><div class="fa">→</div>
+      <div class="fb">FB Shop-т шуурхай харагдах</div>
+    </div>
+    <div class="flow-row">
+      <div class="fb">FB-ээс захиалга</div><div class="fa">→</div>
+      <div class="fb">FB Webhook → eseller</div><div class="fa">→</div>
+      <div class="fb">Order үүсгэх</div><div class="fa">→</div>
+      <div class="fb">Нэгдсэн order dashboard</div>
+    </div>
+  </div>
+
+  <div class="section-title">Нэмэлт интеграцийн эрэмбэ</div>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:14px">
+    <div style="margin-bottom:10px;font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em">Яаралтай · Эхний ээлж</div>
+    <div class="priority-row"><div class="pri-dot pri-hi"></div><div class="pri-text">Facebook OAuth + Page холболт — нэвтрэлт + бүртгэл</div></div>
+    <div class="priority-row"><div class="pri-dot pri-hi"></div><div class="pri-text">FB Commerce Catalog sync — бараа автоматаар FB Shop-т</div></div>
+    <div class="priority-row"><div class="pri-dot pri-hi"></div><div class="pri-text">Google Analytics 4 — хандалт, хөрвүүлэлт хэмжих</div></div>
+    <div style="margin:10px 0;font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em">Дараагийн ээлж</div>
+    <div class="priority-row"><div class="pri-dot pri-med"></div><div class="pri-text">Instagram Shopping + product tag</div></div>
+    <div class="priority-row"><div class="pri-dot pri-med"></div><div class="pri-text">Messenger unified inbox</div></div>
+    <div class="priority-row"><div class="pri-dot pri-med"></div><div class="pri-text">Google Merchant Center</div></div>
+    <div class="priority-row"><div class="pri-dot pri-med"></div><div class="pri-text">Viber Business чат</div></div>
+    <div style="margin:10px 0;font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em">Ирээдүйн ээлж</div>
+    <div class="priority-row"><div class="pri-dot pri-lo"></div><div class="pri-text">TikTok Shop catalog sync</div></div>
+    <div class="priority-row"><div class="pri-dot pri-lo"></div><div class="pri-text">WhatsApp Business API</div></div>
+    <div class="priority-row"><div class="pri-dot pri-lo"></div><div class="pri-text">YouTube Shopping (барилга/авто видео)</div></div>
+  </div>
+</div>
+
+<!-- PROMPT 12 -->
+<div id="panel-p12" class="panel">
+  <div class="section-title">Prompt 12 — Facebook & Instagram OAuth + нэвтрэлт</div>
+  <div class="prompt-box" id="p12text">
+<button class="copy-btn" onclick="copyPrompt('p12text')">Хуулах</button>## SOCIAL AUTH — FACEBOOK & INSTAGRAM OAUTH
+
+Implement social login and business page connection for Facebook and Instagram
+using NextAuth.js + Meta's Graph API.
+
+---
+
+### NEXTAUTH PROVIDERS CONFIG
+
+```typescript
+// app/api/auth/[...nextauth]/route.ts
+import NextAuth from "next-auth"
+import FacebookProvider from "next-auth/providers/facebook"
+import GoogleProvider from "next-auth/providers/google"
+
+export const authOptions = {
+  providers: [
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_APP_ID!,
+      clientSecret: process.env.FACEBOOK_APP_SECRET!,
+      authorization: {
+        params: {
+          scope: [
+            "email",
+            "public_profile",
+            // For business features (requested separately after login):
+            // "pages_manage_posts",
+            // "pages_read_engagement",
+            // "catalog_management",
+            // "instagram_basic",
+            // "instagram_content_publish",
+          ].join(","),
+        },
+      },
+      profile(profile) {
+        return {
+          id: profile.id,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture?.data?.url,
+          facebookId: profile.id,
+        }
+      },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: { params: { scope: "openid email profile" } },
+    }),
+  ],
+
+  callbacks: {
+    async jwt({ token, account, user }) {
+      if (account?.provider === "facebook") {
+        token.facebookAccessToken = account.access_token
+        token.facebookId = account.providerAccountId
+      }
+      return token
+    },
+    async session({ session, token }) {
+      session.user.facebookId = token.facebookId as string
+      session.facebookAccessToken = token.facebookAccessToken as string
+      return session
+    },
+  },
+}
+```
+
+### PRISMA SCHEMA — Social connections
+
+```prisma
+model SocialConnection {
+  id            String   @id @default(cuid())
+  userId        String
+  provider      String   // "facebook" | "instagram" | "google"
+  providerId    String   // platform user/page id
+  accessToken   String   // encrypted
+  refreshToken  String?  // encrypted
+  tokenExpiry   DateTime?
+  scope         String   // granted permissions
+  pageId        String?  // FB Page ID (for business accounts)
+  pageToken     String?  // encrypted — long-lived page access token
+  igAccountId   String?  // linked Instagram business account id
+  isActive      Boolean  @default(true)
+  connectedAt   DateTime @default(now())
+  lastSyncAt    DateTime?
+
+  user User @relation(...)
+
+  @@unique([userId, provider, providerId])
+}
+```
+
+### FB PAGE CONNECTION FLOW
+
+After basic login, entity owners connect their FB Business Page:
+
+```typescript
+// Step 1: Request extended permissions
+// GET /api/social/facebook/connect
+export async function GET(req) {
+  const scopes = [
+    "pages_show_list",
+    "pages_manage_posts",
+    "pages_read_engagement",
+    "catalog_management",
+    "business_management",
+    "instagram_basic",
+    "instagram_content_publish",
+    "instagram_shopping_tag_products",
+  ].join(",")
+
+  const url = `https://www.facebook.com/dialog/oauth?` +
+    `client_id=${FB_APP_ID}` +
+    `&redirect_uri=${CALLBACK_URL}` +
+    `&scope=${scopes}` +
+    `&response_type=code`
+
+  return redirect(url)
+}
+
+// Step 2: Handle callback, get long-lived token
+// GET /api/social/facebook/callback
+export async function GET(req) {
+  const { code } = parseQuery(req.url)
+
+  // Exchange code for short-lived token
+  const shortToken = await exchangeCodeForToken(code)
+
+  // Exchange for long-lived token (60 days)
+  const longToken = await fetch(
+    `https://graph.facebook.com/oauth/access_token?` +
+    `grant_type=fb_exchange_token&` +
+    `client_id=${FB_APP_ID}&` +
+    `client_secret=${FB_APP_SECRET}&` +
+    `fb_exchange_token=${shortToken}`
+  )
+
+  // Get user's pages
+  const pages = await fetch(
+    `https://graph.facebook.com/me/accounts?access_token=${longToken}`
+  )
+
+  // Show page selector UI → user picks which page to connect
+  return redirect(`/dashboard/settings/social?pages=${encode(pages)}`)
+}
+
+// Step 3: User selects page → save page token
+// POST /api/social/facebook/select-page
+async function selectPage(pageId: string, pageToken: string) {
+  // Page tokens are permanent (don't expire unless revoked)
+  // Encrypt and store in SocialConnection.pageToken
+  
+  // Also check if this page has a linked Instagram Business account
+  const igAccount = await fetch(
+    `https://graph.facebook.com/${pageId}?` +
+    `fields=instagram_business_account&` +
+    `access_token=${pageToken}`
+  )
+
+  await db.socialConnection.upsert({
+    where: { userId_provider_providerId: { userId, provider: 'facebook', providerId } },
+    create: { userId, provider: 'facebook', providerId, pageId, pageToken: encrypt(pageToken), igAccountId: igAccount?.id },
+    update: { pageToken: encrypt(pageToken), igAccountId: igAccount?.id },
+  })
+}
+```
+
+### SOCIAL SETTINGS UI — /dashboard/settings/social
+
+```tsx
+<SocialSettingsPage>
+  <ConnectedAccounts>
+    <SocialRow platform="facebook">
+      {connected ? (
+        <>
+          <Avatar src={fbProfile.picture} />
+          <div>
+            <p>{fbProfile.name}</p>
+            <p className="muted">@{fbProfile.username}</p>
+          </div>
+          <StatusBadge>Холбогдсон</StatusBadge>
+          <Button onClick={disconnect}>Салгах</Button>
+        </>
+      ) : (
+        <Button onClick={() => signIn('facebook')}>
+          Facebook-ээр нэвтрэх
+        </Button>
+      )}
+    </SocialRow>
+
+  <ConnectedPages>
+    {fbPages.map(page => (
+      <PageRow key={page.id}>
+        <img src={page.picture} />
+        <div>
+          <p>{page.name}</p>
+          <p>{page.category}</p>
+        </div>
+        {page.isConnected ? (
+          <StatusBadge green>Идэвхтэй</StatusBadge>
+        ) : (
+          <Button onClick={() => connectPage(page.id)}>Холбох</Button>
+        )}
+        {page.instagramAccount && (
+          <InstagramBadge>IG холбоотой</InstagramBadge>
+        )}
+      </PageRow>
+    ))}
+
+  <PermissionStatus>
+    — Shows which permissions are granted
+    — "catalog_management: Зөвшөөрөгдсөн ✓"
+    — "instagram_shopping: Хүсэлт гаргах шаардлагатай"
+    — Reauthorize button if permissions missing
+```
+
+### TOKEN REFRESH BACKGROUND JOB
+
+```typescript
+// cron: every 24 hours
+// Refresh tokens expiring within 7 days
+async function refreshExpiringTokens() {
+  const expiringSoon = await db.socialConnection.findMany({
+    where: {
+      tokenExpiry: { lte: addDays(new Date(), 7) },
+      isActive: true,
+    }
+  })
+
+  for (const conn of expiringSoon) {
+    try {
+      const newToken = await refreshFacebookToken(decrypt(conn.accessToken))
+      await db.socialConnection.update({
+        where: { id: conn.id },
+        data: { accessToken: encrypt(newToken.token), tokenExpiry: newToken.expiry }
+      })
+    } catch (err) {
+      // Notify user: "Facebook холболт дуусжээ, дахин холбоно уу"
+      await notifyUser(conn.userId, 'SOCIAL_TOKEN_EXPIRED', { provider: 'facebook' })
+    }
+  }
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 13 -->
+<div id="panel-p13" class="panel">
+  <div class="section-title">Prompt 13 — Facebook Shop Catalog автоматик sync</div>
+  <div class="prompt-box" id="p13text">
+<button class="copy-btn" onclick="copyPrompt('p13text')">Хуулах</button>## FACEBOOK SHOP CATALOG SYNC
+
+Automatically sync eseller.mn products to Facebook Commerce Manager
+(Facebook Shop / Marketplace) using the Catalog API.
+
+---
+
+### PRISMA SCHEMA
+
+```prisma
+model FbCatalogSync {
+  id            String     @id @default(cuid())
+  entityId      String     // store/company/agent id
+  fbCatalogId   String     // FB catalog ID
+  fbPageId      String
+  status        SyncStatus @default(IDLE)
+  totalItems    Int        @default(0)
+  syncedItems   Int        @default(0)
+  failedItems   Int        @default(0)
+  lastSyncAt    DateTime?
+  nextSyncAt    DateTime?
+  errorLog      Json?
+  createdAt     DateTime   @default(now())
+}
+
+model ProductFbMapping {
+  id            String   @id @default(cuid())
+  productId     String   @unique
+  fbRetailerId  String   @unique  // FB product retailer_id (= eseller refId)
+  fbItemId      String?           // FB assigned item id
+  lastSyncedAt  DateTime?
+  syncStatus    String            // "synced" | "pending" | "failed" | "deleted"
+  errorMessage  String?
+}
+
+enum SyncStatus { IDLE | RUNNING | COMPLETED | FAILED | PAUSED }
+```
+
+### CATALOG SERVICE
+
+```typescript
+// lib/integrations/facebook/CatalogService.ts
+
+class FacebookCatalogService {
+  private graphUrl = "https://graph.facebook.com/v19.0"
+
+  // Create catalog for entity (one-time setup)
+  async createCatalog(entityId: string): Promise<string> {
+    const conn = await getEntityFbConnection(entityId)
+    
+    const res = await this.call(`/${conn.fbPageId}/owned_product_catalogs`, {
+      method: 'POST',
+      body: {
+        name: `${entity.name} — Eseller Catalog`,
+        vertical: 'commerce',
+      },
+      token: decrypt(conn.pageToken),
+    })
+
+    await db.fbCatalogSync.create({
+      data: { entityId, fbCatalogId: res.id, fbPageId: conn.fbPageId }
+    })
+
+    return res.id
+  }
+
+  // Map eseller product to FB catalog item format
+  mapProductToFbItem(product: Product): FbCatalogItem {
+    return {
+      id: product.refId,                    // retailer_id
+      title: product.name,
+      description: product.description?.slice(0, 9999) || "",
+      availability: product.stock > 0 ? "in stock" : "out of stock",
+      condition: "new",
+      price: `${product.price} MNT`,
+      link: `${APP_URL}/product/${product.slug}`,
+      image_link: product.images[0],
+      additional_image_link: product.images.slice(1, 10).join(","),
+      brand: product.store?.name || "Eseller",
+      google_product_category: mapCategoryToGoogle(product.category),
+      custom_label_0: product.tier,         // VIP | FEATURED | NORMAL
+      custom_label_1: product.category.name,
+    }
+  }
+
+  // Batch upload products (max 1000 per request)
+  async batchSync(entityId: string, products: Product[]): Promise<SyncResult> {
+    const catalog = await db.fbCatalogSync.findUnique({ where: { entityId } })
+    const chunks = chunkArray(products, 1000)
+
+    let synced = 0, failed = 0
+    const errors = []
+
+    for (const chunk of chunks) {
+      const requests = chunk.map(p => ({
+        method: "UPDATE",
+        retailer_id: p.refId,
+        data: this.mapProductToFbItem(p),
+      }))
+
+      try {
+        const res = await this.call(`/${catalog.fbCatalogId}/items_batch`, {
+          method: 'POST',
+          body: { allow_upsert: true, requests },
+          token: await this.getPageToken(entityId),
+        })
+
+        // Check individual item results
+        for (const handle of res.handles) {
+          if (handle.errors?.length) {
+            failed++
+            errors.push({ retailer_id: handle.retailer_id, error: handle.errors[0] })
+          } else {
+            synced++
+          }
+        }
+      } catch (err) {
+        failed += chunk.length
+        errors.push({ batch_error: err.message })
+      }
+    }
+
+    await db.fbCatalogSync.update({
+      where: { entityId },
+      data: { syncedItems: synced, failedItems: failed, lastSyncAt: new Date(), status: 'COMPLETED', errorLog: errors },
+    })
+
+    return { synced, failed, errors }
+  }
+
+  // Single product update (called on product save)
+  async syncProduct(productId: string): Promise<void> {
+    const product = await getProductWithStore(productId)
+    const entityId = product.storeId || product.entityId
+    const catalog = await db.fbCatalogSync.findUnique({ where: { entityId } })
+    if (!catalog || catalog.status === 'PAUSED') return
+
+    await this.call(`/${catalog.fbCatalogId}/items_batch`, {
+      method: 'POST',
+      body: {
+        allow_upsert: true,
+        requests: [{ method: "UPDATE", retailer_id: product.refId, data: this.mapProductToFbItem(product) }],
+      },
+      token: await this.getPageToken(entityId),
+    })
+
+    await db.productFbMapping.upsert({
+      where: { productId },
+      create: { productId, fbRetailerId: product.refId, lastSyncedAt: new Date(), syncStatus: 'synced' },
+      update: { lastSyncedAt: new Date(), syncStatus: 'synced' },
+    })
+  }
+
+  // Delete product from FB catalog
+  async deleteProduct(productId: string): Promise<void> {
+    const mapping = await db.productFbMapping.findUnique({ where: { productId } })
+    if (!mapping) return
+
+    await this.call(`/${catalogId}/items_batch`, {
+      method: 'POST',
+      body: {
+        requests: [{ method: "DELETE", retailer_id: mapping.fbRetailerId }],
+      },
+    })
+
+    await db.productFbMapping.update({
+      where: { productId },
+      data: { syncStatus: 'deleted', lastSyncedAt: new Date() },
+    })
+  }
+}
+
+// Hook into product lifecycle:
+// After createProduct  → catalogService.syncProduct(product.id)
+// After updateProduct  → catalogService.syncProduct(product.id)
+// After deleteProduct  → catalogService.deleteProduct(product.id)
+// After updateStock    → catalogService.syncProduct(product.id)
+```
+
+### SYNC DASHBOARD — /dashboard/integrations/facebook
+
+```tsx
+<FacebookIntegrationPage>
+  <ConnectionStatus>
+    FB Page: {page.name} — Холбогдсон ✓
+    Catalog ID: {catalogId}
+    IG Business: {igAccount ? "Холбогдсон" : "Холбогдоогүй"}
+
+  <SyncStats>
+    — Total products: 312
+    — Synced to FB: 298 (95.5%)
+    — Failed: 14
+    — Last sync: 2026-04-03 14:22
+
+  <SyncProgressBar /> — animated when running
+
+  <ActionBar>
+    <Button onClick={syncAll}>Бүгдийг дахин sync хийх</Button>
+    <Button onClick={pauseSync}>Sync түр зогсоох</Button>
+    <Button onClick={viewFbShop}>FB Shop харах ↗</Button>
+
+  <FailedItemsTable>
+    — Products that failed to sync
+    — Error message per item
+    — "Дахин оролдох" per row
+
+  <SyncLog>
+    — History of sync runs
+    — Start time, duration, synced/failed counts
+    — Expandable error details
+```
+
+### FACEBOOK ORDERS WEBHOOK
+
+```typescript
+// POST /api/webhooks/facebook/orders
+// Receives orders placed through Facebook Shop
+
+export async function POST(req) {
+  const body = await req.json()
+  
+  for (const entry of body.entry) {
+    for (const change of entry.changes) {
+      if (change.field === 'commerce_orders') {
+        const fbOrder = change.value
+
+        // Create corresponding eseller order
+        await createOrderFromFacebook({
+          fbOrderId: fbOrder.id,
+          buyer: {
+            name: fbOrder.shipping_address?.name,
+            email: fbOrder.buyer_details?.email,
+          },
+          items: fbOrder.items.data.map(item => ({
+            retailerId: item.retailer_id,   // = eseller refId
+            quantity: item.quantity,
+            priceAmount: item.price_per_unit.amount,
+          })),
+          shippingAddress: fbOrder.shipping_address,
+          channel: 'FACEBOOK_SHOP',    // tag order source
+        })
+      }
+    }
+  }
+
+  return new Response('OK')
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 14 -->
+<div id="panel-p14" class="panel">
+  <div class="section-title">Prompt 14 — Instagram Shopping + Messenger нэгдсэн inbox</div>
+  <div class="prompt-box" id="p14text">
+<button class="copy-btn" onclick="copyPrompt('p14text')">Хуулах</button>## INSTAGRAM SHOPPING + MESSENGER UNIFIED INBOX
+
+Connect Instagram Business accounts for product tagging and shopping,
+plus unify Facebook Messenger + eseller chat into one inbox.
+
+---
+
+### INSTAGRAM SHOPPING SETUP
+
+```typescript
+// Prerequisite: FB Page connected with instagram_business_account
+
+// 1. Get IG Business Account ID (done during FB Page connection)
+const igAccountId = fbPageData.instagram_business_account.id
+
+// 2. Connect product catalog to IG account
+async function connectCatalogToInstagram(entityId: string) {
+  const { fbCatalogId, igAccountId } = await getEntityConnections(entityId)
+
+  // Connect catalog to IG shopping
+  await graphApi(`/${igAccountId}/product_catalogs`, {
+    method: 'POST',
+    body: { catalog_id: fbCatalogId },
+    token: pageToken,
+  })
+}
+
+// 3. Submit for Instagram Shopping review (one-time)
+async function requestIGShoppingAccess(igAccountId: string) {
+  // Requires:
+  // - IG Business Account
+  // - Connected FB Page
+  // - Product catalog with ≥ 1 product
+  // - Comply with commerce policies
+  // Submit via Business Manager (manual step, then approved by Meta)
+}
+```
+
+### PRODUCT TAGGING IN POSTS
+
+```typescript
+// Tag products when entity posts to Instagram via API
+
+interface IGPostWithProducts {
+  imageUrl: string
+  caption: string
+  productTags: Array<{
+    product_id: string   // FB catalog item id
+    merchant_id: string  // FB catalog id
+    // optional: x, y coordinates on image (0.0 - 1.0)
+    x?: number
+    y?: number
+  }>
+}
+
+async function createIGPostWithProductTag(entityId: string, post: IGPostWithProducts) {
+  // Step 1: Create media container
+  const container = await graphApi(`/${igAccountId}/media`, {
+    method: 'POST',
+    body: {
+      image_url: post.imageUrl,
+      caption: post.caption,
+      product_tags: post.productTags,
+    },
+  })
+
+  // Step 2: Publish container
+  await graphApi(`/${igAccountId}/media_publish`, {
+    method: 'POST',
+    body: { creation_id: container.id },
+  })
+}
+```
+
+### INSTAGRAM POST SCHEDULER — /dashboard/social/instagram
+
+```tsx
+<InstagramScheduler>
+  <PostForm>
+    <ImageUpload>
+      — Upload or pick from existing product images
+      — Crop to 1:1 (feed) or 4:5 (portrait)
+
+    <CaptionEditor>
+      — Text area with hashtag suggestions
+      — Character counter (2200 max)
+      — Emoji picker
+
+    <ProductTagging>
+      — Search products from catalog
+      — Add up to 5 product tags per image
+      — Preview tagged image with shopping bag icons
+
+    <ScheduleOptions>
+      — Post now | Schedule for later
+      — DateTimePicker for scheduled posts
+      — "Best times" suggestion (based on audience analytics)
+
+  <PostHistory>
+    — List of published posts
+    — Impressions, reach, product clicks per post
+    — Repost / Edit caption (first 24h) / Delete
+```
+
+---
+
+### MESSENGER UNIFIED INBOX
+
+Bring Facebook Messenger messages into eseller's chat system.
+
+```typescript
+// POST /api/webhooks/facebook/messenger
+// Receives Messenger messages sent to entity's FB Page
+
+export async function POST(req) {
+  const body = await req.json()
+  
+  for (const entry of body.entry) {
+    for (const event of entry.messaging) {
+      if (event.message) {
+        await handleIncomingMessage({
+          platform: 'FACEBOOK_MESSENGER',
+          senderId: event.sender.id,
+          recipientPageId: event.recipient.id,
+          messageText: event.message.text,
+          attachments: event.message.attachments,
+          timestamp: event.timestamp,
+        })
+      }
+    }
+  }
+}
+
+async function handleIncomingMessage(msg) {
+  // Find entity by FB page ID
+  const entity = await db.socialConnection.findFirst({
+    where: { pageId: msg.recipientPageId }
+  })
+
+  // Find or create eseller chat thread
+  let chat = await db.chat.findFirst({
+    where: { entityId: entity.entityId, platform: 'MESSENGER', externalSenderId: msg.senderId }
+  })
+
+  if (!chat) {
+    // Get sender profile from FB
+    const senderProfile = await graphApi(`/${msg.senderId}?fields=name,profile_pic&access_token=${pageToken}`)
+
+    chat = await db.chat.create({
+      data: {
+        entityId: entity.entityId,
+        platform: 'MESSENGER',
+        externalSenderId: msg.senderId,
+        senderName: senderProfile.name,
+        senderAvatar: senderProfile.profile_pic,
+      }
+    })
+  }
+
+  // Save message
+  await db.message.create({
+    data: { chatId: chat.id, content: msg.messageText, direction: 'INBOUND', platform: 'MESSENGER' }
+  })
+
+  // Notify entity owner (in-app + push)
+  await notifyNewMessage(entity.entityId, chat.id)
+}
+
+// Reply from eseller → sends back to Messenger
+async function replyToMessenger(chatId: string, text: string) {
+  const chat = await db.chat.findUnique({ where: { id: chatId } })
+  
+  await graphApi(`/me/messages`, {
+    method: 'POST',
+    body: {
+      recipient: { id: chat.externalSenderId },
+      message: { text },
+    },
+    token: decrypt(connection.pageToken),
+  })
+}
+```
+
+### UNIFIED INBOX UI — /dashboard/messages
+
+```tsx
+<UnifiedInbox>
+  <ChannelFilter>
+    [Бүгд] [Eseller чат] [Messenger] [Instagram DM*]
+    — Count badge per channel
+    — Unread indicator
+
+  <ConversationList>
+    — Each thread shows: avatar, name, last message, time, platform badge
+    — Platform badge: "Messenger" (blue) | "Eseller" (teal) | "IG" (gradient)
+    — Unread threads bold
+
+  <ChatWindow>
+    — Shows all messages regardless of channel
+    — Platform badge on each message bubble
+    — Reply box sends to the same platform the message came from
+    — If Messenger: sends via Graph API
+    — If Eseller: sends via WebSocket
+
+  <CustomerInfo sidebar>
+    — If FB user: show FB profile info
+    — If registered eseller user: show order history
+    — Quick actions: Send invoice, Share product link
+```
+</div>
+</div>
+
+<!-- PROMPT 15 -->
+<div id="panel-p15" class="panel">
+  <div class="section-title">Prompt 15 — Google Merchant, TikTok Shop, Analytics нэмэлт</div>
+  <div class="prompt-box" id="p15text">
+<button class="copy-btn" onclick="copyPrompt('p15text')">Хуулах</button>## ADDITIONAL INTEGRATIONS
+
+---
+
+### 1. GOOGLE MERCHANT CENTER + GOOGLE SHOPPING
+
+```typescript
+// lib/integrations/google/MerchantService.ts
+// Uses Content API for Shopping v2.1
+
+class GoogleMerchantService {
+  // Authenticate with service account or OAuth
+  async authenticate(entityId: string): Promise<void>
+
+  // Submit product to Google Merchant
+  async insertProduct(product: Product): Promise<void> {
+    await this.client.products.insert({
+      merchantId: process.env.GOOGLE_MERCHANT_ID,
+      requestBody: {
+        offerId: product.refId,
+        title: product.name,
+        description: product.description,
+        link: `${APP_URL}/product/${product.slug}`,
+        imageLink: product.images[0],
+        additionalImageLinks: product.images.slice(1),
+        contentLanguage: 'mn',
+        targetCountry: 'MN',
+        channel: 'online',
+        availability: product.stock > 0 ? 'in stock' : 'out of stock',
+        condition: 'new',
+        price: { value: String(product.price), currency: 'MNT' },
+        brand: product.store.name,
+        googleProductCategory: mapCategory(product.category),
+        shipping: [{ country: 'MN', price: { value: '0', currency: 'MNT' } }],
+      }
+    })
+  }
+
+  // Auto-sync on product changes (same hooks as FB)
+  // Batch sync via Content API batch endpoint
+}
+```
+
+---
+
+### 2. GOOGLE ANALYTICS 4 + ECOMMERCE TRACKING
+
+```typescript
+// Install: npm install @next/third-parties
+
+// app/layout.tsx
+import { GoogleAnalytics } from '@next/third-parties/google'
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>{children}</body>
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+    </html>
+  )
+}
+
+// lib/analytics/events.ts — track ecommerce events
+export const analytics = {
+  // Product viewed
+  viewItem: (product: Product) => gtag('event', 'view_item', {
+    currency: 'MNT',
+    value: product.price,
+    items: [{ item_id: product.refId, item_name: product.name, price: product.price }],
+  }),
+
+  // Add to cart
+  addToCart: (product: Product, qty: number) => gtag('event', 'add_to_cart', {
+    currency: 'MNT',
+    value: product.price * qty,
+    items: [{ item_id: product.refId, quantity: qty }],
+  }),
+
+  // Purchase completed
+  purchase: (order: Order) => gtag('event', 'purchase', {
+    transaction_id: order.refId,
+    value: order.total,
+    currency: 'MNT',
+    items: order.items.map(i => ({
+      item_id: i.product.refId,
+      item_name: i.product.name,
+      price: i.unitPrice,
+      quantity: i.quantity,
+    })),
+  }),
+
+  // Entity profile viewed
+  viewEntityProfile: (entity: Entity) => gtag('event', 'select_content', {
+    content_type: entity.type,
+    item_id: entity.slug,
+  }),
+}
+```
+
+---
+
+### 3. TIKTOK SHOP CATALOG SYNC
+
+```typescript
+// lib/integrations/tiktok/TikTokShopService.ts
+// Uses TikTok Shop Open API v202309
+
+class TikTokShopService {
+  private baseUrl = "https://open-api.tiktokglobalshop.com"
+
+  // Generate signature for each request
+  private sign(params: Record<string, string>, path: string): string {
+    // HMAC-SHA256 signature per TikTok docs
+  }
+
+  // Map product to TikTok format
+  mapProduct(product: Product): TikTokProduct {
+    return {
+      title: product.name,
+      description: product.description,
+      category_id: mapToTikTokCategory(product.category),
+      images: product.images.map(url => ({ url })),
+      skus: [{
+        price: { amount: String(product.price), currency: "MNT" },
+        inventory: [{ quantity: product.stock }],
+      }],
+      package_weight: { value: "0.5", unit: "KILOGRAM" },
+    }
+  }
+
+  async createProduct(product: Product): Promise<string> {
+    const res = await this.call('/product/202309/products', {
+      method: 'POST',
+      body: this.mapProduct(product),
+    })
+    return res.data.product_id
+  }
+
+  // Same lifecycle hooks as Facebook sync
+}
+```
+
+---
+
+### 4. VIBER BUSINESS MESSAGES
+
+```typescript
+// lib/integrations/viber/ViberService.ts
+
+class ViberService {
+  private apiUrl = "https://chatapi.viber.com/pa"
+  private authToken = process.env.VIBER_AUTH_TOKEN
+
+  // Send message to Viber user
+  async sendMessage(viberId: string, text: string): Promise<void> {
+    await fetch(`${this.apiUrl}/send_message`, {
+      method: 'POST',
+      headers: { 'X-Viber-Auth-Token': this.authToken },
+      body: JSON.stringify({
+        receiver: viberId,
+        type: 'text',
+        text,
+        sender: { name: 'Eseller.mn', avatar: LOGO_URL },
+      }),
+    })
+  }
+
+  // Receive webhook: POST /api/webhooks/viber
+  async handleWebhook(req: Request): Promise<void> {
+    const event = await req.json()
+    if (event.event === 'message') {
+      await handleIncomingMessage({
+        platform: 'VIBER',
+        senderId: event.sender.id,
+        senderName: event.sender.name,
+        messageText: event.message.text,
+      })
+    }
+  }
+}
+```
+
+---
+
+### 5. INTEGRATION SETTINGS PAGE — /dashboard/integrations
+
+```tsx
+<IntegrationsHub>
+  <IntegrationGrid>
+    {integrations.map(integration => (
+      <IntegrationCard key={integration.id}>
+        <Logo src={integration.logo} size={40} />
+        <Name>{integration.name}</Name>
+        <Description>{integration.desc}</Description>
+        <StatusBadge>{integration.connected ? "Холбогдсон" : "Холбоогүй"}</StatusBadge>
+
+        {integration.connected ? (
+          <>
+            <LastSync>Сүүлийн sync: {integration.lastSync}</LastSync>
+            <div>
+              <Button onClick={configure}>Тохиргоо</Button>
+              <Button onClick={disconnect} variant="danger">Салгах</Button>
+            </div>
+          </>
+        ) : (
+          <Button onClick={connect} variant="primary">Холбох</Button>
+        )}
+
+        {integration.isPremium && !hasPlan && (
+          <PremiumBadge>Pro төлөвлөгөө шаардлагатай</PremiumBadge>
+        )}
+      </IntegrationCard>
+    ))}
+
+  // Available integrations list:
+  const integrations = [
+    { id: 'facebook',  name: 'Facebook Shop',    tier: 'free',    category: 'sales' },
+    { id: 'instagram', name: 'Instagram Shopping', tier: 'free',  category: 'sales' },
+    { id: 'messenger', name: 'Facebook Messenger', tier: 'free',  category: 'chat' },
+    { id: 'google_merchant', name: 'Google Merchant', tier: 'pro', category: 'sales' },
+    { id: 'tiktok',    name: 'TikTok Shop',       tier: 'pro',     category: 'sales' },
+    { id: 'viber',     name: 'Viber Business',     tier: 'free',   category: 'chat' },
+    { id: 'ga4',       name: 'Google Analytics 4', tier: 'free',   category: 'analytics' },
+    { id: 'hotjar',    name: 'Hotjar Heatmaps',    tier: 'pro',    category: 'analytics' },
+    { id: 'mailchimp', name: 'Mailchimp Email',    tier: 'pro',    category: 'marketing' },
+  ]
+```
+
+---
+
+### 6. WEBHOOK MANAGEMENT — /admin/webhooks
+
+```tsx
+// Super admin can see all incoming/outgoing webhooks
+<WebhookDashboard>
+  <IncomingWebhooks>
+    — FB orders, FB Messenger, IG, QPay, Stripe, Viber, TikTok
+    — Real-time log with success/fail counts
+    — Retry failed webhooks
+
+  <OutgoingWebhooks>
+    — Eseller can also fire webhooks TO partner systems
+    — Entity can subscribe: on_new_order | on_payment | on_review
+    — Custom endpoint URL + secret header
+    — Delivery log, retry, disable
+
+  // This enables enterprise/B2B integration:
+  // Large stores can receive eseller order events in their own ERP
+```
+</div>
+</div>
+
+<!-- PARTNERS -->
+<div id="panel-partners" class="panel">
+  <div class="section-title">Хамтрах боломжтой салбарууд — Монголын зах зээлд</div>
+  <div class="partner-grid">
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Хүргэлтийн компаниуд</span><span class="badge b-red">Яаралтай</span></div>
+      <div class="partner-desc">Унэгүй Экспресс, Murkh, iPost, MonPost, Ачааны courier-үүд. API эсвэл webhook-оор захиалга дамжуулах, tracking авах. Хэрэглэгч checkout дээр хүргэлтийн сонголт харна.</div>
+      <div class="partner-tags"><span class="tag">API/webhook</span><span class="tag">Tracking</span><span class="tag">COD</span></div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Төлбөрийн системүүд</span><span class="badge b-red">Яаралтай</span></div>
+      <div class="partner-desc">QPay (байгаа), SocialPay, M-Bank, Khan Bank, Golomt — банкны direct debit. Монголын хэрэглэгчдэд танил бүх хэлбэрийн төлбөр нэг дор.</div>
+      <div class="partner-tags"><span class="tag">SocialPay</span><span class="tag">M-Bank</span><span class="tag">Direct debit</span></div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Агуулах / Logistics</span><span class="badge b-warn">Дунд</span></div>
+      <div class="partner-desc">3PL (Third-party logistics) компаниуд. Дэлгүүр нь агуулах, пакинг, хүргэлтийг бүрэн аутсорс хийх боломж. Eseller-т inventory sync хийнэ.</div>
+      <div class="partner-tags"><span class="tag">3PL</span><span class="tag">Inventory sync</span><span class="tag">Fulfillment</span></div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Маркетингийн платформ</span><span class="badge b-warn">Дунд</span></div>
+      <div class="partner-desc">Mailchimp / SendGrid email маркетинг, SMS мэдэгдэл (Unitel, MobiCom gateway), push notification (OneSignal). Автомат кампанит ажил.</div>
+      <div class="partner-tags"><span class="tag">Email</span><span class="tag">SMS</span><span class="tag">Push</span></div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Нягтлан / Санхүү</span><span class="badge b-warn">Дунд</span></div>
+      <div class="partner-desc">НӨАТ системтэй холбох (НББХ), нягтлан бодох бүртгэлийн программтай (Itools, QuickBooks MN) орлого/зардлын автомат синк. Invoice → НӨАТ баримт.</div>
+      <div class="partner-tags"><span class="tag">НӨАТ</span><span class="tag">НББХ</span><span class="tag">Itools</span></div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Даатгал</span><span class="badge b-green">Ирээдүй</span></div>
+      <div class="partner-desc">Дэлгүүрийн нийлүүлэгч, ачааны даатгал. Checkout дээр даатгал нэмэх сонголт. Даатгалын компанитай affiliate орлого хуваалцах загвар.</div>
+      <div class="partner-tags"><span class="tag">Cargo insurance</span><span class="tag">Affiliate</span></div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Хэрэглэгчийн зээл / BNPL</span><span class="badge b-green">Ирээдүй</span></div>
+      <div class="partner-desc">Хожим төл (Buy Now Pay Later) — Khan Bank, TDB банктай хамтран ажиллах. Checkout дээр "3 сарын хуваан төлөлт" сонголт нэмнэ.</div>
+      <div class="partner-tags"><span class="tag">BNPL</span><span class="tag">Khan Bank</span><span class="tag">Installment</span></div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-head"><span class="partner-name">Нийгмийн сүлжээ / Агуулга</span><span class="badge b-blue">Байгаа</span></div>
+      <div class="partner-desc">FB, Instagram, TikTok Shop, Google Merchant — бараа автоматаар тараах. Influencer marketing платформтай холбох, affiliate tracking.</div>
+      <div class="partner-tags"><span class="tag">Multi-channel</span><span class="tag">Influencer</span><span class="tag">Affiliate</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Техникийн интеграцийн ерөнхий зарчим</div>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;font-size:12px;color:var(--color-text-secondary);line-height:1.9">
+    Бүх гадаад интеграцийг <span style="color:var(--color-text-primary);font-weight:500">provider interface</span> загварт оруулна — дотоод систем нь нэг стандарт API дуудна, тухайн provider-ийн нарийн ширийнийг <span style="color:var(--color-text-primary);font-weight:500">adapter class</span> шийдэнэ. Шинэ partner нэмэхэд зөвхөн adapter нэмж, config-т идэвхжүүлнэ — core code хөндөхгүй. Бүх webhook <span style="color:var(--color-text-primary);font-weight:500">idempotent</span> байна (давтагдсан event хоёр дахь удаа боловсруулагдахгүй). Гадаад системд хийсэн бүх дуудлага <span style="color:var(--color-text-primary);font-weight:500">retry + circuit breaker</span>-тэй байна.
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyPrompt(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.innerText.replace('Хуулах','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа!';
+    setTimeout(()=>btn.textContent='Хуулах',2000);
+  });
+}
+function copyAll(){
+  const ids=['p12text','p13text','p14text','p15text'];
+  const all=ids.map(id=>{
+    const el=document.getElementById(id);
+    return el?el.innerText.replace('Хуулах','').trim():'';
+  }).join('\n\n---\n\n');
+  navigator.clipboard.writeText(all).then(()=>alert('Бүх 4 prompt хуулагдлаа!'));
+}
+</script>

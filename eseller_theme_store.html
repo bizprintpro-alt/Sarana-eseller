@@ -1,0 +1,414 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif);font-size:13px;background:var(--color-background-tertiary)}
+
+.top-bar{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 20px;display:flex;align-items:center;gap:16px;height:52px}
+.logo{font-size:15px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#E8242C}
+.top-search{flex:1;max-width:360px;position:relative}
+.top-search input{width:100%;height:34px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:0 10px 0 32px;background:var(--color-background-secondary);color:var(--color-text-primary);font-size:12px;outline:none}
+.top-search input:focus{border-color:#E8242C;box-shadow:0 0 0 3px rgba(232,36,44,0.08)}
+.top-search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%)}
+.top-tabs{display:flex;gap:0;margin-left:auto}
+.top-tab{padding:0 14px;height:52px;display:flex;align-items:center;font-size:12px;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none}
+.top-tab:hover{color:var(--color-text-primary)}
+.top-tab.active{color:#E8242C;border-bottom-color:#E8242C;font-weight:500}
+
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 52px)}
+
+/* Sidebar */
+.sidebar{background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:20px 0;overflow-y:auto}
+.sidebar-section{margin-bottom:6px}
+.ss-head{display:flex;align-items:center;justify-content:space-between;padding:6px 18px;cursor:pointer;border:none;background:none;width:100%}
+.ss-label{font-size:11px;font-weight:500;color:var(--color-text-primary);text-transform:uppercase;letter-spacing:.07em}
+.ss-arrow{color:var(--color-text-tertiary);transition:transform .2s}
+.ss-arrow.open{transform:rotate(180deg)}
+.filter-list{padding:0 18px 8px;display:none}
+.filter-list.open{display:block}
+.filter-item{display:flex;align-items:center;justify-content:space-between;padding:4px 0;cursor:pointer;gap:6px}
+.fi-check{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--color-text-secondary)}
+.fi-check input[type=checkbox]{accent-color:#E8242C;width:13px;height:13px;cursor:pointer}
+.fi-count{font-size:10px;color:var(--color-text-tertiary);background:var(--color-background-secondary);padding:1px 6px;border-radius:99px}
+.filter-item.checked .fi-check{color:var(--color-text-primary);font-weight:500}
+
+/* Main */
+.main{padding:20px}
+.main-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.result-count{font-size:13px;color:var(--color-text-secondary)}
+.sort-row{display:flex;align-items:center;gap:8px}
+.sort-label{font-size:12px;color:var(--color-text-tertiary)}
+.sort-select{height:32px;padding:0 28px 0 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-size:12px;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
+
+/* Theme grid */
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:24px}
+
+.theme-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;cursor:pointer;transition:border-color .15s,transform .15s}
+.theme-card:hover{border-color:var(--color-border-secondary);transform:translateY(-2px)}
+.theme-card.featured{border:2px solid #E8242C}
+
+.tc-preview{position:relative;aspect-ratio:16/10;background:var(--color-background-secondary);overflow:hidden}
+.tc-preview img{width:100%;height:100%;object-fit:cover}
+.tc-badge{position:absolute;top:8px;left:8px;display:flex;gap:4px}
+.badge{display:inline-flex;font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-free{background:#E8242C;color:#fff}
+.b-new{background:#0C447C;color:#fff}
+.b-hot{background:#F59E0B;color:#fff}
+.b-popular{background:#059669;color:#fff}
+.b-type{background:rgba(0,0,0,0.6);color:#fff;backdrop-filter:blur(4px)}
+.tc-hover{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity .2s}
+.theme-card:hover .tc-hover{opacity:1}
+.tc-btn{padding:7px 14px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;cursor:pointer;border:none;white-space:nowrap}
+.tc-try{background:#E8242C;color:#fff}
+.tc-demo{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4)!important;border-radius:var(--border-radius-md)!important}
+
+.tc-info{padding:12px}
+.tc-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.tc-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.tc-price{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.tc-price.free-tag{color:#E8242C}
+.tc-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--color-text-tertiary)}
+.tc-rating{display:flex;align-items:center;gap:3px}
+.stars{color:#F59E0B;font-size:10px}
+.tc-by{margin-left:auto;font-size:10px;color:var(--color-text-tertiary)}
+.tc-types{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.type-pill{font-size:9px;padding:1px 6px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary)}
+.type-pill.match{background:rgba(232,36,44,0.08);color:#E8242C;border-color:rgba(232,36,44,0.2)}
+
+/* Pagination */
+.pagination{display:flex;justify-content:center;gap:4px;margin-bottom:24px}
+.pg-btn{width:34px;height:34px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.pg-btn:hover{border-color:#E8242C;color:#E8242C}
+.pg-btn.active{background:#E8242C;border-color:#E8242C;color:#fff;font-weight:500}
+
+/* Industry quick filters */
+.industry-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.ind-chip{padding:5px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .12s;white-space:nowrap}
+.ind-chip:hover{border-color:#E8242C;color:#E8242C}
+.ind-chip.active{background:#E8242C;border-color:#E8242C;color:#fff;font-weight:500}
+
+/* Preview colors */
+.preview-minimal{background:linear-gradient(135deg,#f8f8f8 0%,#ffffff 100%)}
+.preview-bold{background:linear-gradient(135deg,#E8242C 0%,#1a1a1a 100%)}
+.preview-modern{background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%)}
+.preview-luxury{background:linear-gradient(135deg,#0a0a0a 0%,#1a1210 100%)}
+.preview-nature{background:linear-gradient(135deg,#e8f5e9 0%,#c8e6c9 100%)}
+.preview-ocean{background:linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%)}
+
+/* Mock theme preview content */
+.mock-nav{height:24px;background:rgba(255,255,255,0.9);display:flex;align-items:center;padding:0 10px;gap:8px}
+.mock-logo-bar{width:40px;height:6px;border-radius:3px;background:rgba(0,0,0,0.2)}
+.mock-nav-links{display:flex;gap:6px;margin-left:auto}
+.mock-link{width:20px;height:4px;border-radius:2px;background:rgba(0,0,0,0.15)}
+.mock-hero{flex:1;display:flex;align-items:center;justify-content:center;padding:8px}
+.mock-hero-text{text-align:center}
+.mock-h1{height:8px;width:80px;background:rgba(255,255,255,0.8);border-radius:4px;margin:0 auto 6px}
+.mock-h2{height:5px;width:100px;background:rgba(255,255,255,0.5);border-radius:3px;margin:0 auto 8px}
+.mock-cta{height:14px;width:60px;background:#E8242C;border-radius:4px;margin:0 auto}
+.mock-products{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px;background:rgba(0,0,0,0.05)}
+.mock-product{height:28px;background:rgba(255,255,255,0.6);border-radius:4px}
+.mock-dark .mock-nav{background:rgba(26,26,26,0.95)}
+.mock-dark .mock-logo-bar{background:rgba(255,255,255,0.4)}
+.mock-dark .mock-link{background:rgba(255,255,255,0.3)}
+.mock-dark .mock-h1{background:rgba(255,255,255,0.9)}
+.mock-dark .mock-h2{background:rgba(255,255,255,0.5)}
+.mock-dark .mock-products{background:rgba(0,0,0,0.3)}
+.mock-dark .mock-product{background:rgba(255,255,255,0.08)}
+</style>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="logo"><div class="logo-dot"></div>eseller.mn theme store</div>
+  <div class="top-search">
+    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.5" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><path d="M10 10l2.5 2.5"/></svg>
+    <input placeholder="Theme хайх..." id="search-input" oninput="filterThemes()" />
+  </div>
+  <div class="top-tabs">
+    <button class="top-tab active" onclick="setTab(this,'all')">Бүх theme</button>
+    <button class="top-tab" onclick="setTab(this,'free')">Үнэгүй</button>
+    <button class="top-tab" onclick="setTab(this,'popular')">Эрэлттэй</button>
+    <button class="top-tab" onclick="setTab(this,'new')">Шинэ</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- Sidebar filters -->
+  <div class="sidebar">
+
+    <!-- Price -->
+    <div class="sidebar-section">
+      <button class="ss-head" onclick="toggleSection(this)">
+        <span class="ss-label">Үнэ</span>
+        <svg class="ss-arrow open" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-list open">
+        <div class="filter-item" onclick="toggleFilter(this,'price','free')">
+          <label class="fi-check"><input type="checkbox"/> Үнэгүй</label>
+          <span class="fi-count">8</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'price','paid')">
+          <label class="fi-check"><input type="checkbox"/> Төлбөртэй</label>
+          <span class="fi-count">21</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entity type -->
+    <div class="sidebar-section">
+      <button class="ss-head" onclick="toggleSection(this)">
+        <span class="ss-label">Дэлгүүрийн төрөл</span>
+        <svg class="ss-arrow open" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-list open">
+        <div class="filter-item" onclick="toggleFilter(this,'type','store')">
+          <label class="fi-check"><input type="checkbox"/> 🏪 Дэлгүүр</label>
+          <span class="fi-count">18</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'type','preorder')">
+          <label class="fi-check"><input type="checkbox"/> 📦 Захиалгын дэлгүүр</label>
+          <span class="fi-count">6</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'type','agent')">
+          <label class="fi-check"><input type="checkbox"/> 🏠 Үл хөдлөх агент</label>
+          <span class="fi-count">5</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'type','company')">
+          <label class="fi-check"><input type="checkbox"/> 🏗 Барилгын компани</label>
+          <span class="fi-count">4</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'type','auto')">
+          <label class="fi-check"><input type="checkbox"/> 🚗 Авто худалдаа</label>
+          <span class="fi-count">7</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'type','service')">
+          <label class="fi-check"><input type="checkbox"/> ✂️ Үйлчилгээ</label>
+          <span class="fi-count">9</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'type','digital')">
+          <label class="fi-check"><input type="checkbox"/> 💾 Дижитал контент</label>
+          <span class="fi-count">4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Style -->
+    <div class="sidebar-section">
+      <button class="ss-head" onclick="toggleSection(this)">
+        <span class="ss-label">Загварын хэв</span>
+        <svg class="ss-arrow open" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-list open">
+        <div class="filter-item" onclick="toggleFilter(this,'style','minimal')">
+          <label class="fi-check"><input type="checkbox"/> Minimal (цэвэр)</label>
+          <span class="fi-count">14</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'style','bold')">
+          <label class="fi-check"><input type="checkbox"/> Bold (хүчтэй)</label>
+          <span class="fi-count">11</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'style','modern')">
+          <label class="fi-check"><input type="checkbox"/> Modern (орчин үеийн)</label>
+          <span class="fi-count">9</span>
+        </div>
+        <div class="filter-item" onclick="toggleFilter(this,'style','luxury')">
+          <label class="fi-check"><input type="checkbox"/> Luxury (тансаг)</label>
+          <span class="fi-count">5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="sidebar-section">
+      <button class="ss-head" onclick="toggleSection(this)">
+        <span class="ss-label">Онцлогууд</span>
+        <svg class="ss-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-list">
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Цагийн захиалга</label><span class="fi-count">12</span></div>
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Зарын систем</label><span class="fi-count">8</span></div>
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Карт харьцуулалт</label><span class="fi-count">9</span></div>
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Галерей</label><span class="fi-count">21</span></div>
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Газрын зураг</label><span class="fi-count">15</span></div>
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Video hero</label><span class="fi-count">7</span></div>
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Infinite scroll</label><span class="fi-count">18</span></div>
+        <div class="filter-item"><label class="fi-check"><input type="checkbox"/> Dark mode</label><span class="fi-count">16</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Main content -->
+  <div class="main">
+
+    <!-- Industry chips -->
+    <div class="industry-chips" id="industry-chips">
+      <button class="ind-chip active" onclick="setIndustry(this,'all')">Бүгд</button>
+      <button class="ind-chip" onclick="setIndustry(this,'fashion')">Хувцас & Гоо сайхан</button>
+      <button class="ind-chip" onclick="setIndustry(this,'food')">Хоол & Ундаа</button>
+      <button class="ind-chip" onclick="setIndustry(this,'tech')">Электроник</button>
+      <button class="ind-chip" onclick="setIndustry(this,'realestate')">Үл хөдлөх</button>
+      <button class="ind-chip" onclick="setIndustry(this,'auto')">Авто тээвэр</button>
+      <button class="ind-chip" onclick="setIndustry(this,'service')">Үйлчилгээ</button>
+      <button class="ind-chip" onclick="setIndustry(this,'digital')">Дижитал контент</button>
+    </div>
+
+    <!-- Header -->
+    <div class="main-header">
+      <span class="result-count" id="result-count">29 theme олдлоо</span>
+      <div class="sort-row">
+        <span class="sort-label">Эрэмбэлэх:</span>
+        <select class="sort-select" onchange="sortThemes(this.value)">
+          <option value="relevance">Хамааралтай</option>
+          <option value="newest">Шинэ эхэндээ</option>
+          <option value="price_low">Үнэ: бага → их</option>
+          <option value="price_high">Үнэ: их → бага</option>
+          <option value="rating">Үнэлгээ</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Theme grid -->
+    <div class="theme-grid" id="theme-grid"></div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="pg-btn">‹</button>
+      <button class="pg-btn active">1</button>
+      <button class="pg-btn">2</button>
+      <button class="pg-btn">3</button>
+      <button class="pg-btn">›</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const THEMES = [
+  {id:1,name:'Цагаан Орд',style:'minimal',price:0,rating:98,reviews:142,types:['store','preorder'],preview:'preview-minimal',isNew:false,isPop:true,desc:'Цэвэр цагаан, бараа онцолсон минималист загвар'},
+  {id:2,name:'Улаан Буллет',style:'bold',price:29900,rating:96,reviews:89,types:['store','service'],preview:'preview-bold',isNew:true,isPop:true,desc:'Хүчтэй улаан, том typography — бизнест зориулсан'},
+  {id:3,name:'Хар Тэнгэр',style:'modern',price:49900,rating:94,reviews:67,types:['auto','store'],preview:'preview-modern',isNew:false,isPop:false,desc:'Орчин үеийн хар дэвсгэртэй авто мэргэжилтэй загвар'},
+  {id:4,name:'Алтан Дэлхий',style:'luxury',price:79900,rating:99,reviews:34,types:['agent','company'],preview:'preview-luxury',isNew:true,isPop:false,desc:'Тансаг хар-алтан өнгөний үл хөдлөхийн агентлагт'},
+  {id:5,name:'Ногоон Нуга',style:'minimal',price:0,rating:91,reviews:203,types:['food','service'],preview:'preview-nature',isNew:false,isPop:true,desc:'Байгалийн ногоон — хоол, эрүүл мэнд, органик'},
+  {id:6,name:'Далайн Хөх',style:'modern',price:39900,rating:97,reviews:118,types:['digital','service'],preview:'preview-ocean',isNew:false,isPop:true,desc:'Цэнхэр орчин үеийн дижитал контент, программ'},
+  {id:7,name:'Цөлийн Элс',style:'luxury',price:59900,rating:93,reviews:45,types:['auto'],preview:'preview-luxury',isNew:false,isPop:false,desc:'Авто дилерийн тансаг, мэргэжлийн загвар'},
+  {id:8,name:'Мөнгөн Шил',style:'minimal',price:0,rating:88,reviews:176,types:['store','digital'],preview:'preview-minimal',isNew:true,isPop:false,desc:'Цэвэр мөнгөлөг — электроник, технологийн бүтээгдэхүүнд'},
+  {id:9,name:'Эрдэнэт',style:'bold',price:29900,rating:95,reviews:92,types:['preorder'],preview:'preview-bold',isNew:false,isPop:true,desc:'Pre-order болон batch захиалгын мэргэжилтэй загвар'},
+  {id:10,name:'Уулын Цас',style:'minimal',price:19900,rating:97,reviews:156,types:['store','service'],preview:'preview-minimal',isNew:false,isPop:true,desc:'Цагаан цэвэрхэн — олон ангиллын дэлгүүрт'},
+  {id:11,name:'Гэрэл',style:'modern',price:0,rating:90,reviews:88,types:['company'],preview:'preview-modern',isNew:true,isPop:false,desc:'Барилгын компанийн орчин үеийн, мэргэжлийн загвар'},
+  {id:12,name:'Хотын Дуу',style:'bold',price:49900,rating:92,reviews:71,types:['service','store'],preview:'preview-bold',isNew:false,isPop:false,desc:'Хотын хэмнэлд нийцсэн үйлчилгээний загвар'},
+]
+
+let activeTab = 'all'
+let activeIndustry = 'all'
+let searchQ = ''
+let activeFilters = {price:[],type:[],style:[]}
+
+function renderThemes(){
+  const grid = document.getElementById('theme-grid')
+  let filtered = THEMES.filter(t => {
+    if(activeTab==='free' && t.price!==0) return false
+    if(activeTab==='popular' && !t.isPop) return false
+    if(activeTab==='new' && !t.isNew) return false
+    if(searchQ && !t.name.toLowerCase().includes(searchQ) && !t.desc.toLowerCase().includes(searchQ)) return false
+    return true
+  })
+
+  document.getElementById('result-count').textContent = filtered.length + ' theme олдлоо'
+
+  grid.innerHTML = filtered.map(t => `
+    <div class="theme-card${t.isPop&&activeTab==='popular'?' featured':''}">
+      <div class="tc-preview ${t.preview} ${t.style==='modern'||t.style==='luxury'?'mock-dark':''}">
+        <div class="mock-nav">
+          <div class="mock-logo-bar"></div>
+          <div class="mock-nav-links"><div class="mock-link"></div><div class="mock-link"></div><div class="mock-link"></div></div>
+        </div>
+        <div class="mock-hero">
+          <div class="mock-hero-text">
+            <div class="mock-h1"></div>
+            <div class="mock-h2"></div>
+            <div class="mock-cta"></div>
+          </div>
+        </div>
+        <div class="mock-products">
+          <div class="mock-product"></div><div class="mock-product"></div>
+          <div class="mock-product"></div><div class="mock-product"></div>
+        </div>
+        <div class="tc-badge">
+          ${t.price===0?'<span class="badge b-free">Үнэгүй</span>':''}
+          ${t.isNew?'<span class="badge b-new">Шинэ</span>':''}
+          ${t.isPop&&!t.isNew?'<span class="badge b-popular">Эрэлттэй</span>':''}
+        </div>
+        <div class="tc-hover">
+          <button class="tc-btn tc-try" onclick="alert('Энэ theme-г ашиглах: ${t.name}')">Ашиглах</button>
+          <button class="tc-btn tc-demo" onclick="alert('Demo харах: ${t.name}')">Demo</button>
+        </div>
+      </div>
+      <div class="tc-info">
+        <div class="tc-row">
+          <span class="tc-name">${t.name}</span>
+          <span class="tc-price ${t.price===0?'free-tag':''}">${t.price===0?'Үнэгүй':t.price.toLocaleString()+'₮'}</span>
+        </div>
+        <div class="tc-meta">
+          <div class="tc-rating">
+            <span class="stars">★</span>
+            <span>${t.rating}%</span>
+          </div>
+          <span>·</span>
+          <span>${t.reviews} үнэлгээ</span>
+          <span class="tc-by">by eseller.mn</span>
+        </div>
+        <div class="tc-types">
+          ${t.types.map(tp => `<span class="type-pill">${getTypeLabel(tp)}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('')
+}
+
+function getTypeLabel(tp){
+  const m={store:'Дэлгүүр',preorder:'Pre-order',agent:'Агент',company:'Компани',auto:'Авто',service:'Үйлчилгээ',digital:'Дижитал',food:'Хоол'}
+  return m[tp]||tp
+}
+
+function setTab(btn, tab){
+  activeTab = tab
+  document.querySelectorAll('.top-tab').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  renderThemes()
+}
+
+function setIndustry(btn, ind){
+  activeIndustry = ind
+  document.querySelectorAll('.ind-chip').forEach(b=>b.classList.remove('active'))
+  btn.classList.add('active')
+  renderThemes()
+}
+
+function filterThemes(){
+  searchQ = document.getElementById('search-input').value.toLowerCase()
+  renderThemes()
+}
+
+function sortThemes(val){
+  if(val==='newest') THEMES.sort((a,b)=>b.isNew-a.isNew)
+  else if(val==='price_low') THEMES.sort((a,b)=>a.price-b.price)
+  else if(val==='price_high') THEMES.sort((a,b)=>b.price-a.price)
+  else if(val==='rating') THEMES.sort((a,b)=>b.rating-a.rating)
+  renderThemes()
+}
+
+function toggleSection(btn){
+  const list = btn.nextElementSibling
+  const arrow = btn.querySelector('.ss-arrow')
+  list.classList.toggle('open')
+  arrow.classList.toggle('open')
+}
+
+function toggleFilter(row, cat, val){
+  row.classList.toggle('checked')
+  const cb = row.querySelector('input')
+  cb.checked = !cb.checked
+}
+
+renderThemes()
+</script>

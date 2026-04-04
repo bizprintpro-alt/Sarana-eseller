@@ -1,0 +1,143 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:18px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.col{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.col-head{padding:10px 14px;font-size:12px;font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary)}
+.col-head.now{background:var(--color-background-warning);color:var(--color-text-warning)}
+.col-head.target{background:var(--color-background-success);color:var(--color-text-success)}
+.type-row{display:flex;align-items:flex-start;gap:8px;padding:8px 14px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.type-row:last-child{border-bottom:none}
+.type-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.type-body{flex:1}
+.type-name{font-weight:500;color:var(--color-text-primary);margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.type-sub{font-size:11px;color:var(--color-text-tertiary);line-height:1.5}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:1px 7px;border-radius:99px;white-space:nowrap}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.diff-row{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border-radius:var(--border-radius-md);margin-bottom:6px;font-size:12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary)}
+.diff-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:1px}
+.d-miss{background:var(--color-background-danger);color:var(--color-text-danger)}
+.diff-body{flex:1}
+.diff-title{font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.diff-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.info-box{background:var(--color-background-info);border:0.5px solid var(--color-border-info);border-radius:var(--border-radius-md);padding:10px 13px;margin-top:14px}
+.info-text{font-size:12px;color:var(--color-text-info);line-height:1.7}
+</style>
+
+<div class="w">
+
+<div class="st">Одоогийн 2 vs Байх ёстой 7 төрөл</div>
+<div class="g2">
+  <div class="col">
+    <div class="col-head now">Одоо байгаа — 2 төрөл (дутуу)</div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-info)">🏪</div>
+      <div class="type-body">
+        <div class="type-name">Бараа дэлгүүр <span class="badge b-green">Одоогийн</span></div>
+        <div class="type-sub">Физик болон дижитал бараа борлуулах дэлгүүр</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-secondary)">⚙️</div>
+      <div class="type-body">
+        <div class="type-name">Үйлчилгээний байгууллага</div>
+        <div class="type-sub">Цаг захиалгатай үйлчилгээ: салон, засвар, хэвлэл</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="col-head target">Байх ёстой — 7 төрөл</div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-info)">🏪</div>
+      <div class="type-body">
+        <div class="type-name">Дэлгүүр</div>
+        <div class="type-sub">Бараа удирдлага · Захиалга · Хүргэлт</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-danger)">📦</div>
+      <div class="type-body">
+        <div class="type-name">Захиалгын дэлгүүр <span class="badge b-red">Шинэ</span></div>
+        <div class="type-sub">Гадаадаас захиалж оруулдаг · Pre-order · Batch</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-icon" style="background:#EEEDFE">🏠</div>
+      <div class="type-body">
+        <div class="type-name">Үл хөдлөхийн агент</div>
+        <div class="type-sub">Орон сууц · Газар · Оффис зуучлал</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-success)">🏗️</div>
+      <div class="type-body">
+        <div class="type-name">Барилгын компани</div>
+        <div class="type-sub">Шинэ барилга · Орон сууцны төсөл · VIP</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-warning)">🚗</div>
+      <div class="type-body">
+        <div class="type-name">Авто худалдаа</div>
+        <div class="type-sub">Шинэ болон хуучин автомашин · Тест драйв</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-secondary)">⚙️</div>
+      <div class="type-body">
+        <div class="type-name">Үйлчилгээ</div>
+        <div class="type-sub">Салон · Засвар · Хэвлэл · Сургалт</div>
+      </div>
+    </div>
+    <div class="type-row">
+      <div class="type-icon" style="background:var(--color-background-info)">💾</div>
+      <div class="type-body">
+        <div class="type-name">Файл / Дижитал <span class="badge b-blue">Шинэ</span></div>
+        <div class="type-sub">PDF · ZIP · Видео · Instant download</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="st">Дутуу 5 төрлийн dashboard ялгаа</div>
+
+<div class="diff-row">
+  <div class="diff-icon d-miss">!</div>
+  <div class="diff-body">
+    <div class="diff-title">Захиалгын дэлгүүр — Pre-order систем дутуу</div>
+    <div class="diff-desc">Dashboard: "Захиалгын дараалал", "Ачааны мөрдөлт", "Урьдчилгаа" цэсүүд байхгүй. Энэ нь бусад дэлгүүрээс огт өөр workflow.</div>
+  </div>
+</div>
+<div class="diff-row">
+  <div class="diff-icon d-miss">!</div>
+  <div class="diff-body">
+    <div class="diff-title">Үл хөдлөх / Барилга / Авто — Зар дэлгэц дутуу</div>
+    <div class="diff-desc">Эдгээрт "Бараа" байдаггүй — "Зар", "Байршлын зураг", "Техник үзүүлэлт" байх ёстой. Sidebar nav, dashboard stats бүгд өөр.</div>
+  </div>
+</div>
+<div class="diff-row">
+  <div class="diff-icon d-miss">!</div>
+  <div class="diff-body">
+    <div class="diff-title">Файл / Дижитал — Instant download систем дутуу</div>
+    <div class="diff-desc">Төлбөр хийгдмэгц татах линк автомат явуулах, DRM хамгаалалт, license key — энэ нь бараа дэлгүүрээс бүрэн өөр.</div>
+  </div>
+</div>
+
+<div class="info-box">
+  <div class="info-text">
+    <strong>Санал:</strong> Claude Code-д <code>eseller_seller_types_dashboard_prompts.md</code> файлаа оруулж<br>
+    "Prompt A-г хэрэгжүүл — 7 entity type нэм" гэж хэлбэл бүгдийг нэмж өгнө.<br>
+    Одоо байгаа 2 төрлийн логик хэвээр үлдэнэ, 5 шинэ нэмэгдэнэ.
+  </div>
+</div>
+
+</div>

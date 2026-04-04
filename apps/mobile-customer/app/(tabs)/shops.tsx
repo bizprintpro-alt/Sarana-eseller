@@ -1,249 +1,173 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, TextInput, TouchableOpacity,
-  StyleSheet, Dimensions, FlatList,
+  StyleSheet, FlatList, ActivityIndicator, Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
-const { width } = Dimensions.get('window');
+import { StoresAPI, StoreListItem } from '../lib/api';
 const BRAND = '#E8242C';
 
-// ─── Filters ──────────────────────────────────────────────
-const FILTERS = [
-  { key: 'all', label: 'Бүгд' },
-  { key: 'featured', label: 'Онцлох' },
-  { key: 'new', label: 'Шинэ' },
-  { key: 'afterpay', label: 'Afterpay' },
-  { key: 'top', label: 'Шилдэг' },
+// ─── Entity Type Config (7 types) ────────────────────────
+const ENTITY_TYPES = [
+  { key: 'all', label: 'Бүгд', emoji: '🏪', color: BRAND },
+  { key: 'store', label: 'Дэлгүүр', emoji: '🛍️', color: '#6366F1' },
+  { key: 'service', label: 'Үйлчилгээ', emoji: '⚙️', color: '#8B5CF6' },
+  { key: 'agent', label: 'Агент', emoji: '🏠', color: '#3B82F6' },
+  { key: 'company', label: 'Компани', emoji: '🏗️', color: '#10B981' },
+  { key: 'auto_dealer', label: 'Авто', emoji: '🚗', color: '#F59E0B' },
 ];
 
 const SORT_OPTIONS = [
-  { key: 'popular', label: 'Эрэлттэй' },
   { key: 'newest', label: 'Шинэ' },
   { key: 'rating', label: 'Үнэлгээ' },
-  { key: 'products', label: 'Бараа олонтой' },
+  { key: 'popular', label: 'Эрэлттэй' },
 ];
 
-// ─── Demo Stores ──────────────────────────────────────────
-const STORES = [
-  {
-    id: 's1',
-    name: 'TechZone Mongolia',
-    emoji: '🖥️',
-    date: '2024.06.15',
-    badges: ['Онцлох', 'Afterpay'],
-    products: 45,
-    followers: 1250,
-    rating: 4.9,
-    category: 'Электроник',
-    verified: true,
-    items: [
-      { name: 'iPhone 15 Pro', price: 4200000, emoji: '📱' },
-      { name: 'MacBook Air M3', price: 3800000, emoji: '💻' },
-      { name: 'AirPods Pro', price: 650000, emoji: '🎧' },
-      { name: 'iPad Air', price: 2400000, emoji: '📲' },
-      { name: 'Apple Watch', price: 1200000, emoji: '⌚' },
-    ],
-  },
-  {
-    id: 's2',
-    name: 'Fashion Hub',
-    emoji: '👗',
-    date: '2024.09.20',
-    badges: ['Онцлох'],
-    products: 120,
-    followers: 3400,
-    rating: 4.7,
-    category: 'Хувцас',
-    verified: true,
-    items: [
-      { name: 'Designer цамц', price: 85000, emoji: '👕' },
-      { name: 'Leather цүнх', price: 195000, emoji: '👜' },
-      { name: 'Nike гутал', price: 289000, emoji: '👟' },
-      { name: 'Cashmere sweater', price: 350000, emoji: '🧥' },
-      { name: 'Малгай', price: 45000, emoji: '🧢' },
-    ],
-  },
-  {
-    id: 's3',
-    name: 'Beauty Lab',
-    emoji: '💄',
-    date: '2025.01.10',
-    badges: ['Afterpay'],
-    products: 78,
-    followers: 5600,
-    rating: 4.8,
-    category: 'Гоо сайхан',
-    verified: false,
-    items: [
-      { name: 'Нүүрний крем', price: 68000, emoji: '🧴' },
-      { name: 'Сэрүүн тос', price: 45000, emoji: '✨' },
-      { name: 'Хумс будаг set', price: 35000, emoji: '💅' },
-      { name: 'Нүд будаг', price: 52000, emoji: '👁️' },
-      { name: 'Уруулын будаг', price: 28000, emoji: '💋' },
-    ],
-  },
-  {
-    id: 's4',
-    name: 'Home & Living',
-    emoji: '🏠',
-    date: '2025.03.05',
-    badges: ['Шинэ', 'Онцлох'],
-    products: 34,
-    followers: 890,
-    rating: 4.6,
-    category: 'Гэр ахуй',
-    verified: true,
-    items: [
-      { name: 'LED гэрэл', price: 45000, emoji: '💡' },
-      { name: 'Торгон дэр', price: 65000, emoji: '🛋️' },
-      { name: 'Хөнжил', price: 120000, emoji: '🛏️' },
-      { name: 'Аяга таваг set', price: 85000, emoji: '🍽️' },
-      { name: 'Цэцэг тавиур', price: 38000, emoji: '🌿' },
-    ],
-  },
-  {
-    id: 's5',
-    name: 'Sport Central',
-    emoji: '⚽',
-    date: '2024.11.28',
-    badges: ['Онцлох', 'Afterpay'],
-    products: 92,
-    followers: 2100,
-    rating: 4.7,
-    category: 'Спорт',
-    verified: true,
-    items: [
-      { name: 'Yoga mat', price: 45000, emoji: '🧘' },
-      { name: 'Дасгалын хувцас', price: 75000, emoji: '🏃' },
-      { name: 'Protein powder', price: 95000, emoji: '💪' },
-      { name: 'Бокс бээлий', price: 68000, emoji: '🥊' },
-      { name: 'Сагсан бөмбөг', price: 55000, emoji: '🏀' },
-    ],
-  },
-  {
-    id: 's6',
-    name: 'Kids World',
-    emoji: '🧸',
-    date: '2025.02.14',
-    badges: ['Шинэ'],
-    products: 56,
-    followers: 1800,
-    rating: 4.5,
-    category: 'Хүүхэд',
-    verified: false,
-    items: [
-      { name: 'LEGO set', price: 185000, emoji: '🧱' },
-      { name: 'Хүүхэлдэй', price: 35000, emoji: '🧸' },
-      { name: 'Зургийн ном', price: 15000, emoji: '📚' },
-      { name: 'Усан будаг', price: 22000, emoji: '🎨' },
-      { name: 'Puzzle 1000', price: 28000, emoji: '🧩' },
-    ],
-  },
+// ─── Fallback demo data (shown if API unavailable) ───────
+const FALLBACK_STORES: StoreListItem[] = [
+  { id: 's1', name: 'TechZone Mongolia', slug: 'techzone', industry: 'Электроник', district: 'СБД', entityType: 'store', isVerified: true, rating: 4.9, reviewCount: 45 },
+  { id: 's2', name: 'Fashion Hub', slug: 'fashionhub', industry: 'Хувцас', district: 'ЧД', entityType: 'store', isVerified: true, rating: 4.7, reviewCount: 120 },
+  { id: 's3', name: 'Beauty Lab', slug: 'beautylab', industry: 'Гоо сайхан', district: 'БЗД', entityType: 'service', isVerified: false, rating: 4.8, reviewCount: 78 },
+  { id: 's4', name: 'Home & Living', slug: 'homeliving', industry: 'Гэр ахуй', district: 'ХУД', entityType: 'store', isVerified: true, rating: 4.6, reviewCount: 34 },
+  { id: 's5', name: 'Номин Агент', slug: 'nominagent', industry: 'Үл хөдлөх', district: 'СБД', entityType: 'agent', isVerified: true, rating: 4.9, reviewCount: 89 },
+  { id: 's6', name: 'Монгол Барилга', slug: 'mongolbuild', industry: 'Барилга', district: 'ХУД', entityType: 'company', isVerified: true, rating: 4.5, reviewCount: 23 },
+  { id: 's7', name: 'Auto Mall', slug: 'automall', industry: 'Авто худалдаа', district: 'СХД', entityType: 'auto_dealer', isVerified: false, rating: 4.3, reviewCount: 56 },
 ];
 
-function formatPrice(n: number) { return n.toLocaleString() + '₮'; }
+const ENTITY_EMOJI: Record<string, string> = {
+  store: '🛍️', agent: '🏠', company: '🏗️', auto_dealer: '🚗', service: '��️',
+};
 
-// ─── Store Card ───────────────────────────────────────────
-function StoreCard({ store }: { store: typeof STORES[0] }) {
+function getEntityColor(type: string): string {
+  return ENTITY_TYPES.find((t) => t.key === type)?.color || '#777';
+}
+
+// ─── Store Card ──────────────────────────────────────────
+function StoreCard({ store }: { store: StoreListItem }) {
+  const emoji = ENTITY_EMOJI[store.entityType] || '🏪';
+  const color = getEntityColor(store.entityType);
+  const typeName = ENTITY_TYPES.find((t) => t.key === store.entityType)?.label || store.entityType;
+
   return (
-    <View style={s.storeCard}>
+    <TouchableOpacity style={s.storeCard} activeOpacity={0.8}
+      onPress={() => router.push(`/store/${store.slug}` as any)}>
       {/* Header */}
       <View style={s.storeHeader}>
         <View style={s.storeLogo}>
-          <Text style={{ fontSize: 28 }}>{store.emoji}</Text>
+          {store.logo ? (
+            <Image source={{ uri: store.logo }} style={{ width: 48, height: 48, borderRadius: 24 }} />
+          ) : (
+            <Text style={{ fontSize: 28 }}>{emoji}</Text>
+          )}
         </View>
         <View style={s.storeInfo}>
           <View style={s.storeNameRow}>
             <Text style={s.storeName} numberOfLines={1}>{store.name}</Text>
-            {store.verified && (
+            {store.isVerified && (
               <Ionicons name="checkmark-circle" size={16} color="#3B82F6" />
             )}
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
-            <Ionicons name="calendar-outline" size={12} color="#777" />
-            <Text style={s.storeDate}>{store.date}</Text>
-            <Text style={s.storeCat}>· {store.category}</Text>
+            {store.district && (
+              <>
+                <Ionicons name="location-outline" size={12} color="#777" />
+                <Text style={s.storeDate}>{store.district}</Text>
+              </>
+            )}
+            {store.industry && <Text style={s.storeCat}>· {store.industry}</Text>}
           </View>
+          {/* Entity type badge */}
           <View style={s.badgeRow}>
-            {store.badges.map((badge) => (
-              <View key={badge} style={[s.badge,
-                badge === 'Онцлох' && s.badgeFeatured,
-                badge === 'Afterpay' && s.badgeAfterpay,
-                badge === 'Шинэ' && s.badgeNew,
-              ]}>
-                {badge === 'Afterpay' && <Ionicons name="checkmark-circle" size={10} color="#22C55E" />}
-                <Text style={[s.badgeText,
-                  badge === 'Онцлох' && { color: '#6366F1' },
-                  badge === 'Afterpay' && { color: '#22C55E' },
-                  badge === 'Шинэ' && { color: '#F59E0B' },
-                ]}>{badge}</Text>
-              </View>
-            ))}
+            <View style={[s.badge, { backgroundColor: color + '20' }]}>
+              <Text style={[s.badgeText, { color }]}>{typeName}</Text>
+            </View>
           </View>
         </View>
-        <TouchableOpacity style={s.followBtn}>
-          <Ionicons name="heart-outline" size={14} color={BRAND} />
-          <Text style={s.followText}>Дагах</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Stats */}
       <View style={s.statsRow}>
-        <View style={s.stat}>
-          <Ionicons name="bag-outline" size={14} color="#A0A0A0" />
-          <Text style={s.statText}>{store.products} бараа</Text>
-        </View>
-        <View style={s.stat}>
-          <Ionicons name="people-outline" size={14} color="#A0A0A0" />
-          <Text style={s.statText}>{store.followers.toLocaleString()} дагагч</Text>
-        </View>
-        <View style={s.stat}>
-          <Ionicons name="star" size={14} color="#F59E0B" />
-          <Text style={s.statText}>{store.rating}</Text>
-        </View>
+        {store.rating != null && (
+          <View style={s.stat}>
+            <Ionicons name="star" size={14} color="#F59E0B" />
+            <Text style={s.statText}>{store.rating.toFixed(1)}</Text>
+          </View>
+        )}
+        {store.reviewCount != null && (
+          <View style={s.stat}>
+            <Ionicons name="chatbubble-outline" size={14} color="#A0A0A0" />
+            <Text style={s.statText}>{store.reviewCount} сэтгэгдэл</Text>
+          </View>
+        )}
+        {store.phone && (
+          <View style={s.stat}>
+            <Ionicons name="call-outline" size={14} color="#A0A0A0" />
+            <Text style={s.statText}>{store.phone}</Text>
+          </View>
+        )}
       </View>
 
-      {/* Product Preview */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 14, gap: 8, paddingVertical: 4 }}>
-        {store.items.map((item, i) => (
-          <TouchableOpacity key={i} style={s.previewItem} activeOpacity={0.8}>
-            <View style={s.previewImage}>
-              <Text style={{ fontSize: 28 }}>{item.emoji}</Text>
-            </View>
-            <View style={s.previewPrice}>
-              <Text style={s.previewPriceText}>{formatPrice(item.price)}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
       {/* View Store */}
-      <TouchableOpacity style={s.viewStoreBtn} activeOpacity={0.7}>
+      <TouchableOpacity style={s.viewStoreBtn} activeOpacity={0.7}
+        onPress={() => router.push(`/store/${store.slug}` as any)}>
         <Text style={s.viewStoreText}>Дэлгүүр үзэх</Text>
         <Ionicons name="arrow-forward" size={14} color={BRAND} />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 }
 
-// ─── Main Screen ──────────────────────────────────────────
+// ─── Main Screen ─────────────────────────────────────────
 export default function ShopsScreen() {
   const [search, setSearch] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeType, setActiveType] = useState('all');
+  const [activeSort, setActiveSort] = useState('newest');
   const [showSort, setShowSort] = useState(false);
-  const [activeSort, setActiveSort] = useState('popular');
 
-  const filtered = STORES.filter((store) => {
-    if (search && !store.name.toLowerCase().includes(search.toLowerCase())) return false;
-    if (activeFilter === 'featured') return store.badges.includes('Онцлох');
-    if (activeFilter === 'new') return store.badges.includes('Шинэ');
-    if (activeFilter === 'afterpay') return store.badges.includes('Afterpay');
-    if (activeFilter === 'top') return store.rating >= 4.7;
-    return true;
-  });
+  // API state
+  const [stores, setStores] = useState<StoreListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [usingFallback, setUsingFallback] = useState(false);
+
+  // Fetch stores from API
+  const fetchStores = async () => {
+    setLoading(true);
+    try {
+      const params: Record<string, string> = { sort: activeSort };
+      if (activeType !== 'all') params.type = activeType;
+      if (search.trim()) params.search = search.trim();
+
+      const res = await StoresAPI.list(params);
+      if (res.stores && res.stores.length > 0) {
+        setStores(res.stores);
+        setUsingFallback(false);
+      } else {
+        // API returned empty — use fallback filtered
+        setStores(FALLBACK_STORES);
+        setUsingFallback(true);
+      }
+    } catch {
+      // API unavailable — use fallback
+      setStores(FALLBACK_STORES);
+      setUsingFallback(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStores();
+  }, [activeType, activeSort]);
+
+  // Local filtering for fallback data
+  const filtered = usingFallback
+    ? stores.filter((store) => {
+        if (search && !store.name.toLowerCase().includes(search.toLowerCase())) return false;
+        if (activeType !== 'all' && store.entityType !== activeType) return false;
+        return true;
+      })
+    : stores;
 
   return (
     <View style={s.container}>
@@ -257,6 +181,8 @@ export default function ShopsScreen() {
             onChangeText={setSearch}
             placeholder="Дэлгүүр хайх..."
             placeholderTextColor="#555"
+            onSubmitEditing={fetchStores}
+            returnKeyType="search"
           />
         </View>
         <TouchableOpacity style={s.sortBtn} onPress={() => setShowSort(!showSort)}>
@@ -277,44 +203,56 @@ export default function ShopsScreen() {
         </View>
       )}
 
-      {/* Filter Pills */}
-      <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 12 }}>
-        {FILTERS.map((f) => (
-          <TouchableOpacity key={f.key}
-            style={[s.filterPill, activeFilter === f.key && s.filterPillActive, { marginRight: 10 }]}
-            onPress={() => setActiveFilter(f.key)}>
-            <Text style={[s.filterText, activeFilter === f.key && s.filterTextActive]}>{f.label}</Text>
+      {/* Entity Type Filter — 7 types */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 12, gap: 8 }}>
+        {ENTITY_TYPES.map((t) => (
+          <TouchableOpacity key={t.key}
+            style={[s.filterPill, activeType === t.key && { backgroundColor: t.color, borderColor: t.color }]}
+            onPress={() => setActiveType(t.key)}>
+            <Text style={{ fontSize: 14 }}>{t.emoji}</Text>
+            <Text style={[s.filterText, activeType === t.key && s.filterTextActive]}>{t.label}</Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </ScrollView>
 
       {/* Stats Bar */}
       <View style={s.resultBar}>
         <Text style={s.resultText}>
           <Text style={{ fontWeight: '800', color: '#FFF' }}>{filtered.length}</Text> дэлгүүр олдлоо
         </Text>
+        {usingFallback && (
+          <Text style={{ fontSize: 10, color: '#555' }}>(demo data)</Text>
+        )}
       </View>
 
       {/* Store List */}
-      <FlatList
-        data={filtered}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <StoreCard store={item} />}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 40, gap: 16 }}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={s.emptyState}>
-            <Text style={{ fontSize: 48 }}>🏪</Text>
-            <Text style={s.emptyTitle}>Дэлгүүр олдсонгүй</Text>
-            <Text style={s.emptyText}>Хайлтын утгаа өөрчилнө үү</Text>
-          </View>
-        }
-      />
+      {loading ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color={BRAND} />
+          <Text style={{ color: '#777', marginTop: 12, fontSize: 13 }}>Дэлгүүрүүд ачааллаж байна...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filtered}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <StoreCard store={item} />}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 40, gap: 16 }}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={s.emptyState}>
+              <Text style={{ fontSize: 48 }}>🏪</Text>
+              <Text style={s.emptyTitle}>Дэлгүүр олдсонгүй</Text>
+              <Text style={s.emptyText}>Хайлтын утгаа өөрчилнө үү</Text>
+            </View>
+          }
+        />
+      )}
     </View>
   );
 }
 
-// ─── Styles ───────────────────────────────────────────────
+// ─── Styles ────────���─────────────────────────��───────────
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0A0A0A' },
 
@@ -331,13 +269,12 @@ const s = StyleSheet.create({
   sortOptionText: { fontSize: 14, fontWeight: '600', color: '#A0A0A0' },
 
   // Filters
-  filterPill: { height: 38, paddingHorizontal: 20, borderRadius: 19, backgroundColor: '#1A1A1A', borderWidth: 1, borderColor: '#3D3D3D', justifyContent: 'center' as const, alignItems: 'center' as const },
-  filterPillActive: { backgroundColor: BRAND, borderColor: BRAND },
-  filterText: { fontSize: 14, fontWeight: '700', color: '#CCCCCC', includeFontPadding: false },
+  filterPill: { flexDirection: 'row', alignItems: 'center', gap: 6, height: 38, paddingHorizontal: 16, borderRadius: 19, backgroundColor: '#1A1A1A', borderWidth: 1, borderColor: '#3D3D3D' },
+  filterText: { fontSize: 13, fontWeight: '700', color: '#CCCCCC' },
   filterTextActive: { color: '#FFFFFF' },
 
   // Result bar
-  resultBar: { paddingHorizontal: 16, paddingBottom: 12 },
+  resultBar: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingBottom: 12 },
   resultText: { fontSize: 13, color: '#777' },
 
   // Store Card
@@ -351,28 +288,15 @@ const s = StyleSheet.create({
   storeCat: { fontSize: 11, color: '#555' },
   badgeRow: { flexDirection: 'row', gap: 6, marginTop: 6 },
   badge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  badgeFeatured: { backgroundColor: 'rgba(99,102,241,0.15)' },
-  badgeAfterpay: { backgroundColor: 'rgba(34,197,94,0.15)' },
-  badgeNew: { backgroundColor: 'rgba(245,158,11,0.15)' },
   badgeText: { fontSize: 10, fontWeight: '700' },
-
-  // Follow
-  followBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(232,36,44,0.1)', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20, borderWidth: 0.5, borderColor: 'rgba(232,36,44,0.2)' },
-  followText: { fontSize: 12, fontWeight: '700', color: BRAND },
 
   // Stats
   statsRow: { flexDirection: 'row', paddingHorizontal: 14, paddingVertical: 12, gap: 16 },
   stat: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   statText: { fontSize: 12, color: '#A0A0A0', fontWeight: '500' },
 
-  // Preview Items
-  previewItem: { width: 80, position: 'relative' },
-  previewImage: { width: 80, height: 80, borderRadius: 10, backgroundColor: '#2A2A2A', alignItems: 'center', justifyContent: 'center', borderWidth: 0.5, borderColor: '#3D3D3D' },
-  previewPrice: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: 'rgba(0,0,0,0.7)', borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingVertical: 3 },
-  previewPriceText: { fontSize: 9, fontWeight: '700', color: '#FFF', textAlign: 'center' },
-
   // View Store
-  viewStoreBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 14, borderTopWidth: 0.5, borderTopColor: '#2A2A2A', marginTop: 12 },
+  viewStoreBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 14, borderTopWidth: 0.5, borderTopColor: '#2A2A2A', marginTop: 4 },
   viewStoreText: { fontSize: 13, fontWeight: '700', color: BRAND },
 
   // Empty

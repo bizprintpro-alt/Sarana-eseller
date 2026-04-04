@@ -1,0 +1,615 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+
+.sum-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:2rem}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px}
+.sl{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.sv{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.sd{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:8px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;margin-top:18px}
+.st:first-child{margin-top:0}
+
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-teal{background:#E1F5EE;color:#0F6E56}
+.b-gold{background:#FAEEDA;color:#633806}
+
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px;cursor:pointer;transition:border-color .12s}
+.card:hover{border-color:var(--color-border-secondary)}
+.ch{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;gap:8px}
+.cn{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.cd{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:8px}
+.cl{font-size:11px;color:var(--color-text-secondary);line-height:1.9}
+.price-tag{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-top:8px}
+.price-sub{font-size:10px;color:var(--color-text-tertiary)}
+
+.placement-mockup{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px;font-size:12px}
+.mock-row{display:flex;gap:6px;align-items:center;margin-bottom:6px;font-size:11px;color:var(--color-text-secondary)}
+.mock-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.zone{border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--color-text-primary)}
+.z-hero{background:var(--color-background-danger);height:44px;width:100%;margin-bottom:6px;color:var(--color-text-danger)}
+.z-bar{background:var(--color-background-warning);height:22px;width:100%;margin-bottom:6px;color:var(--color-text-warning)}
+.z-nav{background:var(--color-background-info);height:22px;width:100%;margin-bottom:6px;color:var(--color-text-info)}
+.z-card{background:var(--color-background-success);height:60px;flex:1;color:var(--color-text-success)}
+.z-side{background:var(--color-background-info);width:90px;height:120px;flex-shrink:0;color:var(--color-text-info)}
+.z-inline{background:var(--color-background-warning);height:44px;width:100%;margin-bottom:6px;color:var(--color-text-warning)}
+.z-product{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);height:60px;flex:1;color:var(--color-text-tertiary)}
+.z-native{background:#EEEDFE;height:60px;flex:1;color:#3C3489}
+.z-popup{background:var(--color-background-danger);height:80px;width:180px;margin:0 auto;color:var(--color-text-danger)}
+
+.revenue-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.revenue-row:last-child{border-bottom:none}
+.rev-num{font-size:18px;font-weight:500;min-width:48px;text-align:right}
+.rev-bar-wrap{flex:1;height:6px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden}
+.rev-bar{height:100%;border-radius:99px}
+.rev-name{font-size:12px;color:var(--color-text-secondary);min-width:160px}
+.rev-note{font-size:11px;color:var(--color-text-tertiary)}
+
+.trend-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:10px}
+.trend-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.trend-icon{width:28px;height:28px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.trend-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.trend-desc{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.trend-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+
+.roadmap-row{display:flex;gap:10px;margin-bottom:14px}
+.road-col{flex:1;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.road-phase{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.road-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px}
+.road-list{font-size:11px;color:var(--color-text-secondary);line-height:1.9}
+
+.calc-box{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.calc-row:last-child{border-bottom:none;font-weight:500;font-size:13px}
+.calc-key{color:var(--color-text-secondary)}
+.calc-val{color:var(--color-text-primary);font-family:var(--font-mono)}
+
+.btn-sm{border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;transition:background .12s}
+.btn-sm:hover{background:var(--color-background-secondary)}
+.btn-p{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info)}
+</style>
+
+<div class="w">
+
+<div class="sum-bar">
+  <div class="sc"><div class="sl">Орлогын эх үүсвэр</div><div class="sv">14+</div><div class="sd">Тодорхойлогдсон</div></div>
+  <div class="sc"><div class="sl">Потенциал MRR</div><div class="sv" style="color:var(--color-text-success)">~42M₮</div><div class="sd">Жилийн тооцоо</div></div>
+  <div class="sc"><div class="sl">Баннерын байршил</div><div class="sv">8</div><div class="sd">Хамгийн үр дүнтэй</div></div>
+  <div class="sc"><div class="sl">2026 тренд</div><div class="sv">6</div><div class="sd">Нэн тэргүүн</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('revenue')">Орлогын загвар</button>
+  <button class="tab" onclick="show('banners')">Баннер байршил</button>
+  <button class="tab" onclick="show('marketing')">Имэйл / SMS</button>
+  <button class="tab" onclick="show('trends')">2026 тренд</button>
+  <button class="tab" onclick="show('calc')">Орлого тооцоолуур</button>
+  <button class="tab" onclick="show('roadmap')">Хэрэгжилтийн төлөвлөгөө</button>
+</div>
+
+<!-- REVENUE MODEL -->
+<div id="panel-revenue" class="panel active">
+  <div class="st">Орлогын 14+ эх үүсвэр — эрэмбэлэгдсэн</div>
+
+  <div style="margin-bottom:14px">
+    <div class="revenue-row">
+      <span class="rev-name">Төлбөртэй баннер (Hero/VIP)</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:90%;background:var(--color-text-danger)"></div></div>
+      <span class="rev-num" style="color:var(--color-text-danger)">9M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Онцлох / Featured байршил</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:75%;background:var(--color-text-warning)"></div></div>
+      <span class="rev-num" style="color:var(--color-text-warning)">7M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Гүйлгээний комисс (2-5%)</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:65%;background:var(--color-text-success)"></div></div>
+      <span class="rev-num" style="color:var(--color-text-success)">6M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Pro дэлгүүрийн subscripiton</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:50%;background:var(--color-text-info)"></div></div>
+      <span class="rev-num" style="color:var(--color-text-info)">5M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">SMS / Email маркетинг кампани</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:40%;background:#7F77DD"></div></div>
+      <span class="rev-num" style="color:#7F77DD">4M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Push notification кампани</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:30%;background:var(--color-text-tertiary)"></div></div>
+      <span class="rev-num">3M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Affiliate / Referral программ</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:25%;background:var(--color-text-tertiary)"></div></div>
+      <span class="rev-num">2.5M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Native sponsored content</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:22%;background:var(--color-text-tertiary)"></div></div>
+      <span class="rev-num">2.2M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Хүргэлтийн комисс</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:18%;background:var(--color-text-tertiary)"></div></div>
+      <span class="rev-num">1.8M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+    <div class="revenue-row">
+      <span class="rev-name">Data / Analytics тайлан</span>
+      <div class="rev-bar-wrap"><div class="rev-bar" style="width:14%;background:var(--color-text-tertiary)"></div></div>
+      <span class="rev-num">1.4M₮</span>
+      <span class="rev-note">/сар</span>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card" onclick="sendPrompt('Баннерын төлбөрийн системийг Claude Code промпт болгон бэлтгэж өгнө үү')">
+      <div class="ch"><span class="cn">Баннер / Байршил</span><span class="badge b-red">Хамгийн өндөр</span></div>
+      <div class="cd">Hero баннер, VIP байршил, sidebar, in-feed native. CPM болон flat-rate хоёуланг дэмжих.</div>
+      <div class="cl">· Hero 7 хоног: 500,000₮<br>· Hero 30 хоног: 1,500,000₮<br>· In-feed sponsored: 200,000₮<br>· Sidebar 30 хоног: 300,000₮</div>
+    </div>
+    <div class="card" onclick="sendPrompt('SMS/Email маркетингийн модулийн Claude Code промпт бэлтгэж өгнө үү')">
+      <div class="ch"><span class="cn">Маркетинг каналууд</span><span class="badge b-purple">Давтагдах</span></div>
+      <div class="cd">SMS blast, имэйл кампани, push notification — дэлгүүр эзэн өөрийн үйлчлүүлэгчид илгээнэ.</div>
+      <div class="cl">· SMS: 50₮/хүн (min 1000)<br>· Имэйл: 20₮/хүн (min 500)<br>· Push: 10₮/хүн (min 500)<br>· Автомат: сарын 50,000₮+</div>
+    </div>
+    <div class="card" onclick="sendPrompt('Subscription болон комиссын модулийн Claude Code промпт бэлтгэж өгнө үү')">
+      <div class="ch"><span class="cn">Subscription + комисс</span><span class="badge b-green">Тогтвортой</span></div>
+      <div class="cd">Сарын гишүүнчлэл + гүйлгээний % комисс. Хамтад нь хамгийн тогтвортой орлого.</div>
+      <div class="cl">· Basic: үнэгүй (5% комисс)<br>· Pro: 29,900₮/сар (2.5%)<br>· Business: 89,900₮/сар (1.5%)<br>· Enterprise: тохиролцоогоор</div>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER PLACEMENTS -->
+<div id="panel-banners" class="panel">
+  <div class="st">8 баннерын байршил — нүүр хуудасны зураглал</div>
+
+  <div class="placement-mockup">
+    <div class="mock-label">Нүүр хуудасны бүтэц — баннерын байршилтай</div>
+
+    <div class="zone z-nav">① Navbar announcement bar — 22px, marquee</div>
+
+    <div class="zone z-hero">② Hero carousel баннер — 420px өндөр · Хамгийн үнэтэй · Swiper автомат</div>
+
+    <div style="display:flex;gap:6px;margin-bottom:6px">
+      <div class="zone z-card">③ Feature pill</div>
+      <div class="zone z-card">③ Feature pill</div>
+      <div class="zone z-card">③ Feature pill</div>
+      <div class="zone z-card">③ Feature pill</div>
+    </div>
+
+    <div class="zone z-bar">④ Mid-page баннер мөр — horizontal scroll sponsored</div>
+
+    <div style="display:flex;gap:6px;margin-bottom:6px">
+      <div style="flex:1">
+        <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px">Хямдралтай бараа grid</div>
+        <div style="display:flex;gap:4px">
+          <div class="zone z-product" style="height:50px;font-size:10px">Бараа</div>
+          <div class="zone z-native" style="height:50px;font-size:10px">⑤ Native</div>
+          <div class="zone z-product" style="height:50px;font-size:10px">Бараа</div>
+          <div class="zone z-native" style="height:50px;font-size:10px">⑤ Native</div>
+          <div class="zone z-product" style="height:50px;font-size:10px">Бараа</div>
+        </div>
+      </div>
+      <div class="zone z-side" style="font-size:10px;text-align:center;padding:4px">⑥ Sidebar<br>sticky<br>баннер</div>
+    </div>
+
+    <div class="zone z-inline">⑦ Section separator баннер — ангилалуудын хооронд</div>
+
+    <div style="display:flex;gap:4px;margin-bottom:6px">
+      <div class="zone z-product" style="height:50px;font-size:10px">Бараа</div>
+      <div class="zone z-product" style="height:50px;font-size:10px">Бараа</div>
+      <div class="zone z-native" style="height:50px;font-size:10px">⑧ Native ad</div>
+      <div class="zone z-product" style="height:50px;font-size:10px">Бараа</div>
+      <div class="zone z-product" style="height:50px;font-size:10px">Бараа</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><span class="cn">① Announcement bar</span><span class="badge b-warn">Хөнгөн</span></div>
+      <div class="cd">Navbar доорх 22px хөдөлгөөнтэй мөр. Маркетинг мэдэгдэл, купон код, flash sale.</div>
+      <div class="cl">· Flat rate: 50,000–150,000₮/7 хоног<br>· 3-5 мессеж ротейт<br>· Emoji + текст дэмжих<br>· CTR дунджаар 1.8%</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">② Hero carousel</span><span class="badge b-red">Хамгийн үнэтэй</span></div>
+      <div class="cd">Нүүр хуудасны гол баннер. Бренд awareness хамгийн өндөр. 5 секунд автоматаар солигдоно.</div>
+      <div class="cl">· 7 хоног: 500,000₮<br>· 30 хоног: 1,500,000₮<br>· Үзэгдэх байдал: 100%<br>· CTR дунджаар 3.2%</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">⑤ In-feed native ad</span><span class="badge b-purple">2026 тренд</span></div>
+      <div class="cd">Бараа картын дунд байрлах "Сурталчилгаа" тэмдэглэгдсэн sponsored карт. Хамгийн organic харагдах.</div>
+      <div class="cl">· CPM загвар: 5,000₮/1000 харагдалт<br>· Бараа картын яг загвараар<br>· Click → бараа/дэлгүүрийн хуудас<br>· CTR дунджаар 2.8%</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">⑥ Sticky sidebar</span><span class="badge b-blue">Desktop</span></div>
+      <div class="cd">Хуудас гүйлгэхэд хамт хөдөлдөг баруун талын баннер. Desktop-т л харагдана.</div>
+      <div class="cl">· 30 хоног: 300,000₮<br>· 300x600 pixel<br>· Scroll-ийг дагадаг sticky<br>· Impression: өндөр</div>
+    </div>
+  </div>
+
+  <div class="st">Баннер үнийн матриц</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px;font-size:12px">
+    <div style="display:grid;grid-template-columns:1fr 80px 100px 100px 100px;gap:0;font-size:11px">
+      <div style="font-weight:500;color:var(--color-text-tertiary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)">Байршил</div>
+      <div style="font-weight:500;color:var(--color-text-tertiary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right">CTR</div>
+      <div style="font-weight:500;color:var(--color-text-tertiary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right">7 хоног</div>
+      <div style="font-weight:500;color:var(--color-text-tertiary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right">30 хоног</div>
+      <div style="font-weight:500;color:var(--color-text-tertiary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right">3 сар</div>
+      <div style="color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)">Hero carousel</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;color:var(--color-text-success)">3.2%</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">500K₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">1.5M₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">3.5M₮</div>
+      <div style="color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)">Announcement bar</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;color:var(--color-text-success)">1.8%</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">50K₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">150K₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">400K₮</div>
+      <div style="color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)">In-feed native</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;color:var(--color-text-success)">2.8%</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">200K₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">600K₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">1.5M₮</div>
+      <div style="color:var(--color-text-secondary);padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)">Section separator</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;color:var(--color-text-warning)">1.2%</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">100K₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">300K₮</div>
+      <div style="padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);text-align:right;font-family:var(--font-mono)">750K₮</div>
+      <div style="color:var(--color-text-secondary);padding:6px 0">Sticky sidebar</div>
+      <div style="padding:6px 0;text-align:right;color:var(--color-text-warning)">0.9%</div>
+      <div style="padding:6px 0;text-align:right;font-family:var(--font-mono)">120K₮</div>
+      <div style="padding:6px 0;text-align:right;font-family:var(--font-mono)">320K₮</div>
+      <div style="padding:6px 0;text-align:right;font-family:var(--font-mono)">800K₮</div>
+    </div>
+  </div>
+</div>
+
+<!-- EMAIL / SMS -->
+<div id="panel-marketing" class="panel">
+  <div class="st">Имэйл, SMS, Push — маркетингийн бүрэн экосистем</div>
+
+  <div class="g3">
+    <div class="card">
+      <div class="ch"><span class="cn">SMS маркетинг</span><span class="badge b-red">Хамгийн өндөр CTR</span></div>
+      <div class="cd">Монголд имэйлийн открэйт 22% vs SMS 95%+. Дэлгүүр эзэд өөрийн бааз руу илгээнэ.</div>
+      <div class="cl">· Bulk SMS: 50₮/мессеж<br>· Minimum: 1,000 хүлээн авагч<br>· Personalization: нэр, сонирхол<br>· Цаг товлох: schedule<br>· Unsubscribe автомат</div>
+      <div class="price-tag">~50,000₮ кампани</div>
+      <div class="price-sub">1,000 хүн × 50₮</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Имэйл кампани</span><span class="badge b-blue">Хямд, үр дүнтэй</span></div>
+      <div class="cd">Resend / Brevo ашиглан HTML template-тэй имэйл. A/B тест, open rate tracking.</div>
+      <div class="cl">· Үнэ: 20₮/имэйл<br>· Minimum: 500 хүлээн авагч<br>· Template: newsletter, хямдрал, захиалгын баталгаа<br>· Автомат: сагс орхисон, WB<br>· Open/click tracking</div>
+      <div class="price-tag">~10,000₮ кампани</div>
+      <div class="price-sub">500 хүн × 20₮</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Push notification</span><span class="badge b-teal">Мобайл</span></div>
+      <div class="cd">Апп суулгасан хэрэглэгчдэд шууд push. Хамгийн хямд, хамгийн хурдан.</div>
+      <div class="cl">· Үнэ: 10₮/хүн<br>· Minimum: 500 хүн<br>· Rich push: зураг + CTA товч<br>· Geofencing: байршлаас хамаарсан<br>· Click tracking + conversion</div>
+      <div class="price-tag">~5,000₮ кампани</div>
+      <div class="price-sub">500 хүн × 10₮</div>
+    </div>
+  </div>
+
+  <div class="st">Автомат маркетингийн урсгалууд</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><span class="cn">Сагс орхисон хэрэглэгч</span><span class="badge b-gold">Өндөр conversion</span></div>
+      <div class="cd">Хэрэглэгч сагсаа орхиод 1 цаг болсон бол автомат мэдэгдэл илгээнэ.</div>
+      <div class="cl">· 1 цагийн дараа: Push "Сагсаа мартсан уу?"<br>· 24 цагийн дараа: Имэйл + 5% хямдрал купон<br>· 72 цагийн дараа: SMS "Сүүлийн боломж"<br>· Conversion rate: 8-12%</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Үнийн бууралтын мэдэгдэл</span><span class="badge b-green">Wishlist хэрэглэгч</span></div>
+      <div class="cd">Хэрэглэгчийн хүслийн жагсаалтад байгаа бараа хямдарвал автомат мэдэгдэл.</div>
+      <div class="cl">· Ямар ч % буурсан бол push<br>· 20%+ бол SMS нэмж илгээх<br>· Бараа зарагдах дөхсөн бол "3 ширхэг үлдлээ"<br>· Conversion rate: 15-22%</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Давтагдах захиалга сануулагч</span><span class="badge b-purple">LTV нэмэгдүүлэх</span></div>
+      <div class="cd">Өмнөх захиалгад үндэслэн "Дахин захиалах цаг болсон уу?" автомат.</div>
+      <div class="cl">· Хоол: 2-3 долоо хоногт 1<br>· Гоо сайхан: 45-60 хоногт 1<br>· Гэр ахуй: улирал бүр<br>· Personalized product suggest</div>
+    </div>
+    <div class="card">
+      <div class="ch"><span class="cn">Шинэ хэрэглэгч onboarding</span><span class="badge b-blue">Retention</span></div>
+      <div class="cd">Бүртгүүлсний дараах 7 хоногийн автомат дараалал.</div>
+      <div class="cl">· Өдөр 1: Тавтай морил + 10,000₮ купон<br>· Өдөр 3: Ойр дэлгүүрүүд харуулах<br>· Өдөр 7: Хамгийн их зарагдаж байгаа бараа<br>· CTR: 35-45%</div>
+    </div>
+  </div>
+</div>
+
+<!-- 2026 TRENDS -->
+<div id="panel-trends" class="panel">
+  <div class="st">2026 оны 6 хамгийн чухал монетизацийн тренд</div>
+
+  <div class="trend-card">
+    <div class="trend-head">
+      <div class="trend-icon" style="background:var(--color-background-danger)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-danger)" stroke-width="1.5"><path d="M8 2l1.5 3 3.5.5-2.5 2.5.6 3.5L8 10l-3.1 1.5.6-3.5L3 5.5 6.5 5Z"/></svg>
+      </div>
+      <span class="trend-title">AI-powered персонализаци (Retail Media Network)</span>
+      <span class="badge b-red">Хамгийн чухал</span>
+    </div>
+    <div class="trend-desc">2026-д Amazon, Shopify бүгд Retail Media Network байгуулсан. Eseller-ийн хэрэглэгчийн дата ашиглан дэлгүүр эздэд зорилтот аудитори санал болгох. "Таны барааг хамгийн их сонирхдог хэрэглэгчид" гэдэг audience таргетинг — Google Ads-тай адил зарчим, гэхдээ Eseller-ийн платформ дотор.</div>
+    <div class="trend-tags">
+      <span class="badge b-red">Retail Media</span>
+      <span class="badge b-gray">AI targeting</span>
+      <span class="badge b-gray">First-party data</span>
+      <span class="badge b-gray">CPM + CPC загвар</span>
+    </div>
+  </div>
+
+  <div class="trend-card">
+    <div class="trend-head">
+      <div class="trend-icon" style="background:var(--color-background-info)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-info)" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+      </div>
+      <span class="trend-title">Shoppable video / Live commerce</span>
+      <span class="badge b-blue">TikTok Shop загвар</span>
+    </div>
+    <div class="trend-desc">Дэлгүүр эзэн live stream хийж, үзэгч шууд захиалга хийнэ. TikTok Shop 2025-д АНУ-д $20B+ гүйлгээ хийсэн. Монголд Facebook Live худалдаа маш идэвхтэй — Eseller-т platform дотор live commerce нэмэх боломж. Бараа tag хийх, шууд сагсанд нэмэх.</div>
+    <div class="trend-tags">
+      <span class="badge b-blue">Live streaming</span>
+      <span class="badge b-gray">WebRTC</span>
+      <span class="badge b-gray">In-stream purchase</span>
+      <span class="badge b-gray">Revenue share 5-10%</span>
+    </div>
+  </div>
+
+  <div class="trend-card">
+    <div class="trend-head">
+      <div class="trend-icon" style="background:var(--color-background-success)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-success)" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      </div>
+      <span class="trend-title">BNPL — "Хожим төл" (Buy Now Pay Later)</span>
+      <span class="badge b-green">Монголд бэлэн зах</span>
+    </div>
+    <div class="trend-desc">Checkout дээр "3 сарын хуваан төлөлт" товч нэмэх. Банктай хамтран ажиллах (Khan Bank, TDB). Eseller нь хуваан төлөлт бүрт 1-3% шимтгэл авна. Монголын хэрэглэгчид зээлийн карт ашиглах дадал өссөн — BNPL-ийн зах зээл хурдан өсч байна.</div>
+    <div class="trend-tags">
+      <span class="badge b-green">BNPL</span>
+      <span class="badge b-gray">Khan Bank API</span>
+      <span class="badge b-gray">1-3% комисс</span>
+      <span class="badge b-gray">Conversion +23%</span>
+    </div>
+  </div>
+
+  <div class="trend-card">
+    <div class="trend-head">
+      <div class="trend-icon" style="background:var(--color-background-warning)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-warning)" stroke-width="1.5"><path d="M3 8h10M8 3v10"/></svg>
+      </div>
+      <span class="trend-title">Gamification + Loyalty points</span>
+      <span class="badge b-warn">Retention тренд</span>
+    </div>
+    <div class="trend-desc">Захиалга хийх бүрт "Eseller оноо" цуглуулах. Оноогоо хямдрал, купон болгон ашиглах. Premium мэмбершип (Eseller Gold/Platinum) — жилийн 49,900₮ төлж онцгой давуу тал авах. Amazon Prime загвар. Монголын хэрэглэгчдэд оноо цуглуулах сэтгэл зүй маш сайн ажилладаг.</div>
+    <div class="trend-tags">
+      <span class="badge b-warn">Loyalty points</span>
+      <span class="badge b-gray">Gold membership</span>
+      <span class="badge b-gray">49,900₮/жил</span>
+      <span class="badge b-gray">LTV +40%</span>
+    </div>
+  </div>
+
+  <div class="trend-card">
+    <div class="trend-head">
+      <div class="trend-icon" style="background:var(--color-background-secondary)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+      </div>
+      <span class="trend-title">Influencer / Creator marketplace</span>
+      <span class="badge b-purple">Community-led</span>
+    </div>
+    <div class="trend-desc">Influencer-ийн контент → Eseller бараа линк → захиалга → автомат комисс. Creator dashboard: өөрийн affiliate link, орлогын тайлан, performance дата. Монголын социал медиа хэрэглэгчид маш идэвхтэй — бренд коллаб зах зээл огцом өссөн.</div>
+    <div class="trend-tags">
+      <span class="badge b-purple">Affiliate 5-15%</span>
+      <span class="badge b-gray">Creator dashboard</span>
+      <span class="badge b-gray">Auto payout</span>
+      <span class="badge b-gray">Performance tracking</span>
+    </div>
+  </div>
+
+  <div class="trend-card">
+    <div class="trend-head">
+      <div class="trend-icon" style="background:var(--color-background-info)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-info)" stroke-width="1.5"><path d="M2 10l4-6 3 4 2-3 3 5"/></svg>
+      </div>
+      <span class="trend-title">Seller analytics SaaS (Data-as-a-Service)</span>
+      <span class="badge b-blue">B2B орлого</span>
+    </div>
+    <div class="trend-desc">Дэлгүүр эздэд зах зээлийн дата зарах. "Таны ангилалд хамгийн их хайгдаж байгаа бараанууд", "Өрсөлдөгчийн үнийн дүн шинжилгээ", "Хэрэглэгчийн чиг хандлага" — эдгээр premium аналитик тайлан. Хятадын JD.com, Alibaba-д маш амжилттай загвар.</div>
+    <div class="trend-tags">
+      <span class="badge b-blue">Data analytics</span>
+      <span class="badge b-gray">99,900₮/сар</span>
+      <span class="badge b-gray">Market insights</span>
+      <span class="badge b-gray">Competitor pricing</span>
+    </div>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<div id="panel-calc" class="panel">
+  <div class="st">Орлого тооцоолуур — сарын потенциал</div>
+  <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">
+    <div style="flex:1;min-width:280px">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Идэвхтэй дэлгүүрийн тоо</div>
+      <input type="range" id="stores" min="50" max="1000" step="10" value="200" style="width:100%" oninput="calc()">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary)"><span>50</span><span id="stores-out" style="font-weight:500;color:var(--color-text-primary)">200</span><span>1,000</span></div>
+
+      <div style="font-size:12px;color:var(--color-text-secondary);margin:14px 0 8px">Сарын нийт гүйлгээ (сая ₮)</div>
+      <input type="range" id="gmv" min="10" max="500" step="10" value="100" style="width:100%" oninput="calc()">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary)"><span>10M</span><span id="gmv-out" style="font-weight:500;color:var(--color-text-primary)">100M</span><span>500M</span></div>
+
+      <div style="font-size:12px;color:var(--color-text-secondary);margin:14px 0 8px">Hero баннерын захиалга (сард)</div>
+      <input type="range" id="banners" min="0" max="20" step="1" value="6" style="width:100%" oninput="calc()">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary)"><span>0</span><span id="banners-out" style="font-weight:500;color:var(--color-text-primary)">6</span><span>20</span></div>
+
+      <div style="font-size:12px;color:var(--color-text-secondary);margin:14px 0 8px">Pro subscription хувь (%)</div>
+      <input type="range" id="propct" min="5" max="50" step="1" value="20" style="width:100%" oninput="calc()">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary)"><span>5%</span><span id="propct-out" style="font-weight:500;color:var(--color-text-primary)">20%</span><span>50%</span></div>
+    </div>
+
+    <div style="flex:1;min-width:260px">
+      <div class="calc-box">
+        <div class="calc-row"><span class="calc-key">Комисс орлого (2.5%)</span><span class="calc-val" id="r-commission">2,500,000₮</span></div>
+        <div class="calc-row"><span class="calc-key">Hero баннер</span><span class="calc-val" id="r-banner">3,000,000₮</span></div>
+        <div class="calc-row"><span class="calc-key">Pro subscription</span><span class="calc-val" id="r-pro">1,196,000₮</span></div>
+        <div class="calc-row"><span class="calc-key">In-feed native (est)</span><span class="calc-val" id="r-native">800,000₮</span></div>
+        <div class="calc-row"><span class="calc-key">SMS/Email кампани</span><span class="calc-val" id="r-sms">400,000₮</span></div>
+        <div class="calc-row"><span class="calc-key">Affiliate комисс (1%)</span><span class="calc-val" id="r-affiliate">300,000₮</span></div>
+        <div class="calc-row"><span class="calc-key" style="color:var(--color-text-primary);font-weight:500">Нийт MRR (тооцоо)</span><span class="calc-val" id="r-total" style="color:var(--color-text-success);font-size:16px">8,196,000₮</span></div>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);line-height:1.7">
+        Тооцоо нь тухайн хувь хэмжээнд суурилсан ойролцоо тоо. Жилийн ARR = MRR × 12
+      </div>
+      <div style="margin-top:12px;padding:10px 12px;background:var(--color-background-info);border-radius:var(--border-radius-md)">
+        <div style="font-size:11px;color:var(--color-text-info)">Жилийн таамаглалт ARR</div>
+        <div style="font-size:20px;font-weight:500;color:var(--color-text-info)" id="r-arr">98,352,000₮</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div id="panel-roadmap" class="panel">
+  <div class="st">Хэрэгжилтийн 4 үе шат</div>
+  <div class="roadmap-row">
+    <div class="road-col" style="border-color:var(--color-border-danger)">
+      <div class="road-phase">Үе шат 1 · 1-2 сар</div>
+      <div class="road-title">Орлогын суурь</div>
+      <div class="road-list">
+        ✦ Hero баннер CRUD (Admin)<br>
+        ✦ Announcement bar Admin<br>
+        ✦ Онцлох / Featured tier<br>
+        ✦ Pro subscription (29,900₮)<br>
+        ✦ Комиссын систем (2.5%)<br>
+        ✦ Баннерын төлбөр (QPay)
+      </div>
+    </div>
+    <div class="road-col" style="border-color:var(--color-border-warning)">
+      <div class="road-phase">Үе шат 2 · 3-4 сар</div>
+      <div class="road-title">Маркетинг + Автомат</div>
+      <div class="road-list">
+        ✦ SMS blast платформ<br>
+        ✦ Имэйл кампани builder<br>
+        ✦ Push notification кампани<br>
+        ✦ Сагс орхисон автомат<br>
+        ✦ In-feed native ad<br>
+        ✦ Affiliate / referral систем
+      </div>
+    </div>
+    <div class="road-col" style="border-color:var(--color-border-success)">
+      <div class="road-phase">Үе шат 3 · 5-7 сар</div>
+      <div class="road-title">2026 тренд</div>
+      <div class="road-list">
+        ✦ Loyalty points систем<br>
+        ✦ Eseller Gold membership<br>
+        ✦ BNPL (хуваан төлөлт)<br>
+        ✦ Creator/Influencer dashboard<br>
+        ✦ Retail media targeting<br>
+        ✦ Analytics SaaS (99,900₮)
+      </div>
+    </div>
+    <div class="road-col" style="border-color:var(--color-border-info)">
+      <div class="road-phase">Үе шат 4 · 8-12 сар</div>
+      <div class="road-title">Live + Data</div>
+      <div class="road-list">
+        ✦ Live commerce (stream+buy)<br>
+        ✦ Shoppable video<br>
+        ✦ AI-powered ad targeting<br>
+        ✦ Market insight тайлан<br>
+        ✦ B2B data partnership<br>
+        ✦ Хүргэлт комисс систем
+      </div>
+    </div>
+  </div>
+
+  <div class="st">Хэрэгжүүлэх дараагийн алхамууд</div>
+  <div class="g3">
+    <div class="card" onclick="sendPrompt('Баннер удирдлагын Admin CRUD + баннер байршуулах хуудасны Claude Code промпт бэлтгэж өгнө үү')">
+      <div class="ch"><span class="cn">Баннер систем промпт</span><span class="badge b-red">Нэн тэргүүн</span></div>
+      <div class="cd">Admin CRUD, баннер slot, schedule, хэмжилт — Claude Code промпт</div>
+      <button class="btn-sm btn-p" style="margin-top:8px">Промпт авах ↗</button>
+    </div>
+    <div class="card" onclick="sendPrompt('SMS болон Email маркетингийн campaign builder болон автоматчиллын Claude Code промпт бэлтгэж өгнө үү')">
+      <div class="ch"><span class="cn">Маркетинг автоматчилал</span><span class="badge b-purple">Давтагдах орлого</span></div>
+      <div class="cd">SMS/Email/Push campaign builder, автомат урсгал — Claude Code промпт</div>
+      <button class="btn-sm btn-p" style="margin-top:8px">Промпт авах ↗</button>
+    </div>
+    <div class="card" onclick="sendPrompt('Loyalty points системийн болон Eseller Gold membership-ийн Claude Code промпт бэлтгэж өгнө үү')">
+      <div class="ch"><span class="cn">Loyalty + Membership</span><span class="badge b-warn">LTV нэмэгдүүлнэ</span></div>
+      <div class="cd">Оноо цуглуулах, Gold мэмбершип, Amazon Prime загвар — Claude Code промпт</div>
+      <button class="btn-sm btn-p" style="margin-top:8px">Промпт авах ↗</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function fmt(n){return Math.round(n).toLocaleString('mn-MN')+'₮'}
+
+function calc(){
+  const stores=parseInt(document.getElementById('stores').value);
+  const gmv=parseInt(document.getElementById('gmv').value)*1_000_000;
+  const banners=parseInt(document.getElementById('banners').value);
+  const propct=parseInt(document.getElementById('propct').value)/100;
+
+  document.getElementById('stores-out').textContent=stores;
+  document.getElementById('gmv-out').textContent=(gmv/1_000_000).toFixed(0)+'M₮';
+  document.getElementById('banners-out').textContent=banners;
+  document.getElementById('propct-out').textContent=Math.round(propct*100)+'%';
+
+  const commission=gmv*0.025;
+  const bannerRev=banners*500_000;
+  const proRev=stores*propct*29_900;
+  const native=gmv*0.008;
+  const sms=stores*0.3*7_000;
+  const affiliate=gmv*0.003;
+  const total=commission+bannerRev+proRev+native+sms+affiliate;
+
+  document.getElementById('r-commission').textContent=fmt(commission);
+  document.getElementById('r-banner').textContent=fmt(bannerRev);
+  document.getElementById('r-pro').textContent=fmt(proRev);
+  document.getElementById('r-native').textContent=fmt(native);
+  document.getElementById('r-sms').textContent=fmt(sms);
+  document.getElementById('r-affiliate').textContent=fmt(affiliate);
+  document.getElementById('r-total').textContent=fmt(total);
+  document.getElementById('r-arr').textContent=fmt(total*12);
+}
+calc();
+</script>

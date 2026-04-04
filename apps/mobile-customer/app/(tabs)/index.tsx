@@ -2,16 +2,17 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View, Text, ScrollView, FlatList, TouchableOpacity, TextInput,
   Image, StyleSheet, Dimensions, Animated, NativeSyntheticEvent,
-  NativeScrollEvent, Platform,
+  NativeScrollEvent, Platform, ActivityIndicator, Linking,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { BannersAPI, BannerData } from '../lib/api';
 
 const { width } = Dimensions.get('window');
 const BRAND = '#E8242C';
 
-// ─── Demo Data ────────────────────────────────────────────
-const BANNERS = [
+// ─── Fallback Demo Data (shown while API loads or on error) ──
+const FALLBACK_BANNERS = [
   { id: '1', title: 'Зуны Мега Хямдрал', subtitle: '70% хүртэл хөнгөлөлт', color: '#E8242C', icon: 'flame' as const },
   { id: '2', title: 'Шинэ дэлгүүрүүд', subtitle: 'Өдөр бүр шинэ брэнд нэмэгдэж байна', color: '#6366F1', icon: 'storefront' as const },
   { id: '3', title: 'Үнэгүй хүргэлт', subtitle: '50,000₮-с дээш захиалгад', color: '#059669', icon: 'car' as const },
@@ -80,23 +81,46 @@ const SERVICES = [
 
 function formatPrice(n: number) { return n.toLocaleString() + '₮'; }
 
-// ─── Banner Carousel ──────────────────────────────────────
+// ─── Banner Carousel (Real API + Fallback) ───────────────
 function BannerCarousel() {
   const scrollRef = useRef<ScrollView>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [banners] = useState(FALLBACK_BANNERS);
+  const [apiBanners, setApiBanners] = useState<BannerData[]>([]);
+
+  // Fetch real banners from API
+  useEffect(() => {
+    BannersAPI.getBySlot('HERO')
+      .then((res) => {
+        if (res.data && res.data.length > 0) {
+          setApiBanners(res.data);
+        }
+      })
+      .catch(() => {/* use fallback */});
+  }, []);
+
+  const hasApiBanners = apiBanners.length > 0;
+  const itemCount = hasApiBanners ? apiBanners.length : banners.length;
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const next = (activeIndex + 1) % BANNERS.length;
+      const next = (activeIndex + 1) % itemCount;
       scrollRef.current?.scrollTo({ x: next * (width - 32), animated: true });
       setActiveIndex(next);
     }, 4000);
     return () => clearInterval(timer);
-  }, [activeIndex]);
+  }, [activeIndex, itemCount]);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const idx = Math.round(e.nativeEvent.contentOffset.x / (width - 32));
     setActiveIndex(idx);
+  };
+
+  const onBannerPress = (banner: BannerData) => {
+    BannersAPI.trackClick(banner.id).catch(() => {});
+    if (banner.linkUrl) {
+      Linking.openURL(banner.linkUrl).catch(() => {});
+    }
   };
 
   return (
@@ -111,27 +135,51 @@ function BannerCarousel() {
         snapToInterval={width - 32}
         contentContainerStyle={{ gap: 0 }}
       >
-        {BANNERS.map((b) => (
-          <TouchableOpacity key={b.id} activeOpacity={0.9} style={[s.bannerSlide, { backgroundColor: b.color }]}>
-            <View style={s.bannerContent}>
-              <View style={{ flex: 1 }}>
-                <Text style={s.bannerTitle}>{b.title}</Text>
-                <Text style={s.bannerSub}>{b.subtitle}</Text>
-                <View style={s.bannerBtn}>
-                  <Text style={s.bannerBtnText}>Дэлгэрэнгүй</Text>
-                  <Ionicons name="arrow-forward" size={14} color="#FFF" />
+        {hasApiBanners
+          ? apiBanners.map((b) => (
+            <TouchableOpacity key={b.id} activeOpacity={0.9}
+              style={[s.bannerSlide, { backgroundColor: b.bgColor || BRAND }]}
+              onPress={() => onBannerPress(b)}>
+              {b.imageMobile || b.imageUrl ? (
+                <Image source={{ uri: b.imageMobile || b.imageUrl }}
+                  style={{ width: width - 32, height: 140, borderRadius: 16 }}
+                  resizeMode="cover" />
+              ) : (
+                <View style={s.bannerContent}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={s.bannerTitle}>{b.title}</Text>
+                    <Text style={s.bannerSub}>{b.altText || ''}</Text>
+                    <View style={s.bannerBtn}>
+                      <Text style={s.bannerBtnText}>Дэлгэрэнгүй</Text>
+                      <Ionicons name="arrow-forward" size={14} color="#FFF" />
+                    </View>
+                  </View>
+                </View>
+              )}
+            </TouchableOpacity>
+          ))
+          : banners.map((b) => (
+            <TouchableOpacity key={b.id} activeOpacity={0.9} style={[s.bannerSlide, { backgroundColor: b.color }]}>
+              <View style={s.bannerContent}>
+                <View style={{ flex: 1 }}>
+                  <Text style={s.bannerTitle}>{b.title}</Text>
+                  <Text style={s.bannerSub}>{b.subtitle}</Text>
+                  <View style={s.bannerBtn}>
+                    <Text style={s.bannerBtnText}>Дэлгэрэнгүй</Text>
+                    <Ionicons name="arrow-forward" size={14} color="#FFF" />
+                  </View>
+                </View>
+                <View style={s.bannerIconWrap}>
+                  <Ionicons name={b.icon} size={48} color="rgba(255,255,255,0.3)" />
                 </View>
               </View>
-              <View style={s.bannerIconWrap}>
-                <Ionicons name={b.icon} size={48} color="rgba(255,255,255,0.3)" />
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))
+        }
       </ScrollView>
       {/* Dots */}
       <View style={s.dotsRow}>
-        {BANNERS.map((_, i) => (
+        {Array.from({ length: itemCount }, (_, i) => (
           <View key={i} style={[s.dot, i === activeIndex && s.dotActive]} />
         ))}
       </View>

@@ -1,0 +1,1390 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);z-index:2}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.section-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.section-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.sc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.sc-name{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.sc-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+.sc-list{font-size:11px;color:var(--color-text-secondary);line-height:1.8;margin-top:6px}
+.issue-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.issue{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px;display:flex;align-items:flex-start;gap:10px}
+.issue-icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.issue-body{flex:1}
+.issue-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.issue-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.5}
+.sev-crit{background:var(--color-background-danger)}
+.sev-high{background:var(--color-background-warning)}
+.sev-med{background:var(--color-background-info)}
+.sev-low{background:var(--color-background-secondary)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;margin-top:14px}
+.st:first-child{margin-top:0}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Нүүр хуудасны аудит + бүтээгдэхүүний карт шинэчлэлт</div>
+    <div class="ps">Eseller.mn · Бүх хэсгийн үүрэг · Алдаа илрүүлэлт · Claude Code prompt багц</div>
+  </div>
+  <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Бүгдийг хуулах</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('audit')">Хэсгийн аудит</button>
+  <button class="tab" onclick="show('issues')">Илэрсэн алдаа</button>
+  <button class="tab" onclick="show('p22')">Prompt 22 · Нүүр хуудас</button>
+  <button class="tab" onclick="show('p23')">Prompt 23 · Бараа карт</button>
+  <button class="tab" onclick="show('p24')">Prompt 24 · Бараа дэлгэрэнгүй</button>
+  <button class="tab" onclick="show('p25')">Prompt 25 · Дэлгүүр эзний upload</button>
+</div>
+
+<!-- AUDIT -->
+<div id="panel-audit" class="panel active">
+  <div class="st">Нүүр хуудасны 10 хэсгийн үүрэг тодорхойлолт</div>
+  <div class="section-grid">
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">1. Navbar</span><span class="badge b-green">Ажиллаж байна</span></div>
+      <div class="sc-desc">Лого, хайлт, сагс, нэвтрэх. Sticky + blur backdrop.</div>
+      <div class="sc-list">· Хайлт: /api/search?q= endpoint<br>· Сагс: Zustand cart store<br>· Нэвтрэх: NextAuth modal<br>· Хэрэгтэй: Real-time search suggest</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">2. Category Nav</span><span class="badge b-warn">Засах шаардлагатай</span></div>
+      <div class="sc-desc">Хэвтээ ангилалын цэс. "Ангилал" dropdown + нэмэлт холбоосууд.</div>
+      <div class="sc-list">· Dropdown: DB-ийн ангилалыг динамикаар харуулах<br>· Одоо: статик HTML байна<br>· "Хямдралтай" link хамгийн баруун талд</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">3. Announcement Bar</span><span class="badge b-warn">Засах шаардлагатай</span></div>
+      <div class="sc-desc">Хөдөлгөөнтэй мессежийн мөр. Хямдрал, купон, хүргэлтийн мэдэгдэл.</div>
+      <div class="sc-list">· Одоо: статик текст<br>· Хэрэгтэй: Админаас өөрчлөх боломж<br>· Auto-scroll marquee</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">4. Hero Banner</span><span class="badge b-red">Алдаатай</span></div>
+      <div class="sc-desc">Нүүр хуудасны гол баннер. Сурталчилгааны контент.</div>
+      <div class="sc-list">· Одоо: статик зураг + текст<br>· Хэрэгтэй: Carousel (swiper)<br>· Админаас зураг/текст солих боломж<br>· CTA товч URL тохируулах</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">5. Feature Pills</span><span class="badge b-green">Ажиллаж байна</span></div>
+      <div class="sc-desc">Үнэгүй хүргэлт, Аюулгүй төлбөр, Хурдан хүргэлт, Шинэ ирэлтүүд.</div>
+      <div class="sc-list">· Статик — өөрчлөлт шаардлагагүй<br>· Хэрэгтэй: Админаас тохируулах боломж</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">6. Хямдралтай бараа</span><span class="badge b-red">Алдаатай</span></div>
+      <div class="sc-desc">Discount хэсэг. Tier=DISCOUNTED барааны horizontal scroll.</div>
+      <div class="sc-list">· Одоо: статик mock бараа<br>· Хэрэгтэй: /api/feed?tier=DISCOUNTED<br>· "Бүгд" товч → /products?tier=discounted<br>· Infinite scroll + skeleton loading</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">7. Ангилалуудын карт</span><span class="badge b-warn">Засах шаардлагатай</span></div>
+      <div class="sc-desc">Тод өнгийн ангилалын карт grid. Хувцас, Хоол, Электроник...</div>
+      <div class="sc-list">· Одоо: hardcoded карт<br>· Хэрэгтэй: DB-ийн category + icon<br>· Карт дарахад шүүсэн feed харагдах<br>· Бараа тоо харуулах</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">8. Бүх бараа feed</span><span class="badge b-red">Алдаатай</span></div>
+      <div class="sc-desc">Бүгд/Бараа/Үйлчилгээ таб + бүх бараа grid.</div>
+      <div class="sc-list">· Одоо: статик mock, tab ажиллахгүй<br>· Хэрэгтэй: /api/feed paginated<br>· Tab switch: client-side шүүлт<br>· Infinite scroll (react-query)</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">9. Бараа карт</span><span class="badge b-red">Дутуу</span></div>
+      <div class="sc-desc">Дэлгүүр нэр, зураг, үнэ, хямдрал, rating, сагс товч.</div>
+      <div class="sc-list">· Хэрэгтэй: олон зураг gallery<br>· Видео preview hover дээр<br>· Quick-view modal<br>· Wishlist ♡ товч (auth шаардлагатай)</div>
+    </div>
+    <div class="section-card">
+      <div class="sc-head"><span class="sc-name">10. Footer</span><span class="badge b-green">Ажиллаж байна</span></div>
+      <div class="sc-desc">Холбоос, нийгмийн сүлжээ, нэвтрэлтийн мэдээлэл.</div>
+      <div class="sc-list">· Одоо: статик — ОК<br>· Хэрэгтэй: Хэвлэгдсэн app store badge</div>
+    </div>
+  </div>
+</div>
+
+<!-- ISSUES -->
+<div id="panel-issues" class="panel">
+  <div class="st">Эгзэгтэй алдаа (Critical)</div>
+  <div class="issue-list">
+    <div class="issue">
+      <div class="issue-icon sev-crit" style="color:var(--color-text-danger)">C</div>
+      <div class="issue-body">
+        <div class="issue-title">Hero Banner — статик, динамик бус</div>
+        <div class="issue-desc">Зураг, текст, CTA URL бүгд hardcoded. Админ солих боломжгүй. /admin/banners CRUD + Cloudinary upload хэрэгтэй. Swiper carousel байхгүй.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-crit" style="color:var(--color-text-danger)">C</div>
+      <div class="issue-body">
+        <div class="issue-title">Feed — бүгд mock data, API холбогдоогүй</div>
+        <div class="issue-desc">"Хямдралтай бараа", "Бүх бараа" хоёулаа статик. /api/feed endpoint байна ч холбогдоогүй. React Query-р SSR + client paginated feed хэрэгтэй.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-crit" style="color:var(--color-text-danger)">C</div>
+      <div class="issue-body">
+        <div class="issue-title">Бараа карт — дэлгэрэнгүй хуудас тасархай</div>
+        <div class="issue-desc">Карт дарахад /product/[id] руу очдог ч хуудас дутуу. Олон зураг, видео, дэлгэрэнгүй тайлбар, seller мэдээлэл байхгүй. Shipping, specification section дутуу.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-crit" style="color:var(--color-text-danger)">C</div>
+      <div class="issue-body">
+        <div class="issue-title">Дэлгүүр эзэн — бараа нэмэх форм дутуу</div>
+        <div class="issue-desc">Одоо зөвхөн нэр + үнэ + 1 зураг оруулна. Олон зураг upload, видео URL/upload, rich text тайлбар, specification table, shipping тохиргоо — бүгд байхгүй.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="st">Чухал алдаа (High)</div>
+  <div class="issue-list">
+    <div class="issue">
+      <div class="issue-icon sev-high" style="color:var(--color-text-warning)">H</div>
+      <div class="issue-body">
+        <div class="issue-title">Category Nav — dropdown статик</div>
+        <div class="issue-desc">Dropdown ангилалын жагсаалт hardcoded. DB-ийн Category table-тай холбоогүй. Шинэ ангилал нэмэхэд navbar дэх dropdown шинэчлэгдэхгүй.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-high" style="color:var(--color-text-warning)">H</div>
+      <div class="issue-body">
+        <div class="issue-title">Хайлт — real-time suggest байхгүй</div>
+        <div class="issue-desc">Navbar хайлт зөвхөн submit дарахад ажилладаг. Typeahead suggestion, category highlight, recent searches — байхгүй. Хэрэглэгч UX муу.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-high" style="color:var(--color-text-warning)">H</div>
+      <div class="issue-body">
+        <div class="issue-title">Wishlist ♡ — ажиллахгүй байна</div>
+        <div class="issue-desc">Карт дээрх ♡ товч UI зөвхөн. Auth шалгахгүй, DB-д хадгалдаггүй, optimistic update байхгүй. Toast мэдэгдэл гарахгүй.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-high" style="color:var(--color-text-warning)">H</div>
+      <div class="issue-body">
+        <div class="issue-title">Сагс — persistence байхгүй</div>
+        <div class="issue-desc">Хуудас refresh хийхэд сагс хоосордог. LocalStorage sync, guest cart merge after login — байхгүй.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-high" style="color:var(--color-text-warning)">H</div>
+      <div class="issue-body">
+        <div class="issue-title">SEO — metadata байхгүй</div>
+        <div class="issue-desc">Бараа хуудасны generateMetadata() байхгүй. OG image, description, structured data (JSON-LD Product schema) — байхгүй. Google Shopping-д илрэхгүй.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="st">Дунд зэргийн алдаа (Medium)</div>
+  <div class="issue-list">
+    <div class="issue">
+      <div class="issue-icon sev-med" style="color:var(--color-text-info)">M</div>
+      <div class="issue-body">
+        <div class="issue-title">Skeleton loading байхгүй</div>
+        <div class="issue-desc">Feed татаж байх үед хоосон дэлгэц харагддаг. ProductCardSkeleton, HeroSkeleton компонент хэрэгтэй. Layout shift (CLS) их байна.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-med" style="color:var(--color-text-info)">M</div>
+      <div class="issue-body">
+        <div class="issue-title">Mobile responsive дутуу</div>
+        <div class="issue-desc">320-375px дэлгэцэнд navbar хайлт overflow гарна. Бараа карт grid 1 баганад буугаагүй. Touch swipe category nav байхгүй.</div>
+      </div>
+    </div>
+    <div class="issue">
+      <div class="issue-icon sev-med" style="color:var(--color-text-info)">M</div>
+      <div class="issue-body">
+        <div class="issue-title">Announcement bar — admin тохируулга байхгүй</div>
+        <div class="issue-desc">Мессеж hardcoded. /admin/settings/announcement CRUD хэрэгтэй. Enable/disable toggle, marquee speed тохируулах.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 22 -->
+<div id="panel-p22" class="panel">
+<div class="st">Prompt 22 — Нүүр хуудасны бүрэн шинэчлэлт</div>
+<div class="prompt-box" id="p22text">
+<button class="copy-btn" onclick="copyPrompt('p22text')">Хуулах</button>## HOME PAGE — FULL IMPLEMENTATION
+
+Fix and complete the eseller.mn home page (app/(tabs)/index.tsx or app/page.tsx).
+Currently many sections use static mock data. Replace ALL with live API data.
+
+---
+
+### 1. DYNAMIC CATEGORY NAV — fetch from DB
+
+```tsx
+// components/layout/CategoryNav.tsx
+// Replace hardcoded categories with DB data
+
+export async function CategoryNav() {
+  const categories = await db.category.findMany({
+    where: { isActive: true, parentId: null },
+    orderBy: { sortOrder: 'asc' },
+    include: { _count: { select: { products: true } } },
+  })
+
+  return (
+    <nav style={{ background: '#E8242C' }}>
+      <div className="max-w-7xl mx-auto px-4 h-11 flex items-center gap-1 overflow-x-auto">
+        <CategoryDropdown categories={categories} />
+        {categories.slice(0, 7).map(cat => (
+          <Link
+            key={cat.id}
+            href={`/?category=${cat.slug}`}
+            className="whitespace-nowrap px-3 py-1.5 text-sm text-white hover:bg-white/20 rounded transition-colors"
+          >
+            {cat.name}
+          </Link>
+        ))}
+        <Link href="/sale" className="ml-auto whitespace-nowrap px-3 text-sm text-yellow-300 font-semibold flex items-center gap-1">
+          ✦ Хямдралтай
+        </Link>
+      </div>
+    </nav>
+  )
+}
+```
+
+### 2. ANNOUNCEMENT BAR — admin-controlled
+
+```tsx
+// components/layout/AnnouncementBar.tsx
+// Fetch from DB, admin can edit via /admin/settings
+
+export async function AnnouncementBar() {
+  const items = await db.announcement.findMany({
+    where: { isActive: true },
+    orderBy: { sortOrder: 'asc' },
+  })
+  if (items.length === 0) return null
+
+  return (
+    <div style={{ background: '#1A1A1A', borderBottom: '0.5px solid #3D3D3D', overflow: 'hidden' }}>
+      <div className="marquee-track flex items-center gap-12 py-2 text-xs">
+        {[...items, ...items].map((item, i) => (
+          <span key={i} className="flex items-center gap-2 whitespace-nowrap text-[#E0E0E0]">
+            <span>{item.icon}</span>
+            {item.text}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// CSS for marquee
+// @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+// .marquee-track { animation: marquee 30s linear infinite; }
+// Admin: POST /api/admin/announcements — CRUD
+```
+
+### 3. HERO BANNER — dynamic carousel (Swiper)
+
+```tsx
+// components/home/HeroBanner.tsx
+'use client'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, Pagination, Navigation } from 'swiper/modules'
+
+interface HeroSlide {
+  id: string
+  title: string
+  subtitle: string
+  image: string       // Cloudinary URL
+  ctaPrimary: { text: string; href: string }
+  ctaSecondary: { text: string; href: string }
+  bgColor: string
+  textColor: 'light' | 'dark'
+}
+
+export function HeroBanner({ slides }: { slides: HeroSlide[] }) {
+  return (
+    <Swiper
+      modules={[Autoplay, Pagination, Navigation]}
+      autoplay={{ delay: 5000, disableOnInteraction: false }}
+      pagination={{ clickable: true }}
+      loop
+      className="w-full"
+      style={{ height: 'clamp(280px, 40vw, 420px)' }}
+    >
+      {slides.map(slide => (
+        <SwiperSlide key={slide.id}>
+          <div
+            className="relative w-full h-full flex items-center"
+            style={{ background: slide.bgColor }}
+          >
+            <Image
+              src={slide.image}
+              alt={slide.title}
+              fill
+              priority
+              className="object-cover"
+              sizes="100vw"
+            />
+            <div className="relative z-10 max-w-7xl mx-auto px-8 w-full">
+              <h1 className="text-4xl md:text-5xl font-black text-white mb-3 leading-tight">
+                {slide.title}
+              </h1>
+              <p className="text-white/80 text-base mb-6 max-w-md">{slide.subtitle}</p>
+              <div className="flex gap-3 flex-wrap">
+                <Button variant="primary" size="lg" asChild>
+                  <Link href={slide.ctaPrimary.href}>{slide.ctaPrimary.text}</Link>
+                </Button>
+                <Button variant="secondary" size="lg" asChild>
+                  <Link href={slide.ctaSecondary.href}>{slide.ctaSecondary.text}</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  )
+}
+
+// Fetch slides in page (SSR):
+const slides = await db.banner.findMany({
+  where: { isActive: true, placement: 'HERO' },
+  orderBy: { sortOrder: 'asc' },
+})
+```
+
+### 4. FEATURE PILLS — configurable
+
+```tsx
+// Fetch from DB or config — admin can toggle/edit
+const features = await db.featurePill.findMany({ where: { isActive: true } })
+// Fallback to defaults if empty
+```
+
+### 5. DISCOUNTED PRODUCTS — live feed
+
+```tsx
+// components/home/DiscountedSection.tsx
+'use client'
+
+export function DiscountedSection() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['feed', 'discounted'],
+    queryFn: () => fetch('/api/feed?tier=DISCOUNTED&limit=12').then(r => r.json()),
+  })
+
+  return (
+    <section className="py-8">
+      <SectionHeader title="Хямдралтай бараа" badge="SALE" href="/products?tier=discounted" />
+      <div className="overflow-x-auto pb-4">
+        <div className="flex gap-4 w-max">
+          {isLoading
+            ? Array(6).fill(0).map((_, i) => <ProductCardSkeleton key={i} />)
+            : data?.items.map(item => <ProductCard key={item.id} product={item} />)
+          }
+        </div>
+      </div>
+    </section>
+  )
+}
+```
+
+### 6. CATEGORY CARDS — DB data + product count
+
+```tsx
+const categories = await db.category.findMany({
+  where: { isActive: true, parentId: null, showOnHome: true },
+  include: {
+    _count: { select: { products: { where: { status: 'ACTIVE' } } } }
+  },
+  orderBy: { sortOrder: 'asc' },
+  take: 8,
+})
+
+// Render with gradient backgrounds from DB (category.gradientFrom, category.gradientTo)
+<Link href={`/?category=${cat.slug}`}>
+  <div style={{ background: `linear-gradient(135deg, ${cat.colorFrom}, ${cat.colorTo})` }}>
+    <Image src={cat.icon} alt={cat.name} width={48} height={48} />
+    <span>{cat.name}</span>
+    <span className="text-xs opacity-70">{cat._count.products} бараа</span>
+  </div>
+</Link>
+```
+
+### 7. MAIN FEED — infinite scroll
+
+```tsx
+// components/home/MainFeed.tsx
+'use client'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInView } from 'react-intersection-observer'
+
+export function MainFeed({ category }: { category?: string }) {
+  const { ref, inView } = useInView()
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+    queryKey: ['feed', 'main', category],
+    queryFn: ({ pageParam = 1 }) =>
+      fetch(`/api/feed?page=${pageParam}&limit=20&tier=NORMAL${category ? `&category=${category}` : ''}`).then(r => r.json()),
+    getNextPageParam: (last) => last.meta.hasMore ? last.meta.page + 1 : undefined,
+    initialPageParam: 1,
+  })
+
+  useEffect(() => {
+    if (inView && hasNextPage) fetchNextPage()
+  }, [inView, hasNextPage])
+
+  const [tab, setTab] = useState<'all' | 'products' | 'services'>('all')
+
+  return (
+    <section className="py-8">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-white">Бүх бараа &amp; үйлчилгээ</h2>
+        <div className="flex gap-2">
+          {['all', 'products', 'services'].map(t => (
+            <button key={t} onClick={() => setTab(t as any)}
+              className={tab === t ? 'btn-tab-active' : 'btn-tab'}>
+              {t === 'all' ? 'Бүгд' : t === 'products' ? 'Бараа' : 'Үйлчилгээ'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        {data?.pages.flatMap(p => p.items)
+          .filter(item => tab === 'all' || item.type === tab.slice(0,-1))
+          .map(item => <ProductCard key={item.id} product={item} />)
+        }
+        {isFetchingNextPage && Array(6).fill(0).map((_, i) => <ProductCardSkeleton key={i} />)}
+      </div>
+
+      <div ref={ref} className="h-10" />
+    </section>
+  )
+}
+```
+
+### 8. SEARCH — real-time typeahead
+
+```tsx
+// components/layout/SearchBar.tsx
+'use client'
+import { useDebounce } from '@/hooks/useDebounce'
+
+export function SearchBar() {
+  const [query, setQuery] = useState('')
+  const debouncedQ = useDebounce(query, 300)
+  const [results, setResults] = useState([])
+
+  useEffect(() => {
+    if (debouncedQ.length < 2) return setResults([])
+    fetch(`/api/search/suggest?q=${debouncedQ}`)
+      .then(r => r.json())
+      .then(d => setResults(d.suggestions))
+  }, [debouncedQ])
+
+  return (
+    <div className="relative flex-1 max-w-xl">
+      <input
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        placeholder="Бараа, дэлгүүр хайх..."
+        className="w-full h-9 pl-4 pr-10 rounded-lg text-sm"
+        style={{ background: 'white', color: '#0A0A0A' }}
+      />
+      {results.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 rounded-lg z-50 overflow-hidden"
+          style={{ background: '#1A1A1A', border: '0.5px solid #3D3D3D' }}>
+          {results.map(r => (
+            <Link key={r.id} href={`/product/${r.slug}`}
+              className="flex items-center gap-3 px-4 py-2.5 hover:bg-[#2A2A2A] transition-colors">
+              <img src={r.image} className="w-8 h-8 rounded object-cover" />
+              <div>
+                <p className="text-sm text-white">{r.name}</p>
+                <p className="text-xs text-[#A0A0A0]">{r.category}</p>
+              </div>
+              <span className="ml-auto text-sm font-bold text-[#E8242C]">
+                {r.price.toLocaleString()}₮
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// GET /api/search/suggest?q=
+// Returns: { suggestions: [{ id, name, slug, image, price, category }] }
+// Use: Prisma full-text search or Meilisearch
+```
+</div>
+</div>
+
+<!-- PROMPT 23 -->
+<div id="panel-p23" class="panel">
+<div class="st">Prompt 23 — Бараа картын шинэчлэлт (hover, quick-view, wishlist)</div>
+<div class="prompt-box" id="p23text">
+<button class="copy-btn" onclick="copyPrompt('p23text')">Хуулах</button>## PRODUCT CARD — ENHANCED VERSION
+
+Rebuild ProductCard with multiple images, video preview, quick-view,
+wishlist, and full seller info. Used everywhere in the feed.
+
+---
+
+### ENHANCED PRODUCT CARD COMPONENT
+
+```tsx
+// components/product/ProductCard.tsx
+'use client'
+import { useState } from 'react'
+
+interface ProductCardProps {
+  product: {
+    id: string
+    refId: string
+    slug: string
+    name: string
+    images: string[]          // multiple images
+    videoUrl?: string         // preview video (optional)
+    price: number
+    originalPrice?: number
+    discountPct?: number
+    tier: 'VIP' | 'FEATURED' | 'DISCOUNTED' | 'NORMAL'
+    rating: number
+    reviewCount: number
+    soldCount: number
+    stock: number
+    seller: {
+      name: string
+      slug: string
+      isVerified: boolean
+      logo?: string
+    }
+    category: { name: string; slug: string }
+    isNew: boolean            // created within 7 days
+    tags?: string[]
+  }
+}
+
+export function ProductCard({ product }: ProductCardProps) {
+  const [activeImg, setActiveImg] = useState(0)
+  const [showVideo, setShowVideo] = useState(false)
+  const [isWishlisted, setIsWishlisted] = useState(false)
+  const [showQuickView, setShowQuickView] = useState(false)
+  const [addedToCart, setAddedToCart] = useState(false)
+
+  const tierBorder =
+    product.tier === 'VIP'      ? 'border-[#FFD700] border-[1.5px]' :
+    product.tier === 'FEATURED' ? 'border-[#E8242C]' : ''
+
+  return (
+    <>
+      <div
+        className={`group relative bg-[#1A1A1A] rounded-[10px] overflow-hidden border border-[#3D3D3D] hover:border-[#555] transition-all duration-200 cursor-pointer ${tierBorder}`}
+        style={{ width: '100%' }}
+      >
+        {/* ── Image area ── */}
+        <div className="relative aspect-square overflow-hidden bg-[#2A2A2A]">
+
+          {/* Main image / video */}
+          {showVideo && product.videoUrl ? (
+            <video
+              src={product.videoUrl}
+              autoPlay muted loop playsInline
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <Image
+              src={product.images[activeImg]}
+              alt={product.name}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 200px"
+            />
+          )}
+
+          {/* Thumbnail strip (hover) */}
+          {product.images.length > 1 && (
+            <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              {product.images.slice(0, 5).map((img, i) => (
+                <button
+                  key={i}
+                  onMouseEnter={() => { setActiveImg(i); setShowVideo(false) }}
+                  className={`w-6 h-6 rounded border-2 overflow-hidden transition-all ${
+                    activeImg === i ? 'border-[#E8242C]' : 'border-white/40'
+                  }`}
+                >
+                  <img src={img} className="w-full h-full object-cover" />
+                </button>
+              ))}
+              {product.videoUrl && (
+                <button
+                  onMouseEnter={() => setShowVideo(true)}
+                  className="w-6 h-6 rounded border-2 border-white/40 bg-black/60 flex items-center justify-center hover:border-[#E8242C]"
+                >
+                  <span className="text-white text-[8px]">▶</span>
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Top-left badges */}
+          <div className="absolute top-2 left-2 flex flex-col gap-1">
+            {product.tier === 'VIP' && (
+              <span className="text-[10px] font-bold bg-[#FFD700] text-[#0A0A0A] px-2 py-0.5 rounded-full">ВИП</span>
+            )}
+            {product.discountPct && (
+              <span className="text-[10px] font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded-full">
+                -{product.discountPct}%
+              </span>
+            )}
+            {product.isNew && (
+              <span className="text-[10px] font-bold bg-[#22C55E] text-white px-2 py-0.5 rounded-full">Шинэ</span>
+            )}
+            {product.stock <= 3 && product.stock > 0 && (
+              <span className="text-[10px] bg-[#F59E0B]/20 text-[#F59E0B] border border-[#F59E0B]/30 px-2 py-0.5 rounded-full">
+                {product.stock} үлдсэн
+              </span>
+            )}
+          </div>
+
+          {/* Top-right: Wishlist + Quick-view */}
+          <div className="absolute top-2 right-2 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <WishlistButton productId={product.id} initialState={isWishlisted} />
+            <button
+              onClick={(e) => { e.preventDefault(); setShowQuickView(true) }}
+              className="w-7 h-7 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-white hover:bg-[#E8242C] transition-colors"
+              title="Хурдан харах"
+            >
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z"/>
+                <circle cx="8" cy="8" r="2"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* Bottom: Add to cart (hover) */}
+          <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-200">
+            <button
+              onClick={(e) => { e.preventDefault(); handleAddToCart() }}
+              className="w-full py-2.5 text-sm font-semibold text-white transition-colors"
+              style={{ background: addedToCart ? '#22C55E' : '#E8242C' }}
+            >
+              {addedToCart ? 'Нэмэгдлээ ✓' : 'Сагсанд нэмэх'}
+            </button>
+          </div>
+        </div>
+
+        {/* ── Info area ── */}
+        <Link href={`/product/${product.slug}`}>
+          <div className="p-3">
+            {/* Seller */}
+            <div className="flex items-center gap-1.5 mb-1.5">
+              {product.seller.logo && (
+                <img src={product.seller.logo} className="w-4 h-4 rounded-full object-cover" />
+              )}
+              <span className="text-[11px] text-[#A0A0A0]">{product.seller.name}</span>
+              {product.seller.isVerified && (
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="#3B82F6">
+                  <path d="M8 1L10 5.5L15 6.3L11.5 9.7L12.4 14.8L8 12.4L3.6 14.8L4.5 9.7L1 6.3L6 5.5Z"/>
+                </svg>
+              )}
+            </div>
+
+            {/* Name */}
+            <h3 className="text-sm font-semibold text-white line-clamp-2 mb-1.5 leading-tight">
+              {product.name}
+            </h3>
+
+            {/* Rating */}
+            <div className="flex items-center gap-1 mb-2">
+              <div className="flex">
+                {Array(5).fill(0).map((_, i) => (
+                  <span key={i} style={{ color: i < Math.round(product.rating) ? '#F59E0B' : '#3D3D3D', fontSize: '10px' }}>★</span>
+                ))}
+              </div>
+              <span className="text-[10px] text-[#A0A0A0]">({product.reviewCount})</span>
+              {product.soldCount > 0 && (
+                <span className="text-[10px] text-[#A0A0A0] ml-auto">{product.soldCount}+ зарагдсан</span>
+              )}
+            </div>
+
+            {/* Price */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-base font-black text-[#E8242C]">
+                {product.price.toLocaleString()}₮
+              </span>
+              {product.originalPrice && (
+                <span className="text-xs text-[#555] line-through">
+                  {product.originalPrice.toLocaleString()}₮
+                </span>
+              )}
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Quick view modal */}
+      {showQuickView && (
+        <QuickViewModal
+          productId={product.id}
+          onClose={() => setShowQuickView(false)}
+        />
+      )}
+    </>
+  )
+}
+```
+
+### WISHLIST BUTTON — authenticated
+
+```tsx
+// components/product/WishlistButton.tsx
+'use client'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+
+export function WishlistButton({ productId, initialState }: { productId: string; initialState: boolean }) {
+  const { data: session } = useSession()
+  const router = useRouter()
+  const [isWishlisted, setIsWishlisted] = useState(initialState)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const toggle = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!session) {
+      // Redirect to login with return URL
+      router.push(`/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
+      return
+    }
+
+    setIsLoading(true)
+    const method = isWishlisted ? 'DELETE' : 'POST'
+    await fetch(`/api/wishlist/${productId}`, { method })
+    setIsWishlisted(!isWishlisted)
+    setIsLoading(false)
+
+    // Toast: "Хүслийн жагсаалтад нэмэгдлээ" / "Хасагдлаа"
+    toast(isWishlisted ? 'Хасагдлаа' : 'Хүслийн жагсаалтад нэмэгдлээ')
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      disabled={isLoading}
+      className="w-7 h-7 rounded-full bg-black/60 backdrop-blur flex items-center justify-center hover:bg-[#E8242C] transition-colors"
+    >
+      <svg width="12" height="12" viewBox="0 0 16 16"
+        fill={isWishlisted ? '#E8242C' : 'none'}
+        stroke={isWishlisted ? '#E8242C' : 'white'}
+        strokeWidth="1.5">
+        <path d="M8 14s-6-3.5-6-8a4 4 0 018 0 4 4 0 018 0c0 4.5-6 8-6 8z"/>
+      </svg>
+    </button>
+  )
+}
+```
+
+### PRODUCT CARD SKELETON
+
+```tsx
+export function ProductCardSkeleton() {
+  return (
+    <div className="bg-[#1A1A1A] rounded-[10px] overflow-hidden border border-[#3D3D3D] animate-pulse">
+      <div className="aspect-square bg-[#2A2A2A]" />
+      <div className="p-3 space-y-2">
+        <div className="h-3 bg-[#2A2A2A] rounded w-2/3" />
+        <div className="h-4 bg-[#2A2A2A] rounded" />
+        <div className="h-4 bg-[#2A2A2A] rounded w-3/4" />
+        <div className="h-5 bg-[#2A2A2A] rounded w-1/2" />
+      </div>
+    </div>
+  )
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 24 -->
+<div id="panel-p24" class="panel">
+<div class="st">Prompt 24 — Бараа дэлгэрэнгүй хуудасны бүрэн шинэчлэлт</div>
+<div class="prompt-box" id="p24text">
+<button class="copy-btn" onclick="copyPrompt('p24text')">Хуулах</button>## PRODUCT DETAIL PAGE — /app/product/[slug]/page.tsx
+
+Complete rebuild of the product detail page with full media gallery,
+rich description, specifications, seller info, and related products.
+
+---
+
+### PAGE STRUCTURE
+
+```
+/product/[slug]
+├── Breadcrumb (Нүүр > Ангилал > Барааны нэр)
+├── Media Gallery (зүүн)
+│   ├── Main image / video player
+│   ├── Thumbnail strip (зургууд + видео)
+│   └── 360° view (optional)
+├── Product Info (баруун)
+│   ├── Seller badge + verified
+│   ├── Title + RefID
+│   ├── Rating summary + review count link
+│   ├── Price block (current + original + discount %)
+│   ├── Stock status
+│   ├── Variant selector (size, color if applicable)
+│   ├── Quantity selector
+│   ├── CTA: Сагсанд нэмэх + Худалдан авах
+│   ├── Wishlist + Share buttons
+│   └── Quick delivery estimate
+├── Tab section
+│   ├── Тайлбар (rich text)
+│   ├── Үзүүлэлт (specification table)
+│   ├── Татан авах файлууд
+│   └── Үнэлгээ & Сэтгэгдэл
+├── Seller profile card
+└── Холбогдох бараа (related)
+```
+
+### MEDIA GALLERY COMPONENT
+
+```tsx
+// components/product/MediaGallery.tsx
+'use client'
+import { useState } from 'react'
+
+interface MediaItem {
+  type: 'image' | 'video'
+  url: string
+  thumbnail: string
+}
+
+export function MediaGallery({ items }: { items: MediaItem[] }) {
+  const [activeIdx, setActiveIdx] = useState(0)
+  const active = items[activeIdx]
+
+  return (
+    <div className="flex gap-3">
+      {/* Thumbnail strip (vertical) */}
+      <div className="flex flex-col gap-2 w-16 flex-shrink-0">
+        {items.map((item, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveIdx(i)}
+            className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+              activeIdx === i ? 'border-[#E8242C]' : 'border-[#3D3D3D] opacity-60 hover:opacity-100'
+            }`}
+          >
+            <img src={item.thumbnail} className="w-full h-full object-cover" />
+            {item.type === 'video' && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                <span className="text-white text-sm">▶</span>
+              </div>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Main view */}
+      <div className="flex-1 relative aspect-square rounded-xl overflow-hidden bg-[#1A1A1A]">
+        {active.type === 'video' ? (
+          <video
+            key={active.url}
+            src={active.url}
+            controls
+            className="w-full h-full object-contain"
+            poster={active.thumbnail}
+          />
+        ) : (
+          <Image
+            src={active.url}
+            alt=""
+            fill
+            className="object-contain"
+            sizes="(max-width:768px) 100vw, 50vw"
+            priority
+          />
+        )}
+
+        {/* Zoom on hover (desktop) */}
+        <div className="absolute top-3 right-3 flex flex-col gap-2">
+          <button
+            onClick={() => window.open(active.url, '_blank')}
+            className="w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-[#E8242C] transition-colors"
+            title="Томруулах"
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <circle cx="6.5" cy="6.5" r="4"/>
+              <path d="M10 10L14 14"/>
+              <path d="M4.5 6.5h4M6.5 4.5v4"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+### PRODUCT INFO SECTION
+
+```tsx
+// components/product/ProductInfo.tsx
+
+export function ProductInfo({ product }: { product: FullProduct }) {
+  const [qty, setQty] = useState(1)
+
+  return (
+    <div className="flex flex-col gap-4">
+      {/* Seller */}
+      <Link href={`/store/${product.seller.slug}`}
+        className="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit">
+        {product.seller.logo && <img src={product.seller.logo} className="w-8 h-8 rounded-full object-cover" />}
+        <span className="text-sm text-[#A0A0A0]">{product.seller.name}</span>
+        {product.seller.isVerified && <VerifiedIcon />}
+      </Link>
+
+      {/* Title + RefID */}
+      <div>
+        <h1 className="text-2xl font-black text-white leading-tight mb-1">{product.name}</h1>
+        <p className="text-xs text-[#555] font-mono">#{product.refId}</p>
+      </div>
+
+      {/* Rating */}
+      <RatingSummary rating={product.rating} count={product.reviewCount} />
+
+      {/* Price */}
+      <div className="flex items-baseline gap-3">
+        <span className="text-3xl font-black text-[#E8242C]">{product.price.toLocaleString()}₮</span>
+        {product.originalPrice && (
+          <>
+            <span className="text-lg text-[#555] line-through">{product.originalPrice.toLocaleString()}₮</span>
+            <span className="text-sm font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded-full">
+              -{product.discountPct}%
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* Stock */}
+      <StockBadge stock={product.stock} />
+
+      {/* Quantity */}
+      <div className="flex items-center gap-3">
+        <span className="text-sm text-[#A0A0A0]">Тоо ширхэг</span>
+        <div className="flex items-center gap-2 bg-[#2A2A2A] rounded-lg p-1">
+          <button onClick={() => setQty(q => Math.max(1, q-1))}
+            className="w-8 h-8 flex items-center justify-center text-white hover:text-[#E8242C]">−</button>
+          <span className="w-8 text-center text-white font-semibold">{qty}</span>
+          <button onClick={() => setQty(q => Math.min(product.stock, q+1))}
+            className="w-8 h-8 flex items-center justify-center text-white hover:text-[#E8242C]">+</button>
+        </div>
+      </div>
+
+      {/* CTA buttons */}
+      <div className="flex gap-3">
+        <Button variant="primary" size="lg" className="flex-1" onClick={() => addToCart(product, qty)}>
+          Сагсанд нэмэх
+        </Button>
+        <Button variant="secondary" size="lg" className="flex-1" asChild>
+          <Link href={`/checkout?productId=${product.id}&qty=${qty}`}>Худалдан авах</Link>
+        </Button>
+      </div>
+
+      {/* Wishlist + Share */}
+      <div className="flex gap-3">
+        <WishlistButton productId={product.id} initialState={product.isWishlisted} showLabel />
+        <ShareButton url={`https://eseller.mn/product/${product.slug}`} title={product.name} />
+      </div>
+
+      {/* Delivery estimate */}
+      <DeliveryEstimate address={userAddress} weight={product.weight} />
+    </div>
+  )
+}
+```
+
+### TAB SECTION — Description, Specs, Downloads, Reviews
+
+```tsx
+const tabs = ['Тайлбар', 'Үзүүлэлт', 'Татан авах', 'Үнэлгээ']
+
+// Tab: Тайлбар — rich text (rendered HTML from Tiptap/Quill)
+<div className="prose prose-invert max-w-none"
+  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.descriptionHtml) }}
+/>
+
+// Tab: Үзүүлэлт — key-value table
+<table className="w-full text-sm">
+  {product.specifications.map(spec => (
+    <tr key={spec.key} className="border-b border-[#3D3D3D]">
+      <td className="py-2.5 pr-4 text-[#A0A0A0] w-1/3">{spec.key}</td>
+      <td className="py-2.5 text-white">{spec.value}</td>
+    </tr>
+  ))}
+</table>
+
+// Tab: Татан авах — downloadable files
+<div className="space-y-2">
+  {product.files.map(file => (
+    <DownloadRow key={file.id} file={file} />
+  ))}
+</div>
+
+// Tab: Үнэлгээ — reviews
+<ReviewSection productId={product.id} reviews={product.reviews} />
+```
+
+### SEO — generateMetadata
+
+```typescript
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const product = await getProduct(params.slug)
+
+  return {
+    title: `${product.name} | Eseller.mn`,
+    description: product.description?.slice(0, 160),
+    openGraph: {
+      title: product.name,
+      description: product.description?.slice(0, 160),
+      images: [{ url: product.images[0], width: 800, height: 800 }],
+      type: 'website',
+    },
+    other: {
+      'product:price:amount': product.price.toString(),
+      'product:price:currency': 'MNT',
+    },
+  }
+}
+
+// JSON-LD structured data
+export function ProductJsonLd({ product }) {
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.name,
+      image: product.images,
+      description: product.description,
+      sku: product.refId,
+      offers: {
+        "@type": "Offer",
+        price: product.price,
+        priceCurrency: "MNT",
+        availability: product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        seller: { "@type": "Organization", name: product.seller.name }
+      },
+      aggregateRating: product.reviewCount > 0 ? {
+        "@type": "AggregateRating",
+        ratingValue: product.rating,
+        reviewCount: product.reviewCount,
+      } : undefined,
+    })}} />
+  )
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 25 -->
+<div id="panel-p25" class="panel">
+<div class="st">Prompt 25 — Дэлгүүр эзний бараа нэмэх/засах форм (олон медиа)</div>
+<div class="prompt-box" id="p25text">
+<button class="copy-btn" onclick="copyPrompt('p25text')">Хуулах</button>## SELLER PRODUCT CREATE/EDIT — FULL MEDIA + RICH CONTENT
+
+Rebuild the seller product form with multi-image upload, video support,
+rich text description, specification builder, and download files.
+
+---
+
+### PRODUCT FORM STRUCTURE (5 tabs)
+
+```
+/dashboard/products/new
+/dashboard/products/[id]/edit
+
+Tab 1: Үндсэн мэдээлэл
+  — Нэр (required, 3-200 chars)
+  — Slug (auto-generated, editable)
+  — Ангилал (nested dropdown)
+  — Брэнд (optional)
+  — Хаяг / Байршил (for physical items)
+  — Tags (multi-select)
+  — Status (Draft / Active / Archived)
+
+Tab 2: Медиа (Зураг, Видео)
+  — Multi-image upload (max 10)
+  — Video upload OR YouTube/Vimeo link
+  — Image ordering (drag & drop)
+  — Thumbnail selector
+
+Tab 3: Тайлбар & Үзүүлэлт
+  — Rich text editor (Tiptap)
+  — Specification table builder
+
+Tab 4: Үнэ & Тоо хэмжээ
+  — Үнэ (required)
+  — Хямдралтай үнэ + хугацаа
+  — Нөөц (stock)
+  — Жин / Хэмжээ (shipping)
+  — SKU / Barcode
+
+Tab 5: Файл & Нэмэлт
+  — Download files (PDF/Doc/ZIP)
+  — Shipping rules
+  — SEO meta (override)
+```
+
+### TAB 2: MULTI-IMAGE + VIDEO UPLOAD
+
+```tsx
+// components/seller/MediaUploadTab.tsx
+'use client'
+import { DndContext, closestCenter } from '@dnd-kit/core'
+import { SortableContext, useSortable, arrayMove } from '@dnd-kit/sortable'
+
+export function MediaUploadTab({ value, onChange }) {
+  const [images, setImages] = useState<UploadedFile[]>(value.images || [])
+  const [video, setVideo] = useState<VideoSource>(value.video || null)
+  const [videoMode, setVideoMode] = useState<'upload' | 'link'>('link')
+
+  const handleImageUpload = async (files: File[]) => {
+    const remaining = 10 - images.length
+    const toUpload = files.slice(0, remaining)
+
+    for (const file of toUpload) {
+      // Validate
+      if (!file.type.startsWith('image/')) { toast.error('Зөвхөн зураг оруулна уу'); continue }
+      if (file.size > 10 * 1024 * 1024) { toast.error('10MB-аас бага зураг оруулна уу'); continue }
+
+      // Get presigned URL
+      const { uploadUrl, fileId, publicUrl } = await fetch('/api/files/upload-url', {
+        method: 'POST',
+        body: JSON.stringify({ filename: file.name, mimeType: file.type, category: 'PRODUCT_IMAGE' }),
+      }).then(r => r.json())
+
+      // Upload to S3/R2
+      await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } })
+
+      // Confirm
+      await fetch('/api/files/confirm', {
+        method: 'POST',
+        body: JSON.stringify({ fileId, entityId: storeId }),
+      })
+
+      setImages(prev => [...prev, { id: fileId, url: publicUrl, isPrimary: prev.length === 0 }])
+    }
+  }
+
+  const reorder = (event) => {
+    const { active, over } = event
+    if (active.id !== over.id) {
+      setImages(items => {
+        const oldIdx = items.findIndex(i => i.id === active.id)
+        const newIdx = items.findIndex(i => i.id === over.id)
+        return arrayMove(items, oldIdx, newIdx)
+      })
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Image upload zone */}
+      <div>
+        <label className="block text-sm font-medium text-[#E0E0E0] mb-3">
+          Бараа зурагнууд
+          <span className="text-[#A0A0A0] font-normal ml-2">(хамгийн ихдээ 10, эхний зураг гол зураг болно)</span>
+        </label>
+
+        {/* Drop zone */}
+        <div
+          className="border-2 border-dashed border-[#3D3D3D] rounded-xl p-8 text-center cursor-pointer hover:border-[#E8242C] transition-colors"
+          onClick={() => fileInputRef.current?.click()}
+          onDrop={e => { e.preventDefault(); handleImageUpload([...e.dataTransfer.files]) }}
+          onDragOver={e => e.preventDefault()}
+        >
+          <div className="text-[#A0A0A0] text-sm">
+            Зурагаа чирж оруулах эсвэл дарж сонгох
+            <br/>
+            <span className="text-xs">JPG, PNG, WEBP · 10MB хүртэл</span>
+          </div>
+          <input ref={fileInputRef} type="file" multiple accept="image/*"
+            className="hidden"
+            onChange={e => handleImageUpload([...e.target.files!])} />
+        </div>
+
+        {/* Image grid (sortable) */}
+        {images.length > 0 && (
+          <DndContext collisionDetection={closestCenter} onDragEnd={reorder}>
+            <SortableContext items={images.map(i => i.id)}>
+              <div className="grid grid-cols-5 gap-3 mt-4">
+                {images.map((img, idx) => (
+                  <SortableImage key={img.id} image={img} index={idx}
+                    onRemove={() => setImages(imgs => imgs.filter(i => i.id !== img.id))}
+                    onSetPrimary={() => setImages(imgs => imgs.map(i => ({ ...i, isPrimary: i.id === img.id })))}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
+        )}
+      </div>
+
+      {/* Video section */}
+      <div>
+        <label className="block text-sm font-medium text-[#E0E0E0] mb-3">
+          Видео танилцуулга
+          <span className="text-[#A0A0A0] font-normal ml-2">(заавал биш)</span>
+        </label>
+
+        <div className="flex gap-2 mb-3">
+          <button
+            onClick={() => setVideoMode('link')}
+            className={`px-3 py-1.5 rounded text-sm ${videoMode === 'link' ? 'bg-[#E8242C] text-white' : 'bg-[#2A2A2A] text-[#A0A0A0]'}`}
+          >YouTube / Vimeo холбоос</button>
+          <button
+            onClick={() => setVideoMode('upload')}
+            className={`px-3 py-1.5 rounded text-sm ${videoMode === 'upload' ? 'bg-[#E8242C] text-white' : 'bg-[#2A2A2A] text-[#A0A0A0]'}`}
+          >Видео файл upload</button>
+        </div>
+
+        {videoMode === 'link' ? (
+          <div className="space-y-2">
+            <input
+              type="url"
+              placeholder="https://youtube.com/watch?v=... эсвэл https://vimeo.com/..."
+              value={video?.url || ''}
+              onChange={e => setVideo({ type: 'link', url: e.target.value })}
+              className="w-full bg-[#2A2A2A] border border-[#3D3D3D] rounded-lg px-4 h-10 text-white text-sm"
+            />
+            {video?.url && isValidVideoUrl(video.url) && (
+              <VideoPreview url={video.url} />
+            )}
+          </div>
+        ) : (
+          <VideoUploader
+            maxSize={200 * 1024 * 1024}  // 200MB
+            onUpload={(file) => setVideo({ type: 'upload', ...file })}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+```
+
+### TAB 3: RICH TEXT + SPEC BUILDER
+
+```tsx
+// Rich text description with Tiptap
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Image from '@tiptap/extension-image'
+import Table from '@tiptap/extension-table'
+
+const editor = useEditor({
+  extensions: [StarterKit, Image, Table.configure({ resizable: true })],
+  content: product?.descriptionHtml || '',
+  onUpdate: ({ editor }) => onChange(editor.getHTML()),
+})
+
+// Spec table builder
+interface Spec { key: string; value: string }
+const [specs, setSpecs] = useState<Spec[]>(product?.specifications || [])
+
+<div className="space-y-2">
+  {specs.map((spec, i) => (
+    <div key={i} className="flex gap-2">
+      <input
+        placeholder="Нэр (жш: Жин)"
+        value={spec.key}
+        onChange={e => updateSpec(i, 'key', e.target.value)}
+        className="flex-1 bg-[#2A2A2A] border border-[#3D3D3D] rounded px-3 h-9 text-white text-sm"
+      />
+      <input
+        placeholder="Утга (жш: 0.5 кг)"
+        value={spec.value}
+        onChange={e => updateSpec(i, 'value', e.target.value)}
+        className="flex-1 bg-[#2A2A2A] border border-[#3D3D3D] rounded px-3 h-9 text-white text-sm"
+      />
+      <button onClick={() => removeSpec(i)} className="text-[#E8242C] hover:opacity-80 px-2">✕</button>
+    </div>
+  ))}
+  <button
+    onClick={() => setSpecs(s => [...s, { key: '', value: '' }])}
+    className="text-sm text-[#E8242C] hover:opacity-80"
+  >+ Үзүүлэлт нэмэх</button>
+</div>
+```
+
+### FORM SAVE + AUTO-SAVE
+
+```typescript
+// Auto-save draft every 30 seconds
+useEffect(() => {
+  const timer = setInterval(async () => {
+    if (isDirty) {
+      await saveDraft(formValues)
+      setLastSaved(new Date())
+      setIsDirty(false)
+    }
+  }, 30000)
+  return () => clearInterval(timer)
+}, [formValues, isDirty])
+
+// Show: "Хадгалагдлаа · 2 мин өмнө"
+// Publish button → changes status to ACTIVE + FB catalog sync + Google Merchant sync
+```
+
+### API ROUTE
+
+```typescript
+// POST /api/seller/products
+// PATCH /api/seller/products/[id]
+// Validates: ownership (sellerId === session.user.entityId)
+// After save: trigger catalog syncs, invalidate feed cache
+// Prisma transaction: product + images + specs + files
+```
+</div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyPrompt(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.innerText.replace('Хуулах','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа!';
+    setTimeout(()=>btn.textContent='Хуулах',2000);
+  });
+}
+function copyAll(){
+  const ids=['p22text','p23text','p24text','p25text'];
+  const all=ids.map(id=>{
+    const el=document.getElementById(id);
+    return el?el.innerText.replace('Хуулах','').trim():'';
+  }).join('\n\n---\n\n');
+  navigator.clipboard.writeText(all).then(()=>alert('Бүх 4 prompt хуулагдлаа!'));
+}
+</script>

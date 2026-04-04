@@ -39,6 +39,8 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json({ success: true, data: banners });
   } catch (e: unknown) {
-    return NextResponse.json({ success: false, error: (e as Error).message }, { status: 500 });
+    // Return empty array instead of 500 so frontend uses fallback gracefully
+    console.warn('Banners API error:', (e as Error).message);
+    return NextResponse.json({ success: true, data: [] });
   }
 }

@@ -1,0 +1,118 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:16px}
+.phase{margin-bottom:20px;border-radius:12px;border:0.5px solid var(--color-border-tertiary);overflow:hidden}
+.phase-header{padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.phase-title{font-size:14px;font-weight:500;color:var(--color-text-primary);flex:1}
+.phase-meta{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500}
+.phase-body{padding:0 16px 14px;display:none}
+.phase-body.open{display:block}
+.items{display:grid;gap:6px;margin-top:10px}
+.item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.item-icon{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.item-text{flex:1}
+.item-title{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.3}
+.item-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px;line-height:1.4}
+.tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;margin-top:4px;font-weight:500}
+.chevron{width:16px;height:16px;transition:transform .2s;color:var(--color-text-tertiary)}
+.chevron.open{transform:rotate(90deg)}
+
+.p1-h{background:#FEF3F2}.p1-m{background:#FEE4E2;color:#C0392B}
+.p2-h{background:#FFF8ED}.p2-m{background:#FDEBC8;color:#854F0B}
+.p3-h{background:#F0FDF4}.p3-m{background:#DCFCE7;color:#166534}
+.p4-h{background:#EFF6FF}.p4-m{background:#DBEAFE;color:#1D4ED8}
+
+.ic-red{background:#FEE2E2}.ic-amber{background:#FEF3C7}.ic-green{background:#D1FAE5}.ic-blue{background:#DBEAFE}.ic-purple{background:#EDE9FE}
+.tag-bug{background:#FEE2E2;color:#991B1B}
+.tag-feat{background:#DBEAFE;color:#1E40AF}
+.tag-perf{background:#D1FAE5;color:#065F46}
+.tag-ux{background:#EDE9FE;color:#5B21B6}
+.tag-biz{background:#FEF3C7;color:#92400E}
+</style>
+
+<div class="wrap">
+
+<div class="phase">
+<div class="phase-header p1-h" onclick="toggle(this)">
+<div style="width:8px;height:8px;border-radius:50%;background:#E24B4A;flex-shrink:0"></div>
+<span class="phase-title">Одоо хийх — суурийг бэхжүүлэх</span>
+<span class="phase-meta p1-m">1–2 долоо хоног</span>
+<svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 4l4 4-4 4"/></svg>
+</div>
+<div class="phase-body open">
+<div class="items">
+<div class="item"><div class="item-icon ic-red"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#991B1B" stroke-width="1.5"><path d="M6 2v4M6 8v1"/></svg></div><div class="item-text"><div class="item-title">Product modal — modifier/add-on систем</div><div class="item-sub">Соус, нэмэлт бүтээгдэхүүн сонголт. Required group блокер. Үнэ real-time нэмэгдэх.</div><span class="tag tag-feat">feature</span><span class="tag tag-biz" style="margin-left:4px">орлого ↑</span></div></div>
+<div class="item"><div class="item-icon ic-red"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#991B1B" stroke-width="1.5"><path d="M6 2v4M6 8v1"/></svg></div><div class="item-text"><div class="item-title">Cart — modifier-тэй line item</div><div class="item-sub">Ижил бараа өөр modifier-тэй бол тусдаа мөр болох. lib/cart.ts-д SelectedModifier type нэмэх.</div><span class="tag tag-bug">засах</span></div></div>
+<div class="item"><div class="item-icon ic-amber"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#92400E" stroke-width="1.5"><path d="M2 6h8M6 2v8"/></svg></div><div class="item-text"><div class="item-title">Upsell блок modal-д</div><div class="item-sub">Ижил seller + ижил category-н бараа харуулах. Horizontal scroll, нэг товчоор нэмэх.</div><span class="tag tag-biz">AOV ↑</span></div></div>
+<div class="item"><div class="item-icon ic-amber"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#92400E" stroke-width="1.5"><path d="M2 6h8M6 2v8"/></svg></div><div class="item-text"><div class="item-title">ShopType-аар modal тохируулах</div><div class="item-sub">Food → modifier + хүргэлтийн хугацаа. Бусад → variant pill. getModalConfig() helper.</div><span class="tag tag-feat">feature</span></div></div>
+<div class="item"><div class="item-icon ic-amber"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#92400E" stroke-width="1.5"><path d="M2 6h8M6 2v8"/></svg></div><div class="item-text"><div class="item-title">Seller dashboard — modifier CRUD</div><div class="item-sub">Бүтээгдэхүүн edit modal дотор group/option нэмэх/засах/устгах. Inline хэрэгтэй.</div><span class="tag tag-ux">UX</span></div></div>
+</div>
+</div>
+</div>
+
+<div class="phase">
+<div class="phase-header p2-h" onclick="toggle(this)">
+<div style="width:8px;height:8px;border-radius:50%;background:#F59E0B;flex-shrink:0"></div>
+<span class="phase-title">Богино хугацаа — гүнзгийрүүлэх</span>
+<span class="phase-meta p2-m">1 сар</span>
+<svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 4l4 4-4 4"/></svg>
+</div>
+<div class="phase-body">
+<div class="items">
+<div class="item"><div class="item-icon ic-blue"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#1D4ED8" stroke-width="1.5"><rect x="2" y="2" width="8" height="8" rx="2"/></svg></div><div class="item-text"><div class="item-title">Seller analytics dashboard</div><div class="item-sub">Өдрийн орлого, шилдэг бараа, захиалгын хурд. Одоо StatCard байгаа ч data хоосон.</div><span class="tag tag-biz">хамгийн их хэрэгтэй</span></div></div>
+<div class="item"><div class="item-icon ic-blue"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#1D4ED8" stroke-width="1.5"><rect x="2" y="2" width="8" height="8" rx="2"/></svg></div><div class="item-text"><div class="item-title">Order real-time status</div><div class="item-sub">Buyer-д "хоол бэлтгэж байна → замдаа байна → хүргэгдлээ" status. Socket эсвэл polling.</div><span class="tag tag-ux">UX</span><span class="tag tag-feat" style="margin-left:4px">feature</span></div></div>
+<div class="item"><div class="item-icon ic-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#065F46" stroke-width="1.5"><path d="M2 6l3 3 5-5"/></svg></div><div class="item-text"><div class="item-title">ProductCard hover slideshow</div><div class="item-sub">Hover → зургийн auto-cycle. Өнгө swatch дарахад зураг солигдох. Zary.mn-д тохирно.</div><span class="tag tag-ux">UX</span></div></div>
+<div class="item"><div class="item-icon ic-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#065F46" stroke-width="1.5"><path d="M2 6l3 3 5-5"/></svg></div><div class="item-text"><div class="item-title">Search — бодит хайлт</div><div class="item-sub">Одоо UI байгаа ч backend search ажиллахгүй. Full-text search MongoDB Atlas эсвэл Meilisearch.</div><span class="tag tag-bug">засах</span><span class="tag tag-perf" style="margin-left:4px">perf</span></div></div>
+<div class="item"><div class="item-icon ic-purple"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#5B21B6" stroke-width="1.5"><circle cx="6" cy="6" r="4"/></svg></div><div class="item-text"><div class="item-title">Review + rating систем</div><div class="item-sub">Одоо star display байгаа ч data хоосон. Buyer захиалгын дараа үнэлгээ үлдээх flow.</div><span class="tag tag-feat">feature</span><span class="tag tag-biz" style="margin-left:4px">trust ↑</span></div></div>
+</div>
+</div>
+</div>
+
+<div class="phase">
+<div class="phase-header p3-h" onclick="toggle(this)">
+<div style="width:8px;height:8px;border-radius:50%;background:#22C55E;flex-shrink:0"></div>
+<span class="phase-title">Дунд хугацаа — өргөтгөх</span>
+<span class="phase-meta p3-m">2–3 сар</span>
+<svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 4l4 4-4 4"/></svg>
+</div>
+<div class="phase-body">
+<div class="items">
+<div class="item"><div class="item-icon ic-blue"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#1D4ED8" stroke-width="1.5"><rect x="2" y="2" width="8" height="8" rx="2"/></svg></div><div class="item-text"><div class="item-title">Storefront builder — гүнзгийрүүлэх</div><div class="item-sub">AI generate + seller засах + mobile preview + publish flow. Одоо хагас бэлэн.</div><span class="tag tag-feat">feature</span></div></div>
+<div class="item"><div class="item-icon ic-blue"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#1D4ED8" stroke-width="1.5"><rect x="2" y="2" width="8" height="8" rx="2"/></svg></div><div class="item-text"><div class="item-title">Multi-tenant subdomain routing</div><div class="item-sub">myshop.eseller.mn → /s/[shopSlug] middleware. Custom domain SSL. Одоо schema бэлэн.</div><span class="tag tag-feat">feature</span><span class="tag tag-biz" style="margin-left:4px">differentiator</span></div></div>
+<div class="item"><div class="item-icon ic-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#065F46" stroke-width="1.5"><path d="M2 6l3 3 5-5"/></svg></div><div class="item-text"><div class="item-title">Affiliate систем бодитоор ажиллуулах</div><div class="item-sub">UI бэлэн ч tracking, commission calculation, payout хоосон. Энэ дээр орлого гарна.</div><span class="tag tag-biz">орлого</span></div></div>
+<div class="item"><div class="item-icon ic-purple"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#5B21B6" stroke-width="1.5"><circle cx="6" cy="6" r="4"/></svg></div><div class="item-text"><div class="item-title">AI category engine production</div><div class="item-sub">Бараа нэмэхэд автомат ангилал. Confidence score. Seller review queue дутуу.</div><span class="tag tag-feat">AI</span></div></div>
+<div class="item"><div class="item-icon ic-amber"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#92400E" stroke-width="1.5"><path d="M2 6h8M6 2v8"/></svg></div><div class="item-text"><div class="item-title">App/store/page.tsx — рефактор</div><div class="item-sub">677 мөр нэг файлд байгаа нь хэт том. Modal, ProductGrid, FilterPanel тус тусдаа болгох.</div><span class="tag tag-perf">tech debt</span></div></div>
+</div>
+</div>
+</div>
+
+<div class="phase">
+<div class="phase-header p4-h" onclick="toggle(this)">
+<div style="width:8px;height:8px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>
+<span class="phase-title">Урт хугацаа — scale</span>
+<span class="phase-meta p4-m">3–6 сар</span>
+<svg class="chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 4l4 4-4 4"/></svg>
+</div>
+<div class="phase-body">
+<div class="items">
+<div class="item"><div class="item-icon ic-blue"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#1D4ED8" stroke-width="1.5"><rect x="2" y="2" width="8" height="8" rx="2"/></svg></div><div class="item-text"><div class="item-title">Mobile app — React Native / PWA</div><div class="item-sub">Хоолны дэлгүүр mobile-first байдаг. Push notification захиалгын update-д зайлшгүй.</div><span class="tag tag-feat">platform</span></div></div>
+<div class="item"><div class="item-icon ic-green"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#065F46" stroke-width="1.5"><path d="M2 6l3 3 5-5"/></svg></div><div class="item-text"><div class="item-title">Performance — caching layer</div><div class="item-sub">Redis cache marketplace feed-д. ISR Next.js storefront page-үүдэд. CDN зураг optimize.</div><span class="tag tag-perf">perf</span></div></div>
+<div class="item"><div class="item-icon ic-purple"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#5B21B6" stroke-width="1.5"><circle cx="6" cy="6" r="4"/></svg></div><div class="item-text"><div class="item-title">AI recommendation engine</div><div class="item-sub">Хэрэглэгчийн захиалгын түүхэнд үндэслэсэн бараа санал. Collaborative filtering.</div><span class="tag tag-feat">AI</span><span class="tag tag-biz" style="margin-left:4px">retention ↑</span></div></div>
+<div class="item"><div class="item-icon ic-amber"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#92400E" stroke-width="1.5"><path d="M2 6h8M6 2v8"/></svg></div><div class="item-text"><div class="item-title">Multi-currency + төлбөр</div><div class="item-sub">MNT дангаараа хангалттай ч QPay/SocialPay нэгтгэл бодит хэрэгцээтэй. Escrow систем.</div><span class="tag tag-biz">орлого</span></div></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+function toggle(header){
+const body=header.nextElementSibling;
+const chevron=header.querySelector('.chevron');
+const isOpen=body.classList.contains('open');
+body.classList.toggle('open',!isOpen);
+chevron.classList.toggle('open',!isOpen);
+}
+</script>

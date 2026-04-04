@@ -1,0 +1,668 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:18px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.fbox{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px;text-align:center;position:relative}
+.fbox::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--color-text-tertiary)}
+.fbox:last-child::after{display:none}
+.fnum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;margin:0 auto 6px}
+.ftitle{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.fsub{font-size:10px;color:var(--color-text-tertiary);line-height:1.5}
+.code{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:11px 13px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-all;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:3px 10px;font-size:10px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans)}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px}
+.ctitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.cdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.65}
+
+/* Interactive demo */
+.demo{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px}
+.input-row{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.inp{padding:7px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-size:12px;font-family:var(--font-mono);width:140px}
+.inp:focus{outline:none;border-color:#E8242C;box-shadow:0 0 0 3px rgba(232,36,44,0.08)}
+.result-box{border-radius:var(--border-radius-md);padding:10px 13px;font-size:12px;line-height:1.7;transition:all .2s}
+.r-ok{background:var(--color-background-success);color:var(--color-text-success);border:0.5px solid var(--color-border-success)}
+.r-err{background:var(--color-background-danger);color:var(--color-text-danger);border:0.5px solid var(--color-border-danger)}
+.r-warn{background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning)}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#E8242C;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+</style>
+
+<div class="w">
+
+<!-- Flow -->
+<div class="st">Шалгалтын урсгал</div>
+<div class="flow">
+  <div class="fbox">
+    <div class="fnum" style="background:var(--color-background-info);color:var(--color-text-info)">1</div>
+    <div class="ftitle">Дэлгүүр хадгалах</div>
+    <div class="fsub">POST /api/seller/locations</div>
+  </div>
+  <div class="fbox">
+    <div class="fnum" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</div>
+    <div class="ftitle">Координат шалгах</div>
+    <div class="fsub">lat/lng байна уу? Монголын хүрээнд байна уу?</div>
+  </div>
+  <div class="fbox">
+    <div class="fnum" style="background:var(--color-background-danger);color:var(--color-text-danger)">3</div>
+    <div class="ftitle">Анхааруулга</div>
+    <div class="fsub">Seller reminder / Admin flag / Badge</div>
+  </div>
+  <div class="fbox">
+    <div class="fnum" style="background:var(--color-background-success);color:var(--color-text-success)">4</div>
+    <div class="ftitle">Map харуулах</div>
+    <div class="fsub">Хэрэглэгч дэлгүүрийг газрын зурагт олно</div>
+  </div>
+</div>
+
+<!-- Interactive tester -->
+<div class="st">Координат шалгах — туршилт</div>
+<div class="demo">
+  <div class="input-row">
+    <div>
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px">Latitude</div>
+      <input class="inp" id="lat-in" value="47.8864" placeholder="47.8864" oninput="checkCoord()"/>
+    </div>
+    <div>
+      <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px">Longitude</div>
+      <input class="inp" id="lng-in" value="106.9057" placeholder="106.9057" oninput="checkCoord()"/>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-self:flex-end">
+      <button onclick="setCoord(47.8864,106.9057)" style="padding:6px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);font-size:11px;cursor:pointer">УБ</button>
+      <button onclick="setCoord(0,0)" style="padding:6px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);font-size:11px;cursor:pointer">Null (0,0)</button>
+      <button onclick="setCoord(null,null)" style="padding:6px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);font-size:11px;cursor:pointer">Хоосон</button>
+      <button onclick="setCoord(51.5074,-0.1278)" style="padding:6px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);font-size:11px;cursor:pointer">Лондон</button>
+    </div>
+  </div>
+  <div id="result-box" class="result-box r-ok">✓ Монголын хүрээнд байна — газрын зурагт харагдана</div>
+</div>
+
+<!-- Code tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="show('util')">Utility функц</button>
+  <button class="tab" onclick="show('api')">API validation</button>
+  <button class="tab" onclick="show('admin')">Admin dashboard</button>
+  <button class="tab" onclick="show('seller')">Seller reminder</button>
+  <button class="tab" onclick="show('cron')">Cron шалгалт</button>
+</div>
+
+<div id="panel-util" class="panel active">
+<div class="code" id="c-util"><button class="copy-btn" onclick="cp('c-util')">Хуулах</button>// lib/location/validateCoords.ts
+// Координатын бүрэн шалгалт — нэг газраас
+
+/** Монгол улсын хилийн хүрээ */
+const MONGOLIA_BOUNDS = {
+  latMin: 41.5,  latMax: 52.2,
+  lngMin: 87.7,  lngMax: 119.9,
+}
+
+/** Улаанбаатар хотын хүрээ (нарийн шалгалтад) */
+const UB_BOUNDS = {
+  latMin: 47.7,  latMax: 48.1,
+  lngMin: 106.6, lngMax: 107.3,
+}
+
+export type CoordStatus =
+  | 'valid_ub'       // УБ хотод байна
+  | 'valid_mongolia' // Монголд байна, УБ-с гадна
+  | 'outside'        // Монголоос гадна
+  | 'zero'           // 0,0 — хуучин placeholder
+  | 'missing'        // null / undefined / NaN
+
+export interface CoordValidation {
+  status:  CoordStatus
+  valid:   boolean          // газрын зурагт харуулах эсэх
+  message: string           // хэрэглэгчид харуулах текст
+  needsUpdate: boolean      // дэлгүүр эзэнд сануулах эсэх
+}
+
+export function validateCoords(
+  lat: number | null | undefined,
+  lng: number | null | undefined
+): CoordValidation {
+
+  // 1. Байхгүй / NaN
+  if (lat == null || lng == null || isNaN(lat) || isNaN(lng)) {
+    return {
+      status:      'missing',
+      valid:       false,
+      message:     'Байршлын координат оруулаагүй байна. Газрын зураг дээр pin тавина уу.',
+      needsUpdate: true,
+    }
+  }
+
+  // 2. 0,0 — хуучин өгөгдлийн placeholder
+  if (lat === 0 && lng === 0) {
+    return {
+      status:      'zero',
+      valid:       false,
+      message:     'Байршил тогтоогоогүй байна (0, 0). Газрын зурагт тэмдэглэнэ үү.',
+      needsUpdate: true,
+    }
+  }
+
+  // 3. Монголоос гадна
+  const inMongolia = (
+    lat >= MONGOLIA_BOUNDS.latMin && lat <= MONGOLIA_BOUNDS.latMax &&
+    lng >= MONGOLIA_BOUNDS.lngMin && lng <= MONGOLIA_BOUNDS.lngMax
+  )
+  if (!inMongolia) {
+    return {
+      status:      'outside',
+      valid:       false,
+      message:     `Координат Монголоос гадна байна (${lat.toFixed(4)}, ${lng.toFixed(4)}). Шалгана уу.`,
+      needsUpdate: true,
+    }
+  }
+
+  // 4. УБ хотод
+  const inUB = (
+    lat >= UB_BOUNDS.latMin && lat <= UB_BOUNDS.latMax &&
+    lng >= UB_BOUNDS.lngMin && lng <= UB_BOUNDS.lngMax
+  )
+  if (inUB) {
+    return {
+      status:      'valid_ub',
+      valid:       true,
+      message:     'Улаанбаатар хотод байна',
+      needsUpdate: false,
+    }
+  }
+
+  // 5. Монголд байна, УБ-с гадна (аймгийн төв гэх мэт)
+  return {
+    status:      'valid_mongolia',
+    valid:       true,
+    message:     'Монгол улсад байна',
+    needsUpdate: false,
+  }
+}
+
+/** Массив шалгах (admin bulk check-д) */
+export function validateCoordsMany(
+  locations: Array<{ id: string; name: string; lat: number | null; lng: number | null }>
+): Array<{ id: string; name: string; validation: CoordValidation }> {
+  return locations.map(loc => ({
+    id:         loc.id,
+    name:       loc.name,
+    validation: validateCoords(loc.lat, loc.lng),
+  }))
+}
+
+/** Статусын тоо гаргах */
+export function getCoordStats(locations: Array<{ lat: number | null; lng: number | null }>) {
+  const results = locations.map(l => validateCoords(l.lat, l.lng))
+  return {
+    total:      results.length,
+    valid:      results.filter(r => r.valid).length,
+    missing:    results.filter(r => r.status === 'missing').length,
+    zero:       results.filter(r => r.status === 'zero').length,
+    outside:    results.filter(r => r.status === 'outside').length,
+    needsUpdate:results.filter(r => r.needsUpdate).length,
+  }
+}</div>
+</div>
+
+<div id="panel-api" class="panel">
+<div class="code" id="c-api"><button class="copy-btn" onclick="cp('c-api')">Хуулах</button>// app/api/seller/locations/route.ts
+// POST дээр координат шалгах
+
+import { validateCoords } from '@/lib/location/validateCoords'
+
+export async function POST(req: Request) {
+  const session  = await requireAuth(req)
+  const body     = await req.json()
+  const { lat, lng, ...rest } = body
+
+  // Координат шалгах
+  const coordCheck = validateCoords(lat, lng)
+
+  // Хадгалахдаа статусыг хамт хадгална
+  const location = await db.storeLocation.create({
+    data: {
+      ...rest,
+      lat,
+      lng,
+      coordStatus:      coordCheck.status,
+      coordNeedsUpdate: coordCheck.needsUpdate,
+      entityId:         await getActiveEntityId(session.user.id),
+    }
+  })
+
+  // Координат буруу бол seller-д сануулах даалгавар үүсгэх
+  if (coordCheck.needsUpdate) {
+    await db.sellerTask.upsert({
+      where:  { entityId_type: { entityId: location.entityId, type: 'UPDATE_LOCATION_COORDS' } },
+      create: {
+        entityId:  location.entityId,
+        type:      'UPDATE_LOCATION_COORDS',
+        priority:  'medium',
+        title:     'Байршлын координат шинэчлэх шаардлагатай',
+        message:   coordCheck.message,
+        locationId:location.id,
+      },
+      update: { updatedAt: new Date() }
+    })
+  }
+
+  return Response.json({
+    location,
+    coordWarning: coordCheck.needsUpdate ? coordCheck.message : null,
+  }, { status: 201 })
+}
+
+// Координат шинэчлэх PATCH
+export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+  const body = await req.json()
+  const { lat, lng } = body
+
+  const coordCheck = validateCoords(lat, lng)
+
+  const updated = await db.storeLocation.update({
+    where: { id: params.id },
+    data: {
+      ...body,
+      coordStatus:      coordCheck.status,
+      coordNeedsUpdate: coordCheck.needsUpdate,
+    }
+  })
+
+  // Координат зассан бол task-ийг устгах
+  if (!coordCheck.needsUpdate) {
+    await db.sellerTask.deleteMany({
+      where: { locationId: params.id, type: 'UPDATE_LOCATION_COORDS' }
+    })
+  }
+
+  return Response.json(updated)
+}
+
+// GET — координат байхгүй байршлуудыг тусад нь гаргах
+// GET /api/seller/locations?filter=needs_coords
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const filter = searchParams.get('filter')
+
+  const where: any = { isActive: true }
+  if (filter === 'needs_coords') {
+    where.coordNeedsUpdate = true
+  }
+
+  const locations = await db.storeLocation.findMany({
+    where,
+    orderBy: [{ coordNeedsUpdate: 'desc' }, { createdAt: 'desc' }]
+  })
+  return Response.json(locations)
+}</div>
+</div>
+
+<div id="panel-admin" class="panel">
+<div class="code" id="c-admin"><button class="copy-btn" onclick="cp('c-admin')">Хуулах</button>// app/admin/locations/page.tsx
+// Admin: Координат байхгүй дэлгүүрүүдийн жагсаалт
+
+import { validateCoordsMany, getCoordStats } from '@/lib/location/validateCoords'
+
+export default async function AdminLocationsPage() {
+  const locations = await db.storeLocation.findMany({
+    where:   { isActive: true },
+    include: { entity: { select: { name: true } } },
+    orderBy: { coordNeedsUpdate: 'desc' },
+  })
+
+  const stats = getCoordStats(locations)
+  const invalid = locations.filter(l => l.coordNeedsUpdate)
+
+  return (
+    <AdminLayout>
+      <PageHeader title="Байршлын координат шалгалт" />
+
+      {/* Stats summary */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10, marginBottom: 24 }}>
+        {[
+          { label: 'Нийт байршил',      value: stats.total,       color: 'blue' },
+          { label: 'Зөв координаттай',   value: stats.valid,       color: 'green' },
+          { label: 'Координат байхгүй',  value: stats.missing,     color: 'danger' },
+          { label: 'Шинэчлэх шаардлагатай', value: stats.needsUpdate, color: 'warning' },
+        ].map(s => (
+          <StatCard key={s.label} label={s.label} value={s.value} color={s.color} />
+        ))}
+      </div>
+
+      {/* Batch fix button */}
+      {stats.needsUpdate > 0 && (
+        <div style={{
+          background: 'rgba(245,158,11,0.08)', border: '0.5px solid rgba(245,158,11,0.25)',
+          borderRadius: 10, padding: '12px 16px', marginBottom: 20,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <div>
+            <p style={{ fontWeight: 500, color: '#F59E0B', fontSize: 13 }}>
+              {stats.needsUpdate} дэлгүүрт координат дутуу / буруу байна
+            </p>
+            <p style={{ fontSize: 11, color: '#A0A0A0', marginTop: 2 }}>
+              Дэлгүүр эзэдэд мэдэгдэл явуулах эсвэл хаягаар автомат geocode хийж болно
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <NotifyAllButton count={stats.needsUpdate} />
+            <AutoGeocodeButton />
+          </div>
+        </div>
+      )}
+
+      {/* Locations table */}
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+        <thead>
+          <tr style={{ borderBottom: '0.5px solid #3D3D3D' }}>
+            <Th>Дэлгүүр</Th>
+            <Th>Хаяг</Th>
+            <Th>Координат</Th>
+            <Th>Статус</Th>
+            <Th>Үйлдэл</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {locations.map(loc => {
+            const check = validateCoords(loc.lat, loc.lng)
+            return (
+              <tr key={loc.id} style={{ borderBottom: '0.5px solid #2A2A2A' }}>
+                <Td>
+                  <p style={{ fontWeight: 500 }}>{loc.entity.name}</p>
+                  <p style={{ color: '#A0A0A0' }}>{loc.name}</p>
+                </Td>
+                <Td>{loc.district}, {loc.address?.slice(0, 30)}...</Td>
+                <Td style={{ fontFamily: 'monospace' }}>
+                  {loc.lat != null ? `${loc.lat.toFixed(4)}, ${loc.lng?.toFixed(4)}` : '—'}
+                </Td>
+                <Td>
+                  <CoordStatusBadge status={check.status} />
+                </Td>
+                <Td>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <a href={`/admin/locations/${loc.id}/fix`}>
+                      <ActionButton>Засах</ActionButton>
+                    </a>
+                    {check.needsUpdate && (
+                      <NotifySellerButton locationId={loc.id} />
+                    )}
+                  </div>
+                </Td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </AdminLayout>
+  )
+}
+
+// CoordStatusBadge component
+function CoordStatusBadge({ status }: { status: string }) {
+  const config = {
+    valid_ub:       { label: 'УБ ✓',         bg: 'rgba(34,197,94,0.12)',  color: '#4ADE80' },
+    valid_mongolia: { label: 'Монгол ✓',     bg: 'rgba(34,197,94,0.12)',  color: '#4ADE80' },
+    outside:        { label: 'Монголоос гадна', bg: 'rgba(220,38,38,0.12)', color: '#F87171' },
+    zero:           { label: '0,0 буруу',    bg: 'rgba(245,158,11,0.12)', color: '#FBBF24' },
+    missing:        { label: 'Байхгүй',      bg: 'rgba(220,38,38,0.12)', color: '#F87171' },
+  }
+  const c = config[status as keyof typeof config] || config.missing
+  return (
+    <span style={{
+      fontSize: 10, fontWeight: 600, padding: '2px 8px',
+      borderRadius: 99, background: c.bg, color: c.color,
+    }}>
+      {c.label}
+    </span>
+  )
+}</div>
+</div>
+
+<div id="panel-seller" class="panel">
+<div class="code" id="c-seller"><button class="copy-btn" onclick="cp('c-seller')">Хуулах</button>// components/seller/LocationCoordReminder.tsx
+// Dashboard-ийн дээд хэсэгт харуулах сануулга banner
+
+'use client'
+import { useQuery } from '@tanstack/react-query'
+import { validateCoords } from '@/lib/location/validateCoords'
+
+export function LocationCoordReminder({ entityId }: { entityId: string }) {
+  const { data } = useQuery({
+    queryKey:  ['locations-check', entityId],
+    queryFn:   () => fetch('/api/seller/locations?filter=needs_coords').then(r => r.json()),
+    staleTime: 5 * 60 * 1000, // 5 минут
+  })
+
+  const invalid = data?.filter((l: any) => {
+    return validateCoords(l.lat, l.lng).needsUpdate
+  }) || []
+
+  if (invalid.length === 0) return null
+
+  return (
+    <div style={{
+      background: 'rgba(245,158,11,0.08)',
+      border:     '0.5px solid rgba(245,158,11,0.25)',
+      borderRadius: 10,
+      padding:    '12px 16px',
+      marginBottom: 16,
+      display:    'flex',
+      alignItems: 'center',
+      gap:        12,
+    }}>
+      {/* Warning icon */}
+      <div style={{
+        width: 32, height: 32, borderRadius: '50%',
+        background: 'rgba(245,158,11,0.15)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0,
+      }}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+          stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round">
+          <path d="M8 1L1 14h14L8 1z"/>
+          <path d="M8 6v4M8 11v1"/>
+        </svg>
+      </div>
+
+      <div style={{ flex: 1 }}>
+        <p style={{ fontSize: 13, fontWeight: 500, color: '#FBBF24', marginBottom: 2 }}>
+          {invalid.length} байршлын координат шинэчлэх шаардлагатай
+        </p>
+        <p style={{ fontSize: 11, color: '#A0A0A0' }}>
+          Хэрэглэгчид газрын зурагт таны дэлгүүрийг харахгүй байж болно
+        </p>
+      </div>
+
+      <a href="/dashboard/seller/locations?filter=needs_coords"
+        style={{
+          padding: '6px 14px', borderRadius: 8,
+          background: 'rgba(245,158,11,0.15)',
+          border: '0.5px solid rgba(245,158,11,0.3)',
+          color: '#FBBF24', fontSize: 12, fontWeight: 500,
+          textDecoration: 'none', whiteSpace: 'nowrap',
+          flexShrink: 0,
+        }}>
+        Засах →
+      </a>
+    </div>
+  )
+}
+
+// Байршлын жагсаалт дотор badge харуулах
+export function LocationCoordBadge({ lat, lng }: { lat: number | null, lng: number | null }) {
+  const check = validateCoords(lat, lng)
+  if (check.valid) return null  // Зөв бол badge харуулахгүй
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 4,
+      padding: '2px 8px', borderRadius: 99,
+      background: 'rgba(245,158,11,0.12)',
+      border: '0.5px solid rgba(245,158,11,0.25)',
+      fontSize: 10, color: '#FBBF24',
+    }}>
+      <svg width="10" height="10" viewBox="0 0 16 16" fill="none"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M8 1L1 14h14L8 1z"/>
+        <path d="M8 6v3M8 10v1"/>
+      </svg>
+      Координат дутуу
+    </div>
+  )
+}</div>
+</div>
+
+<div id="panel-cron" class="panel">
+<div class="code" id="c-cron"><button class="copy-btn" onclick="cp('c-cron')">Хуулах</button>// app/api/cron/check-locations/route.ts
+// Vercel Cron — 7 хоног бүр Пүрэв гаригт ажиллана
+// vercel.json: { "crons": [{ "path": "/api/cron/check-locations", "schedule": "0 10 * * 4" }] }
+
+import { validateCoords } from '@/lib/location/validateCoords'
+
+export async function GET(req: Request) {
+  if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+
+  // Нийт идэвхтэй байршлуудыг авах
+  const locations = await db.storeLocation.findMany({
+    where:   { isActive: true },
+    include: { entity: { include: { user: { select: { id: true, email: true } } } } },
+  })
+
+  let fixed = 0, notified = 0, flagged = 0
+
+  for (const loc of locations) {
+    const check = validateCoords(loc.lat, loc.lng)
+
+    // DB-д статус шинэчлэх
+    await db.storeLocation.update({
+      where: { id: loc.id },
+      data:  { coordStatus: check.status, coordNeedsUpdate: check.needsUpdate },
+    })
+
+    if (!check.needsUpdate) {
+      fixed++
+      continue
+    }
+
+    flagged++
+
+    // Seller-д мэдэгдэл — 7 хоногт нэг удаа (lastNotifiedAt шалгах)
+    const recentNotif = await db.notification.findFirst({
+      where: {
+        userId:    loc.entity.user.id,
+        type:      'LOCATION_COORD_MISSING',
+        refId:     loc.id,
+        createdAt: { gte: subDays(new Date(), 7) },
+      }
+    })
+
+    if (!recentNotif) {
+      await db.notification.create({
+        data: {
+          userId:  loc.entity.user.id,
+          type:    'LOCATION_COORD_MISSING',
+          refId:   loc.id,
+          title:   'Байршлын координат шинэчлэх шаардлагатай',
+          message: `"${loc.name}" байршлын координат дутуу байна. Засна уу.`,
+          url:     `/dashboard/seller/locations/${loc.id}/edit`,
+        }
+      })
+
+      // Email
+      await emailService.send(
+        loc.entity.user.email,
+        '📍 Байршлын координатаа шинэчлэнэ үү',
+        `<p>${loc.name} байршлын координат дутуу байна.</p>
+         <p><a href="${process.env.APP_URL}/dashboard/seller/locations/${loc.id}/edit">Одоо засах →</a></p>`
+      )
+
+      notified++
+    }
+  }
+
+  return Response.json({
+    total:    locations.length,
+    valid:    fixed,
+    flagged,
+    notified,
+    checkedAt: new Date().toISOString(),
+  })
+}
+
+// Prisma migration — нэмэх field-үүд:
+// model StoreLocation {
+//   ...
+//   coordStatus      String?  @default("missing")
+//   coordNeedsUpdate Boolean  @default(true)
+// }
+</div>
+</div>
+
+</div>
+
+<script>
+const MN = {latMin:41.5,latMax:52.2,lngMin:87.7,lngMax:119.9}
+const UB = {latMin:47.7,latMax:48.1,lngMin:106.6,lngMax:107.3}
+
+function checkCoord(){
+  const latV=document.getElementById('lat-in').value
+  const lngV=document.getElementById('lng-in').value
+  const rb=document.getElementById('result-box')
+  const lat=parseFloat(latV), lng=parseFloat(lngV)
+  let cls,msg
+  if(!latV||!lngV||isNaN(lat)||isNaN(lng)){
+    cls='r-err';msg='✗ Координат хоосон байна — газрын зурагт харагдахгүй. Seller-д сануулга явуулна.'
+  } else if(lat===0&&lng===0){
+    cls='r-warn';msg='⚠ 0,0 — хуучин placeholder утга. Буруу байрлалд pin харагдана. Засах шаардлагатай.'
+  } else {
+    const inMN=lat>=MN.latMin&&lat<=MN.latMax&&lng>=MN.lngMin&&lng<=MN.lngMax
+    if(!inMN){cls='r-err';msg=`✗ Монголоос гадна (${lat.toFixed(4)}, ${lng.toFixed(4)}) — Admin flag, seller мэдэгдэл явуулна.`}
+    else {
+      const inUB=lat>=UB.latMin&&lat<=UB.latMax&&lng>=UB.lngMin&&lng<=UB.lngMax
+      cls='r-ok'
+      msg=inUB?`✓ Улаанбаатар хотод байна (${lat.toFixed(4)}, ${lng.toFixed(4)}) — газрын зурагт зөв харагдана`
+             :`✓ Монгол улсад байна (${lat.toFixed(4)}, ${lng.toFixed(4)}) — газрын зурагт харагдана`
+    }
+  }
+  rb.className='result-box '+cls; rb.textContent=msg
+}
+
+function setCoord(lat,lng){
+  document.getElementById('lat-in').value=lat==null?'':lat
+  document.getElementById('lng-in').value=lng==null?'':lng
+  checkCoord()
+}
+
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.getElementById('panel-'+id).classList.add('active')
+  event.target.classList.add('active')
+}
+
+function cp(id){
+  const el=document.getElementById(id)
+  const btn=el.querySelector('.copy-btn')
+  const text=el.innerText.replace('Хуулах','').trim()
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа ✓'
+    setTimeout(()=>btn.textContent='Хуулах',2000)
+  })
+}
+
+checkCoord()
+</script>

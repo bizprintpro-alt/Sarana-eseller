@@ -1,0 +1,1599 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:11.5px;line-height:1.85;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);z-index:2}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.card-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.card-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:10px;padding:2px 6px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-teal{background:#E1F5EE;color:#0F6E56}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-coral{background:#FAECE7;color:#993C1D}
+.flow{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.flow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fb{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:4px 10px;font-size:11px;color:var(--color-text-primary);white-space:nowrap}
+.fa{font-size:11px;color:var(--color-text-tertiary)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;margin-top:14px}
+.st:first-child{margin-top:0}
+.app-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.app-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;text-align:center}
+.app-icon{width:48px;height:48px;border-radius:14px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.app-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.app-sub{font-size:11px;color:var(--color-text-tertiary);line-height:1.5;margin-bottom:6px}
+.feature-list{font-size:11px;color:var(--color-text-secondary);text-align:left;line-height:1.8}
+.sec-layer{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.sec-layer:last-child{border-bottom:none}
+.sec-num{width:22px;height:22px;border-radius:50%;background:var(--color-background-info);color:var(--color-text-info);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;margin-top:1px}
+.sec-body{flex:1}
+.sec-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.sec-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Eseller.mn — Татвар · Аюулгүй байдал · Мобайл апп</div>
+    <div class="ps">eБаримт · ДАН · Хамгаалалт · 4 апп · Claude Code prompt багц</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Бүгдийг хуулах</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Тойм</button>
+  <button class="tab" onclick="show('p16')">Prompt 16 · eБаримт + ДАН</button>
+  <button class="tab" onclick="show('p17')">Prompt 17 · Аюулгүй байдал</button>
+  <button class="tab" onclick="show('p18')">Prompt 18 · Оюуны өмч</button>
+  <button class="tab" onclick="show('p19')">Prompt 19 · Хэрэглэгчийн апп</button>
+  <button class="tab" onclick="show('p20')">Prompt 20 · Борлуулагч апп</button>
+  <button class="tab" onclick="show('p21')">Prompt 21 · Жолооч + Дэлгүүр апп</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="panel-overview" class="panel active">
+  <div class="st">Монголын тусгай системүүд</div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-name"><span class="badge b-red">МТА</span>eБаримт систем</div>
+      <div class="card-desc">Монгол Улсын НӨАТ-ын цахим баримт. Төлбөр бүрт автоматаар баримт үүсгэж МТА-д илгээх. Lottery тоглоомтой холбоотой.</div>
+      <div class="tags"><span class="tag">НӨАТ 10%</span><span class="tag">DDTD API</span><span class="tag">QR баримт</span><span class="tag">Lottery</span></div>
+    </div>
+    <div class="card">
+      <div class="card-name"><span class="badge b-blue">ДАН</span>Цахим иргэн</div>
+      <div class="card-desc">Монгол Улсын ДАН (Дижитал Архив Нэгдэл) системээр иргэний үнэмлэхийн дугаараар баталгаажуулалт. KYC-г хялбар болгоно.</div>
+      <div class="tags"><span class="tag">OAuth2</span><span class="tag">Регистрийн дугаар</span><span class="tag">E-Mongolia</span></div>
+    </div>
+    <div class="card">
+      <div class="card-name"><span class="badge b-purple">4 APPs</span>Мобайл апп</div>
+      <div class="card-desc">Хэрэглэгч, Борлуулагч, Жолооч, Дэлгүүрийн тусдаа апп. React Native + Expo. Нэг codebase, 4 өөр апп.</div>
+      <div class="tags"><span class="tag">React Native</span><span class="tag">Expo</span><span class="tag">iOS+Android</span></div>
+    </div>
+  </div>
+
+  <div class="st">Аюулгүй байдлын давхаргууд</div>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:14px">
+    <div class="sec-layer">
+      <div class="sec-num">1</div>
+      <div class="sec-body"><div class="sec-title">Auth давхарга — JWT + Refresh token rotation</div><div class="sec-desc">Access token (15 мин), Refresh token (7 хоног, rotation), Device fingerprint, Suspicious login илрүүлэлт</div></div>
+    </div>
+    <div class="sec-layer">
+      <div class="sec-num">2</div>
+      <div class="sec-body"><div class="sec-title">MFA — Олон шатлалт баталгаажуулалт</div><div class="sec-desc">SMS OTP (Unitel/MobiCom), TOTP (Google Authenticator), Биометр (мобайл апп дахь FaceID/TouchID)</div></div>
+    </div>
+    <div class="sec-layer">
+      <div class="sec-num">3</div>
+      <div class="sec-body"><div class="sec-title">Rate limiting + DDoS хамгаалалт</div><div class="sec-desc">Cloudflare WAF, API rate limit per IP/user, Brute force хамгаалалт (5 оролдлогын дараа lock)</div></div>
+    </div>
+    <div class="sec-layer">
+      <div class="sec-num">4</div>
+      <div class="sec-body"><div class="sec-title">Мэдээллийн шифрлэлт</div><div class="sec-desc">Нууц мэдээлэл (токен, нууц үг) AES-256 шифрлэлт, HTTPS/TLS 1.3, нууц үг bcrypt/argon2</div></div>
+    </div>
+    <div class="sec-layer">
+      <div class="sec-num">5</div>
+      <div class="sec-body"><div class="sec-title">RBAC + Row-level security</div><div class="sec-desc">Role-based access, өөрийн entity-гийн мэдээлэлд л хандах, Postgres RLS policy</div></div>
+    </div>
+    <div class="sec-layer">
+      <div class="sec-num">6</div>
+      <div class="sec-body"><div class="sec-title">Audit + Monitoring</div><div class="sec-desc">Бүх sensitive action лог, Sentry алдааны мониторинг, Anomaly detection, Admin alert</div></div>
+    </div>
+  </div>
+
+  <div class="st">4 мобайл аппын тойм</div>
+  <div class="app-grid">
+    <div class="app-card">
+      <div class="app-icon" style="background:var(--color-background-info)">🛍</div>
+      <div class="app-name">Хэрэглэгчийн апп</div>
+      <div class="app-sub">Бараа хайх, захиалах, төлөх, хүргэлт мөрдөх</div>
+      <div class="feature-list">· Нүүр feed<br>· Хайлт + шүүлт<br>· Сагс + checkout<br>· Захиалгын мөрдөлт<br>· eБаримт харах<br>· Push мэдэгдэл</div>
+    </div>
+    <div class="app-card">
+      <div class="app-icon" style="background:var(--color-background-success)">🏪</div>
+      <div class="app-name">Борлуулагчийн апп</div>
+      <div class="app-sub">Захиалга авах, бараа удирдах, тайлан харах</div>
+      <div class="feature-list">· Шинэ захиалга alert<br>· Бараа нэмэх/засах<br>· Захиалга баталгаажуулах<br>· Борлуулалтын тайлан<br>· Чат хэрэглэгчтэй<br>· eБаримт илгээх</div>
+    </div>
+    <div class="app-card">
+      <div class="app-icon" style="background:var(--color-background-warning)">🚚</div>
+      <div class="app-name">Жолоочийн апп</div>
+      <div class="app-sub">Хүргэлтийн даалгавар авах, GPS, баталгаажуулах</div>
+      <div class="feature-list">· Хүргэлтийн жагсаалт<br>· GPS навигаци<br>· QR/PIN баталгаажуулалт<br>· Зургаар баталгаажуулах<br>· Online/Offline горим<br>· Орлогын тайлан</div>
+    </div>
+    <div class="app-card">
+      <div class="app-icon" style="background:#EEEDFE">🖥</div>
+      <div class="app-name">Дэлгүүрийн апп</div>
+      <div class="app-sub">POS систем — ширээний болон таблет</div>
+      <div class="feature-list">· Бараа хайх/скан<br>· Худалдааны гүйлгээ<br>· QPay/карт төлөлт<br>· eБаримт хэвлэх<br>· Тооллогын удирдлага<br>· Өдрийн тайлан</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 16 -->
+<div id="panel-p16" class="panel">
+<div class="st">Prompt 16 — eБаримт (НӨАТ) + ДАН систем интеграци</div>
+<div class="prompt-box" id="p16text">
+<button class="copy-btn" onclick="copyPrompt('p16text')">Хуулах</button>## MONGOLIAN TAX SYSTEM — eBARAIMT + DAN INTEGRATION
+
+---
+
+### 1. eBARIMT (НӨАТ цахим баримт) — MTA DDTD API
+
+```typescript
+// lib/tax/EbarimtService.ts
+// МТА-ийн DDTD (Дата Дамжуулах Төхөөрөмж) API-тэй холбогдоно
+
+interface EbarimtConfig {
+  posNo: string           // POS дугаар (МТА-ийн олгосон)
+  merchantTin: string     // ААНБ-н регистрийн дугаар
+  branchNo: string        // Салбарын дугаар
+  districtCode: string    // Дүүргийн код
+  apiUrl: string          // https://ebarimt.mn/api/
+}
+
+interface EbarimtItem {
+  name: string            // Бараа/үйлчилгээний нэр
+  qty: number
+  unitPrice: number       // НӨАТ-гүй үнэ
+  totalAmount: number
+  cityTax: number         // Хотын татвар (2%)
+  vat: number             // НӨАТ (10%)
+}
+
+interface EbarimtRequest {
+  amount: number          // Нийт дүн (НӨАТ-тай)
+  cashAmount: number      // Бэлнээр
+  nonCashAmount: number   // Бэлэн бус
+  vat: number             // Нийт НӨАТ дүн
+  cityTax: number         // Хотын татвар
+  customerNo?: string     // Хэрэглэгчийн регистрийн дугаар (lottery)
+  consumerNo?: string     // Иргэний регистрийн дугаар
+  reportMonth?: number
+  stocks: EbarimtItem[]
+  payments: Array<{
+    code: PaymentType     // 1=Бэлэн, 2=Карт, 3=QPay, 4=Дансаар
+    amount: number
+  }>
+}
+
+class EbarimtService {
+  // PUT баримт илгээх
+  async sendReceipt(request: EbarimtRequest): Promise<EbarimtResponse> {
+    const response = await fetch(`${config.apiUrl}/receipt`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${await this.getToken()}`,
+        'Pos-No': config.posNo,
+        'Branch-No': config.branchNo,
+      },
+      body: JSON.stringify({
+        ...request,
+        merchantTin: config.merchantTin,
+        districtCode: config.districtCode,
+      }),
+    })
+
+    const result = await response.json()
+    // result.billId   — баримтын дугаар
+    // result.qrData   — QR кодны мэдээлэл
+    // result.lottery  — Сугалааны дугаар
+    return result
+  }
+
+  // DELETE баримт буцаах (return/refund)
+  async cancelReceipt(billId: string, reason: string): Promise<void> {
+    await fetch(`${config.apiUrl}/receipt`, {
+      method: 'DELETE',
+      body: JSON.stringify({ billId, description: reason }),
+    })
+  }
+
+  // НӨАТ тооцоолох
+  calculateVAT(amount: number): { subtotal: number, vat: number, cityTax: number, total: number } {
+    const vat = Math.round(amount * 10 / 110)       // НӨАТ 10%
+    const cityTax = Math.round(amount * 2 / 102)    // Хотын татвар 2%
+    const subtotal = amount - vat - cityTax
+    return { subtotal, vat, cityTax, total: amount }
+  }
+}
+```
+
+### AUTO-SEND eBARIMT ON ORDER PAYMENT
+
+```typescript
+// Called from payment webhook after payment.success
+async function onPaymentSuccess(orderId: string) {
+  const order = await getOrderWithItems(orderId)
+
+  const ebarimtReq: EbarimtRequest = {
+    amount: order.total,
+    nonCashAmount: order.total,   // QPay/card = non-cash
+    cashAmount: 0,
+    ...ebarimtService.calculateVAT(order.total),
+    customerNo: order.buyer.danVerifiedRegNo || undefined,
+    stocks: order.items.map(item => ({
+      name: item.product.name,
+      qty: item.quantity,
+      unitPrice: item.unitPrice,
+      totalAmount: item.total,
+      ...ebarimtService.calculateVAT(item.total),
+    })),
+    payments: [{ code: mapPaymentMethod(order.paymentMethod), amount: order.total }],
+  }
+
+  const receipt = await ebarimtService.sendReceipt(ebarimtReq)
+
+  // Save to DB
+  await db.taxReceipt.create({
+    data: {
+      orderId: order.id,
+      billId: receipt.billId,
+      qrData: receipt.qrData,
+      lottery: receipt.lottery,
+      amount: order.total,
+      vatAmount: ebarimtReq.vat,
+      status: 'SENT',
+    }
+  })
+
+  // Send to buyer: QR баримт + lottery дугаар
+  await sendReceiptToUser(order.buyerId, receipt)
+}
+```
+
+### PRISMA — Tax models
+
+```prisma
+model TaxReceipt {
+  id          String   @id @default(cuid())
+  orderId     String   @unique
+  billId      String   @unique    // МТА-ийн баримтын дугаар
+  qrData      String              // QR мэдээлэл
+  lottery     String?             // Сугалааны дугаар
+  amount      Float
+  vatAmount   Float
+  cityTaxAmt  Float
+  status      String              // SENT | CANCELLED | FAILED
+  sentAt      DateTime @default(now())
+  cancelledAt DateTime?
+  retryCount  Int      @default(0)
+  errorMsg    String?
+}
+```
+
+### RETRY MECHANISM — failed receipts
+
+```typescript
+// Background job: every 5 min
+// Retry failed ebarimts (network issues etc.)
+async function retryFailedReceipts() {
+  const failed = await db.taxReceipt.findMany({
+    where: { status: 'FAILED', retryCount: { lt: 3 } }
+  })
+  for (const receipt of failed) {
+    try {
+      await ebarimtService.resendReceipt(receipt.orderId)
+    } catch {
+      await db.taxReceipt.update({
+        where: { id: receipt.id },
+        data: { retryCount: { increment: 1 } }
+      })
+    }
+  }
+}
+```
+
+---
+
+### 2. ДАН СИСТЕМ (E-Mongolia OAuth)
+
+```typescript
+// lib/auth/DanService.ts
+// ДАН системийн OAuth2 интеграци
+
+const DAN_CONFIG = {
+  authUrl:    'https://sso.gov.mn/oauth2/authorize',
+  tokenUrl:   'https://sso.gov.mn/oauth2/token',
+  userInfoUrl:'https://sso.gov.mn/oauth2/userinfo',
+  clientId:    process.env.DAN_CLIENT_ID!,
+  clientSecret:process.env.DAN_CLIENT_SECRET!,
+  redirectUri: `${process.env.APP_URL}/api/auth/dan/callback`,
+  scope:       'openid profile email address',
+}
+
+// Step 1: Redirect to ДАН
+function getDanAuthUrl(state: string): string {
+  return `${DAN_CONFIG.authUrl}?` +
+    `client_id=${DAN_CONFIG.clientId}` +
+    `&redirect_uri=${encodeURIComponent(DAN_CONFIG.redirectUri)}` +
+    `&response_type=code` +
+    `&scope=${DAN_CONFIG.scope}` +
+    `&state=${state}`
+}
+
+// Step 2: Handle callback — GET /api/auth/dan/callback
+async function handleDanCallback(code: string): Promise<DanUser> {
+  const tokenRes = await fetch(DAN_CONFIG.tokenUrl, {
+    method: 'POST',
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: DAN_CONFIG.redirectUri,
+      client_id: DAN_CONFIG.clientId,
+      client_secret: DAN_CONFIG.clientSecret,
+    }),
+  })
+  const { access_token } = await tokenRes.json()
+
+  const userInfo = await fetch(DAN_CONFIG.userInfoUrl, {
+    headers: { Authorization: `Bearer ${access_token}` }
+  })
+
+  // Returns: регистрийн дугаар, овог нэр, утасны дугаар, и-мэйл
+  const danUser = await userInfo.json()
+
+  return {
+    regNo:     danUser.rd,         // Регистрийн дугаар (encrypted in DB)
+    lastName:  danUser.familyName,
+    firstName: danUser.givenName,
+    phone:     danUser.phone_number,
+    email:     danUser.email,
+    isVerified: true,
+  }
+}
+
+// Step 3: Link ДАН to user account
+async function linkDanToUser(userId: string, danUser: DanUser) {
+  await db.user.update({
+    where: { id: userId },
+    data: {
+      danVerified: true,
+      danVerifiedAt: new Date(),
+      // Store only encrypted hash of regNo — never plaintext
+      danRegNoHash: await hashSensitive(danUser.regNo),
+      firstName: danUser.firstName,
+      lastName: danUser.lastName,
+    }
+  })
+}
+```
+
+### ДАН баталгаажуулалтын UI
+
+```tsx
+// In /dashboard/settings/verification or /register step 3
+<DanVerificationSection>
+  {user.danVerified ? (
+    <VerifiedBadge>
+      ДАН системээр баталгаажсан ✓
+      {user.firstName} {user.lastName}
+    </VerifiedBadge>
+  ) : (
+    <VerifyWithDan>
+      <p>Иргэний үнэмлэхийн мэдээллээр баталгаажуулахад ДАН систем ашиглана.</p>
+      <Button onClick={() => redirect(getDanAuthUrl(csrf))}>
+        ДАН-аар баталгаажуулах
+      </Button>
+      <p className="hint">E-Mongolia-д бүртгэлтэй байх шаардлагатай</p>
+    </VerifyWithDan>
+  )}
+</DanVerificationSection>
+
+// Benefits of DAN verification:
+// - eБаримт lottery-д бүртгэгдэх
+// - Дэлгүүрийн эрх хурдан баталгаажих
+// - Зарим функц нээлттэй болох (жишээ: авто зээл хүсэлт)
+```
+
+### НӨАТ ТАЙЛАН — /admin/tax
+
+```tsx
+<TaxReportPage>
+  <MonthlyVATSummary>
+    — Нийт борлуулалт: X₮
+    — НӨАТ нийлбэр: Y₮ (10%)
+    — Хотын татвар: Z₮ (2%)
+    — Илгээсэн баримт: N ширхэг
+    — Амжилттай / Алдаатай / Дахин илгээсэн
+
+  <ReceiptTable>
+    — billId, захиалга, дүн, НӨАТ, lottery, огноо, статус
+    — Filter by: date range, status, entity
+    — Export CSV for МТА reporting
+
+  <FailedReceiptsAlert>
+    — Илгээгдээгүй баримтуудын жагсаалт
+    — Bulk retry товч
+</TaxReportPage>
+```
+</div>
+</div>
+
+<!-- PROMPT 17 -->
+<div id="panel-p17" class="panel">
+<div class="st">Prompt 17 — Системийн аюулгүй байдал + нууц үг менежмент</div>
+<div class="prompt-box" id="p17text">
+<button class="copy-btn" onclick="copyPrompt('p17text')">Хуулах</button>## SECURITY SYSTEM — HARDENED AUTH + PASSWORD MANAGEMENT
+
+---
+
+### 1. PASSWORD MANAGEMENT
+
+```typescript
+// lib/auth/PasswordService.ts
+
+class PasswordService {
+  // Hash with Argon2id (stronger than bcrypt for new systems)
+  async hash(password: string): Promise<string> {
+    return argon2.hash(password, {
+      type: argon2.argon2id,
+      memoryCost: 65536,   // 64 MB
+      timeCost: 3,
+      parallelism: 4,
+    })
+  }
+
+  async verify(password: string, hash: string): Promise<boolean> {
+    return argon2.verify(hash, password)
+  }
+
+  // Password strength validation
+  validate(password: string): { valid: boolean; errors: string[] } {
+    const errors = []
+    if (password.length < 8)           errors.push("8-аас дээш тэмдэгт шаардлагатай")
+    if (!/[A-Z]/.test(password))       errors.push("Дор хаяж 1 том үсэг")
+    if (!/[a-z]/.test(password))       errors.push("Дор хаяж 1 жижиг үсэг")
+    if (!/[0-9]/.test(password))       errors.push("Дор хаяж 1 тоо")
+    if (!/[!@#$%^&*]/.test(password))  errors.push("Тусгай тэмдэгт шаардлагатай")
+    // Check against known breached passwords (HaveIBeenPwned API)
+    if (await this.isBreached(password)) errors.push("Энэ нууц үг мэдэгдэж байна, өөр нууц үг ашиглана уу")
+    return { valid: errors.length === 0, errors }
+  }
+
+  async isBreached(password: string): Promise<boolean> {
+    const sha1 = crypto.createHash('sha1').update(password).digest('hex').toUpperCase()
+    const prefix = sha1.slice(0, 5)
+    const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`)
+    const text = await res.text()
+    return text.includes(sha1.slice(5))
+  }
+}
+```
+
+### 2. PASSWORD RESET FLOW
+
+```typescript
+// Нууц үг мартсан — олон шатлалт баталгаажуулалт
+
+// Step 1: POST /api/auth/forgot-password
+// { email or phone }
+async function initiateReset(identifier: string) {
+  const user = await findUserByEmailOrPhone(identifier)
+  if (!user) return // Silent fail — don't reveal if user exists
+
+  // Generate secure token
+  const token = crypto.randomBytes(32).toString('hex')
+  const expires = addMinutes(new Date(), 15)
+
+  await db.passwordReset.create({
+    data: {
+      userId: user.id,
+      tokenHash: await hashToken(token),  // store hash, not token
+      expiresAt: expires,
+      ipAddress: req.ip,
+      userAgent: req.headers['user-agent'],
+    }
+  })
+
+  if (isEmail(identifier)) {
+    await sendEmail(user.email, 'PASSWORD_RESET', { token, expires })
+  } else {
+    await sendSMS(user.phone, `Eseller нууц үг сэргээх код: ${generateOTP()} (15 минут)`)
+  }
+}
+
+// Step 2: Verify OTP or token
+// POST /api/auth/reset-verify
+// { token, otp? }
+async function verifyReset(token: string, otp?: string) {
+  const record = await db.passwordReset.findFirst({
+    where: {
+      tokenHash: await hashToken(token),
+      expiresAt: { gt: new Date() },
+      usedAt: null,
+    }
+  })
+  if (!record) throw new Error('Токен хүчинтэй бус эсвэл дууссан')
+
+  // Rate limit: max 5 attempts per token
+  if (record.attempts >= 5) throw new Error('Оролдлогын тоо хэтэрлээ')
+
+  return { userId: record.userId, verified: true }
+}
+
+// Step 3: Set new password
+// POST /api/auth/reset-password
+// { token, newPassword }
+async function resetPassword(token: string, newPassword: string) {
+  const { userId } = await verifyReset(token)
+  const { valid, errors } = await passwordService.validate(newPassword)
+  if (!valid) throw new ValidationError(errors)
+
+  await db.$transaction([
+    db.user.update({
+      where: { id: userId },
+      data: { passwordHash: await passwordService.hash(newPassword) }
+    }),
+    // Invalidate ALL existing sessions
+    db.session.deleteMany({ where: { userId } }),
+    // Mark token as used
+    db.passwordReset.update({
+      where: { userId },
+      data: { usedAt: new Date() }
+    }),
+    // Log security event
+    db.securityLog.create({
+      data: { userId, event: 'PASSWORD_RESET', ip: req.ip }
+    }),
+  ])
+
+  // Notify user of password change via email + SMS
+  await notifyPasswordChanged(userId)
+}
+```
+
+### 3. MFA — ОЛОН ШАТЛАЛТ БАТАЛГААЖУУЛАЛТ
+
+```typescript
+// lib/auth/MFAService.ts
+
+class MFAService {
+  // SMS OTP (via Unitel/MobiCom SMS gateway)
+  async sendSMSOTP(userId: string, phone: string): Promise<void> {
+    const otp = generateTOTP(6)  // 6 digit, 5 min expiry
+    const key = `otp:${userId}`
+    await redis.setex(key, 300, await bcrypt.hash(otp, 10))
+    await smsGateway.send(phone, `Eseller нэвтрэх код: ${otp}\n5 минутад хүчинтэй.`)
+  }
+
+  async verifySMSOTP(userId: string, otp: string): Promise<boolean> {
+    const key = `otp:${userId}`
+    const stored = await redis.get(key)
+    if (!stored) return false
+    const valid = await bcrypt.compare(otp, stored)
+    if (valid) await redis.del(key)  // One-time use
+    return valid
+  }
+
+  // TOTP (Google Authenticator / Authy)
+  async setupTOTP(userId: string): Promise<{ secret: string, qrUrl: string }> {
+    const secret = authenticator.generateSecret()
+    const user = await db.user.findUnique({ where: { id: userId } })
+    const otpAuthUrl = authenticator.keyuri(user.email, 'Eseller.mn', secret)
+    const qrUrl = await toDataURL(otpAuthUrl)
+
+    // Store encrypted secret (not confirmed until first verify)
+    await db.mfaSetup.upsert({
+      where: { userId },
+      create: { userId, totpSecret: encrypt(secret), confirmed: false },
+      update: { totpSecret: encrypt(secret), confirmed: false },
+    })
+
+    return { secret, qrUrl }
+  }
+
+  async verifyTOTP(userId: string, token: string): Promise<boolean> {
+    const setup = await db.mfaSetup.findUnique({ where: { userId } })
+    const secret = decrypt(setup.totpSecret)
+    return authenticator.verify({ token, secret })
+  }
+}
+```
+
+### 4. BRUTE FORCE + ACCOUNT LOCKOUT
+
+```typescript
+// lib/security/RateLimiter.ts
+
+const LOCKOUT_THRESHOLDS = {
+  login:          { attempts: 5,  windowMin: 15, lockoutMin: 30 },
+  otp:            { attempts: 3,  windowMin: 10, lockoutMin: 60 },
+  passwordReset:  { attempts: 3,  windowMin: 60, lockoutMin: 120 },
+  apiKey:         { attempts: 10, windowMin: 1,  lockoutMin: 5 },
+}
+
+async function checkAndRecord(key: string, type: keyof typeof LOCKOUT_THRESHOLDS) {
+  const threshold = LOCKOUT_THRESHOLDS[type]
+  const redisKey = `ratelimit:${type}:${key}`
+
+  const attempts = await redis.incr(redisKey)
+  if (attempts === 1) await redis.expire(redisKey, threshold.windowMin * 60)
+
+  if (attempts > threshold.attempts) {
+    const lockKey = `locked:${type}:${key}`
+    await redis.setex(lockKey, threshold.lockoutMin * 60, '1')
+
+    // Notify user via email if account locked
+    if (type === 'login') await notifyAccountLocked(key)
+
+    throw new TooManyRequestsError(`Хэт олон оролдлого. ${threshold.lockoutMin} минутын дараа дахин оролдоно уу.`)
+  }
+}
+```
+
+### 5. JWT + SESSION MANAGEMENT
+
+```typescript
+// lib/auth/TokenService.ts
+
+class TokenService {
+  // Access token: 15 min, stateless
+  issueAccessToken(userId: string, role: string): string {
+    return jwt.sign(
+      { sub: userId, role, type: 'access', jti: nanoid() },
+      process.env.JWT_SECRET!,
+      { expiresIn: '15m', algorithm: 'ES256' }  // Elliptic curve, stronger than HS256
+    )
+  }
+
+  // Refresh token: 7 days, stored in DB + HttpOnly cookie
+  async issueRefreshToken(userId: string, deviceId: string): Promise<string> {
+    const token = crypto.randomBytes(40).toString('hex')
+    const expires = addDays(new Date(), 7)
+
+    await db.refreshToken.create({
+      data: {
+        userId,
+        tokenHash: await hashToken(token),
+        deviceId,
+        deviceInfo: getDeviceInfo(req),
+        expiresAt: expires,
+        ipAddress: req.ip,
+      }
+    })
+
+    return token
+  }
+
+  // Rotation: on each refresh, old token invalidated, new one issued
+  async rotateRefreshToken(oldToken: string): Promise<{ access: string, refresh: string }> {
+    const record = await db.refreshToken.findFirst({
+      where: { tokenHash: await hashToken(oldToken), usedAt: null, expiresAt: { gt: new Date() } }
+    })
+
+    if (!record) {
+      // Possible token reuse attack — invalidate ALL tokens for this user
+      await db.refreshToken.deleteMany({ where: { userId: record?.userId } })
+      throw new UnauthorizedError('Сэжигтэй үйлдэл илэрлээ. Дахин нэвтэрнэ үү.')
+    }
+
+    await db.refreshToken.update({ where: { id: record.id }, data: { usedAt: new Date() } })
+
+    const newAccess = this.issueAccessToken(record.userId, record.user.role)
+    const newRefresh = await this.issueRefreshToken(record.userId, record.deviceId)
+
+    return { access: newAccess, refresh: newRefresh }
+  }
+}
+```
+
+### 6. SECURITY MONITORING
+
+```typescript
+// Suspicious activity detection
+const SUSPICIOUS_EVENTS = [
+  'LOGIN_NEW_COUNTRY',      // Өмнө байгаагүй улсаас нэвтэрсэн
+  'LOGIN_NEW_DEVICE',       // Шинэ төхөөрөмж
+  'MULTIPLE_FAILED_LOGIN',  // 3+ амжилтгүй оролдлого
+  'PASSWORD_CHANGED',       // Нууц үг солигдсон
+  'LARGE_PAYMENT',          // 100,000₮+ гүйлгээ
+  'BULK_EXPORT',            // Их хэмжээний мэдээлэл татсан
+  'ADMIN_ACCESS',           // Админ хуудас нэвтэрсэн
+]
+
+// On suspicious event:
+// 1. Log to SecurityLog table
+// 2. Send email alert to user
+// 3. If HIGH severity: force re-authentication
+// 4. Super admin notification if system-level threat
+```
+</div>
+</div>
+
+<!-- PROMPT 18 -->
+<div id="panel-p18" class="panel">
+<div class="st">Prompt 18 — Оюуны өмчийн хамгаалалт + контент хяналт</div>
+<div class="prompt-box" id="p18text">
+<button class="copy-btn" onclick="copyPrompt('p18text')">Хуулах</button>## INTELLECTUAL PROPERTY PROTECTION + CONTENT MODERATION
+
+---
+
+### 1. IMAGE FINGERPRINTING — зураг хуулбарлалт илрүүлэх
+
+```typescript
+// lib/ip/ImageFingerprintService.ts
+// Uses perceptual hashing (pHash) to detect duplicate/stolen images
+
+class ImageFingerprintService {
+  // Generate perceptual hash for image
+  async generateHash(imageBuffer: Buffer): Promise<string> {
+    // Resize to 32x32, grayscale, DCT-based pHash
+    const resized = await sharp(imageBuffer).resize(32, 32).greyscale().raw().toBuffer()
+    return this.computePHash(resized)
+  }
+
+  // Compare two images — returns similarity 0-100%
+  hammingDistance(hash1: string, hash2: string): number {
+    let distance = 0
+    for (let i = 0; i < hash1.length; i++) {
+      if (hash1[i] !== hash2[i]) distance++
+    }
+    return 100 - (distance / hash1.length * 100)
+  }
+
+  // Check if uploaded image is duplicate of existing
+  async checkDuplicate(imageBuffer: Buffer, entityId: string): Promise<DuplicateResult> {
+    const newHash = await this.generateHash(imageBuffer)
+
+    // Find similar hashes in DB (threshold: 85% similar = likely duplicate)
+    const similar = await db.imageHash.findMany({
+      where: {
+        hash: { not: undefined },
+        // Check in same category/entity type
+      }
+    })
+
+    const duplicates = similar
+      .map(img => ({ ...img, similarity: this.hammingDistance(newHash, img.hash) }))
+      .filter(img => img.similarity >= 85)
+      .sort((a, b) => b.similarity - a.similarity)
+
+    if (duplicates.length > 0 && duplicates[0].entityId !== entityId) {
+      return {
+        isDuplicate: true,
+        similarity: duplicates[0].similarity,
+        originalEntityId: duplicates[0].entityId,
+        originalProductId: duplicates[0].productId,
+      }
+    }
+
+    // Save hash for future checks
+    await db.imageHash.create({ data: { hash: newHash, entityId } })
+    return { isDuplicate: false }
+  }
+}
+```
+
+### 2. WATERMARKING — байршуулсан зураг хамгаалах
+
+```typescript
+// lib/ip/WatermarkService.ts
+
+class WatermarkService {
+  // Add invisible watermark (steganography) to entity images
+  async addInvisibleWatermark(imageBuffer: Buffer, entityId: string): Promise<Buffer> {
+    // Embed entity ID + timestamp in LSB of image pixels
+    // Invisible to human eye, recoverable programmatically
+    const watermark = `ESL:${entityId}:${Date.now()}`
+    return this.embedWatermark(imageBuffer, watermark)
+  }
+
+  // Add visible watermark for pro photos / company images
+  async addVisibleWatermark(imageBuffer: Buffer, text: string): Promise<Buffer> {
+    return sharp(imageBuffer)
+      .composite([{
+        input: await this.createWatermarkOverlay(text, 300, 50),
+        gravity: 'southeast',
+        blend: 'overlay',
+      }])
+      .toBuffer()
+  }
+
+  // Create watermark text overlay
+  async createWatermarkOverlay(text: string, width: number, height: number): Promise<Buffer> {
+    return sharp({
+      create: {
+        width, height, channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      }
+    })
+    .composite([{ input: Buffer.from(
+      `<svg><text opacity="0.4" fill="white" font-size="14">${text}</text></svg>`
+    ), top: 0, left: 0 }])
+    .png().toBuffer()
+  }
+}
+```
+
+### 3. DMCA TAKEDOWN SYSTEM
+
+```prisma
+model DMCAReport {
+  id              String   @id @default(cuid())
+  reporterId      String?          // Хэн мэдэгдсэн (нэвтэрсэн бол)
+  reporterEmail   String
+  reporterName    String
+  contentType     String           // "image" | "text" | "product"
+  contentUrl      String
+  originalWorkUrl String           // Original ажлын URL
+  description     String
+  status          DMCAStatus       @default(PENDING)
+  handledById     String?
+  handledAt       DateTime?
+  resolution      String?
+  createdAt       DateTime @default(now())
+}
+
+enum DMCAStatus { PENDING | UNDER_REVIEW | CONTENT_REMOVED | REJECTED | COUNTER_NOTICE }
+```
+
+```tsx
+// Public DMCA form: /dmca
+<DMCAForm>
+  <p>Таны оюуны өмчийн зөрчил мэдэгдэх хүсэлт</p>
+  <input name="reporterName" placeholder="Таны нэр" />
+  <input name="reporterEmail" placeholder="И-мэйл" />
+  <input name="contentUrl" placeholder="Зөрчил гарсан контентын URL" />
+  <input name="originalWorkUrl" placeholder="Эх бүтээлийн URL" />
+  <textarea name="description" placeholder="Тайлбар" />
+  <p className="legal">Энэхүү мэдэгдэл нь үнэн зөв мэдээлэл агуулсан болохыг баталж байна.</p>
+  <Button type="submit">Мэдэгдэл илгээх</Button>
+</DMCAForm>
+```
+
+### 4. PRODUCT LISTING MODERATION
+
+```typescript
+// lib/moderation/ContentModerator.ts
+
+class ContentModerator {
+  // Auto-scan new product listings
+  async scanListing(listing: Product): Promise<ModerationResult> {
+    const checks = await Promise.all([
+      this.checkForbiddenKeywords(listing.name + ' ' + listing.description),
+      this.checkImageSafety(listing.images),
+      this.checkPriceAnomaly(listing.price, listing.category),
+      this.checkDuplicateListing(listing),
+    ])
+
+    const violations = checks.filter(c => c.flagged)
+
+    if (violations.some(v => v.severity === 'HIGH')) {
+      return { action: 'REJECT', reasons: violations.map(v => v.reason) }
+    }
+    if (violations.length > 0) {
+      return { action: 'MANUAL_REVIEW', reasons: violations.map(v => v.reason) }
+    }
+    return { action: 'APPROVE' }
+  }
+
+  async checkForbiddenKeywords(text: string): Promise<CheckResult> {
+    const FORBIDDEN = [
+      // Хуурамч бараа, хэрэглэхийг хориглосон бараа
+      'хуурамч', 'replica', 'fake', 'хар тамхи', 'мансууруулах',
+      // Зэвсэг
+      'буу', 'мэс', 'тэсрэх',
+    ]
+    const found = FORBIDDEN.filter(kw => text.toLowerCase().includes(kw))
+    return { flagged: found.length > 0, severity: 'HIGH', reason: `Хориглосон үгс: ${found.join(', ')}` }
+  }
+
+  // Check images with AI safety API (AWS Rekognition or Google Vision)
+  async checkImageSafety(imageUrls: string[]): Promise<CheckResult> {
+    for (const url of imageUrls) {
+      const result = await rekognition.detectModerationLabels({ Image: { S3Object: ... } })
+      const violations = result.ModerationLabels.filter(l => l.Confidence > 80)
+      if (violations.length > 0) {
+        return { flagged: true, severity: 'HIGH', reason: 'Зөрчилтэй зураг' }
+      }
+    }
+    return { flagged: false }
+  }
+}
+```
+
+### 5. TERMS OF SERVICE ENFORCEMENT
+
+```typescript
+// Track ToS acceptances (required for legal compliance in MN)
+model TosAcceptance {
+  id          String   @id @default(cuid())
+  userId      String
+  version     String   // "2026-01" etc.
+  ipAddress   String
+  userAgent   String
+  acceptedAt  DateTime @default(now())
+}
+
+// Force re-acceptance when ToS version changes
+// Middleware: check if user has accepted current ToS version
+// If not: redirect to /tos/accept before any action
+```
+</div>
+</div>
+
+<!-- PROMPT 19 -->
+<div id="panel-p19" class="panel">
+<div class="st">Prompt 19 — Хэрэглэгчийн мобайл апп (React Native + Expo)</div>
+<div class="prompt-box" id="p19text">
+<button class="copy-btn" onclick="copyPrompt('p19text')">Хуулах</button>## CUSTOMER MOBILE APP — React Native + Expo
+
+Build the customer-facing mobile app using React Native (Expo managed workflow).
+Shares API with web, uses same auth tokens.
+
+---
+
+### PROJECT SETUP
+
+```bash
+# Monorepo structure
+/apps
+  /web          — Next.js web
+  /mobile-customer    — Customer app (this prompt)
+  /mobile-seller      — Seller app
+  /mobile-driver      — Driver app
+  /mobile-pos         — POS/Store app
+/packages
+  /api-client   — Shared API client (axios + react-query)
+  /ui           — Shared UI components (Restyle or NativeWind)
+  /types        — Shared TypeScript types
+  /utils        — Shared utilities
+
+# Tech stack
+expo: ~51
+react-native: 0.74
+expo-router: ^3 (file-based routing like Next.js)
+nativewind: ^4 (Tailwind for RN)
+zustand: state management
+react-query: server state
+expo-secure-store: token storage (NOT AsyncStorage)
+expo-local-authentication: biometric (FaceID/TouchID)
+expo-notifications: push notifications
+expo-camera: barcode/QR scan
+expo-location: GPS for delivery tracking
+```
+
+### APP STRUCTURE (Expo Router)
+
+```
+app/
+├── (auth)/
+│   ├── login.tsx
+│   ├── register.tsx
+│   ├── forgot-password.tsx
+│   └── dan-verify.tsx          ← ДАН баталгаажуулалт
+├── (tabs)/
+│   ├── index.tsx               ← Нүүр (feed)
+│   ├── search.tsx              ← Хайлт
+│   ├── cart.tsx                ← Сагс
+│   ├── orders.tsx              ← Захиалгууд
+│   └── profile.tsx             ← Профайл
+├── product/[id].tsx            ← Бараа дэлгэрэнгүй
+├── store/[slug].tsx            ← Дэлгүүрийн хуудас
+├── checkout/
+│   ├── index.tsx               ← Захиалга баталгаажуулах
+│   ├── payment.tsx             ← Төлбөр хийх
+│   └── success.tsx             ← Амжилттай
+├── order/[id].tsx              ← Захиалгын дэлгэрэнгүй + tracking
+├── chat/[id].tsx               ← Чат
+└── receipt/[id].tsx            ← eБаримт харах
+```
+
+### SECURE TOKEN STORAGE
+
+```typescript
+// NEVER use AsyncStorage for tokens — use SecureStore
+import * as SecureStore from 'expo-secure-store'
+
+const TokenStorage = {
+  async setAccessToken(token: string) {
+    await SecureStore.setItemAsync('access_token', token, {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    })
+  },
+  async getAccessToken(): Promise<string | null> {
+    return SecureStore.getItemAsync('access_token')
+  },
+  async clear() {
+    await SecureStore.deleteItemAsync('access_token')
+    await SecureStore.deleteItemAsync('refresh_token')
+  },
+}
+```
+
+### BIOMETRIC AUTH
+
+```typescript
+// Enable biometric login after first login
+import * as LocalAuthentication from 'expo-local-authentication'
+
+async function biometricLogin() {
+  const hasHardware = await LocalAuthentication.hasHardwareAsync()
+  const isEnrolled = await LocalAuthentication.isEnrolledAsync()
+
+  if (!hasHardware || !isEnrolled) {
+    return { success: false, reason: 'Биометр тохируулаагүй' }
+  }
+
+  const result = await LocalAuthentication.authenticateAsync({
+    promptMessage: 'Eseller нэвтрэхийн тулд баталгаажуулна уу',
+    fallbackLabel: 'Нууц үг ашиглах',
+    cancelLabel: 'Болих',
+    disableDeviceFallback: false,
+  })
+
+  if (result.success) {
+    // Use stored refresh token to get new access token
+    const refreshToken = await SecureStore.getItemAsync('refresh_token')
+    return await api.auth.refreshTokens(refreshToken)
+  }
+}
+```
+
+### PUSH NOTIFICATIONS
+
+```typescript
+// lib/notifications/PushService.ts (server-side)
+import Expo from 'expo-server-sdk'
+
+const expo = new Expo()
+
+async function sendPushToUser(userId: string, notification: PushNotification) {
+  const tokens = await db.pushToken.findMany({ where: { userId, isActive: true } })
+
+  const messages = tokens
+    .filter(t => Expo.isExpoPushToken(t.token))
+    .map(t => ({
+      to: t.token,
+      title: notification.title,
+      body: notification.body,
+      data: notification.data,
+      sound: 'default',
+      badge: notification.badge,
+    }))
+
+  const chunks = expo.chunkPushNotifications(messages)
+  for (const chunk of chunks) {
+    await expo.sendPushNotificationsAsync(chunk)
+  }
+}
+
+// Notification types:
+// ORDER_CONFIRMED, ORDER_SHIPPED, ORDER_DELIVERED
+// NEW_MESSAGE, PROMOTION, PRICE_DROP
+// EBARIMT_RECEIVED (with lottery number!)
+```
+
+### QPAY DEEP LINK (Mobile)
+
+```typescript
+// Open QPay app directly from eseller app
+import * as Linking from 'expo-linking'
+
+async function openQPayApp(qpayInvoiceId: string) {
+  const qpayDeepLink = `qpay://q?qpayInvoiceNo=${qpayInvoiceId}`
+  const webFallback = `https://qpay.mn/q?qpayInvoiceNo=${qpayInvoiceId}`
+
+  const canOpen = await Linking.canOpenURL(qpayDeepLink)
+  if (canOpen) {
+    await Linking.openURL(qpayDeepLink)
+  } else {
+    // QPay суулгаагүй бол web-ийг нээнэ
+    await Linking.openURL(webFallback)
+  }
+
+  // Poll payment status while user is in QPay
+  pollPaymentStatus(orderId, { interval: 3000, maxAttempts: 40 })
+}
+```
+
+### eBARIMT QR VIEWER
+
+```tsx
+// receipt/[id].tsx
+import QRCode from 'react-native-qrcode-svg'
+
+export default function ReceiptScreen() {
+  const { id } = useLocalSearchParams()
+  const receipt = useReceipt(id)
+
+  return (
+    <ScrollView>
+      <View style={styles.header}>
+        <Text style={styles.title}>eБаримт</Text>
+        <Text style={styles.number}>{receipt.billId}</Text>
+      </View>
+
+      <View style={styles.qrContainer}>
+        <QRCode value={receipt.qrData} size={200} />
+        <Text style={styles.lottery}>
+          Сугалааны дугаар: {receipt.lottery}
+        </Text>
+      </View>
+
+      <ReceiptItems items={receipt.items} />
+      <ReceiptTotals
+        subtotal={receipt.subtotal}
+        vat={receipt.vatAmount}
+        cityTax={receipt.cityTaxAmount}
+        total={receipt.amount}
+      />
+
+      <Button onPress={() => shareReceipt(receipt)}>
+        Хуваалцах
+      </Button>
+    </ScrollView>
+  )
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 20 -->
+<div id="panel-p20" class="panel">
+<div class="st">Prompt 20 — Борлуулагчийн апп</div>
+<div class="prompt-box" id="p20text">
+<button class="copy-btn" onclick="copyPrompt('p20text')">Хуулах</button>## SELLER MOBILE APP
+
+Same Expo monorepo, separate app entry for sellers/entity owners.
+Focus: order management, quick product add, sales analytics.
+
+---
+
+### APP STRUCTURE
+
+```
+app/(seller)/
+├── dashboard.tsx      ← Борлуулалтын тойм
+├── orders/
+│   ├── index.tsx      ← Захиалгын жагсаалт (real-time)
+│   └── [id].tsx       ← Захиалгын дэлгэрэнгүй
+├── products/
+│   ├── index.tsx      ← Бараа жагсаалт
+│   ├── add.tsx        ← Шинэ бараа нэмэх (camera + form)
+│   └── [id]/edit.tsx  ← Бараа засах
+├── chat/
+│   └── index.tsx      ← Нэгдсэн inbox
+├── analytics/
+│   └── index.tsx      ← Борлуулалтын тайлан
+└── settings.tsx
+```
+
+### REAL-TIME ORDER NOTIFICATIONS
+
+```typescript
+// Seller app uses WebSocket for instant order alerts
+import { useEffect } from 'react'
+import { Audio } from 'expo-av'
+
+function useOrderAlerts(entityId: string) {
+  useEffect(() => {
+    const ws = new WebSocket(`${WS_URL}/seller/${entityId}`)
+
+    ws.onmessage = async (event) => {
+      const data = JSON.parse(event.data)
+
+      if (data.type === 'NEW_ORDER') {
+        // Play alert sound
+        const { sound } = await Audio.Sound.createAsync(
+          require('../assets/sounds/order-alert.mp3')
+        )
+        await sound.playAsync()
+
+        // Vibrate device
+        Vibration.vibrate([0, 500, 200, 500])
+
+        // Show notification even if app is in background
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Шинэ захиалга!',
+            body: `${data.order.buyer.name} — ${formatPrice(data.order.total)}`,
+            data: { orderId: data.order.id },
+          },
+          trigger: null,  // immediately
+        })
+      }
+    }
+
+    return () => ws.close()
+  }, [entityId])
+}
+```
+
+### QUICK PRODUCT ADD WITH CAMERA
+
+```tsx
+// products/add.tsx — quick add via camera
+export default function QuickAddProduct() {
+  const [step, setStep] = useState<'photo' | 'details' | 'price'>('photo')
+
+  // Step 1: Photo
+  if (step === 'photo') return (
+    <CameraView
+      onCapture={async (photo) => {
+        // AI auto-suggest: product name + category from image
+        const suggestion = await api.ai.suggestProduct(photo.base64)
+        setProductData({ ...suggestion, image: photo.uri })
+        setStep('details')
+      }}
+    />
+  )
+
+  // Step 2: Details (pre-filled from AI)
+  if (step === 'details') return (
+    <QuickForm
+      fields={['name', 'description', 'category']}
+      initialValues={productData}
+      onNext={(values) => { setProductData(values); setStep('price') }}
+    />
+  )
+
+  // Step 3: Price + publish
+  if (step === 'price') return (
+    <PriceForm
+      onPublish={async (price) => {
+        await api.products.create({ ...productData, price })
+        router.push('/products')
+        showToast('Бараа амжилттай нэмэгдлээ!')
+      }}
+    />
+  )
+}
+```
+
+### BARCODE SCANNER — stock check
+
+```tsx
+import { CameraView, useCameraPermissions } from 'expo-camera'
+
+export function BarcodeScanner() {
+  return (
+    <CameraView
+      barcodeScannerSettings={{ barcodeTypes: ['qr', 'ean13', 'ean8', 'code128'] }}
+      onBarcodeScanned={async ({ data }) => {
+        const product = await api.products.findByBarcode(data)
+        if (product) {
+          router.push(`/products/${product.id}/edit`)
+        } else {
+          showModal('Бараа олдсонгүй. Шинэ бараа нэмэх үү?')
+        }
+      }}
+    />
+  )
+}
+```
+</div>
+</div>
+
+<!-- PROMPT 21 -->
+<div id="panel-p21" class="panel">
+<div class="st">Prompt 21 — Жолоочийн апп + Дэлгүүрийн POS апп</div>
+<div class="prompt-box" id="p21text">
+<button class="copy-btn" onclick="copyPrompt('p21text')">Хуулах</button>## DRIVER APP + STORE POS APP
+
+---
+
+### DRIVER APP
+
+```
+app/(driver)/
+├── home.tsx           ← Ирж буй хүргэлтүүд + статус
+├── deliveries/
+│   ├── active.tsx     ← Одоогийн хүргэлт + GPS навигаци
+│   ├── [id].tsx       ← Хүргэлтийн дэлгэрэнгүй
+│   └── history.tsx    ← Өнгөрсөн хүргэлтүүд
+├── earnings.tsx       ← Орлогын тайлан
+└── profile.tsx        ← Жолоочийн профайл + online/offline
+```
+
+### GPS TRACKING + NAVIGATION
+
+```typescript
+import * as Location from 'expo-location'
+import * as TaskManager from 'expo-task-manager'
+
+const LOCATION_TASK = 'BACKGROUND_LOCATION'
+
+// Background location tracking (even when app closed)
+TaskManager.defineTask(LOCATION_TASK, ({ data, error }) => {
+  if (data) {
+    const { locations } = data as any
+    const loc = locations[0]
+
+    // Send location to server every 30 seconds
+    api.delivery.updateDriverLocation({
+      lat: loc.coords.latitude,
+      lng: loc.coords.longitude,
+      accuracy: loc.coords.accuracy,
+      heading: loc.coords.heading,
+    })
+  }
+})
+
+async function startTracking() {
+  await Location.startLocationUpdatesAsync(LOCATION_TASK, {
+    accuracy: Location.Accuracy.High,
+    timeInterval: 30000,       // 30 seconds
+    distanceInterval: 50,      // or every 50 meters
+    showsBackgroundLocationIndicator: true,
+    foregroundService: {
+      notificationTitle: 'Eseller хүргэлт',
+      notificationBody: 'Байршил мөрдлөгдэж байна',
+    },
+  })
+}
+```
+
+### DELIVERY CONFIRMATION
+
+```tsx
+// Confirm delivery with: PIN code OR photo OR QR scan
+export function DeliveryConfirmation({ shipmentId }) {
+  const [method, setMethod] = useState<'pin' | 'photo' | 'qr'>('pin')
+
+  // Method 1: PIN code (sent to buyer's phone)
+  if (method === 'pin') return (
+    <PINInput
+      length={4}
+      onComplete={async (pin) => {
+        const result = await api.delivery.confirmByPIN(shipmentId, pin)
+        if (result.success) navigateToSuccess()
+        else showError('Код буруу байна')
+      }}
+    />
+  )
+
+  // Method 2: Photo proof
+  if (method === 'photo') return (
+    <CameraView
+      onCapture={async (photo) => {
+        await api.delivery.confirmByPhoto(shipmentId, photo.base64)
+        navigateToSuccess()
+      }}
+    />
+  )
+
+  // Method 3: QR code on package
+  if (method === 'qr') return (
+    <QRScanner
+      onScan={async (qrData) => {
+        await api.delivery.confirmByQR(shipmentId, qrData)
+        navigateToSuccess()
+      }}
+    />
+  )
+}
+```
+
+### ONLINE/OFFLINE DRIVER STATUS
+
+```typescript
+// Driver goes online/offline → affects order assignment
+const DriverStatus = {
+  async goOnline(driverId: string) {
+    await api.driver.setStatus(driverId, 'ONLINE')
+    await startTracking()
+    // Start receiving new delivery assignments via WebSocket
+    connectDeliverySocket(driverId)
+  },
+
+  async goOffline(driverId: string) {
+    await api.driver.setStatus(driverId, 'OFFLINE')
+    await Location.stopLocationUpdatesAsync(LOCATION_TASK)
+    disconnectDeliverySocket()
+  },
+}
+```
+
+---
+
+### STORE POS APP (Tablet / Desktop)
+
+```
+app/(pos)/
+├── terminal.tsx       ← Гол худалдааны дэлгэц
+├── products.tsx       ← Бараа хайх + QR скан
+├── cart.tsx           ← Сагс + нийт дүн
+├── payment.tsx        ← Төлбөр авах (QPay/карт/бэлэн)
+├── receipt.tsx        ← eБаримт хэвлэх + QR
+├── inventory.tsx      ← Тооллого
+└── reports/
+    ├── daily.tsx      ← Өдрийн тайлан
+    └── shift.tsx      ← Ээлжийн тайлан
+```
+
+### POS TERMINAL UI
+
+```tsx
+// Optimized for 10" tablet in landscape mode
+export function POSTerminal() {
+  return (
+    <View style={styles.terminal}>
+      {/* Left: Product search + grid */}
+      <View style={styles.leftPanel}>
+        <SearchBar
+          placeholder="Бараа хайх эсвэл баркод скан..."
+          onScan={handleBarcodeScan}
+          autoFocus
+        />
+        <ProductGrid
+          columns={4}
+          onSelect={addToCart}
+          showStock     // Red badge if low stock
+        />
+      </View>
+
+      {/* Right: Cart + payment */}
+      <View style={styles.rightPanel}>
+        <CartList
+          items={cart}
+          onQuantityChange={updateQty}
+          onRemove={removeItem}
+        />
+
+        <View style={styles.totals}>
+          <TotalRow label="Дүн" value={subtotal} />
+          <TotalRow label="НӨАТ 10%" value={vat} />
+          <TotalRow label="Хотын татвар 2%" value={cityTax} />
+          <TotalRow label="Нийт" value={total} bold large />
+        </View>
+
+        {/* Payment buttons */}
+        <View style={styles.paymentButtons}>
+          <PaymentButton
+            type="CASH"
+            label="Бэлнээр"
+            onPress={() => processCashPayment(total)}
+          />
+          <PaymentButton
+            type="QPAY"
+            label="QPay"
+            onPress={() => showQPayQR(total)}
+          />
+          <PaymentButton
+            type="CARD"
+            label="Карт"
+            onPress={() => processCardPayment(total)}
+          />
+        </View>
+      </View>
+    </View>
+  )
+}
+```
+
+### POS eBARIMT PRINT
+
+```typescript
+// Print eБаримт after payment
+// Supports: Thermal printer (Bluetooth/USB), PDF save, SMS/email send
+
+async function printReceipt(receipt: TaxReceipt, method: 'print' | 'sms' | 'qr') {
+  if (method === 'print') {
+    // Bluetooth thermal printer
+    const printer = await BluetoothPrinter.connect()
+    await printer.printText(formatReceiptText(receipt))
+    await printer.printQR(receipt.qrData, 200)
+    await printer.cutPaper()
+  }
+
+  if (method === 'sms') {
+    await api.sms.send(customerPhone,
+      `eБаримт: ${receipt.billId}\nСугалаа: ${receipt.lottery}\nQR: ${receipt.qrData}`
+    )
+  }
+
+  // Always show QR on screen
+  showQRModal(receipt.qrData, receipt.lottery)
+}
+```
+
+### APP STORE DEPLOYMENT CONFIG
+
+```json
+// eas.json — Expo Application Services
+{
+  "cli": { "version": ">= 10.0.0" },
+  "build": {
+    "customer": {
+      "android": { "buildType": "apk", "gradleCommand": ":app:assembleRelease" },
+      "ios": { "buildConfiguration": "Release" },
+      "env": { "APP_VARIANT": "customer" }
+    },
+    "seller": {
+      "android": { "buildType": "apk" },
+      "env": { "APP_VARIANT": "seller" }
+    },
+    "driver": {
+      "android": { "buildType": "apk" },
+      "env": { "APP_VARIANT": "driver" }
+    },
+    "pos": {
+      "android": { "buildType": "apk" },
+      "env": { "APP_VARIANT": "pos" }
+    }
+  }
+}
+
+// app.config.ts — dynamic config per variant
+export default ({ config }) => {
+  const variant = process.env.APP_VARIANT
+  const variants = {
+    customer: { name: 'Eseller', bundleId: 'mn.eseller.customer', icon: './assets/icon-customer.png' },
+    seller:   { name: 'Eseller Seller', bundleId: 'mn.eseller.seller', icon: './assets/icon-seller.png' },
+    driver:   { name: 'Eseller Driver', bundleId: 'mn.eseller.driver', icon: './assets/icon-driver.png' },
+    pos:      { name: 'Eseller POS', bundleId: 'mn.eseller.pos', icon: './assets/icon-pos.png' },
+  }
+  return { ...config, ...variants[variant] }
+}
+```
+</div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyPrompt(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.innerText.replace('Хуулах','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа!';
+    setTimeout(()=>btn.textContent='Хуулах',2000);
+  });
+}
+function copyAll(){
+  const ids=['p16text','p17text','p18text','p19text','p20text','p21text'];
+  const all=ids.map(id=>{
+    const el=document.getElementById(id);
+    return el?el.innerText.replace('Хуулах','').trim():'';
+  }).join('\n\n---\n\n');
+  navigator.clipboard.writeText(all).then(()=>alert('Бүх 6 prompt хуулагдлаа!'));
+}
+</script>

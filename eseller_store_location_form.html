@@ -1,0 +1,430 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+
+.page{background:var(--color-background-tertiary);padding:24px;min-height:100vh}
+.container{max-width:760px;margin:0 auto}
+
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-tertiary);margin-bottom:20px}
+.breadcrumb span{color:var(--color-text-secondary)}
+
+.page-header{margin-bottom:24px}
+.page-title{font-size:22px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--color-text-secondary)}
+
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px}
+.card-head{padding:16px 20px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.card-icon{width:32px;height:32px;border-radius:var(--border-radius-md);background:#FCEBEB;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.card-sub{font-size:12px;color:var(--color-text-tertiary);margin-top:1px}
+.card-body{padding:20px}
+
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.label{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.req{color:#E8242C;font-size:11px}
+.hint{font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+
+input[type=text],input[type=tel],input[type=url],select,textarea{
+  width:100%;height:38px;padding:0 12px;
+  background:var(--color-background-primary);
+  border:0.5px solid var(--color-border-secondary);
+  border-radius:var(--border-radius-md);
+  color:var(--color-text-primary);
+  font-family:var(--font-sans);
+  font-size:13px;
+  outline:none;
+  transition:border-color .15s;
+}
+input:focus,select:focus,textarea:focus{border-color:#E8242C;box-shadow:0 0 0 3px rgba(232,36,44,0.08)}
+textarea{height:80px;padding:10px 12px;resize:vertical}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+.map-placeholder{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:border-color .15s;position:relative;overflow:hidden}
+.map-placeholder:hover{border-color:#E8242C}
+.map-grid{position:absolute;inset:0;opacity:0.06}
+.map-pin{width:36px;height:36px;background:#E8242C;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.map-pin::after{content:'';width:14px;height:14px;background:var(--color-background-primary);border-radius:50%;position:absolute}
+.map-text{font-size:13px;color:var(--color-text-secondary);position:relative;z-index:1}
+.map-hint{font-size:11px;color:var(--color-text-tertiary);position:relative;z-index:1}
+
+.coord-row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.coord-item{flex:1}
+.coord-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px}
+.coord-badge{display:inline-flex;font-size:10px;padding:2px 8px;border-radius:99px;background:var(--color-background-success);color:var(--color-text-success);margin-left:auto}
+
+.hours-grid{display:grid;grid-template-columns:100px 1fr 1fr 60px;gap:8px;align-items:center;font-size:12px}
+.hours-head{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:4px}
+.day-label{color:var(--color-text-secondary);font-size:12px}
+.hours-row{display:grid;grid-template-columns:100px 1fr 1fr 60px;gap:8px;align-items:center;margin-bottom:8px}
+.hours-row:last-child{margin-bottom:0}
+.day-sep{font-size:12px;color:var(--color-text-tertiary);text-align:center}
+.closed-toggle{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-tertiary);cursor:pointer;justify-content:center}
+.toggle{width:28px;height:16px;border-radius:99px;background:var(--color-border-tertiary);position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:#E8242C}
+.toggle::after{content:'';width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:left .2s}
+.toggle.on::after{left:14px}
+
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.social-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.social-icon{width:32px;height:32px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+
+.action-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.btn-cancel{padding:8px 18px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);font-size:13px;cursor:pointer}
+.btn-save{padding:8px 24px;border-radius:var(--border-radius-md);border:none;background:#E8242C;color:#fff;font-size:13px;font-weight:500;cursor:pointer}
+.btn-save:hover{background:#C41E25}
+.btn-cancel:hover{background:var(--color-background-secondary)}
+
+.progress-dots{display:flex;gap:6px}
+.pdot{width:6px;height:6px;border-radius:50%;background:var(--color-border-secondary)}
+.pdot.active{background:#E8242C;width:18px;border-radius:99px}
+
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+</style>
+
+<div class="page">
+<div class="container">
+
+<div class="breadcrumb">
+  <span>Дэлгүүрийн тохиргоо</span>
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2l4 4-4 4"/></svg>
+  <span style="color:var(--color-text-primary);font-weight:500">Байршил & цагийн хуваарь</span>
+</div>
+
+<div class="page-header">
+  <div class="page-title">Байршил нэмэх</div>
+  <div class="page-sub">Дэлгүүрийн хаяг, цагийн хуваарь, холбоо барих мэдээлэл</div>
+</div>
+
+<!-- Address card -->
+<div class="card">
+  <div class="card-head">
+    <div class="card-icon">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#E8242C" stroke-width="1.5" stroke-linecap="round">
+        <path d="M8 1C5.24 1 3 3.24 3 6c0 4 5 9 5 9s5-5 5-9c0-2.76-2.24-5-5-5z"/>
+        <circle cx="8" cy="6" r="1.5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="card-title">Хаягийн мэдээлэл</div>
+      <div class="card-sub">Дэлгүүрийн яг байрлал</div>
+    </div>
+  </div>
+  <div class="card-body">
+
+    <div class="field">
+      <div class="label">Дэлгүүрийн нэр <span class="req">*</span></div>
+      <input type="text" placeholder="жш: Sarana Fashion Store — Сүхбаатар" value="Sarana Fashion — Хан-Уул салбар"/>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <div class="label">Дүүрэг <span class="req">*</span></div>
+        <select>
+          <option>Хан-Уул дүүрэг</option>
+          <option>Сүхбаатар дүүрэг</option>
+          <option>Баянгол дүүрэг</option>
+          <option>Баянзүрх дүүрэг</option>
+          <option>Чингэлтэй дүүрэг</option>
+          <option>Налайх дүүрэг</option>
+        </select>
+      </div>
+      <div class="field">
+        <div class="label">Хороо <span class="req">*</span></div>
+        <select>
+          <option>1-р хороо</option>
+          <option>2-р хороо</option>
+          <option>3-р хороо</option>
+          <option selected>4-р хороо</option>
+          <option>5-р хороо</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="label">Дэлгэрэнгүй хаяг <span class="req">*</span></div>
+      <input type="text" placeholder="Байшин, орц, тоот, дэлгүүрийн нэр..." value="Зайсан Хилл Молл, 2 давхар, Б-205"/>
+      <div class="hint">Хэрэглэгч олж ирэхэд хялбар болох тэмдэглэгч нэмнэ үү</div>
+    </div>
+
+    <div class="field">
+      <div class="label">Ойрын тэмдэгт газар</div>
+      <input type="text" placeholder="жш: Зайсан мемориалаас 200м, улаан барилгын урд..." value="Зайсан Хилл-ийн гол оролтын баруун гар"/>
+      <div class="hint">Хэрэглэгч хаанаас хэрхэн олохыг тайлбарлана</div>
+    </div>
+
+    <!-- Map picker -->
+    <div class="field">
+      <div class="label">
+        Газрын зураг дээр тэмдэглэх
+        <span class="coord-badge">Тэмдэглэгдсэн</span>
+      </div>
+      <div class="map-placeholder" onclick="this.style.borderColor='#E8242C'">
+        <svg class="map-grid" viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg">
+          <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5"/></pattern></defs>
+          <rect width="400" height="220" fill="url(#grid)"/>
+        </svg>
+        <div class="map-pin"></div>
+        <div class="map-text">Газрын зураг дээр байршлаа тогтоо</div>
+        <div class="map-hint">Дарж pin-ийг хөдөлгөнө</div>
+      </div>
+      <div class="coord-row">
+        <div class="coord-item">
+          <div class="coord-label">Өргөрөг (latitude)</div>
+          <input type="text" value="47.8864" style="font-family:var(--font-mono);font-size:12px"/>
+        </div>
+        <div class="coord-item">
+          <div class="coord-label">Уртраг (longitude)</div>
+          <input type="text" value="106.9057" style="font-family:var(--font-mono);font-size:12px"/>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Hours card -->
+<div class="card">
+  <div class="card-head">
+    <div class="card-icon" style="background:#EFF6FF">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="8" cy="8" r="6"/>
+        <path d="M8 5v3l2 2"/>
+      </svg>
+    </div>
+    <div>
+      <div class="card-title">Цагийн хуваарь</div>
+      <div class="card-sub">Ажиллах өдөр, цаг</div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button onclick="sendPrompt('Ажлын өдрүүд Mon–Fri 09:00–18:00 шаблон ашиглах')" style="padding:5px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);font-size:11px;cursor:pointer">Шаблон ↗</button>
+    </div>
+  </div>
+  <div class="card-body">
+
+    <div style="display:grid;grid-template-columns:90px 1fr 1fr 80px;gap:8px;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:12px">
+      <div style="font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em">Өдөр</div>
+      <div style="font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em">Нээх</div>
+      <div style="font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em">Хаах</div>
+      <div style="font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;text-align:center">Хаалттай</div>
+    </div>
+
+    <div id="hours-rows"></div>
+
+  </div>
+</div>
+
+<!-- Contact card -->
+<div class="card">
+  <div class="card-head">
+    <div class="card-icon" style="background:#EAF3DE">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3B6D11" stroke-width="1.5" stroke-linecap="round">
+        <path d="M2 3h12v10H2zM2 3l6 5 6-5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="card-title">Холбоо барих</div>
+      <div class="card-sub">Утас, имэйл, сошиал хаяг</div>
+    </div>
+  </div>
+  <div class="card-body">
+
+    <div class="grid2">
+      <div class="field">
+        <div class="label">Утасны дугаар <span class="req">*</span></div>
+        <input type="tel" placeholder="+976 9900 0000" value="+976 9911 2233"/>
+      </div>
+      <div class="field">
+        <div class="label">Нэмэлт утас</div>
+        <input type="tel" placeholder="+976 9900 0001"/>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="label">Имэйл хаяг</div>
+      <input type="text" placeholder="sarana@gmail.com" value="sarana.fashion@gmail.com"/>
+    </div>
+
+    <div class="field">
+      <div class="label">Вэб сайт</div>
+      <input type="url" placeholder="https://sarana.mn"/>
+    </div>
+
+    <div style="border-top:0.5px solid var(--color-border-tertiary);padding-top:14px;margin-top:4px">
+      <div class="label" style="margin-bottom:12px">Сошиал сүлжээ</div>
+
+      <div class="social-row">
+        <div class="social-icon" style="background:#EFF6FF">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.5h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/></svg>
+        </div>
+        <input type="text" placeholder="facebook.com/sarana.fashion" style="flex:1"/>
+      </div>
+
+      <div class="social-row">
+        <div class="social-icon" style="background:#FBEAF0">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#E1306C"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </div>
+        <input type="text" placeholder="instagram.com/sarana.fashion" style="flex:1"/>
+      </div>
+
+      <div class="social-row" style="margin-bottom:0">
+        <div class="social-icon" style="background:#EAF3DE">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <input type="text" placeholder="WhatsApp / Viber дугаар" style="flex:1"/>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Parking / features -->
+<div class="card">
+  <div class="card-head">
+    <div class="card-icon" style="background:#F1EFE8">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round">
+        <rect x="1" y="3" width="14" height="10" rx="2"/>
+        <path d="M5 8h2.5a1.5 1.5 0 000-3H5v6M5 8v3"/>
+      </svg>
+    </div>
+    <div>
+      <div class="card-title">Нэмэлт мэдээлэл</div>
+      <div class="card-sub">Тав тухтай байдал, онцлог</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="label" style="margin-bottom:10px">Давуу тал, боломжууд</div>
+    <div id="features-grid"></div>
+
+    <div class="field" style="margin-top:16px">
+      <div class="label">Нэмэлт тэмдэглэл</div>
+      <textarea placeholder="Хэрэглэгчид мэдэх ёстой бусад мэдээлэл...">Зочлох машины зогсоол байрны урд талд байна. Монгол, Англи хэлээр үйлчилдэг.</textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Action bar -->
+<div class="card" style="margin-bottom:0">
+  <div class="action-bar">
+    <div class="progress-dots">
+      <div class="pdot"></div>
+      <div class="pdot"></div>
+      <div class="pdot active"></div>
+      <div class="pdot"></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-cancel">Болих</button>
+      <button class="btn-save">Байршил хадгалах →</button>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+const days = [
+  {name:'Даваа',open:'09:00',close:'21:00',closed:false},
+  {name:'Мягмар',open:'09:00',close:'21:00',closed:false},
+  {name:'Лхагва',open:'09:00',close:'21:00',closed:false},
+  {name:'Пүрэв',open:'09:00',close:'21:00',closed:false},
+  {name:'Баасан',open:'09:00',close:'22:00',closed:false},
+  {name:'Бямба',open:'10:00',close:'22:00',closed:false},
+  {name:'Ням',open:'10:00',close:'20:00',closed:false},
+]
+
+const times = []
+for(let h=0;h<24;h++){
+  for(let m=0;m<60;m+=30){
+    times.push(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`)
+  }
+}
+
+function makeSelect(val,id){
+  const s = document.createElement('select')
+  s.id = id
+  s.style.height='34px'
+  times.forEach(t=>{
+    const o = document.createElement('option')
+    o.value=t; o.textContent=t
+    if(t===val) o.selected=true
+    s.appendChild(o)
+  })
+  return s
+}
+
+const container = document.getElementById('hours-rows')
+days.forEach((d,i)=>{
+  const row = document.createElement('div')
+  row.style.cssText='display:grid;grid-template-columns:90px 1fr 1fr 80px;gap:8px;align-items:center;margin-bottom:10px'
+
+  const label = document.createElement('div')
+  label.style.cssText='font-size:13px;color:var(--color-text-secondary)'
+  label.textContent = d.name
+  row.appendChild(label)
+
+  const openSel = makeSelect(d.open, `open-${i}`)
+  row.appendChild(openSel)
+  const closeSel = makeSelect(d.close, `close-${i}`)
+  row.appendChild(closeSel)
+
+  const toggleWrap = document.createElement('div')
+  toggleWrap.style.cssText='display:flex;align-items:center;justify-content:center;gap:4px;cursor:pointer'
+  const tog = document.createElement('div')
+  tog.className = 'toggle' + (d.closed?' on':'')
+  tog.dataset.day = i
+  const togLabel = document.createElement('span')
+  togLabel.style.cssText='font-size:10px;color:var(--color-text-tertiary)'
+  togLabel.textContent = d.closed?'Хаалттай':''
+  toggleWrap.appendChild(tog)
+  toggleWrap.appendChild(togLabel)
+  toggleWrap.onclick = function(){
+    d.closed=!d.closed
+    tog.className='toggle'+(d.closed?' on':'')
+    togLabel.textContent=d.closed?'Хаалттай':''
+    openSel.disabled=d.closed
+    closeSel.disabled=d.closed
+    openSel.style.opacity=d.closed?'0.35':'1'
+    closeSel.style.opacity=d.closed?'0.35':'1'
+  }
+  row.appendChild(toggleWrap)
+  container.appendChild(row)
+})
+
+const feats=[
+  {icon:'🅿️',label:'Машины зогсоол',checked:true},
+  {icon:'♿',label:'Хөгжлийн бэрхшээлтэй',checked:false},
+  {icon:'🛗',label:'Лифт байна',checked:true},
+  {icon:'💳',label:'Картаар төлнэ',checked:true},
+  {icon:'🌐',label:'Гадаад хэл',checked:true},
+  {icon:'📦',label:'Хүргэлтэй',checked:true},
+  {icon:'↩️',label:'Буцаалттай',checked:true},
+  {icon:'🔒',label:'Аюулгүй байдал',checked:false},
+]
+const fg = document.getElementById('features-grid')
+fg.style.cssText='display:grid;grid-template-columns:repeat(4,1fr);gap:8px'
+feats.forEach(f=>{
+  const btn=document.createElement('div')
+  btn.style.cssText=`display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:var(--border-radius-md);border:0.5px solid ${f.checked?'#E8242C':'var(--color-border-tertiary)'};background:${f.checked?'rgba(232,36,44,0.05)':'var(--color-background-secondary)'};cursor:pointer;transition:all .15s`
+  btn.dataset.checked=f.checked?'1':'0'
+  const icon=document.createElement('span')
+  icon.style.fontSize='14px'
+  icon.textContent=f.icon
+  const label=document.createElement('span')
+  label.style.cssText=`font-size:11px;color:${f.checked?'#E8242C':'var(--color-text-secondary)'};line-height:1.3`
+  label.textContent=f.label
+  btn.appendChild(icon); btn.appendChild(label)
+  btn.onclick=function(){
+    const on=this.dataset.checked==='1'
+    this.dataset.checked=on?'0':'1'
+    this.style.border=on?'0.5px solid var(--color-border-tertiary)':'0.5px solid #E8242C'
+    this.style.background=on?'var(--color-background-secondary)':'rgba(232,36,44,0.05)'
+    label.style.color=on?'var(--color-text-secondary)':'#E8242C'
+  }
+  fg.appendChild(btn)
+})
+</script>

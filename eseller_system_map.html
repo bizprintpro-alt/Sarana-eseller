@@ -1,0 +1,398 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#E8242C;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.scard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.scard-head{padding:10px 13px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:7px}
+.scard-icon{width:26px;height:26px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.scard-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.scard-body{padding:10px 13px}
+.route{display:flex;align-items:baseline;gap:6px;margin-bottom:5px;font-size:11px}
+.rmethod{font-family:var(--font-mono);font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px;flex-shrink:0}
+.get{background:#EAF3DE;color:#3B6D11}
+.post{background:#E6F1FB;color:#0C447C}
+.put{background:#FAEEDA;color:#633806}
+.del{background:#FCEBEB;color:#791F1F}
+.rpath{font-family:var(--font-mono);font-size:11px;color:var(--color-text-primary)}
+.rdesc{font-size:10px;color:var(--color-text-tertiary);margin-left:auto;white-space:nowrap}
+.badge{display:inline-flex;font-size:9px;font-weight:500;padding:1px 6px;border-radius:99px;white-space:nowrap}
+.b-shared{background:#EEEDFE;color:#3C3489}
+.b-new{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-done{background:var(--color-background-success);color:var(--color-text-success)}
+.comp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.comp{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px}
+.comp-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.comp-uses{font-size:10px;color:var(--color-text-tertiary);line-height:1.6}
+.diff-row{display:grid;grid-template-columns:1fr 40px 1fr;gap:6px;align-items:start;margin-bottom:6px}
+.diff-bad{background:var(--color-background-danger);border-radius:var(--border-radius-md);padding:8px 10px;font-size:11px;color:var(--color-text-danger);line-height:1.5}
+.diff-good{background:var(--color-background-success);border-radius:var(--border-radius-md);padding:8px 10px;font-size:11px;color:var(--color-text-success);line-height:1.5}
+.diff-arr{text-align:center;font-size:16px;color:var(--color-text-tertiary);padding-top:6px}
+.phase{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:8px}
+.ph-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ph-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+.ph-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.ph-dur{font-size:10px;color:var(--color-text-tertiary);margin-left:auto}
+.page-list{columns:2;gap:12px;font-size:11px;color:var(--color-text-secondary);line-height:2}
+.page-list code{font-family:var(--font-mono);font-size:10px;color:var(--color-text-primary)}
+.count-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.count-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center}
+.count-n{font-size:20px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.count-l{font-size:9px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em}
+</style>
+
+<div class="w">
+<div class="tabs">
+  <button class="tab active" onclick="show('pages')">Бүх хуудас</button>
+  <button class="tab" onclick="show('apis')">API routes</button>
+  <button class="tab" onclick="show('shared')">Хуваалцсан</button>
+  <button class="tab" onclick="show('norep')">Давталтгүй дүрэм</button>
+  <button class="tab" onclick="show('vs')">Shopify-тай</button>
+  <button class="tab" onclick="show('phases')">Фаз план</button>
+</div>
+
+<!-- PAGES -->
+<div id="panel-pages" class="panel active">
+  <div class="count-row">
+    <div class="count-card"><div class="count-n">18</div><div class="count-l">Public</div></div>
+    <div class="count-card"><div class="count-n">28</div><div class="count-l">Buyer</div></div>
+    <div class="count-card"><div class="count-n">34</div><div class="count-l">Seller</div></div>
+    <div class="count-card"><div class="count-n">8</div><div class="count-l">Affiliate</div></div>
+    <div class="count-card"><div class="count-n">24</div><div class="count-l">Admin</div></div>
+  </div>
+
+  <div class="section-grid">
+    <div class="scard">
+      <div class="scard-head">
+        <div class="scard-icon" style="background:var(--color-background-secondary)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c-2 2-3 4-3 6s1 4 3 6M8 2c2 2 3 4 3 6s-1 4-3 6"/></svg>
+        </div>
+        <div class="scard-title">Public хуудасууд</div>
+      </div>
+      <div class="scard-body">
+        <div class="route"><span class="rpath">/</span><span class="rdesc">Landing</span></div>
+        <div class="route"><span class="rpath">/store</span><span class="rdesc">Marketplace</span></div>
+        <div class="route"><span class="rpath">/[slug]</span><span class="rdesc">Storefront <span class="badge b-new">Шинэ</span></span></div>
+        <div class="route"><span class="rpath">/seller/[name]</span><span class="rdesc">Affiliate <span class="badge b-new">Шинэ</span></span></div>
+        <div class="route"><span class="rpath">/shops</span><span class="rdesc">Дэлгүүрүүд</span></div>
+        <div class="route"><span class="rpath">/feed</span><span class="rdesc">Зарын булан</span></div>
+        <div class="route"><span class="rpath">/gold</span><span class="rdesc">Gold member</span></div>
+        <div class="route"><span class="rpath">/search</span><span class="rdesc">Хайлт</span></div>
+        <div class="route"><span class="rpath">/login · /register</span></div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-head">
+        <div class="scard-icon" style="background:var(--color-background-info)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-info)" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+        </div>
+        <div class="scard-title">Buyer Dashboard</div>
+      </div>
+      <div class="scard-body">
+        <div class="route"><span class="rpath">/profile</span><span class="rdesc">Профайл + loyalty</span></div>
+        <div class="route"><span class="rpath">/cart</span><span class="rdesc">Сагс</span></div>
+        <div class="route"><span class="rpath">/checkout</span><span class="rdesc">Захиалах</span></div>
+        <div class="route"><span class="rpath">/orders</span><span class="rdesc">Захиалгын жагсаалт</span></div>
+        <div class="route"><span class="rpath">/orders/[id]</span><span class="rdesc">Дэлгэрэнгүй</span></div>
+        <div class="route"><span class="rpath">/wishlist</span><span class="rdesc">Хүслийн жагсаалт</span></div>
+        <div class="route"><span class="rpath">/chat/[id]</span><span class="rdesc">Чат</span></div>
+        <div class="route"><span class="rpath">/receipt/[id]</span><span class="rdesc">eБаримт QR</span></div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-head">
+        <div class="scard-icon" style="background:var(--color-background-danger)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-danger)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="12" height="10" rx="1"/><path d="M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
+        </div>
+        <div class="scard-title">Seller Dashboard (34 хуудас)</div>
+      </div>
+      <div class="scard-body">
+        <div class="route"><span class="rpath">/dashboard/seller</span><span class="rdesc">Тойм</span></div>
+        <div class="route"><span class="rpath">/…/products</span><span class="rdesc">Бараа CRUD</span></div>
+        <div class="route"><span class="rpath">/…/orders</span><span class="rdesc">Захиалга</span></div>
+        <div class="route"><span class="rpath">/…/campaigns</span><span class="rdesc">SMS/Email</span></div>
+        <div class="route"><span class="rpath">/…/sellers</span><span class="rdesc">Affiliate approval</span></div>
+        <div class="route"><span class="rpath">/…/storefront</span><span class="rdesc">Theme editor <span class="badge b-new">Шинэ</span></span></div>
+        <div class="route"><span class="rpath">/…/domain</span><span class="rdesc">Custom domain <span class="badge b-new">Шинэ</span></span></div>
+        <div class="route"><span class="rpath">/…/locations</span><span class="rdesc">Байршлууд</span></div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-head">
+        <div class="scard-icon" style="background:var(--color-background-warning)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-warning)" stroke-width="1.5" stroke-linecap="round"><path d="M8 1v14M1 8h14"/></svg>
+        </div>
+        <div class="scard-title">Admin Dashboard (24 хуудас)</div>
+      </div>
+      <div class="scard-body">
+        <div class="route"><span class="rpath">/admin</span><span class="rdesc">Супер дашбоард</span></div>
+        <div class="route"><span class="rpath">/admin/users</span><span class="rdesc">Хэрэглэгч</span></div>
+        <div class="route"><span class="rpath">/admin/stores</span><span class="rdesc">Дэлгүүр verify</span></div>
+        <div class="route"><span class="rpath">/admin/banners</span><span class="rdesc">Баннер CRUD</span></div>
+        <div class="route"><span class="rpath">/admin/finance</span><span class="rdesc">Санхүү</span></div>
+        <div class="route"><span class="rpath">/admin/locations</span><span class="rdesc">Координат шалгалт</span></div>
+        <div class="route"><span class="rpath">/admin/refids</span><span class="rdesc">Bulk renumber</span></div>
+        <div class="route"><span class="rpath">/admin/settings</span><span class="rdesc">Систем тохиргоо</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APIs -->
+<div id="panel-apis" class="panel">
+  <div class="count-row">
+    <div class="count-card"><div class="count-n">12</div><div class="count-l">Auth</div></div>
+    <div class="count-card"><div class="count-n">28</div><div class="count-l">Buyer</div></div>
+    <div class="count-card"><div class="count-n">34</div><div class="count-l">Seller</div></div>
+    <div class="count-card"><div class="count-n">8</div><div class="count-l">Affiliate</div></div>
+    <div class="count-card"><div class="count-n">22</div><div class="count-l">Admin</div></div>
+  </div>
+
+  <div class="section-grid">
+    <div class="scard">
+      <div class="scard-head"><div class="scard-title">Auth + Public</div></div>
+      <div class="scard-body">
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/auth/login</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/auth/roles</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/feed</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/search/suggest</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/banners/[slot]</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/banners/[id]/click</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/stores/[slug]</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/gold/plans</span></div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-head"><div class="scard-title">Buyer</div></div>
+      <div class="scard-body">
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/cart/items</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/orders</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/orders/[id]/receipt</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/wishlist/[id]</span></div>
+        <div class="route"><span class="rmethod get">GET</span><span class="rpath">/api/loyalty/[id]</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/loyalty/redeem</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/gold/trial</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/chat/[id]/messages</span></div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-head"><div class="scard-title">Seller</div></div>
+      <div class="scard-body">
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/seller/products</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/seller/orders/[id]/confirm</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/seller/orders/[id]/ship</span></div>
+        <div class="route"><span class="rmethod put">PUT</span><span class="rpath">/api/seller/storefront</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/seller/storefront/generate-share</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/seller/sellers/[id]/approve</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/campaigns/[id]/send</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/seller/locations/[id]/verify</span></div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-head"><div class="scard-title">Admin + Webhooks</div></div>
+      <div class="scard-body">
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/admin/stores/[id]/verify</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/admin/banners</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/admin/locations/bulk-geocode</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/admin/refids/apply</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/webhooks/qpay</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/webhooks/resend</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/cron/banners</span></div>
+        <div class="route"><span class="rmethod post">POST</span><span class="rpath">/api/cron/loyalty</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHARED -->
+<div id="panel-shared" class="panel">
+  <div class="st">Нэг удаа бүтээж, хаанаас ч ашиглах компонентүүд</div>
+  <div class="comp-grid">
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> ProductCard</div>
+      <div class="comp-uses">store feed · seller page · search · wishlist · affiliate</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> OrderCard</div>
+      <div class="comp-uses">buyer/orders · seller/orders · admin/orders</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> ChatModule</div>
+      <div class="comp-uses">buyer chat · seller messages · admin monitor</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> MediaUploader</div>
+      <div class="comp-uses">бараа · дэлгүүр · баннер · профайл</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> ShareModal</div>
+      <div class="comp-uses">entity storefront · seller affiliate · product</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> GoogleMapPicker</div>
+      <div class="comp-uses">seller location · zar form · agent listing</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> NotificationBell</div>
+      <div class="comp-uses">buyer · seller · admin navbar</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> PaymentModal</div>
+      <div class="comp-uses">checkout · subscription · commission payout</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> LoyaltyWidget</div>
+      <div class="comp-uses">profile · checkout · dashboard sidebar</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> QRCodeDisplay</div>
+      <div class="comp-uses">share modal · receipt · seller profile</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> DashboardLayout</div>
+      <div class="comp-uses">seller · admin (role-based sidebar)</div>
+    </div>
+    <div class="comp">
+      <div class="comp-name"><span class="badge b-shared">Хуваалцсан</span> AuthGuard</div>
+      <div class="comp-uses">бүх protected page — нэг газраас</div>
+    </div>
+  </div>
+</div>
+
+<!-- NO REPEAT -->
+<div id="panel-norep" class="panel">
+  <div class="st">Давталтгүй хөгжүүлэлтийн дүрэм</div>
+  <div class="diff-row">
+    <div class="diff-bad">❌ БУРУУ<br>seller/orders дахь OrderCard ≠ admin/orders дахь OrderCard<br>— 2 удаа код бичсэн</div>
+    <div class="diff-arr">→</div>
+    <div class="diff-good">✅ ЗӨРЧТ<br>&lt;OrderCard viewMode="seller" /&gt;<br>&lt;OrderCard viewMode="admin" /&gt;<br>— нэг компонент, prop-оор</div>
+  </div>
+  <div class="diff-row">
+    <div class="diff-bad">❌ БУРУУ<br>ProductForm-д нэг upload component<br>BannerForm-д өөр upload component</div>
+    <div class="diff-arr">→</div>
+    <div class="diff-good">✅ ЗӨРЧТ<br>&lt;MediaUploader context="product" /&gt;<br>&lt;MediaUploader context="banner" /&gt;<br>— нэг компонент, context-оор</div>
+  </div>
+  <div class="diff-row">
+    <div class="diff-bad">❌ БУРУУ<br>Buyer chat = тусдаа component<br>Seller chat = өөр component<br>— 2x код, 2x bug fix</div>
+    <div class="diff-arr">→</div>
+    <div class="diff-good">✅ ЗӨРЧТ<br>&lt;ChatModule role="buyer" /&gt;<br>&lt;ChatModule role="seller" /&gt;<br>— role-оор UI тохирно</div>
+  </div>
+  <div class="diff-row">
+    <div class="diff-bad">❌ БУРУУ<br>Seller sidebar = нэг nav config<br>Admin sidebar = өөр nav config</div>
+    <div class="diff-arr">→</div>
+    <div class="diff-good">✅ ЗӨРЧТ<br>&lt;DashboardLayout role="seller" /&gt;<br>&lt;DashboardLayout role="admin" /&gt;<br>— NAV_CONFIG[role] pattern</div>
+  </div>
+
+  <div class="st">WebSocket — нэг server, бүх роль</div>
+  <div class="scard">
+    <div class="scard-body" style="padding:12px">
+      <div class="route"><span style="font-size:11px;color:var(--color-text-tertiary)">entity:{id}</span><span class="rdesc">→ seller: шинэ захиалга, мессеж</span></div>
+      <div class="route"><span style="font-size:11px;color:var(--color-text-tertiary)">user:{id}</span><span class="rdesc">→ buyer: мэдэгдэл, чат, loyalty</span></div>
+      <div class="route"><span style="font-size:11px;color:var(--color-text-tertiary)">driver:{id}</span><span class="rdesc">→ driver: хүргэлтийн даалгавар</span></div>
+      <div class="route"><span style="font-size:11px;color:var(--color-text-tertiary)">admin</span><span class="rdesc">→ admin: систем alert</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- VS SHOPIFY -->
+<div id="panel-vs" class="panel">
+  <div class="st">Shopify-д байгаа → Eseller.mn-д хэрэгтэй</div>
+  <div class="comp-grid">
+    <div class="comp"><div class="comp-name">Theme editor</div><div class="comp-uses">/dashboard/seller/storefront — Drag-drop sections, color, font</div></div>
+    <div class="comp"><div class="comp-name">Custom domain</div><div class="comp-uses">/dashboard/seller/domain — DNS verify + SSL auto</div></div>
+    <div class="comp"><div class="comp-name">Discount codes</div><div class="comp-uses">/dashboard/seller/discounts — % болон fixed</div></div>
+    <div class="comp"><div class="comp-name">Analytics</div><div class="comp-uses">/dashboard/seller/analytics — Sales, visitors, conversion</div></div>
+    <div class="comp"><div class="comp-name">Product variants</div><div class="comp-uses">ProductForm-д size, color, material variants</div></div>
+    <div class="comp"><div class="comp-name">Inventory</div><div class="comp-uses">/dashboard/seller/inventory — Нөөц удирдлага</div></div>
+    <div class="comp"><div class="comp-name">Markets</div><div class="comp-uses">Монгол market default — аймаг/дүүргийн хүргэлт тариф</div></div>
+  </div>
+
+  <div class="st">Shopify-д байхгүй → Eseller.mn-ийн давуу тал</div>
+  <div class="comp-grid">
+    <div class="comp" style="border-color:rgba(34,197,94,0.3)"><div class="comp-name" style="color:var(--color-text-success)">Pre-order batch</div><div class="comp-uses">Гадаадаас захиалж оруулдаг систем — Монголд өвөрмөц</div></div>
+    <div class="comp" style="border-color:rgba(34,197,94,0.3)"><div class="comp-name" style="color:var(--color-text-success)">Affiliate seller</div><div class="comp-uses">Built-in commission — тусдаа app хэрэггүй</div></div>
+    <div class="comp" style="border-color:rgba(34,197,94,0.3)"><div class="comp-name" style="color:var(--color-text-success)">QPay + eБаримт</div><div class="comp-uses">Монгол native — plugin хэрэггүй</div></div>
+    <div class="comp" style="border-color:rgba(34,197,94,0.3)"><div class="comp-name" style="color:var(--color-text-success)">ДАН OAuth KYC</div><div class="comp-uses">Иргэний үнэмлэх баталгаажуулалт</div></div>
+    <div class="comp" style="border-color:rgba(34,197,94,0.3)"><div class="comp-name" style="color:var(--color-text-success)">Loyalty + Gold</div><div class="comp-uses">Amazon Prime загвар — built-in</div></div>
+    <div class="comp" style="border-color:rgba(34,197,94,0.3)"><div class="comp-name" style="color:var(--color-text-success)">Multi-role app</div><div class="comp-uses">Buyer+Seller+Driver — нэг апп</div></div>
+    <div class="comp" style="border-color:rgba(34,197,94,0.3)"><div class="comp-name" style="color:var(--color-text-success)">7 entity type</div><div class="comp-uses">Agent, auto, company, digital... Shopify-д байхгүй</div></div>
+  </div>
+</div>
+
+<!-- PHASES -->
+<div id="panel-phases" class="panel">
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</div>
+      <div class="ph-title">CSS var засвар + Storefront суурь</div>
+      <div class="ph-dur">1-р долоо хоног · Яаралтай</div>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+      CSS var засах (ProductCard, Landing, Sidebar) · /[slug] storefront page · StorefrontHero (7 type) · /seller/[username] affiliate · Commission schema
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</div>
+      <div class="ph-title">Theme editor + Shared components</div>
+      <div class="ph-dur">2-р долоо хоног</div>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+      4 theme (Minimal/Bold/Modern/Luxury) · Storefront drag-drop editor · Section toggle · MediaUploader нэгтгэх · ShareModal нэгтгэх
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-info);color:var(--color-text-info)">3</div>
+      <div class="ph-title">Checkout + Commission</div>
+      <div class="ph-dur">3-р долоо хоног</div>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+      QPay checkout бүрэн · eБаримт auto · Order flow confirm/ship/deliver · Commission calculation + record · Affiliate approval dashboard
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-success);color:var(--color-text-success)">4</div>
+      <div class="ph-title">Growth features</div>
+      <div class="ph-dur">4-5-р долоо хоног</div>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+      Loyalty + Gold · Banner CRUD + homepage · SMS/Email campaign · 5 automation flow · Custom domain middleware + DNS verify
+    </div>
+  </div>
+  <div class="phase">
+    <div class="ph-head">
+      <div class="ph-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">5</div>
+      <div class="ph-title">Scale + Mobile</div>
+      <div class="ph-dur">6-8-р долоо хоног</div>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+      ДАН OAuth KYC · Admin panel бүрэн · Analytics dashboard · Mobile multi-role app · WebSocket real-time · SEO: JSON-LD, sitemap
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.getElementById('panel-'+id).classList.add('active')
+  event.target.classList.add('active')
+}
+</script>

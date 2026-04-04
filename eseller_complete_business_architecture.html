@@ -1,0 +1,461 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:16px;font-family:var(--font-sans)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px}
+.tab{font-size:11px;padding:5px 11px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;color:var(--color-text-secondary);background:var(--color-background-primary);transition:all .15s;white-space:nowrap}
+.tab.on{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.pnl{display:none}.pnl.on{display:block}
+.sec{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.5px;text-transform:uppercase;margin:12px 0 6px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.ch{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ct{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.bg{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.bg-g{background:#D1FAE5;color:#065F46}.bg-b{background:#DBEAFE;color:#1D4ED8}
+.bg-a{background:#FEF3C7;color:#92400E}.bg-r{background:#FEE2E2;color:#991B1B}
+.bg-p{background:#EDE9FE;color:#5B21B6}.bg-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.it{font-size:11px;color:var(--color-text-secondary);padding:4px 8px;background:var(--color-background-secondary);border-radius:6px;display:flex;align-items:center;gap:5px}
+.dt{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.row:last-child{border-bottom:none}
+.pill{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500}
+.p-done{background:#D1FAE5;color:#065F46}
+.p-part{background:#FEF3C7;color:#92400E}
+.p-miss{background:#FEE2E2;color:#991B1B}
+.metric{background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;text-align:center}
+.mv{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ml{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.timeline{position:relative;padding-left:20px}
+.tl-item{position:relative;padding:8px 0 8px 16px;border-left:1.5px solid var(--color-border-secondary)}
+.tl-dot{position:absolute;left:-5px;top:12px;width:8px;height:8px;border-radius:50%}
+.tl-title{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.tl-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.tl-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.hier{border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.hier-head{padding:8px 12px;font-size:12px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:8px}
+.hier-body{padding:8px 12px;border-top:0.5px solid var(--color-border-tertiary)}
+</style>
+
+<div class="w">
+<div class="tabs">
+  <div class="tab on" onclick="sw(this,'t0')">Бизнес загвар</div>
+  <div class="tab" onclick="sw(this,'t1')">Эрх мэдлийн шатлал</div>
+  <div class="tab" onclick="sw(this,'t2')">App бүтэц</div>
+  <div class="tab" onclick="sw(this,'t3')">Superadmin бүрэн</div>
+  <div class="tab" onclick="sw(this,'t4')">Shop admin бүрэн</div>
+  <div class="tab" onclick="sw(this,'t5')">Хэрэгжилтийн төлөвлөгөө</div>
+</div>
+
+<!-- TAB 0: BUSINESS MODEL -->
+<div id="t0" class="pnl on">
+<div class="mg">
+  <div class="metric"><div class="mv">~42М₮</div><div class="ml">Жилийн MRR потенциал</div></div>
+  <div class="metric"><div class="mv">14+</div><div class="ml">Орлогын эх үүсвэр</div></div>
+  <div class="metric"><div class="mv">5</div><div class="ml">Апп/платформ</div></div>
+  <div class="metric"><div class="mv">3</div><div class="ml">Компанийн давхарга</div></div>
+</div>
+
+<div class="sec">Компанийн бүтэц</div>
+<div class="hier">
+  <div class="hier-head" style="background:#EDE9FE"><div class="dt" style="background:#7C3AED"></div>Толгой компани (Holding)</div>
+  <div class="hier-body">
+    <div class="it" style="margin-bottom:4px"><div class="dt" style="background:#7C3AED"></div>Стратегийн шийдвэр, хөрөнгө оруулалт, брэнд</div>
+    <div class="it" style="margin-bottom:4px"><div class="dt" style="background:#7C3AED"></div>Бүх компанийн нэгдсэн тайлан харах</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>eseller.mn болон салбар компаниудыг хянах</div>
+  </div>
+</div>
+<div class="hier">
+  <div class="hier-head" style="background:#DBEAFE"><div class="dt" style="background:#1D4ED8"></div>eseller.mn — Платформ операторын компани</div>
+  <div class="hier-body">
+    <div class="g2">
+      <div><div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D4ED8"></div>Marketplace платформ ажиллуулах</div>
+      <div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D4ED8"></div>Seller бүртгэх, баталгаажуулах</div>
+      <div class="it"><div class="dt" style="background:#1D4ED8"></div>Commission, subscription орлого</div></div>
+      <div><div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D4ED8"></div>Маркетинг, баннер орлого</div>
+      <div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D4ED8"></div>Claude AI кредит орлого</div>
+      <div class="it"><div class="dt" style="background:#1D4ED8"></div>Affiliate, delivery орлого</div></div>
+    </div>
+  </div>
+</div>
+<div class="hier">
+  <div class="hier-head" style="background:#D1FAE5"><div class="dt" style="background:#1D9E75"></div>Seller компаниуд — Platform-ийн харилцагч</div>
+  <div class="hier-body">
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Free / Standard / Ultimate / AI Pro subscription-оор ажилладаг. Платформд commission төлдөг.</div>
+  </div>
+</div>
+
+<div class="sec">14+ орлогын эх үүсвэр — эрэмбэлсэн</div>
+<div class="card">
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Төлбөртэй баннер / байршил</span><span class="pill p-miss">9М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Онцлох / featured байршил</span><span class="pill p-miss">7М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Гүйлгээний комисс 2–5%</span><span class="pill p-part">6М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Pro subscription</span><span class="pill p-part">5М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">SMS/Email маркетинг кампани</span><span class="pill p-miss">4М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Push notification кампани</span><span class="pill p-miss">3М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Affiliate / referral</span><span class="pill p-part">2.5М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Native sponsored content</span><span class="pill p-miss">2.2М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Хүргэлтийн комисс</span><span class="pill p-miss">1.8М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Data / analytics тайлан</span><span class="pill p-miss">1.4М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">AI кредит худалдаа</span><span class="pill p-part">1М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Escrow / төлбөр боловсруулалт</span><span class="pill p-miss">0.8М₮</span></div>
+  <div class="row"><span style="font-size:11px;color:var(--color-text-primary);flex:1">Certification / verified badge</span><span class="pill p-miss">0.5М₮</span></div>
+  <div class="row" style="border:none"><span style="font-size:11px;color:var(--color-text-primary);flex:1">POS лиценз төлбөр</span><span class="pill p-miss">0.3М₮</span></div>
+</div>
+<div style="font-size:10px;color:var(--color-text-tertiary);margin-top:4px">Бэлэн ✓ = ногоон · Хэсэгчлэн ~ = шар · Байхгүй ✗ = улаан</div>
+</div>
+
+<!-- TAB 1: HIERARCHY -->
+<div id="t1" class="pnl">
+<div class="sec">Эрх мэдлийн шатлал — 6 давхарга</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#7C3AED"></div><span class="ct">Давхарга 1 — Holding компани</span><span class="bg bg-p">Захирагч</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Бүх компанийн P&L харах</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Стратегийн тохиргоо</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Superadmin нэмэх/хасах</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Платформ идэвхгүй болгох</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#E24B4A"></div><span class="ct">Давхарга 2 — Superadmin</span><span class="bg bg-r">Платформ</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Commission rate тохируулах</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Seller plan өөрчлөх</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Баннер байршил нэмэх</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Нүүр хуудас дизайн</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Маркетинг кампани</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Audit log бүгдийг харах</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#EF9F27"></div><span class="ct">Давхарга 3 — Shop owner/admin</span><span class="bg bg-a">Дэлгүүр</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Дэлгүүрийн бүх тохиргоо</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Ажилтан нэмэх/хасах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Subscription сонгох</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Нүүр хуудас засах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Analytics бүгдийг харах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Баннер захиалах</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#378ADD"></div><span class="ct">Давхарга 4 — Shop manager/staff</span><span class="bg bg-b">Ажилтан</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Бараа CRUD</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Захиалга боловсруулах</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Хэсэгчилсэн analytics</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Хэрэглэгчтэй харилцах</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#1D9E75"></div><span class="ct">Давхарга 5 — Жолооч / POS operator</span><span class="bg bg-g">Гүйцэтгэгч</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Өөрийн захиалга харах</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Статус update хийх</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Өдрийн тайлан харах</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Касс ажиллуулах (POS)</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#888"></div><span class="ct">Давхарга 6 — Buyer / хэрэглэгч</span><span class="bg bg-gray">Үйлчлүүлэгч</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#888"></div>Бараа харах, захиалах</div>
+    <div class="it"><div class="dt" style="background:#888"></div>Хянах хуудас</div>
+    <div class="it"><div class="dt" style="background:#888"></div>Үнэлгээ үлдээх</div>
+    <div class="it"><div class="dt" style="background:#888"></div>Wishlist, хадгалах</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 2: APP STRUCTURE -->
+<div id="t2" class="pnl">
+<div class="sec">Технологийн шийдвэр — миний зөвлөмж</div>
+
+<div class="card" style="border-color:#1D9E75">
+  <div class="ch"><span class="ct">Web (Next.js) — одоогийн систем</span><span class="bg bg-g">Үргэлжлүүлэх</span></div>
+  <div class="g2">
+    <div><div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D9E75"></div>eseller.mn/store — Buyer</div>
+    <div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D9E75"></div>dashboard/seller — Seller</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>dashboard/admin — Superadmin</div></div>
+    <div><div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D9E75"></div>s/[shopSlug] — Shop storefront</div>
+    <div class="it" style="margin-bottom:4px"><div class="dt" style="background:#1D9E75"></div>Holding dashboard</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>dashboard/shop — Shop admin</div></div>
+  </div>
+</div>
+
+<div class="card" style="border-color:#378ADD">
+  <div class="ch"><span class="ct">PWA (Next.js-д нэмэлт) — хурдан гарах</span><span class="bg bg-b">Зөвлөж байна</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Buyer mobile experience</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Push notification</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Offline product browse</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Install to homescreen</div>
+  </div>
+</div>
+
+<div class="card" style="border-color:#EF9F27">
+  <div class="ch"><span class="ct">React Native — жолооч + POS</span><span class="bg bg-a">6 сарын дараа</span></div>
+  <div class="g2">
+    <div><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Жолооч app</div>
+    <div class="it" style="margin-bottom:3px"><div class="dt" style="background:#EF9F27"></div>GPS tracking</div>
+    <div class="it" style="margin-bottom:3px"><div class="dt" style="background:#EF9F27"></div>Offline горим</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Push мэдэгдэл</div></div>
+    <div><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">POS terminal</div>
+    <div class="it" style="margin-bottom:3px"><div class="dt" style="background:#EF9F27"></div>Барcode scan</div>
+    <div class="it" style="margin-bottom:3px"><div class="dt" style="background:#EF9F27"></div>Offline касс</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>QPay terminal</div></div>
+  </div>
+</div>
+
+<div class="card" style="border-color:#7C3AED">
+  <div class="ch"><span class="ct">Claude API — бүх app-д нэвтрэх</span><span class="bg bg-p">Core</span></div>
+  <div class="g3">
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Seller: AI tools</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Admin: кампани текст</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Admin: нүүр хуудас</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Buyer: chatbot</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>System: fraud detect</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Analytics: дүн</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 3: SUPERADMIN -->
+<div id="t3" class="pnl">
+<div class="sec">Superadmin — бүрэн хэрэгслийн жагсаалт</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#E24B4A"></div><span class="ct">Нүүр хуудас удирдлага</span><span class="bg bg-r">Claude API</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Hero зураг upload</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Hero текст — prompt/manual</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Промо баннер нэмэх</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Категори эрэмбэ drag</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Онцлох seller сонгох</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>Announcement popup</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>SEO meta тохируулах</div>
+    <div class="it"><div class="dt" style="background:#E24B4A"></div>A/B test загвар</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#EF9F27"></div><span class="ct">Дизайн / загвар удирдлага</span><span class="bg bg-a">Upload + AI</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Глобал өнгө palette</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Фонт тохируулах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Email template засах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>SMS template засах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Push template засах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Seller storefront default</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>App splash screen</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Загвар library upload</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#7C3AED"></div><span class="ct">Маркетинг кампани</span><span class="bg bg-p">Орлого</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>SMS blast үүсгэх</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Email кампани</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Push notification</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Хэрэглэгч сегмент</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Claude текст генерация</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Schedule илгээх</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>A/B тест</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>Open/click тайлан</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#378ADD"></div><span class="ct">Баннер байршил удирдлага</span><span class="bg bg-b">9М₮ потенциал</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Slot нэмэх/засах</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>CPM/flat-rate тохируулах</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Захиалга батлах/татгалзах</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Performance харах</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Impression тооцоо</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Payout тооцоо</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#1D9E75"></div><span class="ct">Seller / хэрэглэгч удирдлага</span><span class="bg bg-g">Enforcement</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Plan өөрчлөх</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Commission override</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Block/suspend</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Verification батлах</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Role өөрчлөх</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Payout батлах</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Хэрэглэгч нэгтгэх/устгах</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Audit log бүгдийг харах</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#888"></div><span class="ct">Санхүү + орлогын тайлан</span><span class="bg bg-gray">Real-time</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#888"></div>14 эх үүсвэрийн breakdown</div>
+    <div class="it"><div class="dt" style="background:#888"></div>MRR/ARR тооцоо</div>
+    <div class="it"><div class="dt" style="background:#888"></div>Commission тайлан</div>
+    <div class="it"><div class="dt" style="background:#888"></div>Subscription тайлан</div>
+    <div class="it"><div class="dt" style="background:#888"></div>Payout queue</div>
+    <div class="it"><div class="dt" style="background:#888"></div>Holding-д export</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 4: SHOP ADMIN -->
+<div id="t4" class="pnl">
+<div class="sec">Shop admin — дэлгүүрийн бүрэн удирдлага</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#EF9F27"></div><span class="ct">Дэлгүүрийн нүүр хуудас</span><span class="bg bg-a">Upload + AI</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Hero зураг/видео upload</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Headline — prompt/manual</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Онцлох бараа сонгох</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Announcement текст</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Категори харагдах эрэмбэ</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>SEO тохируулах</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Социал холбоос</div>
+    <div class="it"><div class="dt" style="background:#EF9F27"></div>Custom domain тохируулах</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#378ADD"></div><span class="ct">Загвар / дизайн удирдлага</span><span class="bg bg-b">Subscription-д</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Загвар сонгох (template)</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>AI storefront generate</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Өнгө palette сонгох</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Фонт сонгох</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Section drag reorder</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Лого upload</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Banner upload</div>
+    <div class="it"><div class="dt" style="background:#378ADD"></div>Mobile preview</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#1D9E75"></div><span class="ct">Ажилтан удирдлага</span><span class="bg bg-g">Role-based</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Ажилтан нэмэх/хасах</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Role: owner/manager/staff</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Role: cashier/driver</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Цагийн хуваарь</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Хандах хэсэг тохируулах</div>
+    <div class="it"><div class="dt" style="background:#1D9E75"></div>Ажилтны орлого харах</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ch"><div class="dt" style="background:#7C3AED"></div><span class="ct">AI хэрэгслүүд</span><span class="bg bg-p">Claude кредит</span></div>
+  <div class="g2">
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>AI постер үүсгэгч</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>AI лого үүсгэгч</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>AI бараа тайлбар</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>AI борлуулалт зөвлөгч</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>AI ангилал таних</div>
+    <div class="it"><div class="dt" style="background:#7C3AED"></div>AI кампани текст</div>
+  </div>
+</div>
+</div>
+
+<!-- TAB 5: ROADMAP -->
+<div id="t5" class="pnl">
+<div class="sec">Хэрэгжилтийн дараалал — миний шийдвэр</div>
+
+<div class="timeline">
+<div class="tl-item">
+  <div class="tl-dot" style="background:#E24B4A"></div>
+  <div class="tl-title">Фаз 1 — Суурь бэхжүүлэх (1-2 долоо хоног)</div>
+  <div class="tl-sub">Subscription enforcement DB-д, modifier систем, superadmin commission/plan control</div>
+  <div class="tl-tags">
+    <span class="pill p-miss">Plan enforcement</span>
+    <span class="pill p-miss">Modifier/add-on</span>
+    <span class="pill p-miss">Admin plan control</span>
+  </div>
+</div>
+<div class="tl-item">
+  <div class="tl-dot" style="background:#EF9F27"></div>
+  <div class="tl-title">Фаз 2 — Орлогын систем (1 сар)</div>
+  <div class="tl-sub">Баннер байршил, нүүр хуудас admin, маркетинг кампани, орлогын тайлан</div>
+  <div class="tl-tags">
+    <span class="pill p-miss">Banner system</span>
+    <span class="pill p-miss">Homepage admin</span>
+    <span class="pill p-miss">Marketing campaigns</span>
+    <span class="pill p-miss">Revenue dashboard</span>
+  </div>
+</div>
+<div class="tl-item">
+  <div class="tl-dot" style="background:#378ADD"></div>
+  <div class="tl-title">Фаз 3 — Платформ өргөтгөх (2 сар)</div>
+  <div class="tl-sub">Shop admin нүүр хуудас, ажилтан roles, real-time order tracking, review систем</div>
+  <div class="tl-tags">
+    <span class="pill p-miss">Shop homepage control</span>
+    <span class="pill p-miss">Staff roles</span>
+    <span class="pill p-miss">Order tracking</span>
+    <span class="pill p-miss">Reviews</span>
+  </div>
+</div>
+<div class="tl-item">
+  <div class="tl-dot" style="background:#1D9E75"></div>
+  <div class="tl-title">Фаз 4 — Mobile + Жолооч (3 сар)</div>
+  <div class="tl-sub">PWA buyer app, жолооч web dashboard, GPS-гүй боловч статус update</div>
+  <div class="tl-tags">
+    <span class="pill p-miss">Buyer PWA</span>
+    <span class="pill p-miss">Driver web dashboard</span>
+    <span class="pill p-miss">Delivery tracking</span>
+  </div>
+</div>
+<div class="tl-item">
+  <div class="tl-dot" style="background:#7C3AED"></div>
+  <div class="tl-title">Фаз 5 — Native app + POS (6 сар)</div>
+  <div class="tl-sub">React Native жолооч app (GPS+offline), POS terminal app (barcode+offline kasss)</div>
+  <div class="tl-tags">
+    <span class="pill p-miss">Driver React Native</span>
+    <span class="pill p-miss">POS terminal app</span>
+    <span class="pill p-miss">Offline sync</span>
+  </div>
+</div>
+<div class="tl-item" style="border-left-color:transparent">
+  <div class="tl-dot" style="background:#888"></div>
+  <div class="tl-title">Фаз 6 — Holding интеграц (9 сар)</div>
+  <div class="tl-sub">Holding dashboard, multi-company тайлан, нэгдсэн аналитик</div>
+  <div class="tl-tags">
+    <span class="pill p-miss">Holding dashboard</span>
+    <span class="pill p-miss">Cross-company analytics</span>
+  </div>
+</div>
+</div>
+
+<div class="sec">Claude Code промпт — дараалал</div>
+<div class="card">
+  <div class="row"><span style="font-size:11px;flex:1;color:var(--color-text-primary)">Промпт 1: Subscription enforcement + Admin control</span><span class="pill p-miss">Одоо</span></div>
+  <div class="row"><span style="font-size:11px;flex:1;color:var(--color-text-primary)">Промпт 2: Banner + Homepage admin + Claude API</span><span class="pill p-miss">1 долоо хоног</span></div>
+  <div class="row"><span style="font-size:11px;flex:1;color:var(--color-text-primary)">Промпт 3: Marketing campaign + Revenue dashboard</span><span class="pill p-miss">2 долоо хоног</span></div>
+  <div class="row"><span style="font-size:11px;flex:1;color:var(--color-text-primary)">Промпт 4: Shop homepage + Staff roles + Reviews</span><span class="pill p-miss">1 сар</span></div>
+  <div class="row"><span style="font-size:11px;flex:1;color:var(--color-text-primary)">Промпт 5: Buyer PWA + Driver web dashboard</span><span class="pill p-miss">2 сар</span></div>
+  <div class="row" style="border:none"><span style="font-size:11px;flex:1;color:var(--color-text-primary)">Промпт 6: React Native driver + POS terminal</span><span class="pill p-miss">6 сар</span></div>
+</div>
+</div>
+
+</div>
+<script>
+function sw(el,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById(id).classList.add('on');
+}
+</script>

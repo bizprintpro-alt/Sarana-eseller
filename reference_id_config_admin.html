@@ -1,0 +1,435 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tbr{display:flex;gap:8px}
+.btn{border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;transition:background .12s;white-space:nowrap}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-p{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info)}
+.btn-p:hover{opacity:.85}
+.btn-d{background:var(--color-background-danger);border-color:var(--color-border-danger);color:var(--color-text-danger)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;align-items:start;margin-bottom:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.ch{padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cht{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.chs{font-size:11px;color:var(--color-text-tertiary)}
+.pb{padding:16px}
+.fl{display:flex;flex-direction:column;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fl2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fl3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+label{font-size:12px;font-weight:500;color:var(--color-text-secondary)}
+.hint{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+input[type=text],input[type=number],select,textarea{width:100%;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);font-size:13px;padding:0 10px;height:34px}
+textarea{height:auto;padding:8px 10px;resize:vertical}
+input:focus,select:focus{outline:none;border-color:var(--color-border-primary)}
+.seg{display:flex;gap:0;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);overflow:hidden}
+.seg-btn{flex:1;border:none;background:none;padding:7px 6px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;transition:background .12s;border-right:0.5px solid var(--color-border-secondary)}
+.seg-btn:last-child{border-right:none}
+.seg-btn.act{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.preview-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:16px;text-align:center;margin-bottom:14px}
+.preview-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.preview-id{font-size:24px;font-weight:500;font-family:var(--font-mono);color:var(--color-text-primary);letter-spacing:.04em;word-break:break-all}
+.preview-parts{display:flex;align-items:center;justify-content:center;gap:0;margin-top:8px;flex-wrap:wrap}
+.pp{font-size:11px;padding:2px 8px;border-radius:4px;font-family:var(--font-mono)}
+.pp-pre{background:var(--color-background-info);color:var(--color-text-info)}
+.pp-sep{color:var(--color-text-tertiary);padding:2px 2px}
+.pp-cat{background:var(--color-background-success);color:var(--color-text-success)}
+.pp-seq{background:var(--color-background-warning);color:var(--color-text-warning)}
+.pp-yr{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.pp-rand{background:#EEEDFE;color:#3C3489}
+.divline{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.sl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.sv{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.sd{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+.tag.on{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);cursor:pointer}
+.tag.off{cursor:pointer}
+.tag:hover{border-color:var(--color-border-secondary)}
+.history-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.history-row:last-child{border-bottom:none}
+.hdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.htxt{flex:1;color:var(--color-text-secondary)}
+.htxt strong{color:var(--color-text-primary);font-weight:500}
+.htime{font-size:11px;color:var(--color-text-tertiary)}
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px}
+.b-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-info{background:var(--color-background-info);color:var(--color-text-info)}
+.sample-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sample-item{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;font-size:12px;font-family:var(--font-mono);color:var(--color-text-primary)}
+.sample-sub{font-size:10px;color:var(--color-text-tertiary);margin-top:2px;font-family:var(--font-sans)}
+.conflict-box{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-md);padding:10px 12px;font-size:12px;color:var(--color-text-danger);display:none;margin-top:8px}
+.success-box{background:var(--color-background-success);border:0.5px solid var(--color-border-success);border-radius:var(--border-radius-md);padding:10px 12px;font-size:12px;color:var(--color-text-success);display:none;margin-top:8px}
+.tok{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:4px;font-family:var(--font-mono);cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);transition:border-color .12s}
+.tok:hover{border-color:var(--color-border-secondary)}
+.tok-insert{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Reference ID тохиргоо</div>
+    <div class="ps">Админ · Бараа болон захиалгын дугаарын формат</div>
+  </div>
+  <div class="tbr">
+    <button class="btn" onclick="resetForm()">Анхны тохиргоо</button>
+    <button class="btn" onclick="sendPrompt('Reference ID bulk дахин дугаарлах хуудасны дизайн хийж өгнө үү')">Дахин дугаарлах</button>
+    <button class="btn btn-p" onclick="saveConfig()">Тохиргоо хадгалах</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="sc"><div class="sl">Нийт ID олгогдсон</div><div class="sv">48,231</div><div class="sd">Нийт бүртгэлтэй</div></div>
+  <div class="sc"><div class="sl">Өнөөдөр шинэ</div><div class="sv" style="color:var(--color-text-success)">+142</div><div class="sd">Нийт бараа/захиалга</div></div>
+  <div class="sc"><div class="sl">Мөргөлдөөн</div><div class="sv" style="color:var(--color-text-danger)">0</div><div class="sd">Давхардсан ID</div></div>
+</div>
+
+<div class="grid2">
+  <div style="display:flex;flex-direction:column;gap:14px">
+
+    <div class="card">
+      <div class="ch">
+        <span class="cht">ID хамрах хүрээ</span>
+        <span class="chs">Ямар объектод ID олгох</span>
+      </div>
+      <div class="pb">
+        <div class="fl">
+          <div class="fg">
+            <label>Хамрах объект</label>
+            <div class="tag-row">
+              <span class="tag on" onclick="toggleTag(this)">Бараа</span>
+              <span class="tag on" onclick="toggleTag(this)">Захиалга</span>
+              <span class="tag on" onclick="toggleTag(this)">Дэлгүүр</span>
+              <span class="tag off" onclick="toggleTag(this)">Хэрэглэгч</span>
+              <span class="tag off" onclick="toggleTag(this)">Чат</span>
+              <span class="tag off" onclick="toggleTag(this)">Зар</span>
+            </div>
+            <div class="hint">Идэвхтэй объект бүрт тусдаа форматын тохиргоо хийж болно</div>
+          </div>
+          <div class="fg">
+            <label>Тохиргоо засах объект</label>
+            <div class="seg" id="obj-seg">
+              <button class="seg-btn act" onclick="switchObj(this,'PRD')">Бараа</button>
+              <button class="seg-btn" onclick="switchObj(this,'ORD')">Захиалга</button>
+              <button class="seg-btn" onclick="switchObj(this,'STR')">Дэлгүүр</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch">
+        <span class="cht">Форматын тохиргоо</span>
+        <span class="badge b-info" id="obj-badge">Бараа · PRD</span>
+      </div>
+      <div class="pb">
+        <div class="fl">
+          <div class="fl2">
+            <div class="fg">
+              <label>Угтвар (prefix)</label>
+              <input type="text" id="inp-prefix" value="PRD" oninput="updatePreview()" maxlength="6" placeholder="PRD">
+              <div class="hint">2–6 үсэг, том үсгээр</div>
+            </div>
+            <div class="fg">
+              <label>Тусгаарлагч</label>
+              <select id="inp-sep" onchange="updatePreview()">
+                <option value="-">— Зураас (-)</option>
+                <option value="_">_ Доогуур зураас (_)</option>
+                <option value="">Тусгаарлагчгүй</option>
+                <option value=".">, Цэг (.)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fg">
+            <label>Форматын загвар</label>
+            <div class="tok-insert">
+              <span class="tok pp-cat" onclick="insertToken('{CAT}')" title="Ангилалын код">{CAT}</span>
+              <span class="tok pp-seq" onclick="insertToken('{SEQ}')" title="Дараалсан тоо">{SEQ}</span>
+              <span class="tok pp-yr" onclick="insertToken('{YR}')" title="Жил">{YR}</span>
+              <span class="tok pp-yr" onclick="insertToken('{MO}')" title="Сар">{MO}</span>
+              <span class="tok pp-rand" onclick="insertToken('{RND}')" title="Санамсаргүй тоо">{RND}</span>
+            </div>
+            <input type="text" id="inp-pattern" value="{CAT}-{SEQ}" oninput="updatePreview()" placeholder="{CAT}-{SEQ}">
+            <div class="hint">Токен дарж оруулна уу · Жишээ: {CAT}-{YR}-{SEQ}</div>
+          </div>
+
+          <div class="fl3">
+            <div class="fg">
+              <label>Дараалал эхлэх тоо</label>
+              <input type="number" id="inp-start" value="10000" min="1" oninput="updatePreview()">
+            </div>
+            <div class="fg">
+              <label>Дугаарын урт</label>
+              <input type="number" id="inp-padlen" value="6" min="4" max="10" oninput="updatePreview()">
+              <div class="hint">Тэгээр нөхнө</div>
+            </div>
+            <div class="fg">
+              <label>Нэмэгдэх алхам</label>
+              <input type="number" id="inp-step" value="1" min="1" max="100" oninput="updatePreview()">
+            </div>
+          </div>
+
+          <div class="fl2">
+            <div class="fg">
+              <label>Ангилалын код</label>
+              <select id="inp-cat" onchange="updatePreview()">
+                <option value="ELC">ELC — Электроник</option>
+                <option value="FSH">FSH — Хувцас</option>
+                <option value="FD">FD — Хоол хүнс</option>
+                <option value="BTY">BTY — Гоо сайхан</option>
+                <option value="HM">HM — Гэр ахуй</option>
+                <option value="SPT">SPT — Спорт</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Том/жижиг үсэг</label>
+              <select id="inp-case" onchange="updatePreview()">
+                <option value="upper">Том үсэг (UPPER)</option>
+                <option value="lower">Жижиг үсэг (lower)</option>
+                <option value="mixed">Холимог</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="conflict-box" class="conflict-box">Анхааруулга: Энэ формат өмнөх ID-тай давхцах магадлалтай. Угтвар эсвэл дараалал шалгана уу.</div>
+          <div id="success-box" class="success-box">Формат хадгалагдлаа. Шинэ ID-ууд энэ форматаар үүснэ.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:14px">
+
+    <div class="card">
+      <div class="ch"><span class="cht">Урьдчилан харах</span></div>
+      <div class="pb">
+        <div class="preview-box">
+          <div class="preview-label">Үүсэх ID жишээ</div>
+          <div class="preview-id" id="prev-id">PRD-ELC-010000</div>
+          <div class="preview-parts" id="prev-parts"></div>
+        </div>
+        <div class="fg" style="margin-bottom:12px">
+          <label>Жишээ ID-ууд (5)</label>
+          <div class="sample-grid" id="sample-grid"></div>
+        </div>
+        <hr class="divline">
+        <div class="fg">
+          <label>ID задлал</label>
+          <div style="display:flex;flex-direction:column;gap:4px;font-size:12px" id="breakdown"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span class="cht">Өөрчлөлтийн түүх</span></div>
+      <div class="pb">
+        <div id="history-list">
+          <div class="history-row">
+            <div class="hdot" style="background:var(--color-text-success)"></div>
+            <div class="htxt"><strong>PRD-ELC-{SEQ}</strong> формат идэвхжсэн</div>
+            <div class="htime">2026-04-01</div>
+          </div>
+          <div class="history-row">
+            <div class="hdot" style="background:var(--color-text-warning)"></div>
+            <div class="htxt">Дараалал <strong>10000</strong>-с эхлүүлсэн</div>
+            <div class="htime">2026-03-20</div>
+          </div>
+          <div class="history-row">
+            <div class="hdot" style="background:var(--color-text-info)"></div>
+            <div class="htxt">Угтвар <strong>ITEM</strong> → <strong>PRD</strong> болгон өөрчлөв</div>
+            <div class="htime">2026-03-10</div>
+          </div>
+          <div class="history-row">
+            <div class="hdot" style="background:var(--color-text-tertiary)"></div>
+            <div class="htxt">Анхны тохиргоо үүссэн</div>
+            <div class="htime">2026-02-15</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span class="cht">Хайлт & шалгалт</span></div>
+      <div class="pb">
+        <div class="fg" style="margin-bottom:10px">
+          <label>ID шалгах</label>
+          <div style="display:flex;gap:6px">
+            <input type="text" id="check-inp" placeholder="PRD-ELC-010042" style="flex:1" oninput="checkId(this.value)">
+          </div>
+          <div id="check-result" class="hint" style="margin-top:4px">ID оруулж давхардал шалгана уу</div>
+        </div>
+        <hr class="divline">
+        <div class="fg">
+          <label>Дараагийн ID</label>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-family:var(--font-mono);font-size:14px;font-weight:500;color:var(--color-text-primary);flex:1;background:var(--color-background-secondary);padding:8px 10px;border-radius:var(--border-radius-md)" id="next-id">PRD-ELC-010001</div>
+            <button class="btn" onclick="generateNext()">Шинэчлэх</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+const objMap={
+  PRD:{label:'Бараа · PRD',prefix:'PRD',pattern:'{CAT}-{SEQ}',start:10000,padlen:6,step:1,sep:'-',cat:'ELC',cs:'upper'},
+  ORD:{label:'Захиалга · ORD',prefix:'ORD',pattern:'{YR}{MO}-{SEQ}',start:1,padlen:5,step:1,sep:'-',cat:'FD',cs:'upper'},
+  STR:{label:'Дэлгүүр · STR',prefix:'STR',pattern:'{SEQ}',start:100,padlen:4,step:1,sep:'-',cat:'HM',cs:'upper'},
+};
+let curObj='PRD';
+
+function getCats(){return {ELC:'ELC',FSH:'FSH',FD:'FD',BTY:'BTY',HM:'HM',SPT:'SPT'};}
+
+function buildId(cfg,seq){
+  const yr=new Date().getFullYear().toString().slice(2);
+  const mo=String(new Date().getMonth()+1).padStart(2,'0');
+  const seqStr=String(seq).padStart(cfg.padlen,'0');
+  let pattern=cfg.pattern
+    .replace('{CAT}',cfg.cat)
+    .replace('{SEQ}',seqStr)
+    .replace('{YR}',yr)
+    .replace('{MO}',mo)
+    .replace('{RND}',String(Math.floor(Math.random()*9000)+1000));
+  const full=(cfg.prefix+cfg.sep+pattern);
+  return cfg.cs==='upper'?full.toUpperCase():cfg.cs==='lower'?full.toLowerCase():full;
+}
+
+function readForm(){
+  return {
+    prefix:document.getElementById('inp-prefix').value.trim()||'PRD',
+    sep:document.getElementById('inp-sep').value,
+    pattern:document.getElementById('inp-pattern').value.trim()||'{SEQ}',
+    start:parseInt(document.getElementById('inp-start').value)||10000,
+    padlen:parseInt(document.getElementById('inp-padlen').value)||6,
+    step:parseInt(document.getElementById('inp-step').value)||1,
+    cat:document.getElementById('inp-cat').value.split(' ')[0],
+    cs:document.getElementById('inp-case').value,
+  };
+}
+
+function updatePreview(){
+  const cfg=readForm();
+  const id=buildId(cfg,cfg.start);
+  document.getElementById('prev-id').textContent=id;
+  document.getElementById('next-id').textContent=buildId(cfg,cfg.start+cfg.step);
+
+  const yr=new Date().getFullYear().toString().slice(2);
+  const mo=String(new Date().getMonth()+1).padStart(2,'0');
+  const parts=[];
+  parts.push(`<span class="pp pp-pre">${cfg.prefix}</span>`);
+  if(cfg.sep) parts.push(`<span class="pp-sep">${cfg.sep}</span>`);
+  const ptokens=cfg.pattern.split(/(\{[A-Z]+\})/g).filter(Boolean);
+  ptokens.forEach((t,i)=>{
+    if(i>0&&cfg.sep) parts.push(`<span class="pp-sep">${cfg.sep}</span>`);
+    if(t==='{CAT}') parts.push(`<span class="pp pp-cat">${cfg.cat}</span>`);
+    else if(t==='{SEQ}') parts.push(`<span class="pp pp-seq">${String(cfg.start).padStart(cfg.padlen,'0')}</span>`);
+    else if(t==='{YR}') parts.push(`<span class="pp pp-yr">${yr}</span>`);
+    else if(t==='{MO}') parts.push(`<span class="pp pp-yr">${mo}</span>`);
+    else if(t==='{RND}') parts.push(`<span class="pp pp-rand">RNDM</span>`);
+    else if(t) parts.push(`<span class="pp" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">${t}</span>`);
+  });
+  document.getElementById('prev-parts').innerHTML=parts.join('');
+
+  const samples=[];
+  for(let i=0;i<4;i++){
+    const s=buildId(cfg,cfg.start+cfg.step*i);
+    const cats=['Электроник','Хувцас','Хоол хүнс','Гоо сайхан'];
+    samples.push(`<div class="sample-item">${s}<div class="sample-sub">${cats[i]||'Бараа'} · жишээ</div></div>`);
+  }
+  document.getElementById('sample-grid').innerHTML=samples.join('');
+
+  const breakdown=[];
+  breakdown.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:var(--color-text-tertiary)">Угтвар</span><span style="font-family:var(--font-mono)">${cfg.prefix}</span></div>`);
+  breakdown.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:var(--color-text-tertiary)">Тусгаарлагч</span><span style="font-family:var(--font-mono)">${cfg.sep||'(байхгүй)'}</span></div>`);
+  breakdown.push(`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="color:var(--color-text-tertiary)">Загвар</span><span style="font-family:var(--font-mono)">${cfg.pattern}</span></div>`);
+  breakdown.push(`<div style="display:flex;justify-content:space-between;padding:4px 0"><span style="color:var(--color-text-tertiary)">Нийт урт</span><span>${id.length} тэмдэгт</span></div>`);
+  document.getElementById('breakdown').innerHTML=breakdown.join('');
+
+  checkId(document.getElementById('check-inp').value);
+}
+
+function switchObj(btn,key){
+  curObj=key;
+  document.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  document.getElementById('obj-badge').textContent=objMap[key].label;
+  const cfg=objMap[key];
+  document.getElementById('inp-prefix').value=cfg.prefix;
+  document.getElementById('inp-sep').value=cfg.sep;
+  document.getElementById('inp-pattern').value=cfg.pattern;
+  document.getElementById('inp-start').value=cfg.start;
+  document.getElementById('inp-padlen').value=cfg.padlen;
+  document.getElementById('inp-step').value=cfg.step;
+  document.getElementById('inp-case').value=cfg.cs;
+  updatePreview();
+}
+
+function toggleTag(el){
+  el.classList.toggle('on');
+  el.classList.toggle('off');
+}
+
+function insertToken(tok){
+  const inp=document.getElementById('inp-pattern');
+  const pos=inp.selectionStart||inp.value.length;
+  inp.value=inp.value.slice(0,pos)+tok+inp.value.slice(pos);
+  inp.focus();
+  updatePreview();
+}
+
+function checkId(val){
+  const el=document.getElementById('check-result');
+  if(!val){el.textContent='ID оруулж давхардал шалгана уу';el.style.color='var(--color-text-tertiary)';return;}
+  const cfg=readForm();
+  const sample=buildId(cfg,cfg.start);
+  const prefix=cfg.prefix.toUpperCase();
+  if(val.toUpperCase().startsWith(prefix)){
+    el.textContent='Формат зөв · Системд бүртгэгдсэн эсэхийг шалгаж байна...';
+    el.style.color='var(--color-text-success)';
+  } else {
+    el.textContent='Формат таарахгүй · Угтвар '+prefix+'-р эхлэх ёстой';
+    el.style.color='var(--color-text-danger)';
+  }
+}
+
+function generateNext(){
+  const cfg=readForm();
+  const next=buildId(cfg,cfg.start+cfg.step*Math.floor(Math.random()*10+1));
+  document.getElementById('next-id').textContent=next;
+}
+
+function saveConfig(){
+  document.getElementById('conflict-box').style.display='none';
+  document.getElementById('success-box').style.display='block';
+  setTimeout(()=>{document.getElementById('success-box').style.display='none';},3000);
+  const h=document.getElementById('history-list');
+  const cfg=readForm();
+  const now=new Date().toISOString().slice(0,10);
+  const row=document.createElement('div');
+  row.className='history-row';
+  row.innerHTML=`<div class="hdot" style="background:var(--color-text-info)"></div><div class="htxt"><strong>${cfg.prefix}${cfg.sep}${cfg.pattern}</strong> формат хадгалагдлаа</div><div class="htime">${now}</div>`;
+  h.insertBefore(row,h.firstChild);
+}
+
+function resetForm(){
+  switchObj(document.querySelector('.seg-btn.act'),'PRD');
+  document.getElementById('conflict-box').style.display='none';
+  document.getElementById('success-box').style.display='none';
+}
+
+updatePreview();
+</script>

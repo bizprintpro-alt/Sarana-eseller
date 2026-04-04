@@ -1,0 +1,366 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.tbl{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.tsb{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tbr{display:flex;gap:8px;align-items:center}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.sl{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.sv{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.sd{font-size:11px;margin-top:2px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.ch{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.cht{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.toolbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.sw{position:relative;flex:1;min-width:140px}
+.sw input{width:100%;padding-left:28px;font-size:13px}
+.si{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--color-text-tertiary)}
+sel{font-size:12px}
+select{font-size:12px;padding:0 8px;height:32px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer}
+.btn{border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:4px 12px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;transition:background .12s;white-space:nowrap}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-p{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info)}
+.btn-p:hover{opacity:.85}
+.btn-d{background:var(--color-background-danger);border-color:var(--color-border-danger);color:var(--color-text-danger)}
+.btn-d:hover{opacity:.85}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap}
+td{padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.sel td{background:var(--color-background-info)}
+tr:not(.sel):hover td{background:var(--color-background-secondary);cursor:pointer}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.b-sp{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-fl{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-bl{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-rv{background:var(--color-background-info);color:var(--color-text-info)}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+.uname{font-weight:500;font-size:12px;color:var(--color-text-primary)}
+.uid{font-size:11px;color:var(--color-text-tertiary)}
+.msg-preview{font-size:12px;color:var(--color-text-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.msg-flag{font-size:11px;color:var(--color-text-danger);font-weight:500}
+.acts{display:flex;gap:4px}
+.pager{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-top:0.5px solid var(--color-border-tertiary);font-size:12px;color:var(--color-text-secondary)}
+.pbtns{display:flex;gap:3px}
+.pb{border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:3px 9px;font-size:12px;color:var(--color-text-secondary);cursor:pointer}
+.pb.cur{background:var(--color-background-secondary);font-weight:500;color:var(--color-text-primary)}
+.rp{display:flex;flex-direction:column;gap:12px}
+.pb2{padding:12px 14px}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.av-u{background:var(--color-background-info);color:var(--color-text-info)}
+.av-s{background:var(--color-background-success);color:var(--color-text-success)}
+.avatar-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ar-info{flex:1}
+.ar-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.ar-meta{font-size:11px;color:var(--color-text-tertiary)}
+.dr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.dr:last-child{border-bottom:none}
+.dk{color:var(--color-text-tertiary)}
+.dv{color:var(--color-text-primary);text-align:right}
+.msg-thread{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.bubble{max-width:220px;padding:7px 10px;border-radius:10px;font-size:12px;line-height:1.5}
+.b-left{background:var(--color-background-secondary);border-radius:2px 10px 10px 10px;align-self:flex-start}
+.b-right{background:var(--color-background-info);border-radius:10px 2px 10px 10px;align-self:flex-end;color:var(--color-text-info)}
+.b-danger{background:var(--color-background-danger);border-radius:10px;align-self:flex-start;border:1px solid var(--color-border-danger)}
+.btime{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.thread-user{font-size:10px;font-weight:500;color:var(--color-text-tertiary);margin-bottom:2px}
+.divider{text-align:center;font-size:11px;color:var(--color-text-tertiary);padding:4px 0;border-top:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);margin:4px 0}
+.risk-bar-wrap{margin-bottom:10px}
+.risk-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);margin-bottom:3px}
+.risk-bar{height:5px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden}
+.rf-ok{background:var(--color-text-success)}
+.rf-med{background:var(--color-text-warning)}
+.rf-hi{background:var(--color-text-danger)}
+.switch-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.switch-row:last-child{border-bottom:none}
+.tog{position:relative;width:28px;height:16px;display:inline-block}
+.tog input{opacity:0;width:0;height:0}
+.tsl{position:absolute;inset:0;background:var(--color-background-secondary);border-radius:99px;cursor:pointer;border:0.5px solid var(--color-border-secondary);transition:background .15s}
+.tsl:before{content:'';position:absolute;width:10px;height:10px;background:var(--color-text-tertiary);border-radius:50%;top:2px;left:2px;transition:transform .15s, background .15s}
+.tog input:checked + .tsl{background:var(--color-background-info);border-color:var(--color-border-info)}
+.tog input:checked + .tsl:before{transform:translateX(12px);background:var(--color-text-info)}
+.bulk-bar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--color-background-warning);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-warning);margin-bottom:12px}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="tbl">Чат хяналтын самбар</div>
+    <div class="tsb">Админ · Бүх харилцан яриа, spam шүүлт, лог</div>
+  </div>
+  <div class="tbr">
+    <button class="btn" onclick="sendPrompt('Чатны spam шүүлтийн дүрэм тохируулах хуудасны дизайн хийж өгнө үү')">Spam дүрэм</button>
+    <button class="btn btn-p" onclick="sendPrompt('Чатны export болон тайлангийн дизайн хийж өгнө үү')">Тайлан экспорт</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="sc"><div class="sl">Нийт чат</div><div class="sv">4,821</div><div class="sd" style="color:var(--color-text-tertiary)">Нийт харилцан яриа</div></div>
+  <div class="sc"><div class="sl">Өнөөдөр идэвхтэй</div><div class="sv" style="color:var(--color-text-success)">312</div><div class="sd" style="color:var(--color-text-success)">↑ 18% өчигдрөөс</div></div>
+  <div class="sc"><div class="sl">Spam илэрсэн</div><div class="sv" style="color:var(--color-text-danger)">47</div><div class="sd" style="color:var(--color-text-danger)">Энэ сард</div></div>
+  <div class="sc"><div class="sl">Шалгах хүлээгдэж буй</div><div class="sv" style="color:var(--color-text-warning)">13</div><div class="sd" style="color:var(--color-text-warning)">Гараар шалгах</div></div>
+  <div class="sc"><div class="sl">Блоклогдсон хэрэглэгч</div><div class="sv">29</div><div class="sd" style="color:var(--color-text-tertiary)">Нийт</div></div>
+</div>
+
+<div id="bulk-bar" style="display:none" class="bulk-bar">
+  <span id="bulk-txt">0 чат сонгогдсон</span>
+  <button class="btn btn-d" style="font-size:11px;padding:3px 10px" onclick="sendPrompt('Олон чатыг нэгэн зэрэг блоклох логик хийж өгнө үү')">Блоклох</button>
+  <button class="btn" style="font-size:11px;padding:3px 10px" onclick="hideBulk()">Болих</button>
+</div>
+
+<div class="layout">
+  <div>
+    <div class="card">
+      <div class="toolbar">
+        <div class="sw">
+          <svg class="si" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+          <input type="text" placeholder="Хэрэглэгч, мессеж хайх..." oninput="filterChats(this.value)">
+        </div>
+        <select onchange="filterByStatus(this.value)">
+          <option value="all">Бүгд</option>
+          <option value="ok">Хэвийн</option>
+          <option value="spam">Spam</option>
+          <option value="flagged">Тэмдэглэгдсэн</option>
+          <option value="blocked">Блоклогдсон</option>
+          <option value="review">Шалгаж байна</option>
+        </select>
+        <select onchange="filterByRisk(this.value)">
+          <option value="all">Эрсдэл: бүгд</option>
+          <option value="hi">Өндөр</option>
+          <option value="med">Дунд</option>
+          <option value="lo">Бага</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:28px"><input type="checkbox" id="chk-all" onchange="toggleAll(this.checked)" style="cursor:pointer"></th>
+            <th>Хэрэглэгч</th>
+            <th>Борлуулагч</th>
+            <th>Сүүлийн мессеж</th>
+            <th>Эрсдэл</th>
+            <th>Төлөв</th>
+            <th>Үйлдэл</th>
+          </tr>
+        </thead>
+        <tbody id="chat-tbody"></tbody>
+      </table>
+      <div class="pager">
+        <span id="pager-info">Харагдаж байна</span>
+        <div class="pbtns">
+          <button class="pb">‹</button>
+          <button class="pb cur">1</button>
+          <button class="pb">2</button>
+          <button class="pb">3</button>
+          <button class="pb">›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rp">
+    <div class="card" id="detail-card">
+      <div class="ch">
+        <span class="cht" id="dp-title">Чат дэлгэрэнгүй</span>
+        <span class="badge b-bl" id="dp-badge">—</span>
+      </div>
+      <div class="pb2">
+        <div class="avatar-row">
+          <div class="av av-u" id="dp-av-u">?</div>
+          <div class="ar-info">
+            <div class="ar-name" id="dp-uname">Хэрэглэгч сонгоно уу</div>
+            <div class="ar-meta" id="dp-umeta">—</div>
+          </div>
+        </div>
+        <div class="msg-thread" id="dp-thread">
+          <div style="font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:16px 0">Чат сонгоход мессеж харагдана</div>
+        </div>
+        <div class="risk-bar-wrap" id="dp-risk-wrap" style="display:none">
+          <div class="risk-label"><span>Spam магадлал</span><span id="dp-risk-pct">—</span></div>
+          <div class="risk-bar"><div id="dp-risk-fill" style="height:100%;border-radius:99px;width:0%"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0;margin-bottom:12px" id="dp-details">
+          <div class="dr"><span class="dk">Чат ID</span><span class="dv" id="d-cid" style="font-family:var(--font-mono);font-size:11px">—</span></div>
+          <div class="dr"><span class="dk">Нийт мессеж</span><span class="dv" id="d-cnt">—</span></div>
+          <div class="dr"><span class="dk">Эхэлсэн</span><span class="dv" id="d-start">—</span></div>
+          <div class="dr"><span class="dk">Сүүлийн идэвх</span><span class="dv" id="d-last">—</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px" id="dp-actions">
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-p" style="flex:1;justify-content:center" id="btn-review" onclick="sendPrompt('Чат шалгах дэлгэрэнгүй view хийж өгнө үү')">Дэлгэрэнгүй харах</button>
+            <button class="btn btn-d" style="flex:1;justify-content:center" id="btn-block" onclick="blockSelected()">Блоклох</button>
+          </div>
+          <button class="btn" style="width:100%;text-align:center" onclick="sendPrompt('Spam тайлан илгээх болон хэрэглэгч сэрэмжлүүлэх логик хийж өгнө үү')">Spam тайлагнах</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span class="cht">Spam автомат шүүлт</span></div>
+      <div class="pb2">
+        <div style="display:flex;flex-direction:column;gap:0;margin-bottom:10px">
+          <div class="switch-row">
+            <span>Spam автомат блок</span>
+            <label class="tog"><input type="checkbox" checked><span class="tsl"></span></label>
+          </div>
+          <div class="switch-row">
+            <span>Утасны дугаар шүүлт</span>
+            <label class="tog"><input type="checkbox" checked><span class="tsl"></span></label>
+          </div>
+          <div class="switch-row">
+            <span>Гадаад холбоос шүүлт</span>
+            <label class="tog"><input type="checkbox" checked><span class="tsl"></span></label>
+          </div>
+          <div class="switch-row">
+            <span>Хэт давтамжтай мессеж</span>
+            <label class="tog"><input type="checkbox"><span class="tsl"></span></label>
+          </div>
+        </div>
+        <button class="btn" style="width:100%;text-align:center;font-size:12px" onclick="sendPrompt('Spam шүүлтийн дүрэм тохируулах дэлгэрэнгүй хуудас хийж өгнө үү')">Дүрэм тохируулах ↗</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><span class="cht">Хурдан шүүлтүүр</span></div>
+      <div class="pb2" style="display:flex;flex-direction:column;gap:6px">
+        <button class="btn" style="text-align:left;width:100%;padding:7px 10px;font-size:12px" onclick="filterByStatus('spam')">
+          <span class="dot" style="background:var(--color-text-danger);margin-right:6px"></span>Spam илэрсэн чатууд (47)
+        </button>
+        <button class="btn" style="text-align:left;width:100%;padding:7px 10px;font-size:12px" onclick="filterByStatus('review')">
+          <span class="dot" style="background:var(--color-text-warning);margin-right:6px"></span>Шалгах хүлээгдэж буй (13)
+        </button>
+        <button class="btn" style="text-align:left;width:100%;padding:7px 10px;font-size:12px" onclick="filterByRisk('hi')">
+          <span class="dot" style="background:var(--color-text-danger);margin-right:6px"></span>Өндөр эрсдэлтэй (8)
+        </button>
+        <button class="btn" style="text-align:left;width:100%;padding:7px 10px;font-size:12px" onclick="filterByStatus('blocked')">
+          <span class="dot" style="background:var(--color-text-tertiary);margin-right:6px"></span>Блоклогдсон (29)
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const chats = [
+  {id:"CHT-0041",buyer:"Б. Мөнхбат",bInit:"БМ",seller:"TechUB Store",sInit:"TU",msgs:["Энэ утас хэзээ ирэх вэ?","Маргааш хүргэнэ","За баярлалаа"],status:"ok",risk:"lo",riskPct:8,count:14,start:"2026-04-01",last:"2026-04-03 10:12",flagReason:""},
+  {id:"CHT-0038",buyer:"Д. Оюунчимэг",bInit:"ДО",seller:"BeautyMN",sInit:"BM",msgs:["Хямдрал хэзээ дуусах вэ?","0909-123456 дугаарт залга хямдруулж өгнө","Утасны дугаар байхгүй!"],status:"spam",risk:"hi",riskPct:91,count:6,start:"2026-04-02",last:"2026-04-02 18:44",flagReason:"Утасны дугаар"},
+  {id:"CHT-0035",buyer:"Э. Анхбаяр",bInit:"ЭА",seller:"SportsMN",sInit:"SM",msgs:["Yoga mat хэмжээ байна уу?","Тийм 3 хэмжээ бий","Жижиг хэмжээ хэд вэ?"],status:"ok",risk:"lo",riskPct:4,count:22,start:"2026-03-30",last:"2026-04-03 09:55",flagReason:""},
+  {id:"CHT-0033",buyer:"Г. Нандинцэцэг",bInit:"ГН",seller:"FashionMN",sInit:"FM",msgs:["Энэ хувцас жинхэнэ үү?","100% оригинал","t.me/fashionmn_real дээр үнэ хямд бий"],status:"flagged",risk:"hi",riskPct:78,count:9,start:"2026-03-29",last:"2026-04-01 14:20",flagReason:"Telegram холбоос"},
+  {id:"CHT-0031",buyer:"С. Батбаяр",bInit:"СБ",seller:"BurgerMN",sInit:"БM",msgs:["Хүргэлт хэдэн цаг болох вэ?","2 цаг дотор хүргэнэ","За"],status:"ok",risk:"lo",riskPct:3,count:5,start:"2026-04-03",last:"2026-04-03 12:01",flagReason:""},
+  {id:"CHT-0028",buyer:"Н. Дэлгэрмаа",bInit:"НД",seller:"LuxuryMN",sInit:"ЛМ",msgs:["Үнийг бууруулж болох уу?","Бага зэрэг тохирч болно","Wechat дээр ярьцгаая: luxury_mn2024"],status:"spam",risk:"hi",riskPct:95,count:8,start:"2026-03-28",last:"2026-03-31 20:15",flagReason:"Гадаад мессенжер"},
+  {id:"CHT-0025",buyer:"О. Мөнхзул",bInit:"ОМ",seller:"GreenMN",sInit:"ГМ",msgs:["Ургамал хэдэн хоногт ирдэг вэ?","5-7 хоногт","Ойлголоо баярлалаа"],status:"ok",risk:"lo",riskPct:5,count:11,start:"2026-03-27",last:"2026-04-02 08:30",flagReason:""},
+  {id:"CHT-0022",buyer:"Х. Болд",bInit:"ХБ",seller:"HomeDecorMN",sInit:"ХД",msgs:["Үнэ тохиролцоё","Хэд санал болгох вэ?","30000₮ хийчихье"],status:"review",risk:"med",riskPct:42,count:17,start:"2026-03-25",last:"2026-04-01 16:44",flagReason:"Системийн гадуур төлбөр"},
+  {id:"CHT-0019",buyer:"Ч. Нарантуяа",bInit:"ЧН",seller:"TechUB Store",sInit:"TU",msgs:["iPhone case захиалж болох уу?","Тийм ирж байгаа загвар бий","Урьдчилгаа хийх боломжтой"],status:"blocked",risk:"med",riskPct:55,count:3,start:"2026-03-20",last:"2026-03-22 11:00",flagReason:"Хэрэглэгч блоклогдсон"},
+  {id:"CHT-0017",buyer:"Б. Энхтуяа",bInit:"БЭ",seller:"PizzaMN",sInit:"ПМ",msgs:["Пицца хэд хоногт ирдэг вэ?","Хоол тул өдөртөө хүргэнэ","Яаж төлбөр хийх вэ?"],status:"ok",risk:"lo",riskPct:6,count:8,start:"2026-04-03",last:"2026-04-03 13:22",flagReason:""},
+];
+
+let selId=null, checked=new Set(), fq='', fs='all', fr='all';
+
+function renderTable(){
+  const rows=chats.filter(c=>{
+    const mq=!fq||c.buyer.toLowerCase().includes(fq.toLowerCase())||c.seller.toLowerCase().includes(fq.toLowerCase())||c.msgs.some(m=>m.toLowerCase().includes(fq.toLowerCase()));
+    const ms=fs==='all'||c.status===fs;
+    const mr=fr==='all'||(fr==='hi'&&c.riskPct>=70)||(fr==='med'&&c.riskPct>=30&&c.riskPct<70)||(fr==='lo'&&c.riskPct<30);
+    return mq&&ms&&mr;
+  });
+  document.getElementById('pager-info').textContent=`${rows.length} чат`;
+  document.getElementById('chat-tbody').innerHTML=rows.map(c=>{
+    const isSel=c.id===selId;
+    const isChk=checked.has(c.id);
+    const badgeCls=c.status==='ok'?'b-ok':c.status==='spam'?'b-sp':c.status==='flagged'?'b-fl':c.status==='blocked'?'b-bl':'b-rv';
+    const badgeTxt=c.status==='ok'?'Хэвийн':c.status==='spam'?'Spam':c.status==='flagged'?'Тэмдэглэгдсэн':c.status==='blocked'?'Блоклогдсон':'Шалгаж байна';
+    const riskCls=c.riskPct>=70?'b-sp':c.riskPct>=30?'b-fl':'b-ok';
+    const riskTxt=c.riskPct>=70?'Өндөр':c.riskPct>=30?'Дунд':'Бага';
+    const lastMsg=c.msgs[c.msgs.length-1];
+    return `<tr class="${isSel?'sel':''}" onclick="selectChat('${c.id}')">
+      <td onclick="event.stopPropagation()"><input type="checkbox" ${isChk?'checked':''} onchange="toggleChk('${c.id}',this.checked)" style="cursor:pointer"></td>
+      <td><div class="uname">${c.buyer}</div><div class="uid">${c.id}</div></td>
+      <td><div class="uname" style="font-weight:400">${c.seller}</div></td>
+      <td><div class="msg-preview">${lastMsg}</div>${c.flagReason?`<div class="msg-flag">! ${c.flagReason}</div>`:''}</td>
+      <td><span class="badge ${riskCls}">${riskTxt} ${c.riskPct}%</span></td>
+      <td><span class="badge ${badgeCls}"><span class="dot" style="background:currentColor;opacity:.7"></span>${badgeTxt}</span></td>
+      <td><div class="acts">
+        <button class="btn" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation();selectChat('${c.id}')">Харах</button>
+        ${c.status!=='blocked'?`<button class="btn btn-d" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation();blockChat('${c.id}')">Блок</button>`:`<button class="btn" style="font-size:11px;padding:3px 8px" onclick="event.stopPropagation()">Сэргээх</button>`}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function selectChat(id){
+  selId=id;
+  const c=chats.find(x=>x.id===id);
+  document.getElementById('dp-title').textContent=c.buyer+' → '+c.seller;
+  const bc=document.getElementById('dp-badge');
+  bc.className='badge '+(c.status==='ok'?'b-ok':c.status==='spam'?'b-sp':c.status==='flagged'?'b-fl':c.status==='blocked'?'b-bl':'b-rv');
+  bc.textContent=c.status==='ok'?'Хэвийн':c.status==='spam'?'Spam':c.status==='flagged'?'Тэмдэглэгдсэн':c.status==='blocked'?'Блоклогдсон':'Шалгаж байна';
+  document.getElementById('dp-av-u').textContent=c.bInit;
+  document.getElementById('dp-uname').textContent=c.buyer;
+  document.getElementById('dp-umeta').textContent=c.seller+' · '+c.count+' мессеж';
+  document.getElementById('d-cid').textContent=c.id;
+  document.getElementById('d-cnt').textContent=c.count+' мессеж';
+  document.getElementById('d-start').textContent=c.start;
+  document.getElementById('d-last').textContent=c.last;
+  const isFlag=c.status==='spam'||c.status==='flagged';
+  const thread=document.getElementById('dp-thread');
+  thread.innerHTML=c.msgs.map((m,i)=>{
+    const isRight=i%2===1;
+    const isDanger=isFlag&&i===c.msgs.length-1;
+    const cls=isDanger?'b-danger':isRight?'b-right':'b-left';
+    return `<div style="display:flex;flex-direction:column;align-self:${isDanger||!isRight?'flex-start':'flex-end'}">
+      <div class="thread-user">${isRight?c.seller:c.buyer}</div>
+      <div class="bubble ${cls}">${m}</div>
+      <div class="btime" style="text-align:${isRight?'right':'left'}">${c.last.split(' ')[1]||'—'}</div>
+    </div>`;
+  }).join('');
+  if(isFlag){
+    thread.innerHTML+=`<div class="divider">Spam / тэмдэглэл: ${c.flagReason||'Шалгагдаж байна'}</div>`;
+  }
+  const rw=document.getElementById('dp-risk-wrap');
+  rw.style.display='';
+  document.getElementById('dp-risk-pct').textContent=c.riskPct+'%';
+  const fill=document.getElementById('dp-risk-fill');
+  fill.style.width=c.riskPct+'%';
+  fill.className=c.riskPct>=70?'rf-hi':c.riskPct>=30?'rf-med':'rf-ok';
+  renderTable();
+}
+
+function blockChat(id){
+  const c=chats.find(x=>x.id===id);
+  if(c){c.status='blocked';c.riskPct=Math.max(c.riskPct,60);}
+  if(selId===id)selectChat(id);
+  renderTable();
+}
+
+function blockSelected(){
+  checked.forEach(id=>blockChat(id));
+  hideBulk();
+}
+
+function filterChats(q){fq=q;renderTable();}
+function filterByStatus(s){fs=s;renderTable();document.querySelectorAll('select')[0].value=s;}
+function filterByRisk(r){fr=r;renderTable();}
+function toggleChk(id,v){
+  if(v)checked.add(id);else checked.delete(id);
+  const bar=document.getElementById('bulk-bar');
+  if(checked.size>0){bar.style.display='flex';document.getElementById('bulk-txt').textContent=checked.size+' чат сонгогдсон';}
+  else bar.style.display='none';
+  renderTable();
+}
+function toggleAll(v){
+  chats.forEach(c=>v?checked.add(c.id):checked.delete(c.id));
+  const bar=document.getElementById('bulk-bar');
+  if(v&&checked.size>0){bar.style.display='flex';document.getElementById('bulk-txt').textContent=checked.size+' чат сонгогдсон';}
+  else bar.style.display='none';
+  renderTable();
+}
+function hideBulk(){checked.clear();document.getElementById('chk-all').checked=false;document.getElementById('bulk-bar').style.display='none';renderTable();}
+renderTable();
+</script>

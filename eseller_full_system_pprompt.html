@@ -1,0 +1,845 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif)}
+.w{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+.pt{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:8px 14px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;transition:color .15s;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.panel{display:none}
+.panel.active{display:block}
+.prompt-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;font-family:var(--font-mono);font-size:12px;line-height:1.8;color:var(--color-text-primary);white-space:pre-wrap;word-break:break-word;position:relative}
+.copy-btn{position:absolute;top:10px;right:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:var(--border-radius-md);padding:4px 12px;font-size:11px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans)}
+.copy-btn:hover{background:var(--color-background-secondary)}
+.section-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;margin-top:16px}
+.section-title:first-child{margin-top:0}
+.arch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.arch-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.arch-icon{width:28px;height:28px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:8px;font-size:14px}
+.arch-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.arch-desc{font-size:11px;color:var(--color-text-tertiary);line-height:1.6}
+.arch-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:10px;padding:2px 6px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.flow-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;flex-wrap:wrap}
+.flow-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:5px 10px;color:var(--color-text-primary);white-space:nowrap}
+.flow-arr{color:var(--color-text-tertiary)}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.role-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.role-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.role-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.perms{display:flex;flex-direction:column;gap:3px}
+.perm{font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:5px}
+.perm-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dot-ok{background:var(--color-text-success)}
+.dot-no{background:var(--color-text-danger)}
+.dot-par{background:var(--color-text-warning)}
+</style>
+
+<div class="w">
+<div class="topbar">
+  <div>
+    <div class="pt">Eseller.mn — Бүрэн системийн архитектур</div>
+    <div class="ps">Claude Code · Мэргэжлийн хөгжүүлэлтийн prompt багц</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button style="border:0.5px solid var(--color-border-secondary);background:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer" onclick="copyAll()">Бүгдийг хуулах</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Архитектур</button>
+  <button class="tab" onclick="show('roles')">Эрх / Роль</button>
+  <button class="tab" onclick="show('prompt1')">Prompt 1 · Үндсэн</button>
+  <button class="tab" onclick="show('prompt2')">Prompt 2 · Профайл</button>
+  <button class="tab" onclick="show('prompt3')">Prompt 3 · Нүүр хуудас</button>
+  <button class="tab" onclick="show('prompt4')">Prompt 4 · Админ</button>
+  <button class="tab" onclick="show('prompt5')">Prompt 5 · Монетизаци</button>
+</div>
+
+<div id="panel-overview" class="panel active">
+  <div class="section-title">Системийн 6 үндсэн булан (Entity type)</div>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-icon" style="background:var(--color-background-info)">🏪</div>
+      <div class="arch-name">Дэлгүүр</div>
+      <div class="arch-desc">Бараа бүтээгдэхүүн зарах байгууллага. Дэлгүүрийн профайл, бараа удирдлага, захиалга.</div>
+      <div class="arch-tags"><span class="tag">store</span><span class="tag">products</span><span class="tag">orders</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:#EEEDFE">🏠</div>
+      <div class="arch-name">Үл хөдлөхийн агент</div>
+      <div class="arch-desc">Агент профайл, зар байршуулах, pro зураг, cover зураг, мэргэжлийн мэдээлэл.</div>
+      <div class="arch-tags"><span class="tag">agent</span><span class="tag">listings</span><span class="tag">pro_profile</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:var(--color-background-success)">🏗</div>
+      <div class="arch-name">Барилгын компани</div>
+      <div class="arch-desc">Байгууллагын танилцуулга, идэвхтэй төслүүд, зургийн галлерей, стандарт мэдээлэл.</div>
+      <div class="arch-tags"><span class="tag">company</span><span class="tag">projects</span><span class="tag">gallery</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:var(--color-background-warning)">🚗</div>
+      <div class="arch-name">Авто худалдаа</div>
+      <div class="arch-desc">Барилгын компанитай адил бүтэц. Машины мэдээлэл, техникийн үзүүлэлт, галлерей.</div>
+      <div class="arch-tags"><span class="tag">auto</span><span class="tag">specs</span><span class="tag">gallery</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:var(--color-background-danger)">🛠</div>
+      <div class="arch-name">Үйлчилгээ</div>
+      <div class="arch-desc">Мэргэжлийн үйлчилгээ үзүүлэгч. Дэлгүүртэй адил бүтэц, үйлчилгээний жагсаалт.</div>
+      <div class="arch-tags"><span class="tag">service</span><span class="tag">portfolio</span></div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-icon" style="background:var(--color-background-secondary)">📋</div>
+      <div class="arch-name">Зарын булан</div>
+      <div class="arch-desc">Хэрэглэгчийн эрхтэй. Зар нэмэх, засах, устгах. Зөвхөн өөрийн зарыг удирдана.</div>
+      <div class="arch-tags"><span class="tag">user_only</span><span class="tag">classifieds</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Нүүр хуудасны урсгал — бүх entity нэгдсэн feed</div>
+  <div class="flow-row"><div class="flow-box">Нүүр хуудас</div><div class="flow-arr">→</div><div class="flow-box">ВИП бүтээгдэхүүн</div><div class="flow-arr">→</div><div class="flow-box">Онцлох</div><div class="flow-arr">→</div><div class="flow-box">Хямдрал</div><div class="flow-arr">→</div><div class="flow-box">Энгийн жагсаалт</div></div>
+  <div class="flow-row"><div class="flow-box">Ангилал шүүлт</div><div class="flow-arr">→</div><div class="flow-box">Дэлгүүр / Агент / Барилга / Авто / Үйлчилгээ / Зар</div><div class="flow-arr">→</div><div class="flow-box">Card харагдах</div></div>
+  <div class="flow-row"><div class="flow-box">Профайл товч</div><div class="flow-arr">→</div><div class="flow-box">Entity-ийн дэлгэрэнгүй хуудас</div><div class="flow-arr">→</div><div class="flow-box">Бараа / Зар / Төсөл жагсаалт</div></div>
+</div>
+
+<div id="panel-roles" class="panel">
+  <div class="section-title">Эрхийн систем (Role-based access)</div>
+  <div class="role-grid">
+    <div class="role-card">
+      <div class="role-head"><span class="role-name">Хэрэглэгч (user)</span><span class="badge b-gray">Үндсэн</span></div>
+      <div class="perms">
+        <div class="perm"><div class="perm-dot dot-ok"></div>Зар байршуулах, засах, устгах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Өөрийн профайл засах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Бараа худалдан авах, сагс</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Чат, мессеж илгээх</div>
+        <div class="perm"><div class="perm-dot dot-no"></div>Дэлгүүр / агент профайл үүсгэх</div>
+      </div>
+    </div>
+    <div class="role-card">
+      <div class="role-head"><span class="role-name">Дэлгүүр (store)</span><span class="badge b-blue">Бизнес</span></div>
+      <div class="perms">
+        <div class="perm"><div class="perm-dot dot-ok"></div>Дэлгүүрийн профайл, cover, лого</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Бараа нэмэх, засах, устгах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Захиалга хүлээн авах, удирдах</div>
+        <div class="perm"><div class="perm-dot dot-par"></div>Онцлох/ВИП (төлбөртэй)</div>
+        <div class="perm"><div class="perm-dot dot-no"></div>Бусад дэлгүүрийн бараа засах</div>
+      </div>
+    </div>
+    <div class="role-card">
+      <div class="role-head"><span class="role-name">Агент (agent)</span><span class="badge b-purple">Үл хөдлөх</span></div>
+      <div class="perms">
+        <div class="perm"><div class="perm-dot dot-ok"></div>Агент профайл, pro зураг, cover</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Үл хөдлөхийн зар байршуулах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Зар засах, устгах, статус солих</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Мэргэжлийн мэдээлэл, туршлага</div>
+        <div class="perm"><div class="perm-dot dot-par"></div>Онцлох зар (төлбөртэй)</div>
+      </div>
+    </div>
+    <div class="role-card">
+      <div class="role-head"><span class="role-name">Барилгын компани</span><span class="badge b-green">Байгууллага</span></div>
+      <div class="perms">
+        <div class="perm"><div class="perm-dot dot-ok"></div>Байгууллагын профайл, лого, cover</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Төслийн танилцуулга нэмэх/засах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Зургийн галлерей удирдах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Стандарт, баримт бичиг байршуулах</div>
+        <div class="perm"><div class="perm-dot dot-par"></div>ВИП байршил (төлбөртэй)</div>
+      </div>
+    </div>
+    <div class="role-card">
+      <div class="role-head"><span class="role-name">Авто худалдаа</span><span class="badge b-warn">Авто</span></div>
+      <div class="perms">
+        <div class="perm"><div class="perm-dot dot-ok"></div>Барилгын компанитай адил бүтэц</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Машины жагсаалт, specs, галлерей</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Тест драйв захиалга авах</div>
+        <div class="perm"><div class="perm-dot dot-par"></div>Онцлох (төлбөртэй)</div>
+      </div>
+    </div>
+    <div class="role-card">
+      <div class="role-head"><span class="role-name">Админ (admin)</span><span class="badge b-blue">Бүрэн эрх</span></div>
+      <div class="perms">
+        <div class="perm"><div class="perm-dot dot-ok"></div>Бүх entity удирдах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Онцлох/ВИП/Хямдрал тохируулах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Монетизацийн төлөвлөгөө удирдах</div>
+        <div class="perm"><div class="perm-dot dot-ok"></div>Тайлан, аналитик, санхүүгийн мэдээлэл</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="panel-prompt1" class="panel">
+  <div class="section-title">Prompt 1 — Системийн үндсэн архитектур ба өгөгдлийн загвар</div>
+  <div class="prompt-box" id="p1">
+<button class="copy-btn" onclick="copyPrompt('p1')">Хуулах</button>You are an expert full-stack engineer. Build a production-grade multi-entity marketplace platform called **eseller.mn** using:
+- Frontend: Next.js 14 (App Router), TypeScript, Tailwind CSS
+- Backend: Next.js API Routes or tRPC
+- Database: PostgreSQL with Prisma ORM
+- Auth: NextAuth.js with role-based access control
+- Storage: Cloudinary (images/media)
+- State: Zustand + React Query
+
+---
+
+## CORE DATA MODELS
+
+### 1. User & Role System
+```prisma
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  phone         String?
+  role          UserRole @default(USER)
+  entityType    EntityType?
+  createdAt     DateTime @default(now())
+
+  store         Store?
+  agent         Agent?
+  company       Company?
+  autoDealer    AutoDealer?
+  serviceProvider ServiceProvider?
+  listings      Listing[]    // user classifieds
+  orders        Order[]
+  chats         Chat[]
+}
+
+enum UserRole {
+  USER          // зар байршуулах эрхтэй хэрэглэгч
+  STORE         // дэлгүүрийн эрх
+  AGENT         // үл хөдлөхийн агент
+  COMPANY       // барилгын компани
+  AUTO_DEALER   // авто худалдаа
+  SERVICE       // үйлчилгээ
+  ADMIN
+}
+
+enum EntityType {
+  STORE | AGENT | COMPANY | AUTO_DEALER | SERVICE
+}
+```
+
+### 2. Unified Product/Listing Feed Model
+```prisma
+model FeedItem {
+  id          String       @id @default(cuid())
+  refId       String       @unique  // PRD-ELC-010001 format
+  title       String
+  description String?
+  price       Float?
+  images      String[]
+  category    Category     @relation(...)
+  entityType  EntityType   // whose item is this
+  entityId    String       // store/agent/company/autoDealer id
+  tier        ItemTier     @default(NORMAL)
+  status      ItemStatus   @default(ACTIVE)
+  viewCount   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  expiresAt   DateTime?
+}
+
+enum ItemTier {
+  VIP         // ВИП — хамгийн дээр гарах
+  FEATURED    // Онцлох
+  DISCOUNTED  // Хямдрал
+  NORMAL      // Энгийн
+}
+```
+
+### 3. Entity Profiles (Store / Agent / Company / Auto / Service)
+All entity profiles share this base structure, extended per type:
+```prisma
+model Store {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  name        String
+  slug        String  @unique
+  logo        String?
+  coverImage  String?
+  description String?
+  address     String?
+  lat         Float?
+  lng         Float?
+  phone       String?
+  isVerified  Boolean @default(false)
+  products    Product[]
+}
+
+model Agent {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  name          String
+  slug          String   @unique
+  profilePhoto  String?  // pro зураг
+  coverImage    String?
+  bio           String?
+  licenseNumber String?
+  experience    Int?     // жилийн туршлага
+  specialties   String[] // мэргэшсэн чиглэл
+  phone         String?
+  isVerified    Boolean  @default(false)
+  listings      RealEstateListing[]
+}
+
+// Company / AutoDealer / ServiceProvider follow same pattern
+// with their own extended fields (projects, specs, portfolio)
+```
+
+---
+
+## REGISTRATION FLOW
+
+When a user signs up and selects entity type:
+1. Choose: Хэрэглэгч / Дэлгүүр / Агент / Барилгын компани / Авто / Үйлчилгээ
+2. Fill entity-specific profile form (slug, cover, logo/photo)
+3. Admin verifies → `isVerified = true` → full access unlocked
+4. Unverified entities can create drafts but not publish
+
+Implement `/register` with multi-step wizard:
+- Step 1: Email/phone + password
+- Step 2: Select role/entity type  
+- Step 3: Entity profile setup (dynamic per type)
+- Step 4: Upload cover image + logo/profile photo
+
+---
+
+Build this schema with all migrations, seed data for each entity type, and a unified `/api/feed` endpoint that returns paginated FeedItems sorted by: VIP → FEATURED → DISCOUNTED → NORMAL, with filtering by entityType, category, price range.
+</div>
+</div>
+
+<div id="panel-prompt2" class="panel">
+  <div class="section-title">Prompt 2 — Entity профайл хуудас (Агент / Барилга / Авто / Үйлчилгээ)</div>
+  <div class="prompt-box" id="p2">
+<button class="copy-btn" onclick="copyPrompt('p2')">Хуулах</button>## ENTITY PROFILE PAGES
+
+Build dynamic profile pages for each entity type at `/[entityType]/[slug]`.
+All share the same layout shell but render entity-specific content sections.
+
+---
+
+### SHARED PROFILE LAYOUT STRUCTURE
+
+```
+/[entityType]/[slug]
+├── CoverImage (full-width hero, 1200x400)
+├── ProfileCard (overlapping cover bottom)
+│   ├── Avatar / Logo / Pro photo
+│   ├── Name + verified badge
+│   ├── Entity type badge (Агент | Компани | Авто | ...)
+│   ├── Rating + review count
+│   ├── Phone reveal button ("Дугаар харах")
+│   └── Chat / Contact CTA
+├── TabNavigation (dynamic per entityType)
+└── ContentSections (below tabs)
+```
+
+---
+
+### AGENT PROFILE — `/agent/[slug]`
+
+Tabs: [ Зарууд | Тухай | Үнэлгээ ]
+
+**"Тухай" section includes:**
+- Bio / мэргэжлийн танилцуулга (rich text)
+- Туршлага (жилийн тоо)
+- Мэргэшсэн чиглэл (badges: Орон сууц | Оффис | Газар | ...)
+- Лицензийн дугаар (verified icon)
+- Нийт борлуулсан зар тоо (stats)
+
+**"Зарууд" section:**
+- Grid of RealEstateListingCard components
+- Filter: Зарна | Түрээслүүлнэ | Бүгд
+- Sort: Шинэ | Үнэ өсөх | Үнэ буурах
+
+**Agent can edit their own profile:**
+- Cover image upload (Cloudinary, 16:9 crop)
+- Profile photo upload (1:1 crop, circular display)
+- All bio fields inline edit or modal form
+
+---
+
+### COMPANY PROFILE — `/company/[slug]`
+(Same for AUTO_DEALER and SERVICE)
+
+Tabs: [ Төслүүд | Галлерей | Тухай компани | Баримт бичиг ]
+
+**"Тухай компани" section:**
+- Official description (rich text, editable)
+- Founded year, employee count, license
+- Awards / certifications (add/remove list)
+- Social links (Facebook, Website, etc.)
+
+**"Төслүүд" section:**
+- ProjectCard grid: thumbnail, name, location, status badge
+  (Хэрэгжиж байна | Дууссан | Захиалга авч байна)
+- Each project links to `/company/[slug]/project/[projectId]`
+
+**Project detail page includes:**
+- Hero gallery (swiper, full-width)
+- Description, location map
+- Floor plans (image upload)
+- Pricing table (unit types + m² + price)
+- Progress updates (timeline)
+- Contact / inquiry form
+
+**"Галлерей" section:**
+- Masonry grid, Cloudinary-hosted
+- Admin of entity can add/remove images
+- Lightbox on click
+
+**"Баримт бичиг" section:**
+- Uploadable documents (PDF): Зөвшөөрөл, Стандарт, Гэрчилгээ
+- Each doc: title + upload date + download button
+- Add/remove by entity owner
+
+---
+
+### OWNER EDIT MODE
+
+When `session.user.entityId === profile.id`:
+- Show floating "Профайл засах" button (bottom-right)
+- Inline edit toggle: all text fields become editable
+- Image sections show upload overlay on hover
+- Section blocks show "+ Нэмэх" / "× Хасах" controls
+- Save triggers optimistic update + API patch
+
+---
+
+Build all profile page components with:
+- Skeleton loading states
+- Empty state illustrations per section
+- Mobile-responsive layout (single column on mobile)
+- `generateMetadata()` for SEO per profile
+</div>
+</div>
+
+<div id="panel-prompt3" class="panel">
+  <div class="section-title">Prompt 3 — Нүүр хуудас: нэгдсэн feed, ангилал, tier шүүлт</div>
+  <div class="prompt-box" id="p3">
+<button class="copy-btn" onclick="copyPrompt('p3')">Хуулах</button>## HOME PAGE — UNIFIED MULTI-ENTITY FEED
+
+Build the main home page `/` that aggregates all entity types into one
+beautiful, filterable, tiered feed.
+
+---
+
+### PAGE STRUCTURE
+
+```
+<HomePage>
+  <HeroBanner />              — rotating VIP/featured promotions
+  <CategoryNav />             — horizontal scroll: Дэлгүүр|Агент|Барилга|Авто|Үйлчилгээ|Зар
+  <AnnouncementBar />         — хямдрал, шинэ ирэлт, купон мэдэгдэл
+  <VIPSection />              — "ВИП бүтээгдэхүүн" titled row (paid placement)
+  <FeaturedSection />         — "Онцлох" grid (paid featured)
+  <DiscountSection />         — "Хямдрал" horizontal scroll
+  <EntitySpotlight />         — агент | барилга | авто булангийн онцлох профайлууд
+  <MainFeed />                — remaining NORMAL items paginated
+  <Footer />
+</HomePage>
+```
+
+---
+
+### CATEGORY NAV BEHAVIOR
+
+Each category tab filters the feed to show items from that entity type only.
+URL: `/?category=agent` or `/?category=company` etc.
+
+When `category=agent`:
+- EntitySpotlight shows featured agents (profile card with photo + stats)
+- MainFeed shows RealEstateListingCards
+- VIP/Featured sections also filter to agent listings
+
+**Entity card variants per type:**
+```tsx
+// Agent card
+<AgentCard>
+  proPhoto, name, verifiedBadge,
+  specialty tags, listingCount,
+  "Зар харах" CTA
+</AgentCard>
+
+// Company / Auto / Service card  
+<CompanyCard>
+  logo, coverThumb, companyName,
+  activeProjectCount / carCount / serviceCount,
+  verifiedBadge, "Профайл харах" CTA  
+</CompanyCard>
+
+// Classifieds (user listing) card
+<ListingCard>
+  image, title, price, location,
+  postedAgo, viewCount, save button
+</ListingCard>
+```
+
+---
+
+### TIER DISPLAY RULES
+
+```
+VIP items:
+- Larger card (2x width in grid)
+- Gold border accent  
+- "ВИП" badge top-left
+- Always appear first in their category
+
+FEATURED items:
+- Standard card + blue "Онцлох" badge
+- Appear after VIP section
+
+DISCOUNTED items:
+- Strike-through original price
+- Red discount percentage badge
+- Dedicated horizontal scroll row
+
+NORMAL items:
+- Standard grid, sorted by createdAt desc
+```
+
+---
+
+### FEED API
+
+```typescript
+// GET /api/feed
+// Query params:
+{
+  category?: EntityType,
+  tier?: ItemTier,
+  page?: number,      // default 1
+  limit?: number,     // default 20
+  sort?: 'newest' | 'price_asc' | 'price_desc',
+  search?: string,
+  district?: string,
+  priceMin?: number,
+  priceMax?: number,
+}
+
+// Response:
+{
+  vip: FeedItem[],        // always included regardless of page
+  featured: FeedItem[],
+  discounted: FeedItem[],
+  normal: FeedItem[],
+  meta: { total, page, hasMore }
+}
+```
+
+---
+
+### PERFORMANCE REQUIREMENTS
+- VIP/Featured sections: server-side rendered (SSR)
+- Main feed: client-side infinite scroll with React Query
+- Images: Next.js Image component with blur placeholder
+- Category switch: optimistic UI, no full page reload
+- Implement `loading.tsx` skeleton for each section
+</div>
+</div>
+
+<div id="panel-prompt4" class="panel">
+  <div class="section-title">Prompt 4 — Админ самбар: бүх entity + хяналт</div>
+  <div class="prompt-box" id="p4">
+<button class="copy-btn" onclick="copyPrompt('p4')">Хуулах</button>## ADMIN DASHBOARD — /admin/*
+
+Build a comprehensive admin panel at `/admin` accessible only to ADMIN role.
+Use a sidebar layout with the following modules:
+
+---
+
+### SIDEBAR NAVIGATION
+
+```
+/admin
+├── /dashboard          — Overview stats + recent activity
+├── /entities           — All entity management
+│   ├── /stores
+│   ├── /agents
+│   ├── /companies
+│   ├── /auto-dealers
+│   ├── /services
+│   └── /listings        — User classifieds
+├── /feed-management    — VIP / Featured / Discount control
+├── /monetization       — Pricing plans, payments, invoices
+├── /chat-control       — Chat monitoring, spam filter
+├── /location-admin     — Store/entity location management
+├── /reference-ids      — ID format configuration
+├── /analytics          — Traffic, sales, engagement
+├── /users              — All user accounts
+└── /settings           — System-wide configuration
+```
+
+---
+
+### /admin/entities/[type] PAGE
+
+Unified entity management table (works for all types):
+
+```tsx
+<EntityManagementPage>
+  <StatsRow>             — count, verified, pending, suspended
+  <Toolbar>              — search, filter by status, bulk actions
+  <EntityTable>
+    columns: [
+      checkbox,
+      entity (logo + name + slug),
+      type badge,
+      owner (user email),
+      status (active|pending|suspended),
+      verified (yes/no),
+      itemCount,
+      joinedDate,
+      actions (view | edit | verify | suspend | delete)
+    ]
+  <Pagination>
+</EntityManagementPage>
+```
+
+**Verify flow:**
+- Click "Баталгаажуулах" → opens modal
+- Show uploaded documents + profile info
+- Admin can: Approve / Reject with reason / Request more info
+- On approve: `isVerified = true`, notification sent to user
+
+---
+
+### /admin/feed-management PAGE
+
+```tsx
+<FeedManagementPage>
+  <TabBar> [ВИП | Онцлох | Хямдрал | Энгийн]
+  
+  <VIPTab>
+    — Current VIP slots (max configurable, e.g. 6)
+    — Each slot: entity card + expiry date + revenue
+    — "Нэмэх" → search any entity item → assign to VIP slot + set duration
+    — Drag to reorder VIP display order
+    — Auto-expiry: item drops to FEATURED when VIP expires
+  
+  <FeaturedTab>
+    — Grid of current featured items
+    — Assign/remove featured status
+    — Set expiry dates
+  
+  <DiscountTab>
+    — Items with active discounts
+    — Override discount % from admin
+    — Schedule discount start/end
+</FeedManagementPage>
+```
+
+---
+
+### /admin/analytics PAGE
+
+```tsx
+<AnalyticsPage>
+  <DateRangePicker />
+  <MetricGrid>
+    — Daily active users, new registrations
+    — Feed impressions by tier (VIP vs Featured vs Normal)
+    — Revenue from VIP/Featured placements
+    — Top performing entities (by views + conversions)
+    — Chat volume, response rates
+    — Most viewed categories
+  <Charts>
+    — Line: daily traffic per entity type
+    — Bar: revenue by monetization tier
+    — Pie: entity type distribution
+</AnalyticsPage>
+```
+
+---
+
+Build all admin pages with:
+- Role guard middleware: redirect non-admins to /403
+- Audit log: every admin action saved to AuditLog table
+- Optimistic updates with rollback on error
+- Export to CSV for all tables
+</div>
+</div>
+
+<div id="panel-prompt5" class="panel">
+  <div class="section-title">Prompt 5 — Монетизацийн систем: VIP, Онцлох, Төлбөр</div>
+  <div class="prompt-box" id="p5">
+<button class="copy-btn" onclick="copyPrompt('p5')">Хуулах</button>## MONETIZATION SYSTEM
+
+Build a complete monetization infrastructure for paid placements,
+subscription plans, and future extensibility.
+
+---
+
+### PRICING TIERS (configurable from admin)
+
+```typescript
+// Admin-configurable pricing plans
+interface PricingPlan {
+  id: string
+  name: string           // "ВИП 7 хоног" | "Онцлох 30 хоног" | ...
+  tier: ItemTier         // VIP | FEATURED | DISCOUNTED
+  entityTypes: EntityType[]  // who can purchase
+  durationDays: number
+  price: number          // MNT
+  maxItems: number       // хэдэн бараанд зэрэг хэрэглэж болох
+  isActive: boolean
+  features: string[]     // display features list
+}
+```
+
+**Default plans to seed:**
+```
+ВИП байршил:
+  - 7 хоног: 49,900₮ (1 item)
+  - 30 хоног: 149,900₮ (1 item)
+  - 3 сар: 349,900₮ (3 items)
+
+Онцлох байршил:
+  - 7 хоног: 19,900₮ (3 items)
+  - 30 хоног: 59,900₮ (5 items)
+
+Агент Pro профайл:
+  - 1 сар: 29,900₮ (verified badge + top of search)
+  - 3 сар: 79,900₮
+
+Барилгын компани Pro:
+  - 1 сар: 89,900₮ (unlimited projects + gallery)
+```
+
+---
+
+### PURCHASE FLOW
+
+```
+Entity owner → /dashboard/promote → 
+  Select item(s) →
+  Choose plan →
+  Payment (QPay / Card) →
+  Immediate activation →
+  Confirmation email + dashboard notification
+```
+
+**Payment integration:**
+- QPay API (primary, Mongolian)
+- Stripe (card backup)
+- Invoice generation (PDF)
+- Webhook: on payment success → activate tier, set expiresAt
+
+---
+
+### ENTITY OWNER DASHBOARD — /dashboard/*
+
+```
+/dashboard
+├── /overview           — stats: views, inquiries, active listings
+├── /listings           — manage items (agent/zar)  
+├── /products           — manage products (store)
+├── /projects           — manage projects (company/auto)
+├── /promote            — buy VIP/Featured placement
+│   ├── ActivePromotions (expiry countdown)
+│   ├── PlanSelector (cards with features)
+│   └── PaymentCheckout
+├── /analytics          — own item performance
+├── /messages           — chat inbox
+├── /settings           — profile, cover, photos
+└── /billing            — invoices, payment history
+```
+
+---
+
+### ADMIN MONETIZATION CONTROLS — /admin/monetization
+
+```tsx
+<MonetizationDashboard>
+  <RevenueOverview>
+    — MRR, total revenue, by plan breakdown
+    — Active VIP count, Featured count
+    — Renewal rate, churn
+  
+  <PlanManager>
+    — CRUD for all pricing plans
+    — Enable/disable plans per entity type
+    — Promotional pricing (limited time discount)
+    — Bulk plan assignment (admin can manually gift VIP)
+  
+  <ActiveSubscriptions>
+    — Table: entity → plan → start → expiry → revenue
+    — Manual extend / cancel / refund
+    — Export to Excel
+  
+  <RevenueProjection>
+    — 30/60/90 day forecast based on renewals
+    — Scenario planning (if we add X plan...)
+```
+
+---
+
+### NOTIFICATION SYSTEM
+
+Trigger notifications for:
+- VIP/Featured expiring in 3 days → renewal prompt
+- Payment successful → activation confirmation
+- New inquiry/chat on promoted item → priority alert
+- Admin verification approved → welcome + onboarding
+
+Channels: in-app bell, email (Resend), SMS (optional)
+
+---
+
+### FUTURE EXTENSIBILITY HOOKS
+
+```typescript
+// All monetization decisions go through this service
+// Makes it easy to add new tiers/rules later
+class MonetizationService {
+  async canPromote(entityId, tier): Promise<boolean>
+  async activatePromotion(itemId, planId, paymentId): Promise<void>
+  async getActivePromotions(entityId): Promise<Promotion[]>
+  async scheduleExpiry(promotionId, expiresAt): Promise<void>
+  async handleExpiry(promotionId): Promise<void>  // downgrade tier
+}
+```
+
+Build this with full test coverage on MonetizationService,
+end-to-end purchase flow tests, and admin override capabilities.
+All pricing must be manageable from admin UI without code changes.
+</div>
+</div>
+
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyPrompt(id){
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.innerText.replace('Хуулах','').trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Хуулагдлаа!';
+    setTimeout(()=>btn.textContent='Хуулах',2000);
+  });
+}
+function copyAll(){
+  const ids=['p1','p2','p3','p4','p5'];
+  const all=ids.map(id=>{
+    const el=document.getElementById(id);
+    return el?el.innerText.replace('Хуулах','').trim():'';
+  }).join('\n\n---\n\n');
+  navigator.clipboard.writeText(all).then(()=>{
+    alert('Бүх 5 prompt хуулагдлаа!');
+  });
+}
+</script>
