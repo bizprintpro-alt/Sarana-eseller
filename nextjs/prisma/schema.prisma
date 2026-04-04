@@ -513,3 +513,69 @@ model WishlistItem {
 
   @@unique([userId, productId])
 }
+
+// ══════════════════════════════════════════════════════════════
+// PRE-ORDER SYSTEM
+// ══════════════════════════════════════════════════════════════
+
+model PreOrderProduct {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  entityId         String   @db.ObjectId
+  refId            String   @unique
+  name             String
+  description      String?
+  images           String[]
+  emoji            String?
+  sourceCountry    String
+  priceEstimate    Float
+  priceFinal       Float?
+  advancePct       Int      @default(30)
+  minOrderQty      Int      @default(1)
+  maxOrderQty      Int?
+  deliveryDays     Int
+  deliveryDaysMax  Int?
+  status           String   @default("OPEN") // DRAFT|OPEN|BATCH_FULL|ORDERED|IN_TRANSIT|CUSTOMS|ARRIVED|DELIVERING|COMPLETED|CANCELLED
+  batchDeadline    DateTime?
+  currentOrders    Int      @default(0)
+  targetOrders     Int?
+  shippingTracking String?
+  customsInfo      Json?
+  category         String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  items   PreOrderItem[]
+  batches PreOrderBatch[]
+}
+
+model PreOrderItem {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  productId       String    @db.ObjectId
+  buyerId         String    @db.ObjectId
+  quantity        Int
+  unitPrice       Float
+  advanceAmount   Float
+  remainingAmount Float
+  advancePaidAt   DateTime?
+  finalPaidAt     DateTime?
+  status          String    @default("PENDING") // PENDING|ADVANCE_PAID|IN_BATCH|SHIPPED|ARRIVED|FINAL_PAID|DELIVERED|CANCELLED
+  notes           String?
+  createdAt       DateTime  @default(now())
+
+  product PreOrderProduct @relation(fields: [productId], references: [id])
+}
+
+model PreOrderBatch {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  productId    String    @db.ObjectId
+  batchNumber  Int
+  orderCount   Int
+  totalQty     Int
+  orderedAt    DateTime?
+  eta          DateTime?
+  trackingCode String?
+  status       String    @default("COLLECTING") // COLLECTING|ORDERED|IN_TRANSIT|CUSTOMS|ARRIVED|DISTRIBUTED
+  createdAt    DateTime  @default(now())
+
+  product PreOrderProduct @relation(fields: [productId], references: [id])
+}
