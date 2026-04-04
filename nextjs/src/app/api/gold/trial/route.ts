@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const endsAt = new Date(startsAt.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     const membership = await prisma.goldMembership.create({
-      data: { userId, plan: "TRIAL", status: "TRIAL", startsAt, endsAt, autoRenew: false },
+      data: { userId, plan: "MONTHLY", status: "TRIAL", startsAt, endsAt, autoRenew: false, isTrial: true, trialEndsAt: endsAt },
     });
 
     return NextResponse.json({ membership });

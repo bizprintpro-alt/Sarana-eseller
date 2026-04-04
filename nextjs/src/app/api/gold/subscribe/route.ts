@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     });
 
     await prisma.membershipPayment.create({
-      data: { membershipId: membership.id, userId, plan, amount: planConfig.price, paymentId, status: "COMPLETED" },
+      data: { membershipId: membership.id, plan, amount: planConfig.price, method: 'qpay', refId: paymentId },
     });
 
     return NextResponse.json({ membership });
