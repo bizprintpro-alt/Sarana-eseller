@@ -17,6 +17,7 @@ import HeroBanner from '@/components/store/HeroBanner';
 import ProductGrid from '@/components/store/ProductGrid';
 import ProductModal from '@/components/store/ProductModal';
 import ProductCard from '@/components/store/ProductCard';
+import SaleSlider from '@/components/store/SaleSlider';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import { Search, ShoppingCart, User, ChevronDown, Tag, ChevronRight } from 'lucide-react';
 
@@ -100,10 +101,7 @@ export default function StorePage() {
 
         <HeroBanner onSearch={() => searchRef.current?.focus()} />
 
-        {saleProducts.length > 0 && <section className="bg-white"><div className="max-w-[1320px] mx-auto px-4 py-8">
-          <div className="flex items-center justify-between mb-6"><div className="flex items-center gap-3"><div className="w-1 h-6 rounded-full bg-[#E31E24]" /><h2 className="text-xl font-black">Хямдралтай бараа</h2><span className="bg-[#E31E24] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Sale</span></div><button onClick={() => setActiveCat('all')} className="text-sm font-semibold text-[#E31E24] bg-transparent border-none cursor-pointer flex items-center gap-1">Бүгд <ChevronRight className="w-4 h-4" /></button></div>
-          <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-none -mx-4 px-4">{saleProducts.map(p => <div key={p._id} className="shrink-0 w-56"><ProductCard product={p} onQuickAdd={quickAdd} onClick={id => setSelProduct(findProduct(id))} isWished={wishlist.has(p._id)} onToggleWish={toggleWL} /></div>)}</div>
-        </div></section>}
+        {saleProducts.length > 0 && <SaleSlider products={saleProducts} quickAdd={quickAdd} findProduct={findProduct} setSelProduct={setSelProduct} wishlist={wishlist} toggleWL={toggleWL} setActiveCat={setActiveCat} />}
 
         <ProductGrid products={filtered} loading={loading} activeType={activeType} activeCat={activeCat} onTypeChange={setActiveType} onCatChange={setActiveCat} onProductClick={id => setSelProduct(findProduct(id))} onQuickAdd={quickAdd} wishlist={wishlist} onToggleWish={toggleWL} />
 

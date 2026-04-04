@@ -12,8 +12,8 @@ export default function TabLayout() {
           backgroundColor: '#111111',
           borderTopColor: '#2A2A2A',
           borderTopWidth: 0.5,
-          height: Platform.OS === 'android' ? 70 : 85,
-          paddingBottom: Platform.OS === 'android' ? 16 : 28,
+          height: Platform.OS === 'android' ? 80 : 90,
+          paddingBottom: Platform.OS === 'android' ? 24 : 30,
           paddingTop: 6,
         },
         tabBarLabelStyle: { fontSize: 10, fontWeight: '600' },
@@ -28,9 +28,17 @@ export default function TabLayout() {
         headerTitle: 'eseller.mn',
         headerTitleStyle: { fontWeight: '900', fontSize: 18 },
       }} />
+      <Tabs.Screen name="shops" options={{
+        title: 'Дэлгүүр',
+        tabBarIcon: ({ color }) => <Ionicons name="storefront-outline" size={22} color={color} />,
+        headerTitle: 'Дэлгүүрүүд',
+        headerTitleStyle: { fontWeight: '800', fontSize: 18 },
+      }} />
       <Tabs.Screen name="search" options={{
-        title: 'Хайлт',
-        tabBarIcon: ({ color }) => <Ionicons name="search" size={22} color={color} />,
+        title: 'Ангилал',
+        tabBarIcon: ({ color }) => <Ionicons name="grid-outline" size={22} color={color} />,
+        headerTitle: 'Ангилал',
+        headerTitleStyle: { fontWeight: '800', fontSize: 18 },
       }} />
       <Tabs.Screen name="cart" options={{
         title: 'Сагс',
