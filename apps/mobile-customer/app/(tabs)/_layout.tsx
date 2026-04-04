@@ -34,10 +34,10 @@ export default function TabLayout() {
         headerTitle: 'Дэлгүүрүүд',
         headerTitleStyle: { fontWeight: '800', fontSize: 18 },
       }} />
-      <Tabs.Screen name="search" options={{
-        title: 'Ангилал',
-        tabBarIcon: ({ color }) => <Ionicons name="grid-outline" size={22} color={color} />,
-        headerTitle: 'Ангилал',
+      <Tabs.Screen name="feed" options={{
+        title: 'Зар',
+        tabBarIcon: ({ color }) => <Ionicons name="megaphone-outline" size={22} color={color} />,
+        headerTitle: 'Зарын булан',
         headerTitleStyle: { fontWeight: '800', fontSize: 18 },
       }} />
       <Tabs.Screen name="cart" options={{
@@ -47,6 +47,9 @@ export default function TabLayout() {
       <Tabs.Screen name="orders" options={{
         title: 'Захиалга',
         tabBarIcon: ({ color }) => <Ionicons name="receipt-outline" size={22} color={color} />,
+      }} />
+      <Tabs.Screen name="search" options={{
+        href: null,
       }} />
       <Tabs.Screen name="profile" options={{
         title: 'Профайл',
