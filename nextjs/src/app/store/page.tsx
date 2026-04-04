@@ -17,6 +17,7 @@ import HeroBanner from '@/components/store/HeroBanner';
 import ProductGrid from '@/components/store/ProductGrid';
 import ProductModal from '@/components/store/ProductModal';
 import SaleSlider from '@/components/store/SaleSlider';
+import BannerSlot from '@/components/store/BannerSlot';
 import ErrorBoundary from '@/components/shared/ErrorBoundary';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import {
@@ -348,19 +349,36 @@ export default function StorePage() {
           </div>
         </section>
 
-        {/* ━━━ Product grid ━━━ */}
-        <ProductGrid
-          products={filtered}
-          loading={loading}
-          activeType={activeType}
-          activeCat={activeCat}
-          onTypeChange={setActiveType}
-          onCatChange={setActiveCat}
-          onProductClick={id => setSelProduct(findProduct(id))}
-          onQuickAdd={quickAdd}
-          wishlist={wishlist}
-          onToggleWish={toggleWL}
-        />
+        {/* ━━━ Mid-page banner (slot: MID_PAGE) ━━━ */}
+        <BannerSlot slot="MID_PAGE" className="max-w-[1320px] mx-auto px-4 py-4" />
+
+        {/* ━━━ Product grid + Sidebar ━━━ */}
+        <div className="max-w-[1320px] mx-auto px-4 flex gap-6">
+          <div className="flex-1 min-w-0">
+            <ProductGrid
+              products={filtered}
+              loading={loading}
+              activeType={activeType}
+              activeCat={activeCat}
+              onTypeChange={setActiveType}
+              onCatChange={setActiveCat}
+              onProductClick={id => setSelProduct(findProduct(id))}
+              onQuickAdd={quickAdd}
+              wishlist={wishlist}
+              onToggleWish={toggleWL}
+            />
+          </div>
+
+          {/* ━━━ Sidebar banner (slot: SIDEBAR_RIGHT, desktop only) ━━━ */}
+          <div className="hidden lg:block w-[300px] shrink-0">
+            <div className="sticky top-[140px]">
+              <BannerSlot slot="SIDEBAR_RIGHT" />
+            </div>
+          </div>
+        </div>
+
+        {/* ━━━ Section separator banner ━━━ */}
+        <BannerSlot slot="SECTION_SEPARATOR" className="max-w-[1320px] mx-auto px-4 py-4" />
 
         {/* ━━━ Product modal ━━━ */}
         {selProduct && (
