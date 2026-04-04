@@ -6,7 +6,7 @@ import { json, errorJson } from '@/lib/api-auth';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, phone, channel, entityId, reason } = body;
+    const { email, phone, channel, reason } = body;
 
     if (!channel) return errorJson('channel required');
     if (!email && !phone) return errorJson('email or phone required');
@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
         email: email || null,
         phone: phone || null,
         channel,
-        entityId: entityId || null,
         reason: reason || null,
       },
     });
