@@ -1,39 +1,48 @@
-﻿export const runtime = 'nodejs';
+export const runtime = 'nodejs';
 
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export async function GET(req: NextRequest) {
   try {
     const products = await prisma.product.findMany({
       where: { isActive: true },
-      take: 40,
+      take: 60,
       orderBy: { createdAt: 'desc' },
     });
 
-    const items = products.map((p: any) => ({
+    // Map to store page format (_id, name, price, etc)
+    const items = products.map((p) => ({
+      _id: p.id,
       id: p.id,
       type: 'product',
+      name: p.name,
       title: p.name,
       price: p.price,
       salePrice: p.salePrice,
-      images: p.images,
+      description: p.description,
       category: p.category,
+      emoji: p.emoji,
+      images: p.images || [],
       stock: p.stock,
+      rating: p.rating,
+      reviewCount: p.reviewCount,
+      isActive: p.isActive,
       createdAt: p.createdAt?.toISOString(),
     }));
 
     return NextResponse.json({
       success: true,
-      data: { items, total: items.length, hasMore: false }
+      data: { items, total: items.length, hasMore: false },
+      // Also return as "products" for store page compatibility
+      products: items,
     });
-  } catch (e: any) {
-    console.error('MARKETPLACE ERROR:', e.message);
+  } catch (e: unknown) {
+    console.error('MARKETPLACE ERROR:', (e as Error).message);
     return NextResponse.json({
       success: true,
-      data: { items: [], total: 0, hasMore: false }
+      data: { items: [], total: 0, hasMore: false },
+      products: [],
     });
   }
 }

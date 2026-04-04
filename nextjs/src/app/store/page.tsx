@@ -112,7 +112,12 @@ export default function StorePage() {
     cart.load(); setWishlist(loadWL());
     (async () => {
       try {
-        const [pr, sv] = await Promise.allSettled([ProductsAPI.list({ limit: '60' }), fetch('/api/services?shopId=all').then(r => r.json()).catch(() => ({ data: [] }))]);
+        const [pr, sv] = await Promise.allSettled([
+          // Try Next.js marketplace API first (DB direct), then backend API
+          fetch('/api/marketplace').then(r => r.json()).then(d => d.data?.items?.length ? { products: d.data.items } : null)
+            .then(r => r || ProductsAPI.list({ limit: '60' })),
+          fetch('/api/services?shopId=all').then(r => r.json()).catch(() => ({ data: [] })),
+        ]);
         setProducts(pr.status === 'fulfilled' && pr.value.products?.length ? pr.value.products : DEMO_PRODUCTS as unknown as Product[]);
         setServices(sv.status === 'fulfilled' && Array.isArray(sv.value?.data) ? sv.value.data : DEMO_SERVICES as unknown as Service[]);
       } catch { setProducts(DEMO_PRODUCTS as unknown as Product[]); setServices(DEMO_SERVICES as unknown as Service[]); }
