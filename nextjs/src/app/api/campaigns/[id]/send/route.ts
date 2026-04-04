@@ -14,14 +14,14 @@ export async function POST(_req: NextRequest, ctx: Ctx) {
       return errorJson('Campaign already sent or sending', 400);
     }
 
-    const recipientCount = Array.isArray(campaign.recipients) ? campaign.recipients.length : 0;
+    const recipientCount = campaign.audienceCount || 0;
 
     await prisma.campaign.update({
       where: { id },
       data: {
         status: 'SENDING',
         sentAt: new Date(),
-        stats: { ...(campaign.stats as Record<string, number>), sent: recipientCount },
+        totalSent: recipientCount,
       },
     });
 
