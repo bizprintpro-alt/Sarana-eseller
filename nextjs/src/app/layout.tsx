@@ -3,6 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 import AuthProvider from '@/components/shared/AuthProvider';
 import Toast from '@/components/shared/Toast';
+import { ThemeProvider, ThemeScript } from '@/providers/ThemeProvider';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
@@ -18,17 +19,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="mn" className="h-full antialiased">
+    <html lang="mn" className="h-full antialiased" suppressHydrationWarning>
       <head>
+        <ThemeScript />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-full">
-        <AuthProvider>
-          {children}
-          <Toast />
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+            <Toast />
+          </AuthProvider>
+        </ThemeProvider>
 
         {/* Google Analytics 4 */}
         {GA_ID && (
