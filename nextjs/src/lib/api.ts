@@ -73,6 +73,7 @@ export interface Product {
   category?: string;
   emoji?: string;
   images?: string[];
+  videoUrl?: string;
   stock?: number;
   commission?: number;
   rating?: number;

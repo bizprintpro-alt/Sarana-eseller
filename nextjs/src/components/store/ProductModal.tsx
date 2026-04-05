@@ -9,7 +9,7 @@ import { useToast } from '@/components/shared/Toast';
 import {
   X, ShoppingCart, Minus, Plus, Share2, Heart, Star,
   Truck, Shield, RotateCcw, Clock, ChevronLeft, ChevronRight,
-  Package, Check, Play, ZoomIn, Info, ThumbsUp, MessageSquare,
+  Package, Check, Play, ZoomIn, Info,
   Tag, Layers, Ruler, Weight, Palette, Box,
 } from 'lucide-react';
 
@@ -86,6 +86,13 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare }:
   if (!product) return null;
 
   const images = product.images?.length ? product.images : [];
+  const videoUrl = (product as any).videoUrl || product.videoUrl;
+  // Build media array: images + video at the end
+  type MediaSlide = { type: 'image'; url: string } | { type: 'video'; url: string };
+  const media: MediaSlide[] = [
+    ...images.map(url => ({ type: 'image' as const, url })),
+    ...(videoUrl ? [{ type: 'video' as const, url: videoUrl }] : []),
+  ];
   const px = product.salePrice || product.price;
   const disc = discountPercent(product.price, product.salePrice);
   const specs = getProductSpecs(product);
@@ -119,27 +126,35 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare }:
 
         {/* ═══ LEFT: Image Gallery ═══ */}
         <div className="md:w-[55%] bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] relative shrink-0 flex flex-col">
-          {/* Main image */}
+          {/* Main image/video */}
           <div className="relative flex-1 min-h-[280px] md:min-h-[400px] flex items-center justify-center overflow-hidden">
-            {images.length > 0 ? (
-              <img
-                src={images[activeImg] || images[0]}
-                alt={product.name}
-                className="w-full h-full object-cover transition-opacity duration-300 cursor-zoom-in"
-                onClick={() => setZoomedImg(images[activeImg])}
-              />
+            {media.length > 0 ? (
+              media[activeImg]?.type === 'video' ? (
+                <video
+                  src={media[activeImg].url}
+                  controls
+                  className="w-full h-full object-contain bg-black"
+                />
+              ) : (
+                <img
+                  src={media[activeImg]?.url || images[0]}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-opacity duration-300 cursor-zoom-in"
+                  onClick={() => media[activeImg]?.type === 'image' && setZoomedImg(media[activeImg].url)}
+                />
+              )
             ) : (
               <span className="text-8xl">{product.emoji || '📦'}</span>
             )}
 
             {/* Nav arrows */}
-            {images.length > 1 && (
+            {media.length > 1 && (
               <>
-                <button onClick={() => setActiveImg(prev => (prev - 1 + images.length) % images.length)}
+                <button onClick={() => setActiveImg(prev => (prev - 1 + media.length) % media.length)}
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
                   <ChevronLeft className="w-4 h-4 text-gray-600" />
                 </button>
-                <button onClick={() => setActiveImg(prev => (prev + 1) % images.length)}
+                <button onClick={() => setActiveImg(prev => (prev + 1) % media.length)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
                   <ChevronRight className="w-4 h-4 text-gray-600" />
                 </button>
@@ -166,8 +181,8 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare }:
                 className="w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
                 <Heart className="w-4 h-4" fill={isWished ? '#E24B4A' : 'none'} color={isWished ? '#E24B4A' : '#666'} />
               </button>
-              {images.length > 0 && (
-                <button onClick={() => setZoomedImg(images[activeImg])}
+              {media.length > 0 && media[activeImg]?.type === 'image' && (
+                <button onClick={() => setZoomedImg(media[activeImg].url)}
                   className="w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
                   <ZoomIn className="w-4 h-4 text-gray-600" />
                 </button>
@@ -175,21 +190,27 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare }:
             </div>
 
             {/* Counter */}
-            {images.length > 1 && (
+            {media.length > 1 && (
               <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs font-bold px-2.5 py-1 rounded-lg">
-                {activeImg + 1} / {images.length}
+                {activeImg + 1} / {media.length}
               </div>
             )}
           </div>
 
           {/* Thumbnail strip */}
-          {images.length > 1 && (
+          {media.length > 1 && (
             <div className="flex gap-2 p-3 bg-white/80 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
-              {images.map((img, i) => (
+              {media.map((m, i) => (
                 <button key={i} onClick={() => setActiveImg(i)}
-                  className={cn('w-16 h-16 rounded-lg overflow-hidden border-2 cursor-pointer transition-all shrink-0',
+                  className={cn('w-16 h-16 rounded-lg overflow-hidden border-2 cursor-pointer transition-all shrink-0 relative',
                     i === activeImg ? 'border-[#E24B4A] shadow-md scale-105' : 'border-gray-200 opacity-60 hover:opacity-100')}>
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  {m.type === 'video' ? (
+                    <div className="w-full h-full bg-gray-900 flex items-center justify-center">
+                      <Play className="w-5 h-5 text-white" fill="white" />
+                    </div>
+                  ) : (
+                    <img src={m.url} alt="" className="w-full h-full object-cover" />
+                  )}
                 </button>
               ))}
             </div>
