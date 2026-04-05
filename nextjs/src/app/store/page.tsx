@@ -385,6 +385,10 @@ export default function StorePage() {
               navigator.clipboard.writeText(`${window.location.origin}/store/${selProduct._id}?ref=${user?.username || ''}`)
                 .then(() => toast.show('Линк хуулагдлаа!', 'ok'));
             }}
+            hasPrev={(() => { const idx = products.findIndex(p => p._id === selProduct._id); return idx > 0; })()}
+            hasNext={(() => { const idx = products.findIndex(p => p._id === selProduct._id); return idx < products.length - 1; })()}
+            onPrev={() => { const idx = products.findIndex(p => p._id === selProduct._id); if (idx > 0) setSelProduct(products[idx - 1]); }}
+            onNext={() => { const idx = products.findIndex(p => p._id === selProduct._id); if (idx < products.length - 1) setSelProduct(products[idx + 1]); }}
           />
         )}
 

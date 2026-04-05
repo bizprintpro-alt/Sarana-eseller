@@ -18,6 +18,10 @@ interface ProductModalProps {
   onClose: () => void;
   isAffiliate?: boolean;
   onShare?: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
+  hasPrev?: boolean;
+  hasNext?: boolean;
 }
 
 /* ═══ Specs generation based on category ═══ */
@@ -61,7 +65,7 @@ const DEMO_REVIEWS = [
   { name: 'Г. Сарантуяа', rating: 5, text: 'Гайхалтай! Найзууддаа санал болгож байна.', date: '1 долоо хоногийн өмнө' },
 ];
 
-export default function ProductModal({ product, onClose, isAffiliate, onShare }: ProductModalProps) {
+export default function ProductModal({ product, onClose, isAffiliate, onShare, onPrev, onNext, hasPrev, hasNext }: ProductModalProps) {
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
@@ -82,6 +86,17 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare }:
     if (product) document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, [product]);
+
+  // Keyboard nav between products
+  useEffect(() => {
+    if (!product) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft' && hasPrev && onPrev) onPrev();
+      if (e.key === 'ArrowRight' && hasNext && onNext) onNext();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [product, hasPrev, hasNext, onPrev, onNext]);
 
   if (!product) return null;
 
@@ -117,6 +132,24 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare }:
       {/* Backdrop */}
       <motion.div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998]"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
+
+      {/* Prev/Next product arrows */}
+      {hasPrev && onPrev && (
+        <button
+          onClick={onPrev}
+          className="fixed left-2 md:left-4 top-1/2 -translate-y-1/2 z-[1000] w-11 h-11 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-xl"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-700" />
+        </button>
+      )}
+      {hasNext && onNext && (
+        <button
+          onClick={onNext}
+          className="fixed right-2 md:right-4 top-1/2 -translate-y-1/2 z-[1000] w-11 h-11 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-xl"
+        >
+          <ChevronRight className="w-5 h-5 text-gray-700" />
+        </button>
+      )}
 
       {/* Modal */}
       <motion.div
