@@ -549,6 +549,57 @@ export default function FeedPage() {
           </Link>
         </div>
 
+        {/* ═══ Featured Businesses ═══ */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-black text-white">Онцлох бизнесүүд</h2>
+            <Link href="/shops" className="text-xs font-semibold text-[#E8242C] no-underline hover:underline">Бүгдийг харах →</Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Auto Dealer */}
+            <Link href="/entity/auto_dealer/autocity" className="group relative h-52 rounded-2xl overflow-hidden no-underline block">
+              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded">Авто</span>
+                  <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
+                </div>
+                <h3 className="text-base font-black text-white group-hover:text-[#E8242C] transition-colors">AutoCity Mongolia</h3>
+                <p className="text-xs text-white/70 mt-0.5">Toyota, BMW, Hyundai · 48 машин · ★ 4.8</p>
+              </div>
+            </Link>
+
+            {/* Construction Company */}
+            <Link href="/entity/company/mongolian-properties" className="group relative h-52 rounded-2xl overflow-hidden no-underline block">
+              <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold bg-blue-500 text-white px-2 py-0.5 rounded">Барилга</span>
+                  <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
+                </div>
+                <h3 className="text-base font-black text-white group-hover:text-[#E8242C] transition-colors">Монголиан Пропертиз</h3>
+                <p className="text-xs text-white/70 mt-0.5">15+ төсөл · 3,200+ айл · ★ 4.7</p>
+              </div>
+            </Link>
+
+            {/* Agent */}
+            <Link href="/entity/agent/erdenbat" className="group relative h-52 rounded-2xl overflow-hidden no-underline block">
+              <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold bg-[#D4AF37] text-black px-2 py-0.5 rounded">Агент</span>
+                  <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
+                </div>
+                <h3 className="text-base font-black text-white group-hover:text-[#E8242C] transition-colors">Б. Эрдэнэбат</h3>
+                <p className="text-xs text-white/70 mt-0.5">12 жил туршлага · 800+ хэлцэл · ★ 4.9</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+
         {/* Search + filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="flex-1 relative">
