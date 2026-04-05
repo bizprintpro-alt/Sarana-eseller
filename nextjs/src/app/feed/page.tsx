@@ -63,20 +63,20 @@ const DEMO_FEED = [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80' },
-  ] as MediaItem[], category: 'apartment', entityType: 'agent' as EntityType, entityName: 'Голден Риэлти', verified: true, tier: 'vip' as ItemTier, viewCount: 1245, district: 'СБД', metadata: { sqm: 78, rooms: 3, floor: 5 }, createdAt: '2026-04-01' },
+  ] as MediaItem[], category: 'apartment', entityType: 'agent' as EntityType, entityName: 'Голден Риэлти', entitySlug: 'erdenbat', verified: true, tier: 'vip' as ItemTier, viewCount: 1245, district: 'СБД', metadata: { sqm: 78, rooms: 3, floor: 5 }, createdAt: '2026-04-01' },
 
   { id: '2', refId: 'VIP-AUTO-001', title: 'Toyota Prius 2022', description: '45,000км, хар өнгө, чипээр ороогүй, татвар төлсөн. Full option. Камер, подогрев, хөтлөгч суудал. Осолд ороогүй, өмчлөгчөөс шууд.', price: 58000000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80' },
     { type: 'video' as const, url: 'https://www.w3schools.com/html/mov_bbb.mp4', thumb: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&q=60' },
-  ] as MediaItem[], category: 'auto', entityType: 'auto_dealer' as EntityType, entityName: 'AutoMall', verified: true, tier: 'vip' as ItemTier, viewCount: 892, district: 'ХУД', metadata: { year: 2022, mileage: 45000, fuel: 'Hybrid' }, createdAt: '2026-04-02' },
+  ] as MediaItem[], category: 'auto', entityType: 'auto_dealer' as EntityType, entityName: 'AutoMall', entitySlug: 'autocity', verified: true, tier: 'vip' as ItemTier, viewCount: 892, district: 'ХУД', metadata: { year: 2022, mileage: 45000, fuel: 'Hybrid' }, createdAt: '2026-04-02' },
 
   { id: '3', refId: 'VIP-CMP-001', title: 'Шинэ барилга, 19-р хороолол', description: '45-95мкв, 1-3 өрөө, 2027 он хүлээлгэж өгнө. Банкны зээлтэй. Хаан банк, Голомт банк хамтарсан.', price: 95000000, originalPrice: 110000000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1460317442991-0ec209397118?w=800&q=80' },
-  ] as MediaItem[], category: 'apartment', entityType: 'company' as EntityType, entityName: 'МАК Констракшн', verified: true, tier: 'vip' as ItemTier, viewCount: 3456, district: 'НД', metadata: { sqm: 65, rooms: 2 }, createdAt: '2026-03-30' },
+  ] as MediaItem[], category: 'apartment', entityType: 'company' as EntityType, entityName: 'МАК Констракшн', entitySlug: 'mongolian-properties', verified: true, tier: 'vip' as ItemTier, viewCount: 3456, district: 'НД', metadata: { sqm: 65, rooms: 2 }, createdAt: '2026-03-30' },
 
   { id: '4', refId: 'FTR-SVC-001', title: 'Вэбсайт хийж өгнө', description: 'React, Next.js, Mobile app хөгжүүлэлт. 3-5 хоногт бэлэн болно. UI/UX дизайн, SEO оптимизаци багтсан.', price: 2500000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80' },
@@ -299,7 +299,13 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
           {/* Entity info */}
           <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)] mb-3">
             <span className="text-base">{entity.emoji}</span>
-            <span className="font-semibold text-[var(--esl-text-secondary)]">{item.entityName}</span>
+            {item.entitySlug ? (
+              <Link href={`/entity/${item.entityType}/${item.entitySlug}`} className="font-semibold text-[var(--esl-text-secondary)] hover:text-[#E8242C] no-underline transition-colors">
+                {item.entityName}
+              </Link>
+            ) : (
+              <span className="font-semibold text-[var(--esl-text-secondary)]">{item.entityName}</span>
+            )}
             {item.verified && <BadgeCheck className="w-4 h-4 text-blue-400" />}
             <span className="text-[#3D3D3D]">·</span>
             <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{item.district}</span>
@@ -433,7 +439,17 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
         <div className="flex-1 p-4 sm:p-5">
           {/* Entity + district */}
           <div className="flex items-center gap-2 text-xs text-[var(--esl-text-muted)] mb-2">
-            <span>{entity.emoji} {item.entityName}</span>
+            {item.entitySlug ? (
+              <Link
+                href={`/entity/${item.entityType}/${item.entitySlug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="text-xs font-semibold text-[var(--esl-text-muted)] hover:text-[#E8242C] no-underline transition-colors flex items-center gap-1"
+              >
+                {entity.emoji} {item.entityName}
+              </Link>
+            ) : (
+              <span>{entity.emoji} {item.entityName}</span>
+            )}
             {item.verified && <span className="text-blue-400">✓</span>}
             {item.district && (
               <>
