@@ -5,11 +5,11 @@ import Link from 'next/link';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import MobileNav from '@/components/shared/MobileNav';
 import {
-  Search, MapPin, Eye, Clock, Plus, Filter, ChevronDown,
+  Search, MapPin, Eye, Clock, Plus,
   Home, Car, Smartphone, ShoppingBag, Wrench, Sofa, Baby,
-  Dumbbell, Sparkles, Package, Crown, Star, Flame, ArrowUpDown,
+  Dumbbell, Sparkles, Package,
   X, Heart, Phone, MessageCircle, Share2, ChevronLeft, ChevronRight,
-  BadgeCheck, Calendar, Ruler, DoorOpen, Fuel, Gauge,
+  BadgeCheck, Calendar, Ruler, DoorOpen, Fuel, Gauge, Play, ImageIcon,
 } from 'lucide-react';
 
 /* ═══ Types ═══ */
@@ -53,20 +53,75 @@ const SORT_OPTIONS = [
   { key: 'popular', label: 'Эрэлттэй' },
 ];
 
+/* ═══ Media type ═══ */
+type MediaItem = { type: 'image'; url: string } | { type: 'video'; url: string; thumb?: string };
+
 /* ═══ Demo Data ═══ */
 const DEMO_FEED = [
-  { id: '1', refId: 'VIP-AGT-001', title: '3 өрөө байр, 13-р хороолол', description: '78мкв, 5 давхарт, шинэ засвартай, тавилгатай. Цонх нар руу харсан, 2 ариун цэврийн өрөөтэй.', price: 280000000, images: [], category: 'apartment', entityType: 'agent' as EntityType, entityName: 'Голден Риэлти', verified: true, tier: 'vip' as ItemTier, viewCount: 1245, district: 'СБД', metadata: { sqm: 78, rooms: 3, floor: 5 }, createdAt: '2026-04-01' },
-  { id: '2', refId: 'VIP-AUTO-001', title: 'Toyota Prius 2022', description: '45,000км, хар өнгө, чипээр ороогүй, татвар төлсөн. Full option.', price: 58000000, images: [], category: 'auto', entityType: 'auto_dealer' as EntityType, entityName: 'AutoMall', verified: true, tier: 'vip' as ItemTier, viewCount: 892, district: 'ХУД', metadata: { year: 2022, mileage: 45000, fuel: 'Hybrid' }, createdAt: '2026-04-02' },
-  { id: '3', refId: 'VIP-CMP-001', title: 'Шинэ барилга, 19-р хороолол', description: '45-95мкв, 1-3 өрөө, 2027 он хүлээлгэж өгнө. Банкны зээлтэй.', price: 95000000, originalPrice: 110000000, images: [], category: 'apartment', entityType: 'company' as EntityType, entityName: 'МАК Констракшн', verified: true, tier: 'vip' as ItemTier, viewCount: 3456, district: 'НД', metadata: { sqm: 65, rooms: 2 }, createdAt: '2026-03-30' },
-  { id: '4', refId: 'FTR-SVC-001', title: 'Вэбсайт хийж өгнө', description: 'React, Next.js, Mobile app хөгжүүлэлт. 3-5 хоногт бэлэн болно.', price: 2500000, images: [], category: 'services', entityType: 'service' as EntityType, entityName: 'TechPro', verified: false, tier: 'featured' as ItemTier, viewCount: 567, district: 'СБД', createdAt: '2026-04-01' },
-  { id: '5', refId: 'FTR-USR-001', title: 'iPhone 15 Pro Max 256GB', description: 'Хэрэглээгүй шинэ, баталгаатай. Утасны хайрцагтай, бүрэн комплект.', price: 3800000, images: [], category: 'electronics', entityType: 'user' as EntityType, entityName: 'Бат', verified: false, tier: 'featured' as ItemTier, viewCount: 432, district: 'БЗД', createdAt: '2026-04-02' },
-  { id: '6', refId: 'DSC-STR-001', title: 'Cashmere цамц 70% OFF', description: '100% монгол ноолуур. XS-XXL хэмжээтэй. Өвөлд тохиромжтой.', price: 45000, originalPrice: 150000, images: [], category: 'fashion', entityType: 'store' as EntityType, entityName: 'Gobi Store', verified: true, tier: 'discounted' as ItemTier, viewCount: 2341, district: 'СБД', createdAt: '2026-03-28' },
-  { id: '7', refId: 'NRM-USR-001', title: 'Буцлуур зарна', description: 'Хэрэглэсэн, хэвийн ажилладаг. Тээвэрлэлт хийнэ.', price: 35000, images: [], category: 'electronics', entityType: 'user' as EntityType, entityName: 'Сараа', verified: false, tier: 'normal' as ItemTier, viewCount: 89, district: 'ЧД', createdAt: '2026-04-03' },
-  { id: '8', refId: 'NRM-USR-002', title: '2 өрөө байр түрээслүүлнэ', description: 'Хотын төвд, шинэ засвартай. Сар бүр 1.2 сая.', price: 1200000, images: [], category: 'apartment', entityType: 'user' as EntityType, entityName: 'Дорж', verified: false, tier: 'normal' as ItemTier, viewCount: 234, district: 'СБД', metadata: { sqm: 55, rooms: 2 }, createdAt: '2026-04-02' },
-  { id: '9', refId: 'NRM-AUTO-001', title: 'Hyundai Tucson 2019', description: '85,000км, цагаан, бензин. Осолд ороогүй.', price: 42000000, images: [], category: 'auto', entityType: 'user' as EntityType, entityName: 'Ганаа', verified: false, tier: 'normal' as ItemTier, viewCount: 156, district: 'БГД', metadata: { year: 2019, mileage: 85000, fuel: 'Бензин' }, createdAt: '2026-04-01' },
-  { id: '10', refId: 'NRM-USR-003', title: 'Диван + ширээ комплект', description: 'Хэрэглэсэн, L хэлбэрийн диван, кофены ширээ', price: 850000, images: [], category: 'furniture', entityType: 'user' as EntityType, entityName: 'Оюука', verified: false, tier: 'normal' as ItemTier, viewCount: 67, district: 'БНД', createdAt: '2026-04-03' },
-  { id: '11', refId: 'NRM-USR-004', title: 'Гэрийн цэвэрлэгээ хийнэ', description: 'Мэргэжлийн цэвэрлэгээ, 1-4 өрөө гэрт.', price: 80000, images: [], category: 'services', entityType: 'user' as EntityType, entityName: 'Цэвэр Гэр', verified: false, tier: 'normal' as ItemTier, viewCount: 312, district: 'СХД', createdAt: '2026-04-03' },
-  { id: '12', refId: 'NRM-USR-005', title: 'Samsung Galaxy S24 Ultra', description: '12/256GB, хэрэглэсэн 3 сар, бүрэн комплект', price: 2800000, images: [], category: 'electronics', entityType: 'user' as EntityType, entityName: 'Тэмүүжин', verified: false, tier: 'normal' as ItemTier, viewCount: 198, district: 'ХУД', createdAt: '2026-04-03' },
+  { id: '1', refId: 'VIP-AGT-001', title: '3 өрөө байр, 13-р хороолол', description: '78мкв, 5 давхарт, шинэ засвартай, тавилгатай. Цонх нар руу харсан, 2 ариун цэврийн өрөөтэй. Паркинг, хамгаалалттай, лифттэй. Төвд ойр, сургууль цэцэрлэгтэй.', price: 280000000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80' },
+  ] as MediaItem[], category: 'apartment', entityType: 'agent' as EntityType, entityName: 'Голден Риэлти', verified: true, tier: 'vip' as ItemTier, viewCount: 1245, district: 'СБД', metadata: { sqm: 78, rooms: 3, floor: 5 }, createdAt: '2026-04-01' },
+
+  { id: '2', refId: 'VIP-AUTO-001', title: 'Toyota Prius 2022', description: '45,000км, хар өнгө, чипээр ороогүй, татвар төлсөн. Full option. Камер, подогрев, хөтлөгч суудал. Осолд ороогүй, өмчлөгчөөс шууд.', price: 58000000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80' },
+    { type: 'video' as const, url: 'https://www.w3schools.com/html/mov_bbb.mp4', thumb: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&q=60' },
+  ] as MediaItem[], category: 'auto', entityType: 'auto_dealer' as EntityType, entityName: 'AutoMall', verified: true, tier: 'vip' as ItemTier, viewCount: 892, district: 'ХУД', metadata: { year: 2022, mileage: 45000, fuel: 'Hybrid' }, createdAt: '2026-04-02' },
+
+  { id: '3', refId: 'VIP-CMP-001', title: 'Шинэ барилга, 19-р хороолол', description: '45-95мкв, 1-3 өрөө, 2027 он хүлээлгэж өгнө. Банкны зээлтэй. Хаан банк, Голомт банк хамтарсан.', price: 95000000, originalPrice: 110000000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1460317442991-0ec209397118?w=800&q=80' },
+  ] as MediaItem[], category: 'apartment', entityType: 'company' as EntityType, entityName: 'МАК Констракшн', verified: true, tier: 'vip' as ItemTier, viewCount: 3456, district: 'НД', metadata: { sqm: 65, rooms: 2 }, createdAt: '2026-03-30' },
+
+  { id: '4', refId: 'FTR-SVC-001', title: 'Вэбсайт хийж өгнө', description: 'React, Next.js, Mobile app хөгжүүлэлт. 3-5 хоногт бэлэн болно. UI/UX дизайн, SEO оптимизаци багтсан.', price: 2500000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80' },
+  ] as MediaItem[], category: 'services', entityType: 'service' as EntityType, entityName: 'TechPro', verified: false, tier: 'featured' as ItemTier, viewCount: 567, district: 'СБД', createdAt: '2026-04-01' },
+
+  { id: '5', refId: 'FTR-USR-001', title: 'iPhone 15 Pro Max 256GB', description: 'Хэрэглээгүй шинэ, баталгаатай. Утасны хайрцагтай, бүрэн комплект. Natural Titanium өнгө.', price: 3800000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&q=80' },
+  ] as MediaItem[], category: 'electronics', entityType: 'user' as EntityType, entityName: 'Бат', verified: false, tier: 'featured' as ItemTier, viewCount: 432, district: 'БЗД', createdAt: '2026-04-02' },
+
+  { id: '6', refId: 'DSC-STR-001', title: 'Cashmere цамц 70% OFF', description: '100% монгол ноолуур. XS-XXL хэмжээтэй. Өвөлд тохиромжтой. Бэлэг болгоход тохиромжтой.', price: 45000, originalPrice: 150000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1434389677669-e08b4cda3a0a?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80' },
+  ] as MediaItem[], category: 'fashion', entityType: 'store' as EntityType, entityName: 'Gobi Store', verified: true, tier: 'discounted' as ItemTier, viewCount: 2341, district: 'СБД', createdAt: '2026-03-28' },
+
+  { id: '7', refId: 'NRM-USR-001', title: 'Буцлуур зарна', description: 'Хэрэглэсэн, хэвийн ажилладаг. Тээвэрлэлт хийнэ.', price: 35000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1585237672814-8f85a8118bf6?w=800&q=80' },
+  ] as MediaItem[], category: 'electronics', entityType: 'user' as EntityType, entityName: 'Сараа', verified: false, tier: 'normal' as ItemTier, viewCount: 89, district: 'ЧД', createdAt: '2026-04-03' },
+
+  { id: '8', refId: 'NRM-USR-002', title: '2 өрөө байр түрээслүүлнэ', description: 'Хотын төвд, шинэ засвартай. Сар бүр 1.2 сая. Тавилгатай, интернэттэй.', price: 1200000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800&q=80' },
+  ] as MediaItem[], category: 'apartment', entityType: 'user' as EntityType, entityName: 'Дорж', verified: false, tier: 'normal' as ItemTier, viewCount: 234, district: 'СБД', metadata: { sqm: 55, rooms: 2 }, createdAt: '2026-04-02' },
+
+  { id: '9', refId: 'NRM-AUTO-001', title: 'Hyundai Tucson 2019', description: '85,000км, цагаан, бензин. Осолд ороогүй. Засвар шаардлагагүй.', price: 42000000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1633695632011-e939ef2f0fc6?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80' },
+    { type: 'video' as const, url: 'https://www.w3schools.com/html/mov_bbb.mp4', thumb: 'https://images.unsplash.com/photo-1633695632011-e939ef2f0fc6?w=400&q=60' },
+  ] as MediaItem[], category: 'auto', entityType: 'user' as EntityType, entityName: 'Ганаа', verified: false, tier: 'normal' as ItemTier, viewCount: 156, district: 'БГД', metadata: { year: 2019, mileage: 85000, fuel: 'Бензин' }, createdAt: '2026-04-01' },
+
+  { id: '10', refId: 'NRM-USR-003', title: 'Диван + ширээ комплект', description: 'Хэрэглэсэн, L хэлбэрийн диван, кофены ширээ. Цайвар саарал өнгө.', price: 850000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=800&q=80' },
+  ] as MediaItem[], category: 'furniture', entityType: 'user' as EntityType, entityName: 'Оюука', verified: false, tier: 'normal' as ItemTier, viewCount: 67, district: 'БНД', createdAt: '2026-04-03' },
+
+  { id: '11', refId: 'NRM-USR-004', title: 'Гэрийн цэвэрлэгээ хийнэ', description: 'Мэргэжлийн цэвэрлэгээ, 1-4 өрөө гэрт. Цонх, хивс, тавилга.', price: 80000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80' },
+  ] as MediaItem[], category: 'services', entityType: 'user' as EntityType, entityName: 'Цэвэр Гэр', verified: false, tier: 'normal' as ItemTier, viewCount: 312, district: 'СХД', createdAt: '2026-04-03' },
+
+  { id: '12', refId: 'NRM-USR-005', title: 'Samsung Galaxy S24 Ultra', description: '12/256GB, хэрэглэсэн 3 сар, бүрэн комплект. Titanium Gray.', price: 2800000, media: [
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&q=80' },
+    { type: 'image' as const, url: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80' },
+  ] as MediaItem[], category: 'electronics', entityType: 'user' as EntityType, entityName: 'Тэмүүжин', verified: false, tier: 'normal' as ItemTier, viewCount: 198, district: 'ХУД', createdAt: '2026-04-03' },
 ];
 
 function formatPrice(n: number) {
@@ -87,6 +142,82 @@ function timeAgo(dateStr: string) {
 function categoryEmoji(cat: string) {
   const map: Record<string, string> = { apartment: '🏠', auto: '🚗', electronics: '📱', fashion: '👗', services: '🔧', furniture: '🛋️', kids: '🧸', sports: '⚽', beauty: '💄' };
   return map[cat] || '📦';
+}
+
+/* ═══ Media Carousel ═══ */
+function MediaCarousel({ media, title, category, isVip, tier, disc }: {
+  media: MediaItem[];
+  title: string;
+  category: string;
+  isVip: boolean;
+  tier: typeof TIER_CONFIG[ItemTier];
+  disc: number;
+}) {
+  const [idx, setIdx] = useState(0);
+  const current = media[idx];
+
+  return (
+    <div className={`relative h-64 sm:h-80 ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
+      {current ? (
+        current.type === 'video' ? (
+          <video src={current.url} controls className="w-full h-full object-contain bg-black" poster={current.thumb} />
+        ) : (
+          <img src={current.url} alt={title} className="w-full h-full object-cover" />
+        )
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">
+          <span className="text-8xl">{categoryEmoji(category)}</span>
+        </div>
+      )}
+
+      {media.length > 1 && (
+        <>
+          <button
+            onClick={() => setIdx(i => i > 0 ? i - 1 : media.length - 1)}
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition cursor-pointer border-none"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setIdx(i => i < media.length - 1 ? i + 1 : 0)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition cursor-pointer border-none"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+          <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-black/60 text-white">
+            {idx + 1} / {media.length}
+          </div>
+          <div className="absolute bottom-3 left-3 flex gap-1.5">
+            {media.map((m, i) => (
+              <button
+                key={i}
+                onClick={() => setIdx(i)}
+                className={`w-10 h-10 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${i === idx ? 'border-white scale-110' : 'border-transparent opacity-60 hover:opacity-100'}`}
+              >
+                {m.type === 'video' ? (
+                  <div className="w-full h-full bg-black/80 flex items-center justify-center relative">
+                    {m.thumb && <img src={m.thumb} alt="" className="w-full h-full object-cover absolute inset-0" />}
+                    <Play className="w-3 h-3 text-white relative z-10" fill="white" />
+                  </div>
+                ) : (
+                  <img src={m.url} alt="" className="w-full h-full object-cover" />
+                )}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      {tier && (
+        <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold" style={{ backgroundColor: tier.color + '25', color: tier.color, backdropFilter: 'blur(8px)' }}>
+          {tier.badge} {tier.label}
+        </div>
+      )}
+      {disc > 0 && (
+        <div className="absolute top-4 right-14 bg-[#E8242C] text-white text-sm font-bold px-3 py-1.5 rounded-lg">-{disc}%</div>
+      )}
+    </div>
+  );
 }
 
 /* ═══ Detail Modal ═══ */
@@ -153,18 +284,15 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
           <X className="w-4 h-4" />
         </button>
 
-        {/* Hero image area */}
-        <div className={`relative h-56 sm:h-72 flex items-center justify-center ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
-          <span className="text-8xl">{categoryEmoji(item.category)}</span>
-          {item.tier !== 'normal' && (
-            <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold" style={{ backgroundColor: tier.color + '25', color: tier.color }}>
-              {tier.badge} {tier.label}
-            </div>
-          )}
-          {disc > 0 && (
-            <div className="absolute top-4 right-14 bg-[#E8242C] text-white text-sm font-bold px-3 py-1.5 rounded-lg">-{disc}%</div>
-          )}
-        </div>
+        {/* Image/Video Carousel */}
+        <MediaCarousel
+          media={item.media}
+          title={item.title}
+          category={item.category}
+          isVip={isVip}
+          tier={item.tier !== 'normal' ? tier : null!}
+          disc={disc}
+        />
 
         {/* Content */}
         <div className="p-6">
@@ -269,17 +397,34 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
     <div onClick={onClick} className={`group rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,.3)] hover:-translate-y-0.5 cursor-pointer ${tier.border} ${tier.bg || 'bg-[var(--esl-bg-card)]'}`}>
       <div className="flex flex-col sm:flex-row">
         {/* Image */}
-        <div className={`relative h-48 sm:h-auto sm:w-56 shrink-0 flex items-center justify-center ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
-          <span className="text-6xl transition-transform duration-300 group-hover:scale-110">{categoryEmoji(item.category)}</span>
+        <div className={`relative h-48 sm:h-auto sm:w-56 shrink-0 overflow-hidden ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
+          {item.media.length > 0 ? (
+            <img
+              src={item.media[0].type === 'video' && 'thumb' in item.media[0] ? item.media[0].thumb! : item.media[0].url}
+              alt={item.title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-6xl">{categoryEmoji(item.category)}</span>
+            </div>
+          )}
+          {/* Media count badge */}
+          {item.media.length > 1 && (
+            <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold bg-black/60 text-white">
+              <ImageIcon className="w-3 h-3" /> {item.media.filter(m => m.type === 'image').length}
+              {item.media.some(m => m.type === 'video') && <><span className="mx-0.5">·</span><Play className="w-3 h-3" /> {item.media.filter(m => m.type === 'video').length}</>}
+            </div>
+          )}
           {item.tier !== 'normal' && (
-            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold" style={{ backgroundColor: tier.color + '20', color: tier.color }}>
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold" style={{ backgroundColor: tier.color + '20', color: tier.color, backdropFilter: 'blur(8px)' }}>
               {tier.badge} {tier.label}
             </div>
           )}
           {disc > 0 && (
             <div className="absolute top-3 right-3 bg-[#E8242C] text-white text-xs font-bold px-2 py-1 rounded-md">-{disc}%</div>
           )}
-          <button onClick={(e) => e.stopPropagation()} className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <button onClick={(e) => e.stopPropagation()} className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-none">
             <Heart className="w-4 h-4 text-white" />
           </button>
         </div>
