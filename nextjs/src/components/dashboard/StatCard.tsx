@@ -2,21 +2,50 @@
 
 import { useEffect, useRef } from 'react';
 
+type Variant = 'primary' | 'success' | 'warning' | 'info';
+// Keep old gradient names for backward compat
+type LegacyGradient = 'indigo' | 'pink' | 'green' | 'amber';
+
 interface StatCardProps {
   icon: string;
   label: string;
   value: string | number;
   sub?: string;
-  gradient: 'indigo' | 'pink' | 'green' | 'amber';
+  variant?: Variant;
+  gradient?: LegacyGradient; // backward compat — mapped to variant
   animate?: boolean;
   sparkData?: number[];
 }
 
-const GRADIENTS = {
-  indigo: 'from-[#6366F1] to-[#4338CA]',
-  pink: 'from-[#EC4899] to-[#DB2777]',
-  green: 'from-[#10B981] to-[#059669]',
-  amber: 'from-[#F59E0B] to-[#D97706]',
+const VARIANT_STYLES: Record<Variant, { bg: string; accent: string; icon: string }> = {
+  primary: {
+    bg: 'var(--esl-brand)',
+    accent: 'rgba(255,255,255,0.15)',
+    icon: 'rgba(255,255,255,0.4)',
+  },
+  success: {
+    bg: 'var(--esl-success)',
+    accent: 'rgba(255,255,255,0.15)',
+    icon: 'rgba(255,255,255,0.4)',
+  },
+  warning: {
+    bg: 'var(--esl-warning)',
+    accent: 'rgba(255,255,255,0.15)',
+    icon: 'rgba(255,255,255,0.4)',
+  },
+  info: {
+    bg: 'var(--esl-info)',
+    accent: 'rgba(255,255,255,0.15)',
+    icon: 'rgba(255,255,255,0.4)',
+  },
+};
+
+// Map old gradient names to new variants
+const GRADIENT_TO_VARIANT: Record<LegacyGradient, Variant> = {
+  indigo: 'primary',
+  pink: 'primary',
+  green: 'success',
+  amber: 'warning',
 };
 
 export default function StatCard({
@@ -24,10 +53,13 @@ export default function StatCard({
   label,
   value,
   sub,
+  variant,
   gradient,
   animate = true,
   sparkData,
 }: StatCardProps) {
+  const resolvedVariant = variant || (gradient ? GRADIENT_TO_VARIANT[gradient] : 'primary');
+  const style = VARIANT_STYLES[resolvedVariant];
   const valRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,13 +82,14 @@ export default function StatCard({
 
   return (
     <div
-      className={`bg-gradient-to-br ${GRADIENTS[gradient]} rounded-2xl p-5 px-6 text-white relative overflow-hidden cursor-default transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,.3)]`}
+      className="rounded-2xl p-5 px-6 text-white relative overflow-hidden cursor-default transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+      style={{ background: style.bg }}
     >
       {/* Decorative circle */}
-      <div className="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-white/[.08]" />
+      <div className="absolute -top-5 -right-5 w-20 h-20 rounded-full" style={{ background: style.accent }} />
 
-      <div className="text-white/40 text-2xl mb-1">{icon}</div>
-      <div ref={valRef} className="text-2xl font-black mb-1 animate-count-up">
+      <div className="text-2xl mb-1" style={{ color: style.icon }}>{icon}</div>
+      <div ref={valRef} className="text-2xl font-black mb-1">
         {typeof value === 'number' ? value.toLocaleString('mn-MN') : value}
       </div>
       <div className="text-sm text-white/70 font-medium">{label}</div>

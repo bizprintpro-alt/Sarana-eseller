@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth';
 import { OrdersAPI, type Order } from '@/lib/api';
 import { formatPrice, STATUS_MAP } from '@/lib/utils';
 import StatCard from '@/components/dashboard/StatCard';
+import { LoyaltyWidget } from '@/components/shared/LoyaltyWidget';
 import Link from 'next/link';
 
 export default function BuyerDashboard() {
@@ -57,12 +58,17 @@ export default function BuyerDashboard() {
       </div>
 
       <div className="p-8">
+        {/* Loyalty */}
+        <div className="mb-6">
+          <LoyaltyWidget context="profile" />
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <StatCard icon="📦" label="Нийт захиалга" value={total} gradient="indigo" />
-          <StatCard icon="💰" label="Нийт зарцуулалт" value={formatPrice(revenue)} gradient="pink" animate={false} />
-          <StatCard icon="⏳" label="Хүлээгдэж буй" value={pending} gradient="amber" />
-          <StatCard icon="✅" label="Хүргэгдсэн" value={done} gradient="green" />
+          <StatCard icon="📦" label="Нийт захиалга" value={total} variant="primary" />
+          <StatCard icon="💰" label="Нийт зарцуулалт" value={formatPrice(revenue)} variant="info" animate={false} />
+          <StatCard icon="⏳" label="Хүлээгдэж буй" value={pending} variant="warning" />
+          <StatCard icon="✅" label="Хүргэгдсэн" value={done} variant="success" />
         </div>
 
         {/* Recent Orders */}

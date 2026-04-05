@@ -270,6 +270,13 @@ const BUYER_SECTIONS: SidebarSection[] = [
       { href: '/store', icon: '🛒', label: 'Дэлгүүр' },
       { href: '/dashboard/orders', icon: '📦', label: 'Захиалгууд' },
       { href: '/dashboard/wishlist', icon: '❤️', label: 'Хүслийн жагсаалт' },
+    ],
+  },
+  {
+    title: 'Миний профайл',
+    items: [
+      { href: '/gold', icon: '👑', label: 'Loyalty & Gold' },
+      { href: '/feed', icon: '📋', label: 'Зарын булан' },
       { href: '/dashboard/settings', icon: '⚙️', label: 'Тохиргоо' },
     ],
   },
