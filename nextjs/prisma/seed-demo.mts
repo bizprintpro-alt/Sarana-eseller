@@ -11,7 +11,6 @@ const IMGS = {
 }
 
 async function main() {
-  // Superadmin
   await prisma.user.upsert({
     where: { email: 'admin@eseller.mn' },
     update: {},
@@ -21,7 +20,7 @@ async function main() {
 
   const shops = [
     { email: 'fashion@eseller.mn', name: 'Болд Гантулга', username: 'boldstore', shopName: 'Bold Fashion', slug: 'bold-fashion', cat: 'Хувцас', imgs: 'fashion' as const,
-      products: [['Zara трэнд хүрэм',158000,190000],['H&M даашинз',45000,0],['Uniqlo цамц',35000,0],['Levi\'s жинс',120000,150000],['Nike гутал',180000,220000]] },
+      products: [['Zara трэнд хүрэм',158000,190000],['H&M даашинз',45000,0],['Uniqlo цамц',35000,0],["Levi's жинс",120000,150000],['Nike гутал',180000,220000]] },
     { email: 'burger@eseller.mn', name: 'Энхбаяр Дорж', username: 'burgermn', shopName: 'BurgerMN', slug: 'burger-mn', cat: 'Хоол', imgs: 'food' as const,
       products: [['Burger Double Set',35000,42000],['Classic Burger',25000,0],['Chicken Burger',28000,0],['Pizza Margarita',38000,45000],['French Fries',12000,0]] },
     { email: 'tech@eseller.mn', name: 'Номун Батболд', username: 'techstore', shopName: 'TechHub MN', slug: 'techhub-mn', cat: 'Электроник', imgs: 'electronics' as const,
@@ -50,12 +49,22 @@ async function main() {
     })
     for (let i = 0; i < s.products.length; i++) {
       const [name, price, orig] = s.products[i]
-      
+      await prisma.product.create({
+        data: {
+          userId: user.id,
+          name: name as string,
+          price: price as number,
+          salePrice: (orig as number) > 0 ? (orig as number) : null,
+          images: [IMGS[s.imgs][i % 3], IMGS[s.imgs][(i + 1) % 3]],
+          category: s.cat,
+          stock: 20 + Math.floor(Math.random() * 80),
+          isActive: true,
+        }
+      })
     }
     console.log(`✓ ${s.shopName}: ${s.products.length} products`)
   }
 
-  // Buyers
   for (const b of [
     { email: 'buyer1@eseller.mn', name: 'Солонго Мөнхбаяр', username: 'solongo' },
     { email: 'buyer2@eseller.mn', name: 'Тэмүүлэн Батсайхан', username: 'temuulen' },
@@ -72,4 +81,3 @@ async function main() {
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect())
-

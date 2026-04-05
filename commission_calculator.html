@@ -1,0 +1,123 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:16px;font-family:var(--font-sans)}
+.row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.metric{flex:1;min-width:120px;background:var(--color-background-secondary);border-radius:8px;padding:12px 14px}
+.metric-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.metric-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px}
+.slider-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.slider-label{font-size:12px;color:var(--color-text-secondary);width:100px;flex-shrink:0}
+.slider-val{font-size:12px;font-weight:500;color:var(--color-text-primary);width:44px;text-align:right;flex-shrink:0}
+.bar-wrap{height:28px;display:flex;border-radius:6px;overflow:hidden;margin-bottom:8px}
+.bar-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;transition:width .3s;min-width:0;overflow:hidden;white-space:nowrap}
+.bar-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sc{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .15s}
+.sc.active{border:2px solid #378ADD}
+.sc-name{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.sc-val{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.note{font-size:11px;color:var(--color-text-tertiary);padding:8px 10px;background:var(--color-background-secondary);border-radius:6px;margin-top:8px}
+input[type=range]{flex:1}
+</style>
+
+<div class="wrap">
+
+<div class="card">
+<div class="card-title">Сценари сонгох</div>
+<div class="scenario-grid">
+<div class="sc active" onclick="setScenario(5,10,this)"><div class="sc-name">Өсөлтийн үе</div><div class="sc-val">5% платформ</div></div>
+<div class="sc" onclick="setScenario(8,12,this)"><div class="sc-name">Тогтвортой</div><div class="sc-val">8% платформ</div></div>
+<div class="sc" onclick="setScenario(12,15,this)"><div class="sc-name">Брэнд болсон</div><div class="sc-val">12% платформ</div></div>
+</div>
+<div class="note">Доорх slider-уудаар өөрчилж болно</div>
+</div>
+
+<div class="card">
+<div class="card-title">Хувь тохируулах</div>
+<div class="slider-row"><span class="slider-label">Платформ</span><input type="range" id="s-plat" min="3" max="20" step="1" value="5" oninput="update()"><span class="slider-val" id="v-plat">5%</span></div>
+<div class="slider-row"><span class="slider-label">Affiliate</span><input type="range" id="s-aff" min="0" max="20" step="1" value="10" oninput="update()"><span class="slider-val" id="v-aff">10%</span></div>
+<div class="slider-row"><span class="slider-label">Захиалгын дүн</span><input type="range" id="s-order" min="10000" max="500000" step="5000" value="50000" oninput="update()"><span class="slider-val" id="v-order">50,000₮</span></div>
+</div>
+
+<div class="row">
+<div class="metric"><div class="metric-label">Дэлгүүр эзэн авна</div><div class="metric-val" id="m-seller">–</div><div class="metric-sub" id="m-seller-pct">–</div></div>
+<div class="metric"><div class="metric-label">Платформ авна</div><div class="metric-val" id="m-plat">–</div><div class="metric-sub" id="m-plat-pct">–</div></div>
+<div class="metric"><div class="metric-label">Affiliate авна</div><div class="metric-val" id="m-aff">–</div><div class="metric-sub" id="m-aff-pct">–</div></div>
+</div>
+
+<div class="card">
+<div class="card-title">Хуваарилалт</div>
+<div class="bar-wrap">
+<div class="bar-seg" id="b-seller" style="background:#1D9E75;color:#fff"></div>
+<div class="bar-seg" id="b-plat" style="background:#378ADD;color:#fff"></div>
+<div class="bar-seg" id="b-aff" style="background:#EF9F27;color:#2c2c2a"></div>
+</div>
+<div class="bar-legend">
+<div class="leg-item"><div class="leg-dot" style="background:#1D9E75"></div>Дэлгүүр эзэн</div>
+<div class="leg-item"><div class="leg-dot" style="background:#378ADD"></div>Платформ</div>
+<div class="leg-item"><div class="leg-dot" style="background:#EF9F27"></div>Affiliate</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">Сард 1,000 захиалга байвал платформын орлого</div>
+<div class="row" style="margin-bottom:0">
+<div class="metric"><div class="metric-label">Өдөрт</div><div class="metric-val" id="d-day">–</div></div>
+<div class="metric"><div class="metric-label">Сард</div><div class="metric-val" id="d-month">–</div></div>
+<div class="metric"><div class="metric-label">Жилд</div><div class="metric-val" id="d-year">–</div></div>
+</div>
+</div>
+
+<div class="note">Дэлхийн benchmark: Shopify 0.5–2%, Amazon 8–15%, Wolt ~30%, Gumroad 10%. Монголын зах зээлд seller татах үед 5%, брэнд болсны дараа 8–10% оновчтой.</div>
+</div>
+
+<script>
+function fmt(n){
+  if(n>=1000000) return (n/1000000).toFixed(1)+'сая₮';
+  if(n>=1000) return Math.round(n/1000)+'K₮';
+  return Math.round(n)+'₮';
+}
+function update(){
+  const plat=+document.getElementById('s-plat').value;
+  const aff=+document.getElementById('s-aff').value;
+  const order=+document.getElementById('s-order').value;
+  document.getElementById('v-plat').textContent=plat+'%';
+  document.getElementById('v-aff').textContent=aff+'%';
+  document.getElementById('v-order').textContent=order.toLocaleString()+'₮';
+  const total=plat+aff;
+  const sellerPct=Math.max(0,100-total);
+  const sellerAmt=order*sellerPct/100;
+  const platAmt=order*plat/100;
+  const affAmt=order*aff/100;
+  document.getElementById('m-seller').textContent=fmt(sellerAmt);
+  document.getElementById('m-seller-pct').textContent=sellerPct+'% авна';
+  document.getElementById('m-plat').textContent=fmt(platAmt);
+  document.getElementById('m-plat-pct').textContent=plat+'% авна';
+  document.getElementById('m-aff').textContent=fmt(affAmt);
+  document.getElementById('m-aff-pct').textContent=aff+'% авна';
+  document.getElementById('b-seller').style.width=sellerPct+'%';
+  document.getElementById('b-seller').textContent=sellerPct>8?sellerPct+'%':'';
+  document.getElementById('b-plat').style.width=plat+'%';
+  document.getElementById('b-plat').textContent=plat>4?plat+'%':'';
+  document.getElementById('b-aff').style.width=aff+'%';
+  document.getElementById('b-aff').textContent=aff>4?aff+'%':'';
+  const monthlyPlat=platAmt*1000;
+  document.getElementById('d-day').textContent=fmt(monthlyPlat/30);
+  document.getElementById('d-month').textContent=fmt(monthlyPlat);
+  document.getElementById('d-year').textContent=fmt(monthlyPlat*12);
+}
+function setScenario(plat,aff,el){
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('s-plat').value=plat;
+  document.getElementById('s-aff').value=aff;
+  update();
+}
+update();
+</script>

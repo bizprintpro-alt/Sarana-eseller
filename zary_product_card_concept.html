@@ -1,0 +1,111 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px;background:var(--color-background-tertiary);border-radius:var(--border-radius-lg)}
+.card{background:var(--color-background-primary);border-radius:12px;border:0.5px solid var(--color-border-tertiary);overflow:hidden;cursor:pointer;transition:transform .2s}
+.card:hover{transform:translateY(-3px)}
+.img-wrap{position:relative;aspect-ratio:1;overflow:hidden;background:var(--color-background-secondary)}
+.img-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:2}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.5);transition:background .15s;cursor:pointer}
+.dot.active{background:#fff}
+.img-slide{display:flex;width:100%;height:100%;transition:transform .3s ease}
+.img-frame{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--color-text-secondary);font-weight:500}
+.badge-row{position:absolute;top:8px;left:8px;display:flex;gap:4px;z-index:2}
+.badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;letter-spacing:.3px}
+.badge-new{background:#111;color:#fff}
+.badge-sale{background:#E24B4A;color:#fff}
+.wishlist{position:absolute;top:8px;right:8px;z-index:2;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.85);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.wishlist:hover{background:#fff}
+.wishlist svg{width:14px;height:14px}
+.quick-add{position:absolute;bottom:0;left:0;right:0;background:rgba(17,17,17,0.88);color:#fff;font-size:12px;font-weight:500;padding:9px;text-align:center;transform:translateY(100%);transition:transform .25s;z-index:2;letter-spacing:.3px}
+.img-wrap:hover .quick-add{transform:translateY(0)}
+.info{padding:10px 12px 12px}
+.seller{font-size:11px;color:var(--color-text-tertiary);margin-bottom:2px}
+.name{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.3;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:8px}
+.price{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.price-orig{font-size:12px;color:var(--color-text-tertiary);text-decoration:line-through}
+.variants{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.v-color{width:16px;height:16px;border-radius:50%;border:1.5px solid transparent;cursor:pointer;transition:border-color .15s}
+.v-color.active,.v-color:hover{border-color:var(--color-text-primary)}
+.v-size{font-size:10px;padding:2px 6px;border-radius:4px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.v-size.active,.v-size:hover{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.stock{font-size:11px;color:var(--color-text-tertiary)}
+.stock-low{color:#E24B4A}
+</style>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const products=[
+{name:"Zara trend савхин хүрэм",seller:"Zary Fashion",price:158000,orig:null,badge:"шинэ",imgs:["#c9b8a8","#8c7b70","#d4c4b4"],colors:["#2c2c2a","#c9b8a8","#8B3A3A"],sizes:["XS","S","M","L"],stock:3},
+{name:"H&M Daashingz",seller:"H&M Official",price:40000,orig:null,badge:"шинэ",imgs:["#b8c4cc","#e8c4c0","#c8d4c0"],colors:["#b8c4cc","#e8c4c0","#c8d4c0"],sizes:["XS","S","M","L","XL"],stock:2},
+{name:"Michael Kors Tote Bag",seller:"MK Store MN",price:299000,orig:375000,badge:"−20%",imgs:["#2c2c2a","#c9a87c","#e8e0d8"],colors:["#2c2c2a","#c9a87c","#e8d0b8"],sizes:null,stock:2},
+];
+
+function fmt(n){return n.toLocaleString()+"₮"}
+
+function card(p,idx){
+let ci=0,si=0;
+const id=`c${idx}`;
+return `<div class="card">
+<div class="img-wrap" id="iw${id}" onmouseenter="startSlide('${id}',${p.imgs.length})" onmouseleave="stopSlide('${id}')">
+  <div class="img-slide" id="sl${id}">
+    ${p.imgs.map((c,i)=>`<div class="img-frame" style="background:${c}"><span style="opacity:.4">${p.name.split(' ')[0]}</span></div>`).join('')}
+  </div>
+  <div class="badge-row">
+    ${p.badge?`<span class="badge ${p.orig?'badge-sale':'badge-new'}">${p.badge}</span>`:''}
+  </div>
+  <div class="wishlist" onclick="event.stopPropagation()">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 13.5S2 9.5 2 5.5A3 3 0 018 3.2 3 3 0 0114 5.5c0 4-6 8-6 8z"/></svg>
+  </div>
+  <div class="img-dots" id="dots${id}">
+    ${p.imgs.map((_,i)=>`<div class="dot ${i===0?'active':''}" onclick="goSlide('${id}',${i},${p.imgs.length});event.stopPropagation()"></div>`).join('')}
+  </div>
+  <div class="quick-add">+ Сагсанд нэмэх</div>
+</div>
+<div class="info">
+  <div class="seller">${p.seller}</div>
+  <div class="name">${p.name}</div>
+  <div class="price-row">
+    <span class="price">${fmt(p.price)}</span>
+    ${p.orig?`<span class="price-orig">${fmt(p.orig)}</span>`:''}
+  </div>
+  <div class="variants">
+    ${p.colors.map((c,i)=>`<div class="v-color ${i===0?'active':''}" style="background:${c}" onclick="selectColor(this)" title="${c}"></div>`).join('')}
+    ${p.sizes?'<div style="width:100%;height:0"></div>'+p.sizes.map((s,i)=>`<div class="v-size ${i===0?'active':''}" onclick="selectSize(this)">${s}</div>`).join(''):''}
+  </div>
+  <div class="stock ${p.stock<=3?'stock-low':''}">
+    ${p.stock<=3?`Үлдсэн: ${p.stock} ширхэг`:`Бэлэн: ${p.stock}+`}
+  </div>
+</div>
+</div>`;
+}
+
+document.getElementById('grid').innerHTML=products.map((p,i)=>card(p,i)).join('');
+
+const timers={};
+function startSlide(id,len){
+if(len<2)return;
+let cur=0;
+timers[id]=setInterval(()=>{cur=(cur+1)%len;goSlide(id,cur,len);},900);
+}
+function stopSlide(id){
+clearInterval(timers[id]);
+goSlide(id,0,99);
+}
+function goSlide(id,idx,len){
+const sl=document.getElementById('sl'+id);
+if(!sl)return;
+sl.style.transform=`translateX(-${idx*100}%)`;
+document.querySelectorAll(`#dots${id} .dot`).forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+function selectColor(el){
+el.closest('.variants').querySelectorAll('.v-color').forEach(e=>e.classList.remove('active'));
+el.classList.add('active');
+}
+function selectSize(el){
+el.closest('.variants').querySelectorAll('.v-size').forEach(e=>e.classList.remove('active'));
+el.classList.add('active');
+}
+</script>

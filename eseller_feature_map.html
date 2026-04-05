@@ -1,0 +1,389 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#E8242C;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+
+/* Feature map */
+.fmap{position:relative;padding:20px 0}
+.center-node{text-align:center;margin:0 auto 24px;max-width:200px}
+.cn-circle{width:80px;height:80px;border-radius:50%;background:#E8242C;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;flex-direction:column;gap:2px}
+.cn-icon{font-size:20px}
+.cn-label{font-size:10px;color:#fff;font-weight:600;letter-spacing:.04em}
+.cn-title{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.cn-sub{font-size:11px;color:var(--color-text-secondary)}
+
+.spoke-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.spoke{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px;position:relative}
+.spoke::before{content:'→';position:absolute;top:50%;right:-14px;transform:translateY(-50%);font-size:12px;color:var(--color-text-tertiary);z-index:1}
+.spoke:nth-child(3n)::before{display:none}
+.sp-icon{font-size:18px;margin-bottom:5px}
+.sp-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.sp-desc{font-size:10px;color:var(--color-text-secondary);line-height:1.5}
+.sp-badge{display:inline-flex;font-size:9px;font-weight:500;padding:1px 6px;border-radius:99px;white-space:nowrap;margin-top:4px}
+.b-loc{background:var(--color-background-success);color:var(--color-text-success)}
+.b-trig{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-rev{background:var(--color-background-info);color:var(--color-text-info)}
+
+/* Flow chain */
+.chain{display:flex;align-items:stretch;gap:0;margin-bottom:14px;overflow-x:auto}
+.chain-node{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;min-width:120px;flex-shrink:0}
+.chain-arrow{display:flex;align-items:center;padding:0 4px;color:var(--color-text-tertiary);font-size:16px;flex-shrink:0}
+.cn-step{font-size:9px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.cn-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.cn-detail{font-size:10px;color:var(--color-text-secondary);line-height:1.4}
+.cn-trigger{font-size:9px;padding:2px 6px;border-radius:99px;background:rgba(232,36,44,0.1);color:#E8242C;margin-top:4px;display:inline-flex}
+
+/* Location UI preview */
+.loc-preview{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px}
+.loc-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.loc-icon{width:36px;height:36px;border-radius:50%;background:#E8242C;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.loc-info{flex:1}
+.loc-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.loc-sub{font-size:11px;color:var(--color-text-secondary)}
+.loc-change{font-size:11px;color:#E8242C;cursor:pointer;text-decoration:underline}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.nearby-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.nearby-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;cursor:pointer}
+.nc-dist{font-size:9px;color:#E8242C;font-weight:600;margin-bottom:3px}
+.nc-name{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.nc-type{font-size:10px;color:var(--color-text-secondary)}
+.nc-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;display:inline-block;margin-right:3px}
+
+/* Priority table */
+.ptable{width:100%;border-collapse:collapse;font-size:12px}
+.ptable th{padding:8px 12px;text-align:left;font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ptable td{padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle}
+.ptable tr:last-child td{border-bottom:none}
+.prio-badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px}
+.p-crit{background:var(--color-background-danger);color:var(--color-text-danger)}
+.p-high{background:var(--color-background-warning);color:var(--color-text-warning)}
+.p-med{background:var(--color-background-info);color:var(--color-text-info)}
+.p-low{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.dep-list{display:flex;gap:4px;flex-wrap:wrap}
+.dep{font-size:10px;padding:1px 7px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary)}
+</style>
+
+<div class="w">
+<div class="tabs">
+  <button class="tab active" onclick="show('center')">Location цөм</button>
+  <button class="tab" onclick="show('chains')">Feature chain-ууд</button>
+  <button class="tab" onclick="show('ui')">UI preview</button>
+  <button class="tab" onclick="show('priority')">Хэрэгжилтийн дараалал</button>
+</div>
+
+<!-- CENTER NODE -->
+<div id="panel-center" class="panel active">
+  <div class="center-node">
+    <div class="cn-circle">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      <span class="cn-label">LOCATION</span>
+    </div>
+    <div class="cn-title">Location — бүгдийн цөм</div>
+    <div class="cn-sub">Хэрэглэгч байршлаа өгмөгц бүх систем идэвхждэг</div>
+  </div>
+
+  <div class="st">Location-оос өдөөгдөх 9 feature</div>
+  <div class="spoke-grid">
+    <div class="spoke">
+      <div class="sp-icon">🛍</div>
+      <div class="sp-title">Store feed эрэмбэлэлт</div>
+      <div class="sp-desc">Ойролцоох дэлгүүр эхэнд гарна. Хурдан хүргэлт badge харагдана.</div>
+      <span class="sp-badge b-loc">Зай-аар эрэмбэ</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">📋</div>
+      <div class="sp-title">Зарын булан шүүлт</div>
+      <div class="sp-desc">Feed дүүрэг-ээр автомат шүүгдэнэ. "Хан-Уул дүүрэг" default болно.</div>
+      <span class="sp-badge b-loc">Дүүрэг автомат</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">🏪</div>
+      <div class="sp-title">Entity discovery</div>
+      <div class="sp-desc">Агент, авто, барилга — бүгд ойролцоохоос гарна. Газрын зураг дээр харуулна.</div>
+      <span class="sp-badge b-loc">Map + зай</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">🚚</div>
+      <div class="sp-title">Хурдан хүргэлт</div>
+      <div class="sp-desc">2-4 цагт хүрэх дэлгүүрүүдийг тусгайлан харуулна. Gold-д эхэнд.</div>
+      <span class="sp-badge b-trig">Gold давуу</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">📢</div>
+      <div class="sp-title">Targeted campaign</div>
+      <div class="sp-desc">SMS/Email-ийг дүүрэг-ээр сегментлэнэ. "Хан-Уул хэрэглэгчид" campaign.</div>
+      <span class="sp-badge b-trig">Сегмент</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">🎯</div>
+      <div class="sp-title">Баннер targeting</div>
+      <div class="sp-desc">Борлуулагч "зөвхөн Хан-Уул, Сүхбаатар" баннер тохируулж болно.</div>
+      <span class="sp-badge b-rev">Орлого</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">📦</div>
+      <div class="sp-title">Хүргэлтийн тариф</div>
+      <div class="sp-desc">Дүүрэг-ийн зайгаар хүргэлтийн үнэ автомат тооцоологдоно.</div>
+      <span class="sp-badge b-rev">Тооцоо</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">💬</div>
+      <div class="sp-title">Affiliate geo-targeting</div>
+      <div class="sp-desc">Борлуулагч тухайн дүүргийн хэрэглэгчдэд онцлон share хийнэ.</div>
+      <span class="sp-badge b-rev">Commission</span>
+    </div>
+    <div class="spoke">
+      <div class="sp-icon">🤖</div>
+      <div class="sp-title">AI дүгнэлт</div>
+      <div class="sp-desc">Claude: "Хан-Уул-д хоолны дэлгүүр дутуу байна, нэмэх хэрэгтэй" гэж санал болгоно.</div>
+      <span class="sp-badge b-trig">AI insight</span>
+    </div>
+  </div>
+</div>
+
+<!-- CHAINS -->
+<div id="panel-chains" class="panel">
+
+  <div class="st">Chain 1 — Хэрэглэгчийн бүрэн замнал</div>
+  <div class="chain">
+    <div class="chain-node"><div class="cn-step">Эхлэл</div><div class="cn-name">Нэвтрэх</div><div class="cn-detail">ДАН / email</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Location</div><div class="cn-name">Байршил</div><div class="cn-detail">GPS эсвэл дүүрэг сонгох</div><div class="cn-trigger">Бүгд идэвхжинэ</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Discovery</div><div class="cn-name">Feed / Store</div><div class="cn-detail">Ойролцоохоор эрэмбэ</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Purchase</div><div class="cn-name">Cart → QPay</div><div class="cn-detail">eБаримт автомат</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Reward</div><div class="cn-name">Loyalty оноо</div><div class="cn-detail">Tier дэвших боломж</div><div class="cn-trigger">Gold урамшуулал</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Retention</div><div class="cn-name">Review → Дахин</div><div class="cn-detail">Campaign trigger</div></div>
+  </div>
+
+  <div class="st">Chain 2 — Борлуулагчийн замнал (Affiliate)</div>
+  <div class="chain">
+    <div class="chain-node"><div class="cn-step">Бүртгэл</div><div class="cn-name">Борлуулагч</div><div class="cn-detail">Username авна</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Сонголт</div><div class="cn-name">Бараа нэмэх</div><div class="cn-detail">Дэлгүүрт хүсэлт</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Зөвшөөрөл</div><div class="cn-name">Дэлгүүр батлана</div><div class="cn-detail">Commission % тохируулна</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Share</div><div class="cn-name">Link / QR</div><div class="cn-detail">Instagram, Facebook</div><div class="cn-trigger">Geo-targeted боломж</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Click</div><div class="cn-name">Хэрэглэгч ирнэ</div><div class="cn-detail">UTM tracking</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Commission</div><div class="cn-name">Захиалга → Мөнгө</div><div class="cn-detail">QPay автомат шилжүүлэг</div></div>
+  </div>
+
+  <div class="st">Chain 3 — Store owner-ийн давтагдах орлого</div>
+  <div class="chain">
+    <div class="chain-node"><div class="cn-step">Дэлгүүр</div><div class="cn-name">Storefront</div><div class="cn-detail">Custom domain</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Баннер</div><div class="cn-name">Paid ads</div><div class="cn-detail">500K–1.5M₮/сар</div><div class="cn-trigger">Орлого 1</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Loyalty</div><div class="cn-name">Gold tier</div><div class="cn-detail">19,900₮/сар</div><div class="cn-trigger">Орлого 2</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Commission</div><div class="cn-name">Affiliate</div><div class="cn-detail">2.5% per sale</div><div class="cn-trigger">Орлого 3</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Campaign</div><div class="cn-name">SMS/Email</div><div class="cn-detail">Давтагдах худалдан авалт</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">AI</div><div class="cn-name">Claude insight</div><div class="cn-detail">Сайжруулалтын санал</div></div>
+  </div>
+
+  <div class="st">Chain 4 — Pre-order batch (Монголын өвөрмөц)</div>
+  <div class="chain">
+    <div class="chain-node"><div class="cn-step">Зар</div><div class="cn-name">Pre-order нээх</div><div class="cn-detail">Min.qty, advance%</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Захиалга</div><div class="cn-name">Хэрэглэгч орно</div><div class="cn-detail">30% урьдчилгаа</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Batch</div><div class="cn-name">Хангалттай болно</div><div class="cn-detail">Progress bar хэрэглэгчид</div><div class="cn-trigger">SMS мэдэгдэл</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Захиалга</div><div class="cn-name">Гадаадад явна</div><div class="cn-detail">Customs tracking</div></div>
+    <div class="chain-arrow">→</div>
+    <div class="chain-node"><div class="cn-step">Хүргэлт</div><div class="cn-name">Ирэхэд мэдэгдэл</div><div class="cn-detail">Loyalty оноо + review</div></div>
+  </div>
+
+</div>
+
+<!-- UI PREVIEW -->
+<div id="panel-ui" class="panel">
+  <div class="st">"Таны ойролцоо" — /store хуудасны Location section</div>
+  <div class="loc-preview">
+    <div class="loc-header">
+      <div class="loc-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      </div>
+      <div class="loc-info">
+        <div class="loc-title">Хан-Уул дүүрэг, 4-р хороо</div>
+        <div class="loc-sub">Таны ойролцоо 28 дэлгүүр, 14 үйлчилгээ байна</div>
+      </div>
+      <span class="loc-change">Өөрчлөх</span>
+    </div>
+
+    <div class="section-label">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#E8242C" stroke-width="1.5" stroke-linecap="round"><path d="M8 1C5.24 1 3 3.24 3 6c0 4 5 9 5 9s5-5 5-9c0-2.76-2.24-5-5-5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+      Ойролцоох дэлгүүрүүд
+    </div>
+    <div class="nearby-grid">
+      <div class="nearby-card">
+        <div class="nc-dist">📍 350м</div>
+        <div class="nc-name">Sarana Fashion</div>
+        <div class="nc-type"><span class="nc-dot"></span>Нээлттэй · Дэлгүүр</div>
+      </div>
+      <div class="nearby-card">
+        <div class="nc-dist">📍 680м</div>
+        <div class="nc-name">TechHub</div>
+        <div class="nc-type"><span class="nc-dot"></span>Нээлттэй · Электроник</div>
+      </div>
+      <div class="nearby-card">
+        <div class="nc-dist">📍 1.2км</div>
+        <div class="nc-name">Зайсан Beauty</div>
+        <div class="nc-type"><span class="nc-dot"></span>Нээлттэй · Салон</div>
+      </div>
+    </div>
+
+    <div class="section-label">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#E8242C" stroke-width="1.5" stroke-linecap="round"><path d="M13 2H3a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1z"/><path d="M5 8h6M5 11h4"/></svg>
+      Ойролцоох зарууд
+    </div>
+    <div class="nearby-grid">
+      <div class="nearby-card">
+        <div class="nc-dist">📍 200м</div>
+        <div class="nc-name">Орон сууц зарна</div>
+        <div class="nc-type">2 өрөө · 85м² · 285M₮</div>
+      </div>
+      <div class="nearby-card">
+        <div class="nc-dist">📍 450м</div>
+        <div class="nc-name">Хуучин машин зарна</div>
+        <div class="nc-type">Toyota Camry 2018 · 32M₮</div>
+      </div>
+      <div class="nearby-card">
+        <div class="nc-dist">📍 900м</div>
+        <div class="nc-name">Цагийн захиалга</div>
+        <div class="nc-type">Үсчин · Чөлөөт цаг байна</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div style="flex:1;min-width:140px;background:rgba(232,36,44,0.08);border:0.5px solid rgba(232,36,44,0.2);border-radius:var(--border-radius-md);padding:10px 12px">
+        <div style="font-size:11px;font-weight:500;color:#E8242C;margin-bottom:3px">🚀 2-4 цагт хүргэлт</div>
+        <div style="font-size:10px;color:var(--color-text-secondary)">Таны дүүрэгт 8 дэлгүүр хурдан хүргэнэ</div>
+      </div>
+      <div style="flex:1;min-width:140px;background:rgba(37,99,235,0.06);border:0.5px solid rgba(37,99,235,0.2);border-radius:var(--border-radius-md);padding:10px 12px">
+        <div style="font-size:11px;font-weight:500;color:#2563EB;margin-bottom:3px">⭐ Gold давуу эрх</div>
+        <div style="font-size:10px;color:var(--color-text-secondary)">Gold гишүүн бол хурдан хүргэлт үнэгүй</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIORITY -->
+<div id="panel-priority" class="panel">
+  <div class="st">Хэрэгжилтийн дараалал — feature бүрийн хамаарал</div>
+  <table class="ptable">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Дараалал</th>
+        <th>Хамаарах feature-үүд</th>
+        <th>Шалтгаан</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">Location service</td>
+        <td><span class="prio-badge p-crit">1-р</span></td>
+        <td><div class="dep-list"><span class="dep">Feed</span><span class="dep">Store</span><span class="dep">Entity</span><span class="dep">Campaign</span><span class="dep">Banner</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Бүгдийн гол цөм. Энэ байхгүй бол бусад "smart" биш</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">Storefront /[slug]</td>
+        <td><span class="prio-badge p-crit">1-р</span></td>
+        <td><div class="dep-list"><span class="dep">Affiliate</span><span class="dep">Share</span><span class="dep">QR</span><span class="dep">Domain</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Дэлгүүр эзэнд "вэб сайт" өгөх. Өрсөлдөгчдөөс ялгарах</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">/seller/[username]</td>
+        <td><span class="prio-badge p-crit">1-р</span></td>
+        <td><div class="dep-list"><span class="dep">Commission</span><span class="dep">QR</span><span class="dep">Tracking</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Affiliate систем — вирусын өсөлтийн хэрэгсэл</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">QPay checkout</td>
+        <td><span class="prio-badge p-high">2-р</span></td>
+        <td><div class="dep-list"><span class="dep">Order</span><span class="dep">eБаримт</span><span class="dep">Loyalty</span><span class="dep">Commission</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Мөнгө орохгүй бол бусад бүгд утгагүй</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">Loyalty + Gold</td>
+        <td><span class="prio-badge p-high">2-р</span></td>
+        <td><div class="dep-list"><span class="dep">Order</span><span class="dep">Location</span><span class="dep">Campaign</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Хэрэглэгч буцаж ирдэг болгоно — LTV нэмэгдэнэ</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">Banner CRUD</td>
+        <td><span class="prio-badge p-high">2-р</span></td>
+        <td><div class="dep-list"><span class="dep">Location</span><span class="dep">Analytics</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Шууд орлого. Location targeting-тэй бол 2x үнэ авч болно</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">SMS/Email Campaign</td>
+        <td><span class="prio-badge p-med">3-р</span></td>
+        <td><div class="dep-list"><span class="dep">Location</span><span class="dep">Order</span><span class="dep">Loyalty</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Дүүрэгт зориулсан offer — CTR 3x өснө</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">Claude AI scanner</td>
+        <td><span class="prio-badge p-med">3-р</span></td>
+        <td><div class="dep-list"><span class="dep">Бүх систем</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Систем хэрэглэгдэж байгаа үед л учиртай болно</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">Custom domain</td>
+        <td><span class="prio-badge p-med">3-р</span></td>
+        <td><div class="dep-list"><span class="dep">Storefront</span><span class="dep">SEO</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Pro subscription-ийг upgrade хийдэг гол шалтгаан</td>
+      </tr>
+      <tr>
+        <td style="font-weight:500;color:var(--color-text-primary)">ДАН OAuth</td>
+        <td><span class="prio-badge p-low">4-р</span></td>
+        <td><div class="dep-list"><span class="dep">KYC</span><span class="dep">Seller verify</span></div></td>
+        <td style="font-size:11px;color:var(--color-text-secondary)">Итгэлцэл нэмэгдэнэ. Seller fraud бууруулна</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:14px;background:rgba(232,36,44,0.05);border:0.5px solid rgba(232,36,44,0.2);border-radius:var(--border-radius-lg);padding:14px">
+    <div style="font-size:13px;font-weight:500;color:#E8242C;margin-bottom:8px">Энэ долоо хоногийн 3 ажил</div>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--color-text-secondary)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--color-background-danger);color:var(--color-text-danger);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0">1</div>
+        <span>Location service: GPS → дүүрэг тодорхойлох → /store feed эрэмбэлэлт</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--color-background-danger);color:var(--color-text-danger);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0">2</div>
+        <span>/[slug] storefront + /seller/[username] — хоёуланг нэгэн зэрэг (schema хуваалцдаг)</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:20px;height:20px;border-radius:50%;background:var(--color-background-danger);color:var(--color-text-danger);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0">3</div>
+        <span>CSS var засвар — дараашийн бүх UI ажиллах суурь</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.getElementById('panel-'+id).classList.add('active')
+  event.target.classList.add('active')
+}
+</script>
