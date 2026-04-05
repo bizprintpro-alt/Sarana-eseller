@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import {
-  Camera, X, Crown, Info, ArrowLeft, Send,
+  Camera, X, Crown, Info, ArrowLeft, Send, Play, Video,
   Home, Car, Smartphone, ShoppingBag, Wrench, Sofa, Baby,
-  Dumbbell, Sparkles, Package, MapPin, Phone,
+  Dumbbell, Sparkles, Package, MapPin, Phone, Eye, Clock,
+  ImageIcon, ChevronLeft, ChevronRight, BadgeCheck,
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -31,8 +32,23 @@ const CONDITIONS = [
   { key: 'broken', label: 'Эвдэрсэн' },
 ];
 
+type MediaFile = {
+  id: string;
+  type: 'image' | 'video';
+  file: File;
+  preview: string;
+};
+
+function formatPrice(n: number) {
+  if (n >= 1000000000) return (n / 1000000000).toFixed(1) + ' тэрбум₮';
+  if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + ' сая₮';
+  if (n > 0) return n.toLocaleString() + '₮';
+  return '0₮';
+}
+
 export default function PostAdPage() {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -40,15 +56,70 @@ export default function PostAdPage() {
   const [district, setDistrict] = useState('');
   const [condition, setCondition] = useState('');
   const [phone, setPhone] = useState('');
-  const [images, setImages] = useState<string[]>([]);
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [isVip, setIsVip] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewMediaIdx, setPreviewMediaIdx] = useState(0);
+  const [dragOver, setDragOver] = useState(false);
 
+  const imageCount = mediaFiles.filter(m => m.type === 'image').length;
+  const videoCount = mediaFiles.filter(m => m.type === 'video').length;
   const canSubmit = title.trim() && price.trim() && category && district;
 
-  const addImage = () => {
-    if (images.length >= 10) return;
-    const placeholders = ['📸', '🖼️', '🏞️', '📷', '🎞️'];
-    setImages([...images, placeholders[images.length % placeholders.length]]);
+  const addFiles = (files: FileList | null) => {
+    if (!files) return;
+    const remaining = 10 - mediaFiles.length;
+    if (remaining <= 0) return;
+
+    const newMedia: MediaFile[] = [];
+    const allowedImages = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const allowedVideos = ['video/mp4', 'video/webm', 'video/quicktime'];
+    const maxImageSize = 10 * 1024 * 1024; // 10MB
+    const maxVideoSize = 50 * 1024 * 1024; // 50MB
+
+    for (let i = 0; i < Math.min(files.length, remaining); i++) {
+      const file = files[i];
+      const isImage = allowedImages.includes(file.type);
+      const isVideo = allowedVideos.includes(file.type);
+
+      if (!isImage && !isVideo) continue;
+      if (isImage && file.size > maxImageSize) continue;
+      if (isVideo && file.size > maxVideoSize) continue;
+      if (isVideo && videoCount + newMedia.filter(m => m.type === 'video').length >= 3) continue;
+
+      newMedia.push({
+        id: crypto.randomUUID(),
+        type: isVideo ? 'video' : 'image',
+        file,
+        preview: URL.createObjectURL(file),
+      });
+    }
+
+    setMediaFiles(prev => [...prev, ...newMedia]);
+  };
+
+  const removeMedia = (id: string) => {
+    setMediaFiles(prev => {
+      const item = prev.find(m => m.id === id);
+      if (item) URL.revokeObjectURL(item.preview);
+      return prev.filter(m => m.id !== id);
+    });
+  };
+
+  const setCover = (id: string) => {
+    setMediaFiles(prev => {
+      const idx = prev.findIndex(m => m.id === id);
+      if (idx <= 0) return prev;
+      const item = prev[idx];
+      return [item, ...prev.filter(m => m.id !== id)];
+    });
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    addFiles(e.dataTransfer.files);
   };
 
   const handleSubmit = () => {
@@ -56,13 +127,206 @@ export default function PostAdPage() {
     setSubmitting(true);
     setTimeout(() => {
       setSubmitting(false);
-      alert('Зар амжилттай илгээгдлээ! Админ шалгасны дараа нийтлэгдэнэ.');
-      router.push('/feed');
+      setShowPreview(true);
     }, 1500);
   };
 
+  const catInfo = CATEGORIES.find(c => c.key === category);
+
+  /* ═══ Preview Modal ═══ */
+  if (showPreview) {
+    return (
+      <div className="min-h-screen bg-[var(--esl-bg-page)]">
+        <header className="sticky top-0 z-50 bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]">
+          <div className="max-w-3xl mx-auto px-4 h-16 flex items-center gap-4">
+            <button onClick={() => setShowPreview(false)} className="w-10 h-10 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] flex items-center justify-center text-white cursor-pointer hover:bg-[var(--esl-bg-elevated)] transition">
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <div className="flex-1">
+              <h1 className="text-lg font-black text-white">Зарын урьдчилсан харагдац</h1>
+              <p className="text-xs text-green-400">Зар амжилттай илгээгдлээ! Админ шалгасны дараа нийтлэгдэнэ.</p>
+            </div>
+          </div>
+        </header>
+
+        <div className="max-w-3xl mx-auto px-4 py-8">
+          {/* Preview card — how it looks in the feed */}
+          <p className="text-xs font-bold text-[var(--esl-text-muted)] mb-3 uppercase tracking-wider">Жагсаалтад ийм харагдана</p>
+          <div className={`rounded-2xl border overflow-hidden mb-8 ${isVip ? 'border-amber-500/30 bg-amber-500/5' : 'border-[var(--esl-border)] bg-[var(--esl-bg-card)]'}`}>
+            <div className="flex flex-col sm:flex-row">
+              <div className={`relative h-48 sm:h-auto sm:w-56 shrink-0 overflow-hidden ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
+                {mediaFiles.length > 0 ? (
+                  mediaFiles[0].type === 'video' ? (
+                    <video src={mediaFiles[0].preview} className="w-full h-full object-cover" />
+                  ) : (
+                    <img src={mediaFiles[0].preview} alt={title} className="w-full h-full object-cover" />
+                  )
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-6xl">{catInfo?.emoji || '📦'}</span>
+                  </div>
+                )}
+                {isVip && (
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-[rgba(212,175,55,0.2)] text-[#D4AF37]">
+                    👑 ВИП
+                  </div>
+                )}
+                {mediaFiles.length > 1 && (
+                  <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold bg-black/60 text-white">
+                    <ImageIcon className="w-3 h-3" /> {imageCount}
+                    {videoCount > 0 && <><span className="mx-0.5">·</span><Play className="w-3 h-3" /> {videoCount}</>}
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 p-4 sm:p-5">
+                <div className="flex items-center gap-2 text-xs text-[var(--esl-text-muted)] mb-2">
+                  <span>👤 Та</span>
+                  {district && <><span className="text-[#3D3D3D]">·</span><span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{district}</span></>}
+                </div>
+                <h3 className={`text-base font-extrabold mb-1.5 leading-snug ${isVip ? 'text-[#FFD700]' : 'text-white'}`}>{title || 'Гарчиг...'}</h3>
+                <p className="text-sm text-[#888] line-clamp-2 mb-3">{description || 'Тайлбар...'}</p>
+                {condition && (
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{CONDITIONS.find(c => c.key === condition)?.label}</span>
+                  </div>
+                )}
+                <div className="flex items-end justify-between">
+                  <span className={`text-xl font-black ${isVip ? 'text-[#FFD700]' : 'text-[#E8242C]'}`}>{formatPrice(Number(price) || 0)}</span>
+                  <div className="flex items-center gap-3 text-[11px] text-[#555]">
+                    <span className="flex items-center gap-1"><Eye className="w-3 h-3" />0</span>
+                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" />Өнөөдөр</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Preview detail — what users see when they click */}
+          <p className="text-xs font-bold text-[var(--esl-text-muted)] mb-3 uppercase tracking-wider">Дарахад ийм харагдана</p>
+          <div className="rounded-2xl border border-[var(--esl-border)] bg-[var(--esl-bg-section)] overflow-hidden mb-8">
+            {/* Media carousel */}
+            <div className={`relative h-64 sm:h-80 ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
+              {mediaFiles.length > 0 ? (
+                mediaFiles[previewMediaIdx]?.type === 'video' ? (
+                  <video src={mediaFiles[previewMediaIdx].preview} controls className="w-full h-full object-contain bg-black" />
+                ) : (
+                  <img src={mediaFiles[previewMediaIdx]?.preview} alt={title} className="w-full h-full object-cover" />
+                )
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-8xl">{catInfo?.emoji || '📦'}</span>
+                </div>
+              )}
+              {mediaFiles.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setPreviewMediaIdx(i => i > 0 ? i - 1 : mediaFiles.length - 1)}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition cursor-pointer border-none"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setPreviewMediaIdx(i => i < mediaFiles.length - 1 ? i + 1 : 0)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition cursor-pointer border-none"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg text-xs font-bold bg-black/60 text-white">
+                    {previewMediaIdx + 1} / {mediaFiles.length}
+                  </div>
+                  <div className="absolute bottom-3 left-3 flex gap-1.5">
+                    {mediaFiles.map((m, i) => (
+                      <button
+                        key={m.id}
+                        onClick={() => setPreviewMediaIdx(i)}
+                        className={`w-10 h-10 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${i === previewMediaIdx ? 'border-white scale-110' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                      >
+                        {m.type === 'video' ? (
+                          <div className="w-full h-full bg-black/80 flex items-center justify-center relative">
+                            <video src={m.preview} className="w-full h-full object-cover absolute inset-0" />
+                            <Play className="w-3 h-3 text-white relative z-10" fill="white" />
+                          </div>
+                        ) : (
+                          <img src={m.preview} alt="" className="w-full h-full object-cover" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+              {isVip && (
+                <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold bg-[rgba(212,175,55,0.25)] text-[#D4AF37]" style={{ backdropFilter: 'blur(8px)' }}>
+                  👑 ВИП
+                </div>
+              )}
+            </div>
+
+            {/* Detail content */}
+            <div className="p-6">
+              <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)] mb-3">
+                <span>👤</span>
+                <span className="font-semibold text-[var(--esl-text-secondary)]">Та</span>
+                <span className="text-[#3D3D3D]">·</span>
+                <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{district || '—'}</span>
+              </div>
+              <h2 className={`text-2xl font-black mb-2 ${isVip ? 'text-[#FFD700]' : 'text-white'}`}>{title || 'Гарчиг...'}</h2>
+              <div className="flex items-center gap-3 mb-4">
+                <span className={`text-3xl font-black ${isVip ? 'text-[#FFD700]' : 'text-[#E8242C]'}`}>{formatPrice(Number(price) || 0)}</span>
+              </div>
+              {condition && (
+                <div className="flex flex-wrap gap-2 mb-5">
+                  <span className="text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                    {CONDITIONS.find(c => c.key === condition)?.label}
+                  </span>
+                </div>
+              )}
+              <div className="mb-6">
+                <h3 className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2">Тайлбар</h3>
+                <p className="text-sm text-[#999] leading-relaxed whitespace-pre-wrap">{description || 'Тайлбар оруулаагүй'}</p>
+              </div>
+              {phone && (
+                <div className="flex items-center gap-2 text-sm text-[#999] mb-6 pb-6 border-b border-[var(--esl-border)]">
+                  <Phone className="w-3.5 h-3.5" /> +976 {phone}
+                </div>
+              )}
+              <div className="flex gap-3">
+                <div className="flex-1 flex items-center justify-center gap-2 h-12 bg-[#E8242C] text-white font-bold rounded-xl text-sm">
+                  <Phone className="w-4 h-4" /> Залгах
+                </div>
+                <div className="flex-1 flex items-center justify-center gap-2 h-12 bg-[var(--esl-bg-elevated)] text-white font-bold rounded-xl border border-[var(--esl-border)] text-sm">
+                  💬 Мессеж
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            <button onClick={() => { setShowPreview(false); }} className="flex-1 h-12 rounded-xl bg-[var(--esl-bg-elevated)] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#3D3D3D] transition flex items-center justify-center gap-2">
+              <ArrowLeft className="w-4 h-4" /> Засах
+            </button>
+            <button onClick={() => router.push('/feed')} className="flex-1 h-12 rounded-xl bg-[#E8242C] text-white text-sm font-bold border-none cursor-pointer hover:bg-[#CC0000] transition flex items-center justify-center gap-2">
+              Зарын булан руу буцах
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ═══ Form ═══ */
   return (
     <div className="min-h-screen bg-[var(--esl-bg-page)]">
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
+        className="hidden"
+        onChange={(e) => { addFiles(e.target.files); e.target.value = ''; }}
+      />
+
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]">
         <div className="max-w-3xl mx-auto px-4 h-16 flex items-center gap-4">
@@ -71,7 +335,7 @@ export default function PostAdPage() {
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-black text-white">Зар оруулах</h1>
-            <p className="text-xs text-[var(--esl-text-muted)]">Зурагтай зар илүү олон хүнд хүрнэ</p>
+            <p className="text-xs text-[var(--esl-text-muted)]">Зурагтай зар 5x илүү олон хүнд хүрнэ</p>
           </div>
           <Link href="/" className="flex items-center gap-2 no-underline">
             <EsellerLogo size={24} />
@@ -80,28 +344,88 @@ export default function PostAdPage() {
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
-        {/* Images */}
+        {/* Media Upload */}
         <div className="mb-8">
-          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Зураг (10 хүртэл)</label>
-          <div className="flex gap-3 flex-wrap">
-            <button
-              onClick={addImage}
-              className="w-28 h-28 rounded-xl border-2 border-dashed border-[var(--esl-border)] bg-[var(--esl-bg-card)] flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-[#E8242C] hover:bg-[var(--esl-bg-card)] transition-colors text-[var(--esl-text-muted)]"
-            >
-              <Camera className="w-6 h-6" />
-              <span className="text-xs font-semibold">Нэмэх</span>
-              <span className="text-[10px] text-[#555]">{images.length}/10</span>
-            </button>
-            {images.map((img, i) => (
-              <div key={i} className="relative w-28 h-28 rounded-xl bg-[var(--esl-bg-elevated)] flex items-center justify-center">
-                <span className="text-4xl">{img}</span>
-                <button onClick={() => setImages(images.filter((_, idx) => idx !== i))} className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#E8242C] text-white flex items-center justify-center border-none cursor-pointer">
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-1 block">
+            Зураг & Видео <span className="text-[#888] font-normal">({mediaFiles.length}/10)</span>
+          </label>
+          <p className="text-xs text-[#555] mb-3">Зураг: JPG, PNG, WebP (10MB хүртэл) · Видео: MP4, WebM (50MB хүртэл, 3 хүртэл)</p>
+
+          <div
+            className={`flex gap-3 flex-wrap p-4 rounded-2xl border-2 border-dashed transition-colors ${
+              dragOver ? 'border-[#E8242C] bg-[rgba(232,36,44,0.05)]' : 'border-[var(--esl-border)] bg-transparent'
+            }`}
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+          >
+            {/* Add button */}
+            {mediaFiles.length < 10 && (
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-28 h-28 rounded-xl border-2 border-dashed border-[var(--esl-border)] bg-[var(--esl-bg-card)] flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:border-[#E8242C] transition-colors text-[var(--esl-text-muted)]"
+              >
+                <Camera className="w-6 h-6" />
+                <span className="text-xs font-semibold">Нэмэх</span>
+                <span className="text-[10px] text-[#555]">{mediaFiles.length}/10</span>
+              </button>
+            )}
+
+            {/* Thumbnails */}
+            {mediaFiles.map((m, i) => (
+              <div key={m.id} className="relative w-28 h-28 rounded-xl overflow-hidden group">
+                {m.type === 'video' ? (
+                  <div className="w-full h-full bg-black relative">
+                    <video src={m.preview} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Play className="w-6 h-6 text-white" fill="white" />
+                    </div>
+                  </div>
+                ) : (
+                  <img src={m.preview} alt="" className="w-full h-full object-cover" />
+                )}
+
+                {/* Remove */}
+                <button
+                  onClick={() => removeMedia(m.id)}
+                  className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#E8242C] text-white flex items-center justify-center border-2 border-[var(--esl-bg-page)] cursor-pointer z-10"
+                >
                   <X className="w-3 h-3" />
                 </button>
-                {i === 0 && <span className="absolute bottom-1.5 left-1.5 text-[9px] font-bold bg-[#E8242C] text-white px-1.5 py-0.5 rounded">Нүүр</span>}
+
+                {/* Cover badge */}
+                {i === 0 && (
+                  <span className="absolute bottom-1.5 left-1.5 text-[9px] font-bold bg-[#E8242C] text-white px-1.5 py-0.5 rounded">Нүүр</span>
+                )}
+
+                {/* Set as cover */}
+                {i > 0 && m.type === 'image' && (
+                  <button
+                    onClick={() => setCover(m.id)}
+                    className="absolute bottom-1.5 left-1.5 text-[9px] font-bold bg-black/70 text-white px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border-none"
+                  >
+                    Нүүр болгох
+                  </button>
+                )}
+
+                {/* Type badge */}
+                {m.type === 'video' && (
+                  <span className="absolute top-1.5 left-1.5 text-[9px] font-bold bg-blue-500 text-white px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                    <Video className="w-2.5 h-2.5" /> Видео
+                  </span>
+                )}
+
+                {/* File size */}
+                <span className="absolute top-1.5 right-1.5 text-[9px] font-bold bg-black/60 text-white px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                  {(m.file.size / (1024 * 1024)).toFixed(1)}MB
+                </span>
               </div>
             ))}
           </div>
+
+          {dragOver && (
+            <p className="text-xs text-[#E8242C] mt-2 font-semibold">Файлуудаа энд тавина уу...</p>
+          )}
         </div>
 
         {/* Title */}
@@ -131,7 +455,7 @@ export default function PostAdPage() {
                   className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border cursor-pointer transition-all ${
                     isActive
                       ? 'bg-[rgba(232,36,44,0.15)] border-[#E8242C] text-white'
-                      : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[var(--esl-border)]'
+                      : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
                   }`}
                 >
                   <span className="text-xl">{c.emoji}</span>
@@ -148,7 +472,7 @@ export default function PostAdPage() {
           <div className="flex">
             <input
               type="text"
-              value={price}
+              value={price ? Number(price).toLocaleString() : ''}
               onChange={(e) => setPrice(e.target.value.replace(/[^0-9]/g, ''))}
               placeholder="0"
               className="flex-1 h-12 px-4 rounded-l-xl bg-[var(--esl-bg-card)] border border-r-0 border-[var(--esl-border)] text-white text-lg font-bold outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
@@ -157,6 +481,9 @@ export default function PostAdPage() {
               <span className="text-lg font-black text-white">₮</span>
             </div>
           </div>
+          {price && Number(price) >= 1000000 && (
+            <p className="text-xs text-[#888] mt-1">{formatPrice(Number(price))}</p>
+          )}
         </div>
 
         {/* Condition */}
@@ -218,7 +545,7 @@ export default function PostAdPage() {
           <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2 block">Холбоо барих утас</label>
           <div className="flex">
             <div className="h-12 px-4 bg-[var(--esl-bg-elevated)] border border-r-0 border-[var(--esl-border)] rounded-l-xl flex items-center">
-              <span className="text-sm text-[var(--esl-text-muted)]">🇲🇳 +976</span>
+              <span className="text-sm text-[var(--esl-text-muted)]">+976</span>
             </div>
             <input
               type="tel"
@@ -231,15 +558,27 @@ export default function PostAdPage() {
         </div>
 
         {/* VIP Upgrade */}
-        <div className="p-5 rounded-2xl bg-[var(--esl-bg-card)] border border-[rgba(212,175,55,0.25)] flex items-center gap-4 mb-6 cursor-pointer hover:border-[rgba(212,175,55,0.5)] transition-colors">
+        <div
+          onClick={() => setIsVip(!isVip)}
+          className={`p-5 rounded-2xl border flex items-center gap-4 mb-6 cursor-pointer transition-colors ${
+            isVip
+              ? 'bg-[rgba(212,175,55,0.08)] border-[rgba(212,175,55,0.5)]'
+              : 'bg-[var(--esl-bg-card)] border-[rgba(212,175,55,0.25)] hover:border-[rgba(212,175,55,0.5)]'
+          }`}
+        >
           <span className="text-3xl">👑</span>
           <div className="flex-1">
             <p className="text-sm font-extrabold text-[#FFD700]">ВИП зар болгох</p>
             <p className="text-xs text-[#999] mt-1">Зарыг дээд талд байрлуулж, илүү олон хүнд харуулна</p>
           </div>
-          <div className="text-right">
-            <p className="text-lg font-black text-[#FFD700]">5,000₮</p>
-            <p className="text-[10px] text-[#999]">7 хоног</p>
+          <div className="text-right flex items-center gap-3">
+            <div>
+              <p className="text-lg font-black text-[#FFD700]">5,000₮</p>
+              <p className="text-[10px] text-[#999]">7 хоног</p>
+            </div>
+            <div className={`w-12 h-7 rounded-full transition-colors flex items-center px-1 ${isVip ? 'bg-[#D4AF37]' : 'bg-[#3D3D3D]'}`}>
+              <div className={`w-5 h-5 rounded-full bg-white transition-transform ${isVip ? 'translate-x-5' : 'translate-x-0'}`} />
+            </div>
           </div>
         </div>
 
@@ -248,7 +587,12 @@ export default function PostAdPage() {
           <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-bold text-blue-400 mb-1">Зар оруулах дүрэм</p>
-            <p className="text-xs text-[#888] leading-relaxed">• Хуурамч зар оруулахыг хориглоно<br />• Зураг бодит байх шаардлагатай<br />• Админ шалгасны дараа нийтлэгдэнэ</p>
+            <p className="text-xs text-[#888] leading-relaxed">
+              • Хуурамч зар оруулахыг хориглоно<br />
+              • Зураг бодит байх шаардлагатай<br />
+              • Видео: MP4, WebM (50MB хүртэл, 3 хүртэл)<br />
+              • Админ шалгасны дараа нийтлэгдэнэ
+            </p>
           </div>
         </div>
 
