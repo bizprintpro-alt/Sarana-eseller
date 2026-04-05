@@ -147,28 +147,28 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
       {hasPrev && onPrev && (
         <button
           onClick={onPrev}
-          className="fixed left-2 md:left-4 top-1/2 -translate-y-1/2 z-[1000] w-11 h-11 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-xl"
+          className="fixed left-2 md:left-4 top-1/2 -translate-y-1/2 z-[1000] w-11 h-11 rounded-full bg-[var(--esl-bg-card)]/90 border-none cursor-pointer flex items-center justify-center hover:bg-[var(--esl-bg-card)] transition shadow-xl"
         >
-          <ChevronLeft className="w-5 h-5 text-gray-700" />
+          <ChevronLeft className="w-5 h-5 text-[var(--esl-text-primary)]" />
         </button>
       )}
       {hasNext && onNext && (
         <button
           onClick={onNext}
-          className="fixed right-2 md:right-4 top-1/2 -translate-y-1/2 z-[1000] w-11 h-11 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-xl"
+          className="fixed right-2 md:right-4 top-1/2 -translate-y-1/2 z-[1000] w-11 h-11 rounded-full bg-[var(--esl-bg-card)]/90 border-none cursor-pointer flex items-center justify-center hover:bg-[var(--esl-bg-card)] transition shadow-xl"
         >
-          <ChevronRight className="w-5 h-5 text-gray-700" />
+          <ChevronRight className="w-5 h-5 text-[var(--esl-text-primary)]" />
         </button>
       )}
 
       {/* Modal */}
       <motion.div
-        className="fixed inset-2 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-5xl bg-white rounded-2xl z-[999] overflow-hidden flex flex-col md:flex-row max-h-[94vh] shadow-2xl"
+        className="fixed inset-2 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-5xl bg-[var(--esl-bg-card)] rounded-2xl z-[999] overflow-hidden flex flex-col md:flex-row max-h-[94vh] shadow-2xl"
         initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }} transition={{ type: 'spring', damping: 30, stiffness: 350 }}>
 
         {/* ═══ LEFT: Image Gallery ═══ */}
-        <div className="md:w-[55%] bg-gradient-to-b from-[#F8FAFC] to-[#F1F5F9] relative shrink-0 flex flex-col">
+        <div className="md:w-[55%] bg-[var(--esl-bg-section)] relative shrink-0 flex flex-col">
           {/* Main image/video */}
           <div className="relative flex-1 min-h-[280px] md:min-h-[400px] flex items-center justify-center overflow-hidden">
             {media.length > 0 ? (
@@ -194,12 +194,12 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
             {media.length > 1 && (
               <>
                 <button onClick={() => setActiveImg(prev => (prev - 1 + media.length) % media.length)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
-                  <ChevronLeft className="w-4 h-4 text-gray-600" />
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[var(--esl-bg-card)]/90 border-none cursor-pointer flex items-center justify-center hover:bg-[var(--esl-bg-card)] transition shadow-lg">
+                  <ChevronLeft className="w-4 h-4 text-[var(--esl-text-secondary)]" />
                 </button>
                 <button onClick={() => setActiveImg(prev => (prev + 1) % media.length)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
-                  <ChevronRight className="w-4 h-4 text-gray-600" />
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[var(--esl-bg-card)]/90 border-none cursor-pointer flex items-center justify-center hover:bg-[var(--esl-bg-card)] transition shadow-lg">
+                  <ChevronRight className="w-4 h-4 text-[var(--esl-text-secondary)]" />
                 </button>
               </>
             )}
@@ -221,13 +221,13 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
             {/* Actions */}
             <div className="absolute top-4 right-4 flex flex-col gap-2">
               <button onClick={() => setIsWished(!isWished)}
-                className="w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
+                className="w-10 h-10 rounded-full bg-[var(--esl-bg-card)]/90 border-none cursor-pointer flex items-center justify-center hover:bg-[var(--esl-bg-card)] transition shadow-lg">
                 <Heart className="w-4 h-4" fill={isWished ? '#E24B4A' : 'none'} color={isWished ? '#E24B4A' : '#666'} />
               </button>
               {media.length > 0 && media[activeImg]?.type === 'image' && (
                 <button onClick={() => setZoomedImg(media[activeImg].url)}
-                  className="w-10 h-10 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center hover:bg-white transition shadow-lg">
-                  <ZoomIn className="w-4 h-4 text-gray-600" />
+                  className="w-10 h-10 rounded-full bg-[var(--esl-bg-card)]/90 border-none cursor-pointer flex items-center justify-center hover:bg-[var(--esl-bg-card)] transition shadow-lg">
+                  <ZoomIn className="w-4 h-4 text-[var(--esl-text-secondary)]" />
                 </button>
               )}
             </div>
@@ -242,11 +242,11 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
 
           {/* Thumbnail strip */}
           {media.length > 1 && (
-            <div className="flex gap-2 p-3 bg-white/80 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+            <div className="flex gap-2 p-3 bg-[var(--esl-bg-card)]/80 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
               {media.map((m, i) => (
                 <button key={i} onClick={() => setActiveImg(i)}
                   className={cn('w-16 h-16 rounded-lg overflow-hidden border-2 cursor-pointer transition-all shrink-0 relative',
-                    i === activeImg ? 'border-[#E24B4A] shadow-md scale-105' : 'border-gray-200 opacity-60 hover:opacity-100')}>
+                    i === activeImg ? 'border-[#E24B4A] shadow-md scale-105' : 'border-[var(--esl-border)] opacity-60 hover:opacity-100')}>
                   {m.type === 'video' ? (
                     <div className="w-full h-full bg-gray-900 flex items-center justify-center">
                       <Play className="w-5 h-5 text-white" fill="white" />
@@ -264,29 +264,29 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
         <div className="md:w-[45%] flex flex-col">
           {/* Close */}
           <button onClick={onClose}
-            className="absolute top-3 right-3 md:relative md:top-0 md:right-0 md:self-end md:m-3 w-8 h-8 rounded-full bg-gray-100 border-none cursor-pointer flex items-center justify-center hover:bg-gray-200 transition z-10">
-            <X className="w-4 h-4 text-gray-500" />
+            className="absolute top-3 right-3 md:relative md:top-0 md:right-0 md:self-end md:m-3 w-8 h-8 rounded-full bg-[var(--esl-bg-section)] border-none cursor-pointer flex items-center justify-center hover:bg-[var(--esl-bg-card-hover)] transition z-10">
+            <X className="w-4 h-4 text-[var(--esl-text-secondary)]" />
           </button>
 
           {/* Scrollable content */}
           <div className="flex-1 overflow-y-auto px-6 pb-4">
             {/* Store */}
             {product.store?.name && (
-              <div className="text-xs text-gray-400 font-medium mb-1">{product.store.name}</div>
+              <div className="text-xs text-[var(--esl-text-muted)] font-medium mb-1">{product.store.name}</div>
             )}
 
             {/* Title */}
-            <h2 className="text-xl font-bold text-gray-900 mb-2 leading-tight">{product.name}</h2>
+            <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2 leading-tight">{product.name}</h2>
 
             {/* Rating */}
             {product.rating != null && (
               <div className="flex items-center gap-2 mb-3">
                 <div className="flex gap-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className={cn('w-4 h-4', i < Math.round(product.rating!) ? 'text-amber-400 fill-amber-400' : 'text-gray-200')} />
+                    <Star key={i} className={cn('w-4 h-4', i < Math.round(product.rating!) ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />
                   ))}
                 </div>
-                <span className="text-xs text-gray-400">{product.rating} ({product.reviewCount || 0} үнэлгээ)</span>
+                <span className="text-xs text-[var(--esl-text-muted)]">{product.rating} ({product.reviewCount || 0} үнэлгээ)</span>
                 <span className="text-xs text-blue-500 font-medium cursor-pointer" onClick={() => setActiveTab('reviews')}>Үнэлгээ харах</span>
               </div>
             )}
@@ -296,14 +296,14 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
               <span className="text-2xl font-black text-[#E24B4A]">{formatPrice(px)}</span>
               {disc > 0 && (
                 <>
-                  <span className="text-sm text-gray-400 line-through">{formatPrice(product.price)}</span>
+                  <span className="text-sm text-[var(--esl-text-muted)] line-through">{formatPrice(product.price)}</span>
                   <span className="text-xs font-bold text-[#E24B4A] bg-red-50 px-2 py-0.5 rounded">-{disc}%</span>
                 </>
               )}
             </div>
 
             {/* Tabs */}
-            <div className="flex gap-1 bg-gray-100 rounded-xl p-1 mb-4">
+            <div className="flex gap-1 bg-[var(--esl-bg-section)] rounded-xl p-1 mb-4">
               {[
                 { key: 'info' as const, label: 'Мэдээлэл' },
                 { key: 'specs' as const, label: 'Үзүүлэлт' },
@@ -313,7 +313,7 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
                   className={cn('flex-1 py-2 rounded-lg text-xs font-semibold border-none cursor-pointer transition-all',
-                    activeTab === tab.key ? 'bg-white text-gray-900 shadow-sm' : 'bg-transparent text-gray-500 hover:text-gray-700')}
+                    activeTab === tab.key ? 'bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] shadow-sm' : 'bg-transparent text-[var(--esl-text-secondary)] hover:text-[var(--esl-text-primary)]')}
                 >
                   {tab.label}
                 </button>
@@ -325,15 +325,15 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
               <>
                 {product.description && (
                   <div className="mb-4">
-                    <p className="text-sm text-gray-600 leading-relaxed">{product.description}</p>
+                    <p className="text-sm text-[var(--esl-text-secondary)] leading-relaxed">{product.description}</p>
                   </div>
                 )}
 
                 {/* Colors */}
                 {colors.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
-                      Өнгө {selectedColor && <span className="font-normal text-gray-400">— {selectedColor}</span>}
+                    <h4 className="text-sm font-semibold text-[var(--esl-text-primary)] mb-2">
+                      Өнгө {selectedColor && <span className="font-normal text-[var(--esl-text-muted)]">— {selectedColor}</span>}
                     </h4>
                     <div className="flex gap-2">
                       {colors.map(c => (
@@ -354,13 +354,13 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 {sizes.length > 0 && (
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="text-sm font-semibold text-gray-700">Хэмжээ <span className="text-[10px] text-[#E24B4A]">• Заавал</span></h4>
+                      <h4 className="text-sm font-semibold text-[var(--esl-text-primary)]">Хэмжээ <span className="text-[10px] text-[#E24B4A]">• Заавал</span></h4>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {sizes.map(s => (
                         <button key={s} onClick={() => setSelectedSize(s)}
                           className={cn('min-w-[42px] h-10 px-3 rounded-lg text-sm font-medium border cursor-pointer transition-all',
-                            selectedSize === s ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-900')}>
+                            selectedSize === s ? 'bg-[var(--esl-text-primary)] text-[var(--esl-bg-card)] border-[var(--esl-text-primary)]' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:border-[var(--esl-text-primary)]')}>
                           {s}
                         </button>
                       ))}
@@ -369,20 +369,20 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 )}
 
                 {/* Trust badges */}
-                <div className="bg-gray-50 rounded-xl p-3.5 space-y-2.5">
-                  <div className="flex items-center gap-2.5 text-xs text-gray-600">
+                <div className="bg-[var(--esl-bg-section)] rounded-xl p-3.5 space-y-2.5">
+                  <div className="flex items-center gap-2.5 text-xs text-[var(--esl-text-secondary)]">
                     <Truck className="w-4 h-4 text-green-500 shrink-0" />
                     <span><strong>Үнэгүй хүргэлт</strong> · 50,000₮-с дээш захиалгад</span>
                   </div>
-                  <div className="flex items-center gap-2.5 text-xs text-gray-600">
+                  <div className="flex items-center gap-2.5 text-xs text-[var(--esl-text-secondary)]">
                     <Clock className="w-4 h-4 text-blue-500 shrink-0" />
                     <span><strong>2-4 цагийн</strong> дотор хүргэнэ</span>
                   </div>
-                  <div className="flex items-center gap-2.5 text-xs text-gray-600">
+                  <div className="flex items-center gap-2.5 text-xs text-[var(--esl-text-secondary)]">
                     <RotateCcw className="w-4 h-4 text-amber-500 shrink-0" />
                     <span><strong>14 хоног</strong> дотор буцаалт боломжтой</span>
                   </div>
-                  <div className="flex items-center gap-2.5 text-xs text-gray-600">
+                  <div className="flex items-center gap-2.5 text-xs text-[var(--esl-text-secondary)]">
                     <Shield className="w-4 h-4 text-purple-500 shrink-0" />
                     <span><strong>Баталгаат бараа</strong> · QPay аюулгүй төлбөр</span>
                   </div>
@@ -396,10 +396,10 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 {specs.map((s, i) => {
                   const Icon = s.icon;
                   return (
-                    <div key={i} className={cn('flex items-center gap-3 py-3 px-3 rounded-lg', i % 2 === 0 ? 'bg-gray-50' : 'bg-white')}>
-                      <Icon className="w-4 h-4 text-gray-400 shrink-0" />
-                      <span className="text-sm text-gray-500 flex-1">{s.label}</span>
-                      <span className="text-sm font-semibold text-gray-900">{s.value}</span>
+                    <div key={i} className={cn('flex items-center gap-3 py-3 px-3 rounded-lg', i % 2 === 0 ? 'bg-[var(--esl-bg-section)]' : 'bg-[var(--esl-bg-card)]')}>
+                      <Icon className="w-4 h-4 text-[var(--esl-text-muted)] shrink-0" />
+                      <span className="text-sm text-[var(--esl-text-secondary)] flex-1">{s.label}</span>
+                      <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{s.value}</span>
                     </div>
                   );
                 })}
@@ -418,15 +418,15 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
             {activeTab === 'reviews' && (
               <div className="space-y-4">
                 {/* Rating summary */}
-                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+                <div className="flex items-center gap-4 p-4 bg-[var(--esl-bg-section)] rounded-xl">
                   <div className="text-center">
-                    <p className="text-3xl font-black text-gray-900">{product.rating || 4.7}</p>
+                    <p className="text-3xl font-black text-[var(--esl-text-primary)]">{product.rating || 4.7}</p>
                     <div className="flex gap-0.5 justify-center my-1">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={cn('w-3.5 h-3.5', i < Math.round(product.rating || 4.7) ? 'text-amber-400 fill-amber-400' : 'text-gray-200')} />
+                        <Star key={i} className={cn('w-3.5 h-3.5', i < Math.round(product.rating || 4.7) ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />
                       ))}
                     </div>
-                    <p className="text-[10px] text-gray-400">{product.reviewCount || DEMO_REVIEWS.length} үнэлгээ</p>
+                    <p className="text-[10px] text-[var(--esl-text-muted)]">{product.reviewCount || DEMO_REVIEWS.length} үнэлгээ</p>
                   </div>
                   <div className="flex-1 space-y-1">
                     {[5, 4, 3, 2, 1].map(n => {
@@ -434,8 +434,8 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                       const pct = (count / DEMO_REVIEWS.length) * 100;
                       return (
                         <div key={n} className="flex items-center gap-2">
-                          <span className="text-[10px] text-gray-400 w-3">{n}</span>
-                          <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <span className="text-[10px] text-[var(--esl-text-muted)] w-3">{n}</span>
+                          <div className="flex-1 h-1.5 bg-[var(--esl-border)] rounded-full overflow-hidden">
                             <div className="h-full bg-amber-400 rounded-full" style={{ width: `${pct}%` }} />
                           </div>
                         </div>
@@ -446,17 +446,17 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
 
                 {/* Review list */}
                 {DEMO_REVIEWS.map((r, i) => (
-                  <div key={i} className="border-b border-gray-100 pb-3 last:border-0">
+                  <div key={i} className="border-b border-[var(--esl-border)] pb-3 last:border-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-semibold text-gray-900">{r.name}</span>
-                      <span className="text-[10px] text-gray-400">{r.date}</span>
+                      <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{r.name}</span>
+                      <span className="text-[10px] text-[var(--esl-text-muted)]">{r.date}</span>
                     </div>
                     <div className="flex gap-0.5 mb-1.5">
                       {Array.from({ length: 5 }).map((_, j) => (
-                        <Star key={j} className={cn('w-3 h-3', j < r.rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200')} />
+                        <Star key={j} className={cn('w-3 h-3', j < r.rating ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />
                       ))}
                     </div>
-                    <p className="text-xs text-gray-600">{r.text}</p>
+                    <p className="text-xs text-[var(--esl-text-secondary)]">{r.text}</p>
                   </div>
                 ))}
               </div>
@@ -464,56 +464,56 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
           </div>
 
           {/* ═══ Recommendations Carousel ═══ */}
-          <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Танд санал болгох</h4>
+          <div className="px-6 py-4 border-t border-[var(--esl-border)] bg-[var(--esl-bg-section)]/50">
+            <h4 className="text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-3">Танд санал болгох</h4>
             <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
               {/* Other products */}
               {allProducts?.filter(p => p._id !== product._id).slice(0, 4).map(p => (
                 <div key={p._id} onClick={() => onProductClick?.(p._id)}
                   className="shrink-0 w-[130px] cursor-pointer group">
-                  <div className="h-[90px] rounded-lg overflow-hidden bg-gray-100 mb-1.5">
+                  <div className="h-[90px] rounded-lg overflow-hidden bg-[var(--esl-bg-section)] mb-1.5">
                     {p.images?.[0] ? (
                       <img src={p.images[0]} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-2xl">{p.emoji || '📦'}</div>
                     )}
                   </div>
-                  <p className="text-[11px] font-semibold text-gray-700 line-clamp-1 group-hover:text-[#E24B4A] transition-colors">{p.name}</p>
+                  <p className="text-[11px] font-semibold text-[var(--esl-text-primary)] line-clamp-1 group-hover:text-[#E24B4A] transition-colors">{p.name}</p>
                   <p className="text-[11px] font-bold text-[#E24B4A]">{formatPrice(p.salePrice || p.price)}</p>
                 </div>
               ))}
               {/* Featured ads */}
               {FEATURED_ADS.slice(0, 3).map(ad => (
                 <a key={ad.id} href={ad.link} className="shrink-0 w-[130px] no-underline group">
-                  <div className="h-[90px] rounded-lg overflow-hidden bg-gray-100 mb-1.5 relative">
+                  <div className="h-[90px] rounded-lg overflow-hidden bg-[var(--esl-bg-section)] mb-1.5 relative">
                     <img src={ad.image} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                     <span className="absolute top-1 left-1 text-[8px] font-bold bg-black/60 text-white px-1.5 py-0.5 rounded">{ad.badge}</span>
                   </div>
-                  <p className="text-[11px] font-semibold text-gray-700 line-clamp-1 group-hover:text-[#E24B4A] transition-colors">{ad.title}</p>
-                  <p className="text-[11px] font-bold text-gray-500">{ad.price}</p>
+                  <p className="text-[11px] font-semibold text-[var(--esl-text-primary)] line-clamp-1 group-hover:text-[#E24B4A] transition-colors">{ad.title}</p>
+                  <p className="text-[11px] font-bold text-[var(--esl-text-secondary)]">{ad.price}</p>
                 </a>
               ))}
             </div>
           </div>
 
           {/* ═══ Footer: Qty + Add to Cart ═══ */}
-          <div className="px-6 py-4 border-t border-gray-100 shrink-0 space-y-3 bg-white">
+          <div className="px-6 py-4 border-t border-[var(--esl-border)] shrink-0 space-y-3 bg-[var(--esl-bg-card)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-gray-600">Тоо:</span>
-                <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                <span className="text-sm font-semibold text-[var(--esl-text-secondary)]">Тоо:</span>
+                <div className="flex items-center border border-[var(--esl-border)] rounded-xl overflow-hidden">
                   <button onClick={() => setQty(Math.max(1, qty - 1))}
-                    className="w-9 h-9 bg-gray-50 border-none cursor-pointer hover:bg-gray-100 transition flex items-center justify-center">
-                    <Minus className="w-3.5 h-3.5 text-gray-500" />
+                    className="w-9 h-9 bg-[var(--esl-bg-section)] border-none cursor-pointer hover:bg-[var(--esl-bg-card-hover)] transition flex items-center justify-center">
+                    <Minus className="w-3.5 h-3.5 text-[var(--esl-text-secondary)]" />
                   </button>
-                  <span className="w-10 h-9 flex items-center justify-center text-sm font-bold border-x border-gray-200">{qty}</span>
+                  <span className="w-10 h-9 flex items-center justify-center text-sm font-bold border-x border-[var(--esl-border)]">{qty}</span>
                   <button onClick={() => setQty(qty + 1)}
-                    className="w-9 h-9 bg-gray-50 border-none cursor-pointer hover:bg-gray-100 transition flex items-center justify-center">
-                    <Plus className="w-3.5 h-3.5 text-gray-500" />
+                    className="w-9 h-9 bg-[var(--esl-bg-section)] border-none cursor-pointer hover:bg-[var(--esl-bg-card-hover)] transition flex items-center justify-center">
+                    <Plus className="w-3.5 h-3.5 text-[var(--esl-text-secondary)]" />
                   </button>
                 </div>
               </div>
-              <span className="text-lg font-black text-gray-900">{formatPrice(px * qty)}</span>
+              <span className="text-lg font-black text-[var(--esl-text-primary)]">{formatPrice(px * qty)}</span>
             </div>
 
             <button onClick={handleAdd} disabled={added}
@@ -524,7 +524,7 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
 
             {isAffiliate && onShare && (
               <button onClick={onShare}
-                className="w-full bg-gray-100 text-gray-600 py-3 rounded-xl font-semibold text-sm border-none cursor-pointer hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                className="w-full bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] py-3 rounded-xl font-semibold text-sm border-none cursor-pointer hover:bg-[var(--esl-bg-card-hover)] transition flex items-center justify-center gap-2">
                 <Share2 className="w-4 h-4" /> Хуваалцах линк хуулах
               </button>
             )}
