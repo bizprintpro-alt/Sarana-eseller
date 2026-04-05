@@ -28,14 +28,14 @@ export default function SchedulesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-black text-[#0F172A]">Ажлын цаг</h1>
-          <p className="text-sm text-[#94A3B8]">Бизнесийн ажлын цагийг тохируулах</p>
+          <p className="text-sm text-[var(--esl-text-muted)]">Бизнесийн ажлын цагийг тохируулах</p>
         </div>
         <button className="inline-flex items-center gap-2 bg-[#6366F1] text-white px-5 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-[#4F46E5] shadow-sm transition">
           <Save className="w-4 h-4" /> Хадгалах
         </button>
       </div>
 
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         {hours.sort((a, b) => a.dayOfWeek - b.dayOfWeek).map((h) => (
           <div key={h.dayOfWeek} className={cn(
             'flex items-center gap-4 px-5 py-4 border-b border-[#F8FAFC] last:border-0',
@@ -45,32 +45,32 @@ export default function SchedulesPage() {
               onClick={() => toggleDay(h.dayOfWeek)}
               className="bg-transparent border-none cursor-pointer p-0"
             >
-              {h.isClosed ? <ToggleLeft className="w-5 h-5 text-[#94A3B8]" /> : <ToggleRight className="w-5 h-5 text-emerald-500" />}
+              {h.isClosed ? <ToggleLeft className="w-5 h-5 text-[var(--esl-text-muted)]" /> : <ToggleRight className="w-5 h-5 text-emerald-500" />}
             </button>
 
-            <span className={cn('text-sm font-bold w-20', h.isClosed ? 'text-[#94A3B8]' : 'text-[#0F172A]')}>
+            <span className={cn('text-sm font-bold w-20', h.isClosed ? 'text-[var(--esl-text-muted)]' : 'text-[#0F172A]')}>
               {DAY_NAMES[h.dayOfWeek]}
             </span>
 
             {h.isClosed ? (
-              <span className="text-sm text-[#94A3B8]">Амралтын өдөр</span>
+              <span className="text-sm text-[var(--esl-text-muted)]">Амралтын өдөр</span>
             ) : (
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-[#94A3B8]" />
+                  <Clock className="w-4 h-4 text-[var(--esl-text-muted)]" />
                   <select
                     value={h.openTime}
                     onChange={(e) => updateTime(h.dayOfWeek, 'openTime', e.target.value)}
-                    className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition appearance-none cursor-pointer"
+                    className="bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition appearance-none cursor-pointer"
                   >
                     {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
-                <span className="text-[#94A3B8]">—</span>
+                <span className="text-[var(--esl-text-muted)]">—</span>
                 <select
                   value={h.closeTime}
                   onChange={(e) => updateTime(h.dayOfWeek, 'closeTime', e.target.value)}
-                  className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition appearance-none cursor-pointer"
+                  className="bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition appearance-none cursor-pointer"
                 >
                   {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
@@ -85,7 +85,7 @@ export default function SchedulesPage() {
         <h3 className="text-sm font-bold text-[#0F172A] mb-2 flex items-center gap-2">
           <Clock className="w-4 h-4 text-[#6366F1]" /> Ажилтан бүрийн хуваарь
         </h3>
-        <p className="text-xs text-[#475569] mb-3">Ажилтан бүрд өөр өөр ажлын цаг тохируулах боломжтой.</p>
+        <p className="text-xs text-[var(--esl-text-secondary)] mb-3">Ажилтан бүрд өөр өөр ажлын цаг тохируулах боломжтой.</p>
         <button className="text-xs font-bold text-[#6366F1] bg-white px-4 py-2 rounded-lg border border-[#6366F1]/20 cursor-pointer hover:bg-[#6366F1] hover:text-white transition">
           Ажилтнууд руу очих →
         </button>

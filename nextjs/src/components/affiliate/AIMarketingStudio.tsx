@@ -58,28 +58,28 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0] shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--esl-border)] shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#6366F1] to-[#A78BFA] flex items-center justify-center">
               <Wand2 className="w-4 h-4 text-white" />
             </div>
             <div>
               <h2 className="text-base font-bold text-[#0F172A]">AI Marketing Studio</h2>
-              <p className="text-xs text-[#94A3B8]">{product.name}</p>
+              <p className="text-xs text-[var(--esl-text-muted)]">{product.name}</p>
             </div>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-[#F8FAFC] border-none cursor-pointer flex items-center justify-center transition bg-transparent">
-            <X className="w-4 h-4 text-[#94A3B8]" />
+          <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-[var(--esl-bg-section)] border-none cursor-pointer flex items-center justify-center transition bg-transparent">
+            <X className="w-4 h-4 text-[var(--esl-text-muted)]" />
           </button>
         </div>
 
         {/* Body */}
         <div className="flex-1 flex overflow-hidden">
           {/* Left — Controls */}
-          <div className="w-[320px] border-r border-[#E2E8F0] overflow-y-auto p-5 space-y-5 shrink-0 hidden md:block">
+          <div className="w-[320px] border-r border-[var(--esl-border)] overflow-y-auto p-5 space-y-5 shrink-0 hidden md:block">
             {/* Templates */}
             <div>
-              <label className="text-xs font-bold text-[#475569] uppercase tracking-wider mb-2 block">Загвар</label>
+              <label className="text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-2 block">Загвар</label>
               <div className="grid grid-cols-3 gap-2">
                 {TEMPLATES.map((t) => (
                   <button
@@ -89,11 +89,11 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
                       'rounded-lg p-2 border cursor-pointer transition-all text-center',
                       selectedTemplate.id === t.id
                         ? 'border-[#6366F1] ring-2 ring-[#6366F1]/20 bg-[#EEF2FF]'
-                        : 'border-[#E2E8F0] hover:border-[#6366F1]/30 bg-white'
+                        : 'border-[var(--esl-border)] hover:border-[#6366F1]/30 bg-white'
                     )}
                   >
                     <div className={`w-full aspect-[3/4] rounded bg-gradient-to-br ${t.gradient} mb-1`} />
-                    <span className="text-[10px] font-semibold text-[#475569]">{t.name}</span>
+                    <span className="text-[10px] font-semibold text-[var(--esl-text-secondary)]">{t.name}</span>
                   </button>
                 ))}
               </div>
@@ -101,7 +101,7 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
 
             {/* Size */}
             <div>
-              <label className="text-xs font-bold text-[#475569] uppercase tracking-wider mb-2 block">Хэмжээ</label>
+              <label className="text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-2 block">Хэмжээ</label>
               <div className="flex gap-2">
                 {SIZES.map((s) => (
                   <button
@@ -111,12 +111,12 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
                       'flex-1 py-2 rounded-lg border cursor-pointer transition-all text-center',
                       selectedSize.key === s.key
                         ? 'border-[#6366F1] bg-[#EEF2FF] text-[#6366F1]'
-                        : 'border-[#E2E8F0] text-[#475569] hover:border-[#6366F1]/30 bg-white'
+                        : 'border-[var(--esl-border)] text-[var(--esl-text-secondary)] hover:border-[#6366F1]/30 bg-white'
                     )}
                   >
                     <s.icon className="w-4 h-4 mx-auto mb-0.5" />
                     <div className="text-[10px] font-bold">{s.label}</div>
-                    <div className="text-[8px] text-[#94A3B8]">{s.dim}</div>
+                    <div className="text-[8px] text-[var(--esl-text-muted)]">{s.dim}</div>
                   </button>
                 ))}
               </div>
@@ -124,7 +124,7 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
 
             {/* Text controls */}
             <div>
-              <label className="text-xs font-bold text-[#475569] uppercase tracking-wider mb-2 flex items-center gap-1 ">
+              <label className="text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-2 flex items-center gap-1 ">
                 <Type className="w-3 h-3" /> Текст
               </label>
               <input
@@ -132,27 +132,27 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
                 value={headlineText}
                 onChange={(e) => setHeadlineText(e.target.value)}
                 placeholder="Гарчиг"
-                className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition mb-2"
+                className="w-full bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition mb-2"
               />
               <input
                 type="text"
                 value={subText}
                 onChange={(e) => setSubText(e.target.value)}
                 placeholder="Дэд текст"
-                className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition"
+                className="w-full bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition"
               />
             </div>
 
             {/* AI Prompt */}
             <div>
-              <label className="text-xs font-bold text-[#475569] uppercase tracking-wider mb-2 flex items-center gap-1">
+              <label className="text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-2 flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-[#6366F1]" /> AI Prompt
               </label>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Жишээ: Аялалд явж байгаа залуу эмэгтэйд зориулсан загвар..."
-                className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition resize-none h-20"
+                className="w-full bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#6366F1] transition resize-none h-20"
               />
               <button
                 onClick={handleGenerate}
@@ -160,10 +160,10 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
                 className={cn(
                   'w-full mt-2 py-2.5 rounded-lg text-xs font-bold transition-all border-none cursor-pointer flex items-center justify-center gap-1.5',
                   generating
-                    ? 'bg-[#F8FAFC] text-[#94A3B8]'
+                    ? 'bg-[var(--esl-bg-section)] text-[var(--esl-text-muted)]'
                     : prompt.trim()
                     ? 'bg-[#6366F1] text-white hover:bg-[#4F46E5] shadow-sm'
-                    : 'bg-[#F8FAFC] text-[#CBD5E1] cursor-not-allowed'
+                    : 'bg-[var(--esl-bg-section)] text-[#CBD5E1] cursor-not-allowed'
                 )}
               >
                 {generating ? <><RefreshCw className="w-3 h-3 animate-spin" /> Үүсгэж байна...</> : <><Wand2 className="w-3 h-3" /> AI-р үүсгэх</>}
@@ -203,10 +203,10 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-3 border-t border-[#E2E8F0] bg-white shrink-0">
-          <span className="text-xs text-[#94A3B8]">AI автоматаар QR код болон брэнд нэмнэ</span>
+        <div className="flex items-center justify-between px-6 py-3 border-t border-[var(--esl-border)] bg-white shrink-0">
+          <span className="text-xs text-[var(--esl-text-muted)]">AI автоматаар QR код болон брэнд нэмнэ</span>
           <div className="flex gap-2">
-            <button className="px-4 py-2 bg-[#F8FAFC] text-[#475569] border border-[#E2E8F0] rounded-lg text-xs font-bold cursor-pointer hover:bg-[#E2E8F0] transition flex items-center gap-1.5">
+            <button className="px-4 py-2 bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] rounded-lg text-xs font-bold cursor-pointer hover:bg-[#E2E8F0] transition flex items-center gap-1.5">
               <Palette className="w-3.5 h-3.5" /> Засах
             </button>
             <button className="px-5 py-2 bg-[#6366F1] text-white rounded-lg text-xs font-bold border-none cursor-pointer hover:bg-[#4F46E5] shadow-sm transition flex items-center gap-1.5">

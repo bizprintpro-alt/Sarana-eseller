@@ -17,7 +17,7 @@ const CATEGORY_STYLES: Record<string, string> = {
   auth: 'bg-blue-100 text-blue-700',
   order: 'bg-green-100 text-green-700',
   product: 'bg-purple-100 text-purple-700',
-  settings: 'bg-gray-100 text-gray-700',
+  settings: 'bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)]',
   payment: 'bg-amber-100 text-amber-700',
 };
 
@@ -71,10 +71,10 @@ export default function LogsPage() {
   }, [filtered]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Үйл ажиллагааны лог</h1>
-        <p className="text-gray-500 mt-1">Системийн бүх үйлдлийн түүх</p>
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Үйл ажиллагааны лог</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Системийн бүх үйлдлийн түүх</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -91,7 +91,7 @@ export default function LogsPage() {
             key={cat}
             onClick={() => setFilter(cat)}
             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-              filter === cat ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              filter === cat ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
             }`}
           >
             {cat === 'all' ? 'Бүгд' : CATEGORY_LABELS[cat]}
@@ -101,32 +101,32 @@ export default function LogsPage() {
 
       {/* Logs */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">📜</div>
-          <h3 className="text-lg font-semibold text-gray-700">Лог олдсонгүй</h3>
-          <p className="text-gray-400 mt-1">Энэ ангилалд бүртгэл байхгүй</p>
+          <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Лог олдсонгүй</h3>
+          <p className="text-[var(--esl-text-muted)] mt-1">Энэ ангилалд бүртгэл байхгүй</p>
         </div>
       ) : (
         <div className="space-y-6">
           {grouped.map(([date, logs]) => (
             <div key={date}>
-              <h3 className="text-sm font-semibold text-gray-400 uppercase mb-3">{date}</h3>
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <h3 className="text-sm font-semibold text-[var(--esl-text-muted)] uppercase mb-3">{date}</h3>
+              <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
                 {logs.map((log, i) => (
-                  <div key={log.id} className={`flex items-start gap-4 p-4 ${i < logs.length - 1 ? 'border-b border-gray-100' : ''} hover:bg-gray-50 transition-colors`}>
-                    <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-lg flex-shrink-0">
+                  <div key={log.id} className={`flex items-start gap-4 p-4 ${i < logs.length - 1 ? 'border-b border-[var(--esl-border)]' : ''} hover:bg-[var(--esl-bg-section)] transition-colors`}>
+                    <div className="w-10 h-10 rounded-full bg-[var(--esl-bg-section)] flex items-center justify-center text-lg flex-shrink-0">
                       {log.icon}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-semibold text-gray-900">{log.action}</span>
+                        <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{log.action}</span>
                         <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium ${CATEGORY_STYLES[log.category]}`}>
                           {CATEGORY_LABELS[log.category]}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-500 mt-0.5">{log.description}</p>
+                      <p className="text-sm text-[var(--esl-text-secondary)] mt-0.5">{log.description}</p>
                     </div>
-                    <span className="text-xs text-gray-400 flex-shrink-0 whitespace-nowrap">
+                    <span className="text-xs text-[var(--esl-text-muted)] flex-shrink-0 whitespace-nowrap">
                       {new Date(log.timestamp).toLocaleTimeString('mn-MN', { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>

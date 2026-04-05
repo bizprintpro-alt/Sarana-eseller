@@ -142,10 +142,10 @@ export default function AdminLocationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Байршлын координат шалгалт</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Админ · Нийт {stats.total} байршил · {stats.needsUpdate} шинэчлэх шаардлагатай</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Байршлын координат шалгалт</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)] mt-0.5">Админ · Нийт {stats.total} байршил · {stats.needsUpdate} шинэчлэх шаардлагатай</p>
         </div>
-        <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-50 cursor-pointer transition">
+        <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
           <Download className="w-3.5 h-3.5" /> CSV экспорт
         </button>
       </div>
@@ -166,12 +166,12 @@ export default function AdminLocationsPage() {
       </div>
 
       {/* Progress bar */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4">
+      <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4">
         <div className="flex justify-between text-xs mb-1.5">
-          <span className="text-gray-500">Координатын бүрэн байдал</span>
-          <span className="font-bold text-gray-900">{verifiedPct}%</span>
+          <span className="text-[var(--esl-text-secondary)]">Координатын бүрэн байдал</span>
+          <span className="font-bold text-[var(--esl-text-primary)]">{verifiedPct}%</span>
         </div>
-        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-2.5 bg-[var(--esl-bg-section)] rounded-full overflow-hidden">
           <div className={cn('h-full rounded-full transition-all', verifiedPct >= 80 ? 'bg-green-500' : verifiedPct >= 50 ? 'bg-amber-500' : 'bg-red-500')}
             style={{ width: `${verifiedPct}%` }} />
         </div>
@@ -184,7 +184,7 @@ export default function AdminLocationsPage() {
             <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0" />
             <div>
               <p className="text-sm font-medium text-amber-300">{stats.needsUpdate} дэлгүүрт координат дутуу / буруу байна</p>
-              <p className="text-xs text-gray-400 mt-0.5">Дэлгүүр эзэдэд мэдэгдэл явуулах эсвэл автомат geocode хийж болно</p>
+              <p className="text-xs text-[var(--esl-text-muted)] mt-0.5">Дэлгүүр эзэдэд мэдэгдэл явуулах эсвэл автомат geocode хийж болно</p>
             </div>
           </div>
         </div>
@@ -195,15 +195,15 @@ export default function AdminLocationsPage() {
         {/* Table */}
         <div className="lg:col-span-2 space-y-4">
           {/* Search + filter */}
-          <div className="bg-white border border-gray-200 rounded-xl p-4">
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4">
             <div className="flex gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
                 <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Байршил хайх..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
+                  className="w-full pl-10 pr-4 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
               </div>
               <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-                className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
                 <option value="all">Бүгд</option>
                 <option value="valid">Зөв координаттай</option>
                 <option value="needs_update">Шинэчлэх шаардлагатай</option>
@@ -213,13 +213,13 @@ export default function AdminLocationsPage() {
           </div>
 
           {/* Table */}
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl overflow-hidden">
             {loading ? (
-              <p className="text-center py-12 text-gray-400">Ачааллаж байна...</p>
+              <p className="text-center py-12 text-[var(--esl-text-muted)]">Ачааллаж байна...</p>
             ) : (
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-left text-[10px] text-gray-500 uppercase tracking-wider border-b border-gray-100 bg-gray-50/50">
+                  <tr className="text-left text-[10px] text-[var(--esl-text-secondary)] uppercase tracking-wider border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)]/50">
                     <th className="px-4 py-2.5 font-medium">Байршил</th>
                     <th className="px-4 py-2.5 font-medium">Хаяг</th>
                     <th className="px-4 py-2.5 font-medium">Координат</th>
@@ -233,18 +233,18 @@ export default function AdminLocationsPage() {
                     const isActive = selected?.id === loc.id;
                     return (
                       <tr key={loc.id} onClick={() => selectLoc(loc)}
-                        className={cn('cursor-pointer transition', isActive ? 'bg-indigo-50' : 'hover:bg-gray-50/50')}>
+                        className={cn('cursor-pointer transition', isActive ? 'bg-indigo-50' : 'hover:bg-[var(--esl-bg-section)]/50')}>
                         <td className="px-4 py-3">
-                          <div className="font-semibold text-gray-900">{loc.name}</div>
+                          <div className="font-semibold text-[var(--esl-text-primary)]">{loc.name}</div>
                           {loc.isPrimary && <span className="text-[9px] text-indigo-500 font-bold">ҮНДСЭН</span>}
                         </td>
                         <td className="px-4 py-3">
-                          <div className="text-xs text-gray-700">{loc.district}</div>
-                          <div className="text-[10px] text-gray-400">{loc.address?.slice(0, 30)}{loc.address?.length > 30 ? '...' : ''}</div>
+                          <div className="text-xs text-[var(--esl-text-primary)]">{loc.district}</div>
+                          <div className="text-[10px] text-[var(--esl-text-muted)]">{loc.address?.slice(0, 30)}{loc.address?.length > 30 ? '...' : ''}</div>
                         </td>
                         <td className="px-4 py-3 font-mono text-xs">
                           {loc.lat != null && loc.lng != null ? (
-                            <span className="text-gray-700">{loc.lat.toFixed(4)}, {loc.lng.toFixed(4)}</span>
+                            <span className="text-[var(--esl-text-primary)]">{loc.lat.toFixed(4)}, {loc.lng.toFixed(4)}</span>
                           ) : (
                             <span className="text-red-400 font-medium">—</span>
                           )}
@@ -252,7 +252,7 @@ export default function AdminLocationsPage() {
                         <td className="px-4 py-3">
                           <CoordStatusBadge status={check.status} />
                         </td>
-                        <td className="px-4 py-3 text-[10px] text-gray-400">
+                        <td className="px-4 py-3 text-[10px] text-[var(--esl-text-muted)]">
                           {loc.coordCheckedAt
                             ? new Date(loc.coordCheckedAt).toLocaleDateString('mn-MN')
                             : '—'}
@@ -261,7 +261,7 @@ export default function AdminLocationsPage() {
                     );
                   })}
                   {paginated.length === 0 && (
-                    <tr><td colSpan={5} className="text-center py-8 text-gray-400">Байршил олдсонгүй</td></tr>
+                    <tr><td colSpan={5} className="text-center py-8 text-[var(--esl-text-muted)]">Байршил олдсонгүй</td></tr>
                   )}
                 </tbody>
               </table>
@@ -269,20 +269,20 @@ export default function AdminLocationsPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 text-xs text-gray-500">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--esl-border)] text-xs text-[var(--esl-text-secondary)]">
                 <span>{filtered.length}-с {((page - 1) * PER_PAGE) + 1}–{Math.min(page * PER_PAGE, filtered.length)} харагдаж байна</span>
                 <div className="flex gap-1">
-                  <button onClick={() => setPage(Math.max(1, page - 1))} className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 bg-white">
+                  <button onClick={() => setPage(Math.max(1, page - 1))} className="w-7 h-7 rounded border border-[var(--esl-border)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] bg-white">
                     <ChevronLeft className="w-3 h-3" />
                   </button>
                   {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + 1).map((p) => (
                     <button key={p} onClick={() => setPage(p)}
                       className={cn('w-7 h-7 rounded border flex items-center justify-center cursor-pointer text-xs font-medium',
-                        page === p ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'border-gray-200 hover:bg-gray-50 bg-white')}>
+                        page === p ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] bg-white')}>
                       {p}
                     </button>
                   ))}
-                  <button onClick={() => setPage(Math.min(totalPages, page + 1))} className="w-7 h-7 rounded border border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 bg-white">
+                  <button onClick={() => setPage(Math.min(totalPages, page + 1))} className="w-7 h-7 rounded border border-[var(--esl-border)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] bg-white">
                     <ChevronRight className="w-3 h-3" />
                   </button>
                 </div>
@@ -291,15 +291,15 @@ export default function AdminLocationsPage() {
           </div>
 
           {/* Quick filters */}
-          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
-            <h4 className="text-xs font-bold text-gray-700">Хурдан шүүлтүүр</h4>
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-2">
+            <h4 className="text-xs font-bold text-[var(--esl-text-primary)]">Хурдан шүүлтүүр</h4>
             {[
               { label: `Координатгүй (${stats.missing + stats.zero})`, color: 'text-red-500', dot: 'bg-red-500', filter: 'missing' },
               { label: `Шинэчлэх шаардлагатай (${stats.needsUpdate})`, color: 'text-amber-500', dot: 'bg-amber-500', filter: 'needs_update' },
               { label: `Монголоос гадна (${stats.outside})`, color: 'text-orange-500', dot: 'bg-orange-500', filter: 'needs_update' },
             ].map((f) => (
               <button key={f.label} onClick={() => { setStatusFilter(f.filter); setPage(1); }}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-left cursor-pointer bg-transparent border-none transition">
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[var(--esl-bg-section)] text-left cursor-pointer bg-transparent border-none transition">
                 <span className={cn('w-2 h-2 rounded-full', f.dot)} />
                 <span className={cn('text-xs font-medium', f.color)}>{f.label}</span>
               </button>
@@ -312,8 +312,8 @@ export default function AdminLocationsPage() {
           {selected ? (
             <>
               {/* Map */}
-              <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div className="h-48 bg-gray-100 flex items-center justify-center relative">
+              <div className="bg-white border border-[var(--esl-border)] rounded-xl overflow-hidden">
+                <div className="h-48 bg-[var(--esl-bg-section)] flex items-center justify-center relative">
                   {selected.lat && selected.lng ? (
                     <iframe
                       src={`https://maps.google.com/maps?q=${selected.lat},${selected.lng}&z=15&output=embed`}
@@ -322,15 +322,15 @@ export default function AdminLocationsPage() {
                     />
                   ) : (
                     <div className="text-center">
-                      <MapPin className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                      <p className="text-xs text-gray-400">Координат оруулаагүй</p>
+                      <MapPin className="w-8 h-8 text-[var(--esl-text-muted)] mx-auto mb-2" />
+                      <p className="text-xs text-[var(--esl-text-muted)]">Координат оруулаагүй</p>
                     </div>
                   )}
                 </div>
 
                 <div className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-bold text-gray-900 text-sm">{selected.name}</h3>
+                    <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">{selected.name}</h3>
                     <CoordStatusBadge status={validateCoords(selected.lat, selected.lng).status} />
                   </div>
 
@@ -351,30 +351,30 @@ export default function AdminLocationsPage() {
 
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-[10px] text-gray-400 block mb-1">Өргөрөг (lat)</label>
+                      <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Өргөрөг (lat)</label>
                       <input type="text" value={editLat} onChange={(e) => setEditLat(e.target.value)} placeholder="47.9077..."
-                        className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                        className="w-full px-2.5 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
                     </div>
                     <div>
-                      <label className="text-[10px] text-gray-400 block mb-1">Уртраг (lng)</label>
+                      <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Уртраг (lng)</label>
                       <input type="text" value={editLng} onChange={(e) => setEditLng(e.target.value)} placeholder="106.8832..."
-                        className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                        className="w-full px-2.5 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-[10px] text-gray-400 block mb-1">Дүүрэг</label>
+                    <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Дүүрэг</label>
                     <select value={editDistrict} onChange={(e) => setEditDistrict(e.target.value)}
-                      className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                      className="w-full px-2.5 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
                       <option value="">—</option>
                       {DISTRICTS.map((d) => <option key={d} value={d}>{d}</option>)}
                     </select>
                   </div>
 
                   <div>
-                    <label className="text-[10px] text-gray-400 block mb-1">Хороо</label>
+                    <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Хороо</label>
                     <input type="text" value={editKhoroo} onChange={(e) => setEditKhoroo(e.target.value)} placeholder="1-р хороо"
-                      className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                      className="w-full px-2.5 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
                   </div>
 
                   <button onClick={handleSave} disabled={saving}
@@ -386,10 +386,10 @@ export default function AdminLocationsPage() {
               </div>
             </>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
-              <MapPin className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <p className="text-sm font-semibold text-gray-400">Байршил сонгоно уу</p>
-              <p className="text-xs text-gray-300 mt-1">Зүүн талын хүснэгтээс байршил сонговол координатын мэдээлэл харагдана</p>
+            <div className="bg-white border border-[var(--esl-border)] rounded-xl p-8 text-center">
+              <MapPin className="w-10 h-10 text-[var(--esl-text-muted)] mx-auto mb-3" />
+              <p className="text-sm font-semibold text-[var(--esl-text-muted)]">Байршил сонгоно уу</p>
+              <p className="text-xs text-[var(--esl-text-muted)] mt-1">Зүүн талын хүснэгтээс байршил сонговол координатын мэдээлэл харагдана</p>
             </div>
           )}
         </div>

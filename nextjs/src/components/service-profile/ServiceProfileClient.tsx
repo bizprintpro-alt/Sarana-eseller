@@ -32,7 +32,7 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
   return (
     <div className="min-h-screen bg-white">
       {/* ═══ Top Nav ═══ */}
-      <nav className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+      <nav className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-[var(--esl-border)] shadow-sm">
         <div className="max-w-3xl mx-auto h-14 flex items-center justify-between px-4">
           <div className="flex items-center gap-2.5">
             {shop.logo ? (
@@ -42,7 +42,7 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
                 {shop.name.charAt(0)}
               </div>
             )}
-            <span className="text-base font-bold text-gray-900 tracking-tight">{shop.name}</span>
+            <span className="text-base font-bold text-[var(--esl-text-primary)] tracking-tight">{shop.name}</span>
           </div>
           <button
             onClick={() => services[0] && setBookingService(services[0])}
@@ -68,22 +68,22 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
             </div>
 
             <div className="text-center sm:text-left flex-1">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">{shop.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--esl-text-primary)] tracking-tight">{shop.name}</h1>
               {shop.description && (
-                <p className="text-sm text-gray-500 mt-1.5 leading-relaxed max-w-lg">{shop.description}</p>
+                <p className="text-sm text-[var(--esl-text-secondary)] mt-1.5 leading-relaxed max-w-lg">{shop.description}</p>
               )}
 
               {/* Meta */}
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 mt-4 text-sm text-gray-500">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5 mt-4 text-sm text-[var(--esl-text-secondary)]">
                 {shop.address && (
                   <span className="flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                    <MapPin className="w-3.5 h-3.5 text-[var(--esl-text-muted)]" />
                     {shop.address}
                   </span>
                 )}
                 {shop.phone && (
-                  <a href={`tel:${shop.phone}`} className="flex items-center gap-1 text-gray-500 no-underline hover:text-indigo-600 transition">
-                    <Phone className="w-3.5 h-3.5 text-gray-400" />
+                  <a href={`tel:${shop.phone}`} className="flex items-center gap-1 text-[var(--esl-text-secondary)] no-underline hover:text-indigo-600 transition">
+                    <Phone className="w-3.5 h-3.5 text-[var(--esl-text-muted)]" />
                     {shop.phone}
                   </a>
                 )}
@@ -92,12 +92,12 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
               {/* Today's hours */}
               <div className="flex items-center justify-center sm:justify-start gap-2 mt-3">
                 <span className={cn('inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full',
-                  isOpenNow ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500')}>
+                  isOpenNow ? 'bg-green-100 text-green-700' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]')}>
                   <span className={cn('w-1.5 h-1.5 rounded-full', isOpenNow ? 'bg-green-500' : 'bg-gray-400')} />
                   {isOpenNow ? 'Нээлттэй' : 'Хаалттай'}
                 </span>
                 {todayHours && !todayHours.isClosed && (
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-[var(--esl-text-muted)]">
                     Өнөөдөр {todayHours.openTime} — {todayHours.closeTime}
                   </span>
                 )}
@@ -109,12 +109,12 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
 
       {/* ═══ Working Hours ═══ */}
       <section className="max-w-3xl mx-auto px-4 pb-6">
-        <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3 overflow-x-auto">
-          <Clock className="w-4 h-4 text-gray-400 shrink-0" />
+        <div className="bg-[var(--esl-bg-section)] rounded-xl p-4 flex items-center gap-3 overflow-x-auto">
+          <Clock className="w-4 h-4 text-[var(--esl-text-muted)] shrink-0" />
           {hours.sort((a, b) => a.dayOfWeek - b.dayOfWeek).map((h) => (
             <div key={h.dayOfWeek} className={cn(
               'shrink-0 text-center px-2.5 py-1.5 rounded-lg text-xs font-medium transition',
-              h.dayOfWeek === today ? 'bg-indigo-600 text-white' : h.isClosed ? 'text-gray-300' : 'text-gray-600'
+              h.dayOfWeek === today ? 'bg-indigo-600 text-white' : h.isClosed ? 'text-[var(--esl-text-muted)]' : 'text-[var(--esl-text-secondary)]'
             )}>
               <div className="font-bold">{DAY_NAMES[h.dayOfWeek]}</div>
               <div className={h.dayOfWeek === today ? 'text-white/80' : ''}>
@@ -127,7 +127,7 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
 
       {/* ═══ Services ═══ */}
       <section className="max-w-3xl mx-auto px-4 py-6">
-        <h2 className="text-xl font-extrabold text-gray-900 mb-6 flex items-center gap-2">
+        <h2 className="text-xl font-extrabold text-[var(--esl-text-primary)] mb-6 flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-indigo-500" />
           Үйлчилгээнүүд
         </h2>
@@ -138,7 +138,7 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
             return (
               <div key={cat}>
                 {Object.keys(grouped).length > 1 && (
-                  <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <h3 className="text-sm font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-3 flex items-center gap-2">
                     {catInfo?.emoji && <span>{catInfo.emoji}</span>}
                     {catInfo?.name || cat}
                   </h3>
@@ -146,23 +146,23 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
 
                 <div className="space-y-3">
                   {catServices.map((s) => (
-                    <div key={s._id} className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4 hover:shadow-md hover:border-gray-300 transition-all group">
+                    <div key={s._id} className="bg-white border border-[var(--esl-border)] rounded-xl p-4 flex items-center gap-4 hover:shadow-md hover:border-[var(--esl-border-strong)] transition-all group">
                       {/* Emoji */}
-                      <div className="w-12 h-12 rounded-xl bg-gray-50 flex items-center justify-center text-2xl shrink-0 group-hover:bg-indigo-50 transition-colors">
+                      <div className="w-12 h-12 rounded-xl bg-[var(--esl-bg-section)] flex items-center justify-center text-2xl shrink-0 group-hover:bg-indigo-50 transition-colors">
                         {s.emoji || '🛎️'}
                       </div>
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-bold text-gray-900">{s.name}</h4>
-                        <div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5">
+                        <h4 className="text-sm font-bold text-[var(--esl-text-primary)]">{s.name}</h4>
+                        <div className="flex items-center gap-3 text-xs text-[var(--esl-text-secondary)] mt-0.5">
                           <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {s.duration} мин</span>
                           {s.rating && (
                             <span className="flex items-center gap-1"><Star className="w-3 h-3 text-amber-400" /> {s.rating} ({s.reviewCount})</span>
                           )}
                         </div>
                         {s.description && (
-                          <p className="text-xs text-gray-400 mt-1 line-clamp-1">{s.description}</p>
+                          <p className="text-xs text-[var(--esl-text-muted)] mt-1 line-clamp-1">{s.description}</p>
                         )}
                       </div>
 
@@ -172,7 +172,7 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
                           {formatPrice(s.salePrice || s.price)}
                         </div>
                         {s.salePrice && s.salePrice < s.price && (
-                          <div className="text-xs text-gray-400 line-through">{formatPrice(s.price)}</div>
+                          <div className="text-xs text-[var(--esl-text-muted)] line-through">{formatPrice(s.price)}</div>
                         )}
                         <button
                           onClick={() => setBookingService(s)}
@@ -198,18 +198,18 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
             { icon: Clock, label: 'Цаг баримталдаг', sub: 'Хүлээлтгүй' },
             { icon: Star, label: '4.8 / 5', sub: 'Хэрэглэгчдийн үнэлгээ' },
           ].map((b) => (
-            <div key={b.label} className="text-center p-4 rounded-xl bg-gray-50">
+            <div key={b.label} className="text-center p-4 rounded-xl bg-[var(--esl-bg-section)]">
               <b.icon className="w-5 h-5 text-indigo-500 mx-auto mb-1.5" />
-              <div className="text-xs font-bold text-gray-900">{b.label}</div>
-              <div className="text-[10px] text-gray-400">{b.sub}</div>
+              <div className="text-xs font-bold text-[var(--esl-text-primary)]">{b.label}</div>
+              <div className="text-[10px] text-[var(--esl-text-muted)]">{b.sub}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* ═══ Footer ═══ */}
-      <footer className="border-t border-gray-100 py-6 text-center">
-        <p className="text-xs text-gray-400">
+      <footer className="border-t border-[var(--esl-border)] py-6 text-center">
+        <p className="text-xs text-[var(--esl-text-muted)]">
           {shop.name} · <a href="https://eseller.mn" className="text-indigo-500 no-underline hover:underline">eseller.mn</a>-р ажилладаг
         </p>
       </footer>

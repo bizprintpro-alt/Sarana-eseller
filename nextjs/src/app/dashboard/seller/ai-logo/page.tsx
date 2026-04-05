@@ -66,7 +66,7 @@ export default function AILogoPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -80,16 +80,16 @@ export default function AILogoPage() {
 
   if (!aiCheck.allowed) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
         <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-8 text-center text-white mb-6">
           <span className="text-4xl mb-3 block">✨</span>
           <h1 className="text-2xl font-bold">AI Лого үүсгэгч</h1>
           <p className="opacity-90 mt-1">Бизнесийнхээ лого автоматаар үүсгэ</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center max-w-lg mx-auto">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">AI боломж хязгаарлагдсан</h2>
-          <p className="text-gray-500 mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
+          <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
+          <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
           <a href="/dashboard/seller/package" className="inline-block bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition">
             Багц шинэчлэх
           </a>
@@ -131,7 +131,7 @@ export default function AILogoPage() {
   const shapes = SHAPES[industry] || SHAPES.food;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-6 mb-6 text-white">
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -147,22 +147,22 @@ export default function AILogoPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Тохиргоо</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Тохиргоо</h2>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Бизнесийн нэр</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Бизнесийн нэр</label>
             <input
               type="text"
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               placeholder="Жишээ: FoodHub"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+              className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Салбар</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Салбар</label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {INDUSTRIES.map((ind) => (
                 <button
@@ -171,7 +171,7 @@ export default function AILogoPage() {
                   className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
                     industry === ind.id
                       ? 'border-purple-500 bg-purple-50 text-purple-700'
-                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                      : 'border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
                   <span className="mr-1">{ind.icon}</span> {ind.name}
@@ -181,7 +181,7 @@ export default function AILogoPage() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Загвар</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Загвар</label>
             <div className="grid grid-cols-2 gap-2">
               {LOGO_STYLES.map((s) => (
                 <button
@@ -190,7 +190,7 @@ export default function AILogoPage() {
                   className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
                     style === s.id
                       ? 'border-purple-500 bg-purple-50 text-purple-700'
-                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                      : 'border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
                   {s.name}
@@ -200,14 +200,14 @@ export default function AILogoPage() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Өнгөний палитр</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Өнгөний палитр</label>
             <div className="grid grid-cols-3 gap-2">
               {COLOR_PALETTES.map((cp) => (
                 <button
                   key={cp.id}
                   onClick={() => setPalette(cp.id)}
                   className={`p-3 rounded-lg border-2 text-center transition-all ${
-                    palette === cp.id ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'
+                    palette === cp.id ? 'border-purple-500 bg-purple-50' : 'border-[var(--esl-border)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
                   <div className="flex justify-center gap-1 mb-1">
@@ -215,7 +215,7 @@ export default function AILogoPage() {
                       <div key={i} className="w-5 h-5 rounded-full" style={{ backgroundColor: c }} />
                     ))}
                   </div>
-                  <span className="text-xs text-gray-600">{cp.name}</span>
+                  <span className="text-xs text-[var(--esl-text-secondary)]">{cp.name}</span>
                 </button>
               ))}
             </div>
@@ -238,14 +238,14 @@ export default function AILogoPage() {
         </div>
 
         {/* Preview */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Урьдчилан харах</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Урьдчилан харах</h2>
 
           {logoGenerated ? (
             <div className="space-y-6">
               {/* Logo preview */}
               <div className="flex justify-center">
-                <div className="w-64 h-64 bg-white rounded-2xl border-2 border-gray-200 shadow-lg flex flex-col items-center justify-center p-6">
+                <div className="w-64 h-64 bg-white rounded-2xl border-2 border-[var(--esl-border)] shadow-lg flex flex-col items-center justify-center p-6">
                   <div
                     className="text-5xl mb-2 font-bold tracking-tight"
                     style={{ color: selectedPalette.colors[0] }}
@@ -274,7 +274,7 @@ export default function AILogoPage() {
                       <div key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: c }} />
                     ))}
                   </div>
-                  <span className="text-[10px] text-gray-400 mt-2 uppercase tracking-widest">
+                  <span className="text-[10px] text-[var(--esl-text-muted)] mt-2 uppercase tracking-widest">
                     {INDUSTRIES.find((i) => i.id === industry)?.name}
                   </span>
                 </div>
@@ -300,15 +300,15 @@ export default function AILogoPage() {
                 </button>
                 <button
                   onClick={handleDownload}
-                  className="flex-1 border border-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition"
+                  className="flex-1 border border-[var(--esl-border)] text-[var(--esl-text-primary)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--esl-bg-section)] transition"
                 >
                   SVG татах
                 </button>
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-64 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-              <div className="text-center text-gray-400">
+            <div className="flex items-center justify-center h-64 bg-[var(--esl-bg-section)] rounded-xl border-2 border-dashed border-[var(--esl-border)]">
+              <div className="text-center text-[var(--esl-text-muted)]">
                 <span className="text-4xl block mb-2">🎨</span>
                 <p className="text-sm">Бизнесийн нэр оруулж лого үүсгэнэ үү</p>
               </div>
@@ -319,21 +319,21 @@ export default function AILogoPage() {
 
       {/* History */}
       {history.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mt-6">
-          <h2 className="font-bold text-gray-900 mb-4">Түүх</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mt-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Түүх</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {history.map((h) => (
-              <div key={h.id} className="border border-gray-200 rounded-lg p-3">
+              <div key={h.id} className="border border-[var(--esl-border)] rounded-lg p-3">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="flex gap-0.5">
                     {h.colors.map((c, i) => (
                       <div key={i} className="w-4 h-4 rounded-full" style={{ backgroundColor: c }} />
                     ))}
                   </div>
-                  <span className="text-sm font-medium text-gray-900 truncate">{h.businessName}</span>
+                  <span className="text-sm font-medium text-[var(--esl-text-primary)] truncate">{h.businessName}</span>
                 </div>
-                <p className="text-xs text-gray-500">{h.industry} / {h.style}</p>
-                <p className="text-xs text-gray-400 mt-1">{new Date(h.createdAt).toLocaleDateString('mn-MN')}</p>
+                <p className="text-xs text-[var(--esl-text-secondary)]">{h.industry} / {h.style}</p>
+                <p className="text-xs text-[var(--esl-text-muted)] mt-1">{new Date(h.createdAt).toLocaleDateString('mn-MN')}</p>
               </div>
             ))}
           </div>

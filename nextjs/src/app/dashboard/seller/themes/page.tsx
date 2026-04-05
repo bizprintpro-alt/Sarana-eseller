@@ -83,10 +83,10 @@ export default function ThemeStorePage() {
   const isDark = (style: string) => style === 'modern' || style === 'luxury';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0A0A0A' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--esl-bg-page)' }}>
       {/* Top bar */}
       <div style={{
-        background: '#111', borderBottom: '0.5px solid #2A2A2A',
+        background: 'var(--esl-bg-section)', borderBottom: '0.5px solid #2A2A2A',
         padding: '0 20px', display: 'flex', alignItems: 'center', gap: 16, height: 52,
       }}>
         <div style={{ fontSize: 15, fontWeight: 500, color: '#FFF', display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -97,7 +97,7 @@ export default function ThemeStorePage() {
         <div style={{ flex: 1, maxWidth: 360, position: 'relative' }}>
           <Search size={13} style={{ position: 'absolute', left: 9, top: '50%', transform: 'translateY(-50%)', color: '#555' }} />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Theme хайх..."
-            style={{ width: '100%', height: 34, border: '0.5px solid #2A2A2A', borderRadius: 8, padding: '0 10px 0 32px', background: '#1A1A1A', color: '#FFF', fontSize: 12, outline: 'none' }} />
+            style={{ width: '100%', height: 34, border: '0.5px solid #2A2A2A', borderRadius: 8, padding: '0 10px 0 32px', background: 'var(--esl-bg-card)', color: '#FFF', fontSize: 12, outline: 'none' }} />
         </div>
 
         <div style={{ display: 'flex', gap: 0, marginLeft: 'auto' }}>
@@ -144,7 +144,7 @@ export default function ThemeStorePage() {
             <span style={{ fontSize: 12, color: '#555' }}>Эрэмбэлэх:</span>
             <select value={sort} onChange={e => setSort(e.target.value)} style={{
               height: 32, padding: '0 28px 0 10px', border: '0.5px solid #2A2A2A',
-              borderRadius: 8, background: '#111', color: '#FFF', fontSize: 12, outline: 'none', cursor: 'pointer',
+              borderRadius: 8, background: 'var(--esl-bg-section)', color: '#FFF', fontSize: 12, outline: 'none', cursor: 'pointer',
             }}>
               <option value="relevance">Хамааралтай</option>
               <option value="newest">Шинэ түрүүнд</option>
@@ -162,7 +162,7 @@ export default function ThemeStorePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
             {filtered.map(theme => (
               <div key={theme.id} style={{
-                background: '#111', border: theme.isFeatured ? '2px solid #E8242C' : '0.5px solid #2A2A2A',
+                background: 'var(--esl-bg-section)', border: theme.isFeatured ? '2px solid #E8242C' : '0.5px solid #2A2A2A',
                 borderRadius: 12, overflow: 'hidden', cursor: 'pointer',
                 transition: 'transform 0.15s, border-color 0.15s',
               }}
@@ -229,7 +229,7 @@ export default function ThemeStorePage() {
                     {theme.entityTypes?.map(tp => (
                       <span key={tp} style={{
                         fontSize: 9, padding: '1px 6px', borderRadius: 99,
-                        background: '#1A1A1A', color: '#555', border: '0.5px solid #2A2A2A',
+                        background: 'var(--esl-bg-card)', color: '#555', border: '0.5px solid #2A2A2A',
                       }}>
                         {TYPE_LABELS[tp] || tp}
                       </span>

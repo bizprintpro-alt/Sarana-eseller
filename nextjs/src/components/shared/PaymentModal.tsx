@@ -86,7 +86,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
 
       <div style={{
         position: 'relative', width: '90%', maxWidth: 380,
-        background: '#1A1A1A', borderRadius: 16, border: '0.5px solid #2A2A2A',
+        background: 'var(--esl-bg-card)', borderRadius: 16, border: '0.5px solid #2A2A2A',
         padding: 24, color: '#FFF',
       }}>
         <button onClick={onClose} style={{
@@ -101,7 +101,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
         {/* Amount */}
         <div style={{
           textAlign: 'center', padding: '16px 0', marginBottom: 16,
-          background: '#0A0A0A', borderRadius: 10, border: '0.5px solid #2A2A2A',
+          background: 'var(--esl-bg-page)', borderRadius: 10, border: '0.5px solid #2A2A2A',
         }}>
           <span style={{ fontSize: 10, color: '#555', textTransform: 'uppercase' }}>Нийт дүн</span>
           <div style={{ fontSize: 28, fontWeight: 700, color: '#E8242C' }}>
@@ -121,7 +121,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
                   style={{
                     flex: 1, padding: '12px 8px', borderRadius: 10,
                     border: method === m.key ? '1px solid #E8242C' : '0.5px solid #2A2A2A',
-                    background: method === m.key ? 'rgba(232,36,44,0.06)' : '#0A0A0A',
+                    background: method === m.key ? 'rgba(232,36,44,0.06)' : 'var(--esl-bg-page)',
                     color: '#FFF', cursor: 'pointer', textAlign: 'center',
                   }}>
                   <div style={{ marginBottom: 4, color: method === m.key ? '#E8242C' : '#777' }}>{m.icon}</div>
@@ -169,7 +169,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
             </div>
             <button onClick={checkPayment} style={{
               padding: '8px 16px', borderRadius: 8, fontSize: 12,
-              border: '0.5px solid #2A2A2A', background: '#0A0A0A', color: '#777', cursor: 'pointer',
+              border: '0.5px solid #2A2A2A', background: 'var(--esl-bg-page)', color: '#777', cursor: 'pointer',
             }}>
               Шалгах
             </button>

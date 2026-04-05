@@ -130,7 +130,7 @@ export default function SellerDashboardPage() {
   // ── Loading skeleton ──
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header skeleton */}
           <div className="animate-pulse space-y-3">
@@ -154,7 +154,7 @@ export default function SellerDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--esl-bg-section)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
         {/* ═══ Координат reminder ═══ */}
@@ -163,12 +163,12 @@ export default function SellerDashboardPage() {
         {/* ═══ Header ═══ */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">
               Өрлийн мэнд, {user?.name || 'Худалдагч'}!
             </h1>
-            <p className="text-sm text-gray-500 mt-1">{dateStr}</p>
+            <p className="text-sm text-[var(--esl-text-secondary)] mt-1">{dateStr}</p>
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-sm font-medium text-gray-700">{storeName}</span>
+              <span className="text-sm font-medium text-[var(--esl-text-primary)]">{storeName}</span>
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
                 eseller.mn/{storeSlug}
               </span>
@@ -183,7 +183,7 @@ export default function SellerDashboardPage() {
             </Link>
             <Link
               href="/dashboard/seller/analytics"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-gray-700 text-sm font-medium rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-[var(--esl-text-primary)] text-sm font-medium rounded-xl border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] transition-colors"
             >
               Тайлан харах
             </Link>
@@ -226,9 +226,9 @@ export default function SellerDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Sales Bar Chart */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
+          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold text-gray-900">Борлуулалтын график</h2>
+              <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Борлуулалтын график</h2>
               <span className="text-sm font-medium text-indigo-600">
                 {formatPrice(weeklyTotal)}
               </span>
@@ -238,14 +238,14 @@ export default function SellerDashboardPage() {
                 const h = Math.max(8, (val / maxWeekly) * 100);
                 return (
                   <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                    <span className="text-[10px] text-gray-400 font-medium">
+                    <span className="text-[10px] text-[var(--esl-text-muted)] font-medium">
                       {formatPrice(val)}
                     </span>
                     <div
                       className="w-full rounded-lg bg-gradient-to-t from-indigo-500 to-indigo-400 transition-all duration-500 hover:from-indigo-600 hover:to-indigo-500"
                       style={{ height: `${h}%` }}
                     />
-                    <span className="text-[11px] text-gray-500 font-medium mt-1">
+                    <span className="text-[11px] text-[var(--esl-text-secondary)] font-medium mt-1">
                       {WEEK_DAYS[i].slice(0, 2)}
                     </span>
                   </div>
@@ -255,9 +255,9 @@ export default function SellerDashboardPage() {
           </div>
 
           {/* Active Orders */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
+          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-semibold text-gray-900">Идэвхтэй захиалгууд</h2>
+              <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Идэвхтэй захиалгууд</h2>
               <Link
                 href="/dashboard/seller/orders"
                 className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
@@ -266,7 +266,7 @@ export default function SellerDashboardPage() {
               </Link>
             </div>
             {activeOrders.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+              <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
                 <span className="text-3xl mb-2">📋</span>
                 <p className="text-sm">Идэвхтэй захиалга байхгүй</p>
               </div>
@@ -278,21 +278,21 @@ export default function SellerDashboardPage() {
                   return (
                     <div
                       key={order._id}
-                      className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-between py-3 px-4 rounded-xl bg-[var(--esl-bg-section)] hover:bg-[var(--esl-bg-section)] transition-colors"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">
                           {getInitials(buyerName)}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium text-[var(--esl-text-primary)] truncate">
                             {order.orderNumber || `#${order._id.slice(-6)}`}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">{buyerName}</p>
+                          <p className="text-xs text-[var(--esl-text-secondary)] truncate">{buyerName}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-sm font-semibold text-gray-900">
+                        <span className="text-sm font-semibold text-[var(--esl-text-primary)]">
                           {formatPrice(order.total)}
                         </span>
                         <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${cls}`}>
@@ -311,10 +311,10 @@ export default function SellerDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Low Stock */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-5">Үлдэгдэл багассан бараа</h2>
+          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+            <h2 className="text-lg font-semibold text-[var(--esl-text-primary)] mb-5">Үлдэгдэл багассан бараа</h2>
             {lowStockProducts.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+              <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
                 <span className="text-3xl mb-2">✅</span>
                 <p className="text-sm">Бүх барааны үлдэгдэл хангалттай</p>
               </div>
@@ -326,13 +326,13 @@ export default function SellerDashboardPage() {
                   return (
                     <div
                       key={p._id}
-                      className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50"
+                      className="flex items-center justify-between py-3 px-4 rounded-xl bg-[var(--esl-bg-section)]"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="text-xl shrink-0">{p.emoji || '📦'}</span>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>
-                          <p className="text-xs text-gray-500">{formatPrice(p.price)}</p>
+                          <p className="text-sm font-medium text-[var(--esl-text-primary)] truncate">{p.name}</p>
+                          <p className="text-xs text-[var(--esl-text-secondary)]">{formatPrice(p.price)}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
@@ -357,10 +357,10 @@ export default function SellerDashboardPage() {
           </div>
 
           {/* Top Products */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-5">Шилдэг бараанууд</h2>
+          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+            <h2 className="text-lg font-semibold text-[var(--esl-text-primary)] mb-5">Шилдэг бараанууд</h2>
             {topProducts.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-10 text-gray-400">
+              <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
                 <span className="text-3xl mb-2">🏆</span>
                 <p className="text-sm">Захиалгын дата хүлээж байна</p>
               </div>
@@ -369,18 +369,18 @@ export default function SellerDashboardPage() {
                 {topProducts.map((tp, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between py-3 px-4 rounded-xl bg-gray-50"
+                    className="flex items-center justify-between py-3 px-4 rounded-xl bg-[var(--esl-bg-section)]"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <span className="text-lg w-7 text-center shrink-0">
                         {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : tp.emoji}
                       </span>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">{tp.name}</p>
-                        <p className="text-xs text-gray-500">{tp.units} ширхэг зарагдсан</p>
+                        <p className="text-sm font-medium text-[var(--esl-text-primary)] truncate">{tp.name}</p>
+                        <p className="text-xs text-[var(--esl-text-secondary)]">{tp.units} ширхэг зарагдсан</p>
                       </div>
                     </div>
-                    <span className="text-sm font-semibold text-gray-900 shrink-0">
+                    <span className="text-sm font-semibold text-[var(--esl-text-primary)] shrink-0">
                       {formatPrice(tp.revenue)}
                     </span>
                   </div>
@@ -391,10 +391,10 @@ export default function SellerDashboardPage() {
         </div>
 
         {/* ═══ Row 4 — Subscription Info ═══ */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
+        <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-gray-900">Миний багц</h2>
+              <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Миний багц</h2>
               <span
                 className="inline-flex px-3 py-1 rounded-full text-xs font-bold text-white"
                 style={{ backgroundColor: plan.color }}
@@ -402,11 +402,11 @@ export default function SellerDashboardPage() {
                 {plan.name}
               </span>
               {plan.badge && (
-                <span className="text-xs text-gray-500">{plan.badge}</span>
+                <span className="text-xs text-[var(--esl-text-secondary)]">{plan.badge}</span>
               )}
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-[var(--esl-text-secondary)]">
                 {daysLeft > 0 ? `${daysLeft} хоног үлдсэн` : 'Хугацаа дууссан'}
               </span>
               <Link
@@ -422,10 +422,10 @@ export default function SellerDashboardPage() {
             {usages.map((u) => (
               <div key={u.label} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">{u.label}</span>
-                  <span className="text-sm font-semibold text-gray-900">{u.pct}%</span>
+                  <span className="text-sm text-[var(--esl-text-secondary)]">{u.label}</span>
+                  <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{u.pct}%</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-[var(--esl-bg-section)] rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-700 ${u.color}`}
                     style={{ width: `${Math.max(u.pct, 2)}%` }}
@@ -442,12 +442,12 @@ export default function SellerDashboardPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all group"
+              className="flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border border-[var(--esl-border)] hover:border-indigo-300 hover:shadow-md transition-all group"
             >
               <span className="text-2xl group-hover:scale-110 transition-transform">
                 {link.icon}
               </span>
-              <span className="text-sm font-medium text-gray-700 group-hover:text-indigo-600 transition-colors">
+              <span className="text-sm font-medium text-[var(--esl-text-primary)] group-hover:text-indigo-600 transition-colors">
                 {link.label}
               </span>
             </Link>

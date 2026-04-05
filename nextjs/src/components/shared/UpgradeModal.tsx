@@ -27,7 +27,7 @@ export function UpgradeModal({ isOpen, onClose, reason, currentPlan, requiredPla
 
       <div style={{
         position: 'relative', width: '90%', maxWidth: 440,
-        background: '#1A1A1A', borderRadius: 16, border: '0.5px solid #2A2A2A',
+        background: 'var(--esl-bg-card)', borderRadius: 16, border: '0.5px solid #2A2A2A',
         padding: 24, color: '#FFF',
       }}>
         <button onClick={onClose} style={{
@@ -65,7 +65,7 @@ export function UpgradeModal({ isOpen, onClose, reason, currentPlan, requiredPla
           {/* Current */}
           <div style={{
             padding: 12, borderRadius: 10,
-            background: '#0A0A0A', border: '0.5px solid #2A2A2A',
+            background: 'var(--esl-bg-page)', border: '0.5px solid #2A2A2A',
             textAlign: 'center',
           }}>
             <div style={{ fontSize: 10, color: '#555', marginBottom: 4 }}>Одоогийн</div>

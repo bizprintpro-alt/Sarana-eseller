@@ -177,7 +177,7 @@ export default function StorefrontEditorPage() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen text-gray-400 text-sm">Ачааллаж байна...</div>;
+    return <div className="flex items-center justify-center h-screen text-[var(--esl-text-muted)] text-sm">Ачааллаж байна...</div>;
   }
 
   // ═══ GENERATING SCREEN ═══
@@ -191,7 +191,7 @@ export default function StorefrontEditorPage() {
           <div className="space-y-3">
             {LOADING_STEPS.map((step, i) => (
               <motion.div key={step} initial={{ opacity: 0, x: -10 }} animate={{ opacity: i <= genStep ? 1 : 0.3, x: 0 }} transition={{ delay: i * 0.3 }}
-                className={cn('text-sm font-medium', i <= genStep ? 'text-gray-900' : 'text-gray-400')}>
+                className={cn('text-sm font-medium', i <= genStep ? 'text-[var(--esl-text-primary)]' : 'text-[var(--esl-text-muted)]')}>
                 {i < genStep ? '✓' : i === genStep ? '⏳' : '○'} {step}
               </motion.div>
             ))}
@@ -204,11 +204,11 @@ export default function StorefrontEditorPage() {
   // ═══ PICK MOOD SCREEN ═══
   if (flowStep === 'pick_mood') {
     return (
-      <div className="-m-6 lg:-m-8 min-h-screen bg-[#F8FAFC] p-8">
+      <div className="-m-6 lg:-m-8 min-h-screen bg-[var(--esl-bg-section)] p-8">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-black text-gray-900">Дизайн сонгоно уу</h2>
-            <p className="text-sm text-gray-500 mt-1">AI 3 өөр загвар үүсгэлээ. Аль нь таалагдаж байна?</p>
+            <h2 className="text-2xl font-black text-[var(--esl-text-primary)]">Дизайн сонгоно уу</h2>
+            <p className="text-sm text-[var(--esl-text-secondary)] mt-1">AI 3 өөр загвар үүсгэлээ. Аль нь таалагдаж байна?</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {moodVariants.map((variant, i) => {
@@ -216,7 +216,7 @@ export default function StorefrontEditorPage() {
               return (
                 <motion.button key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
                   onClick={() => handlePickMood(variant)}
-                  className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden hover:border-indigo-500 hover:shadow-lg transition-all cursor-pointer text-left group">
+                  className="bg-white rounded-2xl border-2 border-[var(--esl-border)] overflow-hidden hover:border-indigo-500 hover:shadow-lg transition-all cursor-pointer text-left group">
                   {/* Preview */}
                   <div className="h-48 relative" style={{ background: variant.theme.primaryColor }}>
                     <div className="absolute inset-0 flex items-center justify-center text-white text-center p-4">
@@ -229,13 +229,13 @@ export default function StorefrontEditorPage() {
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-xl">{m.emoji}</span>
-                      <span className="text-sm font-bold text-gray-900">{m.label}</span>
+                      <span className="text-sm font-bold text-[var(--esl-text-primary)]">{m.label}</span>
                     </div>
                     <div className="flex gap-1.5 mb-3">
                       {[variant.theme.primaryColor, variant.theme.accentColor, variant.theme.backgroundColor].map((c, j) => (
-                        <div key={j} className="w-6 h-6 rounded-full border border-gray-200" style={{ background: c }} />
+                        <div key={j} className="w-6 h-6 rounded-full border border-[var(--esl-border)]" style={{ background: c }} />
                       ))}
-                      <span className="text-[10px] text-gray-400 self-center ml-1">{variant.theme.fontDisplay}</span>
+                      <span className="text-[10px] text-[var(--esl-text-muted)] self-center ml-1">{variant.theme.fontDisplay}</span>
                     </div>
                     <div className="text-xs font-semibold text-indigo-600 opacity-0 group-hover:opacity-100 transition flex items-center gap-1">
                       Сонгох <ArrowRight className="w-3 h-3" />
@@ -246,7 +246,7 @@ export default function StorefrontEditorPage() {
             })}
           </div>
           <div className="text-center mt-6">
-            <button onClick={() => setFlowStep('editor')} className="text-sm text-gray-500 hover:text-gray-700 bg-transparent border-none cursor-pointer">
+            <button onClick={() => setFlowStep('editor')} className="text-sm text-[var(--esl-text-secondary)] hover:text-[var(--esl-text-primary)] bg-transparent border-none cursor-pointer">
               Алгасах — гараар засах
             </button>
           </div>
@@ -258,18 +258,18 @@ export default function StorefrontEditorPage() {
   // ═══ PUBLISH SCREEN ═══
   if (flowStep === 'publish') {
     return (
-      <div className="-m-6 lg:-m-8 flex items-center justify-center min-h-screen bg-[#F8FAFC] p-4">
+      <div className="-m-6 lg:-m-8 flex items-center justify-center min-h-screen bg-[var(--esl-bg-section)] p-4">
         <div className="max-w-md w-full space-y-6">
           {published ? (
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl border border-gray-200 p-8 text-center">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl border border-[var(--esl-border)] p-8 text-center">
               <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                 <Check className="w-8 h-8 text-green-600" />
               </div>
-              <h2 className="text-xl font-black text-gray-900 mb-2">Нийтлэгдлээ!</h2>
-              <p className="text-sm text-gray-500 mb-4">Таны дэлгүүр амжилттай нийтлэгдлээ</p>
-              <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-2 mb-4">
+              <h2 className="text-xl font-black text-[var(--esl-text-primary)] mb-2">Нийтлэгдлээ!</h2>
+              <p className="text-sm text-[var(--esl-text-secondary)] mb-4">Таны дэлгүүр амжилттай нийтлэгдлээ</p>
+              <div className="bg-[var(--esl-bg-section)] rounded-xl p-4 flex items-center gap-2 mb-4">
                 <Globe className="w-4 h-4 text-indigo-500 shrink-0" />
-                <span className="text-sm font-mono text-gray-700 flex-1 truncate">{publishedUrl}</span>
+                <span className="text-sm font-mono text-[var(--esl-text-primary)] flex-1 truncate">{publishedUrl}</span>
                 <button onClick={copyUrl} className="text-xs text-indigo-600 font-semibold bg-transparent border-none cursor-pointer">
                   {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
                 </button>
@@ -279,22 +279,22 @@ export default function StorefrontEditorPage() {
                   className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold no-underline hover:bg-indigo-700 transition">
                   <Eye className="w-4 h-4" /> Харах
                 </a>
-                <button onClick={() => setFlowStep('editor')} className="flex-1 py-2.5 bg-gray-100 text-gray-700 rounded-xl text-sm font-semibold hover:bg-gray-200 cursor-pointer border-none transition">
+                <button onClick={() => setFlowStep('editor')} className="flex-1 py-2.5 bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] rounded-xl text-sm font-semibold hover:bg-[var(--esl-bg-card-hover)] cursor-pointer border-none transition">
                   Засах
                 </button>
               </div>
             </motion.div>
           ) : (
-            <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-              <h2 className="text-lg font-black text-gray-900">Дэлгүүр нийтлэх</h2>
+            <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
+              <h2 className="text-lg font-black text-[var(--esl-text-primary)]">Дэлгүүр нийтлэх</h2>
 
               <div>
-                <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Домайн нэр</label>
+                <label className="text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5 block">Домайн нэр</label>
                 <div className="flex items-center gap-0">
                   <input type="text" value={subdomain} onChange={(e) => { setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')); setSubdomainAvailable(null); }}
                     placeholder="myshop"
-                    className="flex-1 px-3 py-2.5 border border-gray-200 border-r-0 rounded-l-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                  <span className="px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-r-lg text-xs text-gray-400">.eseller.mn</span>
+                    className="flex-1 px-3 py-2.5 border border-[var(--esl-border)] border-r-0 rounded-l-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                  <span className="px-3 py-2.5 bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-r-lg text-xs text-[var(--esl-text-muted)]">.eseller.mn</span>
                 </div>
               </div>
 
@@ -306,11 +306,11 @@ export default function StorefrontEditorPage() {
 
               <button onClick={handlePublish} disabled={publishing || !subdomain.trim()}
                 className={cn('w-full py-3 rounded-xl text-sm font-semibold border-none cursor-pointer transition flex items-center justify-center gap-2',
-                  publishing ? 'bg-gray-200 text-gray-400' : 'bg-indigo-600 text-white hover:bg-indigo-700')}>
+                  publishing ? 'bg-gray-200 text-[var(--esl-text-muted)]' : 'bg-indigo-600 text-white hover:bg-indigo-700')}>
                 {publishing ? <><Loader2 className="w-4 h-4 animate-spin" /> Нийтэлж байна...</> : <><Sparkles className="w-4 h-4" /> Нийтлэх</>}
               </button>
 
-              <button onClick={() => setFlowStep('editor')} className="w-full text-center text-sm text-gray-500 bg-transparent border-none cursor-pointer hover:text-gray-700">
+              <button onClick={() => setFlowStep('editor')} className="w-full text-center text-sm text-[var(--esl-text-secondary)] bg-transparent border-none cursor-pointer hover:text-[var(--esl-text-primary)]">
                 ← Засварлах руу буцах
               </button>
             </div>

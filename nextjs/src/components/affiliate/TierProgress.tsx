@@ -27,7 +27,7 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
   const TierIcon = tier.icon;
 
   return (
-    <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 space-y-5">
+    <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6 space-y-5">
       {/* Current Tier */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -35,13 +35,13 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
             <TierIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <div className="text-xs text-[#94A3B8] font-medium">Таны зэрэглэл</div>
+            <div className="text-xs text-[var(--esl-text-muted)] font-medium">Таны зэрэглэл</div>
             <div className="text-lg font-black" style={{ color: tier.color }}>{tier.name}</div>
           </div>
         </div>
         {nextTier && (
           <div className="text-right">
-            <div className="text-[10px] text-[#94A3B8] uppercase tracking-wider font-semibold">Дараагийн</div>
+            <div className="text-[10px] text-[var(--esl-text-muted)] uppercase tracking-wider font-semibold">Дараагийн</div>
             <div className="text-sm font-bold text-[#0F172A] flex items-center gap-1">
               {nextTier.name} <ChevronRight className="w-3 h-3" />
             </div>
@@ -52,10 +52,10 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
       {/* Tier progress */}
       <div>
         <div className="flex justify-between text-xs mb-1.5">
-          <span className="text-[#94A3B8] font-medium">Зэрэглэл шилжих</span>
+          <span className="text-[var(--esl-text-muted)] font-medium">Зэрэглэл шилжих</span>
           <span className="font-bold text-[#0F172A]">{Math.round(progressInTier)}%</span>
         </div>
-        <div className="h-3 bg-[#F1F5F9] rounded-full overflow-hidden">
+        <div className="h-3 bg-[var(--esl-bg-section)] rounded-full overflow-hidden">
           <motion.div
             className={`h-full rounded-full bg-gradient-to-r ${tier.bg}`}
             initial={{ width: 0 }}
@@ -64,16 +64,16 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
           />
         </div>
         {nextTier && (
-          <div className="text-[11px] text-[#94A3B8] mt-1.5">
+          <div className="text-[11px] text-[var(--esl-text-muted)] mt-1.5">
             {nextTier.name} зэрэглэлд хүрэхэд <span className="font-bold text-[#0F172A]">{((tier.max - totalEarnings) / 1000).toFixed(0)}K₮</span> дутуу
           </div>
         )}
       </div>
 
       {/* Monthly target */}
-      <div className="bg-[#F8FAFC] rounded-xl p-4">
+      <div className="bg-[var(--esl-bg-section)] rounded-xl p-4">
         <div className="flex justify-between text-xs mb-2">
-          <span className="font-semibold text-[#475569]">Сарын зорилго</span>
+          <span className="font-semibold text-[var(--esl-text-secondary)]">Сарын зорилго</span>
           <span className="font-bold text-[#6366F1]">{Math.round(monthlyProgress)}%</span>
         </div>
         <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
@@ -84,7 +84,7 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
             transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
-        <div className="flex justify-between text-[11px] text-[#94A3B8] mt-1.5">
+        <div className="flex justify-between text-[11px] text-[var(--esl-text-muted)] mt-1.5">
           <span>{(monthlySales / 1000).toFixed(0)}K₮ борлуулсан</span>
           <span>Зорилго: {(monthlyTarget / 1000).toFixed(0)}K₮</span>
         </div>
@@ -96,7 +96,7 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
           <div key={t.name} className={`text-center py-2 px-1 rounded-lg border text-[10px] font-bold transition-all ${
             i <= currentTier
               ? 'border-[#6366F1]/20 bg-[#EEF2FF] text-[#6366F1]'
-              : 'border-[#E2E8F0] bg-white text-[#CBD5E1]'
+              : 'border-[var(--esl-border)] bg-white text-[#CBD5E1]'
           }`}>
             <t.icon className="w-3.5 h-3.5 mx-auto mb-0.5" />
             {t.name}

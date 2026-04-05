@@ -108,7 +108,7 @@ export default function BuyerChatPage() {
   return (
     <div style={{
       maxWidth: 480, margin: '0 auto',
-      background: '#0A0A0A', minHeight: '100vh',
+      background: 'var(--esl-bg-page)', minHeight: '100vh',
       display: 'flex', flexDirection: 'column',
       fontFamily: 'system-ui, sans-serif',
     }}>
@@ -116,7 +116,7 @@ export default function BuyerChatPage() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
         padding: '11px 16px', borderBottom: '0.5px solid #2A2A2A',
-        background: '#0A0A0A',
+        background: 'var(--esl-bg-page)',
       }}>
         <Link href="/shops" style={{
           width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -168,7 +168,7 @@ export default function BuyerChatPage() {
 
       {/* ═══ Order Banner ═══ */}
       <div style={{
-        margin: '10px 14px', background: '#1A1A1A',
+        margin: '10px 14px', background: 'var(--esl-bg-card)',
         border: '0.5px solid #2A2A2A', borderRadius: 12, overflow: 'hidden',
       }}>
         <div style={{
@@ -183,7 +183,7 @@ export default function BuyerChatPage() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px' }}>
           <div style={{
-            width: 44, height: 44, borderRadius: 8, background: '#222',
+            width: 44, height: 44, borderRadius: 8, background: 'var(--esl-bg-card-hover)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             border: '0.5px solid #333', flexShrink: 0,
           }}>
@@ -203,8 +203,8 @@ export default function BuyerChatPage() {
       <div style={{ flex: 1, overflowY: 'auto', padding: 14 }}>
         {/* Date separator */}
         <div style={{ textAlign: 'center', margin: '10px 0', position: 'relative' }}>
-          <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 0.5, background: '#2A2A2A' }} />
-          <span style={{ background: '#0A0A0A', padding: '0 10px', fontSize: 10, color: '#555', position: 'relative', zIndex: 1 }}>
+          <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 0.5, background: 'var(--esl-bg-elevated)' }} />
+          <span style={{ background: 'var(--esl-bg-page)', padding: '0 10px', fontSize: 10, color: '#555', position: 'relative', zIndex: 1 }}>
             Өнөөдөр
           </span>
         </div>
@@ -216,7 +216,7 @@ export default function BuyerChatPage() {
               <div key={msg.id} style={{ textAlign: 'center', margin: '10px 0' }}>
                 <span style={{
                   display: 'inline-flex', alignItems: 'center', gap: 5,
-                  fontSize: 11, color: '#555', background: '#1A1A1A',
+                  fontSize: 11, color: '#555', background: 'var(--esl-bg-card)',
                   padding: '5px 12px', borderRadius: 99, border: '0.5px solid #2A2A2A',
                 }}>
                   <Check size={12} />
@@ -252,7 +252,7 @@ export default function BuyerChatPage() {
                     border: '0.5px solid #2A2A2A', cursor: 'pointer', marginBottom: 4,
                   }}>
                     <div style={{
-                      width: '100%', height: 130, background: '#1A1A1A',
+                      width: '100%', height: 130, background: 'var(--esl-bg-card)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
                       <ImageIcon size={28} color="#555" />
@@ -266,7 +266,7 @@ export default function BuyerChatPage() {
                     maxWidth: '68%', padding: '9px 12px', fontSize: 13, lineHeight: 1.55,
                     wordBreak: 'break-word',
                     borderRadius: isMe ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
-                    background: isMe ? '#E8242C' : '#1A1A1A',
+                    background: isMe ? '#E8242C' : 'var(--esl-bg-card)',
                     color: isMe ? '#FFF' : '#E0E0E0',
                   }}>
                     {msg.text}
@@ -295,7 +295,7 @@ export default function BuyerChatPage() {
       {/* ═══ Review Card ═══ */}
       {showReview && (
         <div style={{
-          margin: '0 14px 10px', background: '#1A1A1A',
+          margin: '0 14px 10px', background: 'var(--esl-bg-card)',
           border: '0.5px solid #2A2A2A', borderRadius: 12, padding: 12,
         }}>
           {reviewSent ? (
@@ -328,7 +328,7 @@ export default function BuyerChatPage() {
                 placeholder="Сэтгэгдэл бичих (сонголтоос)..."
                 style={{
                   width: '100%', padding: '7px 10px', border: '0.5px solid #3D3D3D',
-                  borderRadius: 8, background: '#0A0A0A', color: '#FFF',
+                  borderRadius: 8, background: 'var(--esl-bg-page)', color: '#FFF',
                   fontSize: 12, outline: 'none', marginBottom: 8, boxSizing: 'border-box',
                 }}
               />
@@ -353,7 +353,7 @@ export default function BuyerChatPage() {
           <button key={chip} onClick={() => setInput(chip)}
             style={{
               padding: '6px 12px', borderRadius: 99, fontSize: 12, cursor: 'pointer',
-              border: '0.5px solid #3D3D3D', background: '#0A0A0A', color: '#777',
+              border: '0.5px solid #3D3D3D', background: 'var(--esl-bg-page)', color: '#777',
               whiteSpace: 'nowrap', transition: 'all 0.12s',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#E8242C'; e.currentTarget.style.color = '#E8242C'; }}
@@ -380,7 +380,7 @@ export default function BuyerChatPage() {
 
           <div style={{
             flex: 1, display: 'flex', alignItems: 'center', gap: 6,
-            background: '#1A1A1A', border: '0.5px solid #2A2A2A',
+            background: 'var(--esl-bg-card)', border: '0.5px solid #2A2A2A',
             borderRadius: 20, padding: '7px 14px',
           }}>
             <input

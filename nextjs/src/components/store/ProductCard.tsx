@@ -82,7 +82,7 @@ export default function ProductCard({
       {/* ─── Wishlist ─── */}
       {onToggleWish && (
         <button
-          className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full bg-white/85 flex items-center justify-center border border-gray-200/50 cursor-pointer transition-all hover:bg-white hover:scale-110"
+          className="absolute top-2.5 right-2.5 z-10 w-7 h-7 rounded-full bg-white/85 flex items-center justify-center border border-[var(--esl-border)]/50 cursor-pointer transition-all hover:bg-white hover:scale-110"
           onClick={(e) => { e.stopPropagation(); onToggleWish(p._id); }}
         >
           <Heart className="w-3.5 h-3.5" fill={isWished ? '#E24B4A' : 'none'} color={isWished ? '#E24B4A' : '#666'} strokeWidth={1.5} />

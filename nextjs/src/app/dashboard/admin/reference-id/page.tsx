@@ -82,11 +82,11 @@ export default function ReferenceIdPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Reference ID тохиргоо</h1>
-          <p className="text-sm text-gray-500">Админ · Бараа болон захиалгын дугаарын формат</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Reference ID тохиргоо</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)]">Админ · Бараа болон захиалгын дугаарын формат</p>
         </div>
         <div className="flex gap-2">
-          <button className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-50 cursor-pointer transition">
+          <button className="px-4 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
             Анхны тохиргоо
           </button>
           <button className="px-4 py-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-xs font-semibold hover:bg-amber-100 cursor-pointer transition">
@@ -119,29 +119,29 @@ export default function ReferenceIdPage() {
         {/* ═══ Left — Config ═══ */}
         <div className="space-y-4">
           {/* Object scope */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-bold text-gray-900">ID хамрах хүрээ</h3>
-              <span className="text-[10px] text-gray-400">Ямар объектод ID олгох</span>
+              <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">ID хамрах хүрээ</h3>
+              <span className="text-[10px] text-[var(--esl-text-muted)]">Ямар объектод ID олгох</span>
             </div>
             <div>
-              <div className="text-xs text-gray-500 mb-2">Хамрах объект</div>
+              <div className="text-xs text-[var(--esl-text-secondary)] mb-2">Хамрах объект</div>
               <div className="flex flex-wrap gap-2">
                 {OBJECT_TYPES.map((obj) => (
                   <button key={obj.key} onClick={() => setSelectedObj(obj.key)}
                     className={cn('px-3 py-1.5 rounded-full text-xs font-semibold border cursor-pointer transition',
-                      selectedObj === obj.key ? 'bg-indigo-600 text-white border-indigo-600' : obj.active ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-gray-50 text-gray-400 border-gray-200')}>
+                      selectedObj === obj.key ? 'bg-indigo-600 text-white border-indigo-600' : obj.active ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-muted)] border-[var(--esl-border)]')}>
                     {obj.label}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <div className="text-xs text-gray-500 mb-2">Тохиргоо засах объект</div>
+              <div className="text-xs text-[var(--esl-text-secondary)] mb-2">Тохиргоо засах объект</div>
               <div className="flex gap-2">
                 {['Бараа', 'Захиалга', 'Дэлгүүр'].map((t) => (
                   <button key={t} className={cn('px-4 py-2 rounded-lg text-xs font-semibold border cursor-pointer transition',
-                    t === 'Бараа' ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50')}>
+                    t === 'Бараа' ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-white text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}>
                     {t}
                   </button>
                 ))}
@@ -150,73 +150,73 @@ export default function ReferenceIdPage() {
           </div>
 
           {/* Format config */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-bold text-gray-900">Форматын тохиргоо</h3>
+              <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Форматын тохиргоо</h3>
               <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Бараа · {format.prefix}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] text-gray-400 block mb-1">Угтвар (prefix)</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Угтвар (prefix)</label>
                 <input type="text" value={format.prefix} onChange={(e) => setFormat({ ...format, prefix: e.target.value.toUpperCase().slice(0, 6) })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-                <span className="text-[10px] text-gray-400">2–6 үсэг, том үсгээр</span>
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                <span className="text-[10px] text-[var(--esl-text-muted)]">2–6 үсэг, том үсгээр</span>
               </div>
               <div>
-                <label className="text-[10px] text-gray-400 block mb-1">Тусгаарлагч</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Тусгаарлагч</label>
                 <select value={format.separator} onChange={(e) => setFormat({ ...format, separator: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
                   {SEPARATORS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="text-[10px] text-gray-400 block mb-1">Форматын загвар</label>
+              <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Форматын загвар</label>
               <div className="flex gap-1.5 mb-2">
                 {TOKENS.map((t) => (
                   <button key={t} onClick={() => setFormat({ ...format, pattern: format.pattern + t })}
-                    className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-[10px] font-mono font-semibold border-none cursor-pointer hover:bg-gray-200 transition">
+                    className="px-2 py-1 bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] rounded text-[10px] font-mono font-semibold border-none cursor-pointer hover:bg-[var(--esl-bg-card-hover)] transition">
                     {t}
                   </button>
                 ))}
               </div>
               <input type="text" value={format.pattern} onChange={(e) => setFormat({ ...format, pattern: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono bg-[#1A1A2E] text-white focus:outline-none" />
-              <span className="text-[10px] text-gray-400">Токен дарж оруулна уу · Жишээ: {'{CAT}'}-{'{YR}'}-{'{SEQ}'}</span>
+                className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono bg-[#1A1A2E] text-white focus:outline-none" />
+              <span className="text-[10px] text-[var(--esl-text-muted)]">Токен дарж оруулна уу · Жишээ: {'{CAT}'}-{'{YR}'}-{'{SEQ}'}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="text-[10px] text-gray-400 block mb-1">Дараалал эхлэх тоо</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Дараалал эхлэх тоо</label>
                 <input type="number" value={format.seqStart} onChange={(e) => setFormat({ ...format, seqStart: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
               </div>
               <div>
-                <label className="text-[10px] text-gray-400 block mb-1">Дугаарын урт</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Дугаарын урт</label>
                 <input type="number" value={format.seqLength} onChange={(e) => setFormat({ ...format, seqLength: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
               </div>
               <div>
-                <label className="text-[10px] text-gray-400 block mb-1">Нэмэгдэх алхам</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Нэмэгдэх алхам</label>
                 <input type="number" value={format.seqStep} onChange={(e) => setFormat({ ...format, seqStep: Number(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] text-gray-400 block mb-1">Ангилалын код</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Ангилалын код</label>
                 <select value={format.categoryCode} onChange={(e) => setFormat({ ...format, categoryCode: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
                   {Object.entries(CATEGORY_CODES).map(([k, v]) => <option key={k} value={v}>{v} — {k}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-[10px] text-gray-400 block mb-1">Том/жижиг үсэг</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Том/жижиг үсэг</label>
                 <select value={format.caseStyle} onChange={(e) => setFormat({ ...format, caseStyle: e.target.value as 'upper' | 'lower' })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
                   <option value="upper">Том үсэг (UPPER)</option>
                   <option value="lower">Жижиг үсэг (lower)</option>
                 </select>
@@ -228,8 +228,8 @@ export default function ReferenceIdPage() {
         {/* ═══ Right — Preview ═══ */}
         <div className="space-y-4">
           {/* ID Preview */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
-            <h3 className="text-sm font-bold text-gray-900">Урьдчилан харах</h3>
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
+            <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Урьдчилан харах</h3>
             <div className="bg-[#1A1A2E] rounded-xl p-5 text-center">
               <div className="text-[10px] text-white/40 mb-2">ҮҮСЭХ ID ЖИШЭЭ</div>
               <div className="text-2xl font-black text-white font-mono tracking-wider">{previewId}</div>
@@ -244,18 +244,18 @@ export default function ReferenceIdPage() {
             </div>
 
             <div>
-              <div className="text-xs text-gray-500 mb-2">Жишээ ID-ууд ({sampleIds.length})</div>
+              <div className="text-xs text-[var(--esl-text-secondary)] mb-2">Жишээ ID-ууд ({sampleIds.length})</div>
               <div className="grid grid-cols-2 gap-2">
                 {sampleIds.map((s) => (
-                  <div key={s.id} className="bg-gray-50 rounded-lg p-2.5">
-                    <div className="text-xs font-mono font-bold text-gray-900">{s.id}</div>
-                    <div className="text-[10px] text-gray-400">{s.label}</div>
+                  <div key={s.id} className="bg-[var(--esl-bg-section)] rounded-lg p-2.5">
+                    <div className="text-xs font-mono font-bold text-[var(--esl-text-primary)]">{s.id}</div>
+                    <div className="text-[10px] text-[var(--esl-text-muted)]">{s.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="space-y-1.5 text-xs border-t border-gray-100 pt-3">
+            <div className="space-y-1.5 text-xs border-t border-[var(--esl-border)] pt-3">
               {[
                 { label: 'Угтвар', value: format.prefix },
                 { label: 'Тусгаарлагч', value: format.separator || '(байхгүй)' },
@@ -263,26 +263,26 @@ export default function ReferenceIdPage() {
                 { label: 'Нийт урт', value: `${previewId.length} тэмдэгт` },
               ].map((r) => (
                 <div key={r.label} className="flex justify-between">
-                  <span className="text-gray-400">{r.label}</span>
-                  <span className="font-mono font-semibold text-gray-700">{r.value}</span>
+                  <span className="text-[var(--esl-text-muted)]">{r.label}</span>
+                  <span className="font-mono font-semibold text-[var(--esl-text-primary)]">{r.value}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Search & Check */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
-            <h3 className="text-sm font-bold text-gray-900">Хайлт & шалгалт</h3>
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-3">
+            <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Хайлт & шалгалт</h3>
             <div>
-              <label className="text-[10px] text-gray-400 block mb-1">ID шалгах</label>
+              <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">ID шалгах</label>
               <input type="text" value={checkId} onChange={(e) => setCheckId(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono bg-[#1A1A2E] text-white focus:outline-none" />
-              <span className="text-[10px] text-gray-400">ID оруулж давхардал шалгана уу</span>
+                className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm font-mono bg-[#1A1A2E] text-white focus:outline-none" />
+              <span className="text-[10px] text-[var(--esl-text-muted)]">ID оруулж давхардал шалгана уу</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex-1">
-                <label className="text-[10px] text-gray-400 block mb-1">Дараагийн ID</label>
-                <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-mono font-bold text-gray-900">{nextId}</div>
+                <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Дараагийн ID</label>
+                <div className="px-3 py-2 bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg text-sm font-mono font-bold text-[var(--esl-text-primary)]">{nextId}</div>
               </div>
               <button className="mt-4 px-3 py-2 bg-[#1A1A2E] text-white rounded-lg text-xs font-semibold border-none cursor-pointer hover:bg-[#2D2B55] transition">
                 Шинэчлэх
@@ -291,8 +291,8 @@ export default function ReferenceIdPage() {
           </div>
 
           {/* Change history */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-2">
-            <h3 className="text-sm font-bold text-gray-900">Өөрчлөлтийн түүх</h3>
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-2">
+            <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Өөрчлөлтийн түүх</h3>
             {[
               { text: `${format.prefix}-${format.categoryCode}-{SEQ} формат идэвхжсэн`, date: '2026-04-01', dot: 'bg-red-500' },
               { text: 'Дараалал 10000-с эхлүүлсэн', date: '2026-03-20', dot: 'bg-amber-500' },
@@ -302,9 +302,9 @@ export default function ReferenceIdPage() {
               <div key={i} className="flex items-start gap-2.5 py-1.5">
                 <span className={cn('w-2 h-2 rounded-full mt-1 shrink-0', h.dot)} />
                 <div className="flex-1">
-                  <div className="text-xs text-gray-700">{h.text}</div>
+                  <div className="text-xs text-[var(--esl-text-primary)]">{h.text}</div>
                 </div>
-                <span className="text-[10px] text-gray-400 shrink-0">{h.date}</span>
+                <span className="text-[10px] text-[var(--esl-text-muted)] shrink-0">{h.date}</span>
               </div>
             ))}
           </div>

@@ -108,13 +108,13 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
             key={s.label}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-[#E2E8F0] rounded-xl p-4 flex items-center gap-3 hover:shadow-sm transition-shadow"
+            className="bg-white border border-[var(--esl-border)] rounded-xl p-4 flex items-center gap-3 hover:shadow-sm transition-shadow"
           >
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: s.color + '12', color: s.color }}>
               <s.icon className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[11px] text-[#94A3B8] font-medium">{s.label}</div>
+              <div className="text-[11px] text-[var(--esl-text-muted)] font-medium">{s.label}</div>
               <div className="flex items-baseline gap-2">
                 <span className="text-lg font-black text-[#0F172A]">{s.value}</span>
                 <span className="text-[10px] font-bold text-emerald-500">{s.trend}</span>
@@ -128,7 +128,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
       {/* ════════════════════════════════════════
           ONE-CLICK SHARE + SHORT URL
           ════════════════════════════════════════ */}
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6">
+      <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-[#0F172A] text-sm flex items-center gap-2">
             <Send className="w-4 h-4 text-[#6366F1]" />
@@ -141,7 +141,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
               'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border-none cursor-pointer',
               copiedId === 'short-url'
                 ? 'bg-emerald-50 text-emerald-600'
-                : 'bg-[#F8FAFC] text-[#475569] hover:bg-[#6366F1] hover:text-white'
+                : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] hover:bg-[#6366F1] hover:text-white'
             )}
           >
             <Link2 className="w-3 h-3" />
@@ -156,12 +156,12 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
               href={`${ch.url}${encodeURIComponent(refLink)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[#E2E8F0] hover:shadow-md hover:-translate-y-1 transition-all no-underline group"
+              className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--esl-border)] hover:shadow-md hover:-translate-y-1 transition-all no-underline group"
             >
               <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl transition-transform group-hover:scale-110" style={{ background: ch.color + '10' }}>
                 {ch.icon}
               </div>
-              <span className="text-[10px] font-semibold text-[#475569]">{ch.name}</span>
+              <span className="text-[10px] font-semibold text-[var(--esl-text-secondary)]">{ch.name}</span>
             </a>
           ))}
         </div>
@@ -170,9 +170,9 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
       {/* ════════════════════════════════════════
           3-TAB STRUCTURE
           ════════════════════════════════════════ */}
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         {/* Tab header */}
-        <div className="flex border-b border-[#E2E8F0]">
+        <div className="flex border-b border-[var(--esl-border)]">
           {TOOLKIT_TABS.map((t) => (
             <button
               key={t.key}
@@ -181,7 +181,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                 'flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-semibold transition-all border-none cursor-pointer',
                 activeTab === t.key
                   ? 'bg-[#6366F1] text-white'
-                  : 'bg-white text-[#94A3B8] hover:bg-[#F8FAFC] hover:text-[#475569]'
+                  : 'bg-white text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-section)] hover:text-[var(--esl-text-secondary)]'
               )}
             >
               <t.icon className="w-4 h-4" />
@@ -206,7 +206,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                 </div>
                 <div className="flex-1 text-center sm:text-left">
                   <h4 className="text-sm font-bold text-[#0F172A] mb-1">Брэнд QR код</h4>
-                  <p className="text-xs text-[#94A3B8] mb-3 leading-relaxed">Poster, визит карт, нийтлэл дээрээ байршуулж болно</p>
+                  <p className="text-xs text-[var(--esl-text-muted)] mb-3 leading-relaxed">Poster, визит карт, нийтлэл дээрээ байршуулж болно</p>
                   <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                     <a href={`https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(refLink)}&bgcolor=ffffff&color=4338CA&format=png`} download={`eseller-${username}-qr.png`} target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#6366F1] text-white rounded-lg text-xs font-bold no-underline hover:bg-[#4F46E5] transition-all">
@@ -221,7 +221,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                 <h4 className="text-sm font-bold text-[#0F172A] mb-3 flex items-center gap-2">
                   <Image className="w-4 h-4 text-[#6366F1]" />
                   Бэлэн постерууд
-                  <span className="text-[10px] text-[#94A3B8] font-medium">QR код автоматаар нэмэгдсэн</span>
+                  <span className="text-[10px] text-[var(--esl-text-muted)] font-medium">QR код автоматаар нэмэгдсэн</span>
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {CREATIVE_POSTERS.map((p) => (
@@ -236,7 +236,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                         <span className="absolute bottom-2 text-[8px] text-white/40 font-mono">@{username}</span>
                       </div>
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button className="bg-white text-[#0F172A] px-4 py-2 rounded-lg text-xs font-bold border-none cursor-pointer flex items-center gap-1 hover:bg-[#F8FAFC] transition">
+                        <button className="bg-white text-[#0F172A] px-4 py-2 rounded-lg text-xs font-bold border-none cursor-pointer flex items-center gap-1 hover:bg-[var(--esl-bg-section)] transition">
                           <Download className="w-3 h-3" /> Татах
                         </button>
                         <button className="bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold border-none cursor-pointer backdrop-blur-sm flex items-center gap-1 hover:bg-white/30 transition">
@@ -267,7 +267,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                       'flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all border-none cursor-pointer',
                       copySection === s.key
                         ? 'bg-[#6366F1] text-white shadow-sm'
-                        : 'bg-[#F8FAFC] text-[#475569] hover:bg-[#E2E8F0]'
+                        : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] hover:bg-[#E2E8F0]'
                     )}
                   >
                     <s.icon className="w-3.5 h-3.5" />
@@ -279,7 +279,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
               {/* Templates */}
               <div className="space-y-3">
                 {COPY_TEMPLATES[copySection].map((t, i) => (
-                  <div key={i} className="bg-[#F8FAFC] rounded-xl p-4 border border-[#E2E8F0] hover:border-[#6366F1]/20 transition-colors">
+                  <div key={i} className="bg-[var(--esl-bg-section)] rounded-xl p-4 border border-[var(--esl-border)] hover:border-[#6366F1]/20 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-bold text-[#0F172A]">{t.title}</span>
                       <button
@@ -288,13 +288,13 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                           'text-xs font-bold px-3 py-1.5 rounded-lg transition-all border-none cursor-pointer flex items-center gap-1',
                           copiedId === `copy-${copySection}-${i}`
                             ? 'bg-emerald-50 text-emerald-600'
-                            : 'bg-white text-[#6366F1] hover:bg-[#6366F1] hover:text-white border border-[#E2E8F0]'
+                            : 'bg-white text-[#6366F1] hover:bg-[#6366F1] hover:text-white border border-[var(--esl-border)]'
                         )}
                       >
                         {copiedId === `copy-${copySection}-${i}` ? <><Check className="w-3 h-3" /> Хуулсан</> : <><Copy className="w-3 h-3" /> Хуулах</>}
                       </button>
                     </div>
-                    <p className="text-xs text-[#475569] leading-relaxed whitespace-pre-line bg-white rounded-lg p-3 border border-[#E2E8F0]">
+                    <p className="text-xs text-[var(--esl-text-secondary)] leading-relaxed whitespace-pre-line bg-white rounded-lg p-3 border border-[var(--esl-border)]">
                       {t.text.replace(/\{link\}/g, refLink).replace(/\{discount\}/g, '30')}
                     </p>
                   </div>
@@ -309,15 +309,15 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                 </h4>
                 <div className="space-y-2">
                   {FAQ_ITEMS.map((faq, i) => (
-                    <div key={i} className="border border-[#E2E8F0] rounded-xl overflow-hidden">
+                    <div key={i} className="border border-[var(--esl-border)] rounded-xl overflow-hidden">
                       <button
                         onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                        className="w-full flex items-center gap-3 px-4 py-3 bg-transparent border-none cursor-pointer text-left hover:bg-[#F8FAFC] transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-3 bg-transparent border-none cursor-pointer text-left hover:bg-[var(--esl-bg-section)] transition-colors"
                       >
-                        <HelpCircle className="w-4 h-4 text-[#94A3B8] shrink-0" />
+                        <HelpCircle className="w-4 h-4 text-[var(--esl-text-muted)] shrink-0" />
                         <span className="flex-1 text-sm font-semibold text-[#0F172A]">&ldquo;{faq.q}&rdquo;</span>
-                        <span className="text-[10px] font-bold text-[#94A3B8] bg-[#F8FAFC] px-2 py-0.5 rounded">{faq.tag}</span>
-                        <ChevronDown className={cn('w-4 h-4 text-[#94A3B8] transition-transform', openFaq === i && 'rotate-180')} />
+                        <span className="text-[10px] font-bold text-[var(--esl-text-muted)] bg-[var(--esl-bg-section)] px-2 py-0.5 rounded">{faq.tag}</span>
+                        <ChevronDown className={cn('w-4 h-4 text-[var(--esl-text-muted)] transition-transform', openFaq === i && 'rotate-180')} />
                       </button>
                       {openFaq === i && (
                         <div className="px-4 pb-3">
@@ -325,7 +325,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                             <div className="text-[10px] font-bold text-[#6366F1] mb-1 flex items-center gap-1">
                               <Sparkles className="w-3 h-3" /> Санал болгох хариулт
                             </div>
-                            <p className="text-xs text-[#475569] leading-relaxed">{faq.a}</p>
+                            <p className="text-xs text-[var(--esl-text-secondary)] leading-relaxed">{faq.a}</p>
                             <button
                               onClick={() => onCopy(faq.a, `faq-${i}`)}
                               className={cn('mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md transition-all border-none cursor-pointer',
@@ -346,10 +346,10 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
           {/* ═══ TAB 3: Training ═══ */}
           {activeTab === 'training' && (
             <div className="space-y-4">
-              <p className="text-xs text-[#94A3B8]">Шилдэг борлуулагчдын арга барилаас суралцаарай</p>
+              <p className="text-xs text-[var(--esl-text-muted)]">Шилдэг борлуулагчдын арга барилаас суралцаарай</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {TRAINING_VIDEOS.map((v, i) => (
-                  <div key={i} className="group flex items-center gap-3 p-3 rounded-xl border border-[#E2E8F0] hover:border-[#6366F1]/20 hover:shadow-sm transition-all cursor-pointer">
+                  <div key={i} className="group flex items-center gap-3 p-3 rounded-xl border border-[var(--esl-border)] hover:border-[#6366F1]/20 hover:shadow-sm transition-all cursor-pointer">
                     <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#6366F1]/10 to-[#A78BFA]/10 flex items-center justify-center shrink-0 relative">
                       <span className="text-2xl">{v.emoji}</span>
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-[#6366F1]/80 rounded-xl">
@@ -359,9 +359,9 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                     <div className="flex-1 min-w-0">
                       <h5 className="text-sm font-bold text-[#0F172A] truncate group-hover:text-[#6366F1] transition-colors">{v.title}</h5>
                       <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[10px] text-[#94A3B8]">{v.duration}</span>
-                        <span className="text-[10px] text-[#94A3B8]">&middot;</span>
-                        <span className="text-[10px] text-[#94A3B8]">{v.views.toLocaleString()} үзсэн</span>
+                        <span className="text-[10px] text-[var(--esl-text-muted)]">{v.duration}</span>
+                        <span className="text-[10px] text-[var(--esl-text-muted)]">&middot;</span>
+                        <span className="text-[10px] text-[var(--esl-text-muted)]">{v.views.toLocaleString()} үзсэн</span>
                         <span className={cn('text-[9px] font-bold px-1.5 py-0.5 rounded',
                           v.level === 'Анхан' ? 'bg-emerald-50 text-emerald-600' :
                           v.level === 'Дунд' ? 'bg-amber-50 text-amber-600' : 'bg-violet-50 text-violet-600'
@@ -379,7 +379,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                 <h4 className="text-sm font-bold text-[#0F172A] mb-2 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[#6366F1]" /> Ахисан зөвлөгөө
                 </h4>
-                <ul className="space-y-1.5 text-xs text-[#475569]">
+                <ul className="space-y-1.5 text-xs text-[var(--esl-text-secondary)]">
                   <li className="flex items-start gap-2"><span className="text-[#6366F1] font-bold">1.</span> Бүтээгдэхүүнийг өөрөө туршиж үзсэн бол итгэлтэй санал болгоно</li>
                   <li className="flex items-start gap-2"><span className="text-[#6366F1] font-bold">2.</span> Оройн 19-21 цагт нийтэлбэл хамгийн олон хүнд хүрнэ</li>
                   <li className="flex items-start gap-2"><span className="text-[#6366F1] font-bold">3.</span> Reels/Story богино контент илүү хурдан тархдаг</li>

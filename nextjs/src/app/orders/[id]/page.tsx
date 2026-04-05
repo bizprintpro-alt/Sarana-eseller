@@ -71,14 +71,14 @@ export default function OrderTrackingPage() {
   const currentStepIdx = STEPS.findIndex((s) => s.key === order?.status);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
-      <nav className="bg-white border-b border-gray-200 h-14 flex items-center px-4">
+    <div className="min-h-screen bg-[var(--esl-bg-section)]">
+      <nav className="bg-white border-b border-[var(--esl-border)] h-14 flex items-center px-4">
         <div className="max-w-2xl mx-auto w-full flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 no-underline">
             <EsellerLogo size={22} />
-            <span className="text-base font-black text-gray-900">eseller<span className="text-[#E31E24]">.mn</span></span>
+            <span className="text-base font-black text-[var(--esl-text-primary)]">eseller<span className="text-[#E31E24]">.mn</span></span>
           </Link>
-          <button onClick={fetchOrder} className="text-xs text-gray-400 hover:text-indigo-600 bg-transparent border-none cursor-pointer flex items-center gap-1">
+          <button onClick={fetchOrder} className="text-xs text-[var(--esl-text-muted)] hover:text-indigo-600 bg-transparent border-none cursor-pointer flex items-center gap-1">
             <RefreshCw className="w-3 h-3" /> Шинэчлэх
           </button>
         </div>
@@ -86,13 +86,13 @@ export default function OrderTrackingPage() {
 
       <div className="max-w-2xl mx-auto px-4 py-8">
         {loading ? (
-          <div className="text-center py-20 text-sm text-gray-400">Ачааллаж байна...</div>
+          <div className="text-center py-20 text-sm text-[var(--esl-text-muted)]">Ачааллаж байна...</div>
         ) : order ? (
           <div className="space-y-6">
             {/* Header */}
             <div className="text-center">
-              <h1 className="text-xl font-black text-gray-900">Захиалгын явц</h1>
-              <p className="text-sm text-gray-500 mt-1 font-mono">{order.orderNumber || order.id}</p>
+              <h1 className="text-xl font-black text-[var(--esl-text-primary)]">Захиалгын явц</h1>
+              <p className="text-sm text-[var(--esl-text-secondary)] mt-1 font-mono">{order.orderNumber || order.id}</p>
               {order.estimatedMinutes && order.status !== 'delivered' && order.status !== 'cancelled' && (
                 <div className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 text-xs font-semibold px-3 py-1.5 rounded-full mt-3">
                   <Clock className="w-3.5 h-3.5" />
@@ -102,7 +102,7 @@ export default function OrderTrackingPage() {
             </div>
 
             {/* Status Timeline */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
               {isCancelled ? (
                 <div className="text-center py-6">
                   <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
@@ -123,7 +123,7 @@ export default function OrderTrackingPage() {
                         {/* Circle + line */}
                         <div className="flex flex-col items-center">
                           <div className={cn('w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all',
-                            isCompleted ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-400',
+                            isCompleted ? 'bg-indigo-600 text-white' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-muted)]',
                             isCurrent && 'ring-4 ring-indigo-100 animate-pulse')}>
                             <StepIcon className="w-4 h-4" />
                           </div>
@@ -134,11 +134,11 @@ export default function OrderTrackingPage() {
 
                         {/* Text */}
                         <div className="pb-6">
-                          <div className={cn('text-sm font-semibold', isCompleted ? 'text-gray-900' : 'text-gray-400')}>
+                          <div className={cn('text-sm font-semibold', isCompleted ? 'text-[var(--esl-text-primary)]' : 'text-[var(--esl-text-muted)]')}>
                             {step.label}
                           </div>
                           {historyEntry && (
-                            <div className="text-[10px] text-gray-400 mt-0.5">
+                            <div className="text-[10px] text-[var(--esl-text-muted)] mt-0.5">
                               {new Date(historyEntry.timestamp).toLocaleString('mn-MN', { hour: '2-digit', minute: '2-digit' })}
                               {historyEntry.note && ` · ${historyEntry.note}`}
                             </div>
@@ -153,19 +153,19 @@ export default function OrderTrackingPage() {
 
             {/* Order summary */}
             {order.total && (
-              <div className="bg-white rounded-2xl border border-gray-200 p-5">
+              <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-5">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Нийт дүн</span>
-                  <span className="font-bold text-gray-900">{formatPrice(order.total)}</span>
+                  <span className="text-[var(--esl-text-secondary)]">Нийт дүн</span>
+                  <span className="font-bold text-[var(--esl-text-primary)]">{formatPrice(order.total)}</span>
                 </div>
               </div>
             )}
 
-            <p className="text-center text-[10px] text-gray-400">30 секунд тутамд автоматаар шинэчлэгдэнэ</p>
+            <p className="text-center text-[10px] text-[var(--esl-text-muted)]">30 секунд тутамд автоматаар шинэчлэгдэнэ</p>
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="text-sm text-gray-400">Захиалга олдсонгүй</p>
+            <p className="text-sm text-[var(--esl-text-muted)]">Захиалга олдсонгүй</p>
           </div>
         )}
       </div>

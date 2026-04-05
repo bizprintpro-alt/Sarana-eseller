@@ -91,7 +91,7 @@ export function LoyaltyWidget({ context, userId }: Props) {
   return (
     <div style={{
       padding: 16, borderRadius: 12,
-      background: '#1A1A1A', border: '0.5px solid #2A2A2A',
+      background: 'var(--esl-bg-card)', border: '0.5px solid #2A2A2A',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
         <Star size={18} color={tierConfig.text} fill={tierConfig.text} />
@@ -114,7 +114,7 @@ export function LoyaltyWidget({ context, userId }: Props) {
             <span>{tierConfig.label}</span>
             <span>{TIER_COLORS[data.nextTier]?.label || data.nextTier}</span>
           </div>
-          <div style={{ height: 4, background: '#2A2A2A', borderRadius: 2, overflow: 'hidden' }}>
+          <div style={{ height: 4, background: 'var(--esl-bg-elevated)', borderRadius: 2, overflow: 'hidden' }}>
             <div style={{
               height: '100%', borderRadius: 2,
               background: tierConfig.text,

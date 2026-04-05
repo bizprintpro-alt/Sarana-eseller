@@ -46,7 +46,7 @@ export default function BrandsPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -114,15 +114,15 @@ export default function BrandsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🏷️</span>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Брэнд удирдлага</h1>
-              <p className="text-gray-500 text-sm">Брэндүүдийг удирдах ({brands.length}/{plan.limits.maxBrands === -1 ? '∞' : plan.limits.maxBrands})</p>
+              <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Брэнд удирдлага</h1>
+              <p className="text-[var(--esl-text-secondary)] text-sm">Брэндүүдийг удирдах ({brands.length}/{plan.limits.maxBrands === -1 ? '∞' : plan.limits.maxBrands})</p>
             </div>
           </div>
           <button
@@ -136,10 +136,10 @@ export default function BrandsPage() {
 
       {/* Brand Grid */}
       {brands.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <span className="text-5xl block mb-4">🏷️</span>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Брэнд байхгүй</h2>
-          <p className="text-gray-500 text-sm mb-4">Эхний брэндээ нэмнэ үү</p>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Брэнд байхгүй</h2>
+          <p className="text-[var(--esl-text-secondary)] text-sm mb-4">Эхний брэндээ нэмнэ үү</p>
           <button
             onClick={openAddModal}
             className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition"
@@ -150,9 +150,9 @@ export default function BrandsPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {brands.map((brand) => (
-            <div key={brand.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition">
+            <div key={brand.id} className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md transition">
               {/* Logo area */}
-              <div className="h-32 bg-gray-50 flex items-center justify-center border-b border-gray-100">
+              <div className="h-32 bg-[var(--esl-bg-section)] flex items-center justify-center border-b border-[var(--esl-border)]">
                 {brand.logoUrl ? (
                   <img
                     src={brand.logoUrl}
@@ -160,19 +160,19 @@ export default function BrandsPage() {
                     className="max-h-20 max-w-[80%] object-contain"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
-                      (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-4xl font-black text-gray-300">${brand.name[0]}</span>`;
+                      (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-4xl font-black text-[var(--esl-text-muted)]">${brand.name[0]}</span>`;
                     }}
                   />
                 ) : (
-                  <span className="text-4xl font-black text-gray-300">
+                  <span className="text-4xl font-black text-[var(--esl-text-muted)]">
                     {brand.name[0]?.toUpperCase()}
                   </span>
                 )}
               </div>
               <div className="p-4">
-                <h3 className="font-bold text-gray-900">{brand.name}</h3>
+                <h3 className="font-bold text-[var(--esl-text-primary)]">{brand.name}</h3>
                 {brand.description && (
-                  <p className="text-sm text-gray-500 mt-1 line-clamp-2">{brand.description}</p>
+                  <p className="text-sm text-[var(--esl-text-secondary)] mt-1 line-clamp-2">{brand.description}</p>
                 )}
                 {brand.website && (
                   <a
@@ -184,7 +184,7 @@ export default function BrandsPage() {
                     {brand.website}
                   </a>
                 )}
-                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[var(--esl-border)]">
                   <button
                     onClick={() => openEditModal(brand)}
                     className="flex-1 text-indigo-600 hover:bg-indigo-50 py-1.5 rounded-lg text-sm font-medium transition text-center"
@@ -208,62 +208,62 @@ export default function BrandsPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-md shadow-xl">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-bold text-gray-900">
+            <div className="p-6 border-b border-[var(--esl-border)]">
+              <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
                 {editingId ? 'Брэнд засах' : 'Шинэ брэнд'}
               </h2>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Нэр</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Нэр</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Брэндийн нэр"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Лого URL</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Лого URL</label>
                 <input
                   type="url"
                   value={logoUrl}
                   onChange={(e) => setLogoUrl(e.target.value)}
                   placeholder="https://example.com/logo.png"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
                 {logoUrl && (
-                  <div className="mt-2 h-16 bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
+                  <div className="mt-2 h-16 bg-[var(--esl-bg-section)] rounded-lg flex items-center justify-center border border-[var(--esl-border)]">
                     <img src={logoUrl} alt="Preview" className="max-h-12 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                   </div>
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Тайлбар</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Тайлбар</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={2}
                   placeholder="Брэндийн тайлбар"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Вэбсайт</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Вэбсайт</label>
                 <input
                   type="url"
                   value={website}
                   onChange={(e) => setWebsite(e.target.value)}
                   placeholder="https://example.com"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
             </div>
-            <div className="p-6 border-t border-gray-200 flex gap-3">
+            <div className="p-6 border-t border-[var(--esl-border)] flex gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 border border-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition"
+                className="flex-1 border border-[var(--esl-border)] text-[var(--esl-text-primary)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--esl-bg-section)] transition"
               >
                 Болих
               </button>

@@ -24,19 +24,19 @@ export default function ChannelPerformance() {
   const maxClicks = Math.max(...CHANNELS.map((c) => c.clicks));
 
   return (
-    <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+    <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
       <div className="px-6 py-4 border-b border-[#F1F5F9] flex items-center justify-between">
         <h3 className="font-bold text-[#0F172A] text-sm flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-[#6366F1]" />
           Сувгийн гүйцэтгэл
         </h3>
-        <span className="text-[10px] text-[#94A3B8] bg-[#F8FAFC] px-2 py-1 rounded font-medium">Сүүлийн 30 хоног</span>
+        <span className="text-[10px] text-[var(--esl-text-muted)] bg-[var(--esl-bg-section)] px-2 py-1 rounded font-medium">Сүүлийн 30 хоног</span>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-[10px] text-[#94A3B8] uppercase tracking-wider border-b border-[#F8FAFC]">
+            <tr className="text-[10px] text-[var(--esl-text-muted)] uppercase tracking-wider border-b border-[#F8FAFC]">
               <th className="px-6 py-2.5 text-left font-semibold">Суваг</th>
               <th className="px-4 py-2.5 text-right font-semibold">Клик</th>
               <th className="px-4 py-2.5 text-right font-semibold">Борлуулалт</th>
@@ -49,7 +49,7 @@ export default function ChannelPerformance() {
             {CHANNELS.map((ch) => {
               const convRate = ((ch.sales / (ch.clicks || 1)) * 100).toFixed(1);
               return (
-                <tr key={ch.name} className="hover:bg-[#F8FAFC] transition-colors">
+                <tr key={ch.name} className="hover:bg-[var(--esl-bg-section)] transition-colors">
                   <td className="px-6 py-3">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ background: ch.color + '12' }}>
@@ -60,7 +60,7 @@ export default function ChannelPerformance() {
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <div className="w-16 h-1.5 bg-[#F1F5F9] rounded-full overflow-hidden hidden sm:block">
+                      <div className="w-16 h-1.5 bg-[var(--esl-bg-section)] rounded-full overflow-hidden hidden sm:block">
                         <div className="h-full rounded-full" style={{ width: `${(ch.clicks / maxClicks) * 100}%`, background: ch.color }} />
                       </div>
                       <span className="font-semibold text-[#0F172A]">{ch.clicks}</span>
@@ -69,7 +69,7 @@ export default function ChannelPerformance() {
                   <td className="px-4 py-3 text-right font-semibold text-[#0F172A]">{ch.sales}</td>
                   <td className="px-4 py-3 text-right">
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                      Number(convRate) >= 5 ? 'bg-emerald-50 text-emerald-600' : 'bg-[#F8FAFC] text-[#475569]'
+                      Number(convRate) >= 5 ? 'bg-emerald-50 text-emerald-600' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]'
                     }`}>
                       {convRate}%
                     </span>

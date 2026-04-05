@@ -45,7 +45,7 @@ export function ShareModal({ isOpen, onClose, url, title, description }: Props) 
       {/* Modal */}
       <div style={{
         position: 'relative', width: '90%', maxWidth: 400,
-        background: '#1A1A1A', borderRadius: 16, border: '0.5px solid #2A2A2A',
+        background: 'var(--esl-bg-card)', borderRadius: 16, border: '0.5px solid #2A2A2A',
         padding: 24, color: '#FFF',
       }}>
         {/* Close */}
@@ -69,7 +69,7 @@ export function ShareModal({ isOpen, onClose, url, title, description }: Props) 
         {/* Copy link */}
         <div style={{
           display: 'flex', gap: 8, marginBottom: 16,
-          background: '#0A0A0A', borderRadius: 10, border: '0.5px solid #2A2A2A',
+          background: 'var(--esl-bg-page)', borderRadius: 10, border: '0.5px solid #2A2A2A',
           padding: '8px 12px', alignItems: 'center',
         }}>
           <span style={{ flex: 1, fontSize: 12, color: '#A0A0A0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

@@ -55,7 +55,7 @@ export default function LocationsListPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0A0A0A', color: '#FFF', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--esl-bg-page)', color: '#FFF', padding: '24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <div>
@@ -89,7 +89,7 @@ export default function LocationsListPage() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {locations.map((loc) => (
-            <div key={loc.id} style={{ backgroundColor: '#1A1A1A', border: '1px solid #2A2A2A', borderRadius: '12px', padding: '16px' }}>
+            <div key={loc.id} style={{ backgroundColor: 'var(--esl-bg-card)', border: '1px solid #2A2A2A', borderRadius: '12px', padding: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                   <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: 'rgba(232,36,44,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

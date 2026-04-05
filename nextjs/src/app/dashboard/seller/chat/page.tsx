@@ -188,7 +188,7 @@ export default function SellerChatPage() {
     }}>
 
       {/* ═══ LEFT: Conversation List ═══ */}
-      <div style={{ borderRight: '0.5px solid #2A2A2A', display: 'flex', flexDirection: 'column', background: '#0A0A0A' }}>
+      <div style={{ borderRight: '0.5px solid #2A2A2A', display: 'flex', flexDirection: 'column', background: 'var(--esl-bg-page)' }}>
         {/* Header */}
         <div style={{ padding: '14px 16px', borderBottom: '0.5px solid #2A2A2A', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <span style={{ fontSize: 14, fontWeight: 500, color: '#FFF' }}>Чат</span>
@@ -211,7 +211,7 @@ export default function SellerChatPage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Хэрэглэгч, захиалга хайх..."
-            style={{ width: '100%', padding: '7px 10px 7px 30px', border: '0.5px solid #2A2A2A', borderRadius: 8, background: '#1A1A1A', color: '#FFF', fontSize: 12, outline: 'none' }}
+            style={{ width: '100%', padding: '7px 10px 7px 30px', border: '0.5px solid #2A2A2A', borderRadius: 8, background: 'var(--esl-bg-card)', color: '#FFF', fontSize: 12, outline: 'none' }}
           />
         </div>
 
@@ -276,7 +276,7 @@ export default function SellerChatPage() {
       </div>
 
       {/* ═══ MIDDLE: Chat Area ═══ */}
-      <div style={{ display: 'flex', flexDirection: 'column', background: '#0A0A0A' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', background: 'var(--esl-bg-page)' }}>
         {activeConv ? (
           <>
             {/* Chat header */}
@@ -307,8 +307,8 @@ export default function SellerChatPage() {
 
             {/* Product reference bar */}
             {activeConv.productName && (
-              <div style={{ margin: '10px 14px', padding: '10px 12px', background: '#1A1A1A', borderRadius: 8, border: '0.5px solid #2A2A2A', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 8, background: '#222', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '0.5px solid #333' }}>
+              <div style={{ margin: '10px 14px', padding: '10px 12px', background: 'var(--esl-bg-card)', borderRadius: 8, border: '0.5px solid #2A2A2A', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 8, background: 'var(--esl-bg-card-hover)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '0.5px solid #333' }}>
                   <Package size={20} color="#555" />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -317,7 +317,7 @@ export default function SellerChatPage() {
                 </div>
                 <div style={{ display: 'flex', gap: 6 }}>
                   {activeConv.orderNumber && (
-                    <button style={{ padding: '5px 10px', borderRadius: 6, fontSize: 11, fontWeight: 500, cursor: 'pointer', border: '0.5px solid #333', background: '#0A0A0A', color: '#777', whiteSpace: 'nowrap' }}>
+                    <button style={{ padding: '5px 10px', borderRadius: 6, fontSize: 11, fontWeight: 500, cursor: 'pointer', border: '0.5px solid #333', background: 'var(--esl-bg-page)', color: '#777', whiteSpace: 'nowrap' }}>
                       Захиалга {activeConv.orderNumber}
                     </button>
                   )}
@@ -332,8 +332,8 @@ export default function SellerChatPage() {
             <div style={{ flex: 1, overflowY: 'auto', padding: 14 }}>
               {/* Date separator */}
               <div style={{ textAlign: 'center', margin: '12px 0', position: 'relative' }}>
-                <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 0.5, background: '#2A2A2A' }} />
-                <span style={{ background: '#0A0A0A', padding: '0 10px', fontSize: 10, color: '#555', position: 'relative', zIndex: 1 }}>
+                <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 0.5, background: 'var(--esl-bg-elevated)' }} />
+                <span style={{ background: 'var(--esl-bg-page)', padding: '0 10px', fontSize: 10, color: '#555', position: 'relative', zIndex: 1 }}>
                   {msgs.length > 0 ? formatDate(msgs[0].createdAt) : 'Өнөөдөр'}
                 </span>
               </div>
@@ -348,14 +348,14 @@ export default function SellerChatPage() {
                     </div>
                     <div>
                       {msg.imageUrl && (
-                        <div style={{ width: 180, height: 120, borderRadius: 10, background: '#1A1A1A', border: '0.5px solid #2A2A2A', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginBottom: 6 }}>
+                        <div style={{ width: 180, height: 120, borderRadius: 10, background: 'var(--esl-bg-card)', border: '0.5px solid #2A2A2A', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginBottom: 6 }}>
                           <ImageIcon size={24} color="#555" />
                         </div>
                       )}
                       <div style={{
                         maxWidth: '72%', padding: '9px 12px', fontSize: 13, lineHeight: 1.55,
                         borderRadius: isMe ? '14px 4px 14px 14px' : '4px 14px 14px 14px',
-                        background: isMe ? '#E8242C' : '#1A1A1A',
+                        background: isMe ? '#E8242C' : 'var(--esl-bg-card)',
                         color: isMe ? '#FFF' : '#E0E0E0',
                       }}>
                         {msg.text}
@@ -380,7 +380,7 @@ export default function SellerChatPage() {
                   const [bg, tc] = getAvatarColor(activeConv.customerName);
                   return <div style={{ width: 24, height: 24, borderRadius: '50%', background: bg, color: tc, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 500 }}>{getInitials(activeConv.customerName)}</div>;
                 })()}
-                <div style={{ background: '#1A1A1A', borderRadius: 12, padding: '8px 12px', display: 'flex', gap: 4, alignItems: 'center' }}>
+                <div style={{ background: 'var(--esl-bg-card)', borderRadius: 12, padding: '8px 12px', display: 'flex', gap: 4, alignItems: 'center' }}>
                   {[0, 0.2, 0.4].map((delay, i) => (
                     <span key={i} style={{
                       width: 6, height: 6, borderRadius: '50%', background: '#555', display: 'inline-block',
@@ -398,7 +398,7 @@ export default function SellerChatPage() {
               <button style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', color: '#777', border: 'none', background: 'none' }}>
                 <Plus size={16} />
               </button>
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, background: '#1A1A1A', border: '0.5px solid #2A2A2A', borderRadius: 20, padding: '7px 12px' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, background: 'var(--esl-bg-card)', border: '0.5px solid #2A2A2A', borderRadius: 20, padding: '7px 12px' }}>
                 <button style={{ width: 24, height: 24, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, cursor: 'pointer', color: '#777', border: 'none', background: 'none' }}>
                   <ImageIcon size={14} />
                 </button>
@@ -424,7 +424,7 @@ export default function SellerChatPage() {
       </div>
 
       {/* ═══ RIGHT: Info Panel ═══ */}
-      <div style={{ borderLeft: '0.5px solid #2A2A2A', background: '#0A0A0A', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ borderLeft: '0.5px solid #2A2A2A', background: 'var(--esl-bg-page)', display: 'flex', flexDirection: 'column' }}>
         {activeConv ? (
           <>
             {/* Panel header */}
@@ -487,7 +487,7 @@ export default function SellerChatPage() {
                 <button key={i} onClick={() => setInput(text)}
                   style={{
                     width: '100%', textAlign: 'left', padding: '7px 10px', marginBottom: 5,
-                    borderRadius: 6, border: '0.5px solid #2A2A2A', background: '#1A1A1A',
+                    borderRadius: 6, border: '0.5px solid #2A2A2A', background: 'var(--esl-bg-card)',
                     color: '#777', fontSize: 11, cursor: 'pointer', transition: 'all 0.12s',
                   }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = '#E8242C'; e.currentTarget.style.color = '#E8242C'; }}

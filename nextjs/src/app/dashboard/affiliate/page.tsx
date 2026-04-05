@@ -171,13 +171,13 @@ export default function AffiliateDashboard() {
           <h1 className="text-2xl font-black text-[#0F172A] tracking-tight">
             Борлуулагчийн самбар
           </h1>
-          <p className="text-sm text-[#94A3B8] mt-0.5">
+          <p className="text-sm text-[var(--esl-text-muted)] mt-0.5">
             Сайн байна уу, <span className="text-[#0F172A] font-semibold">{username}</span>
           </p>
         </div>
         <button
           onClick={loadData}
-          className="inline-flex items-center gap-2 text-sm bg-white border border-[#E2E8F0] hover:border-[#6366F1] text-[#475569] hover:text-[#6366F1] rounded-xl px-4 py-2.5 transition-all font-medium cursor-pointer"
+          className="inline-flex items-center gap-2 text-sm bg-white border border-[var(--esl-border)] hover:border-[#6366F1] text-[var(--esl-text-secondary)] hover:text-[#6366F1] rounded-xl px-4 py-2.5 transition-all font-medium cursor-pointer"
         >
           <Zap className="w-4 h-4" />
           Шинэчлэх
@@ -187,7 +187,7 @@ export default function AffiliateDashboard() {
       {/* ════════════════════════════════════════
           TABS
           ════════════════════════════════════════ */}
-      <nav className="flex gap-1 bg-white rounded-xl p-1 border border-[#E2E8F0] overflow-x-auto shadow-sm">
+      <nav className="flex gap-1 bg-white rounded-xl p-1 border border-[var(--esl-border)] overflow-x-auto shadow-sm">
         {TABS.map((t) => (
           <button
             key={t.key}
@@ -196,7 +196,7 @@ export default function AffiliateDashboard() {
               'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-all cursor-pointer border-none',
               tab === t.key
                 ? 'bg-[#6366F1] text-white shadow-[0_2px_8px_rgba(99,102,241,.3)]'
-                : 'text-[#94A3B8] hover:text-[#475569] hover:bg-[#F8FAFC] bg-transparent'
+                : 'text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] bg-transparent'
             )}
           >
             <t.icon className="w-4 h-4" />
@@ -255,13 +255,13 @@ export default function AffiliateDashboard() {
                       else if (i === 1) setTab('toolkit');
                       else if (i === 3) setTab('earnings');
                     }}
-                    className="bg-white border border-[#E2E8F0] rounded-xl p-4 text-left hover:border-[#6366F1]/30 hover:-translate-y-0.5 hover:shadow-md transition-all cursor-pointer group"
+                    className="bg-white border border-[var(--esl-border)] rounded-xl p-4 text-left hover:border-[#6366F1]/30 hover:-translate-y-0.5 hover:shadow-md transition-all cursor-pointer group"
                   >
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: a.color + '12', color: a.color }}>
                       <a.icon className="w-5 h-5" />
                     </div>
                     <div className="text-sm font-bold text-[#0F172A]">{a.label}</div>
-                    <div className="text-xs text-[#94A3B8]">{a.desc}</div>
+                    <div className="text-xs text-[var(--esl-text-muted)]">{a.desc}</div>
                   </button>
                 ))}
               </motion.div>
@@ -277,13 +277,13 @@ export default function AffiliateDashboard() {
               {/* Performance Chart + Recent Earnings */}
               <div className="grid lg:grid-cols-5 gap-6">
                 {/* Weekly Performance */}
-                <motion.div variants={fadeUp} custom={3} className="lg:col-span-3 bg-white border border-[#E2E8F0] rounded-2xl p-6">
+                <motion.div variants={fadeUp} custom={3} className="lg:col-span-3 bg-white border border-[var(--esl-border)] rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="font-bold text-[#0F172A] flex items-center gap-2">
                       <BarChart3 className="w-4 h-4 text-[#6366F1]" />
                       Долоо хоногийн гүйцэтгэл
                     </h3>
-                    <span className="text-xs text-[#94A3B8] bg-[#F8FAFC] px-2.5 py-1 rounded-lg font-medium">Энэ долоо хоног</span>
+                    <span className="text-xs text-[var(--esl-text-muted)] bg-[var(--esl-bg-section)] px-2.5 py-1 rounded-lg font-medium">Энэ долоо хоног</span>
                   </div>
                   <div className="flex items-end justify-between gap-2 h-40">
                     {weekData.map((val, i) => (
@@ -299,14 +299,14 @@ export default function AffiliateDashboard() {
                             transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                           />
                         </div>
-                        <span className="text-[10px] font-semibold text-[#94A3B8]">{weekDays[i]}</span>
+                        <span className="text-[10px] font-semibold text-[var(--esl-text-muted)]">{weekDays[i]}</span>
                       </div>
                     ))}
                   </div>
                 </motion.div>
 
                 {/* Recent Earnings */}
-                <motion.div variants={fadeUp} custom={4} className="lg:col-span-2 bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+                <motion.div variants={fadeUp} custom={4} className="lg:col-span-2 bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
                   <div className="px-5 py-4 border-b border-[#F1F5F9] flex items-center justify-between">
                     <h3 className="font-bold text-[#0F172A] text-sm">Сүүлийн орлого</h3>
                     <button onClick={() => setTab('earnings')} className="text-xs text-[#6366F1] font-semibold bg-transparent border-none cursor-pointer hover:underline flex items-center gap-0.5">
@@ -316,10 +316,10 @@ export default function AffiliateDashboard() {
                   {(earnings.earnings?.length ?? 0) > 0 ? (
                     <div className="divide-y divide-[#F8FAFC]">
                       {earnings.earnings?.slice(0, 4).map((e) => (
-                        <div key={e._id} className="px-5 py-3 flex items-center justify-between hover:bg-[#F8FAFC] transition-colors">
+                        <div key={e._id} className="px-5 py-3 flex items-center justify-between hover:bg-[var(--esl-bg-section)] transition-colors">
                           <div className="min-w-0">
                             <div className="text-sm font-semibold text-[#0F172A] truncate">{e.productName}</div>
-                            <div className="text-[11px] text-[#94A3B8]">{fmtDate(e.createdAt)}</div>
+                            <div className="text-[11px] text-[var(--esl-text-muted)]">{fmtDate(e.createdAt)}</div>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <span className={cn(
@@ -362,16 +362,16 @@ export default function AffiliateDashboard() {
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
                   <input
                     type="text"
                     placeholder="Бүтээгдэхүүн хайх..."
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
-                    className="w-full bg-white border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/10 transition-all"
+                    className="w-full bg-white border border-[var(--esl-border)] rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/10 transition-all"
                   />
                 </div>
-                <span className="text-xs text-[#94A3B8] bg-white border border-[#E2E8F0] px-3 py-2 rounded-lg font-medium whitespace-nowrap">
+                <span className="text-xs text-[var(--esl-text-muted)] bg-white border border-[var(--esl-border)] px-3 py-2 rounded-lg font-medium whitespace-nowrap">
                   {filteredProducts.length} бараа
                 </span>
               </div>
@@ -381,17 +381,17 @@ export default function AffiliateDashboard() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {filteredProducts.map((p) => (
-                    <div key={p._id} className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden hover:border-[#6366F1]/30 hover:shadow-md transition-all group">
+                    <div key={p._id} className="bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden hover:border-[#6366F1]/30 hover:shadow-md transition-all group">
                       <div className="h-36 bg-gradient-to-br from-[#F8FAFC] to-[#EEF2FF] flex items-center justify-center text-5xl group-hover:scale-105 transition-transform duration-300">
                         {p.emoji || '📦'}
                       </div>
                       <div className="p-4 space-y-2">
                         <h4 className="text-sm font-bold text-[#0F172A] truncate">{p.name}</h4>
-                        {p.store?.name && <p className="text-xs text-[#94A3B8]">{p.store.name}</p>}
+                        {p.store?.name && <p className="text-xs text-[var(--esl-text-muted)]">{p.store.name}</p>}
                         <div className="flex items-baseline gap-2">
                           <span className="text-base font-black text-[#0F172A]">{formatPrice(p.salePrice || p.price)}</span>
                           {p.salePrice && p.salePrice < p.price && (
-                            <span className="text-xs text-[#94A3B8] line-through">{formatPrice(p.price)}</span>
+                            <span className="text-xs text-[var(--esl-text-muted)] line-through">{formatPrice(p.price)}</span>
                           )}
                         </div>
                         {p.commission && (
@@ -402,13 +402,13 @@ export default function AffiliateDashboard() {
                         <div className="flex gap-2 mt-2">
                           <button
                             onClick={() => setMentorProduct(p)}
-                            className="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 border border-[#E2E8F0] cursor-pointer bg-white text-[#475569] hover:border-[#6366F1] hover:text-[#6366F1]"
+                            className="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 border border-[var(--esl-border)] cursor-pointer bg-white text-[var(--esl-text-secondary)] hover:border-[#6366F1] hover:text-[#6366F1]"
                           >
                             🤖 AI Зөвлөх
                           </button>
                           <button
                             onClick={() => setStudioProduct(p)}
-                            className="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 border border-[#E2E8F0] cursor-pointer bg-white text-[#475569] hover:border-[#EC4899] hover:text-[#EC4899]"
+                            className="flex-1 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 border border-[var(--esl-border)] cursor-pointer bg-white text-[var(--esl-text-secondary)] hover:border-[#EC4899] hover:text-[#EC4899]"
                           >
                             🎨 Постер
                           </button>
@@ -436,8 +436,8 @@ export default function AffiliateDashboard() {
           {tab === 'earnings' && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5">
-                  <div className="text-xs text-[#94A3B8] mb-1 font-medium">Нийт орлого</div>
+                <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-5">
+                  <div className="text-xs text-[var(--esl-text-muted)] mb-1 font-medium">Нийт орлого</div>
                   <div className="text-2xl font-black text-[#0F172A]">{formatPrice(earnings.totalEarnings || 0)}</div>
                 </div>
                 <div className="bg-gradient-to-br from-[#6366F1] to-[#4338CA] rounded-2xl p-5 text-white">
@@ -446,7 +446,7 @@ export default function AffiliateDashboard() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
+              <div className="bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden">
                 <div className="px-6 py-4 border-b border-[#F1F5F9]">
                   <h3 className="font-bold text-[#0F172A] flex items-center gap-2"><DollarSign className="w-4 h-4 text-[#6366F1]" /> Орлогын түүх</h3>
                 </div>
@@ -454,7 +454,7 @@ export default function AffiliateDashboard() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="text-left text-xs text-[#94A3B8] border-b border-[#F8FAFC]">
+                        <tr className="text-left text-xs text-[var(--esl-text-muted)] border-b border-[#F8FAFC]">
                           <th className="px-6 py-3 font-medium">Бүтээгдэхүүн</th>
                           <th className="px-6 py-3 font-medium">Огноо</th>
                           <th className="px-6 py-3 font-medium">Төлөв</th>
@@ -463,9 +463,9 @@ export default function AffiliateDashboard() {
                       </thead>
                       <tbody className="divide-y divide-[#F8FAFC]">
                         {earnings.earnings?.map((e) => (
-                          <tr key={e._id} className="hover:bg-[#F8FAFC] transition-colors">
+                          <tr key={e._id} className="hover:bg-[var(--esl-bg-section)] transition-colors">
                             <td className="px-6 py-3 font-semibold text-[#0F172A]">{e.productName || '—'}</td>
-                            <td className="px-6 py-3 text-[#94A3B8]">{fmtDate(e.createdAt)}</td>
+                            <td className="px-6 py-3 text-[var(--esl-text-muted)]">{fmtDate(e.createdAt)}</td>
                             <td className="px-6 py-3">
                               <span className={cn('text-xs px-2.5 py-1 rounded-full font-semibold',
                                 e.status === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
@@ -496,35 +496,35 @@ export default function AffiliateDashboard() {
                   <div className="text-sm text-white/60 mb-1">Боломжит үлдэгдэл</div>
                   <div className="text-3xl font-black">{formatPrice(wallet.balance || 0)}</div>
                 </div>
-                <div className="bg-white rounded-2xl border border-[#E2E8F0] p-6">
+                <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
                   <ArrowUpRight className="w-5 h-5 text-amber-500 mb-2" />
-                  <div className="text-sm text-[#94A3B8] mb-1">Хүлээгдэж буй</div>
+                  <div className="text-sm text-[var(--esl-text-muted)] mb-1">Хүлээгдэж буй</div>
                   <div className="text-3xl font-black text-amber-500">{formatPrice(wallet.pending || 0)}</div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl border border-[#E2E8F0] p-6 space-y-4">
+              <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
                 <h3 className="font-bold text-[#0F172A] flex items-center gap-2"><DollarSign className="w-4 h-4 text-[#6366F1]" /> Мөнгө татах</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs text-[#94A3B8] block mb-1.5 font-medium">Дүн</label>
+                    <label className="text-xs text-[var(--esl-text-muted)] block mb-1.5 font-medium">Дүн</label>
                     <div className="relative">
                       <input type="number" placeholder="0" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)}
-                        className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/10 transition-all" />
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#94A3B8]">₮</span>
+                        className="w-full bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/10 transition-all" />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[var(--esl-text-muted)]">₮</span>
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-[#94A3B8] block mb-1.5 font-medium">Банк</label>
+                    <label className="text-xs text-[var(--esl-text-muted)] block mb-1.5 font-medium">Банк</label>
                     <select value={withdrawMethod} onChange={(e) => setWithdrawMethod(e.target.value)}
-                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] transition-all appearance-none cursor-pointer">
+                      className="w-full bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6366F1] transition-all appearance-none cursor-pointer">
                       {BANKS.map((b) => <option key={b} value={b}>{b}</option>)}
                     </select>
                   </div>
                 </div>
                 <button onClick={handleWithdraw} disabled={withdrawing}
                   className={cn('w-full sm:w-auto px-8 py-3 rounded-xl text-sm font-bold transition-all border-none cursor-pointer',
-                    withdrawing ? 'bg-[#F8FAFC] text-[#94A3B8] cursor-not-allowed'
+                    withdrawing ? 'bg-[var(--esl-bg-section)] text-[var(--esl-text-muted)] cursor-not-allowed'
                       : 'bg-[#6366F1] text-white hover:bg-[#4F46E5] shadow-[0_4px_12px_rgba(99,102,241,.25)]')}>
                   {withdrawing ? 'Боловсруулж байна...' : 'Татан авах'}
                 </button>

@@ -105,11 +105,11 @@ export default function BlogPage() {
   const publishedCount = posts.filter((p) => p.published).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Блог</h1>
-          <p className="text-gray-500 mt-1">Нийтлэл бичих, засах, удирдах</p>
+          <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Блог</h1>
+          <p className="text-[var(--esl-text-secondary)] mt-1">Нийтлэл бичих, засах, удирдах</p>
         </div>
         <button onClick={openAdd} className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors text-sm">
           + Шинэ нийтлэл
@@ -123,27 +123,27 @@ export default function BlogPage() {
       </div>
 
       {posts.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">📝</div>
-          <h3 className="text-lg font-semibold text-gray-700">Нийтлэл байхгүй</h3>
-          <p className="text-gray-400 mt-1">Эхний нийтлэлээ бичээрэй</p>
+          <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Нийтлэл байхгүй</h3>
+          <p className="text-[var(--esl-text-muted)] mt-1">Эхний нийтлэлээ бичээрэй</p>
         </div>
       ) : (
         <div className="space-y-4">
           {posts.map((post) => (
-            <div key={post.id} className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div key={post.id} className="bg-white rounded-xl border border-[var(--esl-border)] p-5 hover:shadow-md transition-shadow">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-base font-semibold text-gray-900 truncate">{post.title}</h3>
+                    <h3 className="text-base font-semibold text-[var(--esl-text-primary)] truncate">{post.title}</h3>
                     {post.published ? (
                       <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium flex-shrink-0">Нийтлэгдсэн</span>
                     ) : (
-                      <span className="inline-block px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 text-xs font-medium flex-shrink-0">Ноорог</span>
+                      <span className="inline-block px-2 py-0.5 rounded-full bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] text-xs font-medium flex-shrink-0">Ноорог</span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 line-clamp-2">{post.content}</p>
-                  <div className="flex items-center gap-4 mt-2 text-xs text-gray-400">
+                  <p className="text-sm text-[var(--esl-text-secondary)] line-clamp-2">{post.content}</p>
+                  <div className="flex items-center gap-4 mt-2 text-xs text-[var(--esl-text-muted)]">
                     <span>{timeAgo(post.createdAt)}</span>
                     <span>👁️ {post.views} үзэлт</span>
                   </div>
@@ -152,7 +152,7 @@ export default function BlogPage() {
                   <button onClick={() => togglePublish(post.id)} className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${post.published ? 'bg-amber-50 text-amber-600 hover:bg-amber-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`}>
                     {post.published ? 'Нуух' : 'Нийтлэх'}
                   </button>
-                  <button onClick={() => openEdit(post)} className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                  <button onClick={() => openEdit(post)} className="px-3 py-1.5 text-xs font-medium bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] rounded-lg hover:bg-[var(--esl-bg-card-hover)] transition-colors">
                     ✏️ Засах
                   </button>
                   <button onClick={() => handleDelete(post.id)} className="px-3 py-1.5 text-xs font-medium bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
@@ -169,22 +169,22 @@ export default function BlogPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
           <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900">{editingId ? 'Нийтлэл засах' : 'Шинэ нийтлэл'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            <div className="p-6 border-b border-[var(--esl-border)] flex items-center justify-between">
+              <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">{editingId ? 'Нийтлэл засах' : 'Шинэ нийтлэл'}</h2>
+              <button onClick={() => setShowModal(false)} className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] text-xl">&times;</button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Гарчиг *</label>
-                <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Гарчиг *</label>
+                <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Агуулга *</label>
-                <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={8} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Агуулга *</label>
+                <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={8} className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Зурагны URL</label>
-                <input value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} placeholder="https://..." className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Зурагны URL</label>
+                <input value={form.imageUrl} onChange={(e) => setForm({ ...form, imageUrl: e.target.value })} placeholder="https://..." className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <button onClick={handleSave} className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
                 {editingId ? 'Шинэчлэх' : 'Нэмэх'}

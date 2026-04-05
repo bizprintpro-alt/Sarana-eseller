@@ -107,11 +107,11 @@ export default function StoreSettingsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-8 py-5">
+      <div className="bg-white border-b border-[var(--esl-border)] px-8 py-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-black text-gray-900">🎨 Дэлгүүрийн тохиргоо</h1>
-            <p className="text-sm text-gray-400 mt-0.5">Дэлгүүрийн нүүр хуудас, мэдээлэл, дизайныг тохируулна</p>
+            <h1 className="text-xl font-black text-[var(--esl-text-primary)]">🎨 Дэлгүүрийн тохиргоо</h1>
+            <p className="text-sm text-[var(--esl-text-muted)] mt-0.5">Дэлгүүрийн нүүр хуудас, мэдээлэл, дизайныг тохируулна</p>
           </div>
           <button
             onClick={save}
@@ -123,7 +123,7 @@ export default function StoreSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 px-8">
+      <div className="bg-white border-b border-[var(--esl-border)] px-8">
         <div className="flex gap-0">
           {tabs.map((tab) => (
             <button
@@ -132,7 +132,7 @@ export default function StoreSettingsPage() {
               className={`px-5 py-3 text-sm font-semibold border-b-2 transition-all cursor-pointer bg-transparent ${
                 activeTab === tab.id
                   ? 'border-brand text-brand'
-                  : 'border-transparent text-gray-400 hover:text-gray-600'
+                  : 'border-transparent text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)]'
               }`}
             >
               {tab.icon} {tab.label}
@@ -148,7 +148,7 @@ export default function StoreSettingsPage() {
             {/* Store Preview Card */}
             <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl p-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-gray-200 flex items-center justify-center text-2xl overflow-hidden">
+                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-[var(--esl-border)] flex items-center justify-center text-2xl overflow-hidden">
                   {config.logo ? (
                     <img src={config.logo} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -156,13 +156,13 @@ export default function StoreSettingsPage() {
                   )}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-black text-gray-900">{config.storeName || 'Миний дэлгүүр'}</h3>
-                  <p className="text-sm text-gray-500">{storeUrl}</p>
+                  <h3 className="text-lg font-black text-[var(--esl-text-primary)]">{config.storeName || 'Миний дэлгүүр'}</h3>
+                  <p className="text-sm text-[var(--esl-text-secondary)]">{storeUrl}</p>
                 </div>
                 <a
                   href={storePreviewUrl}
                   target="_blank"
-                  className="bg-white text-gray-600 px-4 py-2 rounded-xl text-xs font-bold border border-gray-200 no-underline hover:border-brand hover:text-brand transition-all"
+                  className="bg-white text-[var(--esl-text-secondary)] px-4 py-2 rounded-xl text-xs font-bold border border-[var(--esl-border)] no-underline hover:border-brand hover:text-brand transition-all"
                 >
                   Дэлгүүр лүү зочлох ↗
                 </a>
@@ -170,44 +170,44 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Store Info */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-5">Дэлгүүрийн мэдээлэл</h3>
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">Дэлгүүрийн мэдээлэл</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Дэлгүүрийн нэр</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Дэлгүүрийн нэр</label>
                   <input
                     value={config.storeName}
                     onChange={(e) => update('storeName', e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                     placeholder="Миний дэлгүүр"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Тайлбар</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Тайлбар</label>
                   <textarea
                     value={config.storeDescription}
                     onChange={(e) => update('storeDescription', e.target.value)}
                     rows={3}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition resize-none"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition resize-none"
                     placeholder="Дэлгүүрийн тухай товч тайлбар..."
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Лого URL</label>
+                    <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Лого URL</label>
                     <input
                       value={config.logo}
                       onChange={(e) => update('logo', e.target.value)}
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                      className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                       placeholder="https://..."
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Banner URL</label>
+                    <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Banner URL</label>
                     <input
                       value={config.banner}
                       onChange={(e) => update('banner', e.target.value)}
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                      className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                       placeholder="https://..."
                     />
                   </div>
@@ -216,16 +216,16 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Brand Color */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-3">Брэндийн өнгө</h3>
-              <p className="text-sm text-gray-400 mb-4">Дэлгүүрийн гол өнгийг сонгоно уу</p>
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-3">Брэндийн өнгө</h3>
+              <p className="text-sm text-[var(--esl-text-muted)] mb-4">Дэлгүүрийн гол өнгийг сонгоно уу</p>
               <div className="flex items-center gap-3">
                 {COLOR_PRESETS.map((c) => (
                   <button
                     key={c}
                     onClick={() => update('primaryColor', c)}
                     className={`w-9 h-9 rounded-xl border-2 cursor-pointer transition-all ${
-                      config.primaryColor === c ? 'border-gray-900 scale-110 shadow-lg' : 'border-gray-200 hover:scale-105'
+                      config.primaryColor === c ? 'border-gray-900 scale-110 shadow-lg' : 'border-[var(--esl-border)] hover:scale-105'
                     }`}
                     style={{ background: c }}
                   />
@@ -234,7 +234,7 @@ export default function StoreSettingsPage() {
                   type="color"
                   value={config.primaryColor}
                   onChange={(e) => update('primaryColor', e.target.value)}
-                  className="w-9 h-9 rounded-xl border border-gray-200 cursor-pointer p-0.5"
+                  className="w-9 h-9 rounded-xl border border-[var(--esl-border)] cursor-pointer p-0.5"
                 />
               </div>
             </div>
@@ -245,37 +245,37 @@ export default function StoreSettingsPage() {
         {activeTab === 'storefront' && (
           <div className="space-y-6">
             {/* Hero Section */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-5">🖼 Нүүр хуудасны Hero</h3>
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">🖼 Нүүр хуудасны Hero</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Гарчиг</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Гарчиг</label>
                   <input
                     value={config.heroTitle}
                     onChange={(e) => update('heroTitle', e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Дэд гарчиг</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Дэд гарчиг</label>
                   <input
                     value={config.heroSubtitle}
                     onChange={(e) => update('heroSubtitle', e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Товчлуурын текст</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Товчлуурын текст</label>
                   <input
                     value={config.heroCTA}
                     onChange={(e) => update('heroCTA', e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                   />
                 </div>
               </div>
 
               {/* Hero Preview */}
-              <div className="mt-5 rounded-xl overflow-hidden border border-gray-200">
+              <div className="mt-5 rounded-xl overflow-hidden border border-[var(--esl-border)]">
                 <div
                   className="py-12 px-8 text-center text-white relative"
                   style={{
@@ -286,7 +286,7 @@ export default function StoreSettingsPage() {
                 >
                   <h2 className="text-2xl font-black mb-2">{config.heroTitle || 'Гарчиг'}</h2>
                   <p className="text-sm text-white/70 mb-4">{config.heroSubtitle || 'Дэд гарчиг'}</p>
-                  <button className="bg-white text-gray-900 px-6 py-2 rounded-xl text-sm font-bold border-none">
+                  <button className="bg-white text-[var(--esl-text-primary)] px-6 py-2 rounded-xl text-sm font-bold border-none">
                     {config.heroCTA || 'Товчлуур'}
                   </button>
                 </div>
@@ -294,23 +294,23 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Announcement */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-bold text-gray-900">📢 Зарлал (Announcement)</h3>
+                <h3 className="text-base font-bold text-[var(--esl-text-primary)]">📢 Зарлал (Announcement)</h3>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={config.showAnnouncement}
                     onChange={(e) => update('showAnnouncement', e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 accent-brand"
+                    className="w-4 h-4 rounded border-[var(--esl-border-strong)] accent-brand"
                   />
-                  <span className="text-xs font-semibold text-gray-500">Идэвхтэй</span>
+                  <span className="text-xs font-semibold text-[var(--esl-text-secondary)]">Идэвхтэй</span>
                 </label>
               </div>
               <input
                 value={config.announcement}
                 onChange={(e) => update('announcement', e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                 placeholder="Зарлалын текст..."
               />
               {config.showAnnouncement && config.announcement && (
@@ -321,8 +321,8 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Featured Categories */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-4">📂 Нүүрэнд гарах ангилалууд</h3>
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-4">📂 Нүүрэнд гарах ангилалууд</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {CATEGORY_OPTIONS.map((cat) => {
                   const isSelected = config.featuredCategories.includes(cat.value);
@@ -338,7 +338,7 @@ export default function StoreSettingsPage() {
                       className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold border cursor-pointer transition-all ${
                         isSelected
                           ? 'bg-brand/8 border-brand/20 text-brand'
-                          : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-brand/30'
+                          : 'bg-[var(--esl-bg-section)] border-[var(--esl-border)] text-[var(--esl-text-secondary)] hover:border-brand/30'
                       }`}
                     >
                       {cat.label}
@@ -354,8 +354,8 @@ export default function StoreSettingsPage() {
         {/* ═══ SOCIAL TAB ═══ */}
         {activeTab === 'social' && (
           <div className="space-y-6">
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-5">📱 Сошиал хаягууд</h3>
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">📱 Сошиал хаягууд</h3>
               <div className="space-y-4">
                 {[
                   { key: 'socialFacebook' as const, label: 'Facebook', icon: '📘', placeholder: 'https://facebook.com/...' },
@@ -363,11 +363,11 @@ export default function StoreSettingsPage() {
                   { key: 'socialTiktok' as const, label: 'TikTok', icon: '🎵', placeholder: 'https://tiktok.com/@...' },
                 ].map((s) => (
                   <div key={s.key}>
-                    <label className="block text-xs font-bold text-gray-500 mb-1.5">{s.icon} {s.label}</label>
+                    <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">{s.icon} {s.label}</label>
                     <input
                       value={config[s.key]}
                       onChange={(e) => update(s.key, e.target.value)}
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                      className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                       placeholder={s.placeholder}
                     />
                   </div>
@@ -375,34 +375,34 @@ export default function StoreSettingsPage() {
               </div>
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-5">📞 Холбоо барих</h3>
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">📞 Холбоо барих</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5">Утас</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">Утас</label>
                   <input
                     value={config.phone}
                     onChange={(e) => update('phone', e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                     placeholder="7700-0000"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5">Имэйл</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">Имэйл</label>
                   <input
                     value={config.email}
                     onChange={(e) => update('email', e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                     placeholder="info@store.mn"
                   />
                 </div>
               </div>
               <div className="mt-4">
-                <label className="block text-xs font-bold text-gray-500 mb-1.5">Хаяг</label>
+                <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">Хаяг</label>
                 <input
                   value={config.address}
                   onChange={(e) => update('address', e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                  className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                   placeholder="Улаанбаатар, Монгол"
                 />
               </div>
@@ -413,40 +413,40 @@ export default function StoreSettingsPage() {
         {/* ═══ SEO TAB ═══ */}
         {activeTab === 'seo' && (
           <div className="space-y-6">
-            <div className="bg-white border border-gray-200 rounded-2xl p-6">
-              <h3 className="text-base font-bold text-gray-900 mb-5">🔍 SEO тохиргоо</h3>
+            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">🔍 SEO тохиргоо</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5">Meta Title</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">Meta Title</label>
                   <input
                     value={config.metaTitle}
                     onChange={(e) => update('metaTitle', e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
                     placeholder={config.storeName + ' — eseller.mn'}
                   />
-                  <p className="text-[11px] text-gray-400 mt-1">{(config.metaTitle || config.storeName + ' — eseller.mn').length}/60 тэмдэгт</p>
+                  <p className="text-[11px] text-[var(--esl-text-muted)] mt-1">{(config.metaTitle || config.storeName + ' — eseller.mn').length}/60 тэмдэгт</p>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1.5">Meta Description</label>
+                  <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">Meta Description</label>
                   <textarea
                     value={config.metaDescription}
                     onChange={(e) => update('metaDescription', e.target.value)}
                     rows={3}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition resize-none"
+                    className="w-full border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition resize-none"
                     placeholder={config.storeDescription || 'Дэлгүүрийн тайлбар...'}
                   />
-                  <p className="text-[11px] text-gray-400 mt-1">{(config.metaDescription || config.storeDescription).length}/160 тэмдэгт</p>
+                  <p className="text-[11px] text-[var(--esl-text-muted)] mt-1">{(config.metaDescription || config.storeDescription).length}/160 тэмдэгт</p>
                 </div>
               </div>
 
               {/* Google Preview */}
-              <div className="mt-5 border border-gray-200 rounded-xl p-4 bg-gray-50">
-                <p className="text-[11px] text-gray-400 mb-2 font-bold">Google хайлтын харагдах байдал:</p>
+              <div className="mt-5 border border-[var(--esl-border)] rounded-xl p-4 bg-[var(--esl-bg-section)]">
+                <p className="text-[11px] text-[var(--esl-text-muted)] mb-2 font-bold">Google хайлтын харагдах байдал:</p>
                 <div className="text-blue-700 text-base font-medium hover:underline cursor-pointer">
                   {config.metaTitle || config.storeName + ' — eseller.mn'}
                 </div>
                 <div className="text-green-700 text-xs mt-0.5">{storeUrl}</div>
-                <div className="text-gray-600 text-xs mt-1 line-clamp-2">
+                <div className="text-[var(--esl-text-secondary)] text-xs mt-1 line-clamp-2">
                   {config.metaDescription || config.storeDescription || 'Дэлгүүрийн тайлбар энд харагдана...'}
                 </div>
               </div>

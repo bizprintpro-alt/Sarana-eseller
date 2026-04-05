@@ -37,18 +37,18 @@ export default function BuyerDashboard() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-8 py-5">
+      <div className="bg-white border-b border-[var(--esl-border)] px-8 py-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-black text-gray-900">
+            <h1 className="text-xl font-black text-[var(--esl-text-primary)]">
               Өдрийн мэнд, {user?.name?.split(' ')[0] || ''}! 👋
             </h1>
-            <p className="text-sm text-gray-400 mt-0.5">Худалдан авагчийн самбар</p>
+            <p className="text-sm text-[var(--esl-text-muted)] mt-0.5">Худалдан авагчийн самбар</p>
           </div>
           <div className="flex gap-2">
             <Link
               href="/store"
-              className="bg-gray-100 text-gray-700 text-xs font-bold px-4 py-2 rounded-xl no-underline hover:bg-gray-200 transition-all"
+              className="bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] text-xs font-bold px-4 py-2 rounded-xl no-underline hover:bg-[var(--esl-bg-card-hover)] transition-all"
             >
               🛒 Дэлгүүр
             </Link>
@@ -66,15 +66,15 @@ export default function BuyerDashboard() {
         </div>
 
         {/* Recent Orders */}
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h3 className="text-sm font-bold text-gray-700">🕐 Сүүлийн захиалгууд</h3>
+        <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--esl-border)]">
+            <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">🕐 Сүүлийн захиалгууд</h3>
           </div>
 
           {loading ? (
-            <div className="p-12 text-center text-gray-400 text-sm">Ачааллаж байна...</div>
+            <div className="p-12 text-center text-[var(--esl-text-muted)] text-sm">Ачааллаж байна...</div>
           ) : orders.length === 0 ? (
-            <div className="p-12 text-center text-gray-400">
+            <div className="p-12 text-center text-[var(--esl-text-muted)]">
               <div className="text-4xl mb-3">📭</div>
               <p className="text-sm font-semibold">Захиалга байхгүй байна</p>
               <Link href="/store" className="text-brand text-xs font-bold no-underline mt-2 inline-block">
@@ -85,9 +85,9 @@ export default function BuyerDashboard() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50">
+                  <tr className="bg-[var(--esl-bg-section)]">
                     {['Дугаар', 'Дүн', 'Төлөв', 'Огноо'].map((h) => (
-                      <th key={h} className="text-left px-6 py-3 text-[11px] font-bold text-gray-400 border-b border-gray-200">
+                      <th key={h} className="text-left px-6 py-3 text-[11px] font-bold text-[var(--esl-text-muted)] border-b border-[var(--esl-border)]">
                         {h}
                       </th>
                     ))}
@@ -95,13 +95,13 @@ export default function BuyerDashboard() {
                 </thead>
                 <tbody>
                   {orders.slice(0, 12).map((o) => {
-                    const [cls, label] = STATUS_MAP[o.status] || ['bg-gray-100 text-gray-500', o.status];
+                    const [cls, label] = STATUS_MAP[o.status] || ['bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]', o.status];
                     return (
-                      <tr key={o._id} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                      <tr key={o._id} className="border-b border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] transition">
                         <td className="px-6 py-3 font-mono text-xs text-brand font-bold">
                           #{o.orderNumber || o._id?.slice(-6) || '—'}
                         </td>
-                        <td className="px-6 py-3 font-black text-gray-900">
+                        <td className="px-6 py-3 font-black text-[var(--esl-text-primary)]">
                           {formatPrice(o.total || 0)}
                         </td>
                         <td className="px-6 py-3">
@@ -109,7 +109,7 @@ export default function BuyerDashboard() {
                             {label}
                           </span>
                         </td>
-                        <td className="px-6 py-3 text-gray-400 text-xs">
+                        <td className="px-6 py-3 text-[var(--esl-text-muted)] text-xs">
                           {new Date(o.createdAt).toLocaleDateString('mn-MN')}
                         </td>
                       </tr>

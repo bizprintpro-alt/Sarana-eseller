@@ -35,10 +35,10 @@ export default function SaleSlider({ products, quickAdd, findProduct, setSelProd
             <span style={{ background: '#E31E24', color: '#FFF', fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 4, textTransform: 'uppercase' }}>Sale</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button onClick={() => scroll('left')} style={{ width: 36, height: 36, borderRadius: 8, background: '#1A1A1A', border: '1px solid #3D3D3D', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A0A0A0' }}>
+            <button onClick={() => scroll('left')} style={{ width: 36, height: 36, borderRadius: 8, background: 'var(--esl-bg-card)', border: '1px solid #3D3D3D', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A0A0A0' }}>
               <ChevronLeft size={18} />
             </button>
-            <button onClick={() => scroll('right')} style={{ width: 36, height: 36, borderRadius: 8, background: '#1A1A1A', border: '1px solid #3D3D3D', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A0A0A0' }}>
+            <button onClick={() => scroll('right')} style={{ width: 36, height: 36, borderRadius: 8, background: 'var(--esl-bg-card)', border: '1px solid #3D3D3D', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A0A0A0' }}>
               <ChevronRight size={18} />
             </button>
             <button onClick={() => setActiveCat('all')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#E31E24', fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4, marginLeft: 8 }}>

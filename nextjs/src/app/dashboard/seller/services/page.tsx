@@ -67,8 +67,8 @@ export default function ServicesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Үйлчилгээнүүд</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Үйлчилгээгээ удирдах, нэмэх, засах</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)] tracking-tight">Үйлчилгээнүүд</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)] mt-0.5">Үйлчилгээгээ удирдах, нэмэх, засах</p>
         </div>
         <button onClick={openAdd} className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors border-none cursor-pointer shadow-sm">
           <Plus className="w-4 h-4" /> Шинэ үйлчилгээ нэмэх
@@ -84,11 +84,11 @@ export default function ServicesPage() {
 
       {/* Search */}
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
         <input
           type="text" value={search} onChange={(e) => setSearch(e.target.value)}
           placeholder="Үйлчилгээ хайх..."
-          className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white"
+          className="w-full pl-10 pr-4 py-2.5 border border-[var(--esl-border)] rounded-xl text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white"
         />
       </div>
 
@@ -96,7 +96,7 @@ export default function ServicesPage() {
       {filtered.length === 0 ? (
         <div className="text-center py-20">
           <div className="text-5xl mb-3 opacity-30">🛎️</div>
-          <p className="text-sm font-semibold text-gray-400">Үйлчилгээ олдсонгүй</p>
+          <p className="text-sm font-semibold text-[var(--esl-text-muted)]">Үйлчилгээ олдсонгүй</p>
           <button onClick={openAdd} className="mt-3 text-sm text-indigo-600 font-semibold bg-transparent border-none cursor-pointer hover:underline">
             + Шинэ нэмэх
           </button>
@@ -104,16 +104,16 @@ export default function ServicesPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((s) => (
-            <div key={s._id} className={cn('bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group', !s.isActive && 'opacity-60')}>
+            <div key={s._id} className={cn('bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md transition-shadow group', !s.isActive && 'opacity-60')}>
               {/* Card top */}
-              <div className="h-28 bg-gray-50 flex items-center justify-center relative">
+              <div className="h-28 bg-[var(--esl-bg-section)] flex items-center justify-center relative">
                 <span className="text-5xl group-hover:scale-110 transition-transform duration-200">{s.emoji || '🛎️'}</span>
                 {/* Quick actions */}
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => openEdit(s)} className="w-7 h-7 rounded-lg bg-white shadow-sm border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 cursor-pointer transition-colors">
+                  <button onClick={() => openEdit(s)} className="w-7 h-7 rounded-lg bg-white shadow-sm border border-[var(--esl-border)] flex items-center justify-center text-[var(--esl-text-muted)] hover:text-indigo-600 cursor-pointer transition-colors">
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
-                  <button onClick={() => setDeleteConfirm(s._id)} className="w-7 h-7 rounded-lg bg-white shadow-sm border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 cursor-pointer transition-colors">
+                  <button onClick={() => setDeleteConfirm(s._id)} className="w-7 h-7 rounded-lg bg-white shadow-sm border border-[var(--esl-border)] flex items-center justify-center text-[var(--esl-text-muted)] hover:text-red-500 cursor-pointer transition-colors">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -127,15 +127,15 @@ export default function ServicesPage() {
 
               {/* Card body */}
               <div className="p-4 space-y-2">
-                <h3 className="text-sm font-bold text-gray-900 truncate">{s.name}</h3>
-                <div className="flex items-center gap-3 text-xs text-gray-500">
+                <h3 className="text-sm font-bold text-[var(--esl-text-primary)] truncate">{s.name}</h3>
+                <div className="flex items-center gap-3 text-xs text-[var(--esl-text-secondary)]">
                   <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {s.duration} мин</span>
                   {s.rating && <span className="flex items-center gap-1"><Star className="w-3 h-3 text-amber-400" /> {s.rating}</span>}
                 </div>
                 <div className="flex items-center justify-between pt-1">
                   <span className="text-base font-extrabold text-indigo-600">{formatPrice(s.salePrice || s.price)}</span>
                   <button onClick={() => toggleActive(s._id)} className="bg-transparent border-none cursor-pointer p-0">
-                    {s.isActive ? <ToggleRight className="w-6 h-6 text-green-500" /> : <ToggleLeft className="w-6 h-6 text-gray-300" />}
+                    {s.isActive ? <ToggleRight className="w-6 h-6 text-green-500" /> : <ToggleLeft className="w-6 h-6 text-[var(--esl-text-muted)]" />}
                   </button>
                 </div>
               </div>
@@ -150,10 +150,10 @@ export default function ServicesPage() {
           <>
             <motion.div className="fixed inset-0 bg-black/40 z-[998]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDeleteConfirm(null)} />
             <motion.div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 z-[999] w-full max-w-sm shadow-xl" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Устгах уу?</h3>
-              <p className="text-sm text-gray-500 mb-5">Энэ үйлчилгээг устгасан тохиолдолд холбогдох захиалгууд нөлөөлөгдөнө.</p>
+              <h3 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Устгах уу?</h3>
+              <p className="text-sm text-[var(--esl-text-secondary)] mb-5">Энэ үйлчилгээг устгасан тохиолдолд холбогдох захиалгууд нөлөөлөгдөнө.</p>
               <div className="flex gap-3 justify-end">
-                <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition">Болих</button>
+                <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm font-semibold text-[var(--esl-text-primary)] bg-white border border-[var(--esl-border)] rounded-lg hover:bg-[var(--esl-bg-section)] cursor-pointer transition">Болих</button>
                 <button onClick={() => handleDelete(deleteConfirm)} className="px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 cursor-pointer transition border-none">Устгах</button>
               </div>
             </motion.div>
@@ -171,10 +171,10 @@ export default function ServicesPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
             >
               {/* Modal header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                <h3 className="text-lg font-bold text-gray-900">{editingId ? 'Үйлчилгээ засах' : 'Шинэ үйлчилгээ'}</h3>
-                <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center cursor-pointer border-none bg-transparent transition">
-                  <X className="w-4 h-4 text-gray-400" />
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--esl-border)]">
+                <h3 className="text-lg font-bold text-[var(--esl-text-primary)]">{editingId ? 'Үйлчилгээ засах' : 'Шинэ үйлчилгээ'}</h3>
+                <button onClick={() => setShowModal(false)} className="w-8 h-8 rounded-lg hover:bg-[var(--esl-bg-section)] flex items-center justify-center cursor-pointer border-none bg-transparent transition">
+                  <X className="w-4 h-4 text-[var(--esl-text-muted)]" />
                 </button>
               </div>
 
@@ -182,48 +182,48 @@ export default function ServicesPage() {
               <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
                 {/* Emoji picker */}
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-2">Дүрс</label>
+                  <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-2">Дүрс</label>
                   <div className="flex flex-wrap gap-1.5">
                     {EMOJIS.map((e) => (
                       <button key={e} onClick={() => setForm({ ...form, emoji: e })}
                         className={cn('w-9 h-9 rounded-lg text-lg flex items-center justify-center cursor-pointer border transition',
-                          form.emoji === e ? 'bg-indigo-100 ring-2 ring-indigo-500 border-transparent' : 'bg-gray-50 border-gray-200 hover:bg-gray-100')}
+                          form.emoji === e ? 'bg-indigo-100 ring-2 ring-indigo-500 border-transparent' : 'bg-[var(--esl-bg-section)] border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}
                       >{e}</button>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Нэр *</label>
+                  <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">Нэр *</label>
                   <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Жишээ: Үс засалт"
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
+                    className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Тайлбар</label>
+                  <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">Тайлбар</label>
                   <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} placeholder="Үйлчилгээний тухай..."
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none" />
+                    className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Үнэ (₮) *</label>
+                    <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">Үнэ (₮) *</label>
                     <input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="0"
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
+                      className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Хугацаа</label>
+                    <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">Хугацаа</label>
                     <select value={form.duration} onChange={(e) => setForm({ ...form, duration: Number(e.target.value) })}
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition appearance-none bg-white cursor-pointer">
+                      className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition appearance-none bg-white cursor-pointer">
                       {DURATION_OPTIONS.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-600 mb-1.5">Ангилал</label>
+                  <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">Ангилал</label>
                   <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition appearance-none bg-white cursor-pointer">
+                    className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition appearance-none bg-white cursor-pointer">
                     <option value="">Сонгох...</option>
                     {DEMO_SERVICE_CATEGORIES.map((c) => <option key={c._id} value={c.name.toLowerCase().replace(/\s/g, '')}>{c.emoji} {c.name}</option>)}
                   </select>
@@ -231,8 +231,8 @@ export default function ServicesPage() {
               </div>
 
               {/* Modal footer */}
-              <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100">
-                <button onClick={() => setShowModal(false)} className="px-4 py-2.5 text-sm font-semibold text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition">Болих</button>
+              <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--esl-border)]">
+                <button onClick={() => setShowModal(false)} className="px-4 py-2.5 text-sm font-semibold text-[var(--esl-text-primary)] bg-white border border-[var(--esl-border)] rounded-lg hover:bg-[var(--esl-bg-section)] cursor-pointer transition">Болих</button>
                 <button onClick={handleSave} disabled={!form.name || !form.price}
                   className={cn('px-5 py-2.5 text-sm font-semibold text-white rounded-lg border-none cursor-pointer transition',
                     form.name && form.price ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-300 cursor-not-allowed')}>

@@ -51,25 +51,25 @@ export default function WorkingHoursPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Цагийн хуваарь</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Бизнесийн ажиллах цагийг тохируулах</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)] tracking-tight">Цагийн хуваарь</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)] mt-0.5">Бизнесийн ажиллах цагийг тохируулах</p>
         </div>
         <button onClick={handleSave} disabled={saving}
           className={cn('flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-none cursor-pointer transition shadow-sm',
-            saved ? 'bg-green-600 text-white' : saving ? 'bg-gray-200 text-gray-400' : 'bg-indigo-600 text-white hover:bg-indigo-700')}>
+            saved ? 'bg-green-600 text-white' : saving ? 'bg-gray-200 text-[var(--esl-text-muted)]' : 'bg-indigo-600 text-white hover:bg-indigo-700')}>
           {saved ? <><Check className="w-4 h-4" /> Хадгалагдлаа</> : saving ? 'Хадгалж байна...' : <><Save className="w-4 h-4" /> Хадгалах</>}
         </button>
       </div>
 
       {/* Summary */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
             <Clock className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
-            <div className="text-sm font-bold text-gray-900">Ажлын цаг</div>
-            <div className="text-xs text-gray-500">Долоо хоногт {openDays} өдөр ажиллана</div>
+            <div className="text-sm font-bold text-[var(--esl-text-primary)]">Ажлын цаг</div>
+            <div className="text-xs text-[var(--esl-text-secondary)]">Долоо хоногт {openDays} өдөр ажиллана</div>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ export default function WorkingHoursPage() {
         <div className="flex gap-2 mb-1">
           {hours.sort((a, b) => a.dayOfWeek - b.dayOfWeek).map((h) => (
             <div key={h.dayOfWeek} className={cn('flex-1 text-center py-2 rounded-lg text-xs font-bold transition',
-              h.isClosed ? 'bg-gray-50 text-gray-300' : 'bg-indigo-50 text-indigo-600')}>
+              h.isClosed ? 'bg-[var(--esl-bg-section)] text-[var(--esl-text-muted)]' : 'bg-indigo-50 text-indigo-600')}>
               {DAY_SHORT[h.dayOfWeek]}
             </div>
           ))}
@@ -85,35 +85,35 @@ export default function WorkingHoursPage() {
       </div>
 
       {/* Schedule rows */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden divide-y divide-gray-100">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden divide-y divide-gray-100">
         {hours.sort((a, b) => a.dayOfWeek - b.dayOfWeek).map((h) => (
-          <div key={h.dayOfWeek} className={cn('flex items-center gap-4 px-5 py-4 transition', h.isClosed && 'bg-gray-50/50')}>
+          <div key={h.dayOfWeek} className={cn('flex items-center gap-4 px-5 py-4 transition', h.isClosed && 'bg-[var(--esl-bg-section)]/50')}>
             {/* Toggle */}
             <button onClick={() => toggleDay(h.dayOfWeek)} className="bg-transparent border-none cursor-pointer p-0 shrink-0">
               {h.isClosed
-                ? <ToggleLeft className="w-6 h-6 text-gray-300" />
+                ? <ToggleLeft className="w-6 h-6 text-[var(--esl-text-muted)]" />
                 : <ToggleRight className="w-6 h-6 text-green-500" />}
             </button>
 
             {/* Day name */}
-            <span className={cn('text-sm font-bold w-16 shrink-0', h.isClosed ? 'text-gray-400' : 'text-gray-900')}>
+            <span className={cn('text-sm font-bold w-16 shrink-0', h.isClosed ? 'text-[var(--esl-text-muted)]' : 'text-[var(--esl-text-primary)]')}>
               {DAY_NAMES[h.dayOfWeek]}
             </span>
 
             {h.isClosed ? (
-              <span className="text-sm text-gray-400 italic">Амралтын өдөр</span>
+              <span className="text-sm text-[var(--esl-text-muted)] italic">Амралтын өдөр</span>
             ) : (
               <div className="flex items-center gap-3">
                 <select value={h.openTime} onChange={(e) => updateTime(h.dayOfWeek, 'openTime', e.target.value)}
-                  className="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer appearance-none min-w-[90px] transition">
+                  className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer appearance-none min-w-[90px] transition">
                   {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
-                <span className="text-gray-400 font-medium">—</span>
+                <span className="text-[var(--esl-text-muted)] font-medium">—</span>
                 <select value={h.closeTime} onChange={(e) => updateTime(h.dayOfWeek, 'closeTime', e.target.value)}
-                  className="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer appearance-none min-w-[90px] transition">
+                  className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer appearance-none min-w-[90px] transition">
                   {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
-                <span className="text-xs text-gray-400 hidden sm:inline">
+                <span className="text-xs text-[var(--esl-text-muted)] hidden sm:inline">
                   {(() => {
                     const [oh, om] = h.openTime.split(':').map(Number);
                     const [ch, cm] = h.closeTime.split(':').map(Number);

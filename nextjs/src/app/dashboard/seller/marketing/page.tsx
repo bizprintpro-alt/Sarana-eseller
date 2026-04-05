@@ -23,7 +23,7 @@ const SOCIAL_TEMPLATES = [
   {
     platform: 'TikTok',
     icon: '🎵',
-    color: 'bg-gray-100 text-gray-700',
+    color: 'bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)]',
     template: (url: string, name: string) =>
       `🎬 ${name} дэлгүүрийн шинэ бараанууд!\n\n💥 Хямдралтай\n⭐ Шилдэг чанар\n🚀 Шууд захиалаарай\n\n${url}\n\n#eseller #online #shopping #mongolia`,
   },
@@ -49,11 +49,11 @@ export default function MarketingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Маркетинг</h1>
-        <p className="text-gray-500 mt-1">Дэлгүүрээ сурталчлах хэрэгслүүд</p>
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Маркетинг</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Дэлгүүрээ сурталчлах хэрэгслүүд</p>
       </div>
 
       {/* Stats */}
@@ -65,14 +65,14 @@ export default function MarketingPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Referral Link */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">🔗 Реферал линк</h2>
-          <p className="text-sm text-gray-500 mb-3">Энэ линкээр орсон хэрэглэгчид таны дэлгүүрийг харж, захиалга өгнө.</p>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🔗 Реферал линк</h2>
+          <p className="text-sm text-[var(--esl-text-secondary)] mb-3">Энэ линкээр орсон хэрэглэгчид таны дэлгүүрийг харж, захиалга өгнө.</p>
           <div className="flex gap-2">
             <input
               readOnly
               value={referralUrl}
-              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-gray-50"
+              className="flex-1 px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] bg-[var(--esl-bg-section)]"
             />
             <button
               onClick={() => copyToClipboard(referralUrl, 'Реферал линк')}
@@ -91,11 +91,11 @@ export default function MarketingPage() {
         </div>
 
         {/* QR Code */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">📱 QR Код</h2>
-          <p className="text-sm text-gray-500 mb-3">Дэлгүүрийн QR код — хэвлэж, хуваалцаарай.</p>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📱 QR Код</h2>
+          <p className="text-sm text-[var(--esl-text-secondary)] mb-3">Дэлгүүрийн QR код — хэвлэж, хуваалцаарай.</p>
           <div className="flex flex-col items-center">
-            <div className="w-48 h-48 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center">
+            <div className="w-48 h-48 bg-[var(--esl-bg-section)] border-2 border-dashed border-[var(--esl-border)] rounded-xl flex flex-col items-center justify-center">
               <img
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(storeUrl)}`}
                 alt="QR Code"
@@ -105,10 +105,10 @@ export default function MarketingPage() {
                 }}
               />
             </div>
-            <p className="text-xs text-gray-400 mt-2">{storeUrl}</p>
+            <p className="text-xs text-[var(--esl-text-muted)] mt-2">{storeUrl}</p>
             <button
               onClick={() => copyToClipboard(storeUrl, 'Дэлгүүрийн линк')}
-              className="mt-3 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+              className="mt-3 px-4 py-2 bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] rounded-lg text-sm font-medium hover:bg-[var(--esl-bg-card-hover)] transition-colors"
             >
               Линк хуулах
             </button>
@@ -116,26 +116,26 @@ export default function MarketingPage() {
         </div>
 
         {/* Social Media Templates */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">📣 Сошиал медиа загвар</h2>
-          <p className="text-sm text-gray-500 mb-4">Бэлэн текст хуулж, сошиал хуудас дээрээ нийтлээрэй.</p>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📣 Сошиал медиа загвар</h2>
+          <p className="text-sm text-[var(--esl-text-secondary)] mb-4">Бэлэн текст хуулж, сошиал хуудас дээрээ нийтлээрэй.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {SOCIAL_TEMPLATES.map((tmpl) => {
               const text = tmpl.template(referralUrl, storeName);
               return (
-                <div key={tmpl.platform} className="border border-gray-200 rounded-xl p-4">
+                <div key={tmpl.platform} className="border border-[var(--esl-border)] rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${tmpl.color}`}>
                       {tmpl.icon} {tmpl.platform}
                     </span>
                   </div>
-                  <pre className="text-xs text-gray-600 whitespace-pre-wrap bg-gray-50 rounded-lg p-3 mb-3 max-h-40 overflow-y-auto font-sans">
+                  <pre className="text-xs text-[var(--esl-text-secondary)] whitespace-pre-wrap bg-[var(--esl-bg-section)] rounded-lg p-3 mb-3 max-h-40 overflow-y-auto font-sans">
                     {text}
                   </pre>
                   <button
                     onClick={() => copyToClipboard(text, tmpl.platform)}
                     className={`w-full py-2 rounded-lg text-sm font-medium transition-colors ${
-                      copied === tmpl.platform ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      copied === tmpl.platform ? 'bg-green-500 text-white' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] hover:bg-[var(--esl-bg-card-hover)]'
                     }`}
                   >
                     {copied === tmpl.platform ? '✓ Хуулсан' : 'Текст хуулах'}
@@ -147,20 +147,20 @@ export default function MarketingPage() {
         </div>
 
         {/* Banner Creator */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">🎨 Баннер үүсгэгч</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🎨 Баннер үүсгэгч</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Баннер текст</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Баннер текст</label>
                 <input
                   value={bannerText}
                   onChange={(e) => setBannerText(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Өнгө</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Өнгө</label>
                 <div className="flex gap-2">
                   {['#6366F1', '#EC4899', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'].map((color) => (
                     <button
@@ -182,7 +182,7 @@ export default function MarketingPage() {
               </button>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Урьдчилан харах</label>
+              <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Урьдчилан харах</label>
               <div
                 className="rounded-xl p-6 text-white text-center font-bold text-lg shadow-md"
                 style={{ background: `linear-gradient(135deg, ${bannerColor}, ${bannerColor}dd)` }}

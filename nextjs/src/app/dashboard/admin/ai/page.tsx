@@ -120,7 +120,7 @@ export default function AiDashboardPage() {
             </span>
             <button onClick={runScan} disabled={scanning}
               className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold border cursor-pointer transition"
-              style={{ background: scanning ? '#333' : '#1A1A1A', color: '#A0A0A0', borderColor: '#2A2A2A' }}>
+              style={{ background: scanning ? 'var(--esl-bg-elevated)' : 'var(--esl-bg-card)', color: '#A0A0A0', borderColor: '#2A2A2A' }}>
               {scanning ? <Loader2 size={14} className="animate-spin" /> : <Zap size={14} />}
               {scanning ? 'Шинжилж байна...' : 'Шинжилгээ эхлүүлэх'}
             </button>

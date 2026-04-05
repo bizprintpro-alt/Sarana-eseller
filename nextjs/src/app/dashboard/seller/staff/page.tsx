@@ -16,7 +16,7 @@ interface StaffMember {
 const ROLE_LABELS: Record<string, [string, string]> = {
   manager: ['bg-purple-100 text-purple-700', 'Менежер'],
   editor: ['bg-blue-100 text-blue-700', 'Засварлагч'],
-  viewer: ['bg-gray-100 text-gray-700', 'Үзэгч'],
+  viewer: ['bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)]', 'Үзэгч'],
 };
 
 const ROLE_DESCRIPTIONS: Record<string, string> = {
@@ -81,11 +81,11 @@ export default function StaffPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Ажилтнууд</h1>
-          <p className="text-gray-500 mt-1">Дэлгүүрийн ажилтан нэмэх, удирдах</p>
+          <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Ажилтнууд</h1>
+          <p className="text-[var(--esl-text-secondary)] mt-1">Дэлгүүрийн ажилтан нэмэх, удирдах</p>
         </div>
         <button onClick={() => setShowModal(true)} className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors text-sm">
           + Ажилтан нэмэх
@@ -99,43 +99,43 @@ export default function StaffPage() {
       </div>
 
       {staff.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">👥</div>
-          <h3 className="text-lg font-semibold text-gray-700">Ажилтан байхгүй</h3>
-          <p className="text-gray-400 mt-1">Шинэ ажилтан нэмээрэй</p>
+          <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Ажилтан байхгүй</h3>
+          <p className="text-[var(--esl-text-muted)] mt-1">Шинэ ажилтан нэмээрэй</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Ажилтан</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Имэйл</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Эрх</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Нэмсэн огноо</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Идэвхтэй</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Үйлдэл</th>
+                <tr className="bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]">
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Ажилтан</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Имэйл</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Эрх</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Нэмсэн огноо</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Идэвхтэй</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Үйлдэл</th>
                 </tr>
               </thead>
               <tbody>
                 {staff.map((s) => {
-                  const [cls, label] = ROLE_LABELS[s.role] || ['bg-gray-100 text-gray-600', s.role];
+                  const [cls, label] = ROLE_LABELS[s.role] || ['bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]', s.role];
                   return (
-                    <tr key={s.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <tr key={s.id} className="border-b border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-bold">
                             {s.name.charAt(0)}
                           </div>
-                          <span className="text-sm font-medium text-gray-900">{s.name}</span>
+                          <span className="text-sm font-medium text-[var(--esl-text-primary)]">{s.name}</span>
                         </div>
                       </td>
-                      <td className="p-4 text-sm text-gray-500">{s.email}</td>
+                      <td className="p-4 text-sm text-[var(--esl-text-secondary)]">{s.email}</td>
                       <td className="p-4">
                         <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${cls}`}>{label}</span>
                       </td>
-                      <td className="p-4 text-sm text-gray-500">{new Date(s.addedAt).toLocaleDateString('mn-MN')}</td>
+                      <td className="p-4 text-sm text-[var(--esl-text-secondary)]">{new Date(s.addedAt).toLocaleDateString('mn-MN')}</td>
                       <td className="p-4">
                         <button
                           onClick={() => toggleActive(s.id)}
@@ -162,27 +162,27 @@ export default function StaffPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
           <div className="bg-white rounded-2xl max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900">Ажилтан нэмэх</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            <div className="p-6 border-b border-[var(--esl-border)] flex items-center justify-between">
+              <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">Ажилтан нэмэх</h2>
+              <button onClick={() => setShowModal(false)} className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] text-xl">&times;</button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Нэр</label>
-                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Нэр</label>
+                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Имэйл</label>
-                <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Имэйл</label>
+                <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Эрх</label>
-                <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as StaffMember['role'] })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Эрх</label>
+                <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value as StaffMember['role'] })} className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500">
                   <option value="manager">Менежер</option>
                   <option value="editor">Засварлагч</option>
                   <option value="viewer">Үзэгч</option>
                 </select>
-                <p className="text-xs text-gray-400 mt-1">{ROLE_DESCRIPTIONS[form.role]}</p>
+                <p className="text-xs text-[var(--esl-text-muted)] mt-1">{ROLE_DESCRIPTIONS[form.role]}</p>
               </div>
               <button onClick={handleAdd} className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
                 Нэмэх

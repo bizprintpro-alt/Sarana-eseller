@@ -54,14 +54,14 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-[#0F172A]" />
             <h3 className="text-base font-bold text-[#0F172A]">
-              Сагс {count > 0 && <span className="text-[#94A3B8] font-medium">({count})</span>}
+              Сагс {count > 0 && <span className="text-[var(--esl-text-muted)] font-medium">({count})</span>}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg hover:bg-[#F1F5F9] border-none cursor-pointer flex items-center justify-center transition-colors bg-transparent"
+            className="w-8 h-8 rounded-lg hover:bg-[var(--esl-bg-section)] border-none cursor-pointer flex items-center justify-center transition-colors bg-transparent"
           >
-            <X className="w-4 h-4 text-[#94A3B8]" />
+            <X className="w-4 h-4 text-[var(--esl-text-muted)]" />
           </button>
         </div>
 
@@ -69,17 +69,17 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="text-center py-20">
-              <div className="w-16 h-16 rounded-2xl bg-[#F1F5F9] flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-2xl bg-[var(--esl-bg-section)] flex items-center justify-center mx-auto mb-4">
                 <ShoppingBag className="w-7 h-7 text-[#CBD5E1]" />
               </div>
-              <p className="text-sm font-semibold text-[#94A3B8] mb-1">Сагс хоосон байна</p>
+              <p className="text-sm font-semibold text-[var(--esl-text-muted)] mb-1">Сагс хоосон байна</p>
               <p className="text-xs text-[#CBD5E1]">Дэлгүүрээс бараа нэмээрэй</p>
             </div>
           ) : (
             <div className="space-y-4">
               {items.map((item, idx) => (
                 <div key={`${item._id}-${idx}`} className="flex gap-3 items-start group">
-                  <div className="w-16 h-16 rounded-xl bg-[#F8FAFC] border border-[#F1F5F9] flex items-center justify-center text-2xl shrink-0 overflow-hidden">
+                  <div className="w-16 h-16 rounded-xl bg-[var(--esl-bg-section)] border border-[#F1F5F9] flex items-center justify-center text-2xl shrink-0 overflow-hidden">
                     {item.images?.[0] ? (
                       <img src={item.images[0]} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -90,7 +90,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     <div className="text-sm font-semibold text-[#0F172A] truncate leading-snug">{item.name}</div>
                     {/* Show selected modifiers */}
                     {item.selectedModifiers?.length > 0 && (
-                      <div className="text-[10px] text-[#94A3B8] mt-0.5">
+                      <div className="text-[10px] text-[var(--esl-text-muted)] mt-0.5">
                         {item.selectedModifiers.map((m) => m.optionName).join(', ')}
                       </div>
                     )}
@@ -99,17 +99,17 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     </div>
                     <div className="flex items-center gap-1.5 mt-2">
                       <button
-                        className="w-7 h-7 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center"
+                        className="w-7 h-7 rounded-lg bg-[var(--esl-bg-section)] border border-[var(--esl-border)] cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center"
                         onClick={() => updateQty(idx, item.qty - 1)}
                       >
-                        <Minus className="w-3 h-3 text-[#475569]" />
+                        <Minus className="w-3 h-3 text-[var(--esl-text-secondary)]" />
                       </button>
                       <span className="text-sm font-bold min-w-[28px] text-center text-[#0F172A]">{item.qty}</span>
                       <button
-                        className="w-7 h-7 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center"
+                        className="w-7 h-7 rounded-lg bg-[var(--esl-bg-section)] border border-[var(--esl-border)] cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center"
                         onClick={() => updateQty(idx, item.qty + 1)}
                       >
-                        <Plus className="w-3 h-3 text-[#475569]" />
+                        <Plus className="w-3 h-3 text-[var(--esl-text-secondary)]" />
                       </button>
                     </div>
                   </div>
@@ -129,11 +129,11 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
         {items.length > 0 && (
           <div className="border-t border-[#F1F5F9] px-6 py-5 space-y-3 shrink-0">
             <div className="flex justify-between text-sm">
-              <span className="text-[#94A3B8]">Дүн</span>
+              <span className="text-[var(--esl-text-muted)]">Дүн</span>
               <span className="font-semibold text-[#0F172A]">{formatPrice(subtotal)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-[#94A3B8]">Хүргэлт</span>
+              <span className="text-[var(--esl-text-muted)]">Хүргэлт</span>
               <span className="font-semibold text-[#0F172A]">
                 {delivery === 0 ? (
                   <span className="text-green-600">Үнэгүй</span>
@@ -143,7 +143,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
               </span>
             </div>
             {delivery > 0 && (
-              <div className="text-[11px] text-[#94A3B8] bg-[#F8FAFC] rounded-lg px-3 py-2">
+              <div className="text-[11px] text-[var(--esl-text-muted)] bg-[var(--esl-bg-section)] rounded-lg px-3 py-2">
                 {formatPrice(50000 - subtotal)} нэмбэл үнэгүй хүргэлт
               </div>
             )}

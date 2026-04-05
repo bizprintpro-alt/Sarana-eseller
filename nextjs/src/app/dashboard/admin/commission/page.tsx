@@ -172,7 +172,7 @@ export default function CommissionPage() {
               <button onClick={() => setCalcAffiliate(!calcAffiliate)}
                 className="w-full py-3 rounded-xl text-sm font-semibold border cursor-pointer transition"
                 style={{
-                  background: calcAffiliate ? 'rgba(245,158,11,0.1)' : '#1A1A1A',
+                  background: calcAffiliate ? 'rgba(245,158,11,0.1)' : 'var(--esl-bg-card)',
                   borderColor: calcAffiliate ? '#F59E0B' : '#2A2A2A',
                   color: calcAffiliate ? '#F59E0B' : '#777',
                 }}>

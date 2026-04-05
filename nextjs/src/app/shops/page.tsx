@@ -91,27 +91,27 @@ export default function ShopsPage() {
   const totalService = DEMO_SHOPS.filter((s) => s.type === 'service').length;
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[var(--esl-bg-section)]">
       {/* ═══ Header ═══ */}
       <header className="sticky top-0 z-50 bg-white shadow-sm">
         <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-5">
           <Link href="/" className="flex items-center gap-2 no-underline shrink-0">
             <EsellerLogo size={30} />
-            <span className="text-xl font-black text-[#1A1A2E] tracking-tight hidden sm:block">
+            <span className="text-xl font-black text-[var(--esl-text-primary)] tracking-tight hidden sm:block">
               eseller<span className="text-[#E31E24]">.mn</span>
             </span>
           </Link>
 
           <div className="flex-1 max-w-xl relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
             <input
               type="text" value={search} onChange={(e) => setSearch(e.target.value)}
               placeholder="Дэлгүүр, үйлчилгээ хайх..."
-              className="w-full pl-10 pr-4 py-2.5 bg-[#F5F5F5] border-2 border-transparent rounded-xl text-sm outline-none focus:border-[#E31E24] focus:bg-white transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--esl-bg-section)] border-2 border-transparent rounded-xl text-sm outline-none focus:border-[#E31E24] focus:bg-white transition-all"
             />
           </div>
 
-          <Link href="/store" className="text-sm font-semibold text-gray-500 hover:text-[#E31E24] no-underline transition hidden sm:inline">
+          <Link href="/store" className="text-sm font-semibold text-[var(--esl-text-secondary)] hover:text-[#E31E24] no-underline transition hidden sm:inline">
             Marketplace →
           </Link>
         </div>
@@ -135,7 +135,7 @@ export default function ShopsPage() {
             {TYPE_TABS.map((t) => (
               <button key={t.key} onClick={() => setActiveType(t.key)}
                 className={cn('flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-none cursor-pointer transition-all',
-                  activeType === t.key ? 'bg-white text-[#1A1A2E]' : 'bg-white/10 text-white/70 hover:bg-white/20')}>
+                  activeType === t.key ? 'bg-white text-[var(--esl-text-primary)]' : 'bg-white/10 text-white/70 hover:bg-white/20')}>
                 <t.icon className="w-4 h-4" />
                 {t.label}
                 <span className="text-xs opacity-60">
@@ -155,13 +155,13 @@ export default function ShopsPage() {
             {CATEGORY_FILTERS.map((c) => (
               <button key={c.key} onClick={() => setActiveCat(c.key)}
                 className={cn('shrink-0 px-3.5 py-2 rounded-lg text-xs font-semibold border cursor-pointer transition-all whitespace-nowrap',
-                  activeCat === c.key ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-white text-gray-600 border-gray-200 hover:border-gray-400')}>
+                  activeCat === c.key ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-white text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:border-gray-400')}>
                 {c.label}
               </button>
             ))}
           </div>
           <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold text-gray-600 bg-white cursor-pointer appearance-none focus:outline-none focus:ring-1 focus:ring-[#E31E24]">
+            className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-xs font-semibold text-[var(--esl-text-secondary)] bg-white cursor-pointer appearance-none focus:outline-none focus:ring-1 focus:ring-[#E31E24]">
             <option value="rating">Үнэлгээгээр</option>
             <option value="reviews">Сэтгэгдлээр</option>
             <option value="newest">Шинээр</option>
@@ -169,13 +169,13 @@ export default function ShopsPage() {
         </div>
 
         {/* Results count */}
-        <div className="text-sm text-gray-500 mb-4">{filtered.length} дэлгүүр олдлоо</div>
+        <div className="text-sm text-[var(--esl-text-secondary)] mb-4">{filtered.length} дэлгүүр олдлоо</div>
 
         {/* Shop grid */}
         {filtered.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-3 opacity-30">🏪</div>
-            <p className="text-sm font-semibold text-gray-400">Дэлгүүр олдсонгүй</p>
+            <p className="text-sm font-semibold text-[var(--esl-text-muted)]">Дэлгүүр олдсонгүй</p>
             <button onClick={() => { setSearch(''); setActiveCat('all'); setActiveType('all'); }}
               className="mt-3 text-sm text-[#E31E24] font-semibold bg-transparent border-none cursor-pointer hover:underline">
               Шүүлтүүр цэвэрлэх
@@ -192,7 +192,7 @@ export default function ShopsPage() {
                 variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}>
                 <Link
                   href={shop.type === 'service' ? `/s/${shop.slug}` : `/u/${shop.slug}`}
-                  className="block bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all no-underline group"
+                  className="block bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all no-underline group"
                 >
                   {/* Card header — gradient bg */}
                   <div className={cn('h-28 relative flex items-center justify-center',
@@ -204,14 +204,14 @@ export default function ShopsPage() {
 
                     {/* Type badge */}
                     <span className={cn('absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-full',
-                      shop.type === 'service' ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-600')}>
+                      shop.type === 'service' ? 'bg-indigo-100 text-indigo-700' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]')}>
                       {shop.type === 'service' ? '🛎️ Үйлчилгээ' : '📦 Дэлгүүр'}
                     </span>
 
                     {/* Open badge for services */}
                     {shop.type === 'service' && shop.isOpen !== undefined && (
                       <span className={cn('absolute top-3 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1',
-                        shop.isOpen ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500')}>
+                        shop.isOpen ? 'bg-green-100 text-green-700' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]')}>
                         <span className={cn('w-1.5 h-1.5 rounded-full', shop.isOpen ? 'bg-green-500' : 'bg-gray-400')} />
                         {shop.isOpen ? 'Нээлттэй' : 'Хаалттай'}
                       </span>
@@ -222,20 +222,20 @@ export default function ShopsPage() {
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-1.5">
-                        <h3 className="text-base font-bold text-gray-900 group-hover:text-[#E31E24] transition-colors">{shop.name}</h3>
+                        <h3 className="text-base font-bold text-[var(--esl-text-primary)] group-hover:text-[#E31E24] transition-colors">{shop.name}</h3>
                         {shop.isVerified && (
                           <Verified className="w-4 h-4 text-blue-500 fill-blue-500 shrink-0" />
                         )}
                       </div>
                     </div>
 
-                    <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed mb-3">{shop.description}</p>
+                    <p className="text-xs text-[var(--esl-text-secondary)] line-clamp-2 leading-relaxed mb-3">{shop.description}</p>
 
                     {/* Meta */}
-                    <div className="flex items-center gap-3 text-xs text-gray-400 mb-3">
+                    <div className="flex items-center gap-3 text-xs text-[var(--esl-text-muted)] mb-3">
                       <span className="flex items-center gap-1">
                         <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                        <span className="font-bold text-gray-700">{shop.rating}</span>
+                        <span className="font-bold text-[var(--esl-text-primary)]">{shop.rating}</span>
                         <span>({shop.reviewCount})</span>
                       </span>
                       <span className="flex items-center gap-1">
@@ -246,7 +246,7 @@ export default function ShopsPage() {
 
                     {/* Category + CTA */}
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                      <span className="text-[10px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-section)] px-2.5 py-1 rounded-full">
                         {shop.categoryLabel}
                       </span>
                       <span className="text-xs font-bold text-[#E31E24] flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">

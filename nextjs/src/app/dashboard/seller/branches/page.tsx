@@ -49,7 +49,7 @@ export default function BranchesPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -135,15 +135,15 @@ export default function BranchesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🏪</span>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Салбар удирдлага</h1>
-              <p className="text-gray-500 text-sm">Дэлгүүрийн салбаруудыг удирдах ({branches.length}/{plan.limits.maxBranches === -1 ? '∞' : plan.limits.maxBranches})</p>
+              <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Салбар удирдлага</h1>
+              <p className="text-[var(--esl-text-secondary)] text-sm">Дэлгүүрийн салбаруудыг удирдах ({branches.length}/{plan.limits.maxBranches === -1 ? '∞' : plan.limits.maxBranches})</p>
             </div>
           </div>
           <button
@@ -157,10 +157,10 @@ export default function BranchesPage() {
 
       {/* Branch List */}
       {branches.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <span className="text-5xl block mb-4">🏪</span>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Салбар байхгүй</h2>
-          <p className="text-gray-500 text-sm mb-4">Эхний салбараа нэмнэ үү</p>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Салбар байхгүй</h2>
+          <p className="text-[var(--esl-text-secondary)] text-sm mb-4">Эхний салбараа нэмнэ үү</p>
           <button
             onClick={openAddModal}
             className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition"
@@ -174,15 +174,15 @@ export default function BranchesPage() {
             <div
               key={branch.id}
               className={`bg-white rounded-xl border overflow-hidden transition ${
-                branch.active ? 'border-gray-200' : 'border-gray-200 opacity-60'
+                branch.active ? 'border-[var(--esl-border)]' : 'border-[var(--esl-border)] opacity-60'
               }`}
             >
               <div className="flex flex-col lg:flex-row">
                 {/* Map placeholder */}
-                <div className="lg:w-64 h-40 lg:h-auto bg-gray-100 flex items-center justify-center flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200">
+                <div className="lg:w-64 h-40 lg:h-auto bg-[var(--esl-bg-section)] flex items-center justify-center flex-shrink-0 border-b lg:border-b-0 lg:border-r border-[var(--esl-border)]">
                   <div className="text-center">
                     <span className="text-3xl block mb-1">📍</span>
-                    <span className="text-xs text-gray-400">Газрын зураг</span>
+                    <span className="text-xs text-[var(--esl-text-muted)]">Газрын зураг</span>
                   </div>
                 </div>
 
@@ -191,12 +191,12 @@ export default function BranchesPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-bold text-gray-900 text-lg">{branch.name}</h3>
+                        <h3 className="font-bold text-[var(--esl-text-primary)] text-lg">{branch.name}</h3>
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                             branch.active
                               ? 'bg-green-50 text-green-600'
-                              : 'bg-gray-100 text-gray-500'
+                              : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]'
                           }`}
                         >
                           {branch.active ? 'Идэвхтэй' : 'Идэвхгүй'}
@@ -208,7 +208,7 @@ export default function BranchesPage() {
                         onClick={() => toggleActive(branch.id)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                           branch.active
-                            ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-card-hover)]'
                             : 'bg-green-50 text-green-600 hover:bg-green-100'
                         }`}
                       >
@@ -230,20 +230,20 @@ export default function BranchesPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="text-gray-400">📍</span>
+                    <div className="flex items-center gap-2 text-sm text-[var(--esl-text-secondary)]">
+                      <span className="text-[var(--esl-text-muted)]">📍</span>
                       <span>{branch.address || '—'}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="text-gray-400">📞</span>
+                    <div className="flex items-center gap-2 text-sm text-[var(--esl-text-secondary)]">
+                      <span className="text-[var(--esl-text-muted)]">📞</span>
                       <span>{branch.phone || '—'}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="text-gray-400">👤</span>
+                    <div className="flex items-center gap-2 text-sm text-[var(--esl-text-secondary)]">
+                      <span className="text-[var(--esl-text-muted)]">👤</span>
                       <span>{branch.manager || '—'}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="text-gray-400">🕐</span>
+                    <div className="flex items-center gap-2 text-sm text-[var(--esl-text-secondary)]">
+                      <span className="text-[var(--esl-text-muted)]">🕐</span>
                       <span>{branch.workingHours || '—'}</span>
                     </div>
                   </div>
@@ -258,67 +258,67 @@ export default function BranchesPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-md shadow-xl">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-bold text-gray-900">
+            <div className="p-6 border-b border-[var(--esl-border)]">
+              <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
                 {editingId ? 'Салбар засах' : 'Шинэ салбар'}
               </h2>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Нэр</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Нэр</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Салбарын нэр"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Хаяг</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Хаяг</label>
                 <input
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="Дүүрэг, хороо, гудамж"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Утас</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Утас</label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="9911-2233"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Менежер</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Менежер</label>
                 <input
                   type="text"
                   value={manager}
                   onChange={(e) => setManager(e.target.value)}
                   placeholder="Менежерийн нэр"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ажиллах цаг</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Ажиллах цаг</label>
                 <input
                   type="text"
                   value={workingHours}
                   onChange={(e) => setWorkingHours(e.target.value)}
                   placeholder="09:00-18:00"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
             </div>
-            <div className="p-6 border-t border-gray-200 flex gap-3">
+            <div className="p-6 border-t border-[var(--esl-border)] flex gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 border border-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition"
+                className="flex-1 border border-[var(--esl-border)] text-[var(--esl-text-primary)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--esl-bg-section)] transition"
               >
                 Болих
               </button>

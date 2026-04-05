@@ -73,7 +73,7 @@ export function NotificationBell({ role = 'buyer' }: Props) {
         <div style={{
           position: 'absolute', top: '100%', right: 0, marginTop: 8,
           width: 320, maxHeight: 400, overflowY: 'auto',
-          background: '#1A1A1A', border: '0.5px solid #2A2A2A',
+          background: 'var(--esl-bg-card)', border: '0.5px solid #2A2A2A',
           borderRadius: 12, boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
           zIndex: 100,
         }}>

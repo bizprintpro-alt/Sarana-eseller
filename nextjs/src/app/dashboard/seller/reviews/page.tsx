@@ -29,7 +29,7 @@ function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((i) => (
-        <span key={i} className={`text-sm ${i <= rating ? 'text-amber-400' : 'text-gray-200'}`}>&#9733;</span>
+        <span key={i} className={`text-sm ${i <= rating ? 'text-amber-400' : 'text-[var(--esl-text-disabled)]'}`}>&#9733;</span>
       ))}
     </div>
   );
@@ -58,10 +58,10 @@ export default function ReviewsPage() {
   const fiveStarCount = reviews.filter((r) => r.rating === 5).length;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Сэтгэгдэлүүд</h1>
-        <p className="text-gray-500 mt-1">Харилцагчдын сэтгэгдэл, үнэлгээ</p>
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Сэтгэгдэлүүд</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Харилцагчдын сэтгэгдэл, үнэлгээ</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -76,7 +76,7 @@ export default function ReviewsPage() {
         <button
           onClick={() => setFilterRating(null)}
           className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-            !filterRating ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            !filterRating ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
           }`}
         >
           Бүгд
@@ -86,7 +86,7 @@ export default function ReviewsPage() {
             key={r}
             onClick={() => setFilterRating(r)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              filterRating === r ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              filterRating === r ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
             }`}
           >
             {r} &#9733;
@@ -95,15 +95,15 @@ export default function ReviewsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">⭐</div>
-          <h3 className="text-lg font-semibold text-gray-700">Сэтгэгдэл олдсонгүй</h3>
-          <p className="text-gray-400 mt-1">Энэ үнэлгээтэй сэтгэгдэл байхгүй байна</p>
+          <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Сэтгэгдэл олдсонгүй</h3>
+          <p className="text-[var(--esl-text-muted)] mt-1">Энэ үнэлгээтэй сэтгэгдэл байхгүй байна</p>
         </div>
       ) : (
         <div className="space-y-4">
           {filtered.map((review) => (
-            <div key={review.id} className="bg-white rounded-xl border border-gray-200 p-5">
+            <div key={review.id} className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-bold flex-shrink-0">
@@ -111,15 +111,15 @@ export default function ReviewsPage() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-gray-900">{review.customerName}</span>
+                      <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{review.customerName}</span>
                       <StarRating rating={review.rating} />
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-xs text-gray-400">{review.productEmoji} {review.productName}</span>
-                      <span className="text-xs text-gray-300">|</span>
-                      <span className="text-xs text-gray-400">{timeAgo(review.createdAt)}</span>
+                      <span className="text-xs text-[var(--esl-text-muted)]">{review.productEmoji} {review.productName}</span>
+                      <span className="text-xs text-[var(--esl-text-muted)]">|</span>
+                      <span className="text-xs text-[var(--esl-text-muted)]">{timeAgo(review.createdAt)}</span>
                     </div>
-                    <p className="text-sm text-gray-700 mt-2">{review.comment}</p>
+                    <p className="text-sm text-[var(--esl-text-primary)] mt-2">{review.comment}</p>
 
                     {/* Reply */}
                     {review.reply && (
@@ -137,13 +137,13 @@ export default function ReviewsPage() {
                           onChange={(e) => setReplyText(e.target.value)}
                           placeholder="Хариу бичих..."
                           rows={2}
-                          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                         <div className="flex gap-2">
                           <button onClick={() => handleReply(review.id)} className="px-4 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700">
                             Илгээх
                           </button>
-                          <button onClick={() => { setReplyingTo(null); setReplyText(''); }} className="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-xs font-medium hover:bg-gray-200">
+                          <button onClick={() => { setReplyingTo(null); setReplyText(''); }} className="px-4 py-1.5 bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] rounded-lg text-xs font-medium hover:bg-[var(--esl-bg-card-hover)]">
                             Болих
                           </button>
                         </div>
@@ -154,7 +154,7 @@ export default function ReviewsPage() {
                 {!review.reply && replyingTo !== review.id && (
                   <button
                     onClick={() => { setReplyingTo(review.id); setReplyText(''); }}
-                    className="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex-shrink-0"
+                    className="px-3 py-1.5 text-xs font-medium bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] rounded-lg hover:bg-[var(--esl-bg-card-hover)] transition-colors flex-shrink-0"
                   >
                     💬 Хариу
                   </button>

@@ -49,7 +49,7 @@ export default function CategoriesPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -139,15 +139,15 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🗂️</span>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Ангилал удирдлага</h1>
-              <p className="text-gray-500 text-sm">Барааны ангилалуудыг удирдах ({categories.length}/{plan.limits.maxCategories === -1 ? '∞' : plan.limits.maxCategories})</p>
+              <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Ангилал удирдлага</h1>
+              <p className="text-[var(--esl-text-secondary)] text-sm">Барааны ангилалуудыг удирдах ({categories.length}/{plan.limits.maxCategories === -1 ? '∞' : plan.limits.maxCategories})</p>
             </div>
           </div>
           <button
@@ -161,10 +161,10 @@ export default function CategoriesPage() {
 
       {/* Categories list */}
       {categories.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <span className="text-5xl block mb-4">🗂️</span>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Ангилал байхгүй</h2>
-          <p className="text-gray-500 text-sm mb-4">Эхний ангилалаа нэмнэ үү</p>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Ангилал байхгүй</h2>
+          <p className="text-[var(--esl-text-secondary)] text-sm mb-4">Эхний ангилалаа нэмнэ үү</p>
           <button
             onClick={openAddModal}
             className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition"
@@ -173,35 +173,35 @@ export default function CategoriesPage() {
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
           <div className="divide-y divide-gray-100">
             {parentCategories.map((cat, idx) => (
               <div key={cat.id}>
                 {/* Parent */}
-                <div className="flex items-center gap-4 p-4 hover:bg-gray-50 transition">
+                <div className="flex items-center gap-4 p-4 hover:bg-[var(--esl-bg-section)] transition">
                   <div className="flex flex-col gap-1">
                     <button
                       onClick={() => handleReorder(cat.id, 'up')}
                       disabled={idx === 0}
-                      className="text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs"
+                      className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] disabled:opacity-30 text-xs"
                     >
                       ▲
                     </button>
                     <button
                       onClick={() => handleReorder(cat.id, 'down')}
                       disabled={idx === parentCategories.length - 1}
-                      className="text-gray-400 hover:text-gray-600 disabled:opacity-30 text-xs"
+                      className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] disabled:opacity-30 text-xs"
                     >
                       ▼
                     </button>
                   </div>
-                  <span className="text-xs text-gray-400 w-6 text-center font-mono">{cat.order}</span>
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-xl">
+                  <span className="text-xs text-[var(--esl-text-muted)] w-6 text-center font-mono">{cat.order}</span>
+                  <div className="w-10 h-10 bg-[var(--esl-bg-section)] rounded-lg flex items-center justify-center text-xl">
                     {cat.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900">{cat.name}</p>
-                    {cat.description && <p className="text-xs text-gray-500 truncate">{cat.description}</p>}
+                    <p className="font-semibold text-[var(--esl-text-primary)]">{cat.name}</p>
+                    {cat.description && <p className="text-xs text-[var(--esl-text-secondary)] truncate">{cat.description}</p>}
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -220,15 +220,15 @@ export default function CategoriesPage() {
                 </div>
                 {/* Children */}
                 {getChildren(cat.id).map((child) => (
-                  <div key={child.id} className="flex items-center gap-4 p-4 pl-16 bg-gray-50/50 hover:bg-gray-50 transition border-t border-gray-50">
-                    <span className="text-gray-300">└</span>
-                    <span className="text-xs text-gray-400 w-6 text-center font-mono">{child.order}</span>
-                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-lg border border-gray-200">
+                  <div key={child.id} className="flex items-center gap-4 p-4 pl-16 bg-[var(--esl-bg-section)]/50 hover:bg-[var(--esl-bg-section)] transition border-t border-gray-50">
+                    <span className="text-[var(--esl-text-muted)]">└</span>
+                    <span className="text-xs text-[var(--esl-text-muted)] w-6 text-center font-mono">{child.order}</span>
+                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-lg border border-[var(--esl-border)]">
                       {child.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-800 text-sm">{child.name}</p>
-                      {child.description && <p className="text-xs text-gray-500 truncate">{child.description}</p>}
+                      <p className="font-medium text-[var(--esl-text-primary)] text-sm">{child.name}</p>
+                      {child.description && <p className="text-xs text-[var(--esl-text-secondary)] truncate">{child.description}</p>}
                     </div>
                     <div className="flex items-center gap-2">
                       <button
@@ -252,15 +252,15 @@ export default function CategoriesPage() {
             {categories
               .filter((c) => c.parentId && !categories.find((p) => p.id === c.parentId))
               .map((cat) => (
-                <div key={cat.id} className="flex items-center gap-4 p-4 hover:bg-gray-50 transition">
+                <div key={cat.id} className="flex items-center gap-4 p-4 hover:bg-[var(--esl-bg-section)] transition">
                   <div className="w-6" />
-                  <span className="text-xs text-gray-400 w-6 text-center font-mono">{cat.order}</span>
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-xl">
+                  <span className="text-xs text-[var(--esl-text-muted)] w-6 text-center font-mono">{cat.order}</span>
+                  <div className="w-10 h-10 bg-[var(--esl-bg-section)] rounded-lg flex items-center justify-center text-xl">
                     {cat.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900">{cat.name}</p>
-                    {cat.description && <p className="text-xs text-gray-500 truncate">{cat.description}</p>}
+                    <p className="font-semibold text-[var(--esl-text-primary)]">{cat.name}</p>
+                    {cat.description && <p className="text-xs text-[var(--esl-text-secondary)] truncate">{cat.description}</p>}
                   </div>
                   <div className="flex items-center gap-2">
                     <button onClick={() => openEditModal(cat)} className="text-indigo-600 hover:bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-medium transition">Засах</button>
@@ -276,31 +276,31 @@ export default function CategoriesPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-md shadow-xl">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-bold text-gray-900">
+            <div className="p-6 border-b border-[var(--esl-border)]">
+              <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
                 {editingId ? 'Ангилал засах' : 'Шинэ ангилал'}
               </h2>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Нэр</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Нэр</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ангилалын нэр"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Дүрс тэмдэг</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Дүрс тэмдэг</label>
                 <div className="flex flex-wrap gap-2">
                   {EMOJI_OPTIONS.map((e) => (
                     <button
                       key={e}
                       onClick={() => setIcon(e)}
                       className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg transition-all ${
-                        icon === e ? 'border-indigo-500 bg-indigo-50 scale-110' : 'border-gray-200 hover:border-gray-300'
+                        icon === e ? 'border-indigo-500 bg-indigo-50 scale-110' : 'border-[var(--esl-border)] hover:border-[var(--esl-border-strong)]'
                       }`}
                     >
                       {e}
@@ -309,11 +309,11 @@ export default function CategoriesPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Эцэг ангилал (сонголтоор)</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Эцэг ангилал (сонголтоор)</label>
                 <select
                   value={parentId || ''}
                   onChange={(e) => setParentId(e.target.value || null)}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm bg-white text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 >
                   <option value="">-- Эцэг ангилалгүй --</option>
                   {parentCategories
@@ -326,20 +326,20 @@ export default function CategoriesPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Тайлбар</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Тайлбар</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={2}
                   placeholder="Товч тайлбар (сонголтоор)"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"
                 />
               </div>
             </div>
-            <div className="p-6 border-t border-gray-200 flex gap-3">
+            <div className="p-6 border-t border-[var(--esl-border)] flex gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 border border-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-50 transition"
+                className="flex-1 border border-[var(--esl-border)] text-[var(--esl-text-primary)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--esl-bg-section)] transition"
               >
                 Болих
               </button>

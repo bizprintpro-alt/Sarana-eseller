@@ -24,7 +24,7 @@ export default function AIAnalyticsPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -34,16 +34,16 @@ export default function AIAnalyticsPage() {
 
   if (!aiCheck.allowed) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl p-8 text-center text-white mb-6">
           <span className="text-4xl mb-3 block">🧠</span>
           <h1 className="text-2xl font-bold">AI Борлуулалтын зөвлөгч</h1>
           <p className="opacity-90 mt-1">Ухаалаг шинжилгээ, зөвлөмж, урьдчилсан таамаглал</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center max-w-lg mx-auto">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">AI боломж хязгаарлагдсан</h2>
-          <p className="text-gray-500 mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
+          <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
+          <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
           <a href="/dashboard/seller/package" className="inline-block bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition">
             Багц шинэчлэх
           </a>
@@ -53,7 +53,7 @@ export default function AIAnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl p-6 mb-6 text-white">
         <h1 className="text-2xl font-bold">🧠 AI Борлуулалтын зөвлөгч</h1>
@@ -63,76 +63,76 @@ export default function AIAnalyticsPage() {
       {/* Insight cards grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
         {/* Insight 1 — Sales drop */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">📉</span>
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 text-sm">Борлуулалт 15% буурсан</h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Борлуулалт 15% буурсан</h3>
+              <p className="text-sm text-[var(--esl-text-secondary)] mt-1">
                 Шалтгаан: улиралын нөлөө. Өнгөрсөн жилийн энэ үед ижил хандлага ажиглагдсан. Хямдралын кампанит ажил эхлүүлэхийг зөвлөж байна.
               </p>
               <div className="mt-3 flex items-center gap-2">
                 <span className="bg-red-50 text-red-600 text-xs font-semibold px-2.5 py-1 rounded-full">Анхааруулга</span>
-                <span className="text-xs text-gray-400">2 цагийн өмнө</span>
+                <span className="text-xs text-[var(--esl-text-muted)]">2 цагийн өмнө</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Insight 2 — Recommendation */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">💡</span>
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 text-sm">Шилдэг 3 бараагаа 10% хямдруулвал 25% өсөлт гарна</h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Шилдэг 3 бараагаа 10% хямдруулвал 25% өсөлт гарна</h3>
+              <p className="text-sm text-[var(--esl-text-secondary)] mt-1">
                 &ldquo;Premium цагаан цамц&rdquo;, &ldquo;Sporty гутал Air&rdquo;, &ldquo;Leather цүнх&rdquo; барааны үнийг 10% хямдруулвал зах зээлийн өрсөлдөх чадвар нэмэгдэнэ.
               </p>
               <div className="mt-3 flex items-center gap-2">
                 <span className="bg-green-50 text-green-600 text-xs font-semibold px-2.5 py-1 rounded-full">Зөвлөмж</span>
-                <span className="text-xs text-gray-400">5 цагийн өмнө</span>
+                <span className="text-xs text-[var(--esl-text-muted)]">5 цагийн өмнө</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Insight 3 — Prediction */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">🔮</span>
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 text-sm">Ирэх 7 хоногт 45 захиалга хүлээгдэж байна</h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Ирэх 7 хоногт 45 захиалга хүлээгдэж байна</h3>
+              <p className="text-sm text-[var(--esl-text-secondary)] mt-1">
                 Өмнөх 4 долоо хоногийн хандлага болон улирлын мэдээлэлд тулгуурласан. Бараа нөөцөө шалгахыг зөвлөж байна.
               </p>
               <div className="mt-3 flex items-center gap-2">
                 <span className="bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-full">Таамаглал</span>
-                <span className="text-xs text-gray-400">1 өдрийн өмнө</span>
+                <span className="text-xs text-[var(--esl-text-muted)]">1 өдрийн өмнө</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Insight 4 — Tip */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">🏷️</span>
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 text-sm">Хямдралтай бараа нэмэх нь +30% борлуулалтыг нэмэгдүүлнэ</h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Хямдралтай бараа нэмэх нь +30% борлуулалтыг нэмэгдүүлнэ</h3>
+              <p className="text-sm text-[var(--esl-text-secondary)] mt-1">
                 Таны дэлгүүрт хямдралтай бараа байхгүй байна. Хямдралтай бараа нэмснээр хэрэглэгчдийн анхаарлыг татаж, нийт борлуулалтыг 30% хүртэл нэмэгдүүлэх боломжтой.
               </p>
               <div className="mt-3 flex items-center gap-2">
                 <span className="bg-amber-50 text-amber-600 text-xs font-semibold px-2.5 py-1 rounded-full">Зөвлөгөө</span>
-                <span className="text-xs text-gray-400">3 өдрийн өмнө</span>
+                <span className="text-xs text-[var(--esl-text-muted)]">3 өдрийн өмнө</span>
               </div>
             </div>
           </div>
@@ -140,39 +140,39 @@ export default function AIAnalyticsPage() {
       </div>
 
       {/* Weekly Trend Chart */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h2 className="font-bold text-gray-900 mb-4">7 хоногийн борлуулалтын хандлага</h2>
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">7 хоногийн борлуулалтын хандлага</h2>
         <div className="flex items-end gap-3 h-48">
           {WEEKLY_DATA.map((d) => {
             const height = (d.sales / maxSales) * 100;
             return (
               <div key={d.day} className="flex-1 flex flex-col items-center gap-2">
-                <span className="text-xs font-semibold text-gray-700">{d.sales}</span>
-                <div className="w-full bg-gray-100 rounded-t-lg relative" style={{ height: '100%' }}>
+                <span className="text-xs font-semibold text-[var(--esl-text-primary)]">{d.sales}</span>
+                <div className="w-full bg-[var(--esl-bg-section)] rounded-t-lg relative" style={{ height: '100%' }}>
                   <div
                     className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-emerald-500 to-teal-400 rounded-t-lg transition-all"
                     style={{ height: `${height}%` }}
                   />
                 </div>
-                <span className="text-xs text-gray-500">{d.day}</span>
+                <span className="text-xs text-[var(--esl-text-secondary)]">{d.day}</span>
               </div>
             );
           })}
         </div>
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-[var(--esl-border)]">
           <div>
-            <span className="text-sm text-gray-500">Нийт захиалга</span>
-            <p className="text-xl font-bold text-gray-900">{WEEKLY_DATA.reduce((a, d) => a + d.sales, 0)}</p>
+            <span className="text-sm text-[var(--esl-text-secondary)]">Нийт захиалга</span>
+            <p className="text-xl font-bold text-[var(--esl-text-primary)]">{WEEKLY_DATA.reduce((a, d) => a + d.sales, 0)}</p>
           </div>
           <div>
-            <span className="text-sm text-gray-500">Нийт орлого</span>
-            <p className="text-xl font-bold text-gray-900">
+            <span className="text-sm text-[var(--esl-text-secondary)]">Нийт орлого</span>
+            <p className="text-xl font-bold text-[var(--esl-text-primary)]">
               {(WEEKLY_DATA.reduce((a, d) => a + d.revenue, 0) / 1000000).toFixed(1)}M₮
             </p>
           </div>
           <div>
-            <span className="text-sm text-gray-500">Дундаж/өдөр</span>
-            <p className="text-xl font-bold text-gray-900">
+            <span className="text-sm text-[var(--esl-text-secondary)]">Дундаж/өдөр</span>
+            <p className="text-xl font-bold text-[var(--esl-text-primary)]">
               {Math.round(WEEKLY_DATA.reduce((a, d) => a + d.sales, 0) / 7)}
             </p>
           </div>
@@ -181,37 +181,37 @@ export default function AIAnalyticsPage() {
 
       {/* Additional insights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">📊</span>
-            <h3 className="font-bold text-gray-900 text-sm">Хамгийн эрэлттэй цаг</h3>
+            <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Хамгийн эрэлттэй цаг</h3>
           </div>
-          <p className="text-3xl font-black text-gray-900">14:00-18:00</p>
-          <p className="text-sm text-gray-500 mt-1">Захиалгын 65% энэ цагт ирдэг</p>
+          <p className="text-3xl font-black text-[var(--esl-text-primary)]">14:00-18:00</p>
+          <p className="text-sm text-[var(--esl-text-secondary)] mt-1">Захиалгын 65% энэ цагт ирдэг</p>
           <div className="mt-3 bg-indigo-50 text-indigo-700 text-xs px-3 py-1.5 rounded-lg">
             Зөвлөмж: Энэ цагт промо мэдэгдэл илгээ
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">🏆</span>
-            <h3 className="font-bold text-gray-900 text-sm">Шилдэг ангилал</h3>
+            <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Шилдэг ангилал</h3>
           </div>
-          <p className="text-3xl font-black text-gray-900">Хувцас</p>
-          <p className="text-sm text-gray-500 mt-1">Нийт борлуулалтын 42%</p>
+          <p className="text-3xl font-black text-[var(--esl-text-primary)]">Хувцас</p>
+          <p className="text-sm text-[var(--esl-text-secondary)] mt-1">Нийт борлуулалтын 42%</p>
           <div className="mt-3 bg-green-50 text-green-700 text-xs px-3 py-1.5 rounded-lg">
             Зөвлөмж: Хувцасны нэр төрлийг нэмэгдүүл
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">👥</span>
-            <h3 className="font-bold text-gray-900 text-sm">Давтан худалдан авалт</h3>
+            <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Давтан худалдан авалт</h3>
           </div>
-          <p className="text-3xl font-black text-gray-900">23%</p>
-          <p className="text-sm text-gray-500 mt-1">Хэрэглэгчдийн 23% дахин захиалдаг</p>
+          <p className="text-3xl font-black text-[var(--esl-text-primary)]">23%</p>
+          <p className="text-sm text-[var(--esl-text-secondary)] mt-1">Хэрэглэгчдийн 23% дахин захиалдаг</p>
           <div className="mt-3 bg-amber-50 text-amber-700 text-xs px-3 py-1.5 rounded-lg">
             Зөвлөмж: Loyalty program нэвтрүүл
           </div>

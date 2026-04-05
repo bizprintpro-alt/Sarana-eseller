@@ -33,7 +33,7 @@ export default function ConversionFunnel({
   const maxVal = steps[0].value || 1;
 
   return (
-    <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6">
+    <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
       <h3 className="font-bold text-[#0F172A] mb-5 flex items-center gap-2 text-sm">
         <ShoppingCart className="w-4 h-4 text-[#6366F1]" />
         Борлуулалтын шүүлтүүр (Funnel)
@@ -50,7 +50,7 @@ export default function ConversionFunnel({
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
                   <StepIcon className="w-4 h-4" style={{ color: step.color }} />
-                  <span className="text-xs font-semibold text-[#475569]">{step.label}</span>
+                  <span className="text-xs font-semibold text-[var(--esl-text-secondary)]">{step.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-black text-[#0F172A]">{step.value.toLocaleString()}</span>
@@ -61,7 +61,7 @@ export default function ConversionFunnel({
                   )}
                 </div>
               </div>
-              <div className="h-2.5 bg-[#F1F5F9] rounded-full overflow-hidden">
+              <div className="h-2.5 bg-[var(--esl-bg-section)] rounded-full overflow-hidden">
                 <motion.div
                   className="h-full rounded-full"
                   style={{ background: step.color }}
@@ -76,7 +76,7 @@ export default function ConversionFunnel({
       </div>
 
       <div className="mt-4 pt-4 border-t border-[#F1F5F9] flex items-center justify-between">
-        <span className="text-xs text-[#94A3B8]">Нийт хөрвүүлэлт</span>
+        <span className="text-xs text-[var(--esl-text-muted)]">Нийт хөрвүүлэлт</span>
         <span className="text-sm font-black text-[#10B981]">
           {((purchases / (views || 1)) * 100).toFixed(1)}%
         </span>

@@ -264,7 +264,7 @@ export default function LandingPage() {
             <motion.h2 variants={fadeUp} custom={1} className="text-[#0F172A] font-black tracking-[-0.03em] leading-tight mb-4" style={{ fontSize: 'clamp(26px, 4vw, 48px)' }}>
               Хоёр талын замнал
             </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="text-[#475569] text-[15px] max-w-[500px] mx-auto leading-relaxed">
+            <motion.p variants={fadeUp} custom={2} className="text-[var(--esl-text-secondary)] text-[15px] max-w-[500px] mx-auto leading-relaxed">
               Барааны эзэн ба борлуулагч хоёулаа ашигтай — энэ нь eseller.mn-ийн гол зарчим.
             </motion.p>
           </motion.div>
@@ -286,7 +286,7 @@ export default function LandingPage() {
                   <div className="w-9 h-9 rounded-xl bg-[#FFF0F0] text-[#CC0000] flex items-center justify-center text-sm font-black shrink-0 shadow-sm">{s.n}</div>
                   <div>
                     <h4 className="text-sm font-bold text-[#0F172A] mb-1">{s.t}</h4>
-                    <p className="text-sm text-[#475569] leading-relaxed">{s.d}</p>
+                    <p className="text-sm text-[var(--esl-text-secondary)] leading-relaxed">{s.d}</p>
                   </div>
                 </motion.div>
               ))}
@@ -308,7 +308,7 @@ export default function LandingPage() {
                   <div className="w-9 h-9 rounded-xl bg-[#FFFBEB] text-[#D97706] flex items-center justify-center text-sm font-black shrink-0 shadow-sm">{s.n}</div>
                   <div>
                     <h4 className="text-sm font-bold text-[#0F172A] mb-1">{s.t}</h4>
-                    <p className="text-sm text-[#475569] leading-relaxed">{s.d}</p>
+                    <p className="text-sm text-[var(--esl-text-secondary)] leading-relaxed">{s.d}</p>
                   </div>
                 </motion.div>
               ))}
@@ -320,7 +320,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════════
           ROLES — Light gray section
           ═══════════════════════════════════════════ */}
-      <section className="bg-[#F8FAFC] py-24 px-[6%]">
+      <section className="bg-[var(--esl-bg-section)] py-24 px-[6%]">
         <div className="max-w-[1100px] mx-auto">
           <motion.div
             initial="hidden"
@@ -335,7 +335,7 @@ export default function LandingPage() {
             <motion.h2 variants={fadeUp} custom={1} className="text-[#0F172A] font-black tracking-[-0.03em] leading-tight mb-4" style={{ fontSize: 'clamp(26px, 4vw, 48px)' }}>
               Экосистемд бүгдэд байр бий
             </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="text-[#475569] text-[15px] max-w-[500px] mx-auto leading-relaxed">
+            <motion.p variants={fadeUp} custom={2} className="text-[var(--esl-text-secondary)] text-[15px] max-w-[500px] mx-auto leading-relaxed">
               Барааны эзэн, борлуулагч, худалдан авагч, жолооч — бүгд хамтдаа ажилладаг.
             </motion.p>
           </motion.div>
@@ -356,18 +356,18 @@ export default function LandingPage() {
               <motion.div key={r.t} variants={fadeUp}>
                 <Link
                   href="/login#register"
-                  className="group relative block bg-white border-[1.5px] border-[#E2E8F0] rounded-3xl p-8 no-underline overflow-hidden hover:-translate-y-1.5 hover:shadow-xl hover:border-transparent transition-all duration-200"
+                  className="group relative block bg-white border-[1.5px] border-[var(--esl-border)] rounded-3xl p-8 no-underline overflow-hidden hover:-translate-y-1.5 hover:shadow-xl hover:border-transparent transition-all duration-200"
                 >
                   <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${r.grad} opacity-0 group-hover:opacity-100 group-hover:h-[5px] transition-all`} />
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: r.bg, color: r.color }}>
                     {r.ic}
                   </div>
                   <h3 className="text-lg font-extrabold text-[#0F172A] mb-2">{r.t}</h3>
-                  <p className="text-sm text-[#475569] leading-relaxed mb-4">{r.d}</p>
+                  <p className="text-sm text-[var(--esl-text-secondary)] leading-relaxed mb-4">{r.d}</p>
                   <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full" style={{ background: r.bg, color: r.color }}>
                     {r.earn}
                   </span>
-                  <span className="block mt-5 text-sm font-bold text-[#94A3B8] group-hover:text-[#CC0000] transition-colors">
+                  <span className="block mt-5 text-sm font-bold text-[var(--esl-text-muted)] group-hover:text-[#CC0000] transition-colors">
                     Бүртгүүлэх <ArrowRight className="inline w-4 h-4" />
                   </span>
                 </Link>
@@ -493,7 +493,7 @@ export default function LandingPage() {
               хамтдаа л байна.
             </span>
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-[15px] text-[#475569] max-w-[480px] mx-auto leading-relaxed mb-12">
+          <motion.p variants={fadeUp} className="text-[15px] text-[var(--esl-text-secondary)] max-w-[480px] mx-auto leading-relaxed mb-12">
             Дэлгүүр нээх, борлуулагч болох — хоёулаа үнэгүй. Зөвхөн борлуулалт болоход л тооцоо хийгдэнэ.
           </motion.p>
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center mb-5">
@@ -505,12 +505,12 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/shops"
-              className="border-2 border-[#E2E8F0] hover:border-[#CC0000] text-[#0F172A] hover:text-[#CC0000] px-8 py-4 rounded-2xl font-bold no-underline transition-all duration-200"
+              className="border-2 border-[var(--esl-border)] hover:border-[#CC0000] text-[#0F172A] hover:text-[#CC0000] px-8 py-4 rounded-2xl font-bold no-underline transition-all duration-200"
             >
               📢 Борлуулагч болох <ArrowRight className="inline w-4 h-4" />
             </Link>
           </motion.div>
-          <motion.p variants={fadeUp} className="text-sm text-[#94A3B8]">
+          <motion.p variants={fadeUp} className="text-sm text-[var(--esl-text-muted)]">
             Бүртгэл үнэгүй &middot; Зөвхөн борлуулалтаас комисс &middot; QPay аюулгүй
           </motion.p>
         </motion.div>

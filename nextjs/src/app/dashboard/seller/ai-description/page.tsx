@@ -77,7 +77,7 @@ export default function AIDescriptionPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -90,16 +90,16 @@ export default function AIDescriptionPage() {
 
   if (!aiCheck.allowed) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 text-center text-white mb-6">
           <span className="text-4xl mb-3 block">📝</span>
           <h1 className="text-2xl font-bold">AI Тайлбар бичигч</h1>
           <p className="opacity-90 mt-1">Бүтээгдэхүүний тайлбар автоматаар бич</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center max-w-lg mx-auto">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">AI боломж хязгаарлагдсан</h2>
-          <p className="text-gray-500 mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
+          <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
+          <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
           <a href="/dashboard/seller/package" className="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition">
             Багц шинэчлэх
           </a>
@@ -135,7 +135,7 @@ export default function AIDescriptionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 mb-6 text-white">
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -151,33 +151,33 @@ export default function AIDescriptionPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Мэдээлэл оруулах</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Мэдээлэл оруулах</h2>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Барааны нэр</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Барааны нэр</label>
             <input
               type="text"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
               placeholder="Жишээ: Premium цагаан цамц"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Гол онцлогууд (мөр тус бүрт 1)</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Гол онцлогууд (мөр тус бүрт 1)</label>
             <textarea
               value={features}
               onChange={(e) => setFeatures(e.target.value)}
               rows={4}
               placeholder={"100% цэвэр хөвөн\nS, M, L, XL хэмжээтэй\nМонгол үйлдвэрлэл"}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"
+              className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"
             />
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Өнгө аяс</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Өнгө аяс</label>
             <div className="grid grid-cols-2 gap-2">
               {TONES.map((t) => (
                 <button
@@ -186,7 +186,7 @@ export default function AIDescriptionPage() {
                   className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
                     tone === t.id
                       ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                      : 'border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
                   <span className="mr-1">{t.icon}</span> {t.name}
@@ -196,7 +196,7 @@ export default function AIDescriptionPage() {
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Хэл</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Хэл</label>
             <div className="flex gap-2">
               {LANGUAGES.map((l) => (
                 <button
@@ -205,7 +205,7 @@ export default function AIDescriptionPage() {
                   className={`flex-1 p-3 rounded-lg border-2 text-sm font-medium transition-all ${
                     lang === l.id
                       ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                      : 'border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
                   {l.name}
@@ -231,12 +231,12 @@ export default function AIDescriptionPage() {
         </div>
 
         {/* Result */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Үр дүн</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Үр дүн</h2>
 
           {result ? (
             <div>
-              <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 mb-4 whitespace-pre-wrap text-sm text-gray-800 leading-relaxed min-h-[200px]">
+              <div className="bg-[var(--esl-bg-section)] rounded-xl border border-[var(--esl-border)] p-4 mb-4 whitespace-pre-wrap text-sm text-[var(--esl-text-primary)] leading-relaxed min-h-[200px]">
                 {result}
               </div>
               <div className="flex gap-3">
@@ -255,8 +255,8 @@ export default function AIDescriptionPage() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-64 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-              <div className="text-center text-gray-400">
+            <div className="flex items-center justify-center h-64 bg-[var(--esl-bg-section)] rounded-xl border-2 border-dashed border-[var(--esl-border)]">
+              <div className="text-center text-[var(--esl-text-muted)]">
                 <span className="text-4xl block mb-2">📝</span>
                 <p className="text-sm">Мэдээлэл оруулж тайлбар үүсгэнэ үү</p>
               </div>

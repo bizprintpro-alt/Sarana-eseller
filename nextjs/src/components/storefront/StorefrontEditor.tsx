@@ -106,21 +106,21 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
   };
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-[var(--esl-bg-section)] overflow-hidden">
       {/* ═══ LEFT PANEL — Controls ═══ */}
-      <div className="w-[320px] bg-white border-r border-gray-200 flex flex-col shrink-0 overflow-hidden">
+      <div className="w-[320px] bg-white border-r border-[var(--esl-border)] flex flex-col shrink-0 overflow-hidden">
         {/* Top bar */}
-        <div className="flex items-center justify-between px-4 h-14 border-b border-gray-200 shrink-0">
-          <h2 className="text-sm font-bold text-gray-900">Дэлгүүр засварлах</h2>
+        <div className="flex items-center justify-between px-4 h-14 border-b border-[var(--esl-border)] shrink-0">
+          <h2 className="text-sm font-bold text-[var(--esl-text-primary)]">Дэлгүүр засварлах</h2>
           <div className="flex gap-1">
             {onRegenerate && (
-              <button onClick={onRegenerate} className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center border-none cursor-pointer bg-transparent" title="AI дахин үүсгэх">
-                <RotateCcw className="w-4 h-4 text-gray-400" />
+              <button onClick={onRegenerate} className="w-8 h-8 rounded-lg hover:bg-[var(--esl-bg-section)] flex items-center justify-center border-none cursor-pointer bg-transparent" title="AI дахин үүсгэх">
+                <RotateCcw className="w-4 h-4 text-[var(--esl-text-muted)]" />
               </button>
             )}
             {previewUrl && (
-              <a href={previewUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center no-underline" title="Шинэ цонхонд нээх">
-                <ExternalLink className="w-4 h-4 text-gray-400" />
+              <a href={previewUrl} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg hover:bg-[var(--esl-bg-section)] flex items-center justify-center no-underline" title="Шинэ цонхонд нээх">
+                <ExternalLink className="w-4 h-4 text-[var(--esl-text-muted)]" />
               </a>
             )}
           </div>
@@ -128,16 +128,16 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
 
         <div className="flex-1 overflow-y-auto">
           {/* ─── Mood selector ─── */}
-          <div className="px-4 py-4 border-b border-gray-100">
+          <div className="px-4 py-4 border-b border-[var(--esl-border)]">
             <div className="flex items-center gap-2 mb-3">
               <Sparkles className="w-4 h-4 text-indigo-500" />
-              <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Загвар</span>
+              <span className="text-xs font-bold text-[var(--esl-text-primary)] uppercase tracking-wider">Загвар</span>
             </div>
             <div className="grid grid-cols-4 gap-1.5">
               {MOODS.map((m) => (
                 <button key={m.key} onClick={() => setMood(m.key)}
                   className={cn('flex flex-col items-center gap-1 py-2 rounded-lg text-[10px] font-semibold border-none cursor-pointer transition',
-                    config.theme.mood === m.key ? 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-300' : 'bg-gray-50 text-gray-500 hover:bg-gray-100')}>
+                    config.theme.mood === m.key ? 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-300' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)]')}>
                   <span className="text-base">{m.emoji}</span>
                   {m.label}
                 </button>
@@ -146,10 +146,10 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
           </div>
 
           {/* ─── Colors ─── */}
-          <div className="px-4 py-4 border-b border-gray-100">
+          <div className="px-4 py-4 border-b border-[var(--esl-border)]">
             <div className="flex items-center gap-2 mb-3">
               <Palette className="w-4 h-4 text-indigo-500" />
-              <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Өнгө</span>
+              <span className="text-xs font-bold text-[var(--esl-text-primary)] uppercase tracking-wider">Өнгө</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               {[
@@ -158,9 +158,9 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
                 { key: 'backgroundColor' as const, label: 'Арын фон' },
                 { key: 'textColor' as const, label: 'Текст' },
               ].map((c) => (
-                <label key={c.key} className="flex items-center gap-2 text-xs text-gray-600">
+                <label key={c.key} className="flex items-center gap-2 text-xs text-[var(--esl-text-secondary)]">
                   <input type="color" value={config.theme[c.key]} onChange={(e) => updateTheme({ [c.key]: e.target.value })}
-                    className="w-7 h-7 rounded border border-gray-200 cursor-pointer p-0" />
+                    className="w-7 h-7 rounded border border-[var(--esl-border)] cursor-pointer p-0" />
                   {c.label}
                 </label>
               ))}
@@ -168,23 +168,23 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
           </div>
 
           {/* ─── Fonts ─── */}
-          <div className="px-4 py-4 border-b border-gray-100">
+          <div className="px-4 py-4 border-b border-[var(--esl-border)]">
             <div className="flex items-center gap-2 mb-3">
               <Type className="w-4 h-4 text-indigo-500" />
-              <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">Фонт</span>
+              <span className="text-xs font-bold text-[var(--esl-text-primary)] uppercase tracking-wider">Фонт</span>
             </div>
             <div className="space-y-2">
               <div>
-                <label className="text-[10px] text-gray-400 mb-1 block">Гарчиг</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] mb-1 block">Гарчиг</label>
                 <select value={config.theme.fontDisplay} onChange={(e) => updateTheme({ fontDisplay: e.target.value as FontFamily })}
-                  className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                  className="w-full px-2 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
                   {FONTS.map((f) => <option key={f} value={f}>{f}</option>)}
                 </select>
               </div>
               <div>
-                <label className="text-[10px] text-gray-400 mb-1 block">Текст</label>
+                <label className="text-[10px] text-[var(--esl-text-muted)] mb-1 block">Текст</label>
                 <select value={config.theme.fontBody} onChange={(e) => updateTheme({ fontBody: e.target.value as FontFamily })}
-                  className="w-full px-2 py-1.5 border border-gray-200 rounded-lg text-xs bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                  className="w-full px-2 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
                   {FONTS.map((f) => <option key={f} value={f}>{f}</option>)}
                 </select>
               </div>
@@ -192,36 +192,36 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
           </div>
 
           {/* ─── Hero ─── */}
-          <div className="px-4 py-4 border-b border-gray-100">
-            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3 block">Hero</span>
+          <div className="px-4 py-4 border-b border-[var(--esl-border)]">
+            <span className="text-xs font-bold text-[var(--esl-text-primary)] uppercase tracking-wider mb-3 block">Hero</span>
             <div className="space-y-2">
               <input type="text" value={config.hero.headline} onChange={(e) => updateHero({ headline: e.target.value })} placeholder="Гарчиг"
-                className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                className="w-full px-2.5 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
               <input type="text" value={config.hero.subheadline} onChange={(e) => updateHero({ subheadline: e.target.value })} placeholder="Дэд гарчиг"
-                className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                className="w-full px-2.5 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
               <input type="text" value={config.hero.ctaText} onChange={(e) => updateHero({ ctaText: e.target.value })} placeholder="Товчний текст"
-                className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                className="w-full px-2.5 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500" />
             </div>
           </div>
 
           {/* ─── Sections ─── */}
           <div className="px-4 py-4">
-            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3 block">Хэсгүүд</span>
+            <span className="text-xs font-bold text-[var(--esl-text-primary)] uppercase tracking-wider mb-3 block">Хэсгүүд</span>
             <div className="space-y-1">
               {[...config.sections].sort((a, b) => a.order - b.order).map((s) => (
-                <div key={s.id} className={cn('flex items-center gap-2 px-2.5 py-2 rounded-lg transition', s.visible ? 'bg-gray-50' : 'bg-gray-50/50 opacity-50')}>
-                  <GripVertical className="w-3.5 h-3.5 text-gray-300 cursor-grab shrink-0" />
-                  <span className="text-xs font-medium text-gray-700 flex-1 truncate">{SECTION_LABELS[s.type] || s.type}</span>
-                  <button onClick={() => moveSection(s.id, -1)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-gray-400 hover:text-gray-600">
+                <div key={s.id} className={cn('flex items-center gap-2 px-2.5 py-2 rounded-lg transition', s.visible ? 'bg-[var(--esl-bg-section)]' : 'bg-[var(--esl-bg-section)]/50 opacity-50')}>
+                  <GripVertical className="w-3.5 h-3.5 text-[var(--esl-text-muted)] cursor-grab shrink-0" />
+                  <span className="text-xs font-medium text-[var(--esl-text-primary)] flex-1 truncate">{SECTION_LABELS[s.type] || s.type}</span>
+                  <button onClick={() => moveSection(s.id, -1)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)]">
                     <ChevronUp className="w-3 h-3" />
                   </button>
-                  <button onClick={() => moveSection(s.id, 1)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-gray-400 hover:text-gray-600">
+                  <button onClick={() => moveSection(s.id, 1)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)]">
                     <ChevronDown className="w-3 h-3" />
                   </button>
-                  <button onClick={() => toggleSection(s.id)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-gray-400 hover:text-gray-600">
+                  <button onClick={() => toggleSection(s.id)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)]">
                     {s.visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                   </button>
-                  <button onClick={() => removeSection(s.id)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-gray-300 hover:text-red-500">
+                  <button onClick={() => removeSection(s.id)} className="w-5 h-5 rounded bg-transparent border-none cursor-pointer flex items-center justify-center text-[var(--esl-text-muted)] hover:text-red-500">
                     <Trash2 className="w-3 h-3" />
                   </button>
                 </div>
@@ -231,7 +231,7 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
         </div>
 
         {/* Save + Publish */}
-        <div className="px-4 py-3 border-t border-gray-200 shrink-0 space-y-2">
+        <div className="px-4 py-3 border-t border-[var(--esl-border)] shrink-0 space-y-2">
           <button onClick={handleSave} disabled={saving}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-700 border-none cursor-pointer transition disabled:opacity-50">
             <Save className="w-4 h-4" /> {saving ? 'Хадгалж байна...' : 'Хадгалах'}
@@ -249,19 +249,19 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
       {/* ═══ RIGHT PANEL — Preview ═══ */}
       <div className="flex-1 flex flex-col">
         {/* Preview toolbar */}
-        <div className="flex items-center justify-center gap-2 h-10 bg-gray-200/50 border-b border-gray-200 shrink-0">
+        <div className="flex items-center justify-center gap-2 h-10 bg-gray-200/50 border-b border-[var(--esl-border)] shrink-0">
           <button onClick={() => setPreviewMode('desktop')}
-            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'desktop' ? 'bg-white shadow-sm text-gray-900' : 'bg-transparent text-gray-400')}>
+            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'desktop' ? 'bg-white shadow-sm text-[var(--esl-text-primary)]' : 'bg-transparent text-[var(--esl-text-muted)]')}>
             <Monitor className="w-4 h-4" />
           </button>
           <button onClick={() => setPreviewMode('mobile')}
-            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'mobile' ? 'bg-white shadow-sm text-gray-900' : 'bg-transparent text-gray-400')}>
+            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'mobile' ? 'bg-white shadow-sm text-[var(--esl-text-primary)]' : 'bg-transparent text-[var(--esl-text-muted)]')}>
             <Smartphone className="w-4 h-4" />
           </button>
         </div>
 
         {/* Preview area */}
-        <div className="flex-1 overflow-auto flex items-start justify-center p-4 bg-gray-100">
+        <div className="flex-1 overflow-auto flex items-start justify-center p-4 bg-[var(--esl-bg-section)]">
           <div className={cn('bg-white shadow-xl overflow-hidden transition-all duration-300',
             previewMode === 'mobile' ? 'w-[375px] rounded-[2rem] ring-8 ring-gray-800' : 'w-full max-w-[1200px] rounded-lg')}>
             <div className={cn(previewMode === 'mobile' ? 'h-[812px] overflow-y-auto' : 'min-h-[600px]')}>

@@ -156,7 +156,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-[#F8FAFC]">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 bg-[var(--esl-bg-section)]">
           {messages.map((msg) => (
             <motion.div
               key={msg.id}
@@ -168,7 +168,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
                 'max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
                 msg.role === 'user'
                   ? 'bg-[#6366F1] text-white rounded-br-md'
-                  : 'bg-white text-[#0F172A] border border-[#E2E8F0] rounded-bl-md shadow-sm'
+                  : 'bg-white text-[#0F172A] border border-[var(--esl-border)] rounded-bl-md shadow-sm'
               )}>
                 {msg.role === 'ai' && (
                   <div className="flex items-center gap-1 text-[10px] text-[#6366F1] font-bold mb-1.5">
@@ -182,7 +182,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
 
           {typing && (
             <div className="flex justify-start">
-              <div className="bg-white rounded-2xl rounded-bl-md px-4 py-3 border border-[#E2E8F0] shadow-sm">
+              <div className="bg-white rounded-2xl rounded-bl-md px-4 py-3 border border-[var(--esl-border)] shadow-sm">
                 <div className="flex gap-1">
                   <span className="w-2 h-2 rounded-full bg-[#6366F1] animate-bounce" style={{ animationDelay: '0ms' }} />
                   <span className="w-2 h-2 rounded-full bg-[#6366F1] animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -196,12 +196,12 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
 
         {/* Quick questions */}
         {messages.length <= 2 && (
-          <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-none bg-[#F8FAFC] border-t border-[#E2E8F0]">
+          <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-none bg-[var(--esl-bg-section)] border-t border-[var(--esl-border)]">
             {QUICK_QUESTIONS.map((q) => (
               <button
                 key={q.label}
                 onClick={() => sendMessage(q.label)}
-                className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-white border border-[#E2E8F0] rounded-xl text-xs font-semibold text-[#475569] hover:border-[#6366F1] hover:text-[#6366F1] transition-all cursor-pointer"
+                className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:border-[#6366F1] hover:text-[#6366F1] transition-all cursor-pointer"
               >
                 <q.icon className="w-3 h-3" />
                 {q.label}
@@ -211,7 +211,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
         )}
 
         {/* Input */}
-        <div className="px-4 py-3 border-t border-[#E2E8F0] bg-white shrink-0">
+        <div className="px-4 py-3 border-t border-[var(--esl-border)] bg-white shrink-0">
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
               <input
@@ -220,10 +220,10 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage(input)}
                 placeholder="Асуултаа бичнэ үү..."
-                className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl pl-4 pr-10 py-2.5 text-sm outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/10 transition-all"
+                className="w-full bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-xl pl-4 pr-10 py-2.5 text-sm outline-none focus:border-[#6366F1] focus:ring-2 focus:ring-[#6366F1]/10 transition-all"
               />
               <button
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-transparent border-none cursor-pointer text-[#94A3B8] hover:text-[#6366F1] transition flex items-center justify-center"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-lg bg-transparent border-none cursor-pointer text-[var(--esl-text-muted)] hover:text-[#6366F1] transition flex items-center justify-center"
               >
                 <Mic className="w-4 h-4" />
               </button>
@@ -235,7 +235,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
                 'w-10 h-10 rounded-xl border-none cursor-pointer flex items-center justify-center transition-all',
                 input.trim()
                   ? 'bg-[#6366F1] text-white shadow-[0_2px_8px_rgba(99,102,241,.3)] hover:bg-[#4F46E5]'
-                  : 'bg-[#F8FAFC] text-[#CBD5E1] cursor-not-allowed'
+                  : 'bg-[var(--esl-bg-section)] text-[#CBD5E1] cursor-not-allowed'
               )}
             >
               <Send className="w-4 h-4" />

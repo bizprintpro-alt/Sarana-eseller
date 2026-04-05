@@ -107,9 +107,9 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
       {/* Body */}
       <div className="flex-1 overflow-y-auto p-6">
         {product.store?.name && (
-          <div className="text-xs text-[#94A3B8] font-medium mb-1">{product.store.name}</div>
+          <div className="text-xs text-[var(--esl-text-muted)] font-medium mb-1">{product.store.name}</div>
         )}
-        <h3 className="text-xl font-black text-[#1A1A2E] mb-3">{product.name}</h3>
+        <h3 className="text-xl font-black text-[var(--esl-text-primary)] mb-3">{product.name}</h3>
 
         {/* Rating */}
         {product.rating && (
@@ -119,20 +119,20 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
                 <Star key={i} className={cn('w-4 h-4', i < Math.round(product.rating!) ? 'text-amber-400 fill-amber-400' : 'text-[#E2E8F0]')} />
               ))}
             </div>
-            <span className="text-xs text-[#94A3B8]">{product.rating} ({product.reviewCount || 0})</span>
+            <span className="text-xs text-[var(--esl-text-muted)]">{product.rating} ({product.reviewCount || 0})</span>
           </div>
         )}
 
         {/* Delivery info */}
         {(estimatedMins || deliveryFee > 0) && (
-          <div className="flex items-center gap-3 mb-3 p-2.5 bg-[#F8FAFC] rounded-lg">
+          <div className="flex items-center gap-3 mb-3 p-2.5 bg-[var(--esl-bg-section)] rounded-lg">
             {estimatedMins && (
-              <div className="flex items-center gap-1 text-xs text-[#475569]">
-                <Clock className="w-3.5 h-3.5 text-[#94A3B8]" /> ~{estimatedMins} мин
+              <div className="flex items-center gap-1 text-xs text-[var(--esl-text-secondary)]">
+                <Clock className="w-3.5 h-3.5 text-[var(--esl-text-muted)]" /> ~{estimatedMins} мин
               </div>
             )}
-            <div className="flex items-center gap-1 text-xs text-[#475569]">
-              <Truck className="w-3.5 h-3.5 text-[#94A3B8]" />
+            <div className="flex items-center gap-1 text-xs text-[var(--esl-text-secondary)]">
+              <Truck className="w-3.5 h-3.5 text-[var(--esl-text-muted)]" />
               {deliveryFee === 0 ? 'Үнэгүй хүргэлт' : `Хүргэлт: ${formatPrice(deliveryFee)}`}
             </div>
           </div>
@@ -141,22 +141,22 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
         {/* Price */}
         <div className="flex items-baseline gap-3 mb-4">
           <span className="text-2xl font-black text-[#E31E24]">{formatPrice(basePrice)}</span>
-          {disc > 0 && <span className="text-sm text-[#94A3B8] line-through">{formatPrice(product.price)}</span>}
+          {disc > 0 && <span className="text-sm text-[var(--esl-text-muted)] line-through">{formatPrice(product.price)}</span>}
         </div>
 
         {product.description && (
-          <p className="text-sm text-[#475569] leading-relaxed mb-4">{product.description}</p>
+          <p className="text-sm text-[var(--esl-text-secondary)] leading-relaxed mb-4">{product.description}</p>
         )}
 
         {/* ═══ MODIFIERS ═══ */}
         {modifierGroups.map((group) => (
           <div key={group.id} className="mb-4">
             <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-sm font-semibold text-[#1A1A2E]">{group.name}</span>
+              <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{group.name}</span>
               {group.required
                 ? <span className="text-[10px] text-[#E31E24] font-semibold">• Заавал</span>
-                : <span className="text-[10px] text-[#94A3B8]">• Сонголттой</span>}
-              {group.multiple && <span className="text-[10px] text-[#94A3B8]">• Олон сонгож болно</span>}
+                : <span className="text-[10px] text-[var(--esl-text-muted)]">• Сонголттой</span>}
+              {group.multiple && <span className="text-[10px] text-[var(--esl-text-muted)]">• Олон сонгож болно</span>}
             </div>
             <div className="flex flex-wrap gap-2">
               {group.options.filter((o) => o.available).map((option) => {
@@ -164,7 +164,7 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
                 return (
                   <button key={option.id} onClick={() => handleModifierSelect(group, option)}
                     className={cn('px-3.5 py-2 rounded-full text-sm font-medium border transition-all cursor-pointer',
-                      isSelected ? 'bg-[#E31E24] text-white border-[#E31E24]' : 'bg-white text-[#475569] border-[#E2E8F0] hover:border-[#E31E24]')}>
+                      isSelected ? 'bg-[#E31E24] text-white border-[#E31E24]' : 'bg-white text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:border-[#E31E24]')}>
                     {option.name}
                     {option.price > 0 && <span className="ml-1 text-xs opacity-75">+{formatPrice(option.price)}</span>}
                   </button>
@@ -177,16 +177,16 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
         {/* ═══ ADD-ONS ═══ */}
         {addOns.length > 0 && (
           <div className="mb-4">
-            <p className="text-sm font-semibold text-[#1A1A2E] mb-2">Хамт авах</p>
+            <p className="text-sm font-semibold text-[var(--esl-text-primary)] mb-2">Хамт авах</p>
             <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
               {addOns.map((addon) => {
                 const selected = selectedAddOns.find((a) => a.addOnId === addon.id);
                 return (
                   <div key={addon.id} onClick={() => !selected && handleAddOnToggle(addon)}
                     className={cn('shrink-0 w-24 p-2.5 rounded-xl border cursor-pointer transition-all text-center',
-                      selected ? 'border-[#E31E24] bg-red-50' : 'border-[#E2E8F0] hover:border-[#E31E24] bg-white')}>
+                      selected ? 'border-[#E31E24] bg-red-50' : 'border-[var(--esl-border)] hover:border-[#E31E24] bg-white')}>
                     <div className="text-2xl mb-1">{addon.image ? '📦' : '🎁'}</div>
-                    <p className="text-xs text-[#475569] font-medium truncate">{addon.name}</p>
+                    <p className="text-xs text-[var(--esl-text-secondary)] font-medium truncate">{addon.name}</p>
                     <p className="text-xs text-[#E31E24] font-bold">+{formatPrice(addon.price)}</p>
                     {selected && (
                       <div className="mt-1.5 flex items-center justify-center gap-1">
@@ -205,35 +205,35 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
         )}
 
         {/* Qty */}
-        <div className="flex items-center gap-3 pt-2 border-t border-[#F5F5F5]">
-          <span className="text-sm font-semibold text-[#475569]">Тоо:</span>
-          <div className="flex items-center border border-[#E2E8F0] rounded-xl overflow-hidden">
-            <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-10 bg-[#F8FAFC] border-none cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center">
-              <Minus className="w-4 h-4 text-[#475569]" />
+        <div className="flex items-center gap-3 pt-2 border-t border-[var(--esl-border)]">
+          <span className="text-sm font-semibold text-[var(--esl-text-secondary)]">Тоо:</span>
+          <div className="flex items-center border border-[var(--esl-border)] rounded-xl overflow-hidden">
+            <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-10 bg-[var(--esl-bg-section)] border-none cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center">
+              <Minus className="w-4 h-4 text-[var(--esl-text-secondary)]" />
             </button>
-            <span className="w-12 h-10 flex items-center justify-center text-sm font-bold border-x border-[#E2E8F0]">{qty}</span>
-            <button onClick={() => setQty(qty + 1)} className="w-10 h-10 bg-[#F8FAFC] border-none cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center">
-              <Plus className="w-4 h-4 text-[#475569]" />
+            <span className="w-12 h-10 flex items-center justify-center text-sm font-bold border-x border-[var(--esl-border)]">{qty}</span>
+            <button onClick={() => setQty(qty + 1)} className="w-10 h-10 bg-[var(--esl-bg-section)] border-none cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center">
+              <Plus className="w-4 h-4 text-[var(--esl-text-secondary)]" />
             </button>
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="p-6 pt-4 border-t border-[#F5F5F5] space-y-3 shrink-0">
+      <div className="p-6 pt-4 border-t border-[var(--esl-border)] space-y-3 shrink-0">
         {/* Price breakdown */}
         {(modifierTotal > 0 || addOnTotal > 0 || deliveryFee > 0) && (
           <div className="space-y-1 text-xs">
             {modifierTotal > 0 && (
-              <div className="flex justify-between text-[#94A3B8]"><span>Нэмэлт сонголт</span><span>+{formatPrice(modifierTotal)}</span></div>
+              <div className="flex justify-between text-[var(--esl-text-muted)]"><span>Нэмэлт сонголт</span><span>+{formatPrice(modifierTotal)}</span></div>
             )}
             {addOnTotal > 0 && (
-              <div className="flex justify-between text-[#94A3B8]"><span>Хамт авах бараа</span><span>+{formatPrice(addOnTotal)}</span></div>
+              <div className="flex justify-between text-[var(--esl-text-muted)]"><span>Хамт авах бараа</span><span>+{formatPrice(addOnTotal)}</span></div>
             )}
             {deliveryFee > 0 && (
-              <div className="flex justify-between text-[#94A3B8]"><span>Хүргэлт</span><span>+{formatPrice(deliveryFee)}</span></div>
+              <div className="flex justify-between text-[var(--esl-text-muted)]"><span>Хүргэлт</span><span>+{formatPrice(deliveryFee)}</span></div>
             )}
-            <div className="flex justify-between text-sm font-bold text-[#1A1A2E] pt-1 border-t border-[#F5F5F5]">
+            <div className="flex justify-between text-sm font-bold text-[var(--esl-text-primary)] pt-1 border-t border-[var(--esl-border)]">
               <span>Нийт</span><span>{formatPrice(grandTotal)}</span>
             </div>
           </div>
@@ -243,14 +243,14 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
           onClick={() => canAdd && onAddToCart(selectedModifiers, selectedAddOns)}
           disabled={!canAdd}
           className={cn('w-full py-3.5 rounded-xl font-bold text-sm border-none cursor-pointer transition-all flex items-center justify-center gap-2',
-            canAdd ? 'bg-[#E31E24] text-white shadow-[0_4px_12px_rgba(227,30,36,.25)] hover:bg-[#C41A1F]' : 'bg-[#E2E8F0] text-[#94A3B8] cursor-not-allowed')}
+            canAdd ? 'bg-[#E31E24] text-white shadow-[0_4px_12px_rgba(227,30,36,.25)] hover:bg-[#C41A1F]' : 'bg-[#E2E8F0] text-[var(--esl-text-muted)] cursor-not-allowed')}
         >
           {canAdd ? <><ShoppingCart className="w-4 h-4" /> Сагсанд нэмэх — {formatPrice(grandTotal)}</> : 'Заавал сонголтоо хийнэ үү'}
         </button>
 
         {isAffiliate && onShare && (
           <button onClick={onShare}
-            className="w-full bg-[#F5F5F5] text-[#475569] py-3 rounded-xl font-semibold text-sm border-none cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center gap-2">
+            className="w-full bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] py-3 rounded-xl font-semibold text-sm border-none cursor-pointer hover:bg-[#E2E8F0] transition flex items-center justify-center gap-2">
             <Share2 className="w-4 h-4" /> Хуваалцах линк хуулах
           </button>
         )}

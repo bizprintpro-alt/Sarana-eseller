@@ -18,7 +18,7 @@ interface GiftCard {
 
 const STATUS_STYLES: Record<string, [string, string]> = {
   active: ['bg-green-100 text-green-700', 'Идэвхтэй'],
-  used: ['bg-gray-100 text-gray-500', 'Хэрэглэсэн'],
+  used: ['bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]', 'Хэрэглэсэн'],
   expired: ['bg-red-100 text-red-600', 'Дууссан'],
 };
 
@@ -80,11 +80,11 @@ export default function GiftCardsPage() {
   const usedValue = cards.filter((c) => c.status === 'used').reduce((s, c) => s + c.amount, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Бэлгийн карт</h1>
-          <p className="text-gray-500 mt-1">Бэлгийн карт үүсгэх, удирдах</p>
+          <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Бэлгийн карт</h1>
+          <p className="text-[var(--esl-text-secondary)] mt-1">Бэлгийн карт үүсгэх, удирдах</p>
         </div>
         <button onClick={() => { setForm({ ...form, code: generateCode() }); setShowModal(true); }} className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors text-sm">
           + Шинэ бэлгийн карт
@@ -99,17 +99,17 @@ export default function GiftCardsPage() {
       </div>
 
       {cards.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">🎁</div>
-          <h3 className="text-lg font-semibold text-gray-700">Бэлгийн карт байхгүй</h3>
-          <p className="text-gray-400 mt-1">Шинэ бэлгийн карт үүсгээрэй</p>
+          <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Бэлгийн карт байхгүй</h3>
+          <p className="text-[var(--esl-text-muted)] mt-1">Шинэ бэлгийн карт үүсгээрэй</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {cards.map((card) => {
             const [cls, label] = STATUS_STYLES[card.status];
             return (
-              <div key={card.id} className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${card.status !== 'active' ? 'opacity-70' : ''}`}>
+              <div key={card.id} className={`bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden ${card.status !== 'active' ? 'opacity-70' : ''}`}>
                 <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-5 text-white">
                   <div className="flex justify-between items-start">
                     <span className="text-2xl">🎁</span>
@@ -121,15 +121,15 @@ export default function GiftCardsPage() {
                   <p className="text-sm font-mono mt-1 text-white/80">{card.code}</p>
                 </div>
                 <div className="p-4">
-                  <div className="flex justify-between text-xs text-gray-500 mb-3">
+                  <div className="flex justify-between text-xs text-[var(--esl-text-secondary)] mb-3">
                     <span>Үүсгэсэн: {new Date(card.createdAt).toLocaleDateString('mn-MN')}</span>
                     <span>Дуусах: {new Date(card.expiresAt).toLocaleDateString('mn-MN')}</span>
                   </div>
                   {card.usedBy && (
-                    <p className="text-xs text-gray-400 mb-2">Хэрэглэсэн: {card.usedBy}</p>
+                    <p className="text-xs text-[var(--esl-text-muted)] mb-2">Хэрэглэсэн: {card.usedBy}</p>
                   )}
                   <div className="flex gap-2">
-                    <button onClick={() => copyCode(card.code)} className="flex-1 px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    <button onClick={() => copyCode(card.code)} className="flex-1 px-3 py-1.5 text-xs font-medium bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] rounded-lg hover:bg-[var(--esl-bg-card-hover)] transition-colors">
                       Код хуулах
                     </button>
                     <button onClick={() => deleteCard(card.id)} className="px-3 py-1.5 text-xs font-medium bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
@@ -146,34 +146,34 @@ export default function GiftCardsPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
           <div className="bg-white rounded-2xl max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900">Шинэ бэлгийн карт</h2>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            <div className="p-6 border-b border-[var(--esl-border)] flex items-center justify-between">
+              <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">Шинэ бэлгийн карт</h2>
+              <button onClick={() => setShowModal(false)} className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] text-xl">&times;</button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Код</label>
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Код</label>
                 <div className="flex gap-2">
-                  <input readOnly value={form.code} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 bg-gray-50 font-mono" />
-                  <button onClick={() => setForm({ ...form, code: generateCode() })} className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+                  <input readOnly value={form.code} className="flex-1 px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] bg-[var(--esl-bg-section)] font-mono" />
+                  <button onClick={() => setForm({ ...form, code: generateCode() })} className="px-3 py-2 bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] rounded-lg text-sm hover:bg-[var(--esl-bg-card-hover)] transition-colors">
                     Шинэ
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Дүн (₮)</label>
-                <input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Дүн (₮)</label>
+                <input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                 <div className="flex gap-2 mt-2">
                   {[10000, 25000, 50000, 100000].map((v) => (
-                    <button key={v} onClick={() => setForm({ ...form, amount: String(v) })} className="px-3 py-1 text-xs bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors">
+                    <button key={v} onClick={() => setForm({ ...form, amount: String(v) })} className="px-3 py-1 text-xs bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] rounded-lg hover:bg-[var(--esl-bg-card-hover)] transition-colors">
                       {formatPrice(v)}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Дуусах огноо</label>
-                <input type="date" value={form.expiresAt} onChange={(e) => setForm({ ...form, expiresAt: e.target.value })} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Дуусах огноо</label>
+                <input type="date" value={form.expiresAt} onChange={(e) => setForm({ ...form, expiresAt: e.target.value })} className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <button onClick={handleCreate} className="w-full py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors">
                 Үүсгэх

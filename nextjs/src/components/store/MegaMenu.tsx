@@ -75,7 +75,7 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
 
           {/* Menu panel */}
           <motion.div
-            className="absolute top-full left-0 right-0 z-50 bg-white shadow-[0_20px_60px_rgba(0,0,0,.12)] border-t border-gray-100"
+            className="absolute top-full left-0 right-0 z-50 bg-white shadow-[0_20px_60px_rgba(0,0,0,.12)] border-t border-[var(--esl-border)]"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -88,7 +88,7 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
                 <div className="col-span-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Package className="w-4 h-4 text-[#E31E24]" />
-                    <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Бараа бүтээгдэхүүн</h3>
+                    <h3 className="text-sm font-bold text-[var(--esl-text-primary)] uppercase tracking-wider">Бараа бүтээгдэхүүн</h3>
                   </div>
                   <div className="space-y-0.5">
                     {PRODUCT_CATEGORIES.map((cat) => (
@@ -98,20 +98,20 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
                         onMouseEnter={() => setHoveredCat(cat.key)}
                         className={cn(
                           'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left border-none cursor-pointer transition-all group',
-                          hoveredCat === cat.key ? 'bg-red-50' : 'bg-transparent hover:bg-gray-50'
+                          hoveredCat === cat.key ? 'bg-red-50' : 'bg-transparent hover:bg-[var(--esl-bg-section)]'
                         )}
                       >
                         <div className={cn(
                           'w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-colors',
-                          hoveredCat === cat.key ? 'bg-[#E31E24] text-white' : 'bg-gray-100'
+                          hoveredCat === cat.key ? 'bg-[#E31E24] text-white' : 'bg-[var(--esl-bg-section)]'
                         )}>
                           {hoveredCat === cat.key ? <cat.icon className="w-4 h-4" /> : cat.emoji}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold text-gray-900 group-hover:text-[#E31E24] transition-colors">{cat.label}</div>
+                          <div className="text-sm font-semibold text-[var(--esl-text-primary)] group-hover:text-[#E31E24] transition-colors">{cat.label}</div>
                         </div>
-                        <span className="text-[10px] text-gray-400 font-medium">{cat.count}+</span>
-                        <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#E31E24] transition-colors" />
+                        <span className="text-[10px] text-[var(--esl-text-muted)] font-medium">{cat.count}+</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-[var(--esl-text-muted)] group-hover:text-[#E31E24] transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -127,7 +127,7 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
                 <div className="col-span-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Scissors className="w-4 h-4 text-indigo-600" />
-                    <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Үйлчилгээ</h3>
+                    <h3 className="text-sm font-bold text-[var(--esl-text-primary)] uppercase tracking-wider">Үйлчилгээ</h3>
                   </div>
                   <div className="space-y-0.5">
                     {SERVICE_CATEGORIES.map((cat) => (
@@ -137,20 +137,20 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
                         onMouseEnter={() => setHoveredCat(cat.key)}
                         className={cn(
                           'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left border-none cursor-pointer transition-all group',
-                          hoveredCat === cat.key ? 'bg-indigo-50' : 'bg-transparent hover:bg-gray-50'
+                          hoveredCat === cat.key ? 'bg-indigo-50' : 'bg-transparent hover:bg-[var(--esl-bg-section)]'
                         )}
                       >
                         <div className={cn(
                           'w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-colors',
-                          hoveredCat === cat.key ? 'bg-indigo-600 text-white' : 'bg-gray-100'
+                          hoveredCat === cat.key ? 'bg-indigo-600 text-white' : 'bg-[var(--esl-bg-section)]'
                         )}>
                           {hoveredCat === cat.key ? <cat.icon className="w-4 h-4" /> : cat.emoji}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">{cat.label}</div>
+                          <div className="text-sm font-semibold text-[var(--esl-text-primary)] group-hover:text-indigo-600 transition-colors">{cat.label}</div>
                         </div>
-                        <span className="text-[10px] text-gray-400 font-medium">{cat.count}+</span>
-                        <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-indigo-600 transition-colors" />
+                        <span className="text-[10px] text-[var(--esl-text-muted)] font-medium">{cat.count}+</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-[var(--esl-text-muted)] group-hover:text-indigo-600 transition-colors" />
                       </button>
                     ))}
                   </div>
@@ -187,7 +187,7 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <Star className="w-4 h-4 text-amber-500" />
-                      <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Онцлох дэлгүүрүүд</h3>
+                      <h3 className="text-sm font-bold text-[var(--esl-text-primary)] uppercase tracking-wider">Онцлох дэлгүүрүүд</h3>
                     </div>
                     <div className="space-y-2">
                       {FEATURED_SHOPS.map((shop) => (
@@ -195,16 +195,16 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
                           key={shop.slug}
                           href={shop.type === 'service' ? `/s/${shop.slug}` : `/u/${shop.slug}`}
                           onClick={onClose}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition no-underline group"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-[var(--esl-bg-section)] transition no-underline group"
                         >
-                          <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center text-lg group-hover:scale-105 transition-transform">
+                          <div className="w-9 h-9 rounded-lg bg-[var(--esl-bg-section)] flex items-center justify-center text-lg group-hover:scale-105 transition-transform">
                             {shop.emoji}
                           </div>
                           <div className="flex-1">
-                            <div className="text-sm font-semibold text-gray-900">{shop.name}</div>
-                            <div className="text-[10px] text-gray-400">{shop.type === 'service' ? 'Үйлчилгээ' : 'Дэлгүүр'}</div>
+                            <div className="text-sm font-semibold text-[var(--esl-text-primary)]">{shop.name}</div>
+                            <div className="text-[10px] text-[var(--esl-text-muted)]">{shop.type === 'service' ? 'Үйлчилгээ' : 'Дэлгүүр'}</div>
                           </div>
-                          <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
+                          <ChevronRight className="w-3.5 h-3.5 text-[var(--esl-text-muted)]" />
                         </Link>
                       ))}
                     </div>

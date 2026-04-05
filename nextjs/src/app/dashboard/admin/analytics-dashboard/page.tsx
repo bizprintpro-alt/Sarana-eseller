@@ -62,14 +62,14 @@ export default function AnalyticsDashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Хандалтын аналитик</h1>
-          <p className="text-sm text-gray-500">Үзсэн тоо, хуваалцалт, хадгалсан тооны статистик</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Хандалтын аналитик</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)]">Үзсэн тоо, хуваалцалт, хадгалсан тооны статистик</p>
         </div>
-        <div className="flex gap-1 bg-white border border-gray-200 rounded-xl p-1">
+        <div className="flex gap-1 bg-white border border-[var(--esl-border)] rounded-xl p-1">
           {PERIODS.map((p) => (
             <button key={p} onClick={() => setPeriod(p)}
               className={cn('px-3 py-1.5 rounded-lg text-xs font-semibold border-none cursor-pointer transition',
-                period === p ? 'bg-[#1A1A2E] text-white' : 'bg-transparent text-gray-500 hover:bg-gray-50')}>
+                period === p ? 'bg-[#1A1A2E] text-white' : 'bg-transparent text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)]')}>
               {p}
             </button>
           ))}
@@ -79,7 +79,7 @@ export default function AnalyticsDashboardPage() {
       {/* Overview Stats */}
       <div className="grid grid-cols-4 gap-4">
         {OVERVIEW_STATS.map((s) => (
-          <div key={s.label} className="bg-white border border-gray-200 rounded-xl p-4">
+          <div key={s.label} className="bg-white border border-[var(--esl-border)] rounded-xl p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: s.color + '12', color: s.color }}>
                 <s.icon className="w-4.5 h-4.5" />
@@ -90,17 +90,17 @@ export default function AnalyticsDashboardPage() {
                 {s.change}
               </span>
             </div>
-            <div className="text-2xl font-black text-gray-900">{s.value}</div>
-            <div className="text-[10px] text-gray-400 mt-0.5">{s.label}</div>
+            <div className="text-2xl font-black text-[var(--esl-text-primary)]">{s.value}</div>
+            <div className="text-[10px] text-[var(--esl-text-muted)] mt-0.5">{s.label}</div>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* ═══ Weekly Chart ═══ */}
-        <div className="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-5">
+        <div className="lg:col-span-2 bg-white border border-[var(--esl-border)] rounded-xl p-5">
           <div className="flex items-center justify-between mb-5">
-            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+            <h3 className="text-sm font-bold text-[var(--esl-text-primary)] flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-indigo-500" /> Долоо хоногийн хандалт
             </h3>
             <div className="flex gap-3 text-[10px]">
@@ -120,25 +120,25 @@ export default function AnalyticsDashboardPage() {
                   <motion.div className="w-3 bg-green-500 rounded-t" initial={{ height: 0 }}
                     animate={{ height: `${(d.orders / maxViews) * 100}%` }} transition={{ duration: 0.5, delay: i * 0.05 + 0.2 }} />
                 </div>
-                <span className="text-[10px] font-semibold text-gray-400">{d.day}</span>
+                <span className="text-[10px] font-semibold text-[var(--esl-text-muted)]">{d.day}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* ═══ Traffic Sources ═══ */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5">
+          <h3 className="text-sm font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2">
             <Globe className="w-4 h-4 text-indigo-500" /> Трафикийн эх үүсвэр
           </h3>
           <div className="space-y-3">
             {TRAFFIC_SOURCES.map((t) => (
               <div key={t.source}>
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="font-medium text-gray-700">{t.source}</span>
-                  <span className="text-gray-400">{t.visits.toLocaleString()} ({t.pct}%)</span>
+                  <span className="font-medium text-[var(--esl-text-primary)]">{t.source}</span>
+                  <span className="text-[var(--esl-text-muted)]">{t.visits.toLocaleString()} ({t.pct}%)</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-[var(--esl-bg-section)] rounded-full overflow-hidden">
                   <motion.div className="h-full rounded-full" style={{ background: t.color }}
                     initial={{ width: 0 }} animate={{ width: `${t.pct}%` }} transition={{ duration: 0.6 }} />
                 </div>
@@ -150,17 +150,17 @@ export default function AnalyticsDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ═══ Top Pages ═══ */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5">
-          <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5">
+          <h3 className="text-sm font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2">
             <Eye className="w-4 h-4 text-indigo-500" /> Шилдэг хуудсууд
           </h3>
           <div className="space-y-2">
             {TOP_PAGES.map((p, i) => (
               <div key={p.path} className="flex items-center gap-3 py-1.5">
-                <span className="text-xs font-bold text-gray-400 w-5">{i + 1}</span>
-                <span className="text-xs font-mono text-gray-700 flex-1 truncate">{p.path}</span>
-                <span className="text-xs font-bold text-gray-900">{p.views.toLocaleString()}</span>
-                <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <span className="text-xs font-bold text-[var(--esl-text-muted)] w-5">{i + 1}</span>
+                <span className="text-xs font-mono text-[var(--esl-text-primary)] flex-1 truncate">{p.path}</span>
+                <span className="text-xs font-bold text-[var(--esl-text-primary)]">{p.views.toLocaleString()}</span>
+                <div className="w-16 h-1.5 bg-[var(--esl-bg-section)] rounded-full overflow-hidden">
                   <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${p.pct}%` }} />
                 </div>
               </div>
@@ -170,19 +170,19 @@ export default function AnalyticsDashboardPage() {
 
         {/* ═══ Devices + Realtime ═══ */}
         <div className="space-y-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5">
+            <h3 className="text-sm font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2">
               <Smartphone className="w-4 h-4 text-indigo-500" /> Төхөөрөмжийн статистик
             </h3>
             <div className="space-y-3">
               {DEVICE_STATS.map((d) => (
                 <div key={d.device} className="flex items-center gap-3">
-                  <d.icon className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs text-gray-700 w-20">{d.device}</span>
-                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <d.icon className="w-4 h-4 text-[var(--esl-text-muted)]" />
+                  <span className="text-xs text-[var(--esl-text-primary)] w-20">{d.device}</span>
+                  <div className="flex-1 h-2 bg-[var(--esl-bg-section)] rounded-full overflow-hidden">
                     <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${d.pct}%` }} />
                   </div>
-                  <span className="text-xs font-bold text-gray-900 w-10 text-right">{d.pct}%</span>
+                  <span className="text-xs font-bold text-[var(--esl-text-primary)] w-10 text-right">{d.pct}%</span>
                 </div>
               ))}
             </div>

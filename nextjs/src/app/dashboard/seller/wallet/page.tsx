@@ -104,10 +104,10 @@ export default function WalletPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
+          <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           {[1, 2, 3].map((i) => <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />)}
@@ -117,10 +117,10 @@ export default function WalletPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Хэтэвч</h1>
-        <p className="text-gray-500 mt-1">Үлдэгдэл шалгах, мөнгө татах</p>
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Хэтэвч</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Үлдэгдэл шалгах, мөнгө татах</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -131,26 +131,26 @@ export default function WalletPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Withdraw Form */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">💳 Мөнгө татах</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">💳 Мөнгө татах</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Дүн</label>
+              <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Дүн</label>
               <input
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="50000"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-              <p className="text-xs text-gray-400 mt-1">Боломжит: {formatPrice(balance)}</p>
+              <p className="text-xs text-[var(--esl-text-muted)] mt-1">Боломжит: {formatPrice(balance)}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Банк</label>
+              <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Банк</label>
               <select
                 value={bank}
                 onChange={(e) => setBank(e.target.value)}
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 {BANKS.map((b) => (
                   <option key={b.value} value={b.value}>{b.label}</option>
@@ -158,13 +158,13 @@ export default function WalletPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Дансны дугаар</label>
+              <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Дансны дугаар</label>
               <input
                 type="text"
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
                 placeholder="1234567890"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             <button
@@ -178,25 +178,25 @@ export default function WalletPage() {
         </div>
 
         {/* Withdrawal History */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">📜 Татан авалтын түүх</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📜 Татан авалтын түүх</h2>
           {withdrawals.length === 0 ? (
             <div className="p-8 text-center">
               <div className="text-3xl mb-2">💸</div>
-              <p className="text-gray-400">Одоогоор татан авалт байхгүй</p>
+              <p className="text-[var(--esl-text-muted)]">Одоогоор татан авалт байхгүй</p>
             </div>
           ) : (
             <div className="space-y-3">
               {withdrawals.map((w) => {
-                const [cls, label] = STATUS_LABEL[w.status] || ['bg-gray-100 text-gray-600', w.status];
+                const [cls, label] = STATUS_LABEL[w.status] || ['bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]', w.status];
                 return (
-                  <div key={w.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={w.id} className="flex items-center justify-between p-3 bg-[var(--esl-bg-section)] rounded-lg">
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{w.bank}</p>
-                      <p className="text-xs text-gray-500">{w.accountNumber} — {new Date(w.date).toLocaleDateString('mn-MN')}</p>
+                      <p className="text-sm font-medium text-[var(--esl-text-primary)]">{w.bank}</p>
+                      <p className="text-xs text-[var(--esl-text-secondary)]">{w.accountNumber} — {new Date(w.date).toLocaleDateString('mn-MN')}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-gray-900">{formatPrice(w.amount)}</p>
+                      <p className="text-sm font-bold text-[var(--esl-text-primary)]">{formatPrice(w.amount)}</p>
                       <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>{label}</span>
                     </div>
                   </div>

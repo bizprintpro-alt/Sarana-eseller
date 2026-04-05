@@ -109,7 +109,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="p-4 space-y-2">
                   {orders.slice(0, 5).map((o) => {
-                    const [cls, label] = STATUS_MAP[o.status] || ['bg-gray-500/15 text-gray-400', o.status];
+                    const [cls, label] = STATUS_MAP[o.status] || ['bg-[var(--esl-bg-section)]0/15 text-[var(--esl-text-muted)]', o.status];
                     return (
                       <div key={o._id} className="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-white/[.02] transition">
                         <div>
@@ -195,7 +195,7 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {orders.slice(0, 50).map((o) => {
-                    const [cls, label] = STATUS_MAP[o.status] || ['bg-gray-500/15 text-gray-400', o.status];
+                    const [cls, label] = STATUS_MAP[o.status] || ['bg-[var(--esl-bg-section)]0/15 text-[var(--esl-text-muted)]', o.status];
                     return (
                       <tr key={o._id} className="border-b border-white/[.04] hover:bg-white/[.02]">
                         <td className="px-6 py-3 font-mono text-xs text-brand font-bold">#{o.orderNumber || o._id?.slice(-5)}</td>

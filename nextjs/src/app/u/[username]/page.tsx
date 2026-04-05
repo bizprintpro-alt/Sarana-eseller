@@ -62,23 +62,23 @@ export default function MicroStorefront() {
   const displayName = (profile as any)?.name || username;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[var(--esl-bg-section)]">
       <Toast />
 
       {/* ═══ Sticky Nav ═══ */}
-      <nav className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-[#E2E8F0] shadow-sm">
+      <nav className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-[var(--esl-border)] shadow-sm">
         <div className="max-w-3xl mx-auto h-14 flex items-center px-4 gap-3">
           <Link href="/" className="flex items-center gap-2 no-underline shrink-0">
             <EsellerLogo size={22} />
             <span className="text-base font-black text-[#0F172A] tracking-tight">eseller<span className="text-[#E31E24]">.mn</span></span>
           </Link>
           <div className="flex-1" />
-          <Link href="/store" className="text-xs font-semibold text-[#475569] no-underline hover:text-[#6366F1] transition hidden sm:inline">
+          <Link href="/store" className="text-xs font-semibold text-[var(--esl-text-secondary)] no-underline hover:text-[#6366F1] transition hidden sm:inline">
             Дэлгүүр
           </Link>
           <button
             onClick={() => setCartOpen(true)}
-            className="relative w-9 h-9 rounded-lg hover:bg-[#F8FAFC] border-none cursor-pointer bg-transparent flex items-center justify-center text-[#475569] hover:text-[#E31E24] transition"
+            className="relative w-9 h-9 rounded-lg hover:bg-[var(--esl-bg-section)] border-none cursor-pointer bg-transparent flex items-center justify-center text-[var(--esl-text-secondary)] hover:text-[#E31E24] transition"
           >
             <ShoppingCart className="w-5 h-5" />
             {cartCount > 0 && (
@@ -95,19 +95,19 @@ export default function MicroStorefront() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-[#E2E8F0] p-5 flex items-center gap-4"
+          className="bg-white rounded-2xl border border-[var(--esl-border)] p-5 flex items-center gap-4"
         >
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6366F1] to-[#A78BFA] flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md">
             {getInitials(displayName)}
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-lg font-black text-[#0F172A]">{displayName}</div>
-            <div className="text-xs text-[#94A3B8]">@{username} · eseller.mn борлуулагч</div>
+            <div className="text-xs text-[var(--esl-text-muted)]">@{username} · eseller.mn борлуулагч</div>
             <div className="flex items-center gap-3 mt-1.5">
               <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
                 <Shield className="w-3 h-3" /> Баталгаажсан
               </span>
-              <span className="text-[10px] text-[#94A3B8]">{products.length} бараа</span>
+              <span className="text-[10px] text-[var(--esl-text-muted)]">{products.length} бараа</span>
             </div>
           </div>
         </motion.div>
@@ -118,7 +118,7 @@ export default function MicroStorefront() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden"
+            className="bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden"
           >
             <div className="relative h-64 sm:h-80 bg-gradient-to-br from-[#F8FAFC] to-[#EEF2FF] flex items-center justify-center">
               {heroProduct.images?.[0] ? (
@@ -138,7 +138,7 @@ export default function MicroStorefront() {
 
             <div className="p-5">
               {heroProduct.store?.name && (
-                <div className="text-xs text-[#94A3B8] mb-1">{heroProduct.store.name}</div>
+                <div className="text-xs text-[var(--esl-text-muted)] mb-1">{heroProduct.store.name}</div>
               )}
               <h2 className="text-xl font-black text-[#0F172A] mb-2">{heroProduct.name}</h2>
 
@@ -149,30 +149,30 @@ export default function MicroStorefront() {
                       <Star key={i} className={cn('w-4 h-4', i < Math.round(heroProduct.rating!) ? 'text-amber-400 fill-amber-400' : 'text-[#E2E8F0]')} />
                     ))}
                   </div>
-                  <span className="text-xs text-[#94A3B8]">{heroProduct.rating} ({heroProduct.reviewCount || 0} үнэлгээ)</span>
+                  <span className="text-xs text-[var(--esl-text-muted)]">{heroProduct.rating} ({heroProduct.reviewCount || 0} үнэлгээ)</span>
                 </div>
               )}
 
               <div className="flex items-baseline gap-3 mb-4">
                 <span className="text-3xl font-black text-[#E31E24]">{formatPrice(heroProduct.salePrice || heroProduct.price)}</span>
                 {heroProduct.salePrice && heroProduct.salePrice < heroProduct.price && (
-                  <span className="text-base text-[#94A3B8] line-through">{formatPrice(heroProduct.price)}</span>
+                  <span className="text-base text-[var(--esl-text-muted)] line-through">{formatPrice(heroProduct.price)}</span>
                 )}
               </div>
 
               {heroProduct.description && (
-                <p className="text-sm text-[#475569] leading-relaxed mb-4">{heroProduct.description}</p>
+                <p className="text-sm text-[var(--esl-text-secondary)] leading-relaxed mb-4">{heroProduct.description}</p>
               )}
 
               {/* Trust badges */}
               <div className="flex flex-wrap gap-2 mb-5">
-                <span className="text-[10px] font-semibold text-[#475569] bg-[#F8FAFC] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <span className="text-[10px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-section)] px-3 py-1.5 rounded-lg flex items-center gap-1">
                   <Truck className="w-3 h-3 text-[#6366F1]" /> 2-4ц хүргэлт
                 </span>
-                <span className="text-[10px] font-semibold text-[#475569] bg-[#F8FAFC] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <span className="text-[10px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-section)] px-3 py-1.5 rounded-lg flex items-center gap-1">
                   <Shield className="w-3 h-3 text-[#6366F1]" /> QPay аюулгүй
                 </span>
-                <span className="text-[10px] font-semibold text-[#475569] bg-[#F8FAFC] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <span className="text-[10px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-section)] px-3 py-1.5 rounded-lg flex items-center gap-1">
                   <Clock className="w-3 h-3 text-[#6366F1]" /> 7 хоног буцаалт
                 </span>
               </div>
@@ -200,8 +200,8 @@ export default function MicroStorefront() {
               {crossSellProducts.map((p) => {
                 const disc = discountPercent(p.price, p.salePrice);
                 return (
-                  <div key={p._id} className="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
-                    <div className="relative h-32 bg-[#F8FAFC] flex items-center justify-center overflow-hidden">
+                  <div key={p._id} className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                    <div className="relative h-32 bg-[var(--esl-bg-section)] flex items-center justify-center overflow-hidden">
                       {p.images?.[0] ? (
                         <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                       ) : (
@@ -215,11 +215,11 @@ export default function MicroStorefront() {
                       <div className="text-xs font-bold text-[#0F172A] line-clamp-2 leading-snug mb-1.5">{p.name}</div>
                       <div className="flex items-baseline gap-1.5 mb-2">
                         <span className="text-sm font-black text-[#E31E24]">{formatPrice(p.salePrice || p.price)}</span>
-                        {disc > 0 && <span className="text-[10px] text-[#94A3B8] line-through">{formatPrice(p.price)}</span>}
+                        {disc > 0 && <span className="text-[10px] text-[var(--esl-text-muted)] line-through">{formatPrice(p.price)}</span>}
                       </div>
                       <button
                         onClick={() => handleAdd(p)}
-                        className="w-full bg-[#F8FAFC] text-[#0F172A] text-[11px] font-bold py-2 rounded-lg border border-[#E2E8F0] cursor-pointer hover:bg-[#6366F1] hover:text-white hover:border-[#6366F1] transition-all flex items-center justify-center gap-1"
+                        className="w-full bg-[var(--esl-bg-section)] text-[#0F172A] text-[11px] font-bold py-2 rounded-lg border border-[var(--esl-border)] cursor-pointer hover:bg-[#6366F1] hover:text-white hover:border-[#6366F1] transition-all flex items-center justify-center gap-1"
                       >
                         <ShoppingCart className="w-3 h-3" /> Нэмэх
                       </button>
@@ -241,7 +241,7 @@ export default function MicroStorefront() {
 
       {/* Footer */}
       <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-        <div className="text-xs text-[#94A3B8]">
+        <div className="text-xs text-[var(--esl-text-muted)]">
           <Link href="/" className="text-[#6366F1] font-bold no-underline hover:underline">eseller.mn</Link>
           {' '}· Борлуулагчдын дижитал экосистем
         </div>

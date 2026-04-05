@@ -79,10 +79,10 @@ export default function CustomersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
+          <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           {[1, 2, 3].map((i) => <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />)}
@@ -92,11 +92,11 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Харилцагчид</h1>
-        <p className="text-gray-500 mt-1">Захиалга өгсөн харилцагчдын жагсаалт</p>
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Харилцагчид</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Захиалга өгсөн харилцагчдын жагсаалт</p>
       </div>
 
       {/* Stats */}
@@ -113,46 +113,46 @@ export default function CustomersPage() {
           placeholder="🔍 Харилцагч хайх..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md px-4 py-2.5 border border-gray-200 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full max-w-md px-4 py-2.5 border border-[var(--esl-border)] rounded-lg bg-white text-[var(--esl-text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
       {/* Customer Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
             <div className="text-4xl mb-3">👥</div>
-            <h3 className="text-lg font-semibold text-gray-700">Харилцагч олдсонгүй</h3>
-            <p className="text-gray-400 mt-1">Захиалга орсны дараа харилцагчид энд харагдана</p>
+            <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Харилцагч олдсонгүй</h3>
+            <p className="text-[var(--esl-text-muted)] mt-1">Захиалга орсны дараа харилцагчид энд харагдана</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">#</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Нэр</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Захиалгын тоо</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Нийт зарцуулсан</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Сүүлийн захиалга</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Төрөл</th>
+                <tr className="bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]">
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">#</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Нэр</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Захиалгын тоо</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Нийт зарцуулсан</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Сүүлийн захиалга</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Төрөл</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((c, i) => (
-                  <tr key={c.name} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td className="p-4 text-sm text-gray-400">{i + 1}</td>
+                  <tr key={c.name} className="border-b border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] transition-colors">
+                    <td className="p-4 text-sm text-[var(--esl-text-muted)]">{i + 1}</td>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-bold">
                           {c.name.charAt(0)}
                         </div>
-                        <span className="text-sm font-medium text-gray-900">{c.name}</span>
+                        <span className="text-sm font-medium text-[var(--esl-text-primary)]">{c.name}</span>
                       </div>
                     </td>
-                    <td className="p-4 text-sm text-gray-700">{c.orderCount} захиалга</td>
-                    <td className="p-4 text-sm font-semibold text-gray-900">{formatPrice(c.totalSpent)}</td>
-                    <td className="p-4 text-sm text-gray-500">{timeAgo(c.lastOrder)}</td>
+                    <td className="p-4 text-sm text-[var(--esl-text-primary)]">{c.orderCount} захиалга</td>
+                    <td className="p-4 text-sm font-semibold text-[var(--esl-text-primary)]">{formatPrice(c.totalSpent)}</td>
+                    <td className="p-4 text-sm text-[var(--esl-text-secondary)]">{timeAgo(c.lastOrder)}</td>
                     <td className="p-4">
                       {c.orderCount > 1 ? (
                         <span className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">Давтан</span>

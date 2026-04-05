@@ -24,8 +24,8 @@ export default class ErrorBoundary extends Component<Props, State> {
           <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center mb-4">
             <AlertTriangle className="w-7 h-7 text-red-500" />
           </div>
-          <h3 className="text-base font-bold text-gray-900 mb-1">Алдаа гарлаа</h3>
-          <p className="text-sm text-gray-500 mb-4 text-center max-w-sm">
+          <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-1">Алдаа гарлаа</h3>
+          <p className="text-sm text-[var(--esl-text-secondary)] mb-4 text-center max-w-sm">
             Хуудас ачааллахад алдаа гарлаа. Дахин оролдоно уу.
           </p>
           <button onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}

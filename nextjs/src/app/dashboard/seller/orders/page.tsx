@@ -94,19 +94,19 @@ export default function OrdersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
+          <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />
           ))}
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-12 bg-gray-100 rounded animate-pulse mb-3" />
+            <div key={i} className="h-12 bg-[var(--esl-bg-section)] rounded animate-pulse mb-3" />
           ))}
         </div>
       </div>
@@ -114,11 +114,11 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Захиалгын удирдлага</h1>
-        <p className="text-gray-500 mt-1">Бүх захиалгуудыг хянах, төлөв өөрчлөх</p>
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Захиалгын удирдлага</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Бүх захиалгуудыг хянах, төлөв өөрчлөх</p>
       </div>
 
       {/* Stats */}
@@ -138,7 +138,7 @@ export default function OrdersPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
               filter === tab.key
                 ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
             }`}
           >
             {tab.label}
@@ -152,41 +152,41 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
             <div className="text-4xl mb-3">📭</div>
-            <h3 className="text-lg font-semibold text-gray-700">Захиалга олдсонгүй</h3>
-            <p className="text-gray-400 mt-1">Энэ төлөвт захиалга байхгүй байна</p>
+            <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Захиалга олдсонгүй</h3>
+            <p className="text-[var(--esl-text-muted)] mt-1">Энэ төлөвт захиалга байхгүй байна</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Дугаар</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Захиалагч</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Дүн</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Төлөв</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Реферал</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Огноо</th>
-                  <th className="text-left p-4 text-xs font-semibold text-gray-500 uppercase">Үйлдэл</th>
+                <tr className="bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]">
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Дугаар</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Захиалагч</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Дүн</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Төлөв</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Реферал</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Огноо</th>
+                  <th className="text-left p-4 text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Үйлдэл</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((order) => (
                   <tr
                     key={order._id}
-                    className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                    className="border-b border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition-colors"
                     onClick={() => setSelectedOrder(order)}
                   >
                     <td className="p-4 font-mono text-sm font-semibold text-indigo-600">
                       {order.orderNumber || order._id.slice(-6).toUpperCase()}
                     </td>
-                    <td className="p-4 text-sm text-gray-700">{order.user?.name || order.buyer?.name || 'Хэрэглэгч'}</td>
-                    <td className="p-4 text-sm font-semibold text-gray-900">{formatPrice(order.total || 0)}</td>
+                    <td className="p-4 text-sm text-[var(--esl-text-primary)]">{order.user?.name || order.buyer?.name || 'Хэрэглэгч'}</td>
+                    <td className="p-4 text-sm font-semibold text-[var(--esl-text-primary)]">{formatPrice(order.total || 0)}</td>
                     <td className="p-4">
-                      <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${LIGHT_STATUS[order.status] || 'bg-gray-100 text-gray-600'}`}>
+                      <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${LIGHT_STATUS[order.status] || 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]'}`}>
                         {statusLabel(order.status)}
                       </span>
                     </td>
@@ -196,15 +196,15 @@ export default function OrdersPage() {
                           🔗 {order.referralCode}
                         </span>
                       ) : (
-                        <span className="text-gray-300 text-xs">—</span>
+                        <span className="text-[var(--esl-text-muted)] text-xs">—</span>
                       )}
                     </td>
-                    <td className="p-4 text-sm text-gray-500">{timeAgo(order.createdAt)}</td>
+                    <td className="p-4 text-sm text-[var(--esl-text-secondary)]">{timeAgo(order.createdAt)}</td>
                     <td className="p-4" onClick={(e) => e.stopPropagation()}>
                       <select
                         value={order.status}
                         onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                        className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="text-xs border border-[var(--esl-border)] rounded-lg px-2 py-1.5 bg-white text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       >
                         <option value="pending">⏳ Хүлээгдэж буй</option>
                         <option value="confirmed">✅ Баталгаажсан</option>
@@ -227,27 +227,27 @@ export default function OrdersPage() {
       {selectedOrder && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setSelectedOrder(null)}>
           <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-6 border-b border-[var(--esl-border)]">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-gray-900">
+                <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
                   Захиалга #{selectedOrder.orderNumber || selectedOrder._id.slice(-6).toUpperCase()}
                 </h2>
-                <button onClick={() => setSelectedOrder(null)} className="text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+                <button onClick={() => setSelectedOrder(null)} className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] text-xl">&times;</button>
               </div>
             </div>
             <div className="p-6 space-y-5">
               {/* Customer */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Захиалагч</h3>
-                <p className="text-gray-900 font-medium">{selectedOrder.user?.name || selectedOrder.buyer?.name || 'Хэрэглэгч'}</p>
-                {selectedOrder.delivery?.phone && <p className="text-sm text-gray-500">📞 {selectedOrder.delivery.phone}</p>}
+                <h3 className="text-sm font-semibold text-[var(--esl-text-secondary)] uppercase mb-2">Захиалагч</h3>
+                <p className="text-[var(--esl-text-primary)] font-medium">{selectedOrder.user?.name || selectedOrder.buyer?.name || 'Хэрэглэгч'}</p>
+                {selectedOrder.delivery?.phone && <p className="text-sm text-[var(--esl-text-secondary)]">📞 {selectedOrder.delivery.phone}</p>}
               </div>
 
               {/* Delivery Address */}
               {selectedOrder.delivery?.address && (
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Хүргэлтийн хаяг</h3>
-                  <p className="text-gray-700 text-sm">
+                  <h3 className="text-sm font-semibold text-[var(--esl-text-secondary)] uppercase mb-2">Хүргэлтийн хаяг</h3>
+                  <p className="text-[var(--esl-text-primary)] text-sm">
                     {[selectedOrder.delivery.address.district, selectedOrder.delivery.address.street, selectedOrder.delivery.address.building].filter(Boolean).join(', ')}
                   </p>
                 </div>
@@ -255,15 +255,15 @@ export default function OrdersPage() {
 
               {/* Items */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Бүтээгдэхүүн</h3>
+                <h3 className="text-sm font-semibold text-[var(--esl-text-secondary)] uppercase mb-2">Бүтээгдэхүүн</h3>
                 <div className="space-y-2">
                   {selectedOrder.items?.map((item, i) => (
-                    <div key={i} className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
+                    <div key={i} className="flex justify-between items-center bg-[var(--esl-bg-section)] rounded-lg p-3">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">{item.name || item.product?.name || 'Бүтээгдэхүүн'}</p>
-                        <p className="text-xs text-gray-500">x{item.quantity || 1}</p>
+                        <p className="text-sm font-medium text-[var(--esl-text-primary)]">{item.name || item.product?.name || 'Бүтээгдэхүүн'}</p>
+                        <p className="text-xs text-[var(--esl-text-secondary)]">x{item.quantity || 1}</p>
                       </div>
-                      <p className="text-sm font-semibold text-gray-900">{formatPrice((item.price || 0) * (item.quantity || 1))}</p>
+                      <p className="text-sm font-semibold text-[var(--esl-text-primary)]">{formatPrice((item.price || 0) * (item.quantity || 1))}</p>
                     </div>
                   ))}
                 </div>
@@ -271,7 +271,7 @@ export default function OrdersPage() {
 
               {/* Total */}
               <div className="flex justify-between items-center bg-indigo-50 rounded-lg p-4">
-                <span className="font-semibold text-gray-700">Нийт дүн</span>
+                <span className="font-semibold text-[var(--esl-text-primary)]">Нийт дүн</span>
                 <span className="text-xl font-bold text-indigo-600">{formatPrice(selectedOrder.total || 0)}</span>
               </div>
 
@@ -285,12 +285,12 @@ export default function OrdersPage() {
 
               {/* Status Update */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Төлөв шинэчлэх</h3>
+                <h3 className="text-sm font-semibold text-[var(--esl-text-secondary)] uppercase mb-2">Төлөв шинэчлэх</h3>
                 <div className="flex gap-2">
                   <select
                     value={selectedOrder.status}
                     onChange={(e) => handleStatusChange(selectedOrder._id, e.target.value)}
-                    className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="flex-1 border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm bg-white text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="pending">⏳ Хүлээгдэж буй</option>
                     <option value="confirmed">✅ Баталгаажсан</option>

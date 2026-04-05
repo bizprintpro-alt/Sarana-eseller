@@ -55,10 +55,10 @@ export default function RevenuePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
+          <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           {[1, 2, 3, 4].map((i) => <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />)}
@@ -68,10 +68,10 @@ export default function RevenuePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Орлого</h1>
-        <p className="text-gray-500 mt-1">Борлуулалтын орлого, статистик</p>
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Орлого</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Борлуулалтын орлого, статистик</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -83,17 +83,17 @@ export default function RevenuePage() {
 
       {/* Revenue Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Орлогын түүх</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Орлогын түүх</h2>
           {revenueHistory.length === 0 ? (
             <div className="p-8 text-center">
               <div className="text-3xl mb-2">💸</div>
-              <p className="text-gray-400">Одоогоор орлого бүртгэгдээгүй байна</p>
+              <p className="text-[var(--esl-text-muted)]">Одоогоор орлого бүртгэгдээгүй байна</p>
             </div>
           ) : (
             <div className="space-y-3">
               {revenueHistory.map((order) => (
-                <div key={order._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div key={order._id} className="flex items-center justify-between p-3 bg-[var(--esl-bg-section)] rounded-lg hover:bg-[var(--esl-bg-section)] transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
                       order.status === 'delivered' ? 'bg-green-100' : 'bg-amber-100'
@@ -101,17 +101,17 @@ export default function RevenuePage() {
                       {order.status === 'delivered' ? '✅' : '⏳'}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-[var(--esl-text-primary)]">
                         {order.orderNumber || `#${order._id.slice(-6).toUpperCase()}`}
                       </p>
-                      <p className="text-xs text-gray-500">{order.user?.name || 'Хэрэглэгч'} — {timeAgo(order.createdAt)}</p>
+                      <p className="text-xs text-[var(--esl-text-secondary)]">{order.user?.name || 'Хэрэглэгч'} — {timeAgo(order.createdAt)}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className={`text-sm font-bold ${order.status === 'delivered' ? 'text-green-600' : 'text-amber-600'}`}>
                       +{formatPrice(order.total || 0)}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[var(--esl-text-muted)]">
                       {order.status === 'delivered' ? 'Хүргэгдсэн' : order.status === 'shipped' ? 'Явсан' : 'Баталгаажсан'}
                     </p>
                   </div>
@@ -121,8 +121,8 @@ export default function RevenuePage() {
           )}
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Товч мэдээлэл</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Товч мэдээлэл</h2>
           <div className="space-y-4">
             <div className="p-4 bg-green-50 rounded-lg">
               <p className="text-xs text-green-600 font-medium">Дундаж захиалга</p>

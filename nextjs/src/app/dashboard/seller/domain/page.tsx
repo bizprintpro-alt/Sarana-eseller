@@ -54,9 +54,9 @@ export default function DomainPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-8 py-5">
-        <h1 className="text-xl font-black text-gray-900">🌐 Домайн нэр</h1>
-        <p className="text-sm text-gray-400 mt-0.5">Дэлгүүрийн веб хаягийг тохируулна</p>
+      <div className="bg-white border-b border-[var(--esl-border)] px-8 py-5">
+        <h1 className="text-xl font-black text-[var(--esl-text-primary)]">🌐 Домайн нэр</h1>
+        <p className="text-sm text-[var(--esl-text-muted)] mt-0.5">Дэлгүүрийн веб хаягийг тохируулна</p>
       </div>
 
       <div className="p-8 max-w-3xl space-y-6">
@@ -66,8 +66,8 @@ export default function DomainPage() {
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-lg">🌐</div>
             <div>
-              <div className="text-xs text-gray-500 font-semibold">Одоогийн хаяг</div>
-              <div className="text-lg font-black text-gray-900">
+              <div className="text-xs text-[var(--esl-text-secondary)] font-semibold">Одоогийн хаяг</div>
+              <div className="text-lg font-black text-[var(--esl-text-primary)]">
                 {config.subdomain || 'store'}.eseller.mn
               </div>
             </div>
@@ -77,32 +77,32 @@ export default function DomainPage() {
             <span className="text-xs text-green-600 font-semibold">Идэвхтэй</span>
             {config.sslEnabled && (
               <>
-                <span className="text-gray-300 mx-1">·</span>
-                <span className="text-xs text-gray-400">🔒 SSL идэвхтэй</span>
+                <span className="text-[var(--esl-text-muted)] mx-1">·</span>
+                <span className="text-xs text-[var(--esl-text-muted)]">🔒 SSL идэвхтэй</span>
               </>
             )}
           </div>
         </div>
 
         {/* ═══ Subdomain ═══ */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6">
+        <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-base font-bold text-gray-900">Субдомайн</h3>
-              <p className="text-xs text-gray-400 mt-0.5">Үнэгүй eseller.mn субдомайн</p>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)]">Субдомайн</h3>
+              <p className="text-xs text-[var(--esl-text-muted)] mt-0.5">Үнэгүй eseller.mn субдомайн</p>
             </div>
             <span className="text-[10px] font-bold bg-green-100 text-green-600 px-2 py-1 rounded-md">Үнэгүй</span>
           </div>
 
-          <div className="flex items-center gap-0 rounded-xl border border-gray-200 overflow-hidden focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/10">
-            <span className="text-sm text-gray-400 bg-gray-50 px-4 py-2.5 border-r border-gray-200 shrink-0">https://</span>
+          <div className="flex items-center gap-0 rounded-xl border border-[var(--esl-border)] overflow-hidden focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/10">
+            <span className="text-sm text-[var(--esl-text-muted)] bg-[var(--esl-bg-section)] px-4 py-2.5 border-r border-[var(--esl-border)] shrink-0">https://</span>
             <input
               value={subInput}
               onChange={(e) => setSubInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
               className="flex-1 px-3 py-2.5 text-sm font-semibold outline-none border-none"
               placeholder="miiny-delguur"
             />
-            <span className="text-sm text-gray-400 bg-gray-50 px-4 py-2.5 border-l border-gray-200 shrink-0">.eseller.mn</span>
+            <span className="text-sm text-[var(--esl-text-muted)] bg-[var(--esl-bg-section)] px-4 py-2.5 border-l border-[var(--esl-border)] shrink-0">.eseller.mn</span>
           </div>
 
           {subInput && !isValidSub && (
@@ -120,7 +120,7 @@ export default function DomainPage() {
               </button>
               <button
                 onClick={() => setSubInput(config.subdomain)}
-                className="text-gray-400 text-xs font-semibold bg-transparent border-none cursor-pointer hover:text-gray-600"
+                className="text-[var(--esl-text-muted)] text-xs font-semibold bg-transparent border-none cursor-pointer hover:text-[var(--esl-text-secondary)]"
               >
                 Цуцлах
               </button>
@@ -129,11 +129,11 @@ export default function DomainPage() {
         </div>
 
         {/* ═══ Custom Domain ═══ */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6">
+        <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-base font-bold text-gray-900">Хувийн домайн</h3>
-              <p className="text-xs text-gray-400 mt-0.5">Өөрийн домайн холбох (жишээ: minii-delguur.mn)</p>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)]">Хувийн домайн</h3>
+              <p className="text-xs text-[var(--esl-text-muted)] mt-0.5">Өөрийн домайн холбох (жишээ: minii-delguur.mn)</p>
             </div>
             <span className="text-[10px] font-bold bg-amber-100 text-amber-600 px-2 py-1 rounded-md">Pro багц</span>
           </div>
@@ -142,7 +142,7 @@ export default function DomainPage() {
             <input
               value={config.customDomain}
               onChange={(e) => setConfig({ ...config, customDomain: e.target.value, customDomainVerified: false })}
-              className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
+              className="flex-1 border border-[var(--esl-border)] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/10 transition"
               placeholder="minii-delguur.mn"
             />
             <button
@@ -159,7 +159,7 @@ export default function DomainPage() {
           </div>
 
           {config.customDomain && (
-            <div className="mt-4 bg-gray-50 border border-gray-200 rounded-xl p-4">
+            <div className="mt-4 bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-xl p-4">
               <div className="flex items-center gap-2 mb-3">
                 {config.customDomainVerified ? (
                   <>
@@ -174,21 +174,21 @@ export default function DomainPage() {
                 )}
               </div>
 
-              <p className="text-xs text-gray-500 mb-3">
+              <p className="text-xs text-[var(--esl-text-secondary)] mb-3">
                 Домайнаа холбохын тулд дараах DNS бичлэгийг нэмнэ үү:
               </p>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="text-gray-400 border-b border-gray-200">
+                    <tr className="text-[var(--esl-text-muted)] border-b border-[var(--esl-border)]">
                       <th className="text-left py-2 px-3">Төрөл</th>
                       <th className="text-left py-2 px-3">Нэр</th>
                       <th className="text-left py-2 px-3">Утга</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-gray-100">
+                    <tr className="border-b border-[var(--esl-border)]">
                       <td className="py-2 px-3 font-mono font-bold">CNAME</td>
                       <td className="py-2 px-3 font-mono">{config.customDomain}</td>
                       <td className="py-2 px-3 font-mono text-brand">cname.eseller.mn</td>
@@ -207,7 +207,7 @@ export default function DomainPage() {
                   save({ customDomainVerified: true });
                   toast.show('✅ Домайн баталгаажлаа!');
                 }}
-                className="mt-3 bg-white text-gray-700 px-4 py-2 rounded-lg text-xs font-bold border border-gray-200 cursor-pointer hover:border-brand hover:text-brand transition-all"
+                className="mt-3 bg-white text-[var(--esl-text-primary)] px-4 py-2 rounded-lg text-xs font-bold border border-[var(--esl-border)] cursor-pointer hover:border-brand hover:text-brand transition-all"
               >
                 🔄 Шалгах
               </button>
@@ -216,11 +216,11 @@ export default function DomainPage() {
         </div>
 
         {/* ═══ SSL ═══ */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6">
+        <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-gray-900">🔒 SSL Гэрчилгээ</h3>
-              <p className="text-xs text-gray-400 mt-0.5">Автоматаар үнэгүй Let&apos;s Encrypt SSL</p>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)]">🔒 SSL Гэрчилгээ</h3>
+              <p className="text-xs text-[var(--esl-text-muted)] mt-0.5">Автоматаар үнэгүй Let&apos;s Encrypt SSL</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -229,7 +229,7 @@ export default function DomainPage() {
                 onChange={(e) => save({ sslEnabled: e.target.checked })}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-brand/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500" />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-brand/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-[var(--esl-border-strong)] after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500" />
             </label>
           </div>
         </div>

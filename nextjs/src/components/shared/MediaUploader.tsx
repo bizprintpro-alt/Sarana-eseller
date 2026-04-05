@@ -93,7 +93,7 @@ export function MediaUploader({ context, value, onChange, maxFiles = 5, label }:
             border: `1.5px dashed ${dragOver ? '#E8242C' : '#3D3D3D'}`,
             borderRadius: 10, padding: '20px 16px',
             textAlign: 'center', cursor: 'pointer',
-            background: dragOver ? 'rgba(232,36,44,0.04)' : '#1A1A1A',
+            background: dragOver ? 'rgba(232,36,44,0.04)' : 'var(--esl-bg-card)',
             transition: 'all 0.15s',
           }}
         >

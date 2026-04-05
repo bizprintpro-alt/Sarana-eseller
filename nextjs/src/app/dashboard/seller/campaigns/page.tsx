@@ -283,7 +283,7 @@ export default function CampaignsPage() {
   };
 
   const inputStyle: React.CSSProperties = {
-    background: '#111111',
+    background: 'var(--esl-bg-section)',
     border: `1px solid ${BORDER}`,
     borderRadius: 8,
     padding: '10px 14px',
@@ -464,7 +464,7 @@ export default function CampaignsPage() {
                             })
                           }
                           style={{
-                            background: '#111',
+                            background: 'var(--esl-bg-section)',
                             border: `1px solid ${BORDER}`,
                             borderRadius: 4,
                             padding: '2px 8px',
@@ -895,7 +895,7 @@ export default function CampaignsPage() {
                       <div
                         key={s.label}
                         style={{
-                          background: '#111111',
+                          background: 'var(--esl-bg-section)',
                           borderRadius: 8,
                           padding: '10px 14px',
                           textAlign: 'center',

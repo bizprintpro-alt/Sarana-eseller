@@ -81,11 +81,11 @@ export default function NewBannerPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0A0A0A', color: '#FFF', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--esl-bg-page)', color: '#FFF', padding: '24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
         <Link href="/dashboard/admin/banners"
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#1A1A1A', border: '1px solid #3D3D3D', color: '#FFF', textDecoration: 'none' }}>
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--esl-bg-card)', border: '1px solid #3D3D3D', color: '#FFF', textDecoration: 'none' }}>
           <ArrowLeft size={18} />
         </Link>
         <h1 style={{ fontSize: '20px', fontWeight: '800', margin: 0 }}>Шинэ баннер нэмэх</h1>
@@ -132,7 +132,7 @@ export default function NewBannerPage() {
         {/* Image Preview */}
         {form.imageUrl && (
           <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #3D3D3D' }}>
-            <div style={{ padding: '8px 12px', backgroundColor: '#1A1A1A', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ padding: '8px 12px', backgroundColor: 'var(--esl-bg-card)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Eye size={14} color="#777" />
               <span style={{ fontSize: '12px', color: '#777' }}>Урьдчилсан харагдац</span>
             </div>
@@ -205,7 +205,7 @@ export default function NewBannerPage() {
             {saving ? 'Хадгалж байна...' : 'Баннер үүсгэх'}
           </button>
           <Link href="/dashboard/admin/banners"
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '48px', paddingInline: '24px', backgroundColor: '#1A1A1A', color: '#A0A0A0', border: '1px solid #3D3D3D', borderRadius: '10px', fontSize: '14px', fontWeight: '600', textDecoration: 'none' }}>
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '48px', paddingInline: '24px', backgroundColor: 'var(--esl-bg-card)', color: '#A0A0A0', border: '1px solid #3D3D3D', borderRadius: '10px', fontSize: '14px', fontWeight: '600', textDecoration: 'none' }}>
             Цуцлах
           </Link>
         </div>
@@ -226,7 +226,7 @@ const inputStyle: React.CSSProperties = {
   width: '100%',
   height: '44px',
   padding: '0 14px',
-  backgroundColor: '#1A1A1A',
+  backgroundColor: 'var(--esl-bg-card)',
   border: '1px solid #3D3D3D',
   borderRadius: '10px',
   color: '#FFF',

@@ -103,7 +103,7 @@ export function MapPicker({ lat, lng, onChange }: MapPickerProps) {
           borderRadius: '10px',
           overflow: 'hidden',
           border: '0.5px solid #3D3D3D',
-          backgroundColor: '#2A2A2A',
+          backgroundColor: 'var(--esl-bg-elevated)',
         }}
       />
       {!loaded && (

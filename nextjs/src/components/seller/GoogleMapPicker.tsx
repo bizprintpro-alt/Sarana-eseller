@@ -165,7 +165,7 @@ export function GoogleMapPicker({ lat, lng, onChange, height = 280 }: Props) {
           display: 'flex', gap: 0,
           border: '1px solid #3D3D3D',
           borderRadius: 10,
-          background: '#2A2A2A',
+          background: 'var(--esl-bg-elevated)',
           overflow: 'hidden',
         }}>
           <input
@@ -192,7 +192,7 @@ export function GoogleMapPicker({ lat, lng, onChange, height = 280 }: Props) {
         {suggestions.length > 0 && (
           <div style={{
             position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 50,
-            background: '#1A1A1A',
+            background: 'var(--esl-bg-card)',
             border: '1px solid #3D3D3D',
             borderRadius: '0 0 10px 10px',
             overflow: 'hidden',
@@ -219,7 +219,7 @@ export function GoogleMapPicker({ lat, lng, onChange, height = 280 }: Props) {
       }}>
         {loading && (
           <div style={{
-            position: 'absolute', inset: 0, background: '#2A2A2A',
+            position: 'absolute', inset: 0, background: 'var(--esl-bg-elevated)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 13, color: '#777',
           }}>
@@ -239,7 +239,7 @@ export function GoogleMapPicker({ lat, lng, onChange, height = 280 }: Props) {
             <p style={{ fontSize: 10, color: '#777', marginBottom: 3 }}>{f.label}</p>
             <div style={{
               padding: '6px 10px', border: '1px solid #3D3D3D',
-              borderRadius: 8, background: '#2A2A2A',
+              borderRadius: 8, background: 'var(--esl-bg-elevated)',
               fontFamily: 'monospace', fontSize: 12, color: '#FFF',
             }}>
               {f.value}

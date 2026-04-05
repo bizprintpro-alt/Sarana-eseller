@@ -66,12 +66,12 @@ export default function IntegrationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Интеграцууд</h1>
-          <p className="text-sm text-gray-500">Гадаад платформуудтай холбогдож борлуулалтаа өсгөх</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Интеграцууд</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)]">Гадаад платформуудтай холбогдож борлуулалтаа өсгөх</p>
         </div>
-        <div className="text-sm text-gray-500 bg-white border border-gray-200 rounded-xl px-4 py-2">
+        <div className="text-sm text-[var(--esl-text-secondary)] bg-white border border-[var(--esl-border)] rounded-xl px-4 py-2">
           <Link2 className="w-4 h-4 inline mr-1.5 text-indigo-500" />
-          <span className="font-bold text-gray-900">{connectedCount}</span>/{integrations.length} холбогдсон
+          <span className="font-bold text-[var(--esl-text-primary)]">{connectedCount}</span>/{integrations.length} холбогдсон
         </div>
       </div>
 
@@ -80,7 +80,7 @@ export default function IntegrationsPage() {
         {CATEGORIES.map((c) => (
           <button key={c.key} onClick={() => setCatFilter(c.key)}
             className={cn('px-3.5 py-2 rounded-xl text-xs font-semibold border-none cursor-pointer transition',
-              catFilter === c.key ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50')}>
+              catFilter === c.key ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}>
             {c.label}
           </button>
         ))}
@@ -90,21 +90,21 @@ export default function IntegrationsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filtered.map((intg) => (
           <div key={intg.id} className={cn('bg-white rounded-2xl border p-5 transition-all hover:shadow-sm',
-            intg.connected ? 'border-green-200' : 'border-gray-200')}>
+            intg.connected ? 'border-green-200' : 'border-[var(--esl-border)]')}>
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{intg.icon}</span>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h3 className="text-sm font-bold text-gray-900">{intg.name}</h3>
+                    <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">{intg.name}</h3>
                     {intg.tier === 'pro' && (
                       <span className="text-[9px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded flex items-center gap-0.5">
                         <Crown className="w-2.5 h-2.5" /> PRO
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{intg.desc}</p>
+                  <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5 leading-relaxed">{intg.desc}</p>
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function IntegrationsPage() {
             {/* Sync stats */}
             {intg.stats && (
               <div className="flex gap-4 mb-3 text-xs">
-                <span className="text-gray-500">Sync: <strong className="text-gray-900">{intg.stats.synced}</strong></span>
+                <span className="text-[var(--esl-text-secondary)]">Sync: <strong className="text-[var(--esl-text-primary)]">{intg.stats.synced}</strong></span>
                 {(intg.stats.failed ?? 0) > 0 && <span className="text-red-500">Алдаа: <strong>{intg.stats.failed}</strong></span>}
               </div>
             )}
@@ -135,7 +135,7 @@ export default function IntegrationsPage() {
             <div className="flex gap-2">
               {intg.connected ? (
                 <>
-                  <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold bg-gray-50 text-gray-700 hover:bg-gray-100 cursor-pointer border-none transition">
+                  <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] hover:bg-[var(--esl-bg-section)] cursor-pointer border-none transition">
                     <Settings className="w-3.5 h-3.5" /> Тохиргоо
                   </button>
                   <button onClick={() => handleDisconnect(intg.id)}
@@ -146,7 +146,7 @@ export default function IntegrationsPage() {
               ) : (
                 <button onClick={() => handleConnect(intg.id)} disabled={connectingId === intg.id}
                   className={cn('flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-semibold border-none cursor-pointer transition',
-                    connectingId === intg.id ? 'bg-gray-100 text-gray-400' :
+                    connectingId === intg.id ? 'bg-[var(--esl-bg-section)] text-[var(--esl-text-muted)]' :
                     intg.tier === 'pro' ? 'bg-amber-50 text-amber-700 hover:bg-amber-100' :
                     'bg-indigo-600 text-white hover:bg-indigo-700')}>
                   {connectingId === intg.id
@@ -165,8 +165,8 @@ export default function IntegrationsPage() {
       <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-start gap-3">
         <Shield className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
         <div>
-          <h4 className="text-sm font-bold text-gray-900">Аюулгүй холболт</h4>
-          <p className="text-xs text-gray-600 mt-0.5">Бүх холболт OAuth 2.0 стандартаар хийгдэнэ. Таны нууц үг хадгалагдахгүй. Хүссэн үедээ салгах боломжтой.</p>
+          <h4 className="text-sm font-bold text-[var(--esl-text-primary)]">Аюулгүй холболт</h4>
+          <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5">Бүх холболт OAuth 2.0 стандартаар хийгдэнэ. Таны нууц үг хадгалагдахгүй. Хүссэн үедээ салгах боломжтой.</p>
         </div>
       </div>
     </div>

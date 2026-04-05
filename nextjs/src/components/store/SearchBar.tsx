@@ -63,12 +63,12 @@ export default function SearchBar({ value, onChange, inputRef }: SearchBarProps)
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
           placeholder="Бараа, дэлгүүр хайх..."
-          className="w-full h-11 pl-4 pr-20 rounded-xl bg-[#F5F5F5] border-2 border-transparent text-sm outline-none focus:border-[#E31E24] focus:bg-white transition-all"
+          className="w-full h-11 pl-4 pr-20 rounded-xl bg-[var(--esl-bg-section)] border-2 border-transparent text-sm outline-none focus:border-[#E31E24] focus:bg-white transition-all"
         />
         {value && (
           <button onClick={() => { onChange(''); setSuggestions([]); }}
             className="absolute right-12 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center border-none cursor-pointer hover:bg-gray-300 transition">
-            <X className="w-3 h-3 text-gray-500" />
+            <X className="w-3 h-3 text-[var(--esl-text-secondary)]" />
           </button>
         )}
         <button className="absolute right-1 top-1 bottom-1 px-3 bg-[#E31E24] text-white rounded-lg border-none cursor-pointer hover:bg-[#C41A1F] transition flex items-center justify-center">
@@ -78,29 +78,29 @@ export default function SearchBar({ value, onChange, inputRef }: SearchBarProps)
 
       {/* Dropdown */}
       {showDropdown && suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden max-h-[400px] overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-[var(--esl-border)] z-50 overflow-hidden max-h-[400px] overflow-y-auto">
           {suggestions.map((s) => (
             <Link key={s.id} href={`/store/${s.id}`} onClick={() => setShowDropdown(false)}
-              className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition no-underline">
-              <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-lg shrink-0 overflow-hidden">
+              className="flex items-center gap-3 px-4 py-2.5 hover:bg-[var(--esl-bg-section)] transition no-underline">
+              <div className="w-10 h-10 rounded-lg bg-[var(--esl-bg-section)] flex items-center justify-center text-lg shrink-0 overflow-hidden">
                 {s.image ? <img src={s.image} alt="" className="w-full h-full object-cover" /> : (s.emoji || '📦')}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">{s.name}</p>
-                {s.category && <p className="text-[10px] text-gray-400">{s.category}</p>}
+                <p className="text-sm font-semibold text-[var(--esl-text-primary)] truncate">{s.name}</p>
+                {s.category && <p className="text-[10px] text-[var(--esl-text-muted)]">{s.category}</p>}
               </div>
               <span className="text-sm font-bold text-[#E31E24] shrink-0">{formatPrice(s.price)}</span>
             </Link>
           ))}
-          <div className="px-4 py-2 border-t border-gray-100 text-center">
-            <span className="text-xs text-gray-400">{suggestions.length} бараа олдлоо</span>
+          <div className="px-4 py-2 border-t border-[var(--esl-border)] text-center">
+            <span className="text-xs text-[var(--esl-text-muted)]">{suggestions.length} бараа олдлоо</span>
           </div>
         </div>
       )}
 
       {showDropdown && value.length >= 2 && suggestions.length === 0 && !loading && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-gray-200 z-50 p-6 text-center">
-          <p className="text-sm text-gray-400">"{value}" хайлтаар бараа олдсонгүй</p>
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-[var(--esl-border)] z-50 p-6 text-center">
+          <p className="text-sm text-[var(--esl-text-muted)]">"{value}" хайлтаар бараа олдсонгүй</p>
         </div>
       )}
     </div>

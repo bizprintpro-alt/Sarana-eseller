@@ -62,20 +62,20 @@ export default function NotificationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
+          <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Мэдэгдэл</h1>
-        <p className="text-gray-500 mt-1">Имэйл болон push мэдэгдлийн тохиргоо</p>
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+        <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Мэдэгдэл</h1>
+        <p className="text-[var(--esl-text-secondary)] mt-1">Имэйл болон push мэдэгдлийн тохиргоо</p>
       </div>
 
       <div className="max-w-3xl">
@@ -84,25 +84,25 @@ export default function NotificationsPage() {
           <button onClick={enableAll} className="px-4 py-2 bg-green-50 text-green-700 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors">
             Бүгдийг идэвхжүүлэх
           </button>
-          <button onClick={disableAll} className="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+          <button onClick={disableAll} className="px-4 py-2 bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] rounded-lg text-sm font-medium hover:bg-[var(--esl-bg-card-hover)] transition-colors">
             Бүгдийг унтраах
           </button>
         </div>
 
         {/* Settings Table */}
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="grid grid-cols-[1fr,80px,80px] gap-0 border-b border-gray-200 bg-gray-50 px-5 py-3">
-            <div className="text-xs font-semibold text-gray-500 uppercase">Мэдэгдэл</div>
-            <div className="text-xs font-semibold text-gray-500 uppercase text-center">Имэйл</div>
-            <div className="text-xs font-semibold text-gray-500 uppercase text-center">Push</div>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+          <div className="grid grid-cols-[1fr,80px,80px] gap-0 border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)] px-5 py-3">
+            <div className="text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Мэдэгдэл</div>
+            <div className="text-xs font-semibold text-[var(--esl-text-secondary)] uppercase text-center">Имэйл</div>
+            <div className="text-xs font-semibold text-[var(--esl-text-secondary)] uppercase text-center">Push</div>
           </div>
           {settings.map((setting) => (
-            <div key={setting.key} className="grid grid-cols-[1fr,80px,80px] gap-0 items-center border-b border-gray-100 last:border-0 px-5 py-4 hover:bg-gray-50 transition-colors">
+            <div key={setting.key} className="grid grid-cols-[1fr,80px,80px] gap-0 items-center border-b border-[var(--esl-border)] last:border-0 px-5 py-4 hover:bg-[var(--esl-bg-section)] transition-colors">
               <div className="flex items-start gap-3">
                 <span className="text-xl mt-0.5">{setting.icon}</span>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{setting.label}</p>
-                  <p className="text-xs text-gray-400">{setting.description}</p>
+                  <p className="text-sm font-medium text-[var(--esl-text-primary)]">{setting.label}</p>
+                  <p className="text-xs text-[var(--esl-text-muted)]">{setting.description}</p>
                 </div>
               </div>
               <div className="flex justify-center">

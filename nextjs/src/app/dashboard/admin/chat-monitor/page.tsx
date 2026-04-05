@@ -38,13 +38,13 @@ const RISK_STYLE = {
   high: { label: 'Өндөр', bg: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' },
   medium: { label: 'Дунд', bg: 'bg-amber-100', text: 'text-amber-700', dot: 'bg-amber-500' },
   low: { label: 'Бага', bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-500' },
-  none: { label: 'Хэвийн', bg: 'bg-gray-100', text: 'text-gray-600', dot: 'bg-gray-400' },
+  none: { label: 'Хэвийн', bg: 'bg-[var(--esl-bg-section)]', text: 'text-[var(--esl-text-secondary)]', dot: 'bg-gray-400' },
 };
 
 const STATUS_STYLE: Record<string, { label: string; color: string }> = {
   active: { label: 'Идэвхтэй', color: 'text-green-600' },
   flagged: { label: 'Анхааруулга', color: 'text-red-500' },
-  blocked: { label: 'Блоклогдсон', color: 'text-gray-400' },
+  blocked: { label: 'Блоклогдсон', color: 'text-[var(--esl-text-muted)]' },
   pending_review: { label: 'Шалгах', color: 'text-amber-500' },
 };
 
@@ -79,14 +79,14 @@ export default function ChatMonitorPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Чат хяналтын самбар</h1>
-          <p className="text-sm text-gray-500">Админ · Бүх харилцан яриа, spam шүүлт, лог</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Чат хяналтын самбар</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)]">Админ · Бүх харилцан яриа, spam шүүлт, лог</p>
         </div>
         <div className="flex gap-2">
           <button className="flex items-center gap-1.5 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-xs font-semibold hover:bg-red-100 cursor-pointer transition border-none">
             <Shield className="w-3.5 h-3.5" /> Spam дүрэм
           </button>
-          <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-50 cursor-pointer transition">
+          <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
             <Download className="w-3.5 h-3.5" /> Тайлан экспорт
           </button>
         </div>
@@ -99,7 +99,7 @@ export default function ChatMonitorPage() {
           { label: 'Өнөөдөр идэвхтэй', value: '312', sub: '↑ 18% өчигдрөөс', color: 'text-green-400' },
           { label: 'Spam илэрсэн', value: '47', sub: 'Энэ сард', color: 'text-red-400' },
           { label: 'Шалгах хүлээгдэж буй', value: String(pendingCount), sub: 'Гараар шалгах', color: 'text-amber-400' },
-          { label: 'Блоклогдсон хэрэглэгч', value: '29', sub: 'Нийт', color: 'text-gray-400' },
+          { label: 'Блоклогдсон хэрэглэгч', value: '29', sub: 'Нийт', color: 'text-[var(--esl-text-muted)]' },
         ].map((s) => (
           <div key={s.label} className="bg-[#1A1A2E] rounded-xl p-4 text-white">
             <div className="text-[10px] text-white/50 mb-1">{s.label}</div>
@@ -113,22 +113,22 @@ export default function ChatMonitorPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* ═══ Chat List ═══ */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
               <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Хэрэглэгч, мессеж хайх..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                className="w-full pl-10 pr-4 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
             <div className="flex gap-2">
               <select value={riskFilter} onChange={(e) => setRiskFilter(e.target.value)}
-                className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs bg-white cursor-pointer">
+                className="px-3 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer">
                 <option value="all">Бүгд</option>
                 <option value="spam">Spam илэрсэн</option>
                 <option value="pending">Шалгах хүлээгдэж буй</option>
                 <option value="high_risk">Өндөр эрсдэлтэй</option>
                 <option value="blocked">Блоклогдсон</option>
               </select>
-              <select className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs bg-white cursor-pointer">
+              <select className="px-3 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer">
                 <option>Эрсдэл: бүгд</option>
                 <option>Өндөр</option>
                 <option>Дунд</option>
@@ -137,10 +137,10 @@ export default function ChatMonitorPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-[10px] text-gray-500 uppercase tracking-wider border-b border-gray-100 bg-gray-50/50">
+                <tr className="text-left text-[10px] text-[var(--esl-text-secondary)] uppercase tracking-wider border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)]/50">
                   <th className="px-4 py-2.5 w-8"><input type="checkbox" className="rounded" /></th>
                   <th className="px-4 py-2.5 font-medium">Хэрэглэгч</th>
                   <th className="px-4 py-2.5 font-medium">Борлуулагч</th>
@@ -153,15 +153,15 @@ export default function ChatMonitorPage() {
                   const isActive = selected?.id === chat.id;
                   return (
                     <tr key={chat.id} onClick={() => setSelected(chat)}
-                      className={cn('cursor-pointer transition', isActive ? 'bg-indigo-50' : 'hover:bg-gray-50/50')}>
+                      className={cn('cursor-pointer transition', isActive ? 'bg-indigo-50' : 'hover:bg-[var(--esl-bg-section)]/50')}>
                       <td className="px-4 py-3"><input type="checkbox" className="rounded" onClick={(e) => e.stopPropagation()} /></td>
                       <td className="px-4 py-3">
-                        <div className="font-semibold text-gray-900">{chat.customerName}</div>
-                        <div className="text-[10px] text-gray-400">{chat.id}</div>
+                        <div className="font-semibold text-[var(--esl-text-primary)]">{chat.customerName}</div>
+                        <div className="text-[10px] text-[var(--esl-text-muted)]">{chat.id}</div>
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-700">{chat.sellerName}</td>
+                      <td className="px-4 py-3 text-xs text-[var(--esl-text-primary)]">{chat.sellerName}</td>
                       <td className="px-4 py-3">
-                        <div className="text-xs text-gray-700 truncate max-w-[200px]">{chat.lastMessage}</div>
+                        <div className="text-xs text-[var(--esl-text-primary)] truncate max-w-[200px]">{chat.lastMessage}</div>
                         {chat.flags.length > 0 && (
                           <div className="flex gap-1 mt-1">
                             {chat.flags.map((f) => (
@@ -175,12 +175,12 @@ export default function ChatMonitorPage() {
                 })}
               </tbody>
             </table>
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 text-xs text-gray-500">
+            <div className="flex items-center justify-between px-4 py-3 border-t border-[var(--esl-border)] text-xs text-[var(--esl-text-secondary)]">
               <span>10 чат</span>
               <div className="flex gap-1">
                 {[1, 2, 3].map((p) => (
                   <button key={p} className={cn('w-7 h-7 rounded border flex items-center justify-center cursor-pointer text-xs font-medium',
-                    p === 1 ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'border-gray-200 bg-white hover:bg-gray-50')}>{p}</button>
+                    p === 1 ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'border-[var(--esl-border)] bg-white hover:bg-[var(--esl-bg-section)]')}>{p}</button>
                 ))}
               </div>
             </div>
@@ -192,18 +192,18 @@ export default function ChatMonitorPage() {
           {selected ? (
             <>
               {/* Chat detail */}
-              <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+              <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-gray-900">Чат дэлгэрэнгүй</h3>
-                  <button onClick={() => setSelected(null)} className="text-xs text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer">—</button>
+                  <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Чат дэлгэрэнгүй</h3>
+                  <button onClick={() => setSelected(null)} className="text-xs text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] bg-transparent border-none cursor-pointer">—</button>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-bold text-indigo-600">
                     {selected.customerName.charAt(0)}
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-gray-900">{selected.customerName}</div>
-                    <div className="text-[10px] text-gray-400">{selected.id}</div>
+                    <div className="text-sm font-bold text-[var(--esl-text-primary)]">{selected.customerName}</div>
+                    <div className="text-[10px] text-[var(--esl-text-muted)]">{selected.id}</div>
                   </div>
                 </div>
 
@@ -215,14 +215,14 @@ export default function ChatMonitorPage() {
                     { label: 'Сүүлийн идэвх', value: 'Өнөөдөр' },
                   ].map((r) => (
                     <div key={r.label} className="flex justify-between">
-                      <span className="text-gray-400">{r.label}</span>
-                      <span className="text-gray-700 font-medium">{r.value}</span>
+                      <span className="text-[var(--esl-text-muted)]">{r.label}</span>
+                      <span className="text-[var(--esl-text-primary)] font-medium">{r.value}</span>
                     </div>
                   ))}
                 </div>
 
                 <div className="flex gap-2 pt-2">
-                  <button className="flex-1 py-2 rounded-lg text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer border-none transition">
+                  <button className="flex-1 py-2 rounded-lg text-xs font-semibold bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] hover:bg-[var(--esl-bg-card-hover)] cursor-pointer border-none transition">
                     Дэлгэрэнгүй харах
                   </button>
                   <button className="flex-1 py-2 rounded-lg text-xs font-semibold bg-red-50 text-red-600 hover:bg-red-100 cursor-pointer border-none transition">
@@ -235,8 +235,8 @@ export default function ChatMonitorPage() {
               </div>
 
               {/* Spam auto filter */}
-              <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
-                <h4 className="text-xs font-bold text-gray-700">Spam автомат шүүлт</h4>
+              <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
+                <h4 className="text-xs font-bold text-[var(--esl-text-primary)]">Spam автомат шүүлт</h4>
                 {[
                   { label: 'Spam автомат блок', state: spamAutoBlock, setter: setSpamAutoBlock },
                   { label: 'Утасны дугаар шүүлт', state: phoneFilter, setter: setPhoneFilter },
@@ -244,28 +244,28 @@ export default function ChatMonitorPage() {
                   { label: 'Хэт давтамжтай мессеж', state: repeatFilter, setter: setRepeatFilter },
                 ].map((t) => (
                   <div key={t.label} className="flex items-center justify-between">
-                    <span className="text-xs text-gray-600">{t.label}</span>
+                    <span className="text-xs text-[var(--esl-text-secondary)]">{t.label}</span>
                     <button onClick={() => t.setter(!t.state)} className="bg-transparent border-none cursor-pointer p-0">
-                      {t.state ? <ToggleRight className="w-6 h-6 text-indigo-600" /> : <ToggleLeft className="w-6 h-6 text-gray-300" />}
+                      {t.state ? <ToggleRight className="w-6 h-6 text-indigo-600" /> : <ToggleLeft className="w-6 h-6 text-[var(--esl-text-muted)]" />}
                     </button>
                   </div>
                 ))}
-                <button className="w-full py-2 rounded-lg text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer border-none transition flex items-center justify-center gap-1">
+                <button className="w-full py-2 rounded-lg text-xs font-semibold bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] hover:bg-[var(--esl-bg-card-hover)] cursor-pointer border-none transition flex items-center justify-center gap-1">
                   Дүрэм тохируулах <ExternalLink className="w-3 h-3" />
                 </button>
               </div>
             </>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
-              <MessageCircle className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <p className="text-sm font-semibold text-gray-400">Хэрэглэгч сонгоно уу</p>
-              <p className="text-xs text-gray-300 mt-1">Чат сонгоход мессеж харагдана</p>
+            <div className="bg-white border border-[var(--esl-border)] rounded-xl p-8 text-center">
+              <MessageCircle className="w-10 h-10 text-[var(--esl-text-muted)] mx-auto mb-3" />
+              <p className="text-sm font-semibold text-[var(--esl-text-muted)]">Хэрэглэгч сонгоно уу</p>
+              <p className="text-xs text-[var(--esl-text-muted)] mt-1">Чат сонгоход мессеж харагдана</p>
             </div>
           )}
 
           {/* Quick filters */}
-          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
-            <h4 className="text-xs font-bold text-gray-700">Хурдан шүүлтүүр</h4>
+          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-2">
+            <h4 className="text-xs font-bold text-[var(--esl-text-primary)]">Хурдан шүүлтүүр</h4>
             {[
               { label: `Spam илэрсэн чатууд (${spamCount})`, dot: 'bg-red-500', filter: 'spam' },
               { label: `Шалгах хүлээгдэж буй (${pendingCount})`, dot: 'bg-amber-500', filter: 'pending' },
@@ -273,9 +273,9 @@ export default function ChatMonitorPage() {
               { label: `Блоклогдсон (${blockedCount})`, dot: 'bg-gray-400', filter: 'blocked' },
             ].map((f) => (
               <button key={f.filter} onClick={() => setRiskFilter(f.filter)}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-left cursor-pointer bg-transparent border-none transition">
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[var(--esl-bg-section)] text-left cursor-pointer bg-transparent border-none transition">
                 <span className={cn('w-2 h-2 rounded-full', f.dot)} />
-                <span className="text-xs font-medium text-gray-600">{f.label}</span>
+                <span className="text-xs font-medium text-[var(--esl-text-secondary)]">{f.label}</span>
               </button>
             ))}
           </div>

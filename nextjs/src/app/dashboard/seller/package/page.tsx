@@ -17,8 +17,8 @@ function UsageBar({ label, percent, color }: { label: string; percent: number; c
   return (
     <div>
       <div className="flex justify-between text-xs mb-1">
-        <span className="text-gray-600">{label}</span>
-        <span className="font-semibold text-gray-800">{percent === 0 ? 'Хязгааргүй' : `${percent}%`}</span>
+        <span className="text-[var(--esl-text-secondary)]">{label}</span>
+        <span className="font-semibold text-[var(--esl-text-primary)]">{percent === 0 ? 'Хязгааргүй' : `${percent}%`}</span>
       </div>
       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
         <div
@@ -43,7 +43,7 @@ export default function PackagePage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -72,18 +72,18 @@ export default function PackagePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center gap-3 mb-1">
           <span className="text-2xl">📦</span>
-          <h1 className="text-2xl font-bold text-gray-900">Үнийн багц</h1>
+          <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Үнийн багц</h1>
         </div>
-        <p className="text-gray-500 text-sm">Дэлгүүрийнхээ боломжийг нэмэгдүүлж, борлуулалтаа өсгөөрэй</p>
+        <p className="text-[var(--esl-text-secondary)] text-sm">Дэлгүүрийнхээ боломжийг нэмэгдүүлж, борлуулалтаа өсгөөрэй</p>
       </div>
 
       {/* Current Plan Info */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4 mb-5">
           <div className="flex items-center gap-3">
             <div
@@ -93,8 +93,8 @@ export default function PackagePage() {
               {plan.nameEn[0]}
             </div>
             <div>
-              <h2 className="font-bold text-gray-900">{plan.name} багц</h2>
-              <p className="text-sm text-gray-500">{plan.description}</p>
+              <h2 className="font-bold text-[var(--esl-text-primary)]">{plan.name} багц</h2>
+              <p className="text-sm text-[var(--esl-text-secondary)]">{plan.description}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -118,11 +118,11 @@ export default function PackagePage() {
 
       {/* Monthly / Yearly Toggle */}
       <div className="flex justify-center mb-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-1 flex">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-1 flex">
           <button
             onClick={() => setYearly(false)}
             className={`px-5 py-2 rounded-lg text-sm font-semibold transition-colors ${
-              !yearly ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'
+              !yearly ? 'bg-indigo-600 text-white' : 'text-[var(--esl-text-secondary)] hover:text-[var(--esl-text-primary)]'
             }`}
           >
             Сарын
@@ -130,7 +130,7 @@ export default function PackagePage() {
           <button
             onClick={() => setYearly(true)}
             className={`px-5 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${
-              yearly ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:text-gray-900'
+              yearly ? 'bg-indigo-600 text-white' : 'text-[var(--esl-text-secondary)] hover:text-[var(--esl-text-primary)]'
             }`}
           >
             Жилийн
@@ -160,7 +160,7 @@ export default function PackagePage() {
                   ? 'bg-white border-2 border-indigo-400 shadow-md shadow-indigo-50'
                   : p.id === 'ultimate'
                   ? 'bg-white border-2 border-amber-400 shadow-md shadow-amber-50'
-                  : 'bg-white border-2 border-gray-200'
+                  : 'bg-white border-2 border-[var(--esl-border)]'
               }`}
             >
               {/* Badge */}
@@ -187,15 +187,15 @@ export default function PackagePage() {
                   >
                     {p.id === 'free' ? '🆓' : p.id === 'standard' ? '⭐' : p.id === 'ultimate' ? '💎' : '🤖'}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900">{p.name}</h3>
-                  <p className="text-xs text-gray-500 mt-1">{p.description}</p>
+                  <h3 className="text-lg font-bold text-[var(--esl-text-primary)]">{p.name}</h3>
+                  <p className="text-xs text-[var(--esl-text-secondary)] mt-1">{p.description}</p>
                   <div className="mt-3">
                     {price === 0 ? (
-                      <span className="text-3xl font-black text-gray-900">Үнэгүй</span>
+                      <span className="text-3xl font-black text-[var(--esl-text-primary)]">Үнэгүй</span>
                     ) : (
                       <div>
-                        <span className="text-3xl font-black text-gray-900">{formatPrice(price)}</span>
-                        <span className="text-gray-500 text-sm">{yearly ? '/жил' : '/сар'}</span>
+                        <span className="text-3xl font-black text-[var(--esl-text-primary)]">{formatPrice(price)}</span>
+                        <span className="text-[var(--esl-text-secondary)] text-sm">{yearly ? '/жил' : '/сар'}</span>
                       </div>
                     )}
                   </div>
@@ -204,7 +204,7 @@ export default function PackagePage() {
                 {/* Features */}
                 <ul className="space-y-2.5 mb-6">
                   {p.features.map((f, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--esl-text-primary)]">
                       <span className="text-green-500 mt-0.5 flex-shrink-0">&#10003;</span>
                       <span>{f}</span>
                     </li>
@@ -217,7 +217,7 @@ export default function PackagePage() {
                   disabled={isCurrent}
                   className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${
                     isCurrent
-                      ? 'bg-gray-100 text-gray-400 cursor-default'
+                      ? 'bg-[var(--esl-bg-section)] text-[var(--esl-text-muted)] cursor-default'
                       : isAIPro
                       ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white hover:from-pink-600 hover:to-purple-700 shadow-md'
                       : p.id === 'standard'
@@ -236,15 +236,15 @@ export default function PackagePage() {
       </div>
 
       {/* Comparison Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden max-w-7xl mx-auto">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900">Багцуудын харьцуулалт</h2>
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden max-w-7xl mx-auto">
+        <div className="p-6 border-b border-[var(--esl-border)]">
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">Багцуудын харьцуулалт</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left p-4 font-semibold text-gray-600">Боломж</th>
+              <tr className="border-b border-[var(--esl-border)]">
+                <th className="text-left p-4 font-semibold text-[var(--esl-text-secondary)]">Боломж</th>
                 {PLANS.map((p) => (
                   <th key={p.id} className="p-4 text-center font-semibold" style={{ color: p.color }}>
                     {p.name}
@@ -264,12 +264,12 @@ export default function PackagePage() {
                 { label: 'Блог нийтлэл', key: 'blogPosts' as const },
                 { label: 'Промо код', key: 'promoCodesLimit' as const },
               ].map((row, i) => (
-                <tr key={row.key} className={i % 2 === 0 ? 'bg-gray-50' : ''}>
-                  <td className="p-4 text-gray-700 font-medium">{row.label}</td>
+                <tr key={row.key} className={i % 2 === 0 ? 'bg-[var(--esl-bg-section)]' : ''}>
+                  <td className="p-4 text-[var(--esl-text-primary)] font-medium">{row.label}</td>
                   {PLANS.map((p) => {
                     const val = p.limits[row.key];
                     return (
-                      <td key={p.id} className="p-4 text-center text-gray-800">
+                      <td key={p.id} className="p-4 text-center text-[var(--esl-text-primary)]">
                         {val === -1 ? (
                           <span className="text-green-600 font-semibold">Хязгааргүй</span>
                         ) : (
@@ -291,14 +291,14 @@ export default function PackagePage() {
                 { label: 'Дата экспорт', key: 'exportData' as const },
                 { label: 'SEO хэрэгсэл', key: 'seoTools' as const },
               ].map((row, i) => (
-                <tr key={row.key} className={i % 2 === 0 ? '' : 'bg-gray-50'}>
-                  <td className="p-4 text-gray-700 font-medium">{row.label}</td>
+                <tr key={row.key} className={i % 2 === 0 ? '' : 'bg-[var(--esl-bg-section)]'}>
+                  <td className="p-4 text-[var(--esl-text-primary)] font-medium">{row.label}</td>
                   {PLANS.map((p) => (
                     <td key={p.id} className="p-4 text-center">
                       {p.limits[row.key] ? (
                         <span className="text-green-500 text-lg">&#10003;</span>
                       ) : (
-                        <span className="text-gray-300 text-lg">&#10007;</span>
+                        <span className="text-[var(--esl-text-muted)] text-lg">&#10007;</span>
                       )}
                     </td>
                   ))}
@@ -310,8 +310,8 @@ export default function PackagePage() {
       </div>
 
       {/* FAQ */}
-      <div className="max-w-3xl mx-auto mt-10 bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Түгээмэл асуултууд</h2>
+      <div className="max-w-3xl mx-auto mt-10 bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Түгээмэл асуултууд</h2>
         <div className="space-y-4">
           {[
             ['Багц хэзээ идэвхждэг вэ?', 'Төлбөр баталгаажмагц шууд идэвхжинэ.'],
@@ -319,9 +319,9 @@ export default function PackagePage() {
             ['Багцаа хэзээ ч өөрчилж болох уу?', 'Тийм, хүссэн үедээ дээшлүүлэх эсвэл бууруулах боломжтой.'],
             ['AI кредит дуусвал яах вэ?', 'Дараа сард автоматаар шинэчлэгдэнэ, эсвэл дээд багц руу шилжиж болно.'],
           ].map(([q, a], i) => (
-            <div key={i} className="border-b border-gray-100 pb-3 last:border-0">
-              <p className="text-sm font-semibold text-gray-800">{q}</p>
-              <p className="text-sm text-gray-500 mt-1">{a}</p>
+            <div key={i} className="border-b border-[var(--esl-border)] pb-3 last:border-0">
+              <p className="text-sm font-semibold text-[var(--esl-text-primary)]">{q}</p>
+              <p className="text-sm text-[var(--esl-text-secondary)] mt-1">{a}</p>
             </div>
           ))}
         </div>

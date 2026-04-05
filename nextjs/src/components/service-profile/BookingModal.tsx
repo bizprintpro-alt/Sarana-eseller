@@ -150,13 +150,13 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--esl-border)] shrink-0">
           <div>
-            <h3 className="text-base font-bold text-gray-900">Цаг захиалах</h3>
-            <p className="text-xs text-gray-500">{service.name} — {durationText}</p>
+            <h3 className="text-base font-bold text-[var(--esl-text-primary)]">Цаг захиалах</h3>
+            <p className="text-xs text-[var(--esl-text-secondary)]">{service.name} — {durationText}</p>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center cursor-pointer border-none bg-transparent transition">
-            <X className="w-4 h-4 text-gray-400" />
+          <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-[var(--esl-bg-section)] flex items-center justify-center cursor-pointer border-none bg-transparent transition">
+            <X className="w-4 h-4 text-[var(--esl-text-muted)]" />
           </button>
         </div>
 
@@ -177,19 +177,19 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
           {step === 'date' && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <button onClick={prevMonth} className="w-8 h-8 rounded-lg border border-gray-200 bg-white flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <ChevronLeft className="w-4 h-4 text-gray-600" />
+                <button onClick={prevMonth} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-white flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
+                  <ChevronLeft className="w-4 h-4 text-[var(--esl-text-secondary)]" />
                 </button>
-                <span className="text-sm font-bold text-gray-900">{MONTH_NAMES[calMonth]} {calYear}</span>
-                <button onClick={nextMonth} className="w-8 h-8 rounded-lg border border-gray-200 bg-white flex items-center justify-center cursor-pointer hover:bg-gray-50 transition">
-                  <ChevronRight className="w-4 h-4 text-gray-600" />
+                <span className="text-sm font-bold text-[var(--esl-text-primary)]">{MONTH_NAMES[calMonth]} {calYear}</span>
+                <button onClick={nextMonth} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-white flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
+                  <ChevronRight className="w-4 h-4 text-[var(--esl-text-secondary)]" />
                 </button>
               </div>
 
               {/* Day headers */}
               <div className="grid grid-cols-7 gap-1 mb-1">
                 {DAY_NAMES.map((d) => (
-                  <div key={d} className="text-center text-[10px] font-semibold text-gray-400 py-1">{d}</div>
+                  <div key={d} className="text-center text-[10px] font-semibold text-[var(--esl-text-muted)] py-1">{d}</div>
                 ))}
               </div>
 
@@ -208,8 +208,8 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
                       disabled={disabled}
                       className={cn(
                         'h-10 rounded-lg text-sm font-medium transition border-none cursor-pointer',
-                        disabled && 'text-gray-300 cursor-not-allowed bg-transparent',
-                        !disabled && !isSelected && 'hover:bg-indigo-50 text-gray-700 bg-transparent',
+                        disabled && 'text-[var(--esl-text-muted)] cursor-not-allowed bg-transparent',
+                        !disabled && !isSelected && 'hover:bg-indigo-50 text-[var(--esl-text-primary)] bg-transparent',
                         isSelected && 'bg-indigo-600 text-white shadow-sm',
                         isToday && !isSelected && !disabled && 'ring-1 ring-indigo-300',
                       )}
@@ -221,7 +221,7 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
               </div>
 
               {/* Closed days legend */}
-              <div className="mt-3 flex items-center gap-3 text-[10px] text-gray-400">
+              <div className="mt-3 flex items-center gap-3 text-[10px] text-[var(--esl-text-muted)]">
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-gray-200" /> Амралтын өдөр</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-600" /> Сонгосон</span>
               </div>
@@ -234,13 +234,13 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
               <button onClick={() => setStep('date')} className="flex items-center gap-1 text-xs text-indigo-600 font-semibold mb-3 bg-transparent border-none cursor-pointer">
                 <ChevronLeft className="w-3 h-3" /> Өдөр солих
               </button>
-              <p className="text-sm text-gray-500 mb-3">
+              <p className="text-sm text-[var(--esl-text-secondary)] mb-3">
                 <Calendar className="w-3.5 h-3.5 inline mr-1" />
                 {selectedDate?.toLocaleDateString('mn-MN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}
               </p>
 
               {timeSlots.length === 0 ? (
-                <div className="text-center py-10 text-sm text-gray-400">Энэ өдөр цаг байхгүй байна</div>
+                <div className="text-center py-10 text-sm text-[var(--esl-text-muted)]">Энэ өдөр цаг байхгүй байна</div>
               ) : (
                 <div className="grid grid-cols-3 gap-2">
                   {timeSlots.map((t) => (
@@ -251,7 +251,7 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
                         'py-2.5 rounded-lg text-sm font-semibold border transition cursor-pointer',
                         selectedTime === t
                           ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                          : 'bg-white text-gray-700 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
+                          : 'bg-white text-[var(--esl-text-primary)] border-[var(--esl-border)] hover:border-indigo-300 hover:bg-indigo-50'
                       )}
                     >
                       {t}
@@ -272,43 +272,43 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
               {/* Summary */}
               <div className="bg-indigo-50 rounded-xl p-3 space-y-1 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Үйлчилгээ</span>
-                  <span className="font-semibold text-gray-900">{service.name}</span>
+                  <span className="text-[var(--esl-text-secondary)]">Үйлчилгээ</span>
+                  <span className="font-semibold text-[var(--esl-text-primary)]">{service.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Огноо</span>
-                  <span className="font-semibold text-gray-900">{selectedDate?.toLocaleDateString('mn-MN', { month: 'short', day: 'numeric' })}</span>
+                  <span className="text-[var(--esl-text-secondary)]">Огноо</span>
+                  <span className="font-semibold text-[var(--esl-text-primary)]">{selectedDate?.toLocaleDateString('mn-MN', { month: 'short', day: 'numeric' })}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Цаг</span>
-                  <span className="font-semibold text-gray-900">{selectedTime}</span>
+                  <span className="text-[var(--esl-text-secondary)]">Цаг</span>
+                  <span className="font-semibold text-[var(--esl-text-primary)]">{selectedTime}</span>
                 </div>
                 <div className="flex justify-between border-t border-indigo-100 pt-1 mt-1">
-                  <span className="text-gray-600">Үнэ</span>
+                  <span className="text-[var(--esl-text-secondary)]">Үнэ</span>
                   <span className="font-bold text-indigo-600">{(service.salePrice || service.price).toLocaleString()}₮</span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">
                   <User className="w-3 h-3 inline mr-1" />Нэр *
                 </label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Таны нэр"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
+                  className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">
                   <Phone className="w-3 h-3 inline mr-1" />Утас *
                 </label>
                 <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="9911-2233"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
+                  className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-gray-600 mb-1.5">
+                <label className="block text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5">
                   <MessageSquare className="w-3 h-3 inline mr-1" />Тэмдэглэл
                 </label>
                 <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} placeholder="Нэмэлт мэдээлэл (заавал биш)"
-                  className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none" />
+                  className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none" />
               </div>
 
               {error && (
@@ -323,40 +323,40 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
               <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                 <Check className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-1">Захиалга амжилттай!</h3>
-              <p className="text-sm text-gray-500 mb-4">
+              <h3 className="text-xl font-bold text-[var(--esl-text-primary)] mb-1">Захиалга амжилттай!</h3>
+              <p className="text-sm text-[var(--esl-text-secondary)] mb-4">
                 {selectedDate?.toLocaleDateString('mn-MN', { month: 'long', day: 'numeric' })}, {selectedTime} цагт {service.name}
               </p>
-              <p className="text-xs text-gray-400">{shopName} таньд баярлалаа. Бид тантай холбоо барих болно.</p>
+              <p className="text-xs text-[var(--esl-text-muted)]">{shopName} таньд баярлалаа. Бид тантай холбоо барих болно.</p>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-gray-100 shrink-0">
+        <div className="px-5 py-4 border-t border-[var(--esl-border)] shrink-0">
           {step === 'date' && (
             <button onClick={() => selectedDate && setStep('time')} disabled={!selectedDate}
               className={cn('w-full py-3 rounded-xl text-sm font-semibold border-none cursor-pointer transition',
-                selectedDate ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-200 text-gray-400 cursor-not-allowed')}>
+                selectedDate ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-200 text-[var(--esl-text-muted)] cursor-not-allowed')}>
               Цаг сонгох →
             </button>
           )}
           {step === 'time' && (
             <button onClick={() => selectedTime && setStep('info')} disabled={!selectedTime}
               className={cn('w-full py-3 rounded-xl text-sm font-semibold border-none cursor-pointer transition',
-                selectedTime ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-200 text-gray-400 cursor-not-allowed')}>
+                selectedTime ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-200 text-[var(--esl-text-muted)] cursor-not-allowed')}>
               Мэдээлэл бөглөх →
             </button>
           )}
           {step === 'info' && (
             <button onClick={handleSubmit} disabled={submitting || !name.trim() || !phone.trim()}
               className={cn('w-full py-3 rounded-xl text-sm font-semibold border-none cursor-pointer transition flex items-center justify-center gap-2',
-                submitting ? 'bg-gray-200 text-gray-400' : 'bg-indigo-600 text-white hover:bg-indigo-700')}>
+                submitting ? 'bg-gray-200 text-[var(--esl-text-muted)]' : 'bg-indigo-600 text-white hover:bg-indigo-700')}>
               {submitting ? <><Loader2 className="w-4 h-4 animate-spin" /> Илгээж байна...</> : 'Захиалга баталгаажуулах'}
             </button>
           )}
           {step === 'done' && (
-            <button onClick={onClose} className="w-full py-3 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 border-none cursor-pointer transition">
+            <button onClick={onClose} className="w-full py-3 rounded-xl text-sm font-semibold bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] hover:bg-[var(--esl-bg-card-hover)] border-none cursor-pointer transition">
               Хаах
             </button>
           )}

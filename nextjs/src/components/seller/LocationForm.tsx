@@ -69,7 +69,7 @@ const HOUR_TEMPLATES: Record<string, typeof DEFAULT_HOURS> = {
 
 // ─── Styles ─────────────────────────────────────────────────
 const card: React.CSSProperties = {
-  backgroundColor: '#1A1A1A', borderRadius: '12px', padding: '20px',
+  backgroundColor: 'var(--esl-bg-card)', borderRadius: '12px', padding: '20px',
   border: '1px solid #2A2A2A', marginBottom: '16px',
 };
 const label: React.CSSProperties = {
@@ -78,7 +78,7 @@ const label: React.CSSProperties = {
 };
 const input: React.CSSProperties = {
   width: '100%', height: '44px', padding: '0 14px',
-  backgroundColor: '#2A2A2A', border: '1px solid #3D3D3D',
+  backgroundColor: 'var(--esl-bg-elevated)', border: '1px solid #3D3D3D',
   borderRadius: '10px', color: '#FFF', fontSize: '14px', boxSizing: 'border-box',
 };
 const select: React.CSSProperties = { ...input, appearance: 'none' as const };
@@ -209,11 +209,11 @@ export default function LocationForm({ initialData, isEdit }: Props) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0A0A0A', color: '#FFF', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--esl-bg-page)', color: '#FFF', padding: '24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
         <Link href="/dashboard/seller/locations"
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#1A1A1A', border: '1px solid #3D3D3D', color: '#FFF', textDecoration: 'none' }}>
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--esl-bg-card)', border: '1px solid #3D3D3D', color: '#FFF', textDecoration: 'none' }}>
           <ArrowLeft size={18} />
         </Link>
         <div>
@@ -306,7 +306,7 @@ export default function LocationForm({ initialData, isEdit }: Props) {
             <div style={{ display: 'flex', gap: '6px' }}>
               {[{ key: 'weekdays', label: 'Ажлын өдөр' }, { key: 'daily', label: 'Өдөр бүр' }].map((t) => (
                 <button key={t.key} type="button" onClick={() => applyTemplate(t.key)}
-                  style={{ padding: '4px 10px', borderRadius: '6px', border: '1px solid #3D3D3D', backgroundColor: '#2A2A2A', color: '#A0A0A0', fontSize: '11px', cursor: 'pointer' }}>
+                  style={{ padding: '4px 10px', borderRadius: '6px', border: '1px solid #3D3D3D', backgroundColor: 'var(--esl-bg-elevated)', color: '#A0A0A0', fontSize: '11px', cursor: 'pointer' }}>
                   {t.label}
                 </button>
               ))}
@@ -388,7 +388,7 @@ export default function LocationForm({ initialData, isEdit }: Props) {
                 { key: 'whatsapp', placeholder: '+976 9900 0000', icon: 'wa' },
               ].map((s) => (
                 <div key={s.key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: '#2A2A2A', border: '1px solid #3D3D3D', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#777' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--esl-bg-elevated)', border: '1px solid #3D3D3D', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '700', color: '#777' }}>
                     {s.icon}
                   </div>
                   <input style={{ ...input, flex: 1, height: '36px' }}
@@ -414,7 +414,7 @@ export default function LocationForm({ initialData, isEdit }: Props) {
               const active = form.features.includes(f.key);
               return (
                 <button key={f.key} type="button" onClick={() => toggleFeature(f.key)}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', padding: '12px 8px', borderRadius: '10px', border: `1px solid ${active ? '#E8242C' : '#3D3D3D'}`, backgroundColor: active ? 'rgba(232,36,44,0.08)' : '#2A2A2A', color: active ? '#E8242C' : '#A0A0A0', cursor: 'pointer', fontSize: '11px', transition: 'all 0.2s' }}>
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', padding: '12px 8px', borderRadius: '10px', border: `1px solid ${active ? '#E8242C' : '#3D3D3D'}`, backgroundColor: active ? 'rgba(232,36,44,0.08)' : 'var(--esl-bg-elevated)', color: active ? '#E8242C' : 'var(--esl-text-muted)', cursor: 'pointer', fontSize: '11px', transition: 'all 0.2s' }}>
                   <span style={{ fontSize: '18px' }}>{f.icon}</span>
                   <span style={{ textAlign: 'center', lineHeight: '1.3' }}>{f.label}</span>
                 </button>

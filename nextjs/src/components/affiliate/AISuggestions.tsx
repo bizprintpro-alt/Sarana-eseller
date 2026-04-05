@@ -50,7 +50,7 @@ const TYPE_ICONS = {
 
 export default function AISuggestions() {
   return (
-    <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+    <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
       <div className="px-6 py-4 border-b border-[#F1F5F9] flex items-center justify-between">
         <h3 className="font-bold text-[#0F172A] text-sm flex items-center gap-2">
           <Bot className="w-4 h-4 text-[#6366F1]" />
@@ -67,7 +67,7 @@ export default function AISuggestions() {
           const Icon = TYPE_ICONS[s.type];
 
           return (
-            <div key={i} className="px-6 py-4 hover:bg-[#F8FAFC] transition-colors">
+            <div key={i} className="px-6 py-4 hover:bg-[var(--esl-bg-section)] transition-colors">
               <div className="flex items-start gap-3">
                 <div className={`w-9 h-9 rounded-xl ${style.bg} ${style.border} border flex items-center justify-center shrink-0 mt-0.5`}>
                   <Icon className="w-4 h-4" style={{ color: style.dot.replace('bg-', '') }} />
@@ -77,7 +77,7 @@ export default function AISuggestions() {
                     <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
                     <h4 className="text-sm font-bold text-[#0F172A]">{s.title}</h4>
                   </div>
-                  <p className="text-xs text-[#475569] leading-relaxed mb-2">{s.desc}</p>
+                  <p className="text-xs text-[var(--esl-text-secondary)] leading-relaxed mb-2">{s.desc}</p>
                   <div className="flex items-center gap-3">
                     {s.action && (
                       <button className="text-xs font-bold text-[#6366F1] bg-[#EEF2FF] px-3 py-1.5 rounded-lg hover:bg-[#6366F1] hover:text-white transition-all border-none cursor-pointer flex items-center gap-1">
@@ -85,7 +85,7 @@ export default function AISuggestions() {
                       </button>
                     )}
                     {s.time && (
-                      <span className="text-[10px] text-[#94A3B8] flex items-center gap-1">
+                      <span className="text-[10px] text-[var(--esl-text-muted)] flex items-center gap-1">
                         <Clock className="w-3 h-3" /> {s.time}
                       </span>
                     )}

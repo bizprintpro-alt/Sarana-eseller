@@ -47,7 +47,7 @@ export default function AppointmentsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-[#0F172A]">Цаг захиалга</h1>
-          <p className="text-sm text-[#94A3B8]">Бүх цаг захиалгыг удирдах</p>
+          <p className="text-sm text-[var(--esl-text-muted)]">Бүх цаг захиалгыг удирдах</p>
         </div>
       </div>
 
@@ -58,12 +58,12 @@ export default function AppointmentsPage() {
           { label: 'Баталгаажуулах', value: pendingCount, icon: Clock, color: '#F59E0B' },
           { label: 'Долоо хоногийн орлого', value: formatPrice(weekRevenue), icon: Check, color: '#10B981' },
         ].map((s) => (
-          <div key={s.label} className="bg-white border border-[#E2E8F0] rounded-xl p-4 flex items-center gap-3">
+          <div key={s.label} className="bg-white border border-[var(--esl-border)] rounded-xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: s.color + '12', color: s.color }}>
               <s.icon className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs text-[#94A3B8] font-medium">{s.label}</div>
+              <div className="text-xs text-[var(--esl-text-muted)] font-medium">{s.label}</div>
               <div className="text-lg font-black text-[#0F172A]">{s.value}</div>
             </div>
           </div>
@@ -73,13 +73,13 @@ export default function AppointmentsPage() {
       {/* Filters */}
       <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Хэрэглэгч, үйлчилгээ хайх..."
-            className="w-full bg-white border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#6366F1] transition"
+            className="w-full bg-white border border-[var(--esl-border)] rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#6366F1] transition"
           />
         </div>
         <div className="flex gap-1.5">
@@ -88,7 +88,7 @@ export default function AppointmentsPage() {
               key={s}
               onClick={() => setFilterStatus(s)}
               className={cn('px-3 py-2 rounded-lg text-xs font-semibold border-none cursor-pointer transition whitespace-nowrap',
-                filterStatus === s ? 'bg-[#6366F1] text-white' : 'bg-white text-[#475569] border border-[#E2E8F0] hover:bg-[#F8FAFC]')}
+                filterStatus === s ? 'bg-[#6366F1] text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}
             >
               {s === 'all' ? 'Бүгд' : STATUS_CONFIG[s as AppointmentStatus]?.label.split(' ')[0]}
             </button>
@@ -97,11 +97,11 @@ export default function AppointmentsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-[10px] text-[#94A3B8] uppercase tracking-wider border-b border-[#F1F5F9]">
+              <tr className="text-[10px] text-[var(--esl-text-muted)] uppercase tracking-wider border-b border-[#F1F5F9]">
                 <th className="px-5 py-3 text-left font-semibold">Огноо / Цаг</th>
                 <th className="px-4 py-3 text-left font-semibold">Хэрэглэгч</th>
                 <th className="px-4 py-3 text-left font-semibold">Үйлчилгээ</th>
@@ -115,17 +115,17 @@ export default function AppointmentsPage() {
               {filtered.map((a) => {
                 const st = STATUS_CONFIG[a.status];
                 return (
-                  <tr key={a._id} className="hover:bg-[#F8FAFC] transition-colors">
+                  <tr key={a._id} className="hover:bg-[var(--esl-bg-section)] transition-colors">
                     <td className="px-5 py-3">
                       <div className="text-sm font-semibold text-[#0F172A]">{fmtDate(a.date)}</div>
-                      <div className="text-xs text-[#94A3B8] flex items-center gap-1"><Clock className="w-3 h-3" /> {a.startTime} – {a.endTime}</div>
+                      <div className="text-xs text-[var(--esl-text-muted)] flex items-center gap-1"><Clock className="w-3 h-3" /> {a.startTime} – {a.endTime}</div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="text-sm font-semibold text-[#0F172A]">{a.customerName}</div>
-                      {a.customerPhone && <div className="text-xs text-[#94A3B8] flex items-center gap-1"><Phone className="w-3 h-3" /> {a.customerPhone}</div>}
+                      {a.customerPhone && <div className="text-xs text-[var(--esl-text-muted)] flex items-center gap-1"><Phone className="w-3 h-3" /> {a.customerPhone}</div>}
                     </td>
-                    <td className="px-4 py-3 text-sm font-medium text-[#475569]">{a.serviceName}</td>
-                    <td className="px-4 py-3 text-sm text-[#475569]">{a.staffName || '—'}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-[var(--esl-text-secondary)]">{a.serviceName}</td>
+                    <td className="px-4 py-3 text-sm text-[var(--esl-text-secondary)]">{a.staffName || '—'}</td>
                     <td className="px-4 py-3">
                       <span className={cn('text-xs font-semibold px-2.5 py-1 rounded-full', st.bg, st.text)}>{st.label}</span>
                     </td>
@@ -164,7 +164,7 @@ export default function AppointmentsPage() {
         {filtered.length === 0 && (
           <div className="text-center py-16">
             <div className="text-5xl mb-3 opacity-30">📅</div>
-            <p className="text-sm font-semibold text-[#94A3B8]">Цаг захиалга олдсонгүй</p>
+            <p className="text-sm font-semibold text-[var(--esl-text-muted)]">Цаг захиалга олдсонгүй</p>
           </div>
         )}
       </div>

@@ -27,7 +27,7 @@ export default function EditLocationPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0A0A0A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--esl-bg-page)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p style={{ color: '#777' }}>Ачааллаж байна...</p>
       </div>
     );
@@ -35,7 +35,7 @@ export default function EditLocationPage() {
 
   if (error || !data) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0A0A0A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--esl-bg-page)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <p style={{ color: '#EF4444' }}>{error || 'Байршил олдсонгүй'}</p>
       </div>
     );

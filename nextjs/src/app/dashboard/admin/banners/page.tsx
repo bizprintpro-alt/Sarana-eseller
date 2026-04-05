@@ -78,7 +78,7 @@ const STATUS_COLORS: Record<BannerStatus, { bg: string; text: string }> = {
   active: { bg: 'bg-emerald-500/20', text: 'text-emerald-400' },
   scheduled: { bg: 'bg-blue-500/20', text: 'text-blue-400' },
   pending: { bg: 'bg-amber-500/20', text: 'text-amber-400' },
-  expired: { bg: 'bg-gray-500/20', text: 'text-gray-400' },
+  expired: { bg: 'bg-[var(--esl-bg-section)]0/20', text: 'text-[var(--esl-text-muted)]' },
   draft: { bg: 'bg-purple-500/20', text: 'text-purple-400' },
 };
 

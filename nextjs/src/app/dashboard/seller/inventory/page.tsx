@@ -81,7 +81,7 @@ export default function InventoryPage() {
 
   if (!mounted || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -137,49 +137,49 @@ export default function InventoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center gap-3">
           <span className="text-2xl">📦</span>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Нөөцийн удирдлага</h1>
-            <p className="text-gray-500 text-sm">Барааны нөөц, агуулахын байдлыг хянах</p>
+            <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Нөөцийн удирдлага</h1>
+            <p className="text-[var(--esl-text-secondary)] text-sm">Барааны нөөц, агуулахын байдлыг хянах</p>
           </div>
         </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
               <span className="text-lg">📦</span>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Нийт бараа</p>
-              <p className="text-2xl font-bold text-gray-900">{totalProducts}</p>
+              <p className="text-sm text-[var(--esl-text-secondary)]">Нийт бараа</p>
+              <p className="text-2xl font-bold text-[var(--esl-text-primary)]">{totalProducts}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
               <span className="text-lg">⚠️</span>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Нөөц бага</p>
+              <p className="text-sm text-[var(--esl-text-secondary)]">Нөөц бага</p>
               <p className="text-2xl font-bold text-amber-600">{lowStock}</p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
               <span className="text-lg">🚫</span>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Дууссан</p>
+              <p className="text-sm text-[var(--esl-text-secondary)]">Дууссан</p>
               <p className="text-2xl font-bold text-red-600">{outOfStock}</p>
             </div>
           </div>
@@ -187,9 +187,9 @@ export default function InventoryPage() {
       </div>
 
       {/* Filter */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-4 mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500 mr-2">Шүүлтүүр:</span>
+          <span className="text-sm text-[var(--esl-text-secondary)] mr-2">Шүүлтүүр:</span>
           {([
             { id: 'all' as const, label: 'Бүгд', count: totalProducts },
             { id: 'low' as const, label: 'Нөөц бага', count: lowStock },
@@ -201,7 +201,7 @@ export default function InventoryPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 filter === f.id
                   ? 'bg-indigo-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-card-hover)]'
               }`}
             >
               {f.label} ({f.count})
@@ -211,21 +211,21 @@ export default function InventoryPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
             <span className="text-4xl block mb-3">✅</span>
-            <p className="text-gray-500">Энэ шүүлтүүрт тохирох бараа байхгүй</p>
+            <p className="text-[var(--esl-text-secondary)]">Энэ шүүлтүүрт тохирох бараа байхгүй</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="text-left p-4 font-semibold text-gray-600">Бараа</th>
-                  <th className="text-center p-4 font-semibold text-gray-600">Нөөц</th>
-                  <th className="text-center p-4 font-semibold text-gray-600">Доод хязгаар</th>
-                  <th className="text-center p-4 font-semibold text-gray-600">Төлөв</th>
+                <tr className="border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)]">
+                  <th className="text-left p-4 font-semibold text-[var(--esl-text-secondary)]">Бараа</th>
+                  <th className="text-center p-4 font-semibold text-[var(--esl-text-secondary)]">Нөөц</th>
+                  <th className="text-center p-4 font-semibold text-[var(--esl-text-secondary)]">Доод хязгаар</th>
+                  <th className="text-center p-4 font-semibold text-[var(--esl-text-secondary)]">Төлөв</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,15 +234,15 @@ export default function InventoryPage() {
                   const isEditing = editingStock === item.product._id;
 
                   return (
-                    <tr key={item.product._id} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                    <tr key={item.product._id} className="border-b border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] transition">
                       <td className="p-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-lg">
+                          <div className="w-10 h-10 bg-[var(--esl-bg-section)] rounded-lg flex items-center justify-center text-lg">
                             {item.product.emoji || '📦'}
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{item.product.name}</p>
-                            <p className="text-xs text-gray-500">{item.product.category || 'Ангилалгүй'}</p>
+                            <p className="font-medium text-[var(--esl-text-primary)]">{item.product.name}</p>
+                            <p className="text-xs text-[var(--esl-text-secondary)]">{item.product.category || 'Ангилалгүй'}</p>
                           </div>
                         </div>
                       </td>
@@ -253,7 +253,7 @@ export default function InventoryPage() {
                               type="number"
                               value={editValue}
                               onChange={(e) => setEditValue(e.target.value)}
-                              className="w-20 border border-gray-300 rounded-lg px-2 py-1 text-sm text-center focus:ring-2 focus:ring-indigo-500 outline-none"
+                              className="w-20 border border-[var(--esl-border-strong)] rounded-lg px-2 py-1 text-sm text-center focus:ring-2 focus:ring-indigo-500 outline-none"
                               autoFocus
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') handleStockSave(item.product._id);
@@ -268,7 +268,7 @@ export default function InventoryPage() {
                             </button>
                             <button
                               onClick={() => setEditingStock(null)}
-                              className="text-gray-400 hover:bg-gray-100 px-2 py-1 rounded text-xs"
+                              className="text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-section)] px-2 py-1 rounded text-xs"
                             >
                               ✗
                             </button>
@@ -276,7 +276,7 @@ export default function InventoryPage() {
                         ) : (
                           <button
                             onClick={() => handleStockEdit(item.product._id, item.stock)}
-                            className="font-semibold text-gray-900 hover:text-indigo-600 hover:bg-indigo-50 px-3 py-1 rounded-lg transition"
+                            className="font-semibold text-[var(--esl-text-primary)] hover:text-indigo-600 hover:bg-indigo-50 px-3 py-1 rounded-lg transition"
                             title="Дарж засах"
                           >
                             {item.stock}
@@ -288,7 +288,7 @@ export default function InventoryPage() {
                           type="number"
                           value={item.minThreshold}
                           onChange={(e) => handleThresholdChange(item.product._id, parseInt(e.target.value) || 0)}
-                          className="w-16 border border-gray-200 rounded-lg px-2 py-1 text-sm text-center text-gray-700 focus:ring-2 focus:ring-indigo-500 outline-none"
+                          className="w-16 border border-[var(--esl-border)] rounded-lg px-2 py-1 text-sm text-center text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 outline-none"
                           min={0}
                         />
                       </td>

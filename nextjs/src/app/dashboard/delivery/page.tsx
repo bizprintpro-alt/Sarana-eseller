@@ -93,7 +93,7 @@ export default function DeliveryDashboard() {
           ) : (
             <div className="divide-y divide-white/[.04]">
               {filtered.map((o) => {
-                const [cls, label] = STATUS_MAP[o.status] || ['bg-gray-500/15 text-gray-400', o.status];
+                const [cls, label] = STATUS_MAP[o.status] || ['bg-[var(--esl-bg-section)]0/15 text-[var(--esl-text-muted)]', o.status];
                 const address = o.delivery?.address;
                 return (
                   <div key={o._id} className="p-5 hover:bg-white/[.02] transition">

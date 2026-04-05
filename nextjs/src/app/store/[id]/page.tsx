@@ -168,7 +168,7 @@ export default function ProductDetailPage() {
               <div className="flex items-center gap-2">
                 <div className="flex gap-0.5">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className={cn('w-4 h-4', i < Math.round(product.rating!) ? 'text-amber-400 fill-amber-400' : 'text-gray-200')} />
+                    <Star key={i} className={cn('w-4 h-4', i < Math.round(product.rating!) ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />
                   ))}
                 </div>
                 <span className="text-sm" style={{ color: 'var(--esl-text-muted)' }}>{product.rating} ({product.reviewCount || 0} үнэлгээ)</span>
@@ -274,7 +274,7 @@ export default function ProductDetailPage() {
                   {reviews.map((r: any, i: number) => (
                     <div key={i} className="last:border-0 pb-4 last:pb-0" style={{ borderBottom: '1px solid var(--esl-border)' }}>
                       <div className="flex items-center gap-2 mb-1">
-                        <div className="flex gap-0.5">{Array.from({ length: 5 }).map((_, j) => <Star key={j} className={cn('w-3 h-3', j < r.rating ? 'text-amber-400 fill-amber-400' : 'text-gray-200')} />)}</div>
+                        <div className="flex gap-0.5">{Array.from({ length: 5 }).map((_, j) => <Star key={j} className={cn('w-3 h-3', j < r.rating ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />)}</div>
                         <span className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>{r.buyerName || 'Хэрэглэгч'}</span>
                       </div>
                       {r.comment && <p className="text-sm" style={{ color: 'var(--esl-text-secondary)' }}>{r.comment}</p>}

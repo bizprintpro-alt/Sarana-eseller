@@ -85,7 +85,7 @@ export default function MarketingPage() {
                 <button key={key} onClick={() => setType(key)}
                   className="flex-1 py-3 rounded-xl text-center cursor-pointer transition-all border"
                   style={{
-                    background: type === key ? cfg.color + '15' : '#0A0A0A',
+                    background: type === key ? cfg.color + '15' : 'var(--esl-bg-page)',
                     borderColor: type === key ? cfg.color + '50' : '#2A2A2A',
                     color: type === key ? cfg.color : '#777',
                   }}>

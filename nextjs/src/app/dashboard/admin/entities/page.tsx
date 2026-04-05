@@ -59,10 +59,10 @@ export default function AdminEntitiesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Бүх нэгж удирдлага</h1>
-          <p className="text-sm text-gray-500">Дэлгүүр, агент, компани, авто, үйлчилгээ</p>
+          <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Бүх нэгж удирдлага</h1>
+          <p className="text-sm text-[var(--esl-text-secondary)]">Дэлгүүр, агент, компани, авто, үйлчилгээ</p>
         </div>
-        <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold hover:bg-gray-50 cursor-pointer transition">
+        <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
           <Download className="w-3.5 h-3.5" /> CSV экспорт
         </button>
       </div>
@@ -83,15 +83,15 @@ export default function AdminEntitiesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+      <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
         <div className="flex gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
             <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Нэгж хайх..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              className="w-full pl-10 pr-4 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-xs bg-white cursor-pointer">
+            className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer">
             <option value="all">Бүх статус</option>
             <option value="active">Идэвхтэй</option>
             <option value="pending">Хүлээгдэж буй</option>
@@ -102,7 +102,7 @@ export default function AdminEntitiesPage() {
           {TYPE_TABS.map((t) => (
             <button key={t.key} onClick={() => setTypeFilter(t.key)}
               className={cn('shrink-0 px-3 py-1.5 rounded-lg text-xs font-semibold border-none cursor-pointer transition',
-                typeFilter === t.key ? 'bg-[#1A1A2E] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100')}>
+                typeFilter === t.key ? 'bg-[#1A1A2E] text-white' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)]')}>
               {t.label}
             </button>
           ))}
@@ -110,10 +110,10 @@ export default function AdminEntitiesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+      <div className="bg-white border border-[var(--esl-border)] rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-[10px] text-gray-500 uppercase tracking-wider border-b border-gray-100 bg-gray-50/50">
+            <tr className="text-left text-[10px] text-[var(--esl-text-secondary)] uppercase tracking-wider border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)]/50">
               <th className="px-4 py-2.5 w-8"><input type="checkbox" className="rounded" /></th>
               <th className="px-4 py-2.5">Нэгж</th>
               <th className="px-4 py-2.5">Төрөл</th>
@@ -128,18 +128,18 @@ export default function AdminEntitiesPage() {
             {filtered.map((e) => {
               const info = ENTITY_LABELS[e.type];
               return (
-                <tr key={e.id} className="hover:bg-gray-50/50 transition">
+                <tr key={e.id} className="hover:bg-[var(--esl-bg-section)]/50 transition">
                   <td className="px-4 py-3"><input type="checkbox" className="rounded" /></td>
                   <td className="px-4 py-3">
-                    <div className="font-semibold text-gray-900">{e.name}</div>
-                    <div className="text-[10px] text-gray-400">/{e.slug}</div>
+                    <div className="font-semibold text-[var(--esl-text-primary)]">{e.name}</div>
+                    <div className="text-[10px] text-[var(--esl-text-muted)]">/{e.slug}</div>
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-[10px] font-semibold bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full">
                       {info?.emoji} {info?.label}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs text-gray-500">{e.ownerEmail}</td>
+                  <td className="px-4 py-3 text-xs text-[var(--esl-text-secondary)]">{e.ownerEmail}</td>
                   <td className="px-4 py-3">
                     <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded-full',
                       e.status === 'active' ? 'bg-green-100 text-green-700' : e.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700')}>
@@ -147,21 +147,21 @@ export default function AdminEntitiesPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    {e.isVerified ? <Shield className="w-4 h-4 text-blue-500 fill-blue-500" /> : <span className="text-xs text-gray-300">—</span>}
+                    {e.isVerified ? <Shield className="w-4 h-4 text-blue-500 fill-blue-500" /> : <span className="text-xs text-[var(--esl-text-muted)]">—</span>}
                   </td>
-                  <td className="px-4 py-3 text-xs font-bold text-gray-700">{e.itemCount}</td>
+                  <td className="px-4 py-3 text-xs font-bold text-[var(--esl-text-primary)]">{e.itemCount}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
-                      <button className="w-7 h-7 rounded-lg bg-transparent border border-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition" title="Харах">
-                        <Eye className="w-3.5 h-3.5 text-gray-400" />
+                      <button className="w-7 h-7 rounded-lg bg-transparent border border-[var(--esl-border)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition" title="Харах">
+                        <Eye className="w-3.5 h-3.5 text-[var(--esl-text-muted)]" />
                       </button>
                       {!e.isVerified && e.status === 'pending' && (
                         <button className="w-7 h-7 rounded-lg bg-green-50 border-none flex items-center justify-center cursor-pointer hover:bg-green-100 transition" title="Баталгаажуулах">
                           <Check className="w-3.5 h-3.5 text-green-600" />
                         </button>
                       )}
-                      <button className="w-7 h-7 rounded-lg bg-transparent border border-gray-200 flex items-center justify-center cursor-pointer hover:bg-red-50 transition" title="Түдгэлзүүлэх">
-                        <Ban className="w-3.5 h-3.5 text-gray-400" />
+                      <button className="w-7 h-7 rounded-lg bg-transparent border border-[var(--esl-border)] flex items-center justify-center cursor-pointer hover:bg-red-50 transition" title="Түдгэлзүүлэх">
+                        <Ban className="w-3.5 h-3.5 text-[var(--esl-text-muted)]" />
                       </button>
                     </div>
                   </td>

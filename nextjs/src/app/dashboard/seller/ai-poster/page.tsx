@@ -64,7 +64,7 @@ export default function AIPosterPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -111,16 +111,16 @@ export default function AIPosterPage() {
 
   if (!aiCheck.allowed) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+      <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
         <div className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl p-8 text-center text-white mb-6">
           <span className="text-4xl mb-3 block">🎨</span>
           <h1 className="text-2xl font-bold">AI Постер үүсгэгч</h1>
           <p className="opacity-90 mt-1">Бүтээгдэхүүнийхээ мэргэжлийн постер үүсгэ</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center max-w-lg mx-auto">
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">AI боломж хязгаарлагдсан</h2>
-          <p className="text-gray-500 mb-4">
+          <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
+          <p className="text-[var(--esl-text-secondary)] mb-4">
             Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.
           </p>
           <a
@@ -138,7 +138,7 @@ export default function AIPosterPage() {
   const isLight = ['#f8f9fa', '#e8d5b7', '#dfe6e9', '#ffeaa7', '#fab1a0', '#81ecec'].includes(bgColor);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl p-6 mb-6 text-white">
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -154,16 +154,16 @@ export default function AIPosterPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Тохиргоо</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Тохиргоо</h2>
 
           {/* Product Select */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Бараа сонгох</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Бараа сонгох</label>
             <select
               value={selectedProduct}
               onChange={(e) => setSelectedProduct(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm bg-white text-gray-900 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
+              className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm bg-white text-[var(--esl-text-primary)] focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
             >
               <option value="">-- Бараа сонгох --</option>
               {products.map((p) => (
@@ -176,7 +176,7 @@ export default function AIPosterPage() {
 
           {/* Style */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Загвар</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Загвар</label>
             <div className="grid grid-cols-2 gap-2">
               {STYLES.map((s) => (
                 <button
@@ -185,7 +185,7 @@ export default function AIPosterPage() {
                   className={`p-3 rounded-lg border-2 text-left text-sm font-medium transition-all ${
                     style === s.id
                       ? 'border-pink-500 bg-pink-50 text-pink-700'
-                      : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                      : 'border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
                   <span className="mr-2">{s.icon}</span>
@@ -197,13 +197,13 @@ export default function AIPosterPage() {
 
           {/* Size */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Хэмжээ</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Хэмжээ</label>
             <div className="space-y-2">
               {SIZES.map((s) => (
                 <label
                   key={s.id}
                   className={`flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                    size === s.id ? 'border-pink-500 bg-pink-50' : 'border-gray-200 hover:border-gray-300'
+                    size === s.id ? 'border-pink-500 bg-pink-50' : 'border-[var(--esl-border)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
                   <input
@@ -214,7 +214,7 @@ export default function AIPosterPage() {
                     onChange={() => setSize(s.id)}
                     className="accent-pink-500"
                   />
-                  <span className="text-sm text-gray-700">{s.name}</span>
+                  <span className="text-sm text-[var(--esl-text-primary)]">{s.name}</span>
                 </label>
               ))}
             </div>
@@ -222,14 +222,14 @@ export default function AIPosterPage() {
 
           {/* Background Color */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Дэвсгэр өнгө</label>
+            <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Дэвсгэр өнгө</label>
             <div className="flex flex-wrap gap-2">
               {BG_COLORS.map((c) => (
                 <button
                   key={c.id}
                   onClick={() => setBgColor(c.id)}
                   className={`w-10 h-10 rounded-lg border-2 transition-all ${
-                    bgColor === c.id ? 'border-pink-500 scale-110 shadow-md' : 'border-gray-300'
+                    bgColor === c.id ? 'border-pink-500 scale-110 shadow-md' : 'border-[var(--esl-border-strong)]'
                   }`}
                   style={{ backgroundColor: c.id }}
                   title={c.name}
@@ -255,8 +255,8 @@ export default function AIPosterPage() {
         </div>
 
         {/* Preview */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Урьдчилан харах</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Урьдчилан харах</h2>
 
           {poster ? (
             <div className="flex justify-center">
@@ -268,7 +268,7 @@ export default function AIPosterPage() {
                   {/* Poster content */}
                   <span className="text-6xl mb-4">{poster.emoji || '📦'}</span>
                   <h3
-                    className={`text-2xl font-bold mb-2 ${isLight ? 'text-gray-900' : 'text-white'}`}
+                    className={`text-2xl font-bold mb-2 ${isLight ? 'text-[var(--esl-text-primary)]' : 'text-white'}`}
                     style={{
                       fontFamily:
                         style === 'elegant'
@@ -281,14 +281,14 @@ export default function AIPosterPage() {
                     {poster.name}
                   </h3>
                   {poster.description && (
-                    <p className={`text-sm mb-4 opacity-80 ${isLight ? 'text-gray-700' : 'text-white'}`}>
+                    <p className={`text-sm mb-4 opacity-80 ${isLight ? 'text-[var(--esl-text-primary)]' : 'text-white'}`}>
                       {poster.description}
                     </p>
                   )}
                   <div className="flex items-center gap-3 mb-4">
                     {poster.salePrice ? (
                       <>
-                        <span className={`text-lg line-through opacity-50 ${isLight ? 'text-gray-600' : 'text-white'}`}>
+                        <span className={`text-lg line-through opacity-50 ${isLight ? 'text-[var(--esl-text-secondary)]' : 'text-white'}`}>
                           {formatPrice(poster.price)}
                         </span>
                         <span className={`text-3xl font-black ${isLight ? 'text-red-600' : 'text-yellow-400'}`}>
@@ -296,7 +296,7 @@ export default function AIPosterPage() {
                         </span>
                       </>
                     ) : (
-                      <span className={`text-3xl font-black ${isLight ? 'text-gray-900' : 'text-white'}`}>
+                      <span className={`text-3xl font-black ${isLight ? 'text-[var(--esl-text-primary)]' : 'text-white'}`}>
                         {formatPrice(poster.price)}
                       </span>
                     )}
@@ -308,13 +308,13 @@ export default function AIPosterPage() {
                   )}
                   {style === 'elegant' && (
                     <div className={`border-t ${isLight ? 'border-gray-400' : 'border-white/30'} pt-3 mt-2`}>
-                      <span className={`text-xs tracking-widest uppercase ${isLight ? 'text-gray-500' : 'text-white/60'}`}>
+                      <span className={`text-xs tracking-widest uppercase ${isLight ? 'text-[var(--esl-text-secondary)]' : 'text-white/60'}`}>
                         eseller.mn
                       </span>
                     </div>
                   )}
                   {style === 'minimalist' && (
-                    <span className={`text-xs mt-2 ${isLight ? 'text-gray-400' : 'text-white/40'}`}>eseller.mn</span>
+                    <span className={`text-xs mt-2 ${isLight ? 'text-[var(--esl-text-muted)]' : 'text-white/40'}`}>eseller.mn</span>
                   )}
                   {style === 'playful' && (
                     <div className="mt-2">
@@ -325,8 +325,8 @@ export default function AIPosterPage() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-64 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-              <div className="text-center text-gray-400">
+            <div className="flex items-center justify-center h-64 bg-[var(--esl-bg-section)] rounded-xl border-2 border-dashed border-[var(--esl-border)]">
+              <div className="text-center text-[var(--esl-text-muted)]">
                 <span className="text-4xl block mb-2">🖼️</span>
                 <p className="text-sm">Бараа сонгоод постер үүсгэнэ үү</p>
               </div>
@@ -337,19 +337,19 @@ export default function AIPosterPage() {
 
       {/* History */}
       {history.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 mt-6">
-          <h2 className="font-bold text-gray-900 mb-4">Түүх</h2>
+        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mt-6">
+          <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Түүх</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {history.map((h) => (
-              <div key={h.id} className="border border-gray-200 rounded-lg p-3">
+              <div key={h.id} className="border border-[var(--esl-border)] rounded-lg p-3">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-8 h-8 rounded" style={{ backgroundColor: h.bgColor }} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{h.productName}</p>
-                    <p className="text-xs text-gray-500">{h.style} / {h.size}</p>
+                    <p className="text-sm font-medium text-[var(--esl-text-primary)] truncate">{h.productName}</p>
+                    <p className="text-xs text-[var(--esl-text-secondary)]">{h.style} / {h.size}</p>
                   </div>
                 </div>
-                <p className="text-xs text-gray-400">{new Date(h.createdAt).toLocaleDateString('mn-MN')}</p>
+                <p className="text-xs text-[var(--esl-text-muted)]">{new Date(h.createdAt).toLocaleDateString('mn-MN')}</p>
               </div>
             ))}
           </div>
