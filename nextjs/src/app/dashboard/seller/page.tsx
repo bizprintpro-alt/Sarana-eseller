@@ -107,10 +107,10 @@ export default function SellerDashboardPage() {
 
   // Usage bars
   const usages = [
-    { label: 'Бараа', pct: getUsagePercent('products'), color: 'bg-indigo-500' },
-    { label: 'Ажилчид', pct: getUsagePercent('staff'), color: 'bg-pink-500' },
-    { label: 'Хадгалах зай', pct: getUsagePercent('storage'), color: 'bg-green-500' },
-    { label: 'AI кредит', pct: getUsagePercent('aiCredits'), color: 'bg-amber-500' },
+    { label: 'Бараа', pct: getUsagePercent('products'), color: 'bg-[#E8242C]' },
+    { label: 'Ажилчид', pct: getUsagePercent('staff'), color: 'bg-[#16A34A]' },
+    { label: 'Хадгалах зай', pct: getUsagePercent('storage'), color: 'bg-[#2563EB]' },
+    { label: 'AI кредит', pct: getUsagePercent('aiCredits'), color: 'bg-[#D97706]' },
   ];
 
   const weeklySales: number[] = analytics?.daily?.map((d: any) => d.revenue) || [48000, 72000, 35000, 91000, 64000, 110000, 85000];
@@ -169,15 +169,20 @@ export default function SellerDashboardPage() {
             <p className="text-sm text-[var(--esl-text-secondary)] mt-1">{dateStr}</p>
             <div className="flex items-center gap-2 mt-2">
               <span className="text-sm font-medium text-[var(--esl-text-primary)]">{storeName}</span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700">
-                eseller.mn/{storeSlug}
-              </span>
+              <a
+                href={`/${storeSlug}`}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[rgba(232,36,44,0.08)] text-[#E8242C] no-underline hover:bg-[rgba(232,36,44,0.15)] transition"
+              >
+                🔗 Дэлгүүр харах →
+              </a>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard/seller/products"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#E8242C] text-white text-sm font-medium rounded-xl hover:bg-[#C41E25] transition-colors shadow-sm"
             >
               <span>+</span> Бараа нэмэх
             </Link>
@@ -196,28 +201,28 @@ export default function SellerDashboardPage() {
             icon="💰"
             label="Энэ сарын борлуулалт"
             value={formatPrice(monthRevenue)}
-            gradient="indigo"
+            variant="primary"
             sparkData={[12, 18, 14, 22, 28, 19, 25, 30]}
           />
           <StatCard
             icon="📋"
             label="Нийт захиалга"
             value={totalOrders}
-            gradient="pink"
+            variant="success"
             sub={`${activeOrders.length} идэвхтэй`}
           />
           <StatCard
             icon="📦"
             label="Идэвхтэй бараа"
             value={activeProducts}
-            gradient="green"
+            variant="info"
             sub={`${products.length} нийт`}
           />
           <StatCard
             icon="📈"
             label="Хөрвүүлэлт"
             value={`${conversionRate}%`}
-            gradient="amber"
+            variant="warning"
             sub="Зочин → Захиалга"
           />
         </div>
@@ -229,29 +234,37 @@ export default function SellerDashboardPage() {
           <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Борлуулалтын график</h2>
-              <span className="text-sm font-medium text-indigo-600">
+              <span className="text-sm font-medium text-[#E8242C]">
                 {formatPrice(weeklyTotal)}
               </span>
             </div>
-            <div className="flex items-end gap-2 h-40">
-              {weeklySales.map((val: number, i: number) => {
-                const h = Math.max(8, (val / maxWeekly) * 100);
-                return (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                    <span className="text-[10px] text-[var(--esl-text-muted)] font-medium">
-                      {formatPrice(val)}
-                    </span>
-                    <div
-                      className="w-full rounded-lg bg-gradient-to-t from-indigo-500 to-indigo-400 transition-all duration-500 hover:from-indigo-600 hover:to-indigo-500"
-                      style={{ height: `${h}%` }}
-                    />
-                    <span className="text-[11px] text-[var(--esl-text-secondary)] font-medium mt-1">
-                      {WEEK_DAYS[i].slice(0, 2)}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+            {totalOrders === 0 ? (
+              <div className="flex flex-col items-center justify-center h-40 text-[var(--esl-text-muted)]">
+                <span className="text-3xl mb-2">📊</span>
+                <p className="text-sm font-medium">Анхны захиалга ирэхэд chart харагдана</p>
+                <Link href="/dashboard/seller/products" className="text-xs text-[#E8242C] font-semibold mt-2 no-underline hover:underline">+ Бараа нэмэх</Link>
+              </div>
+            ) : (
+              <div className="flex items-end gap-2 h-40">
+                {weeklySales.map((val: number, i: number) => {
+                  const h = Math.max(8, (val / maxWeekly) * 100);
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                      <span className="text-[10px] text-[var(--esl-text-muted)] font-medium">
+                        {formatPrice(val)}
+                      </span>
+                      <div
+                        className="w-full rounded-lg transition-all duration-500 bg-[#E8242C] hover:bg-[#C41E25]"
+                        style={{ height: `${h}%` }}
+                      />
+                      <span className="text-[11px] text-[var(--esl-text-secondary)] font-medium mt-1">
+                        {WEEK_DAYS[i].slice(0, 2)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Active Orders */}
@@ -260,7 +273,7 @@ export default function SellerDashboardPage() {
               <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Идэвхтэй захиалгууд</h2>
               <Link
                 href="/dashboard/seller/orders"
-                className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                className="text-sm text-[#E8242C] hover:text-[#C41E25] font-medium"
               >
                 Бүгдийг харах →
               </Link>
@@ -268,7 +281,10 @@ export default function SellerDashboardPage() {
             {activeOrders.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
                 <span className="text-3xl mb-2">📋</span>
-                <p className="text-sm">Идэвхтэй захиалга байхгүй</p>
+                <p className="text-sm mb-3">Идэвхтэй захиалга байхгүй</p>
+                <Link href="/dashboard/seller/products" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#E8242C] text-white text-xs font-bold rounded-lg no-underline hover:bg-[#C41E25] transition">
+                  + Бараа нэмэх
+                </Link>
               </div>
             ) : (
               <div className="space-y-3">
@@ -281,7 +297,7 @@ export default function SellerDashboardPage() {
                       className="flex items-center justify-between py-3 px-4 rounded-xl bg-[var(--esl-bg-section)] hover:bg-[var(--esl-bg-section)] transition-colors"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-[rgba(232,36,44,0.1)] text-[#E8242C] flex items-center justify-center text-xs font-bold shrink-0">
                           {getInitials(buyerName)}
                         </div>
                         <div className="min-w-0">
@@ -345,7 +361,7 @@ export default function SellerDashboardPage() {
                         >
                           {isZero ? 'Дууссан' : `${stock} ширхэг`}
                         </span>
-                        <button className="text-xs font-medium text-indigo-600 hover:text-indigo-700 whitespace-nowrap">
+                        <button className="text-xs font-medium text-[#E8242C] hover:text-[#C41E25] whitespace-nowrap">
                           Нөөц нэмэх
                         </button>
                       </div>
@@ -411,9 +427,9 @@ export default function SellerDashboardPage() {
               </span>
               <Link
                 href="/dashboard/seller/package"
-                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#E8242C] text-white text-sm font-bold rounded-xl hover:bg-[#C41E25] transition-colors shadow-sm no-underline"
               >
-                Багц шинэчлэх
+                ⚡ Pro болох
               </Link>
             </div>
           </div>
@@ -442,12 +458,12 @@ export default function SellerDashboardPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border border-[var(--esl-border)] hover:border-indigo-300 hover:shadow-md transition-all group"
+              className="flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border border-[var(--esl-border)] hover:border-[#E8242C]/30 hover:shadow-md transition-all group"
             >
               <span className="text-2xl group-hover:scale-110 transition-transform">
                 {link.icon}
               </span>
-              <span className="text-sm font-medium text-[var(--esl-text-primary)] group-hover:text-indigo-600 transition-colors">
+              <span className="text-sm font-medium text-[var(--esl-text-primary)] group-hover:text-[#E8242C] transition-colors">
                 {link.label}
               </span>
             </Link>
