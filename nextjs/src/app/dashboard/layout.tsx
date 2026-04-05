@@ -214,6 +214,7 @@ const ADMIN_SECTIONS: SidebarSection[] = [
       { href: '/dashboard/admin/sellers', icon: '🏷️', label: 'Борлуулагчид', isNew: true },
       { href: '/dashboard/admin/shops', icon: '🏪', label: 'Дэлгүүрүүд' },
       { href: '/dashboard/admin/revenue', icon: '💵', label: 'Орлого' },
+      { href: '/dashboard/admin/commission', icon: '💰', label: 'Комисс' },
       { href: '/dashboard/admin/banners', icon: '🖼️', label: 'Баннер' },
     ],
   },
