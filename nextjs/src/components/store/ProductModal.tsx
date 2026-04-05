@@ -22,7 +22,17 @@ interface ProductModalProps {
   onNext?: () => void;
   hasPrev?: boolean;
   hasNext?: boolean;
+  allProducts?: Product[];
+  onProductClick?: (id: string) => void;
 }
+
+/* ═══ Recommended items (mixed products + featured ads) ═══ */
+const FEATURED_ADS = [
+  { id: 'ad-1', type: 'auto' as const, title: 'Toyota Land Cruiser 300', price: '185 сая₮', image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400&q=80', badge: 'Авто зар', link: '/entity/auto_dealer/autocity' },
+  { id: 'ad-2', type: 'realty' as const, title: '3 өрөө байр, Ривер Гарден', price: '450 сая₮', image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80', badge: 'Орон сууц', link: '/entity/agent/erdenbat' },
+  { id: 'ad-3', type: 'service' as const, title: 'Вэбсайт хөгжүүлэлт', price: '2.5 сая₮', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80', badge: 'Үйлчилгээ', link: '/feed' },
+  { id: 'ad-4', type: 'building' as const, title: 'Zaisan Heights — шинэ төсөл', price: '95 сая₮~', image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&q=80', badge: 'Шинэ барилга', link: '/entity/company/mongolian-properties' },
+];
 
 /* ═══ Specs generation based on category ═══ */
 function getProductSpecs(product: Product): { icon: typeof Box; label: string; value: string }[] {
@@ -65,7 +75,7 @@ const DEMO_REVIEWS = [
   { name: 'Г. Сарантуяа', rating: 5, text: 'Гайхалтай! Найзууддаа санал болгож байна.', date: '1 долоо хоногийн өмнө' },
 ];
 
-export default function ProductModal({ product, onClose, isAffiliate, onShare, onPrev, onNext, hasPrev, hasNext }: ProductModalProps) {
+export default function ProductModal({ product, onClose, isAffiliate, onShare, onPrev, onNext, hasPrev, hasNext, allProducts, onProductClick }: ProductModalProps) {
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
@@ -451,6 +461,39 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 ))}
               </div>
             )}
+          </div>
+
+          {/* ═══ Recommendations Carousel ═══ */}
+          <div className="px-6 py-4 border-t border-gray-100 bg-gray-50/50">
+            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Танд санал болгох</h4>
+            <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+              {/* Other products */}
+              {allProducts?.filter(p => p._id !== product._id).slice(0, 4).map(p => (
+                <div key={p._id} onClick={() => onProductClick?.(p._id)}
+                  className="shrink-0 w-[130px] cursor-pointer group">
+                  <div className="h-[90px] rounded-lg overflow-hidden bg-gray-100 mb-1.5">
+                    {p.images?.[0] ? (
+                      <img src={p.images[0]} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-2xl">{p.emoji || '📦'}</div>
+                    )}
+                  </div>
+                  <p className="text-[11px] font-semibold text-gray-700 line-clamp-1 group-hover:text-[#E24B4A] transition-colors">{p.name}</p>
+                  <p className="text-[11px] font-bold text-[#E24B4A]">{formatPrice(p.salePrice || p.price)}</p>
+                </div>
+              ))}
+              {/* Featured ads */}
+              {FEATURED_ADS.slice(0, 3).map(ad => (
+                <a key={ad.id} href={ad.link} className="shrink-0 w-[130px] no-underline group">
+                  <div className="h-[90px] rounded-lg overflow-hidden bg-gray-100 mb-1.5 relative">
+                    <img src={ad.image} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                    <span className="absolute top-1 left-1 text-[8px] font-bold bg-black/60 text-white px-1.5 py-0.5 rounded">{ad.badge}</span>
+                  </div>
+                  <p className="text-[11px] font-semibold text-gray-700 line-clamp-1 group-hover:text-[#E24B4A] transition-colors">{ad.title}</p>
+                  <p className="text-[11px] font-bold text-gray-500">{ad.price}</p>
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* ═══ Footer: Qty + Add to Cart ═══ */}
