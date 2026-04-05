@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import MobileNav from '@/components/shared/MobileNav';
@@ -8,7 +8,8 @@ import {
   Search, MapPin, Eye, Clock, Plus, Filter, ChevronDown,
   Home, Car, Smartphone, ShoppingBag, Wrench, Sofa, Baby,
   Dumbbell, Sparkles, Package, Crown, Star, Flame, ArrowUpDown,
-  X, Heart,
+  X, Heart, Phone, MessageCircle, Share2, ChevronLeft, ChevronRight,
+  BadgeCheck, Calendar, Ruler, DoorOpen, Fuel, Gauge,
 } from 'lucide-react';
 
 /* ═══ Types ═══ */
@@ -88,15 +89,184 @@ function categoryEmoji(cat: string) {
   return map[cat] || '📦';
 }
 
+/* ═══ Detail Modal ═══ */
+function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
+  item: typeof DEMO_FEED[0];
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  hasPrev: boolean;
+  hasNext: boolean;
+}) {
+  const tier = TIER_CONFIG[item.tier];
+  const entity = ENTITY_LABELS[item.entityType];
+  const isVip = item.tier === 'vip';
+  const disc = item.originalPrice ? Math.round((1 - item.price / item.originalPrice) * 100) : 0;
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft' && hasPrev) onPrev();
+      if (e.key === 'ArrowRight' && hasNext) onNext();
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [onClose, onPrev, onNext, hasPrev, hasNext]);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+
+      {/* Nav arrows */}
+      {hasPrev && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-[102] w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+      )}
+      {hasNext && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-[102] w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition cursor-pointer"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      )}
+
+      {/* Modal */}
+      <div
+        className="relative z-[101] w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[var(--esl-border)] bg-[var(--esl-bg-section)] shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white hover:bg-black/80 transition cursor-pointer border-none"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        {/* Hero image area */}
+        <div className={`relative h-56 sm:h-72 flex items-center justify-center ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
+          <span className="text-8xl">{categoryEmoji(item.category)}</span>
+          {item.tier !== 'normal' && (
+            <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold" style={{ backgroundColor: tier.color + '25', color: tier.color }}>
+              {tier.badge} {tier.label}
+            </div>
+          )}
+          {disc > 0 && (
+            <div className="absolute top-4 right-14 bg-[#E8242C] text-white text-sm font-bold px-3 py-1.5 rounded-lg">-{disc}%</div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          {/* Entity info */}
+          <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)] mb-3">
+            <span className="text-base">{entity.emoji}</span>
+            <span className="font-semibold text-[var(--esl-text-secondary)]">{item.entityName}</span>
+            {item.verified && <BadgeCheck className="w-4 h-4 text-blue-400" />}
+            <span className="text-[#3D3D3D]">·</span>
+            <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{item.district}</span>
+            <span className="text-[#3D3D3D]">·</span>
+            <span className="text-xs text-[#555]">#{item.refId}</span>
+          </div>
+
+          {/* Title */}
+          <h2 className={`text-2xl font-black mb-2 ${isVip ? 'text-[#FFD700]' : 'text-white'}`}>
+            {item.title}
+          </h2>
+
+          {/* Price */}
+          <div className="flex items-center gap-3 mb-4">
+            <span className={`text-3xl font-black ${isVip ? 'text-[#FFD700]' : 'text-[#E8242C]'}`}>
+              {formatPrice(item.price)}
+            </span>
+            {disc > 0 && (
+              <span className="text-base text-[#555] line-through">{formatPrice(item.originalPrice!)}</span>
+            )}
+          </div>
+
+          {/* Metadata */}
+          {item.metadata && (
+            <div className="flex flex-wrap gap-2 mb-5">
+              {item.metadata.sqm && (
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                  <Ruler className="w-3.5 h-3.5" /> {item.metadata.sqm}м²
+                </span>
+              )}
+              {item.metadata.rooms && (
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                  <DoorOpen className="w-3.5 h-3.5" /> {item.metadata.rooms} өрөө
+                </span>
+              )}
+              {item.metadata.year && (
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                  <Calendar className="w-3.5 h-3.5" /> {item.metadata.year} он
+                </span>
+              )}
+              {item.metadata.mileage && (
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                  <Gauge className="w-3.5 h-3.5" /> {(item.metadata.mileage / 1000).toFixed(0)}мян км
+                </span>
+              )}
+              {item.metadata.fuel && (
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                  <Fuel className="w-3.5 h-3.5" /> {item.metadata.fuel}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Description */}
+          <div className="mb-6">
+            <h3 className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2">Тайлбар</h3>
+            <p className="text-sm text-[#999] leading-relaxed">{item.description}</p>
+          </div>
+
+          {/* Stats */}
+          <div className="flex items-center gap-4 text-xs text-[#555] mb-6 pb-6 border-b border-[var(--esl-border)]">
+            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" /> {item.viewCount} үзсэн</span>
+            <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {timeAgo(item.createdAt)}</span>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-3">
+            <button className="flex-1 flex items-center justify-center gap-2 h-12 bg-[#E8242C] text-white font-bold rounded-xl hover:bg-[#CC0000] transition-colors cursor-pointer border-none text-sm">
+              <Phone className="w-4 h-4" /> Залгах
+            </button>
+            <button className="flex-1 flex items-center justify-center gap-2 h-12 bg-[var(--esl-bg-elevated)] text-white font-bold rounded-xl border border-[var(--esl-border)] hover:border-[#555] transition-colors cursor-pointer text-sm">
+              <MessageCircle className="w-4 h-4" /> Мессеж
+            </button>
+            <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--esl-bg-elevated)] border border-[var(--esl-border)] text-[#888] hover:text-[#E8242C] hover:border-[#555] transition-colors cursor-pointer">
+              <Heart className="w-4 h-4" />
+            </button>
+            <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--esl-bg-elevated)] border border-[var(--esl-border)] text-[#888] hover:text-white hover:border-[#555] transition-colors cursor-pointer">
+              <Share2 className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ═══ Feed Card ═══ */
-function FeedCard({ item }: { item: typeof DEMO_FEED[0] }) {
+function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () => void }) {
   const tier = TIER_CONFIG[item.tier];
   const entity = ENTITY_LABELS[item.entityType];
   const isVip = item.tier === 'vip';
   const disc = item.originalPrice ? Math.round((1 - item.price / item.originalPrice) * 100) : 0;
 
   return (
-    <div className={`group rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,.3)] hover:-translate-y-0.5 cursor-pointer ${tier.border} ${tier.bg || 'bg-[var(--esl-bg-card)]'}`}>
+    <div onClick={onClick} className={`group rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,.3)] hover:-translate-y-0.5 cursor-pointer ${tier.border} ${tier.bg || 'bg-[var(--esl-bg-card)]'}`}>
       <div className="flex flex-col sm:flex-row">
         {/* Image */}
         <div className={`relative h-48 sm:h-auto sm:w-56 shrink-0 flex items-center justify-center ${isVip ? 'bg-[#1A1500]' : 'bg-[var(--esl-bg-elevated)]'}`}>
@@ -109,7 +279,7 @@ function FeedCard({ item }: { item: typeof DEMO_FEED[0] }) {
           {disc > 0 && (
             <div className="absolute top-3 right-3 bg-[#E8242C] text-white text-xs font-bold px-2 py-1 rounded-md">-{disc}%</div>
           )}
-          <button className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+          <button onClick={(e) => e.stopPropagation()} className="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <Heart className="w-4 h-4 text-white" />
           </button>
         </div>
@@ -170,7 +340,7 @@ export default function FeedPage() {
   const [activeCat, setActiveCat] = useState('all');
   const [activeDistrict, setActiveDistrict] = useState('Бүгд');
   const [activeSort, setActiveSort] = useState('newest');
-  const [showFilters, setShowFilters] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     let list = [...DEMO_FEED];
@@ -286,7 +456,7 @@ export default function FeedPage() {
         {/* Feed grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {filtered.map((item) => (
-            <FeedCard key={item.id} item={item} />
+            <FeedCard key={item.id} item={item} onClick={() => setSelectedId(item.id)} />
           ))}
         </div>
 
@@ -306,6 +476,23 @@ export default function FeedPage() {
         </div>
       </footer>
       <MobileNav />
+
+      {/* Detail Modal */}
+      {selectedId && (() => {
+        const idx = filtered.findIndex(i => i.id === selectedId);
+        const item = filtered[idx];
+        if (!item) return null;
+        return (
+          <FeedDetailModal
+            item={item}
+            onClose={() => setSelectedId(null)}
+            onPrev={() => { if (idx > 0) setSelectedId(filtered[idx - 1].id); }}
+            onNext={() => { if (idx < filtered.length - 1) setSelectedId(filtered[idx + 1].id); }}
+            hasPrev={idx > 0}
+            hasNext={idx < filtered.length - 1}
+          />
+        );
+      })()}
     </div>
   );
 }
