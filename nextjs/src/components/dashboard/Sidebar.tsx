@@ -161,8 +161,8 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
                       collapsed ? 'justify-center px-0 mx-0.5' : 'px-2.5'
                     } ${
                       isActive
-                        ? 'bg-[rgba(232,36,44,0.12)] text-[#FF4D53] font-semibold shadow-[inset_0_0_0_1px_rgba(79,70,229,0.1)]'
-                        : 'text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-card)] hover:text-[var(--esl-text-secondary)]'
+                        ? 'bg-[rgba(232,36,44,0.08)] text-[#E8242C] font-semibold border-l-[3px] border-l-[#E8242C]'
+                        : 'text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-card)] hover:text-[var(--esl-text-secondary)] border-l-[3px] border-l-transparent'
                     }`}
                   >
                     <IconComponent className={`shrink-0 transition-colors duration-150 ${
