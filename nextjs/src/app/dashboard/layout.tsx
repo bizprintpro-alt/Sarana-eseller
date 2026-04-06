@@ -53,6 +53,7 @@ const CUSTOMER_SALES: SidebarSection = {
   items: [
     { href: '/dashboard/seller/customers', icon: '👥', label: 'Хэрэглэгч' },
     { href: '/dashboard/seller/sellers', icon: '📢', label: 'Борлуулагчид', isNew: true },
+    { href: '/dashboard/seller/commissions', icon: '💰', label: 'Комисс тайлан', isNew: true },
     { href: '/dashboard/seller/promotions', icon: '🎁', label: 'Урамшуулал' },
     { href: '/dashboard/seller/promo-codes', icon: '🏷️', label: 'Промо код' },
     { href: '/dashboard/seller/giftcards', icon: '💳', label: 'Бэлгийн карт' },
@@ -245,7 +246,8 @@ const AFFILIATE_SECTIONS: SidebarSection[] = [
     items: [
       { href: '/dashboard/affiliate', icon: '📊', label: 'Самбар' },
       { href: '/dashboard/affiliate/products', icon: '🛍️', label: 'Бараа сонгох' },
-      { href: '/dashboard/affiliate/earnings', icon: '💰', label: 'Орлого' },
+      { href: '/dashboard/affiliate/commissions', icon: '💰', label: 'Комиссын тайлан', isNew: true },
+      { href: '/dashboard/affiliate/earnings', icon: '📈', label: 'Орлого' },
       { href: '/dashboard/affiliate/wallet', icon: '💳', label: 'Хэтэвч' },
       { href: '/dashboard/affiliate/marketing', icon: '📢', label: 'Маркетинг' },
     ],
