@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Share2, ShoppingBag, Star, Heart, MapPin, QrCode, Copy, Check } from 'lucide-react';
 import { ShareModal } from '@/components/shared/ShareModal';
@@ -32,10 +32,22 @@ function formatPrice(n: number) {
 }
 
 export default function SellerPage() {
-  const seller = DEMO_SELLER;
+  const [seller, setSeller] = useState(DEMO_SELLER);
+  const [products, setProducts] = useState(DEMO_PRODUCTS);
   const [copied, setCopied] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const shareUrl = `https://eseller.mn/seller/${seller.username}`;
+
+  // Fetch real seller data, fallback to demo
+  useEffect(() => {
+    const username = window.location.pathname.split('/').pop();
+    if (username) {
+      fetch(`/api/seller/${username}`).then(r => r.json()).then(data => {
+        if (data.seller) setSeller(data.seller);
+        if (data.products?.length) setProducts(data.products);
+      }).catch(() => {});
+    }
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareUrl);
@@ -71,7 +83,7 @@ export default function SellerPage() {
               <p className="text-xs text-white/70">Борлуулалт</p>
             </div>
             <div>
-              <p className="text-2xl font-black text-white">{DEMO_PRODUCTS.length}</p>
+              <p className="text-2xl font-black text-white">{products.length}</p>
               <p className="text-xs text-white/70">Бараа</p>
             </div>
             <div>
@@ -103,7 +115,7 @@ export default function SellerPage() {
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {DEMO_PRODUCTS.map((p) => {
+          {products.map((p) => {
             const disc = p.salePrice ? Math.round((1 - p.salePrice / p.price) * 100) : 0;
             const px = p.salePrice || p.price;
             return (

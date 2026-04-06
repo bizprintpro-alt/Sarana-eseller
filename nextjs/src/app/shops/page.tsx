@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -69,13 +69,21 @@ const TYPE_TABS = [
 
 /* ═══ Page ═══ */
 export default function ShopsPage() {
+  const [shops, setShops] = useState(DEMO_SHOPS);
   const [search, setSearch] = useState('');
   const [activeType, setActiveType] = useState<ShopType>('all');
   const [activeCat, setActiveCat] = useState('all');
   const [sortBy, setSortBy] = useState<'rating' | 'reviews' | 'newest'>('rating');
 
+  // Fetch real shops from DB, fallback to demo
+  useEffect(() => {
+    fetch('/api/shops').then(r => r.json()).then(data => {
+      if (data.shops?.length > 0) setShops(data.shops);
+    }).catch(() => {});
+  }, []);
+
   const filtered = useMemo(() => {
-    let list = DEMO_SHOPS;
+    let list = shops;
     if (activeType !== 'all') list = list.filter((s) => s.type === activeType);
     if (activeCat !== 'all') list = list.filter((s) => s.category === activeCat);
     if (search.trim()) {
@@ -87,8 +95,8 @@ export default function ShopsPage() {
     return list;
   }, [activeType, activeCat, search, sortBy]);
 
-  const totalProduct = DEMO_SHOPS.filter((s) => s.type === 'product').length;
-  const totalService = DEMO_SHOPS.filter((s) => s.type === 'service').length;
+  const totalProduct = shops.filter((s) => s.type === 'product').length;
+  const totalService = shops.filter((s) => s.type === 'service').length;
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)]">

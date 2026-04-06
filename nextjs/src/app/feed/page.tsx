@@ -499,11 +499,19 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
 
 /* ═══ Main Page ═══ */
 export default function FeedPage() {
+  const [feedItems, setFeedItems] = useState(DEMO_FEED);
   const [search, setSearch] = useState('');
   const [activeCat, setActiveCat] = useState('all');
   const [activeDistrict, setActiveDistrict] = useState('Бүгд');
   const [activeSort, setActiveSort] = useState('newest');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // Fetch real feed data from API, fallback to DEMO_FEED
+  useEffect(() => {
+    fetch('/api/feed').then(r => r.json()).then(data => {
+      if (data.items?.length > 0) setFeedItems(data.items);
+    }).catch(() => {});
+  }, []);
   const { district: userDistrict, loading: locLoading, permissionDenied, refresh: refreshLoc, setManualDistrict } = useUserLocation();
 
   // Auto-set district from GPS
@@ -520,7 +528,7 @@ export default function FeedPage() {
   }, [userDistrict]);
 
   const filtered = useMemo(() => {
-    let list = [...DEMO_FEED];
+    let list = [...feedItems];
     if (activeCat !== 'all') list = list.filter(i => i.category === activeCat);
     if (activeDistrict !== 'Бүгд') list = list.filter(i => i.district === activeDistrict);
     if (search.trim()) {
