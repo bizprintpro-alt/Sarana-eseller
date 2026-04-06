@@ -8,6 +8,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   time: string;
+  createdAt?: string;
 }
 
 interface ChatWidgetProps {
@@ -21,6 +22,7 @@ export default function ChatWidget({ shopId, shopName, primaryColor = '#E8242C' 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const initials = shopName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -43,6 +45,26 @@ export default function ChatWidget({ shopId, shopName, primaryColor = '#E8242C' 
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Poll for new messages (seller replies) every 3s
+  useEffect(() => {
+    if (!sessionId || !open) return;
+    const interval = setInterval(async () => {
+      try {
+        const lastMsg = messages[messages.length - 1];
+        const after = lastMsg?.createdAt || '';
+        const res = await fetch(`/api/chat/messages/${sessionId}${after ? `?after=${after}` : ''}`);
+        const data = await res.json();
+        if (data.messages?.length > 0) {
+          const newMsgs = data.messages
+            .filter((m: any) => !messages.some(e => e.id === m.id))
+            .map((m: any) => ({ ...m, role: m.role === 'customer' ? 'user' as const : 'assistant' as const }));
+          if (newMsgs.length > 0) setMessages(prev => [...prev, ...newMsgs]);
+        }
+      } catch {}
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [sessionId, open, messages]);
+
   const sendMessage = async (text?: string) => {
     const content = text || input.trim();
     if (!content || loading) return;
@@ -62,19 +84,26 @@ export default function ChatWidget({ shopId, shopName, primaryColor = '#E8242C' 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          sessionId,
           shopId,
           message: content,
-          history: messages.filter(m => m.id !== 'welcome').map(m => ({ role: m.role, content: m.content })),
+          role: 'customer',
+          history: messages.filter(m => m.id !== 'welcome').map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content })),
         }),
       });
       const data = await res.json();
 
-      setMessages(prev => [...prev, {
-        id: `a_${Date.now()}`,
-        role: 'assistant',
-        content: data.reply || 'Уучлаарай, дахин оролдоно уу.',
-        time: new Date().toLocaleTimeString('mn', { hour: '2-digit', minute: '2-digit' }),
-      }]);
+      // Save session ID for polling
+      if (data.sessionId && !sessionId) setSessionId(data.sessionId);
+
+      if (data.reply) {
+        setMessages(prev => [...prev, {
+          id: data.replyMessage?.id || `a_${Date.now()}`,
+          role: 'assistant',
+          content: data.reply,
+          time: new Date().toLocaleTimeString('mn', { hour: '2-digit', minute: '2-digit' }),
+        }]);
+      }
     } catch {
       setMessages(prev => [...prev, {
         id: `e_${Date.now()}`,
