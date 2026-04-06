@@ -1,0 +1,160 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.role-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.rh{padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.ri{width:28px;height:28px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.rname{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.rsub{font-size:10px;color:var(--color-text-tertiary)}
+.rb{padding:12px 14px}
+.issue{display:flex;align-items:flex-start;gap:7px;margin-bottom:7px;font-size:11px}
+.issue:last-child{margin-bottom:0}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.d-ok{background:var(--color-text-success)}
+.d-err{background:var(--color-text-danger)}
+.d-warn{background:var(--color-text-warning)}
+.d-info{background:var(--color-text-info)}
+.it{color:var(--color-text-primary);font-weight:500;margin-bottom:1px}
+.id{color:var(--color-text-secondary);line-height:1.5}
+
+.fix-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.fix{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;display:flex;gap:10px;align-items:flex-start}
+.fnum{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0;margin-top:1px}
+.fn-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.fn-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.fn-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.fbody{flex:1}
+.ftitle{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.fdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.fcode{font-size:10px;font-family:var(--font-mono);color:var(--color-text-tertiary);margin-top:4px;background:var(--color-background-secondary);padding:3px 7px;border-radius:4px;display:inline-block}
+
+.stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px;text-align:center}
+.sn{font-size:18px;font-weight:500;margin-bottom:2px}
+.sl{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em}
+</style>
+
+<div class="w">
+
+<div class="stat-row">
+  <div class="sc"><div class="sn" style="color:var(--color-text-success)">3/3</div><div class="sl">Роль ажиллана</div></div>
+  <div class="sc"><div class="sn" style="color:#E8242C">~8</div><div class="sl">Засах асуудал</div></div>
+  <div class="sc"><div class="sn">Stat card</div><div class="sl">Гол асуудал</div></div>
+</div>
+
+<div class="st">3 Роллын байдал</div>
+<div class="g3">
+
+  <!-- Seller -->
+  <div class="role-card">
+    <div class="rh">
+      <div class="ri" style="background:rgba(232,36,44,0.1)">🏪</div>
+      <div><div class="rname">Seller dashboard</div><div class="rsub">/dashboard/seller</div></div>
+    </div>
+    <div class="rb">
+      <div class="issue"><div class="dot d-ok"></div><div><div class="it">Stat card 4ш ✓</div><div class="id">Борлуулалт, захиалга, бараа, хөрвүүлэлт</div></div></div>
+      <div class="issue"><div class="dot d-ok"></div><div><div class="it">Sidebar бүрэн ✓</div><div class="id">Theme store, AI tools, Location бүгд байна</div></div></div>
+      <div class="issue"><div class="dot d-err"></div><div><div class="it">Stat card өнгө — брэнд зөрчил</div><div class="id">Цэнхэр/ягаан/ногоон/шар hardcoded. Eseller улаан брэнд дутуу</div></div></div>
+      <div class="issue"><div class="dot d-warn"></div><div><div class="it">Subscription bar харагдахгүй</div><div class="id">"Үнэгүй түрээс" progress bar доод хэсэгт — текст жижиг</div></div></div>
+      <div class="issue"><div class="dot d-warn"></div><div><div class="it">Хоосон chart widget</div><div class="id">Орлогын chart байна ч дата байхгүй үед placeholder дутуу</div></div></div>
+    </div>
+  </div>
+
+  <!-- Buyer -->
+  <div class="role-card">
+    <div class="rh">
+      <div class="ri" style="background:var(--color-background-info)">👤</div>
+      <div><div class="rname">Buyer dashboard</div><div class="rsub">/dashboard</div></div>
+    </div>
+    <div class="rb">
+      <div class="issue"><div class="dot d-ok"></div><div><div class="it">Stat card 4ш ✓</div><div class="id">Захиалга, зардал, хүлээгдэж буй, хүргэгдсэн</div></div></div>
+      <div class="issue"><div class="dot d-ok"></div><div><div class="it">"Дэлгүүр рүү очих" link ✓</div><div class="id">Хоосон байхад дэлгүүр руу чиглүүлнэ</div></div></div>
+      <div class="issue"><div class="dot d-err"></div><div><div class="it">Stat card өнгө — hardcoded</div><div class="id">Цэнхэр/ягаан/шар/ногоон — CSS var ашиглаагүй</div></div></div>
+      <div class="issue"><div class="dot d-warn"></div><div><div class="it">Loyalty widget байхгүй</div><div class="id">Оноо, tier, Gold badge — buyer dashboard-д харагдах ёстой</div></div></div>
+      <div class="issue"><div class="dot d-info"></div><div><div class="it">Sidebar цөөн цэс</div><div class="id">Самбар, Дэлгүүр, Захиалга, Хүслийн жагсаалт, Тохиргоо дутуу</div></div></div>
+    </div>
+  </div>
+
+  <!-- Driver -->
+  <div class="role-card">
+    <div class="rh">
+      <div class="ri" style="background:var(--color-background-success)">🚗</div>
+      <div><div class="rname">Driver dashboard</div><div class="rsub">/dashboard/delivery</div></div>
+    </div>
+    <div class="rb">
+      <div class="issue"><div class="dot d-ok"></div><div><div class="it">Stat card 4ш ✓</div><div class="id">Хүлэгдэж буй, хүргэлтэнд, хүргэгдсэн, нийт захиалга</div></div></div>
+      <div class="issue"><div class="dot d-ok"></div><div><div class="it">Tab шүүлт ✓</div><div class="id">Бүгд/Баталгаажсан/Явж байна/Хүргэгдсэн</div></div></div>
+      <div class="issue"><div class="dot d-err"></div><div><div class="it">Stat card өнгө — hardcoded</div><div class="id">Цэнхэр/ягаан/ногоон/шар — мөн адил асуудал</div></div></div>
+      <div class="issue"><div class="dot d-warn"></div><div><div class="it">Орлогын дата байхгүй</div><div class="id">Stat card-д дата 0 — "Орлого" section дутуу</div></div></div>
+      <div class="issue"><div class="dot d-info"></div><div><div class="it">Газрын зураг байхгүй</div><div class="id">Жолоочид хамгийн чухал feature — route map дутуу</div></div></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="st">Яаралтай засах 5 зүйл — бүх роллд нэгэн зэрэг</div>
+
+<div class="fix-list">
+  <div class="fix">
+    <div class="fnum fn-red">1</div>
+    <div class="fbody">
+      <div class="ftitle">Stat card өнгө — 3 роллд нэгэн зэрэг засах</div>
+      <div class="fdesc">Seller, Buyer, Driver — гурвын stat card өнгө нэг pattern-д нийцүүлэх. Hardcoded gradient болон цэнхэр/ягаан/шар → CSS var + Eseller улаан брэнд схем.</div>
+      <div class="fcode">StatCard component → variant prop: 'primary'|'success'|'warning'|'info' → CSS var</div>
+    </div>
+  </div>
+
+  <div class="fix">
+    <div class="fnum fn-red">2</div>
+    <div class="fbody">
+      <div class="ftitle">Buyer sidebar — цэс нэмэх</div>
+      <div class="fdesc">Одоо: Самбар, Дэлгүүр, Захиалга, Хүслийн жагсаалт, Тохиргоо — дутуу.<br>Нэмэх: Миний профайл, Loyalty оноо, Чат, Хаягийн дэвтэр.</div>
+      <div class="fcode">app/dashboard/layout.tsx → BUYER_NAV нэмэх</div>
+    </div>
+  </div>
+
+  <div class="fix">
+    <div class="fnum fn-red">3</div>
+    <div class="fbody">
+      <div class="ftitle">Loyalty widget — buyer dashboard-д нэмэх</div>
+      <div class="fdesc">Buyer dashboard-ийн дээд хэсэгт loyalty оноо, tier badge, Gold status харуулах widget нэмэх. Хэрэглэгч яг яаж урамшуулал авдгаа мэднэ.</div>
+      <div class="fcode">LoyaltyWidget component → /dashboard дээд хэсэгт</div>
+    </div>
+  </div>
+
+  <div class="fix">
+    <div class="fnum fn-warn">4</div>
+    <div class="fbody">
+      <div class="ftitle">Chart placeholder — дата байхгүй үед</div>
+      <div class="fdesc">Seller dashboard-ийн орлогын chart хоосон харагдана. "Анхны захиалга ирэхэд chart гарна" гэсэн placeholder нэмэх.</div>
+      <div class="fcode">EmptyState component → chart area-д</div>
+    </div>
+  </div>
+
+  <div class="fix">
+    <div class="fnum fn-warn">5</div>
+    <div class="fbody">
+      <div class="ftitle">Driver — орлогын stat + route map placeholder</div>
+      <div class="fdesc">Жолоочид орлого харах чухал. "Өнөөдрийн орлого: 0₮" stat нэмэх. Газрын зурагт route харуулах section placeholder.</div>
+      <div class="fcode">EarningsCard + MapPlaceholder → /dashboard/delivery</div>
+    </div>
+  </div>
+</div>
+
+<div style="background:rgba(232,36,44,0.05);border:0.5px solid rgba(232,36,44,0.2);border-radius:var(--border-radius-lg);padding:12px 14px">
+  <div style="font-size:12px;font-weight:500;color:#E8242C;margin-bottom:6px">Claude Code-д өгөх тушаал</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+    1. Shared StatCard component үүсгэх — variant prop-тай, CSS var ашигласан<br>
+    2. Seller / Buyer / Driver dashboard-д StatCard ашиглах<br>
+    3. Buyer sidebar цэс нэмэх (profile, loyalty, chat, addresses)<br>
+    4. LoyaltyWidget → /dashboard дээд хэсэгт<br>
+    5. Chart EmptyState + Driver earnings card нэмэх
+  </div>
+</div>
+
+</div>

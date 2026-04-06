@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Share2, ShoppingBag, Star, Heart, MapPin, QrCode, Copy, Check } from 'lucide-react';
+import { ShareModal } from '@/components/shared/ShareModal';
 
 /* ═══ Demo Data ═══ */
 const DEMO_SELLER = {
@@ -33,6 +34,7 @@ function formatPrice(n: number) {
 export default function SellerPage() {
   const seller = DEMO_SELLER;
   const [copied, setCopied] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const shareUrl = `https://eseller.mn/seller/${seller.username}`;
 
   const handleCopy = () => {
@@ -86,7 +88,7 @@ export default function SellerPage() {
             <button className="flex items-center gap-2 bg-white/20 border border-white/30 text-white px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-white/30 transition backdrop-blur-sm">
               <QrCode className="w-3.5 h-3.5" /> QR код
             </button>
-            <button className="flex items-center gap-2 bg-white/20 border border-white/30 text-white px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-white/30 transition backdrop-blur-sm">
+            <button onClick={() => setShareOpen(true)} className="flex items-center gap-2 bg-white/20 border border-white/30 text-white px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer hover:bg-white/30 transition backdrop-blur-sm">
               <Share2 className="w-3.5 h-3.5" /> Хуваалцах
             </button>
           </div>
@@ -143,6 +145,8 @@ export default function SellerPage() {
         </p>
         <Link href="/feed" className="text-xs text-[#E8242C] no-underline mt-2 inline-block">eseller.mn →</Link>
       </footer>
+
+      <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} url={shareUrl} title={seller.displayName} description="eseller.mn борлуулагчийн хуудас" />
     </div>
   );
 }

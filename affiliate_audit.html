@@ -1,0 +1,110 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.d-err{background:var(--color-text-danger)}
+.d-warn{background:var(--color-text-warning)}
+.d-ok{background:var(--color-text-success)}
+.rbody{flex:1}
+.rtitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.rdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.65}
+.rfix{font-size:11px;color:var(--color-text-tertiary);margin-top:5px;font-family:var(--font-mono);background:var(--color-background-secondary);padding:4px 8px;border-radius:4px;display:inline-block}
+.badge{display:inline-flex;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap;margin-left:6px}
+.b-err{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-ok{background:var(--color-background-success);color:var(--color-text-success)}
+</style>
+
+<div class="w">
+<div class="st">Зургаас олсон асуудлууд</div>
+
+<div class="row">
+  <div class="dot d-err"></div>
+  <div class="rbody">
+    <div class="rtitle">Бараа карт дизайн — CSS var ашиглаагүй<span class="badge b-err">Эгзэгтэй</span></div>
+    <div class="rdesc">Карт дэвсгэр цайвар ягаан (#EEF2FF) hardcoded байна — CSS var ашиглаагүй. Dark mode дэлгэрэнгүй тохируулгаар солигдохгүй. 3 цогцлолын 80% цагаан зарчим зөрчигдсөн.</div>
+    <div class="rfix">background → var(--esl-bg-card) · border → var(--esl-border)</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="dot d-err"></div>
+  <div class="rbody">
+    <div class="rtitle">Бараа зураг placeholder — emoji хэтэрхий том<span class="badge b-err">UI алдаа</span></div>
+    <div class="rdesc">Emoji зураг placeholder (~60px) карт дотор асимметр харагдана. Зургийн талбар aspect-ratio тогтоогүй тул карт өндөр тэгш бус.</div>
+    <div class="rfix">img area: aspectRatio 1:1 · objectFit cover · emoji fontSize 32px</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="dot d-err"></div>
+  <div class="rbody">
+    <div class="rtitle">"Борлуулж эхлэх" товч — цэнхэр (брэнд зөрчил)<span class="badge b-err">Брэнд</span></div>
+    <div class="rdesc">Товч цэнхэр (#6366F1 индиго) харагдаж байна — Eseller.mn-ийн брэнд улаан (#E8242C) байх ёстой. Бүх CTA товч нэгдмэл байх хэрэгтэй.</div>
+    <div class="rfix">button bg → #E8242C · hover → #C41E25</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="dot d-warn"></div>
+  <div class="rbody">
+    <div class="rtitle">AI Линк / Постер товчнууд — харагдахгүй<span class="badge b-warn">Дутуу</span></div>
+    <div class="rdesc">Карт дотор "AI Линк" болон "Постер" гэсэн 2 товч байна гэхдээ icon болон текст тодорхой харагдахгүй. Товчны контент хоосон харагдана.</div>
+    <div class="rfix">button: icon + label нэмэх · min-width тогтоох</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="dot d-warn"></div>
+  <div class="rbody">
+    <div class="rtitle">Sidebar — "Борлуулагч" гарчиг тодорхойгүй<span class="badge b-warn">UX</span></div>
+    <div class="rdesc">Sidebar дээр "БОРЛУУЛАГЧ" гэсэн гарчиг цайвар харагдана. Самбар, Бараа сонгох, Орлого, Хэтэвч, Маркетинг — 5 цэс байна ч идэвхтэй tab (Бүтээгдэхүүн) тодорхой тэмдэглэгдэхгүй.</div>
+    <div class="rfix">active tab: border-left 3px #E8242C · bg var(--esl-brand-bg)</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="dot d-warn"></div>
+  <div class="rbody">
+    <div class="rtitle">Горимын toggle — "Өдөр/Шөнө/Систем" sidebar доод хэсэгт<span class="badge b-ok">Ажиллана</span></div>
+    <div class="rdesc">Sidebar доод хэсэгт 3 сонголт харагдаж байна — энэ зөв хэрэгжсэн. Гэхдээ одоо "Өдөр" горимд байгаа ч карт дэвсгэр цайвар ягаан — CSS var ашиглаагүйгээс болж.</div>
+    <div class="rfix">ThemeSelector ажиллана ✓ · Карт var() болгосны дараа зөв болно</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="dot d-ok"></div>
+  <div class="rbody">
+    <div class="rtitle">Ажиллаж байгаа зүйлс<span class="badge b-ok">OK</span></div>
+    <div class="rdesc">
+      ✓ /dashboard/affiliate?tab=products route ажиллана<br>
+      ✓ Бараа жагсаалт гарна (67 бараа)<br>
+      ✓ Үнэ, шимтгэл % харагдана<br>
+      ✓ "Борлуулж эхлэх" товч байна<br>
+      ✓ Dark mode toggle UI байна<br>
+      ✓ Хайлтын талбар байна
+    </div>
+  </div>
+</div>
+
+<div class="st">Claude Code-д өгөх засварын тушаал</div>
+<div class="row">
+  <div class="dot d-err"></div>
+  <div class="rbody">
+    <div class="rtitle">Дараалал</div>
+    <div class="rdesc" style="line-height:2">
+      1. AffiliateProductCard дэвсгэр → <code>var(--esl-bg-card)</code><br>
+      2. Зургийн талбар → <code>aspectRatio: '1', objectFit: 'cover'</code><br>
+      3. "Борлуулж эхлэх" товч → <code>background: '#E8242C'</code><br>
+      4. AI Линк / Постер товчны label + icon нэмэх<br>
+      5. Sidebar active state → <code>borderLeft: '3px solid #E8242C'</code>
+    </div>
+  </div>
+</div>
+
+</div>

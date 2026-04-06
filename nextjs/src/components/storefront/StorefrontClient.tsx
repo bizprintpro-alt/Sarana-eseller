@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { MapPin, Phone, Star, Shield, ShoppingBag, Users } from 'lucide-react';
+import { MapPin, Phone, Star, Shield, ShoppingBag, Users, Share2 } from 'lucide-react';
+import { ShareModal } from '@/components/shared/ShareModal';
 
 interface ShopData {
   id: string; name: string; slug: string; logo?: string | null; phone?: string | null;
@@ -37,6 +39,8 @@ function discountPct(price: number, sale?: number | null) {
 
 export default function StorefrontClient({ shop, products }: { shop: ShopData; products: ProductData[] }) {
   const badge = ENTITY_BADGES[shop.industry || 'store'] || ENTITY_BADGES.store;
+  const [shareOpen, setShareOpen] = useState(false);
+  const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/${shop.slug}` : `https://eseller.mn/${shop.slug}`;
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--esl-bg-page)' }}>
@@ -89,6 +93,9 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
                 Холбоо барих
               </a>
             )}
+            <button onClick={() => setShareOpen(true)} className="flex items-center gap-2 bg-white/10 border border-white/30 text-white px-5 py-3.5 rounded-xl font-semibold text-sm cursor-pointer hover:bg-white/20 transition backdrop-blur-sm">
+              <Share2 className="w-4 h-4" /> Хуваалцах
+            </button>
           </div>
 
           {shop.allowSellers && (
@@ -183,6 +190,8 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
           © {new Date().getFullYear()} {shop.name} — eseller.mn дээр
         </p>
       </footer>
+
+      <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} url={shareUrl} title={shop.name} description={`${shop.name} — eseller.mn дэлгүүр`} />
     </div>
   );
 }

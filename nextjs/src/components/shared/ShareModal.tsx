@@ -30,8 +30,8 @@ export function ShareModal({ isOpen, onClose, url, title, description }: Props) 
 
   const socials = [
     { name: 'Facebook', color: '#1877F2', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-    { name: 'Twitter', color: '#1DA1F2', href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}` },
-    { name: 'LinkedIn', color: '#0A66C2', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
+    { name: 'WhatsApp', color: '#25D366', href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}` },
+    { name: 'Telegram', color: '#26A5E4', href: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}` },
   ];
 
   return (
