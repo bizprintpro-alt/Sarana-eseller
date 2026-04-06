@@ -89,6 +89,8 @@ model Product {
   deliveryFee   Int?
   deliveryType  String   @default("standard") // standard | express | pickup
   estimatedMins Int?
+  entityType    String?  // STORE | REAL_ESTATE | AUTO | SERVICE | CONSTRUCTION | PRE_ORDER | DIGITAL
+  metadata      Json?    // entity-specific fields
   allowAffiliate      Boolean @default(false)
   affiliateCommission Float?  @default(0)
   createdAt     DateTime @default(now())
