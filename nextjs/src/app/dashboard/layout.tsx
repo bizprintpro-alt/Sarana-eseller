@@ -235,6 +235,7 @@ const ADMIN_SECTIONS: SidebarSection[] = [
   {
     title: 'Систем',
     items: [
+      { href: '/dashboard/admin/site-settings', icon: '🌐', label: 'Сайтын тохиргоо', isNew: true },
       { href: '/dashboard/admin/config', icon: '⚙️', label: 'Тохиргоо' },
       { href: '/dashboard/admin/ai', icon: '🧠', label: 'Claude AI' },
       { href: '/dashboard/admin/analytics-dashboard', icon: '📈', label: 'Аналитик' },
