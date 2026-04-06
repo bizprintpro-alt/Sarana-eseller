@@ -54,7 +54,7 @@ export default function DomainPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-white border-b border-[var(--esl-border)] px-8 py-5">
+      <div className="bg-[var(--esl-bg-card)] border-b border-[var(--esl-border)] px-8 py-5">
         <h1 className="text-xl font-black text-[var(--esl-text-primary)]">🌐 Домайн нэр</h1>
         <p className="text-sm text-[var(--esl-text-muted)] mt-0.5">Дэлгүүрийн веб хаягийг тохируулна</p>
       </div>
@@ -64,7 +64,7 @@ export default function DomainPage() {
         {/* Current Domain */}
         <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-2xl p-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-lg">🌐</div>
+            <div className="w-10 h-10 rounded-xl bg-[var(--esl-bg-card)] shadow-sm flex items-center justify-center text-lg">🌐</div>
             <div>
               <div className="text-xs text-[var(--esl-text-secondary)] font-semibold">Одоогийн хаяг</div>
               <div className="text-lg font-black text-[var(--esl-text-primary)]">
@@ -85,7 +85,7 @@ export default function DomainPage() {
         </div>
 
         {/* ═══ Subdomain ═══ */}
-        <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+        <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-base font-bold text-[var(--esl-text-primary)]">Субдомайн</h3>
@@ -129,7 +129,7 @@ export default function DomainPage() {
         </div>
 
         {/* ═══ Custom Domain ═══ */}
-        <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+        <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-base font-bold text-[var(--esl-text-primary)]">Хувийн домайн</h3>
@@ -207,7 +207,7 @@ export default function DomainPage() {
                   save({ customDomainVerified: true });
                   toast.show('✅ Домайн баталгаажлаа!');
                 }}
-                className="mt-3 bg-white text-[var(--esl-text-primary)] px-4 py-2 rounded-lg text-xs font-bold border border-[var(--esl-border)] cursor-pointer hover:border-brand hover:text-brand transition-all"
+                className="mt-3 bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] px-4 py-2 rounded-lg text-xs font-bold border border-[var(--esl-border)] cursor-pointer hover:border-brand hover:text-brand transition-all"
               >
                 🔄 Шалгах
               </button>
@@ -216,7 +216,7 @@ export default function DomainPage() {
         </div>
 
         {/* ═══ SSL ═══ */}
-        <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+        <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-base font-bold text-[var(--esl-text-primary)]">🔒 SSL Гэрчилгээ</h3>

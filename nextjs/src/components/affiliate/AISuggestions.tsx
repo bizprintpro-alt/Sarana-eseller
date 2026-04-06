@@ -50,7 +50,7 @@ const TYPE_ICONS = {
 
 export default function AISuggestions() {
   return (
-    <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+    <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
       <div className="px-6 py-4 border-b border-[#F1F5F9] flex items-center justify-between">
         <h3 className="font-bold text-[#0F172A] text-sm flex items-center gap-2">
           <Bot className="w-4 h-4 text-[#6366F1]" />

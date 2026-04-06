@@ -107,7 +107,7 @@ export default function AdminConfigPage() {
                   <button onClick={() => updateConfig(item.key, isOn ? 'false' : 'true')}
                     className="relative w-11 h-6 rounded-full border-none cursor-pointer transition-colors"
                     style={{ background: isOn ? '#6366F1' : '#333' }}>
-                    <div className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-white transition-all"
+                    <div className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-[var(--esl-bg-card)] transition-all"
                       style={{ left: isOn ? '22px' : '3px' }} />
                   </button>
                 </div>

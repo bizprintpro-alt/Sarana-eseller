@@ -58,7 +58,7 @@ export default function AppointmentsPage() {
           { label: 'Баталгаажуулах', value: pendingCount, icon: Clock, color: '#F59E0B' },
           { label: 'Долоо хоногийн орлого', value: formatPrice(weekRevenue), icon: Check, color: '#10B981' },
         ].map((s) => (
-          <div key={s.label} className="bg-white border border-[var(--esl-border)] rounded-xl p-4 flex items-center gap-3">
+          <div key={s.label} className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: s.color + '12', color: s.color }}>
               <s.icon className="w-5 h-5" />
             </div>
@@ -79,7 +79,7 @@ export default function AppointmentsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Хэрэглэгч, үйлчилгээ хайх..."
-            className="w-full bg-white border border-[var(--esl-border)] rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#6366F1] transition"
+            className="w-full bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:border-[#6366F1] transition"
           />
         </div>
         <div className="flex gap-1.5">
@@ -88,7 +88,7 @@ export default function AppointmentsPage() {
               key={s}
               onClick={() => setFilterStatus(s)}
               className={cn('px-3 py-2 rounded-lg text-xs font-semibold border-none cursor-pointer transition whitespace-nowrap',
-                filterStatus === s ? 'bg-[#6366F1] text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}
+                filterStatus === s ? 'bg-[#6366F1] text-white' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}
             >
               {s === 'all' ? 'Бүгд' : STATUS_CONFIG[s as AppointmentStatus]?.label.split(' ')[0]}
             </button>
@@ -97,7 +97,7 @@ export default function AppointmentsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

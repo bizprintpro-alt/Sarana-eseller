@@ -104,7 +104,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
         onClick={onClose}
       />
       <motion.div
-        className="fixed inset-3 sm:inset-auto sm:right-4 sm:top-4 sm:bottom-4 sm:w-[440px] bg-white rounded-2xl z-[999] flex flex-col shadow-2xl overflow-hidden"
+        className="fixed inset-3 sm:inset-auto sm:right-4 sm:top-4 sm:bottom-4 sm:w-[440px] bg-[var(--esl-bg-card)] rounded-2xl z-[999] flex flex-col shadow-2xl overflow-hidden"
         initial={{ opacity: 0, x: 60, scale: 0.95 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         exit={{ opacity: 0, x: 60, scale: 0.95 }}
@@ -168,7 +168,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
                 'max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
                 msg.role === 'user'
                   ? 'bg-[#6366F1] text-white rounded-br-md'
-                  : 'bg-white text-[#0F172A] border border-[var(--esl-border)] rounded-bl-md shadow-sm'
+                  : 'bg-[var(--esl-bg-card)] text-[#0F172A] border border-[var(--esl-border)] rounded-bl-md shadow-sm'
               )}>
                 {msg.role === 'ai' && (
                   <div className="flex items-center gap-1 text-[10px] text-[#6366F1] font-bold mb-1.5">
@@ -182,7 +182,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
 
           {typing && (
             <div className="flex justify-start">
-              <div className="bg-white rounded-2xl rounded-bl-md px-4 py-3 border border-[var(--esl-border)] shadow-sm">
+              <div className="bg-[var(--esl-bg-card)] rounded-2xl rounded-bl-md px-4 py-3 border border-[var(--esl-border)] shadow-sm">
                 <div className="flex gap-1">
                   <span className="w-2 h-2 rounded-full bg-[#6366F1] animate-bounce" style={{ animationDelay: '0ms' }} />
                   <span className="w-2 h-2 rounded-full bg-[#6366F1] animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -201,7 +201,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
               <button
                 key={q.label}
                 onClick={() => sendMessage(q.label)}
-                className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:border-[#6366F1] hover:text-[#6366F1] transition-all cursor-pointer"
+                className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:border-[#6366F1] hover:text-[#6366F1] transition-all cursor-pointer"
               >
                 <q.icon className="w-3 h-3" />
                 {q.label}
@@ -211,7 +211,7 @@ export default function AIProductMentor({ product, onClose, onStartSelling, user
         )}
 
         {/* Input */}
-        <div className="px-4 py-3 border-t border-[var(--esl-border)] bg-white shrink-0">
+        <div className="px-4 py-3 border-t border-[var(--esl-border)] bg-[var(--esl-bg-card)] shrink-0">
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
               <input

@@ -62,7 +62,7 @@ export default function WorkingHoursPage() {
       </div>
 
       {/* Summary */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
             <Clock className="w-5 h-5 text-indigo-600" />
@@ -85,7 +85,7 @@ export default function WorkingHoursPage() {
       </div>
 
       {/* Schedule rows */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden divide-y divide-gray-100">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden divide-y divide-gray-100">
         {hours.sort((a, b) => a.dayOfWeek - b.dayOfWeek).map((h) => (
           <div key={h.dayOfWeek} className={cn('flex items-center gap-4 px-5 py-4 transition', h.isClosed && 'bg-[var(--esl-bg-section)]/50')}>
             {/* Toggle */}
@@ -105,12 +105,12 @@ export default function WorkingHoursPage() {
             ) : (
               <div className="flex items-center gap-3">
                 <select value={h.openTime} onChange={(e) => updateTime(h.dayOfWeek, 'openTime', e.target.value)}
-                  className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer appearance-none min-w-[90px] transition">
+                  className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-[var(--esl-bg-card)] cursor-pointer appearance-none min-w-[90px] transition">
                   {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
                 <span className="text-[var(--esl-text-muted)] font-medium">—</span>
                 <select value={h.closeTime} onChange={(e) => updateTime(h.dayOfWeek, 'closeTime', e.target.value)}
-                  className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer appearance-none min-w-[90px] transition">
+                  className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-[var(--esl-bg-card)] cursor-pointer appearance-none min-w-[90px] transition">
                   {TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
                 <span className="text-xs text-[var(--esl-text-muted)] hidden sm:inline">

@@ -51,7 +51,7 @@ export default function MarketingPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Маркетинг</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Дэлгүүрээ сурталчлах хэрэгслүүд</p>
       </div>
@@ -65,7 +65,7 @@ export default function MarketingPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Referral Link */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🔗 Реферал линк</h2>
           <p className="text-sm text-[var(--esl-text-secondary)] mb-3">Энэ линкээр орсон хэрэглэгчид таны дэлгүүрийг харж, захиалга өгнө.</p>
           <div className="flex gap-2">
@@ -91,7 +91,7 @@ export default function MarketingPage() {
         </div>
 
         {/* QR Code */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📱 QR Код</h2>
           <p className="text-sm text-[var(--esl-text-secondary)] mb-3">Дэлгүүрийн QR код — хэвлэж, хуваалцаарай.</p>
           <div className="flex flex-col items-center">
@@ -116,7 +116,7 @@ export default function MarketingPage() {
         </div>
 
         {/* Social Media Templates */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📣 Сошиал медиа загвар</h2>
           <p className="text-sm text-[var(--esl-text-secondary)] mb-4">Бэлэн текст хуулж, сошиал хуудас дээрээ нийтлээрэй.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -147,7 +147,7 @@ export default function MarketingPage() {
         </div>
 
         {/* Banner Creator */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🎨 Баннер үүсгэгч</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">

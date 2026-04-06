@@ -108,7 +108,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
             key={s.label}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-[var(--esl-border)] rounded-xl p-4 flex items-center gap-3 hover:shadow-sm transition-shadow"
+            className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 flex items-center gap-3 hover:shadow-sm transition-shadow"
           >
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: s.color + '12', color: s.color }}>
               <s.icon className="w-5 h-5" />
@@ -128,7 +128,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
       {/* ════════════════════════════════════════
           ONE-CLICK SHARE + SHORT URL
           ════════════════════════════════════════ */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-[#0F172A] text-sm flex items-center gap-2">
             <Send className="w-4 h-4 text-[#6366F1]" />
@@ -170,7 +170,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
       {/* ════════════════════════════════════════
           3-TAB STRUCTURE
           ════════════════════════════════════════ */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         {/* Tab header */}
         <div className="flex border-b border-[var(--esl-border)]">
           {TOOLKIT_TABS.map((t) => (
@@ -181,7 +181,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                 'flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-semibold transition-all border-none cursor-pointer',
                 activeTab === t.key
                   ? 'bg-[#6366F1] text-white'
-                  : 'bg-white text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-section)] hover:text-[var(--esl-text-secondary)]'
+                  : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-section)] hover:text-[var(--esl-text-secondary)]'
               )}
             >
               <t.icon className="w-4 h-4" />
@@ -197,7 +197,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
               {/* QR Code — branded */}
               <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-[#F1F5F9]">
                 <div className="relative shrink-0">
-                  <div className="w-40 h-40 bg-white rounded-2xl border-2 border-[#6366F1]/20 flex items-center justify-center p-2.5 shadow-[0_4px_20px_rgba(99,102,241,.08)]">
+                  <div className="w-40 h-40 bg-[var(--esl-bg-card)] rounded-2xl border-2 border-[#6366F1]/20 flex items-center justify-center p-2.5 shadow-[0_4px_20px_rgba(99,102,241,.08)]">
                     <img loading="lazy" src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(refLink)}&bgcolor=ffffff&color=4338CA`} alt="QR" className="w-full h-full" width={160} height={160} />
                   </div>
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#6366F1] text-white text-[9px] font-bold px-3 py-1 rounded-full shadow-sm whitespace-nowrap">
@@ -236,7 +236,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                         <span className="absolute bottom-2 text-[8px] text-white/40 font-mono">@{username}</span>
                       </div>
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button className="bg-white text-[#0F172A] px-4 py-2 rounded-lg text-xs font-bold border-none cursor-pointer flex items-center gap-1 hover:bg-[var(--esl-bg-section)] transition">
+                        <button className="bg-[var(--esl-bg-card)] text-[#0F172A] px-4 py-2 rounded-lg text-xs font-bold border-none cursor-pointer flex items-center gap-1 hover:bg-[var(--esl-bg-section)] transition">
                           <Download className="w-3 h-3" /> Татах
                         </button>
                         <button className="bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold border-none cursor-pointer backdrop-blur-sm flex items-center gap-1 hover:bg-white/30 transition">
@@ -288,13 +288,13 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                           'text-xs font-bold px-3 py-1.5 rounded-lg transition-all border-none cursor-pointer flex items-center gap-1',
                           copiedId === `copy-${copySection}-${i}`
                             ? 'bg-emerald-50 text-emerald-600'
-                            : 'bg-white text-[#6366F1] hover:bg-[#6366F1] hover:text-white border border-[var(--esl-border)]'
+                            : 'bg-[var(--esl-bg-card)] text-[#6366F1] hover:bg-[#6366F1] hover:text-white border border-[var(--esl-border)]'
                         )}
                       >
                         {copiedId === `copy-${copySection}-${i}` ? <><Check className="w-3 h-3" /> Хуулсан</> : <><Copy className="w-3 h-3" /> Хуулах</>}
                       </button>
                     </div>
-                    <p className="text-xs text-[var(--esl-text-secondary)] leading-relaxed whitespace-pre-line bg-white rounded-lg p-3 border border-[var(--esl-border)]">
+                    <p className="text-xs text-[var(--esl-text-secondary)] leading-relaxed whitespace-pre-line bg-[var(--esl-bg-card)] rounded-lg p-3 border border-[var(--esl-border)]">
                       {t.text.replace(/\{link\}/g, refLink).replace(/\{discount\}/g, '30')}
                     </p>
                   </div>
@@ -329,7 +329,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                             <button
                               onClick={() => onCopy(faq.a, `faq-${i}`)}
                               className={cn('mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md transition-all border-none cursor-pointer',
-                                copiedId === `faq-${i}` ? 'bg-emerald-100 text-emerald-600' : 'bg-white text-[#6366F1] hover:bg-[#6366F1] hover:text-white')}
+                                copiedId === `faq-${i}` ? 'bg-emerald-100 text-emerald-600' : 'bg-[var(--esl-bg-card)] text-[#6366F1] hover:bg-[#6366F1] hover:text-white')}
                             >
                               {copiedId === `faq-${i}` ? '✓ Хуулсан' : '📋 Хуулах'}
                             </button>

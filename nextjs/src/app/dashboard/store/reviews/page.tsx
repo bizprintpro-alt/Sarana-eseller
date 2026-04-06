@@ -59,7 +59,7 @@ export default function ReviewsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Сэтгэгдэлүүд</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Харилцагчдын сэтгэгдэл, үнэлгээ</p>
       </div>
@@ -76,7 +76,7 @@ export default function ReviewsPage() {
         <button
           onClick={() => setFilterRating(null)}
           className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-            !filterRating ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
+            !filterRating ? 'bg-indigo-600 text-white' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
           }`}
         >
           Бүгд
@@ -86,7 +86,7 @@ export default function ReviewsPage() {
             key={r}
             onClick={() => setFilterRating(r)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              filterRating === r ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
+              filterRating === r ? 'bg-indigo-600 text-white' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
             }`}
           >
             {r} &#9733;
@@ -95,7 +95,7 @@ export default function ReviewsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">⭐</div>
           <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Сэтгэгдэл олдсонгүй</h3>
           <p className="text-[var(--esl-text-muted)] mt-1">Энэ үнэлгээтэй сэтгэгдэл байхгүй байна</p>
@@ -103,7 +103,7 @@ export default function ReviewsPage() {
       ) : (
         <div className="space-y-4">
           {filtered.map((review) => (
-            <div key={review.id} className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+            <div key={review.id} className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-bold flex-shrink-0">

@@ -139,7 +139,7 @@ export default function InventoryPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center gap-3">
           <span className="text-2xl">📦</span>
           <div>
@@ -151,7 +151,7 @@ export default function InventoryPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
               <span className="text-lg">📦</span>
@@ -162,7 +162,7 @@ export default function InventoryPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
               <span className="text-lg">⚠️</span>
@@ -173,7 +173,7 @@ export default function InventoryPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
               <span className="text-lg">🚫</span>
@@ -187,7 +187,7 @@ export default function InventoryPage() {
       </div>
 
       {/* Filter */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-4 mb-4">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-4 mb-4">
         <div className="flex items-center gap-2">
           <span className="text-sm text-[var(--esl-text-secondary)] mr-2">Шүүлтүүр:</span>
           {([
@@ -211,7 +211,7 @@ export default function InventoryPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
             <span className="text-4xl block mb-3">✅</span>

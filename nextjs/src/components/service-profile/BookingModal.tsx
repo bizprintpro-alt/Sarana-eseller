@@ -142,7 +142,7 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
     <>
       <motion.div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[998]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
       <motion.div
-        className="fixed inset-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-md bg-white sm:rounded-2xl z-[999] flex flex-col sm:max-h-[90vh] overflow-hidden shadow-2xl"
+        className="fixed inset-0 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-md bg-[var(--esl-bg-card)] sm:rounded-2xl z-[999] flex flex-col sm:max-h-[90vh] overflow-hidden shadow-2xl"
         initial={{ opacity: 0, y: 40, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 40, scale: 0.97 }}
@@ -177,11 +177,11 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
           {step === 'date' && (
             <div>
               <div className="flex items-center justify-between mb-3">
-                <button onClick={prevMonth} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-white flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
+                <button onClick={prevMonth} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-[var(--esl-bg-card)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
                   <ChevronLeft className="w-4 h-4 text-[var(--esl-text-secondary)]" />
                 </button>
                 <span className="text-sm font-bold text-[var(--esl-text-primary)]">{MONTH_NAMES[calMonth]} {calYear}</span>
-                <button onClick={nextMonth} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-white flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
+                <button onClick={nextMonth} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-[var(--esl-bg-card)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
                   <ChevronRight className="w-4 h-4 text-[var(--esl-text-secondary)]" />
                 </button>
               </div>
@@ -251,7 +251,7 @@ export default function BookingModal({ service, shopId, shopName, hours, onClose
                         'py-2.5 rounded-lg text-sm font-semibold border transition cursor-pointer',
                         selectedTime === t
                           ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                          : 'bg-white text-[var(--esl-text-primary)] border-[var(--esl-border)] hover:border-indigo-300 hover:bg-indigo-50'
+                          : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] border-[var(--esl-border)] hover:border-indigo-300 hover:bg-indigo-50'
                       )}
                     >
                       {t}

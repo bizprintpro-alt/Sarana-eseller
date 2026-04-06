@@ -80,7 +80,7 @@ export default function CustomersPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
           <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
@@ -94,7 +94,7 @@ export default function CustomersPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Харилцагчид</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Захиалга өгсөн харилцагчдын жагсаалт</p>
       </div>
@@ -113,12 +113,12 @@ export default function CustomersPage() {
           placeholder="🔍 Харилцагч хайх..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md px-4 py-2.5 border border-[var(--esl-border)] rounded-lg bg-white text-[var(--esl-text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full max-w-md px-4 py-2.5 border border-[var(--esl-border)] rounded-lg bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
       {/* Customer Table */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
             <div className="text-4xl mb-3">👥</div>

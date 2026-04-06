@@ -38,7 +38,7 @@ export default function BuyerDashboard() {
   return (
     <div>
       {/* Header */}
-      <div className="bg-white border-b border-[var(--esl-border)] px-8 py-5">
+      <div className="bg-[var(--esl-bg-card)] border-b border-[var(--esl-border)] px-8 py-5">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-black text-[var(--esl-text-primary)]">
@@ -72,7 +72,7 @@ export default function BuyerDashboard() {
         </div>
 
         {/* Recent Orders */}
-        <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+        <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--esl-border)]">
             <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">🕐 Сүүлийн захиалгууд</h3>
           </div>

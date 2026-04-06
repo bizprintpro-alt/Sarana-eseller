@@ -65,7 +65,7 @@ export default function AnalyticsDashboardPage() {
           <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Хандалтын аналитик</h1>
           <p className="text-sm text-[var(--esl-text-secondary)]">Үзсэн тоо, хуваалцалт, хадгалсан тооны статистик</p>
         </div>
-        <div className="flex gap-1 bg-white border border-[var(--esl-border)] rounded-xl p-1">
+        <div className="flex gap-1 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-1">
           {PERIODS.map((p) => (
             <button key={p} onClick={() => setPeriod(p)}
               className={cn('px-3 py-1.5 rounded-lg text-xs font-semibold border-none cursor-pointer transition',
@@ -79,7 +79,7 @@ export default function AnalyticsDashboardPage() {
       {/* Overview Stats */}
       <div className="grid grid-cols-4 gap-4">
         {OVERVIEW_STATS.map((s) => (
-          <div key={s.label} className="bg-white border border-[var(--esl-border)] rounded-xl p-4">
+          <div key={s.label} className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: s.color + '12', color: s.color }}>
                 <s.icon className="w-4.5 h-4.5" />
@@ -98,7 +98,7 @@ export default function AnalyticsDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* ═══ Weekly Chart ═══ */}
-        <div className="lg:col-span-2 bg-white border border-[var(--esl-border)] rounded-xl p-5">
+        <div className="lg:col-span-2 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5">
           <div className="flex items-center justify-between mb-5">
             <h3 className="text-sm font-bold text-[var(--esl-text-primary)] flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-indigo-500" /> Долоо хоногийн хандалт
@@ -127,7 +127,7 @@ export default function AnalyticsDashboardPage() {
         </div>
 
         {/* ═══ Traffic Sources ═══ */}
-        <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5">
+        <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5">
           <h3 className="text-sm font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2">
             <Globe className="w-4 h-4 text-indigo-500" /> Трафикийн эх үүсвэр
           </h3>
@@ -150,7 +150,7 @@ export default function AnalyticsDashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ═══ Top Pages ═══ */}
-        <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5">
+        <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5">
           <h3 className="text-sm font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2">
             <Eye className="w-4 h-4 text-indigo-500" /> Шилдэг хуудсууд
           </h3>
@@ -170,7 +170,7 @@ export default function AnalyticsDashboardPage() {
 
         {/* ═══ Devices + Realtime ═══ */}
         <div className="space-y-4">
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5">
             <h3 className="text-sm font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2">
               <Smartphone className="w-4 h-4 text-indigo-500" /> Төхөөрөмжийн статистик
             </h3>

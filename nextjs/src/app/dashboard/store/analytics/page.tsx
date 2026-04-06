@@ -37,7 +37,7 @@ export default function AnalyticsPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Аналитик</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Дэлгүүрийн хандалт, борлуулалтын статистик</p>
       </div>
@@ -49,7 +49,7 @@ export default function AnalyticsPage() {
             key={key}
             onClick={() => setPeriod(key)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              period === key ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
+              period === key ? 'bg-indigo-600 text-white' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
             }`}
           >
             {label}
@@ -67,7 +67,7 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Revenue Chart */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📈 7 хоногийн орлого</h2>
           <div className="flex items-end gap-2 h-48">
             {WEEKLY_REVENUE.map((val, i) => (
@@ -84,7 +84,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Traffic Sources */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🌐 Хандалтын эх үүсвэр</h2>
           <div className="space-y-4">
             {TRAFFIC_SOURCES.map((src) => (
@@ -103,7 +103,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Top Products */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         <div className="p-6 border-b border-[var(--esl-border)]">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">🏆 Шилдэг бүтээгдэхүүн (үзэлтээр)</h2>
         </div>

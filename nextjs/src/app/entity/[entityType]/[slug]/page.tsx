@@ -211,7 +211,7 @@ function HeroCarousel({ images, children }: { images: string[]; children?: React
             <button
               key={i}
               onClick={() => setIdx(i)}
-              className={cn('w-2 h-2 rounded-full transition-all border-none cursor-pointer', i === idx ? 'bg-white w-6' : 'bg-white/40')}
+              className={cn('w-2 h-2 rounded-full transition-all border-none cursor-pointer', i === idx ? 'bg-[var(--esl-bg-card)] w-6' : 'bg-white/40')}
             />
           ))}
         </div>

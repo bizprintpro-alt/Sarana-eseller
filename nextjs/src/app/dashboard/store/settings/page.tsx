@@ -84,7 +84,7 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Тохиргоо</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Дэлгүүрийн ерөнхий тохиргоо</p>
       </div>

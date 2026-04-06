@@ -80,7 +80,7 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* ═══ Header ═══ */}
-      <div className="bg-white border-b border-slate-100 px-8 py-4">
+      <div className="bg-[var(--esl-bg-card)] border-b border-slate-100 px-8 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-indigo-700 flex items-center justify-center">
@@ -95,7 +95,7 @@ export default function OnboardingPage() {
       </div>
 
       {/* ═══ Progress ═══ */}
-      <div className="bg-white border-b border-slate-100 px-8 py-4">
+      <div className="bg-[var(--esl-bg-card)] border-b border-slate-100 px-8 py-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-2">
             {STEPS.map((s, i) => (
@@ -209,7 +209,7 @@ export default function OnboardingPage() {
                         className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-medium border cursor-pointer transition-all ${
                           industry === ind.value
                             ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
-                            : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
+                            : 'bg-[var(--esl-bg-card)] border-slate-200 text-slate-600 hover:border-slate-300'
                         }`}
                       >
                         <span className="text-lg">{ind.emoji}</span>
@@ -339,7 +339,7 @@ export default function OnboardingPage() {
       </div>
 
       {/* ═══ Footer Nav ═══ */}
-      <div className="bg-white border-t border-slate-100 px-8 py-4 shrink-0">
+      <div className="bg-[var(--esl-bg-card)] border-t border-slate-100 px-8 py-4 shrink-0">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           {step > 1 ? (
             <button

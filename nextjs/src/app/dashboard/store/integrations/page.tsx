@@ -69,7 +69,7 @@ export default function IntegrationsPage() {
           <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Интеграцууд</h1>
           <p className="text-sm text-[var(--esl-text-secondary)]">Гадаад платформуудтай холбогдож борлуулалтаа өсгөх</p>
         </div>
-        <div className="text-sm text-[var(--esl-text-secondary)] bg-white border border-[var(--esl-border)] rounded-xl px-4 py-2">
+        <div className="text-sm text-[var(--esl-text-secondary)] bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl px-4 py-2">
           <Link2 className="w-4 h-4 inline mr-1.5 text-indigo-500" />
           <span className="font-bold text-[var(--esl-text-primary)]">{connectedCount}</span>/{integrations.length} холбогдсон
         </div>
@@ -80,7 +80,7 @@ export default function IntegrationsPage() {
         {CATEGORIES.map((c) => (
           <button key={c.key} onClick={() => setCatFilter(c.key)}
             className={cn('px-3.5 py-2 rounded-xl text-xs font-semibold border-none cursor-pointer transition',
-              catFilter === c.key ? 'bg-indigo-600 text-white' : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}>
+              catFilter === c.key ? 'bg-indigo-600 text-white' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}>
             {c.label}
           </button>
         ))}
@@ -89,7 +89,7 @@ export default function IntegrationsPage() {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filtered.map((intg) => (
-          <div key={intg.id} className={cn('bg-white rounded-2xl border p-5 transition-all hover:shadow-sm',
+          <div key={intg.id} className={cn('bg-[var(--esl-bg-card)] rounded-2xl border p-5 transition-all hover:shadow-sm',
             intg.connected ? 'border-green-200' : 'border-[var(--esl-border)]')}>
             {/* Header */}
             <div className="flex items-start justify-between mb-3">

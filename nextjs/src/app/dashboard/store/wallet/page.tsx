@@ -105,7 +105,7 @@ export default function WalletPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
           <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
@@ -118,7 +118,7 @@ export default function WalletPage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Хэтэвч</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Үлдэгдэл шалгах, мөнгө татах</p>
       </div>
@@ -131,7 +131,7 @@ export default function WalletPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Withdraw Form */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">💳 Мөнгө татах</h2>
           <div className="space-y-4">
             <div>
@@ -178,7 +178,7 @@ export default function WalletPage() {
         </div>
 
         {/* Withdrawal History */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📜 Татан авалтын түүх</h2>
           {withdrawals.length === 0 ? (
             <div className="p-8 text-center">

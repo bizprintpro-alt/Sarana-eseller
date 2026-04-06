@@ -141,7 +141,7 @@ export default function CategoriesPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🗂️</span>
@@ -161,7 +161,7 @@ export default function CategoriesPage() {
 
       {/* Categories list */}
       {categories.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <span className="text-5xl block mb-4">🗂️</span>
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Ангилал байхгүй</h2>
           <p className="text-[var(--esl-text-secondary)] text-sm mb-4">Эхний ангилалаа нэмнэ үү</p>
@@ -173,7 +173,7 @@ export default function CategoriesPage() {
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
           <div className="divide-y divide-gray-100">
             {parentCategories.map((cat, idx) => (
               <div key={cat.id}>
@@ -223,7 +223,7 @@ export default function CategoriesPage() {
                   <div key={child.id} className="flex items-center gap-4 p-4 pl-16 bg-[var(--esl-bg-section)]/50 hover:bg-[var(--esl-bg-section)] transition border-t border-gray-50">
                     <span className="text-[var(--esl-text-muted)]">└</span>
                     <span className="text-xs text-[var(--esl-text-muted)] w-6 text-center font-mono">{child.order}</span>
-                    <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-lg border border-[var(--esl-border)]">
+                    <div className="w-8 h-8 bg-[var(--esl-bg-card)] rounded-lg flex items-center justify-center text-lg border border-[var(--esl-border)]">
                       {child.icon}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -275,7 +275,7 @@ export default function CategoriesPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md shadow-xl">
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl w-full max-w-md shadow-xl">
             <div className="p-6 border-b border-[var(--esl-border)]">
               <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
                 {editingId ? 'Ангилал засах' : 'Шинэ ангилал'}
@@ -313,7 +313,7 @@ export default function CategoriesPage() {
                 <select
                   value={parentId || ''}
                   onChange={(e) => setParentId(e.target.value || null)}
-                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm bg-white text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                 >
                   <option value="">-- Эцэг ангилалгүй --</option>
                   {parentCategories

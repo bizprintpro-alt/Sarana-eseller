@@ -228,7 +228,7 @@ export default function SiteSettingsPage() {
                   <span className="text-xs" style={{ color: 'var(--esl-text-secondary)' }}>ДАН нэвтрэх харуулах</span>
                   <button onClick={() => updateLp({ showDanLogin: !lp.showDanLogin })}
                     className={`w-10 h-6 rounded-full flex items-center px-0.5 transition-colors cursor-pointer border-none ${lp.showDanLogin ? 'bg-[#E8242C]' : 'bg-[var(--esl-border)]'}`}>
-                    <div className={`w-5 h-5 rounded-full bg-white transition-transform ${lp.showDanLogin ? 'translate-x-4' : 'translate-x-0'}`} />
+                    <div className={`w-5 h-5 rounded-full bg-[var(--esl-bg-card)] transition-transform ${lp.showDanLogin ? 'translate-x-4' : 'translate-x-0'}`} />
                   </button>
                 </div>
               </div>

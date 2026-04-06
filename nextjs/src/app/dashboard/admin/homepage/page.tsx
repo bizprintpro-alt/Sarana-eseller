@@ -123,7 +123,7 @@ export default function AdminHomepagePage() {
           <div className="mt-4 bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl p-6 text-center">
             <h2 className="text-white font-black text-lg mb-1">{headline || 'Гарчиг...'}</h2>
             <p className="text-white/70 text-xs mb-3">{subtext || 'Дэд гарчиг...'}</p>
-            <span className="inline-block bg-white text-indigo-700 font-bold text-xs px-4 py-2 rounded-lg">{cta || 'CTA...'}</span>
+            <span className="inline-block bg-[var(--esl-bg-card)] text-indigo-700 font-bold text-xs px-4 py-2 rounded-lg">{cta || 'CTA...'}</span>
           </div>
         </div>
 
@@ -134,7 +134,7 @@ export default function AdminHomepagePage() {
             <button onClick={() => { const val = !announcementActive; setAnnouncementActive(val); saveConfig('announcement_active', val ? 'true' : 'false'); }}
               className="relative w-11 h-6 rounded-full border-none cursor-pointer transition-colors"
               style={{ background: announcementActive ? '#6366F1' : '#333' }}>
-              <div className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-white transition-all"
+              <div className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-[var(--esl-bg-card)] transition-all"
                 style={{ left: announcementActive ? '22px' : '3px' }} />
             </button>
           </div>

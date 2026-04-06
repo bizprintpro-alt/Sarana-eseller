@@ -164,7 +164,7 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
                 return (
                   <button key={option.id} onClick={() => handleModifierSelect(group, option)}
                     className={cn('px-3.5 py-2 rounded-full text-sm font-medium border transition-all cursor-pointer',
-                      isSelected ? 'bg-[#E31E24] text-white border-[#E31E24]' : 'bg-white text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:border-[#E31E24]')}>
+                      isSelected ? 'bg-[#E31E24] text-white border-[#E31E24]' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:border-[#E31E24]')}>
                     {option.name}
                     {option.price > 0 && <span className="ml-1 text-xs opacity-75">+{formatPrice(option.price)}</span>}
                   </button>
@@ -184,7 +184,7 @@ export default function ModalBody({ product, qty, setQty, onAddToCart, isAffilia
                 return (
                   <div key={addon.id} onClick={() => !selected && handleAddOnToggle(addon)}
                     className={cn('shrink-0 w-24 p-2.5 rounded-xl border cursor-pointer transition-all text-center',
-                      selected ? 'border-[#E31E24] bg-red-50' : 'border-[var(--esl-border)] hover:border-[#E31E24] bg-white')}>
+                      selected ? 'border-[#E31E24] bg-red-50' : 'border-[var(--esl-border)] hover:border-[#E31E24] bg-[var(--esl-bg-card)]')}>
                     <div className="text-2xl mb-1">{addon.image ? '📦' : '🎁'}</div>
                     <p className="text-xs text-[var(--esl-text-secondary)] font-medium truncate">{addon.name}</p>
                     <p className="text-xs text-[#E31E24] font-bold">+{formatPrice(addon.price)}</p>

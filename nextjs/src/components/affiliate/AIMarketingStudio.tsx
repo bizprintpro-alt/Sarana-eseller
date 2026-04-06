@@ -51,7 +51,7 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
     <>
       <motion.div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[998]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
       <motion.div
-        className="fixed inset-3 sm:inset-6 bg-white rounded-2xl z-[999] flex flex-col overflow-hidden shadow-2xl"
+        className="fixed inset-3 sm:inset-6 bg-[var(--esl-bg-card)] rounded-2xl z-[999] flex flex-col overflow-hidden shadow-2xl"
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -89,7 +89,7 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
                       'rounded-lg p-2 border cursor-pointer transition-all text-center',
                       selectedTemplate.id === t.id
                         ? 'border-[#6366F1] ring-2 ring-[#6366F1]/20 bg-[#EEF2FF]'
-                        : 'border-[var(--esl-border)] hover:border-[#6366F1]/30 bg-white'
+                        : 'border-[var(--esl-border)] hover:border-[#6366F1]/30 bg-[var(--esl-bg-card)]'
                     )}
                   >
                     <div className={`w-full aspect-[3/4] rounded bg-gradient-to-br ${t.gradient} mb-1`} />
@@ -111,7 +111,7 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
                       'flex-1 py-2 rounded-lg border cursor-pointer transition-all text-center',
                       selectedSize.key === s.key
                         ? 'border-[#6366F1] bg-[#EEF2FF] text-[#6366F1]'
-                        : 'border-[var(--esl-border)] text-[var(--esl-text-secondary)] hover:border-[#6366F1]/30 bg-white'
+                        : 'border-[var(--esl-border)] text-[var(--esl-text-secondary)] hover:border-[#6366F1]/30 bg-[var(--esl-bg-card)]'
                     )}
                   >
                     <s.icon className="w-4 h-4 mx-auto mb-0.5" />
@@ -173,7 +173,7 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
 
           {/* Right — Preview */}
           <div className="flex-1 bg-[#F0F0F0] flex items-center justify-center p-6 overflow-hidden">
-            <div className={cn('bg-white rounded-xl shadow-xl overflow-hidden max-h-full', selectedSize.aspect, selectedSize.key === 'story' ? 'w-[280px]' : selectedSize.key === 'post' ? 'w-[360px]' : 'w-full max-w-[560px]')}>
+            <div className={cn('bg-[var(--esl-bg-card)] rounded-xl shadow-xl overflow-hidden max-h-full', selectedSize.aspect, selectedSize.key === 'story' ? 'w-[280px]' : selectedSize.key === 'post' ? 'w-[360px]' : 'w-full max-w-[560px]')}>
               <div className={`w-full h-full bg-gradient-to-br ${selectedTemplate.gradient} relative flex flex-col items-center justify-center text-white p-6 text-center min-h-[300px]`}>
                 {/* Decorative */}
                 <div className="absolute top-[-30px] right-[-30px] w-32 h-32 rounded-full bg-white/[.08]" />
@@ -203,7 +203,7 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-3 border-t border-[var(--esl-border)] bg-white shrink-0">
+        <div className="flex items-center justify-between px-6 py-3 border-t border-[var(--esl-border)] bg-[var(--esl-bg-card)] shrink-0">
           <span className="text-xs text-[var(--esl-text-muted)]">AI автоматаар QR код болон брэнд нэмнэ</span>
           <div className="flex gap-2">
             <button className="px-4 py-2 bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] rounded-lg text-xs font-bold cursor-pointer hover:bg-[#E2E8F0] transition flex items-center gap-1.5">

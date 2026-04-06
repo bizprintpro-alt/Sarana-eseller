@@ -95,7 +95,7 @@ export default function OrdersPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
           <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
@@ -104,7 +104,7 @@ export default function OrdersPage() {
             <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />
           ))}
         </div>
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-12 bg-[var(--esl-bg-section)] rounded animate-pulse mb-3" />
           ))}
@@ -116,7 +116,7 @@ export default function OrdersPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Захиалгын удирдлага</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Бүх захиалгуудыг хянах, төлөв өөрчлөх</p>
       </div>
@@ -138,7 +138,7 @@ export default function OrdersPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
               filter === tab.key
                 ? 'bg-indigo-600 text-white'
-                : 'bg-white text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
+                : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
             }`}
           >
             {tab.label}
@@ -152,7 +152,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
             <div className="text-4xl mb-3">📭</div>
@@ -204,7 +204,7 @@ export default function OrdersPage() {
                       <select
                         value={order.status}
                         onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                        className="text-xs border border-[var(--esl-border)] rounded-lg px-2 py-1.5 bg-white text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="text-xs border border-[var(--esl-border)] rounded-lg px-2 py-1.5 bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       >
                         <option value="pending">⏳ Хүлээгдэж буй</option>
                         <option value="confirmed">✅ Баталгаажсан</option>
@@ -226,7 +226,7 @@ export default function OrdersPage() {
       {/* Order Detail Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setSelectedOrder(null)}>
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-[var(--esl-border)]">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
@@ -290,7 +290,7 @@ export default function OrdersPage() {
                   <select
                     value={selectedOrder.status}
                     onChange={(e) => handleStatusChange(selectedOrder._id, e.target.value)}
-                    className="flex-1 border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm bg-white text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="flex-1 border border-[var(--esl-border)] rounded-lg px-3 py-2 text-sm bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="pending">⏳ Хүлээгдэж буй</option>
                     <option value="confirmed">✅ Баталгаажсан</option>

@@ -2,7 +2,7 @@
 
 export default function ProductCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden">
+    <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] overflow-hidden">
       <div className="h-48 bg-[var(--esl-bg-section)] animate-pulse" />
       <div className="p-4 space-y-2.5">
         <div className="h-3 bg-[var(--esl-bg-section)] rounded-full w-1/3 animate-pulse" />
@@ -48,7 +48,7 @@ export function DashboardSkeleton() {
 
 export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
-    <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden animate-pulse">
+    <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden animate-pulse">
       <div className="h-10 bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)]" />
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="flex items-center gap-4 px-4 py-3 border-b border-gray-50">

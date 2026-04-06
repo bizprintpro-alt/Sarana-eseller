@@ -72,7 +72,7 @@ export default function OrderTrackingPage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)]">
-      <nav className="bg-white border-b border-[var(--esl-border)] h-14 flex items-center px-4">
+      <nav className="bg-[var(--esl-bg-card)] border-b border-[var(--esl-border)] h-14 flex items-center px-4">
         <div className="max-w-2xl mx-auto w-full flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 no-underline">
             <EsellerLogo size={22} />
@@ -102,7 +102,7 @@ export default function OrderTrackingPage() {
             </div>
 
             {/* Status Timeline */}
-            <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+            <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6">
               {isCancelled ? (
                 <div className="text-center py-6">
                   <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-3">
@@ -153,7 +153,7 @@ export default function OrderTrackingPage() {
 
             {/* Order summary */}
             {order.total && (
-              <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-5">
+              <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-5">
                 <div className="flex justify-between text-sm">
                   <span className="text-[var(--esl-text-secondary)]">Нийт дүн</span>
                   <span className="font-bold text-[var(--esl-text-primary)]">{formatPrice(order.total)}</span>

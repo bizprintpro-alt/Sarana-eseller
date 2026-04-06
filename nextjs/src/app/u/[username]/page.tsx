@@ -95,7 +95,7 @@ export default function MicroStorefront() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl border border-[var(--esl-border)] p-5 flex items-center gap-4"
+          className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-5 flex items-center gap-4"
         >
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6366F1] to-[#A78BFA] flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-md">
             {getInitials(displayName)}
@@ -118,7 +118,7 @@ export default function MicroStorefront() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden"
+            className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] overflow-hidden"
           >
             <div className="relative h-64 sm:h-80 bg-gradient-to-br from-[#F8FAFC] to-[#EEF2FF] flex items-center justify-center">
               {heroProduct.images?.[0] ? (
@@ -200,7 +200,7 @@ export default function MicroStorefront() {
               {crossSellProducts.map((p) => {
                 const disc = discountPercent(p.price, p.salePrice);
                 return (
-                  <div key={p._id} className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
+                  <div key={p._id} className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
                     <div className="relative h-32 bg-[var(--esl-bg-section)] flex items-center justify-center overflow-hidden">
                       {p.images?.[0] ? (
                         <img loading="lazy" src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />

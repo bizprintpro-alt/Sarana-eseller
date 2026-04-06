@@ -106,7 +106,7 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Блог</h1>
           <p className="text-[var(--esl-text-secondary)] mt-1">Нийтлэл бичих, засах, удирдах</p>
@@ -123,7 +123,7 @@ export default function BlogPage() {
       </div>
 
       {posts.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">📝</div>
           <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Нийтлэл байхгүй</h3>
           <p className="text-[var(--esl-text-muted)] mt-1">Эхний нийтлэлээ бичээрэй</p>
@@ -131,7 +131,7 @@ export default function BlogPage() {
       ) : (
         <div className="space-y-4">
           {posts.map((post) => (
-            <div key={post.id} className="bg-white rounded-xl border border-[var(--esl-border)] p-5 hover:shadow-md transition-shadow">
+            <div key={post.id} className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5 hover:shadow-md transition-shadow">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
@@ -168,7 +168,7 @@ export default function BlogPage() {
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-[var(--esl-border)] flex items-center justify-between">
               <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">{editingId ? 'Нийтлэл засах' : 'Шинэ нийтлэл'}</h2>
               <button onClick={() => setShowModal(false)} className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] text-xl">&times;</button>

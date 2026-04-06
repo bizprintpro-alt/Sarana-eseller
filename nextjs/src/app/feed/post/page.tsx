@@ -581,7 +581,7 @@ export default function PostAdPage() {
               <p className="text-[10px] text-[#999]">7 хоног</p>
             </div>
             <div className={`w-12 h-7 rounded-full transition-colors flex items-center px-1 ${isVip ? 'bg-[#D4AF37]' : 'bg-[#3D3D3D]'}`}>
-              <div className={`w-5 h-5 rounded-full bg-white transition-transform ${isVip ? 'translate-x-5' : 'translate-x-0'}`} />
+              <div className={`w-5 h-5 rounded-full bg-[var(--esl-bg-card)] transition-transform ${isVip ? 'translate-x-5' : 'translate-x-0'}`} />
             </div>
           </div>
         </div>

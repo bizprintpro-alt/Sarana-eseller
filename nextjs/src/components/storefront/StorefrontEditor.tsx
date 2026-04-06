@@ -108,7 +108,7 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
   return (
     <div className="flex h-screen bg-[var(--esl-bg-section)] overflow-hidden">
       {/* ═══ LEFT PANEL — Controls ═══ */}
-      <div className="w-[320px] bg-white border-r border-[var(--esl-border)] flex flex-col shrink-0 overflow-hidden">
+      <div className="w-[320px] bg-[var(--esl-bg-card)] border-r border-[var(--esl-border)] flex flex-col shrink-0 overflow-hidden">
         {/* Top bar */}
         <div className="flex items-center justify-between px-4 h-14 border-b border-[var(--esl-border)] shrink-0">
           <h2 className="text-sm font-bold text-[var(--esl-text-primary)]">Дэлгүүр засварлах</h2>
@@ -177,14 +177,14 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
               <div>
                 <label className="text-[10px] text-[var(--esl-text-muted)] mb-1 block">Гарчиг</label>
                 <select value={config.theme.fontDisplay} onChange={(e) => updateTheme({ fontDisplay: e.target.value as FontFamily })}
-                  className="w-full px-2 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                  className="w-full px-2 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-[var(--esl-bg-card)] cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
                   {FONTS.map((f) => <option key={f} value={f}>{f}</option>)}
                 </select>
               </div>
               <div>
                 <label className="text-[10px] text-[var(--esl-text-muted)] mb-1 block">Текст</label>
                 <select value={config.theme.fontBody} onChange={(e) => updateTheme({ fontBody: e.target.value as FontFamily })}
-                  className="w-full px-2 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                  className="w-full px-2 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-[var(--esl-bg-card)] cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500">
                   {FONTS.map((f) => <option key={f} value={f}>{f}</option>)}
                 </select>
               </div>
@@ -251,18 +251,18 @@ export default function StorefrontEditor({ initialConfig, onSave, onRegenerate, 
         {/* Preview toolbar */}
         <div className="flex items-center justify-center gap-2 h-10 bg-gray-200/50 border-b border-[var(--esl-border)] shrink-0">
           <button onClick={() => setPreviewMode('desktop')}
-            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'desktop' ? 'bg-white shadow-sm text-[var(--esl-text-primary)]' : 'bg-transparent text-[var(--esl-text-muted)]')}>
+            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'desktop' ? 'bg-[var(--esl-bg-card)] shadow-sm text-[var(--esl-text-primary)]' : 'bg-transparent text-[var(--esl-text-muted)]')}>
             <Monitor className="w-4 h-4" />
           </button>
           <button onClick={() => setPreviewMode('mobile')}
-            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'mobile' ? 'bg-white shadow-sm text-[var(--esl-text-primary)]' : 'bg-transparent text-[var(--esl-text-muted)]')}>
+            className={cn('p-1.5 rounded-md border-none cursor-pointer transition', previewMode === 'mobile' ? 'bg-[var(--esl-bg-card)] shadow-sm text-[var(--esl-text-primary)]' : 'bg-transparent text-[var(--esl-text-muted)]')}>
             <Smartphone className="w-4 h-4" />
           </button>
         </div>
 
         {/* Preview area */}
         <div className="flex-1 overflow-auto flex items-start justify-center p-4 bg-[var(--esl-bg-section)]">
-          <div className={cn('bg-white shadow-xl overflow-hidden transition-all duration-300',
+          <div className={cn('bg-[var(--esl-bg-card)] shadow-xl overflow-hidden transition-all duration-300',
             previewMode === 'mobile' ? 'w-[375px] rounded-[2rem] ring-8 ring-gray-800' : 'w-full max-w-[1200px] rounded-lg')}>
             <div className={cn(previewMode === 'mobile' ? 'h-[812px] overflow-y-auto' : 'min-h-[600px]')}>
               <StorefrontRenderer config={config} />

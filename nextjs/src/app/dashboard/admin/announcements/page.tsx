@@ -53,7 +53,7 @@ export default function AnnouncementsPage() {
       </div>
 
       {/* Current items */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden divide-y divide-gray-100">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden divide-y divide-gray-100">
         {items.map((item) => (
           <div key={item.id} className={cn('flex items-center gap-3 px-4 py-3 transition', !item.isActive && 'opacity-50')}>
             <GripVertical className="w-4 h-4 text-[var(--esl-text-muted)] cursor-grab shrink-0" />
@@ -70,7 +70,7 @@ export default function AnnouncementsPage() {
       </div>
 
       {/* Add new */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-5 space-y-3">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-5 space-y-3">
         <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Шинэ мэдэгдэл нэмэх</h3>
         <div className="flex gap-2">
           <div className="flex gap-1 flex-wrap">

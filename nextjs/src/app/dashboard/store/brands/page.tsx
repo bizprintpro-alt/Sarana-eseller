@@ -116,7 +116,7 @@ export default function BrandsPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
             <span className="text-2xl">🏷️</span>
@@ -136,7 +136,7 @@ export default function BrandsPage() {
 
       {/* Brand Grid */}
       {brands.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <span className="text-5xl block mb-4">🏷️</span>
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Брэнд байхгүй</h2>
           <p className="text-[var(--esl-text-secondary)] text-sm mb-4">Эхний брэндээ нэмнэ үү</p>
@@ -150,7 +150,7 @@ export default function BrandsPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {brands.map((brand) => (
-            <div key={brand.id} className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md transition">
+            <div key={brand.id} className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md transition">
               {/* Logo area */}
               <div className="h-32 bg-[var(--esl-bg-section)] flex items-center justify-center border-b border-[var(--esl-border)]">
                 {brand.logoUrl ? (
@@ -207,7 +207,7 @@ export default function BrandsPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-md shadow-xl">
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl w-full max-w-md shadow-xl">
             <div className="p-6 border-b border-[var(--esl-border)]">
               <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
                 {editingId ? 'Брэнд засах' : 'Шинэ брэнд'}

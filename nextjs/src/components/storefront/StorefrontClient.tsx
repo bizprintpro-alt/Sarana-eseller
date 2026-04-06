@@ -93,7 +93,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
           </div>
 
           <div className="flex gap-3 flex-wrap">
-            <a href="#products" className="bg-white px-7 py-3.5 rounded-xl font-bold text-sm no-underline hover:bg-white/90 transition shadow-lg" style={{ color: primaryColor }}>
+            <a href="#products" className="bg-[var(--esl-bg-card)] px-7 py-3.5 rounded-xl font-bold text-sm no-underline hover:bg-white/90 transition shadow-lg" style={{ color: primaryColor }}>
               {ctaText}
             </a>
             {shop.phone && (

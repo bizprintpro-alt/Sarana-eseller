@@ -216,7 +216,7 @@ export default function StorefrontEditorPage() {
               return (
                 <motion.button key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
                   onClick={() => handlePickMood(variant)}
-                  className="bg-white rounded-2xl border-2 border-[var(--esl-border)] overflow-hidden hover:border-indigo-500 hover:shadow-lg transition-all cursor-pointer text-left group">
+                  className="bg-[var(--esl-bg-card)] rounded-2xl border-2 border-[var(--esl-border)] overflow-hidden hover:border-indigo-500 hover:shadow-lg transition-all cursor-pointer text-left group">
                   {/* Preview */}
                   <div className="h-48 relative" style={{ background: variant.theme.primaryColor }}>
                     <div className="absolute inset-0 flex items-center justify-center text-white text-center p-4">
@@ -261,7 +261,7 @@ export default function StorefrontEditorPage() {
       <div className="-m-6 lg:-m-8 flex items-center justify-center min-h-screen bg-[var(--esl-bg-section)] p-4">
         <div className="max-w-md w-full space-y-6">
           {published ? (
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl border border-[var(--esl-border)] p-8 text-center">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-8 text-center">
               <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                 <Check className="w-8 h-8 text-green-600" />
               </div>
@@ -285,7 +285,7 @@ export default function StorefrontEditorPage() {
               </div>
             </motion.div>
           ) : (
-            <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
+            <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
               <h2 className="text-lg font-black text-[var(--esl-text-primary)]">Дэлгүүр нийтлэх</h2>
 
               <div>

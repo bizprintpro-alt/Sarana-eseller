@@ -20,7 +20,7 @@ export default function ServiceCategoriesPage() {
         </button>
       </div>
 
-      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         {categories.map((cat, i) => (
           <div key={cat._id} className="flex items-center gap-4 px-5 py-4 border-b border-[#F8FAFC] last:border-0 hover:bg-[var(--esl-bg-section)] transition group">
             <GripVertical className="w-4 h-4 text-[#CBD5E1] cursor-grab" />

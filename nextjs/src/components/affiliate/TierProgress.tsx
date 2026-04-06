@@ -27,7 +27,7 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
   const TierIcon = tier.icon;
 
   return (
-    <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6 space-y-5">
+    <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6 space-y-5">
       {/* Current Tier */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -96,7 +96,7 @@ export default function TierProgress({ totalEarnings, monthlyTarget = 200000, mo
           <div key={t.name} className={`text-center py-2 px-1 rounded-lg border text-[10px] font-bold transition-all ${
             i <= currentTier
               ? 'border-[#6366F1]/20 bg-[#EEF2FF] text-[#6366F1]'
-              : 'border-[var(--esl-border)] bg-white text-[#CBD5E1]'
+              : 'border-[var(--esl-border)] bg-[var(--esl-bg-card)] text-[#CBD5E1]'
           }`}>
             <t.icon className="w-3.5 h-3.5 mx-auto mb-0.5" />
             {t.name}

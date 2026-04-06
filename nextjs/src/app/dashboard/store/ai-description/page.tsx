@@ -96,7 +96,7 @@ export default function AIDescriptionPage() {
           <h1 className="text-2xl font-bold">AI Тайлбар бичигч</h1>
           <p className="opacity-90 mt-1">Бүтээгдэхүүний тайлбар автоматаар бич</p>
         </div>
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
           <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
           <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
@@ -151,7 +151,7 @@ export default function AIDescriptionPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Мэдээлэл оруулах</h2>
 
           <div className="mb-4">
@@ -231,7 +231,7 @@ export default function AIDescriptionPage() {
         </div>
 
         {/* Result */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Үр дүн</h2>
 
           {result ? (

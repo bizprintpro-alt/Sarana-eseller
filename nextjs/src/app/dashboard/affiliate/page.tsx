@@ -177,7 +177,7 @@ export default function AffiliateDashboard() {
         </div>
         <button
           onClick={loadData}
-          className="inline-flex items-center gap-2 text-sm bg-white border border-[var(--esl-border)] hover:border-[#E8242C] text-[var(--esl-text-secondary)] hover:text-[#E8242C] rounded-xl px-4 py-2.5 transition-all font-medium cursor-pointer"
+          className="inline-flex items-center gap-2 text-sm bg-[var(--esl-bg-card)] border border-[var(--esl-border)] hover:border-[#E8242C] text-[var(--esl-text-secondary)] hover:text-[#E8242C] rounded-xl px-4 py-2.5 transition-all font-medium cursor-pointer"
         >
           <Zap className="w-4 h-4" />
           Шинэчлэх
@@ -187,7 +187,7 @@ export default function AffiliateDashboard() {
       {/* ════════════════════════════════════════
           TABS
           ════════════════════════════════════════ */}
-      <nav className="flex gap-1 bg-white rounded-xl p-1 border border-[var(--esl-border)] overflow-x-auto shadow-sm">
+      <nav className="flex gap-1 bg-[var(--esl-bg-card)] rounded-xl p-1 border border-[var(--esl-border)] overflow-x-auto shadow-sm">
         {TABS.map((t) => (
           <button
             key={t.key}
@@ -236,7 +236,7 @@ export default function AffiliateDashboard() {
                         'px-5 py-3 rounded-xl text-sm font-bold transition-all shrink-0 flex items-center gap-2 border-none cursor-pointer',
                         copiedId === 'ref'
                           ? 'bg-emerald-400 text-white'
-                          : 'bg-white text-[#C41E25] hover:bg-white/90 shadow-lg'
+                          : 'bg-[var(--esl-bg-card)] text-[#C41E25] hover:bg-white/90 shadow-lg'
                       )}
                     >
                       {copiedId === 'ref' ? <><Check className="w-4 h-4" /> Хуулсан</> : <><Copy className="w-4 h-4" /> Хуулах</>}
@@ -255,7 +255,7 @@ export default function AffiliateDashboard() {
                       else if (i === 1) setTab('toolkit');
                       else if (i === 3) setTab('earnings');
                     }}
-                    className="bg-white border border-[var(--esl-border)] rounded-xl p-4 text-left hover:border-[#E8242C]/30 hover:-translate-y-0.5 hover:shadow-md transition-all cursor-pointer group"
+                    className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 text-left hover:border-[#E8242C]/30 hover:-translate-y-0.5 hover:shadow-md transition-all cursor-pointer group"
                   >
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: a.color + '12', color: a.color }}>
                       <a.icon className="w-5 h-5" />
@@ -277,7 +277,7 @@ export default function AffiliateDashboard() {
               {/* Performance Chart + Recent Earnings */}
               <div className="grid lg:grid-cols-5 gap-6">
                 {/* Weekly Performance */}
-                <motion.div variants={fadeUp} custom={3} className="lg:col-span-3 bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+                <motion.div variants={fadeUp} custom={3} className="lg:col-span-3 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="font-bold text-[var(--esl-text-primary)] flex items-center gap-2">
                       <BarChart3 className="w-4 h-4 text-[#E8242C]" />
@@ -306,7 +306,7 @@ export default function AffiliateDashboard() {
                 </motion.div>
 
                 {/* Recent Earnings */}
-                <motion.div variants={fadeUp} custom={4} className="lg:col-span-2 bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+                <motion.div variants={fadeUp} custom={4} className="lg:col-span-2 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
                   <div className="px-5 py-4 border-b border-[#F1F5F9] flex items-center justify-between">
                     <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Сүүлийн орлого</h3>
                     <button onClick={() => setTab('earnings')} className="text-xs text-[#E8242C] font-semibold bg-transparent border-none cursor-pointer hover:underline flex items-center gap-0.5">
@@ -368,10 +368,10 @@ export default function AffiliateDashboard() {
                     placeholder="Бүтээгдэхүүн хайх..."
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
-                    className="w-full bg-white border border-[var(--esl-border)] rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#E8242C] focus:ring-2 focus:ring-[#E8242C]/10 transition-all"
+                    className="w-full bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl pl-10 pr-4 py-3 text-sm outline-none focus:border-[#E8242C] focus:ring-2 focus:ring-[#E8242C]/10 transition-all"
                   />
                 </div>
-                <span className="text-xs text-[var(--esl-text-muted)] bg-white border border-[var(--esl-border)] px-3 py-2 rounded-lg font-medium whitespace-nowrap">
+                <span className="text-xs text-[var(--esl-text-muted)] bg-[var(--esl-bg-card)] border border-[var(--esl-border)] px-3 py-2 rounded-lg font-medium whitespace-nowrap">
                   {filteredProducts.length} бараа
                 </span>
               </div>
@@ -440,7 +440,7 @@ export default function AffiliateDashboard() {
           {tab === 'earnings' && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-5">
+                <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-5">
                   <div className="text-xs text-[var(--esl-text-muted)] mb-1 font-medium">Нийт орлого</div>
                   <div className="text-2xl font-black text-[var(--esl-text-primary)]">{formatPrice(earnings.totalEarnings || 0)}</div>
                 </div>
@@ -450,7 +450,7 @@ export default function AffiliateDashboard() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden">
+              <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] overflow-hidden">
                 <div className="px-6 py-4 border-b border-[#F1F5F9]">
                   <h3 className="font-bold text-[var(--esl-text-primary)] flex items-center gap-2"><DollarSign className="w-4 h-4 text-[#E8242C]" /> Орлогын түүх</h3>
                 </div>
@@ -500,14 +500,14 @@ export default function AffiliateDashboard() {
                   <div className="text-sm text-white/60 mb-1">Боломжит үлдэгдэл</div>
                   <div className="text-3xl font-black">{formatPrice(wallet.balance || 0)}</div>
                 </div>
-                <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+                <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6">
                   <ArrowUpRight className="w-5 h-5 text-amber-500 mb-2" />
                   <div className="text-sm text-[var(--esl-text-muted)] mb-1">Хүлээгдэж буй</div>
                   <div className="text-3xl font-black text-amber-500">{formatPrice(wallet.pending || 0)}</div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
+              <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
                 <h3 className="font-bold text-[var(--esl-text-primary)] flex items-center gap-2"><DollarSign className="w-4 h-4 text-[#E8242C]" /> Мөнгө татах</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                   <div>

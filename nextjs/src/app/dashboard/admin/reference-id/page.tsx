@@ -86,7 +86,7 @@ export default function ReferenceIdPage() {
           <p className="text-sm text-[var(--esl-text-secondary)]">Админ · Бараа болон захиалгын дугаарын формат</p>
         </div>
         <div className="flex gap-2">
-          <button className="px-4 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
+          <button className="px-4 py-2 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
             Анхны тохиргоо
           </button>
           <button className="px-4 py-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-xs font-semibold hover:bg-amber-100 cursor-pointer transition">
@@ -119,7 +119,7 @@ export default function ReferenceIdPage() {
         {/* ═══ Left — Config ═══ */}
         <div className="space-y-4">
           {/* Object scope */}
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">ID хамрах хүрээ</h3>
               <span className="text-[10px] text-[var(--esl-text-muted)]">Ямар объектод ID олгох</span>
@@ -141,7 +141,7 @@ export default function ReferenceIdPage() {
               <div className="flex gap-2">
                 {['Бараа', 'Захиалга', 'Дэлгүүр'].map((t) => (
                   <button key={t} className={cn('px-4 py-2 rounded-lg text-xs font-semibold border cursor-pointer transition',
-                    t === 'Бараа' ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-white text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}>
+                    t === 'Бараа' ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}>
                     {t}
                   </button>
                 ))}
@@ -150,7 +150,7 @@ export default function ReferenceIdPage() {
           </div>
 
           {/* Format config */}
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Форматын тохиргоо</h3>
               <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Бараа · {format.prefix}</span>
@@ -166,7 +166,7 @@ export default function ReferenceIdPage() {
               <div>
                 <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Тусгаарлагч</label>
                 <select value={format.separator} onChange={(e) => setFormat({ ...format, separator: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-[var(--esl-bg-card)] cursor-pointer focus:outline-none">
                   {SEPARATORS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
               </div>
@@ -209,14 +209,14 @@ export default function ReferenceIdPage() {
               <div>
                 <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Ангилалын код</label>
                 <select value={format.categoryCode} onChange={(e) => setFormat({ ...format, categoryCode: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-[var(--esl-bg-card)] cursor-pointer focus:outline-none">
                   {Object.entries(CATEGORY_CODES).map(([k, v]) => <option key={k} value={v}>{v} — {k}</option>)}
                 </select>
               </div>
               <div>
                 <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">Том/жижиг үсэг</label>
                 <select value={format.caseStyle} onChange={(e) => setFormat({ ...format, caseStyle: e.target.value as 'upper' | 'lower' })}
-                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none">
+                  className="w-full px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm bg-[var(--esl-bg-card)] cursor-pointer focus:outline-none">
                   <option value="upper">Том үсэг (UPPER)</option>
                   <option value="lower">Жижиг үсэг (lower)</option>
                 </select>
@@ -228,7 +228,7 @@ export default function ReferenceIdPage() {
         {/* ═══ Right — Preview ═══ */}
         <div className="space-y-4">
           {/* ID Preview */}
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5 space-y-4">
             <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Урьдчилан харах</h3>
             <div className="bg-[#1A1A2E] rounded-xl p-5 text-center">
               <div className="text-[10px] text-white/40 mb-2">ҮҮСЭХ ID ЖИШЭЭ</div>
@@ -271,7 +271,7 @@ export default function ReferenceIdPage() {
           </div>
 
           {/* Search & Check */}
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-3">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5 space-y-3">
             <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Хайлт & шалгалт</h3>
             <div>
               <label className="text-[10px] text-[var(--esl-text-muted)] block mb-1">ID шалгах</label>
@@ -291,7 +291,7 @@ export default function ReferenceIdPage() {
           </div>
 
           {/* Change history */}
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-5 space-y-2">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-5 space-y-2">
             <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Өөрчлөлтийн түүх</h3>
             {[
               { text: `${format.prefix}-${format.categoryCode}-{SEQ} формат идэвхжсэн`, date: '2026-04-01', dot: 'bg-red-500' },

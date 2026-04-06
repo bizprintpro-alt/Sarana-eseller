@@ -63,7 +63,7 @@ export default function SearchBar({ value, onChange, inputRef }: SearchBarProps)
           onChange={(e) => onChange(e.target.value)}
           onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
           placeholder="Бараа, дэлгүүр хайх..."
-          className="w-full h-11 pl-4 pr-20 rounded-xl bg-[var(--esl-bg-section)] border-2 border-transparent text-sm outline-none focus:border-[#E31E24] focus:bg-white transition-all"
+          className="w-full h-11 pl-4 pr-20 rounded-xl bg-[var(--esl-bg-section)] border-2 border-transparent text-sm outline-none focus:border-[#E31E24] focus:bg-[var(--esl-bg-card)] transition-all"
         />
         {value && (
           <button onClick={() => { onChange(''); setSuggestions([]); }}
@@ -78,7 +78,7 @@ export default function SearchBar({ value, onChange, inputRef }: SearchBarProps)
 
       {/* Dropdown */}
       {showDropdown && suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-[var(--esl-border)] z-50 overflow-hidden max-h-[400px] overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-[var(--esl-bg-card)] rounded-xl shadow-xl border border-[var(--esl-border)] z-50 overflow-hidden max-h-[400px] overflow-y-auto">
           {suggestions.map((s) => (
             <Link key={s.id} href={`/store/${s.id}`} onClick={() => setShowDropdown(false)}
               className="flex items-center gap-3 px-4 py-2.5 hover:bg-[var(--esl-bg-section)] transition no-underline">
@@ -99,7 +99,7 @@ export default function SearchBar({ value, onChange, inputRef }: SearchBarProps)
       )}
 
       {showDropdown && value.length >= 2 && suggestions.length === 0 && !loading && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-[var(--esl-border)] z-50 p-6 text-center">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-[var(--esl-bg-card)] rounded-xl shadow-xl border border-[var(--esl-border)] z-50 p-6 text-center">
           <p className="text-sm text-[var(--esl-text-muted)]">"{value}" хайлтаар бараа олдсонгүй</p>
         </div>
       )}

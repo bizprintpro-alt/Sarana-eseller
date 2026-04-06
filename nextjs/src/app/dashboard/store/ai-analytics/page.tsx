@@ -40,7 +40,7 @@ export default function AIAnalyticsPage() {
           <h1 className="text-2xl font-bold">AI Борлуулалтын зөвлөгч</h1>
           <p className="opacity-90 mt-1">Ухаалаг шинжилгээ, зөвлөмж, урьдчилсан таамаглал</p>
         </div>
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
           <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
           <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
@@ -63,7 +63,7 @@ export default function AIAnalyticsPage() {
       {/* Insight cards grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
         {/* Insight 1 — Sales drop */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">📉</span>
@@ -82,7 +82,7 @@ export default function AIAnalyticsPage() {
         </div>
 
         {/* Insight 2 — Recommendation */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">💡</span>
@@ -101,7 +101,7 @@ export default function AIAnalyticsPage() {
         </div>
 
         {/* Insight 3 — Prediction */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">🔮</span>
@@ -120,7 +120,7 @@ export default function AIAnalyticsPage() {
         </div>
 
         {/* Insight 4 — Tip */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
               <span className="text-lg">🏷️</span>
@@ -140,7 +140,7 @@ export default function AIAnalyticsPage() {
       </div>
 
       {/* Weekly Trend Chart */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">7 хоногийн борлуулалтын хандлага</h2>
         <div className="flex items-end gap-3 h-48">
           {WEEKLY_DATA.map((d) => {
@@ -181,7 +181,7 @@ export default function AIAnalyticsPage() {
 
       {/* Additional insights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">📊</span>
             <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Хамгийн эрэлттэй цаг</h3>
@@ -193,7 +193,7 @@ export default function AIAnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">🏆</span>
             <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Шилдэг ангилал</h3>
@@ -205,7 +205,7 @@ export default function AIAnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-5">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-lg">👥</span>
             <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Давтан худалдан авалт</h3>

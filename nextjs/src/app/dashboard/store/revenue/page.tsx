@@ -56,7 +56,7 @@ export default function RevenuePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
           <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
@@ -69,7 +69,7 @@ export default function RevenuePage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Орлого</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Борлуулалтын орлого, статистик</p>
       </div>
@@ -83,7 +83,7 @@ export default function RevenuePage() {
 
       {/* Revenue Summary */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Орлогын түүх</h2>
           {revenueHistory.length === 0 ? (
             <div className="p-8 text-center">
@@ -121,7 +121,7 @@ export default function RevenuePage() {
           )}
         </div>
 
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Товч мэдээлэл</h2>
           <div className="space-y-4">
             <div className="p-4 bg-green-50 rounded-lg">

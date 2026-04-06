@@ -86,7 +86,7 @@ export default function AILogoPage() {
           <h1 className="text-2xl font-bold">AI Лого үүсгэгч</h1>
           <p className="opacity-90 mt-1">Бизнесийнхээ лого автоматаар үүсгэ</p>
         </div>
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
           <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
           <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
@@ -147,7 +147,7 @@ export default function AILogoPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Тохиргоо</h2>
 
           <div className="mb-4">
@@ -238,14 +238,14 @@ export default function AILogoPage() {
         </div>
 
         {/* Preview */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Урьдчилан харах</h2>
 
           {logoGenerated ? (
             <div className="space-y-6">
               {/* Logo preview */}
               <div className="flex justify-center">
-                <div className="w-64 h-64 bg-white rounded-2xl border-2 border-[var(--esl-border)] shadow-lg flex flex-col items-center justify-center p-6">
+                <div className="w-64 h-64 bg-[var(--esl-bg-card)] rounded-2xl border-2 border-[var(--esl-border)] shadow-lg flex flex-col items-center justify-center p-6">
                   <div
                     className="text-5xl mb-2 font-bold tracking-tight"
                     style={{ color: selectedPalette.colors[0] }}
@@ -319,7 +319,7 @@ export default function AILogoPage() {
 
       {/* History */}
       {history.length > 0 && (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mt-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mt-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Түүх</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {history.map((h) => (

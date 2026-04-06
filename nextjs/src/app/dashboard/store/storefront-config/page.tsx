@@ -250,7 +250,7 @@ export default function StorefrontConfigPage() {
                   <span className="text-sm">{s.emoji}</span>
                   <span className="flex-1 text-xs font-medium" style={{ color: 'var(--esl-text-primary)' }}>{s.label}</span>
                   <div className={`w-8 h-5 rounded-full flex items-center px-0.5 transition-colors ${active ? 'bg-[#E8242C]' : 'bg-[var(--esl-border)]'}`}>
-                    <div className={`w-4 h-4 rounded-full bg-white transition-transform ${active ? 'translate-x-3' : 'translate-x-0'}`} />
+                    <div className={`w-4 h-4 rounded-full bg-[var(--esl-bg-card)] transition-transform ${active ? 'translate-x-3' : 'translate-x-0'}`} />
                   </div>
                 </button>
               );

@@ -63,7 +63,7 @@ export default function NotificationsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 mb-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 mb-6">
           <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-2" />
           <div className="h-4 w-72 bg-[var(--esl-bg-section)] rounded animate-pulse" />
         </div>
@@ -73,7 +73,7 @@ export default function NotificationsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Мэдэгдэл</h1>
         <p className="text-[var(--esl-text-secondary)] mt-1">Имэйл болон push мэдэгдлийн тохиргоо</p>
       </div>
@@ -90,7 +90,7 @@ export default function NotificationsPage() {
         </div>
 
         {/* Settings Table */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
           <div className="grid grid-cols-[1fr,80px,80px] gap-0 border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)] px-5 py-3">
             <div className="text-xs font-semibold text-[var(--esl-text-secondary)] uppercase">Мэдэгдэл</div>
             <div className="text-xs font-semibold text-[var(--esl-text-secondary)] uppercase text-center">Имэйл</div>
@@ -110,7 +110,7 @@ export default function NotificationsPage() {
                   onClick={() => toggle(setting.key, 'email')}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${setting.email ? 'bg-indigo-500' : 'bg-gray-300'}`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${setting.email ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-[var(--esl-bg-card)] transition-transform ${setting.email ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
               </div>
               <div className="flex justify-center">
@@ -118,7 +118,7 @@ export default function NotificationsPage() {
                   onClick={() => toggle(setting.key, 'push')}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${setting.push ? 'bg-indigo-500' : 'bg-gray-300'}`}
                 >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${setting.push ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-[var(--esl-bg-card)] transition-transform ${setting.push ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
               </div>
             </div>

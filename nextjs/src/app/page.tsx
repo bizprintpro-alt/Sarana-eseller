@@ -465,7 +465,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════════
           FINAL CTA — White section
           ═══════════════════════════════════════════ */}
-      <section className="bg-white py-24 px-[6%] text-center">
+      <section className="bg-[var(--esl-bg-card)] py-24 px-[6%] text-center">
         <motion.div
           initial="hidden"
           whileInView="visible"

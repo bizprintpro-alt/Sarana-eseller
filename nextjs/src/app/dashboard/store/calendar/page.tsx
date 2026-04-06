@@ -67,15 +67,15 @@ export default function CalendarPage() {
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-between bg-white border border-[var(--esl-border)] rounded-xl p-3">
+      <div className="flex items-center justify-between bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-3">
         <div className="flex items-center gap-2">
-          <button onClick={() => setWeekOffset((w) => w - 1)} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-white flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
+          <button onClick={() => setWeekOffset((w) => w - 1)} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-[var(--esl-bg-card)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
             <ChevronLeft className="w-4 h-4 text-[var(--esl-text-secondary)]" />
           </button>
           <button onClick={() => setWeekOffset(0)} className="px-3 py-1.5 text-xs font-bold text-[#6366F1] bg-[#EEF2FF] rounded-lg border-none cursor-pointer hover:bg-[#6366F1] hover:text-white transition">
             Өнөөдөр
           </button>
-          <button onClick={() => setWeekOffset((w) => w + 1)} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-white flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
+          <button onClick={() => setWeekOffset((w) => w + 1)} className="w-8 h-8 rounded-lg border border-[var(--esl-border)] bg-[var(--esl-bg-card)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition">
             <ChevronRight className="w-4 h-4 text-[var(--esl-text-secondary)]" />
           </button>
           <span className="text-sm font-semibold text-[#0F172A] ml-2">
@@ -108,7 +108,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Calendar Grid */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-2xl overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
         {/* Day headers */}
         <div className="grid grid-cols-[60px_repeat(7,1fr)] border-b border-[var(--esl-border)]">
           <div className="p-2" />

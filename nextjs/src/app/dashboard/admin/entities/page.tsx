@@ -62,7 +62,7 @@ export default function AdminEntitiesPage() {
           <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)]">Бүх нэгж удирдлага</h1>
           <p className="text-sm text-[var(--esl-text-secondary)]">Дэлгүүр, агент, компани, авто, үйлчилгээ</p>
         </div>
-        <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
+        <button className="flex items-center gap-1.5 px-4 py-2 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl text-xs font-semibold hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
           <Download className="w-3.5 h-3.5" /> CSV экспорт
         </button>
       </div>
@@ -83,7 +83,7 @@ export default function AdminEntitiesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
         <div className="flex gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
@@ -91,7 +91,7 @@ export default function AdminEntitiesPage() {
               className="w-full pl-10 pr-4 py-2 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer">
+            className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-xs bg-[var(--esl-bg-card)] cursor-pointer">
             <option value="all">Бүх статус</option>
             <option value="active">Идэвхтэй</option>
             <option value="pending">Хүлээгдэж буй</option>
@@ -110,7 +110,7 @@ export default function AdminEntitiesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-[var(--esl-border)] rounded-xl overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-[10px] text-[var(--esl-text-secondary)] uppercase tracking-wider border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)]/50">

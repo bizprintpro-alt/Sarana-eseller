@@ -107,7 +107,7 @@ export default function StoreSettingsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-white border-b border-[var(--esl-border)] px-8 py-5">
+      <div className="bg-[var(--esl-bg-card)] border-b border-[var(--esl-border)] px-8 py-5">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-black text-[var(--esl-text-primary)]">🎨 Дэлгүүрийн тохиргоо</h1>
@@ -123,7 +123,7 @@ export default function StoreSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-[var(--esl-border)] px-8">
+      <div className="bg-[var(--esl-bg-card)] border-b border-[var(--esl-border)] px-8">
         <div className="flex gap-0">
           {tabs.map((tab) => (
             <button
@@ -148,7 +148,7 @@ export default function StoreSettingsPage() {
             {/* Store Preview Card */}
             <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl p-6">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-[var(--esl-border)] flex items-center justify-center text-2xl overflow-hidden">
+                <div className="w-16 h-16 rounded-2xl bg-[var(--esl-bg-card)] shadow-sm border border-[var(--esl-border)] flex items-center justify-center text-2xl overflow-hidden">
                   {config.logo ? (
                     <img loading="lazy" src={config.logo} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -162,7 +162,7 @@ export default function StoreSettingsPage() {
                 <a
                   href={storePreviewUrl}
                   target="_blank"
-                  className="bg-white text-[var(--esl-text-secondary)] px-4 py-2 rounded-xl text-xs font-bold border border-[var(--esl-border)] no-underline hover:border-brand hover:text-brand transition-all"
+                  className="bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] px-4 py-2 rounded-xl text-xs font-bold border border-[var(--esl-border)] no-underline hover:border-brand hover:text-brand transition-all"
                 >
                   Дэлгүүр лүү зочлох ↗
                 </a>
@@ -170,7 +170,7 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Store Info */}
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">Дэлгүүрийн мэдээлэл</h3>
               <div className="space-y-4">
                 <div>
@@ -216,7 +216,7 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Brand Color */}
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-3">Брэндийн өнгө</h3>
               <p className="text-sm text-[var(--esl-text-muted)] mb-4">Дэлгүүрийн гол өнгийг сонгоно уу</p>
               <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export default function StoreSettingsPage() {
         {activeTab === 'storefront' && (
           <div className="space-y-6">
             {/* Hero Section */}
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">🖼 Нүүр хуудасны Hero</h3>
               <div className="space-y-4">
                 <div>
@@ -286,7 +286,7 @@ export default function StoreSettingsPage() {
                 >
                   <h2 className="text-2xl font-black mb-2">{config.heroTitle || 'Гарчиг'}</h2>
                   <p className="text-sm text-white/70 mb-4">{config.heroSubtitle || 'Дэд гарчиг'}</p>
-                  <button className="bg-white text-[var(--esl-text-primary)] px-6 py-2 rounded-xl text-sm font-bold border-none">
+                  <button className="bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] px-6 py-2 rounded-xl text-sm font-bold border-none">
                     {config.heroCTA || 'Товчлуур'}
                   </button>
                 </div>
@@ -294,7 +294,7 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Announcement */}
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-base font-bold text-[var(--esl-text-primary)]">📢 Зарлал (Announcement)</h3>
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -321,7 +321,7 @@ export default function StoreSettingsPage() {
             </div>
 
             {/* Featured Categories */}
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-4">📂 Нүүрэнд гарах ангилалууд</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {CATEGORY_OPTIONS.map((cat) => {
@@ -354,7 +354,7 @@ export default function StoreSettingsPage() {
         {/* ═══ SOCIAL TAB ═══ */}
         {activeTab === 'social' && (
           <div className="space-y-6">
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">📱 Сошиал хаягууд</h3>
               <div className="space-y-4">
                 {[
@@ -375,7 +375,7 @@ export default function StoreSettingsPage() {
               </div>
             </div>
 
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">📞 Холбоо барих</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -413,7 +413,7 @@ export default function StoreSettingsPage() {
         {/* ═══ SEO TAB ═══ */}
         {activeTab === 'seo' && (
           <div className="space-y-6">
-            <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">🔍 SEO тохиргоо</h3>
               <div className="space-y-4">
                 <div>

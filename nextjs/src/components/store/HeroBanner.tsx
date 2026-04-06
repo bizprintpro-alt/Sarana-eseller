@@ -143,7 +143,7 @@ export default function HeroBanner({ onSearch }: { onSearch: () => void }) {
               className="flex flex-wrap gap-3"
             >
               <button onClick={onSearch}
-                className="bg-white text-[#E31E24] font-bold px-7 py-3 rounded-xl border-none cursor-pointer text-sm hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                className="bg-[var(--esl-bg-card)] text-[#E31E24] font-bold px-7 py-3 rounded-xl border-none cursor-pointer text-sm hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center gap-2">
                 <Search className="w-4 h-4" /> Бараа хайх
               </button>
               <a href={current.linkUrl}
@@ -173,7 +173,7 @@ export default function HeroBanner({ onSearch }: { onSearch: () => void }) {
           {banners.map((_, i) => (
             <button key={i} onClick={() => setActive(i)}
               className={`border-none cursor-pointer rounded-full transition-all ${
-                i === active ? 'w-6 h-2 bg-white' : 'w-2 h-2 bg-white/40 hover:bg-white/60'
+                i === active ? 'w-6 h-2 bg-[var(--esl-bg-card)]' : 'w-2 h-2 bg-white/40 hover:bg-white/60'
               }`}
             />
           ))}

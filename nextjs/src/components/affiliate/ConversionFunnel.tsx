@@ -33,7 +33,7 @@ export default function ConversionFunnel({
   const maxVal = steps[0].value || 1;
 
   return (
-    <div className="bg-white border border-[var(--esl-border)] rounded-2xl p-6">
+    <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
       <h3 className="font-bold text-[#0F172A] mb-5 flex items-center gap-2 text-sm">
         <ShoppingCart className="w-4 h-4 text-[#6366F1]" />
         Борлуулалтын шүүлтүүр (Funnel)

@@ -75,7 +75,7 @@ export default function BookingsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-4 space-y-3">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-4 space-y-3">
         <div className="flex flex-wrap items-center gap-3">
           {/* Search */}
           <div className="relative flex-1 min-w-[200px]">
@@ -86,10 +86,10 @@ export default function BookingsPage() {
           {/* Date range */}
           <div className="flex items-center gap-2">
             <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
-              className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white cursor-pointer" />
+              className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-[var(--esl-bg-card)] cursor-pointer" />
             <span className="text-[var(--esl-text-muted)] text-sm">—</span>
             <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)}
-              className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white cursor-pointer" />
+              className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-[var(--esl-bg-card)] cursor-pointer" />
           </div>
         </div>
 
@@ -109,7 +109,7 @@ export default function BookingsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-4xl mb-3 opacity-30">📅</div>

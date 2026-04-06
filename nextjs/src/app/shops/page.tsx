@@ -143,7 +143,7 @@ export default function ShopsPage() {
             {TYPE_TABS.map((t) => (
               <button key={t.key} onClick={() => setActiveType(t.key)}
                 className={cn('flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border-none cursor-pointer transition-all',
-                  activeType === t.key ? 'bg-white text-[var(--esl-text-primary)]' : 'bg-white/10 text-white/70 hover:bg-white/20')}>
+                  activeType === t.key ? 'bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)]' : 'bg-white/10 text-white/70 hover:bg-white/20')}>
                 <t.icon className="w-4 h-4" />
                 {t.label}
                 <span className="text-xs opacity-60">

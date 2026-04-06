@@ -77,7 +77,7 @@ export default function DomainSettingsPage() {
       </div>
 
       {/* Domain input card */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 space-y-4">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 space-y-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center">
             <Globe className="w-5 h-5 text-indigo-600" />
@@ -113,7 +113,7 @@ export default function DomainSettingsPage() {
 
       {/* DNS Instructions */}
       {current && !current.verified && (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 space-y-4">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 space-y-4">
           <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">DNS тохируулах заавар</h3>
           <p className="text-sm text-[var(--esl-text-secondary)]">Домайн нэрийнхээ DNS тохиргоонд дараах бичлэгийг нэмнэ үү:</p>
 
@@ -135,7 +135,7 @@ export default function DomainSettingsPage() {
                   <td className="px-4 py-3 font-mono text-indigo-600 font-semibold">cname.eseller.mn</td>
                   <td className="px-4 py-3">
                     <button onClick={() => copyValue('cname.eseller.mn')}
-                      className="w-7 h-7 rounded-lg bg-white border border-[var(--esl-border)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition text-[var(--esl-text-muted)] hover:text-indigo-600">
+                      className="w-7 h-7 rounded-lg bg-[var(--esl-bg-card)] border border-[var(--esl-border)] flex items-center justify-center cursor-pointer hover:bg-[var(--esl-bg-section)] transition text-[var(--esl-text-muted)] hover:text-indigo-600">
                       {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </td>
@@ -170,7 +170,7 @@ export default function DomainSettingsPage() {
 
       {/* Verified success */}
       {current?.verified && (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
               <Shield className="w-5 h-5 text-green-600" />

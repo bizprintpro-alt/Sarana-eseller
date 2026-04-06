@@ -75,7 +75,7 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
 
           {/* Menu panel */}
           <motion.div
-            className="absolute top-full left-0 right-0 z-50 bg-white shadow-[0_20px_60px_rgba(0,0,0,.12)] border-t border-[var(--esl-border)]"
+            className="absolute top-full left-0 right-0 z-50 bg-[var(--esl-bg-card)] shadow-[0_20px_60px_rgba(0,0,0,.12)] border-t border-[var(--esl-border)]"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -176,7 +176,7 @@ export default function MegaMenu({ open, onClose, onSelectCategory, onSelectType
                       <p className="text-xs text-white/70 mb-3">50% хүртэл хямдрал бүх ангилалд</p>
                       <button
                         onClick={() => { onSelectCategory('all'); onClose(); }}
-                        className="bg-white text-[#E31E24] text-xs font-bold px-4 py-2 rounded-lg border-none cursor-pointer hover:bg-white/90 transition"
+                        className="bg-[var(--esl-bg-card)] text-[#E31E24] text-xs font-bold px-4 py-2 rounded-lg border-none cursor-pointer hover:bg-white/90 transition"
                       >
                         Үзэх →
                       </button>

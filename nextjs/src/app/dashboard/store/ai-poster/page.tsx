@@ -117,7 +117,7 @@ export default function AIPosterPage() {
           <h1 className="text-2xl font-bold">AI Постер үүсгэгч</h1>
           <p className="opacity-90 mt-1">Бүтээгдэхүүнийхээ мэргэжлийн постер үүсгэ</p>
         </div>
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
           <span className="text-5xl block mb-4">🔒</span>
           <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
           <p className="text-[var(--esl-text-secondary)] mb-4">
@@ -154,7 +154,7 @@ export default function AIPosterPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Тохиргоо</h2>
 
           {/* Product Select */}
@@ -163,7 +163,7 @@ export default function AIPosterPage() {
             <select
               value={selectedProduct}
               onChange={(e) => setSelectedProduct(e.target.value)}
-              className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm bg-white text-[var(--esl-text-primary)] focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
+              className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none"
             >
               <option value="">-- Бараа сонгох --</option>
               {products.map((p) => (
@@ -255,7 +255,7 @@ export default function AIPosterPage() {
         </div>
 
         {/* Preview */}
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Урьдчилан харах</h2>
 
           {poster ? (
@@ -337,7 +337,7 @@ export default function AIPosterPage() {
 
       {/* History */}
       {history.length > 0 && (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mt-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mt-6">
           <h2 className="font-bold text-[var(--esl-text-primary)] mb-4">Түүх</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {history.map((h) => (

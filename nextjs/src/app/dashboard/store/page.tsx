@@ -188,7 +188,7 @@ export default function SellerDashboardPage() {
             </Link>
             <Link
               href="/dashboard/store/analytics"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-[var(--esl-text-primary)] text-sm font-medium rounded-xl border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] text-sm font-medium rounded-xl border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)] transition-colors"
             >
               Тайлан харах
             </Link>
@@ -231,7 +231,7 @@ export default function SellerDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Sales Bar Chart */}
-          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Борлуулалтын график</h2>
               <span className="text-sm font-medium text-[#E8242C]">
@@ -268,7 +268,7 @@ export default function SellerDashboardPage() {
           </div>
 
           {/* Active Orders */}
-          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Идэвхтэй захиалгууд</h2>
               <Link
@@ -327,7 +327,7 @@ export default function SellerDashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Low Stock */}
-          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6">
             <h2 className="text-lg font-semibold text-[var(--esl-text-primary)] mb-5">Үлдэгдэл багассан бараа</h2>
             {lowStockProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
@@ -373,7 +373,7 @@ export default function SellerDashboardPage() {
           </div>
 
           {/* Top Products */}
-          <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6">
             <h2 className="text-lg font-semibold text-[var(--esl-text-primary)] mb-5">Шилдэг бараанууд</h2>
             {topProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
@@ -407,7 +407,7 @@ export default function SellerDashboardPage() {
         </div>
 
         {/* ═══ Row 4 — Subscription Info ═══ */}
-        <div className="bg-white rounded-2xl border border-[var(--esl-border)] p-6">
+        <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
               <h2 className="text-lg font-semibold text-[var(--esl-text-primary)]">Миний багц</h2>
@@ -458,7 +458,7 @@ export default function SellerDashboardPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border border-[var(--esl-border)] hover:border-[#E8242C]/30 hover:shadow-md transition-all group"
+              className="flex flex-col items-center gap-2 p-5 bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] hover:border-[#E8242C]/30 hover:shadow-md transition-all group"
             >
               <span className="text-2xl group-hover:scale-110 transition-transform">
                 {link.icon}

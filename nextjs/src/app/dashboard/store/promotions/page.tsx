@@ -63,7 +63,7 @@ export default function PromotionsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-6">
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Урамшуулал</h1>
           <p className="text-[var(--esl-text-secondary)] mt-1">Хямдралын код үүсгэх, удирдах</p>
@@ -80,13 +80,13 @@ export default function PromotionsPage() {
       </div>
 
       {promos.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-12 text-center">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">🏷️</div>
           <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Промо код байхгүй</h3>
           <p className="text-[var(--esl-text-muted)] mt-1">Шинэ хямдралын код үүсгээрэй</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden">
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -113,7 +113,7 @@ export default function PromotionsPage() {
                         onClick={() => togglePromo(p.id)}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${p.enabled ? 'bg-green-500' : 'bg-gray-300'}`}
                       >
-                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${p.enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-[var(--esl-bg-card)] transition-transform ${p.enabled ? 'translate-x-6' : 'translate-x-1'}`} />
                       </button>
                     </td>
                     <td className="p-4">
@@ -131,7 +131,7 @@ export default function PromotionsPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
-          <div className="bg-white rounded-2xl max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl max-w-md w-full shadow-xl" onClick={(e) => e.stopPropagation()}>
             <div className="p-6 border-b border-[var(--esl-border)] flex items-center justify-between">
               <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">Шинэ промо код</h2>
               <button onClick={() => setShowModal(false)} className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] text-xl">&times;</button>

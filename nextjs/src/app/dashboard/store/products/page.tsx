@@ -150,7 +150,7 @@ export default function ProductsPage() {
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
         <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Бараа хайх..."
-          className="w-full pl-10 pr-4 py-2.5 border border-[var(--esl-border)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white" />
+          className="w-full pl-10 pr-4 py-2.5 border border-[var(--esl-border)] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-[var(--esl-bg-card)]" />
       </div>
 
       {/* Product grid */}
@@ -161,12 +161,12 @@ export default function ProductsPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((p) => (
-            <div key={p._id} className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md transition group">
+            <div key={p._id} className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md transition group">
               <div className="h-32 bg-[var(--esl-bg-section)] flex items-center justify-center relative">
                 {p.images?.[0] ? <img loading="lazy" src={p.images[0]} alt="" className="w-full h-full object-cover" /> : <span className="text-4xl">{p.emoji || '📦'}</span>}
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                  <button onClick={() => openEdit(p)} className="w-7 h-7 rounded-lg bg-white shadow border border-[var(--esl-border)] flex items-center justify-center cursor-pointer text-[var(--esl-text-muted)] hover:text-indigo-600"><Edit3 className="w-3.5 h-3.5" /></button>
-                  <button onClick={() => handleDelete(p._id)} className="w-7 h-7 rounded-lg bg-white shadow border border-[var(--esl-border)] flex items-center justify-center cursor-pointer text-[var(--esl-text-muted)] hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => openEdit(p)} className="w-7 h-7 rounded-lg bg-[var(--esl-bg-card)] shadow border border-[var(--esl-border)] flex items-center justify-center cursor-pointer text-[var(--esl-text-muted)] hover:text-indigo-600"><Edit3 className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => handleDelete(p._id)} className="w-7 h-7 rounded-lg bg-[var(--esl-bg-card)] shadow border border-[var(--esl-border)] flex items-center justify-center cursor-pointer text-[var(--esl-text-muted)] hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
                 {p.salePrice && p.salePrice < p.price && <span className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">SALE</span>}
               </div>
@@ -190,7 +190,7 @@ export default function ProductsPage() {
       {showModal && (
         <>
           <div className="fixed inset-0 bg-black/40 z-[998]" onClick={() => setShowModal(false)} />
-          <div className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl bg-white rounded-2xl z-[999] flex flex-col max-h-[90vh] shadow-xl overflow-hidden">
+          <div className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-2xl bg-[var(--esl-bg-card)] rounded-2xl z-[999] flex flex-col max-h-[90vh] shadow-xl overflow-hidden">
             {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--esl-border)] shrink-0">
               <h3 className="text-lg font-bold text-[var(--esl-text-primary)]">{editingId ? 'Бараа засах' : 'Шинэ бараа'}</h3>
@@ -233,7 +233,7 @@ export default function ProductsPage() {
                   <div>
                     <label className="text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5 block">Ангилал</label>
                     <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                      className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm bg-[var(--esl-bg-card)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
                       {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                     </select>
                   </div>
@@ -372,7 +372,7 @@ export default function ProductsPage() {
             <div className="flex items-center justify-between px-6 py-4 border-t border-[var(--esl-border)] shrink-0">
               <div className="text-[10px] text-[var(--esl-text-muted)]">{modalTab === 'info' ? '1/5' : modalTab === 'media' ? '2/5' : modalTab === 'desc' ? '3/5' : modalTab === 'price' ? '4/5' : '5/5'}</div>
               <div className="flex gap-2">
-                <button onClick={() => setShowModal(false)} className="px-4 py-2.5 text-sm font-semibold text-[var(--esl-text-primary)] bg-white border border-[var(--esl-border)] rounded-lg hover:bg-[var(--esl-bg-section)] cursor-pointer transition">Болих</button>
+                <button onClick={() => setShowModal(false)} className="px-4 py-2.5 text-sm font-semibold text-[var(--esl-text-primary)] bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-lg hover:bg-[var(--esl-bg-section)] cursor-pointer transition">Болих</button>
                 <button onClick={handleSave} disabled={saving || !form.name || !form.price}
                   className={cn('px-5 py-2.5 text-sm font-semibold text-white rounded-lg border-none cursor-pointer transition',
                     !form.name || !form.price ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700')}>

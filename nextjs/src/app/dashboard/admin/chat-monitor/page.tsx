@@ -86,7 +86,7 @@ export default function ChatMonitorPage() {
           <button className="flex items-center gap-1.5 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-xs font-semibold hover:bg-red-100 cursor-pointer transition border-none">
             <Shield className="w-3.5 h-3.5" /> Spam дүрэм
           </button>
-          <button className="flex items-center gap-1.5 px-4 py-2 bg-white border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
+          <button className="flex items-center gap-1.5 px-4 py-2 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl text-xs font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-section)] cursor-pointer transition">
             <Download className="w-3.5 h-3.5" /> Тайлан экспорт
           </button>
         </div>
@@ -113,7 +113,7 @@ export default function ChatMonitorPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* ═══ Chat List ═══ */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--esl-text-muted)]" />
               <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Хэрэглэгч, мессеж хайх..."
@@ -121,14 +121,14 @@ export default function ChatMonitorPage() {
             </div>
             <div className="flex gap-2">
               <select value={riskFilter} onChange={(e) => setRiskFilter(e.target.value)}
-                className="px-3 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer">
+                className="px-3 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-[var(--esl-bg-card)] cursor-pointer">
                 <option value="all">Бүгд</option>
                 <option value="spam">Spam илэрсэн</option>
                 <option value="pending">Шалгах хүлээгдэж буй</option>
                 <option value="high_risk">Өндөр эрсдэлтэй</option>
                 <option value="blocked">Блоклогдсон</option>
               </select>
-              <select className="px-3 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-white cursor-pointer">
+              <select className="px-3 py-1.5 border border-[var(--esl-border)] rounded-lg text-xs bg-[var(--esl-bg-card)] cursor-pointer">
                 <option>Эрсдэл: бүгд</option>
                 <option>Өндөр</option>
                 <option>Дунд</option>
@@ -137,7 +137,7 @@ export default function ChatMonitorPage() {
             </div>
           </div>
 
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl overflow-hidden">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-[10px] text-[var(--esl-text-secondary)] uppercase tracking-wider border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)]/50">
@@ -180,7 +180,7 @@ export default function ChatMonitorPage() {
               <div className="flex gap-1">
                 {[1, 2, 3].map((p) => (
                   <button key={p} className={cn('w-7 h-7 rounded border flex items-center justify-center cursor-pointer text-xs font-medium',
-                    p === 1 ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'border-[var(--esl-border)] bg-white hover:bg-[var(--esl-bg-section)]')}>{p}</button>
+                    p === 1 ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'border-[var(--esl-border)] bg-[var(--esl-bg-card)] hover:bg-[var(--esl-bg-section)]')}>{p}</button>
                 ))}
               </div>
             </div>
@@ -192,7 +192,7 @@ export default function ChatMonitorPage() {
           {selected ? (
             <>
               {/* Chat detail */}
-              <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
+              <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">Чат дэлгэрэнгүй</h3>
                   <button onClick={() => setSelected(null)} className="text-xs text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] bg-transparent border-none cursor-pointer">—</button>
@@ -235,7 +235,7 @@ export default function ChatMonitorPage() {
               </div>
 
               {/* Spam auto filter */}
-              <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
+              <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 space-y-3">
                 <h4 className="text-xs font-bold text-[var(--esl-text-primary)]">Spam автомат шүүлт</h4>
                 {[
                   { label: 'Spam автомат блок', state: spamAutoBlock, setter: setSpamAutoBlock },
@@ -256,7 +256,7 @@ export default function ChatMonitorPage() {
               </div>
             </>
           ) : (
-            <div className="bg-white border border-[var(--esl-border)] rounded-xl p-8 text-center">
+            <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-8 text-center">
               <MessageCircle className="w-10 h-10 text-[var(--esl-text-muted)] mx-auto mb-3" />
               <p className="text-sm font-semibold text-[var(--esl-text-muted)]">Хэрэглэгч сонгоно уу</p>
               <p className="text-xs text-[var(--esl-text-muted)] mt-1">Чат сонгоход мессеж харагдана</p>
@@ -264,7 +264,7 @@ export default function ChatMonitorPage() {
           )}
 
           {/* Quick filters */}
-          <div className="bg-white border border-[var(--esl-border)] rounded-xl p-4 space-y-2">
+          <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-xl p-4 space-y-2">
             <h4 className="text-xs font-bold text-[var(--esl-text-primary)]">Хурдан шүүлтүүр</h4>
             {[
               { label: `Spam илэрсэн чатууд (${spamCount})`, dot: 'bg-red-500', filter: 'spam' },
