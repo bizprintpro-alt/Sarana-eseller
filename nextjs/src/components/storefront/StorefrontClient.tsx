@@ -43,18 +43,25 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
   const [shareOpen, setShareOpen] = useState(false);
   const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/${shop.slug}` : `https://eseller.mn/${shop.slug}`;
 
+  // Read storefront config
+  const cfg = (shop.storefrontConfig || {}) as Record<string, unknown>;
+  const primaryColor = (cfg.primaryColor as string) || '#E8242C';
+  const heroTitle = (cfg.heroTitle as string) || '';
+  const heroSubtitle = (cfg.heroSubtitle as string) || '';
+  const ctaText = (cfg.ctaText as string) || 'Захиалах';
+
   return (
     <div className="min-h-screen" style={{ background: 'var(--esl-bg-page)' }}>
 
       {/* ═══ HERO ═══ */}
-      <section className="relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 50%, #E8242C 150%)' }}>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(232,36,44,0.3),transparent)]" />
+      <section className="relative overflow-hidden" style={{ background: `linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 50%, ${primaryColor} 150%)` }}>
+        <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 50% at 50% -20%, ${primaryColor}4D, transparent)` }} />
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
           <div className="flex items-start gap-5 mb-6">
             {shop.logo ? (
               <img loading="lazy" src={shop.logo} alt={shop.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20 shadow-lg" />
             ) : (
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#E8242C] to-[#FF6B6B] flex items-center justify-center text-2xl font-black text-white shadow-lg">
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black text-white shadow-lg" style={{ background: primaryColor }}>
                 {shop.name.charAt(0)}
               </div>
             )}
@@ -67,12 +74,12 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
                   <Shield className="w-3 h-3" /> Баталгаажсан
                 </span>
               </div>
-              <h1 className="text-3xl md:text-5xl font-black text-white leading-tight">{shop.name}</h1>
+              <h1 className="text-3xl md:text-5xl font-black text-white leading-tight">{heroTitle || shop.name}</h1>
             </div>
           </div>
 
-          {shop.address && (
-            <p className="text-white/70 text-sm mb-6 max-w-xl">{shop.address}</p>
+          {(heroSubtitle || shop.address) && (
+            <p className="text-white/70 text-sm mb-6 max-w-xl">{heroSubtitle || shop.address}</p>
           )}
 
           <div className="flex items-center gap-3 flex-wrap mb-8">
@@ -86,8 +93,8 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
           </div>
 
           <div className="flex gap-3 flex-wrap">
-            <a href="#products" className="bg-white text-[#E8242C] px-7 py-3.5 rounded-xl font-bold text-sm no-underline hover:bg-white/90 transition shadow-lg">
-              Захиалах
+            <a href="#products" className="bg-white px-7 py-3.5 rounded-xl font-bold text-sm no-underline hover:bg-white/90 transition shadow-lg" style={{ color: primaryColor }}>
+              {ctaText}
             </a>
             {shop.phone && (
               <a href={`tel:${shop.phone}`} className="bg-white/10 border border-white/30 text-white px-6 py-3.5 rounded-xl font-semibold text-sm no-underline hover:bg-white/20 transition backdrop-blur-sm">
@@ -136,13 +143,13 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
                         <div className="w-full h-full flex items-center justify-center text-4xl">{p.emoji || '📦'}</div>
                       )}
                       {disc > 0 && (
-                        <span className="absolute top-2 left-2 bg-[#E8242C] text-white text-[10px] font-bold px-2 py-0.5 rounded">-{disc}%</span>
+                        <span className="absolute top-2 left-2 text-white text-[10px] font-bold px-2 py-0.5 rounded" style={{ background: primaryColor }}>-{disc}%</span>
                       )}
                     </div>
                     <div className="p-3">
                       <p className="text-xs line-clamp-2 font-medium mb-1.5 leading-snug" style={{ color: 'var(--esl-text-primary)' }}>{p.name}</p>
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-sm font-bold text-[#E8242C]">{formatPrice(px)}</span>
+                        <span className="text-sm font-bold" style={{ color: primaryColor }}>{formatPrice(px)}</span>
                         {disc > 0 && <span className="text-[10px] line-through" style={{ color: 'var(--esl-text-muted)' }}>{formatPrice(p.price)}</span>}
                       </div>
                       {p.rating != null && (
@@ -176,7 +183,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
             {shop.phone && (
               <div className="rounded-xl p-5 border" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
                 <p className="text-sm font-semibold mb-1" style={{ color: 'var(--esl-text-primary)' }}>Холбоо барих</p>
-                <a href={`tel:${shop.phone}`} className="text-sm text-[#E8242C] no-underline flex items-center gap-1">
+                <a href={`tel:${shop.phone}`} className="text-sm no-underline flex items-center gap-1" style={{ color: primaryColor }}>
                   <Phone className="w-3.5 h-3.5" /> {shop.phone}
                 </a>
               </div>
@@ -195,7 +202,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
       <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} url={shareUrl} title={shop.name} description={`${shop.name} — eseller.mn дэлгүүр`} />
 
       {/* Chat Widget */}
-      <ChatWidget shopId={shop.id} shopName={shop.name} />
+      <ChatWidget shopId={shop.id} shopName={shop.name} primaryColor={primaryColor} />
     </div>
   );
 }
