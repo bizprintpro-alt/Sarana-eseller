@@ -28,8 +28,9 @@ export interface ShopPageData {
 
 export async function getShopBySlug(slug: string): Promise<ShopPageData | null> {
   try {
-    const shop = await prisma.shop.findUnique({
-      where: { slug },
+    // Search by slug OR storefrontSlug
+    const shop = await prisma.shop.findFirst({
+      where: { OR: [{ slug }, { storefrontSlug: slug }] },
       include: {
         services: { where: { isActive: true }, orderBy: { createdAt: 'desc' } },
         workingHours: { orderBy: { dayOfWeek: 'asc' } },

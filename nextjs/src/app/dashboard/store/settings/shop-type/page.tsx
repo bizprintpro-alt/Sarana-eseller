@@ -643,7 +643,7 @@ export default function ShopTypeWizard() {
 
               <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
                 <a
-                  href={`/${slug}`}
+                  href={`/s/${slug}`}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-[#E8242C] text-white hover:bg-[#CC0000] transition no-underline"
                 >
                   <ExternalLink className="w-4 h-4" />
