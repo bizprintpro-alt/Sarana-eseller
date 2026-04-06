@@ -54,7 +54,7 @@ export function clearAuth() {
 
 export function roleHome(role?: string): string {
   const map: Record<string, string> = {
-    seller: '/dashboard/seller',
+    seller: '/dashboard/store',
     affiliate: '/dashboard/affiliate',
     delivery: '/dashboard/delivery',
     admin: '/dashboard/admin',

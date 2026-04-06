@@ -13,97 +13,97 @@ import Sidebar, { type SidebarSection } from '@/components/dashboard/Sidebar';
 const SAMBAR_PRODUCT: SidebarSection = {
   title: 'Самбар',
   items: [
-    { href: '/dashboard/seller', icon: '📊', label: 'Самбар' },
-    { href: '/dashboard/seller/orders', icon: '📋', label: 'Захиалга' },
-    { href: '/dashboard/seller/chat', icon: '💬', label: 'Чат', isNew: true },
-    { href: '/dashboard/seller/chat-settings', icon: '⚙️', label: 'Чат тохиргоо' },
+    { href: '/dashboard/store', icon: '📊', label: 'Самбар' },
+    { href: '/dashboard/store/orders', icon: '📋', label: 'Захиалга' },
+    { href: '/dashboard/store/chat', icon: '💬', label: 'Чат', isNew: true },
+    { href: '/dashboard/store/chat-settings', icon: '⚙️', label: 'Чат тохиргоо' },
   ],
 };
 
 const SAMBAR_SERVICE: SidebarSection = {
   title: 'Самбар',
   items: [
-    { href: '/dashboard/seller', icon: '📊', label: 'Самбар' },
-    { href: '/dashboard/seller/orders', icon: '📋', label: 'Захиалга' },
-    { href: '/dashboard/seller/chat', icon: '💬', label: 'Чат', isNew: true },
-    { href: '/dashboard/seller/chat-settings', icon: '⚙️', label: 'Чат тохиргоо' },
+    { href: '/dashboard/store', icon: '📊', label: 'Самбар' },
+    { href: '/dashboard/store/orders', icon: '📋', label: 'Захиалга' },
+    { href: '/dashboard/store/chat', icon: '💬', label: 'Чат', isNew: true },
+    { href: '/dashboard/store/chat-settings', icon: '⚙️', label: 'Чат тохиргоо' },
   ],
 };
 
 const PRODUCT_MANAGEMENT: SidebarSection = {
   title: 'Бараа удирдлага',
   items: [
-    { href: '/dashboard/seller/products', icon: '📦', label: 'Бүтээгдэхүүн' },
-    { href: '/dashboard/seller/categories', icon: '📂', label: 'Ангилал' },
-    { href: '/dashboard/seller/brands', icon: '🏷️', label: 'Брэнд' },
-    { href: '/dashboard/seller/inventory', icon: '📊', label: 'Нөөцийн удирдлага' },
+    { href: '/dashboard/store/products', icon: '📦', label: 'Бүтээгдэхүүн' },
+    { href: '/dashboard/store/categories', icon: '📂', label: 'Ангилал' },
+    { href: '/dashboard/store/brands', icon: '🏷️', label: 'Брэнд' },
+    { href: '/dashboard/store/inventory', icon: '📊', label: 'Нөөцийн удирдлага' },
   ],
 };
 
 const SERVICE_MANAGEMENT: SidebarSection = {
   title: 'Үйлчилгээ удирдлага',
   items: [
-    { href: '/dashboard/seller/services', icon: '🛎️', label: 'Үйлчилгээнүүд' },
-    { href: '/dashboard/seller/bookings', icon: '📅', label: 'Цаг захиалга' },
-    { href: '/dashboard/seller/working-hours', icon: '🕐', label: 'Цагийн хуваарь' },
-    { href: '/dashboard/seller/service-categories', icon: '📂', label: 'Ангилал' },
+    { href: '/dashboard/store/services', icon: '🛎️', label: 'Үйлчилгээнүүд' },
+    { href: '/dashboard/store/bookings', icon: '📅', label: 'Цаг захиалга' },
+    { href: '/dashboard/store/working-hours', icon: '🕐', label: 'Цагийн хуваарь' },
+    { href: '/dashboard/store/service-categories', icon: '📂', label: 'Ангилал' },
   ],
 };
 
 const CUSTOMER_SALES: SidebarSection = {
   title: 'Хэрэглэгч & Борлуулалт',
   items: [
-    { href: '/dashboard/seller/customers', icon: '👥', label: 'Хэрэглэгч' },
-    { href: '/dashboard/seller/sellers', icon: '📢', label: 'Борлуулагчид', isNew: true },
-    { href: '/dashboard/seller/commissions', icon: '💰', label: 'Комисс тайлан', isNew: true },
-    { href: '/dashboard/seller/promotions', icon: '🎁', label: 'Урамшуулал' },
-    { href: '/dashboard/seller/promo-codes', icon: '🏷️', label: 'Промо код' },
-    { href: '/dashboard/seller/giftcards', icon: '💳', label: 'Бэлгийн карт' },
-    { href: '/dashboard/seller/reviews', icon: '⭐', label: 'Сэтгэгдэл' },
+    { href: '/dashboard/store/customers', icon: '👥', label: 'Хэрэглэгч' },
+    { href: '/dashboard/store/sellers', icon: '📢', label: 'Борлуулагчид', isNew: true },
+    { href: '/dashboard/store/commissions', icon: '💰', label: 'Комисс тайлан', isNew: true },
+    { href: '/dashboard/store/promotions', icon: '🎁', label: 'Урамшуулал' },
+    { href: '/dashboard/store/promo-codes', icon: '🏷️', label: 'Промо код' },
+    { href: '/dashboard/store/giftcards', icon: '💳', label: 'Бэлгийн карт' },
+    { href: '/dashboard/store/reviews', icon: '⭐', label: 'Сэтгэгдэл' },
   ],
 };
 
 const CONTENT: SidebarSection = {
   title: 'Контент',
   items: [
-    { href: '/dashboard/seller/blog', icon: '📝', label: 'Нийтлэл' },
-    { href: '/dashboard/seller/marketing', icon: '📢', label: 'Маркетинг' },
+    { href: '/dashboard/store/blog', icon: '📝', label: 'Нийтлэл' },
+    { href: '/dashboard/store/marketing', icon: '📢', label: 'Маркетинг' },
   ],
 };
 
 const AI_SECTION: SidebarSection = {
   title: 'AI Инноваци',
   items: [
-    { href: '/dashboard/seller/ai-poster', icon: '🎨', label: 'AI Постер үүсгэгч' },
-    { href: '/dashboard/seller/ai-logo', icon: '✨', label: 'AI Лого үүсгэгч' },
-    { href: '/dashboard/seller/ai-description', icon: '📝', label: 'AI Тайлбар бичигч' },
-    { href: '/dashboard/seller/ai-analytics', icon: '🤖', label: 'AI Зөвлөгч' },
+    { href: '/dashboard/store/ai-poster', icon: '🎨', label: 'AI Постер үүсгэгч' },
+    { href: '/dashboard/store/ai-logo', icon: '✨', label: 'AI Лого үүсгэгч' },
+    { href: '/dashboard/store/ai-description', icon: '📝', label: 'AI Тайлбар бичигч' },
+    { href: '/dashboard/store/ai-analytics', icon: '🤖', label: 'AI Зөвлөгч' },
   ],
 };
 
 const FINANCE: SidebarSection = {
   title: 'Санхүү & Тайлан',
   items: [
-    { href: '/dashboard/seller/revenue', icon: '💵', label: 'Орлого' },
-    { href: '/dashboard/seller/wallet', icon: '💰', label: 'Хэтэвч' },
-    { href: '/dashboard/seller/analytics', icon: '📈', label: 'Хандалт & Тайлан' },
-    { href: '/dashboard/seller/integrations', icon: '🔗', label: 'Интеграц', isNew: true },
+    { href: '/dashboard/store/revenue', icon: '💵', label: 'Орлого' },
+    { href: '/dashboard/store/wallet', icon: '💰', label: 'Хэтэвч' },
+    { href: '/dashboard/store/analytics', icon: '📈', label: 'Хандалт & Тайлан' },
+    { href: '/dashboard/store/integrations', icon: '🔗', label: 'Интеграц', isNew: true },
   ],
 };
 
 const STORE_SETTINGS: SidebarSection = {
   title: 'Дэлгүүрийн тохиргоо',
   items: [
-    { href: '/dashboard/seller/store-settings', icon: '🎨', label: 'Нүүр хуудас & Дизайн' },
-    { href: '/dashboard/seller/storefront-config', icon: '🌐', label: 'Storefront тохиргоо', isNew: true },
-    { href: '/dashboard/seller/storefront-editor', icon: '✨', label: 'AI Дэлгүүр засварлагч' },
-    { href: '/dashboard/seller/themes', icon: '🎭', label: 'Theme store', isNew: true },
-    { href: '/dashboard/seller/settings/shop-type', icon: '🏪', label: 'Дэлгүүрийн төрөл' },
-    { href: '/dashboard/seller/settings/domain', icon: '🌐', label: 'Домайн тохиргоо' },
-    { href: '/dashboard/seller/locations', icon: '📍', label: 'Байршлууд', isNew: true },
-    { href: '/dashboard/seller/branches', icon: '🏪', label: 'Салбар удирдах' },
-    { href: '/dashboard/seller/staff', icon: '👔', label: 'Ажилтан' },
-    { href: '/dashboard/seller/settings', icon: '⚙️', label: 'Ерөнхий тохиргоо' },
+    { href: '/dashboard/store/store-settings', icon: '🎨', label: 'Нүүр хуудас & Дизайн' },
+    { href: '/dashboard/store/storefront-config', icon: '🌐', label: 'Storefront тохиргоо', isNew: true },
+    { href: '/dashboard/store/storefront-editor', icon: '✨', label: 'AI Дэлгүүр засварлагч' },
+    { href: '/dashboard/store/themes', icon: '🎭', label: 'Theme store', isNew: true },
+    { href: '/dashboard/store/settings/shop-type', icon: '🏪', label: 'Дэлгүүрийн төрөл' },
+    { href: '/dashboard/store/settings/domain', icon: '🌐', label: 'Домайн тохиргоо' },
+    { href: '/dashboard/store/locations', icon: '📍', label: 'Байршлууд', isNew: true },
+    { href: '/dashboard/store/branches', icon: '🏪', label: 'Салбар удирдах' },
+    { href: '/dashboard/store/staff', icon: '👔', label: 'Ажилтан' },
+    { href: '/dashboard/store/settings', icon: '⚙️', label: 'Ерөнхий тохиргоо' },
   ],
 };
 
@@ -111,7 +111,7 @@ const PACKAGE: SidebarSection = {
   title: 'Багц & Төлбөр',
   items: [
     { href: '/dashboard/store/package', icon: '👑', label: 'Миний багц' },
-    { href: '/dashboard/seller/logs', icon: '📋', label: 'Лог бүртгэл' },
+    { href: '/dashboard/store/logs', icon: '📋', label: 'Лог бүртгэл' },
   ],
 };
 
@@ -122,53 +122,53 @@ const PACKAGE: SidebarSection = {
 const PRE_ORDER_MANAGEMENT: SidebarSection = {
   title: 'Захиалгын удирдлага',
   items: [
-    { href: '/dashboard/seller/catalog', icon: '📖', label: 'Бараа каталог' },
-    { href: '/dashboard/seller/queue', icon: '📋', label: 'Захиалгын дараалал', isNew: true },
-    { href: '/dashboard/seller/batches', icon: '📦', label: 'Багцын захиалга', isNew: true },
-    { href: '/dashboard/seller/tracking', icon: '📍', label: 'Ирааны мөрдөлт', isNew: true },
-    { href: '/dashboard/seller/deposits', icon: '💳', label: 'Урьдчилгаа', isNew: true },
-    { href: '/dashboard/seller/waitlist', icon: '👥', label: 'Хүлээлтийн жагсаалт' },
+    { href: '/dashboard/store/catalog', icon: '📖', label: 'Бараа каталог' },
+    { href: '/dashboard/store/queue', icon: '📋', label: 'Захиалгын дараалал', isNew: true },
+    { href: '/dashboard/store/batches', icon: '📦', label: 'Багцын захиалга', isNew: true },
+    { href: '/dashboard/store/tracking', icon: '📍', label: 'Ирааны мөрдөлт', isNew: true },
+    { href: '/dashboard/store/deposits', icon: '💳', label: 'Урьдчилгаа', isNew: true },
+    { href: '/dashboard/store/waitlist', icon: '👥', label: 'Хүлээлтийн жагсаалт' },
   ],
 };
 
 const AGENT_MANAGEMENT: SidebarSection = {
   title: 'Агентын удирдлага',
   items: [
-    { href: '/dashboard/seller/listings', icon: '🏠', label: 'Зарууд' },
-    { href: '/dashboard/seller/listings/new', icon: '➕', label: 'Зар нэмэх' },
-    { href: '/dashboard/seller/map', icon: '🗺️', label: 'Байршлын зураг' },
-    { href: '/dashboard/seller/inquiries', icon: '📩', label: 'Хариу хүсэлт' },
-    { href: '/dashboard/seller/profile', icon: '👤', label: 'Профайл' },
+    { href: '/dashboard/store/listings', icon: '🏠', label: 'Зарууд' },
+    { href: '/dashboard/store/listings/new', icon: '➕', label: 'Зар нэмэх' },
+    { href: '/dashboard/store/map', icon: '🗺️', label: 'Байршлын зураг' },
+    { href: '/dashboard/store/inquiries', icon: '📩', label: 'Хариу хүсэлт' },
+    { href: '/dashboard/store/profile', icon: '👤', label: 'Профайл' },
   ],
 };
 
 const COMPANY_MANAGEMENT: SidebarSection = {
   title: 'Компанийн удирдлага',
   items: [
-    { href: '/dashboard/seller/projects', icon: '🏗️', label: 'Төслүүд' },
-    { href: '/dashboard/seller/gallery', icon: '🖼️', label: 'Бүтээгдэхүүний галерей' },
-    { href: '/dashboard/seller/documents', icon: '📄', label: 'Баримт бичиг' },
-    { href: '/dashboard/seller/inquiries', icon: '📩', label: 'Хүсэлт / Inquiry' },
-    { href: '/dashboard/seller/promote', icon: '⭐', label: 'VIP байршил' },
+    { href: '/dashboard/store/projects', icon: '🏗️', label: 'Төслүүд' },
+    { href: '/dashboard/store/gallery', icon: '🖼️', label: 'Бүтээгдэхүүний галерей' },
+    { href: '/dashboard/store/documents', icon: '📄', label: 'Баримт бичиг' },
+    { href: '/dashboard/store/inquiries', icon: '📩', label: 'Хүсэлт / Inquiry' },
+    { href: '/dashboard/store/promote', icon: '⭐', label: 'VIP байршил' },
   ],
 };
 
 const AUTO_DEALER_MANAGEMENT: SidebarSection = {
   title: 'Авто удирдлага',
   items: [
-    { href: '/dashboard/seller/vehicles', icon: '🚗', label: 'Машины жагсаалт' },
-    { href: '/dashboard/seller/test-drives', icon: '📅', label: 'Тест драйв захиалга' },
-    { href: '/dashboard/seller/specs', icon: '📄', label: 'Техник үзүүлэлт' },
-    { href: '/dashboard/seller/pricing', icon: '📊', label: 'Үнийн харьцуулалт' },
+    { href: '/dashboard/store/vehicles', icon: '🚗', label: 'Машины жагсаалт' },
+    { href: '/dashboard/store/test-drives', icon: '📅', label: 'Тест драйв захиалга' },
+    { href: '/dashboard/store/specs', icon: '📄', label: 'Техник үзүүлэлт' },
+    { href: '/dashboard/store/pricing', icon: '📊', label: 'Үнийн харьцуулалт' },
   ],
 };
 
 const DIGITAL_MANAGEMENT: SidebarSection = {
   title: 'Дижитал удирдлага',
   items: [
-    { href: '/dashboard/seller/files', icon: '📁', label: 'Файлууд' },
-    { href: '/dashboard/seller/downloads', icon: '⬇️', label: 'Татаж авалтууд' },
-    { href: '/dashboard/seller/licenses', icon: '🔑', label: 'Лицензүүд' },
+    { href: '/dashboard/store/files', icon: '📁', label: 'Файлууд' },
+    { href: '/dashboard/store/downloads', icon: '⬇️', label: 'Татаж авалтууд' },
+    { href: '/dashboard/store/licenses', icon: '🔑', label: 'Лицензүүд' },
   ],
 };
 

@@ -50,7 +50,7 @@ export function LocationCoordReminder() {
         </p>
       </div>
 
-      <Link href="/dashboard/seller/locations?filter=needs_coords" style={{
+      <Link href="/dashboard/store/locations?filter=needs_coords" style={{
         padding: '6px 14px',
         borderRadius: 8,
         background: 'rgba(245,158,11,0.15)',

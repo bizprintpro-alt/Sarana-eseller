@@ -200,7 +200,7 @@ export default function LocationForm({ initialData, isEdit }: Props) {
         throw new Error(data.error || 'Хадгалахад алдаа гарлаа');
       }
 
-      router.push('/dashboard/seller/locations');
+      router.push('/dashboard/store/locations');
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -212,7 +212,7 @@ export default function LocationForm({ initialData, isEdit }: Props) {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--esl-bg-page)', color: '#FFF', padding: '24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-        <Link href="/dashboard/seller/locations"
+        <Link href="/dashboard/store/locations"
           style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'var(--esl-bg-card)', border: '1px solid #3D3D3D', color: '#FFF', textDecoration: 'none' }}>
           <ArrowLeft size={18} />
         </Link>

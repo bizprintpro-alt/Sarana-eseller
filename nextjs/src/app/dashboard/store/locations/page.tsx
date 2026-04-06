@@ -64,7 +64,7 @@ export default function LocationsListPage() {
             {locations.length} байршил бүртгэлтэй
           </p>
         </div>
-        <Link href="/dashboard/seller/locations/new"
+        <Link href="/dashboard/store/locations/new"
           style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', borderRadius: '10px', backgroundColor: '#E8242C', color: '#FFF', fontSize: '13px', fontWeight: '700', textDecoration: 'none' }}>
           <Plus size={16} /> Байршил нэмэх
         </Link>
@@ -81,7 +81,7 @@ export default function LocationsListPage() {
           <p style={{ fontSize: '13px', color: '#777', marginBottom: '20px' }}>
             Дэлгүүрийн байршлаа нэмж хүргэлтэд олдохоор болго
           </p>
-          <Link href="/dashboard/seller/locations/new"
+          <Link href="/dashboard/store/locations/new"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '10px 20px', borderRadius: '10px', backgroundColor: '#E8242C', color: '#FFF', fontSize: '14px', fontWeight: '600', textDecoration: 'none' }}>
             <Plus size={16} /> Байршил нэмэх
           </Link>
@@ -112,7 +112,7 @@ export default function LocationsListPage() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '6px' }}>
-                  <Link href={`/dashboard/seller/locations/${loc.id}/edit`}
+                  <Link href={`/dashboard/store/locations/${loc.id}/edit`}
                     style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #3D3D3D', color: '#A0A0A0', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <Pencil size={12} /> Засах
                   </Link>

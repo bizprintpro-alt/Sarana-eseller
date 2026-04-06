@@ -74,7 +74,7 @@ export default function OnboardingPage() {
     localStorage.setItem('eseller_store_config', JSON.stringify(config));
     localStorage.setItem('eseller_onboarding_done', 'true');
     toast.show('🎉 Дэлгүүр амжилттай үүслээ!');
-    router.push('/dashboard/seller');
+    router.push('/dashboard/store');
   };
 
   return (
