@@ -24,7 +24,7 @@ const CATEGORIES = [
   { key: 'other', label: 'Бусад', emoji: '📦', Icon: Package },
 ];
 
-const DISTRICTS = ['СБД', 'ХУД', 'БЗД', 'ЧД', 'БГД', 'СХД', 'НД', 'БНД'];
+const DISTRICTS = ['СБД', 'ХУД', 'БЗД', 'ЧД', 'БГД', 'СХД', 'НД', 'БНД', 'Багахангай'];
 const CONDITIONS = [
   { key: 'new', label: 'Шинэ' },
   { key: 'like_new', label: 'Бараг шинэ' },
@@ -521,7 +521,7 @@ export default function PostAdPage() {
           </div>
           <p className="text-xs text-[var(--esl-text-muted)] mb-2">Аймаг:</p>
           <div className="flex flex-wrap gap-2">
-            {['Дархан-Уул', 'Орхон', 'Сэлэнгэ', 'Төв', 'Хөвсгөл', 'Увс', 'Ховд', 'Баян-Өлгий', 'Архангай', 'Өвөрхангай', 'Дорнод', 'Хэнтий'].map((p) => (
+            {['Архангай', 'Баян-Өлгий', 'Баянхонгор', 'Булган', 'Говь-Алтай', 'Дорноговь', 'Дорнод', 'Дундговь', 'Завхан', 'Орхон', 'Өвөрхангай', 'Өмнөговь', 'Сүхбаатар', 'Сэлэнгэ', 'Төв', 'Увс', 'Ховд', 'Хөвсгөл', 'Хэнтий', 'Дархан-Уул', 'Говьсүмбэр'].map((p) => (
               <button key={p} onClick={() => { setProvince(p); setDistrict(''); }}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all ${
                   province === p ? 'bg-[#E8242C] border-[#E8242C] text-white' : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
