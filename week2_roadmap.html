@@ -1,0 +1,109 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.done{background:var(--color-background-success);border:0.5px solid var(--color-border-success);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:16px}
+.done-title{font-size:12px;font-weight:500;color:var(--color-text-success);margin-bottom:8px}
+.done-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.di{font-size:11px;color:var(--color-text-success)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.task{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.tnum{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.n1{background:#E8242C;color:#fff}
+.n2{background:rgba(232,36,44,0.15);color:#E8242C}
+.n3{background:var(--color-background-warning);color:var(--color-text-warning)}
+.n4{background:var(--color-background-info);color:var(--color-text-info)}
+.n5{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.tbody{flex:1}
+.ttitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.tdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.7}
+.tdur{font-size:10px;color:var(--color-text-tertiary);margin-top:4px}
+.badge{display:inline-flex;font-size:9px;font-weight:600;padding:1px 7px;border-radius:99px;margin-left:6px}
+.b-hot{background:#E8242C;color:#fff}
+.b-rev{background:var(--color-background-success);color:var(--color-text-success)}
+</style>
+
+<div class="w">
+
+<div class="done">
+  <div class="done-title">Долоо хоног 1 + QR/Share — Бүрэн дууслаа ✓</div>
+  <div class="done-grid">
+    <div class="di">✓ CSS var 92 файл</div>
+    <div class="di">✓ ThemeProvider</div>
+    <div class="di">✓ /[slug] storefront</div>
+    <div class="di">✓ /seller/[username]</div>
+    <div class="di">✓ Commission calc</div>
+    <div class="di">✓ QR + Share modal</div>
+    <div class="di">✓ shops засвар</div>
+    <div class="di">✓ Service storefront</div>
+    <div class="di">✓ Affiliate dashboard</div>
+  </div>
+</div>
+
+<div class="st">Долоо хоног 2 — Дараалал</div>
+
+<div class="task">
+  <div class="tnum n1">1</div>
+  <div class="tbody">
+    <div class="ttitle">Seller approval dashboard<span class="badge b-hot">Яаралтай</span></div>
+    <div class="tdesc">
+      /dashboard/store/sellers — борлуулагчийн хүсэлт approve/reject UI.<br>
+      SellerProduct.isApproved = true → борлуулагч бараагаа share хийж эхэлнэ.<br>
+      Affiliate chain бүрэн ажиллана.
+    </div>
+    <div class="tdur">⏱ 3-4 цаг</div>
+  </div>
+</div>
+
+<div class="task">
+  <div class="tnum n2">2</div>
+  <div class="tbody">
+    <div class="ttitle">Storefront config editor<span class="badge b-hot">Яаралтай</span></div>
+    <div class="tdesc">
+      /dashboard/store/storefront — theme, color, hero title, sections toggle.<br>
+      storefrontConfig JSON → /[slug] real-time render.<br>
+      Live preview хажуу талд — Shopify загвар.
+    </div>
+    <div class="tdur">⏱ 4-6 цаг</div>
+  </div>
+</div>
+
+<div class="task">
+  <div class="tnum n3">3</div>
+  <div class="tbody">
+    <div class="ttitle">Commission report<span class="badge b-rev">Орлого</span></div>
+    <div class="tdesc">
+      /dashboard/affiliate/commissions — earnings summary.<br>
+      /dashboard/store/commissions — seller-ийн тайлан.<br>
+      Борлуулагч хэзээ, хэд авахаа мэднэ.
+    </div>
+    <div class="tdur">⏱ 2-3 цаг</div>
+  </div>
+</div>
+
+<div class="task">
+  <div class="tnum n4">4</div>
+  <div class="tbody">
+    <div class="ttitle">QPay checkout бүрэн</div>
+    <div class="tdesc">
+      Cart → QPay QR → webhook → order confirm → eБаримт.<br>
+      Мөнгө орж эхлэх цорын ганц алхам.
+    </div>
+    <div class="tdur">⏱ 4-6 цаг</div>
+  </div>
+</div>
+
+<div class="task">
+  <div class="tnum n5">5</div>
+  <div class="tbody">
+    <div class="ttitle">Location service — GPS → feed</div>
+    <div class="tdesc">
+      Хэрэглэгч байршлаа өгмөгц feed дүүрэгт эрэмбэлэгдэнэ.<br>
+      "Таны ойролцоо" section. 9 feature нэгэн зэрэг ухаалаг болно.
+    </div>
+    <div class="tdur">⏱ 4-6 цаг</div>
+  </div>
+</div>
+
+</div>

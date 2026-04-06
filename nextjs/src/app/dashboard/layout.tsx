@@ -52,6 +52,7 @@ const CUSTOMER_SALES: SidebarSection = {
   title: 'Хэрэглэгч & Борлуулалт',
   items: [
     { href: '/dashboard/seller/customers', icon: '👥', label: 'Хэрэглэгч' },
+    { href: '/dashboard/seller/sellers', icon: '📢', label: 'Борлуулагчид', isNew: true },
     { href: '/dashboard/seller/promotions', icon: '🎁', label: 'Урамшуулал' },
     { href: '/dashboard/seller/promo-codes', icon: '🏷️', label: 'Промо код' },
     { href: '/dashboard/seller/giftcards', icon: '💳', label: 'Бэлгийн карт' },
