@@ -166,6 +166,10 @@ model Order {
   shopId           String?  @db.ObjectId
   statusHistory    Json[]
   estimatedMinutes Int?
+  paymentId        String?          // QPay invoice ID
+  paymentMethod    String?          // qpay | card | cash
+  deliveryAddress  String?
+  sellerProfileId  String?  @db.ObjectId
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
