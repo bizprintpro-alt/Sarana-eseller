@@ -1,0 +1,142 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.progress{background:var(--color-background-secondary);border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px}
+.pf{height:100%;border-radius:99px;background:#E8242C;transition:width .5s}
+.plabel{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:16px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px}
+.ctitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.cdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.7}
+.badge{display:inline-flex;font-size:9px;font-weight:600;padding:2px 7px;border-radius:99px}
+.b-done{background:var(--color-background-success);color:var(--color-text-success)}
+.b-next{background:#E8242C;color:#fff}
+.b-soon{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-later{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.week{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 14px;margin-bottom:8px;display:flex;gap:12px}
+.wnum{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.w-done{background:var(--color-background-success);color:var(--color-text-success)}
+.w-next{background:#E8242C;color:#fff}
+.w-soon{background:var(--color-background-warning);color:var(--color-text-warning)}
+.w-later{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.wbody{flex:1}
+.wtitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.wdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.warn{background:rgba(245,158,11,0.08);border:0.5px solid rgba(245,158,11,0.25);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:14px}
+.warn-title{font-size:12px;font-weight:500;color:var(--color-text-warning);margin-bottom:5px}
+.warn-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.7}
+</style>
+
+<div class="w">
+
+<div style="margin-bottom:16px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <span style="font-size:14px;font-weight:500;color:var(--color-text-primary)">Нийт явц</span>
+    <span style="font-size:13px;font-weight:500;color:#E8242C">~65%</span>
+  </div>
+  <div class="progress"><div class="pf" style="width:65%"></div></div>
+  <div class="plabel"><span>Фаз 1 суурь ✓</span><span>Фаз 2 transaction ✓</span><span>Фаз 3 өсөлт →</span><span>Фаз 4 масштаб</span></div>
+</div>
+
+<div class="warn">
+  <div class="warn-title">⚠ Долоо хоног 3 эхлэхийн өмнө шалгах</div>
+  <div class="warn-desc">
+    Одоо deploy хийгдсэн кодыг <strong style="color:var(--color-text-primary)">жинхэнэ хэрэглэгчтэй туршиж үзэх</strong> цаг болсон.<br>
+    1 дэлгүүр + 1 борлуулагч + 1 хэрэглэгч — бүрэн flow туршина:<br>
+    Бараа нэмэх → /[slug] харах → Борлуулагч approve → Share → Захиалга → QPay → Commission
+  </div>
+</div>
+
+<div class="st">Хийгдсэн vs үлдсэн</div>
+<div class="g2">
+  <div class="card">
+    <div class="ctitle">Хийгдсэн <span class="badge b-done">65%</span></div>
+    <div class="cdesc">
+      ✓ CSS design system<br>
+      ✓ Dark/light mode<br>
+      ✓ 7 entity type<br>
+      ✓ /[slug] storefront<br>
+      ✓ /seller/[username] affiliate<br>
+      ✓ QR + Share modal<br>
+      ✓ QPay checkout<br>
+      ✓ Commission system<br>
+      ✓ Location + GPS<br>
+      ✓ Seller approval<br>
+      ✓ Storefront config editor
+    </div>
+  </div>
+  <div class="card">
+    <div class="ctitle">Үлдсэн <span class="badge b-next">35%</span></div>
+    <div class="cdesc">
+      → Loyalty + Gold membership<br>
+      → Banner CRUD (орлого!)<br>
+      → SMS/Email campaign<br>
+      → eБаримт integration<br>
+      → ДАН OAuth KYC<br>
+      → Custom domain<br>
+      → Admin panel бүрэн<br>
+      → Mobile app multi-role<br>
+      → Analytics dashboard<br>
+      → Claude AI developer panel
+    </div>
+  </div>
+</div>
+
+<div class="st">Долоо хоног 3-8 төлөвлөгөө</div>
+
+<div class="week">
+  <div class="wnum w-next">3</div>
+  <div class="wbody">
+    <div class="wtitle">Loyalty + Gold + Banner <span class="badge b-next">Дараагийнх</span></div>
+    <div class="wdesc">
+      Loyalty оноо → tier → Gold membership (19,900₮/сар)<br>
+      Banner CRUD → homepage placement → paid ads орлого<br>
+      <strong style="color:#E8242C">→ Платформын өөрийн орлого эхэлнэ</strong>
+    </div>
+  </div>
+</div>
+
+<div class="week">
+  <div class="wnum w-soon">4</div>
+  <div class="wbody">
+    <div class="wtitle">SMS/Email + eБаримт + ДАН <span class="badge b-soon">Чухал</span></div>
+    <div class="wdesc">Campaign builder · automation · eБаримт API · ДАН KYC — итгэлцэл нэмэгдэнэ</div>
+  </div>
+</div>
+
+<div class="week">
+  <div class="wnum w-soon">5</div>
+  <div class="wbody">
+    <div class="wtitle">Custom domain + Admin panel <span class="badge b-soon">Чухал</span></div>
+    <div class="wdesc">mystore.mn → eseller.mn/slug · Admin: user/store/order удирдлага бүрэн</div>
+  </div>
+</div>
+
+<div class="week">
+  <div class="wnum w-later">6</div>
+  <div class="wbody">
+    <div class="wtitle">Mobile multi-role app <span class="badge b-later">Scale</span></div>
+    <div class="wdesc">Customer + Seller + Driver нэг апп · RoleSwitcher · Push notification</div>
+  </div>
+</div>
+
+<div class="week">
+  <div class="wnum w-later">7</div>
+  <div class="wbody">
+    <div class="wtitle">Analytics + Claude AI panel <span class="badge b-later">Scale</span></div>
+    <div class="wdesc">Dashboard analytics · Claude AI системийн хөгжүүлэгч /admin/ai</div>
+  </div>
+</div>
+
+<div class="week">
+  <div class="wnum w-later">8</div>
+  <div class="wbody">
+    <div class="wtitle">Launch готов <span class="badge b-later">Бэлэн</span></div>
+    <div class="wdesc">SEO sitemap · Performance audit · Security review · Beta хэрэглэгч</div>
+  </div>
+</div>
+
+</div>

@@ -1,25 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from 'next/server';
+import { goldService } from '@/lib/loyalty/GoldService';
 
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await req.json();
-    if (!userId) return NextResponse.json({ error: "userId required" }, { status: 400 });
+    if (!userId) return NextResponse.json({ error: 'userId required' }, { status: 400 });
 
-    const existing = await prisma.goldMembership.findUnique({ where: { userId } });
-    if (existing) {
-      return NextResponse.json({ error: "User already has a membership" }, { status: 400 });
-    }
-
-    const startsAt = new Date();
-    const endsAt = new Date(startsAt.getTime() + 30 * 24 * 60 * 60 * 1000);
-
-    const membership = await prisma.goldMembership.create({
-      data: { userId, plan: "MONTHLY", status: "TRIAL", startsAt, endsAt, autoRenew: false, isTrial: true, trialEndsAt: endsAt },
-    });
-
-    return NextResponse.json({ membership });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const membership = await goldService.startTrial(userId);
+    return NextResponse.json({ membership, message: '30 хоногийн үнэгүй туршилт эхэллээ!' });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed';
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
