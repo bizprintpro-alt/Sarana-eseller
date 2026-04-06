@@ -20,7 +20,7 @@ function UsageBar({ label, percent, color }: { label: string; percent: number; c
         <span className="text-[var(--esl-text-secondary)]">{label}</span>
         <span className="font-semibold text-[var(--esl-text-primary)]">{percent === 0 ? 'Хязгааргүй' : `${percent}%`}</span>
       </div>
-      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--esl-border)' }}>
         <div
           className="h-full rounded-full transition-all"
           style={{ width: `${Math.min(percent, 100)}%`, backgroundColor: color }}
@@ -74,7 +74,7 @@ export default function PackagePage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="rounded-xl border border-[var(--esl-border)] p-6 mb-6" style={{ backgroundColor: 'var(--esl-bg-card)' }}>
         <div className="flex items-center gap-3 mb-1">
           <span className="text-2xl">📦</span>
           <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Үнийн багц</h1>
@@ -83,7 +83,7 @@ export default function PackagePage() {
       </div>
 
       {/* Current Plan Info */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] p-6 mb-6">
+      <div className="rounded-xl border border-[var(--esl-border)] p-6 mb-6" style={{ backgroundColor: 'var(--esl-bg-card)' }}>
         <div className="flex items-center justify-between flex-wrap gap-4 mb-5">
           <div className="flex items-center gap-3">
             <div
@@ -98,11 +98,11 @@ export default function PackagePage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: 'rgba(232,36,44,0.1)', color: '#E8242C' }}>
               {remaining} хоног үлдсэн
             </span>
             {plan.id !== 'free' && (
-              <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+              <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: 'rgba(34,197,94,0.1)', color: '#22C55E' }}>
                 Идэвхтэй
               </span>
             )}
@@ -118,7 +118,7 @@ export default function PackagePage() {
 
       {/* Monthly / Yearly Toggle */}
       <div className="flex justify-center mb-6">
-        <div className="bg-white rounded-xl border border-[var(--esl-border)] p-1 flex">
+        <div className="rounded-xl border border-[var(--esl-border)] p-1 flex" style={{ backgroundColor: 'var(--esl-bg-card)' }}>
           <button
             onClick={() => setYearly(false)}
             className={`px-5 py-2 rounded-lg text-sm font-semibold transition-colors ${
@@ -134,7 +134,7 @@ export default function PackagePage() {
             }`}
           >
             Жилийн
-            <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(34,197,94,0.15)', color: '#22C55E' }}>
               -17%
             </span>
           </button>
@@ -152,16 +152,34 @@ export default function PackagePage() {
             <div
               key={p.id}
               className={`relative rounded-2xl overflow-hidden transition-all ${
-                isAIPro
-                  ? 'bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 border-2 border-pink-300 shadow-lg shadow-pink-100'
-                  : isCurrent
-                  ? 'bg-white border-2 border-green-400 shadow-md'
+                isCurrent
+                  ? 'border-2 border-green-400 shadow-md'
+                  : isAIPro
+                  ? 'border-2 shadow-lg'
                   : p.id === 'standard'
-                  ? 'bg-white border-2 border-indigo-400 shadow-md shadow-indigo-50'
+                  ? 'border-2 shadow-md'
                   : p.id === 'ultimate'
-                  ? 'bg-white border-2 border-amber-400 shadow-md shadow-amber-50'
-                  : 'bg-white border-2 border-[var(--esl-border)]'
+                  ? 'border-2 shadow-md'
+                  : 'border-2 border-[var(--esl-border)]'
               }`}
+              style={{
+                backgroundColor: isAIPro
+                  ? 'rgba(232,36,44,0.05)'
+                  : p.id === 'standard'
+                  ? 'rgba(59,130,246,0.05)'
+                  : p.id === 'ultimate'
+                  ? 'rgba(245,158,11,0.05)'
+                  : 'var(--esl-bg-card)',
+                borderColor: isCurrent
+                  ? undefined
+                  : isAIPro
+                  ? '#E8242C'
+                  : p.id === 'standard'
+                  ? '#3B82F6'
+                  : p.id === 'ultimate'
+                  ? '#F59E0B'
+                  : undefined,
+              }}
             >
               {/* Badge */}
               {p.badge && (
@@ -224,7 +242,7 @@ export default function PackagePage() {
                       ? 'bg-indigo-600 text-white hover:bg-indigo-700'
                       : p.id === 'ultimate'
                       ? 'bg-amber-600 text-white hover:bg-amber-700'
-                      : 'bg-gray-900 text-white hover:bg-gray-800'
+                      : 'bg-[var(--esl-text-primary)] text-[var(--esl-bg-card)] hover:opacity-80'
                   }`}
                 >
                   {isCurrent ? 'Одоогийн багц' : 'Сонгох'}
@@ -236,7 +254,7 @@ export default function PackagePage() {
       </div>
 
       {/* Comparison Table */}
-      <div className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden max-w-7xl mx-auto">
+      <div className="rounded-xl border border-[var(--esl-border)] overflow-hidden max-w-7xl mx-auto" style={{ backgroundColor: 'var(--esl-bg-card)' }}>
         <div className="p-6 border-b border-[var(--esl-border)]">
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">Багцуудын харьцуулалт</h2>
         </div>
@@ -310,7 +328,7 @@ export default function PackagePage() {
       </div>
 
       {/* FAQ */}
-      <div className="max-w-3xl mx-auto mt-10 bg-white rounded-xl border border-[var(--esl-border)] p-6">
+      <div className="max-w-3xl mx-auto mt-10 rounded-xl border border-[var(--esl-border)] p-6" style={{ backgroundColor: 'var(--esl-bg-card)' }}>
         <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Түгээмэл асуултууд</h2>
         <div className="space-y-4">
           {[

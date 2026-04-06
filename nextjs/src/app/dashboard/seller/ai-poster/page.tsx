@@ -124,7 +124,7 @@ export default function AIPosterPage() {
             Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.
           </p>
           <a
-            href="/dashboard/seller/package"
+            href="/dashboard/store/package"
             className="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
           >
             Багц шинэчлэх

@@ -110,7 +110,7 @@ const STORE_SETTINGS: SidebarSection = {
 const PACKAGE: SidebarSection = {
   title: 'Багц & Төлбөр',
   items: [
-    { href: '/dashboard/seller/package', icon: '👑', label: 'Миний багц' },
+    { href: '/dashboard/store/package', icon: '👑', label: 'Миний багц' },
     { href: '/dashboard/seller/logs', icon: '📋', label: 'Лог бүртгэл' },
   ],
 };

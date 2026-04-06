@@ -206,7 +206,7 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
       {!collapsed && storeInfo?.plan === 'Үнэгүй' && (
         <div className="mx-3 mb-2">
           <Link
-            href="/dashboard/seller/package"
+            href="/dashboard/store/package"
             className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-[#E8242C] to-[#C41E25] text-white text-[12px] font-semibold no-underline shadow-sm hover:shadow-md hover:from-indigo-700 hover:to-violet-700 transition-all"
           >
             <Crown className="w-3.5 h-3.5" />

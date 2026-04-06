@@ -117,7 +117,7 @@ export function UpgradeModal({ isOpen, onClose, reason, currentPlan, requiredPla
           }}>
             Хаах
           </button>
-          <Link href="/dashboard/seller/package" style={{
+          <Link href="/dashboard/store/package" style={{
             flex: 2, padding: '10px 0', borderRadius: 10,
             border: 'none', background: '#E8242C', color: '#FFF',
             fontSize: 13, fontWeight: 600, cursor: 'pointer',

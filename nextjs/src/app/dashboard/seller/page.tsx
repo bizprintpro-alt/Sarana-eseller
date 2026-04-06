@@ -426,7 +426,7 @@ export default function SellerDashboardPage() {
                 {daysLeft > 0 ? `${daysLeft} хоног үлдсэн` : 'Хугацаа дууссан'}
               </span>
               <Link
-                href="/dashboard/seller/package"
+                href="/dashboard/store/package"
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#E8242C] text-white text-sm font-bold rounded-xl hover:bg-[#C41E25] transition-colors shadow-sm no-underline"
               >
                 ⚡ Pro болох
