@@ -4,6 +4,8 @@ import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import MobileNav from '@/components/shared/MobileNav';
+import { useUserLocation } from '@/hooks/useUserLocation';
+import LocationBar from '@/components/location/LocationBar';
 import {
   Search, MapPin, Eye, Clock, Plus,
   Home, Car, Smartphone, ShoppingBag, Wrench, Sofa, Baby,
@@ -502,6 +504,20 @@ export default function FeedPage() {
   const [activeDistrict, setActiveDistrict] = useState('Бүгд');
   const [activeSort, setActiveSort] = useState('newest');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { district: userDistrict, loading: locLoading, permissionDenied, refresh: refreshLoc, setManualDistrict } = useUserLocation();
+
+  // Auto-set district from GPS
+  useEffect(() => {
+    if (userDistrict && activeDistrict === 'Бүгд') {
+      const shortMap: Record<string, string> = {
+        'khan-uul': 'ХУД', 'sukhbaatar': 'СБД', 'bayangol': 'БГД',
+        'bayanzurkh': 'БЗД', 'chingeltei': 'ЧД', 'songinokhairkhan': 'СХД',
+        'nalaikh': 'НД', 'baganuur': 'БНД',
+      };
+      const short = shortMap[userDistrict.key];
+      if (short) setActiveDistrict(short);
+    }
+  }, [userDistrict]);
 
   const filtered = useMemo(() => {
     let list = [...DEMO_FEED];
@@ -547,6 +563,25 @@ export default function FeedPage() {
           <Link href="/feed/post" className="flex items-center gap-2 px-5 py-3 bg-[#E8242C] text-white text-sm font-bold rounded-xl no-underline hover:bg-[#CC0000] transition-colors">
             <Plus className="w-4 h-4" /> Зар оруулах
           </Link>
+        </div>
+
+        {/* ═══ Location Bar ═══ */}
+        <div className="mb-6">
+          <LocationBar
+            district={userDistrict}
+            loading={locLoading}
+            permissionDenied={permissionDenied}
+            onDistrictChange={(key) => {
+              setManualDistrict(key);
+              const shortMap: Record<string, string> = {
+                'khan-uul': 'ХУД', 'sukhbaatar': 'СБД', 'bayangol': 'БГД',
+                'bayanzurkh': 'БЗД', 'chingeltei': 'ЧД', 'songinokhairkhan': 'СХД',
+                'nalaikh': 'НД', 'baganuur': 'БНД',
+              };
+              setActiveDistrict(shortMap[key] || 'Бүгд');
+            }}
+            onRefresh={refreshLoc}
+          />
         </div>
 
         {/* ═══ Featured Businesses ═══ */}
