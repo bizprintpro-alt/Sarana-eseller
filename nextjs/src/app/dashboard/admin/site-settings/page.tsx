@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
-import { Save, Plus, X, Eye, EyeOff, CreditCard, Megaphone, BarChart3, Columns3 } from 'lucide-react';
+import { Save, Plus, X, Eye, EyeOff, CreditCard, Megaphone, BarChart3, Columns3, LogIn } from 'lucide-react';
 
 interface SiteSettings {
   announcementBar: { text: string; bgColor: string; textColor: string; link: string; isVisible: boolean };
@@ -10,6 +10,11 @@ interface SiteSettings {
   footerColumns: { title: string; links: { label: string; href: string }[] }[];
   paymentIcons: { qpay: boolean; visa: boolean; mastercard: boolean; socialpay: boolean };
   copyrightText: string;
+  loginPage: {
+    heroTitle: string; heroSubtitle: string; heroBgImage: string;
+    buttonColor: string; showDanLogin: boolean;
+    roles: { icon: string; title: string; desc: string; badge: string }[];
+  };
 }
 
 const PAYMENT_LABELS: Record<string, string> = { qpay: 'QPay', visa: 'Visa', mastercard: 'Mastercard', socialpay: 'SocialPay' };
@@ -183,6 +188,72 @@ export default function SiteSettingsPage() {
           ))}
         </div>
       </section>
+
+      {/* ═══ 5. LOGIN PAGE ═══ */}
+      {settings.loginPage && (() => {
+        const lp = settings.loginPage;
+        const updateLp = (partial: Partial<typeof lp>) => update({ loginPage: { ...lp, ...partial } });
+        return (
+          <section className="rounded-2xl border p-5" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <LogIn className="w-4 h-4 text-[#E8242C]" />
+              <h2 className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>Login хуудас</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider block mb-1" style={{ color: 'var(--esl-text-muted)' }}>Hero гарчиг</label>
+                <textarea value={lp.heroTitle} onChange={e => updateLp({ heroTitle: e.target.value })} rows={2}
+                  className="w-full px-3 py-2 rounded-lg border text-sm outline-none resize-none"
+                  style={{ background: 'var(--esl-bg-section)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider block mb-1" style={{ color: 'var(--esl-text-muted)' }}>Дэд гарчиг</label>
+                <textarea value={lp.heroSubtitle} onChange={e => updateLp({ heroSubtitle: e.target.value })} rows={2}
+                  className="w-full px-3 py-2 rounded-lg border text-sm outline-none resize-none"
+                  style={{ background: 'var(--esl-bg-section)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div>
+                <label className="text-[10px] font-bold uppercase tracking-wider block mb-1" style={{ color: 'var(--esl-text-muted)' }}>Товчны өнгө</label>
+                <div className="flex gap-2">
+                  <input type="color" value={lp.buttonColor} onChange={e => updateLp({ buttonColor: e.target.value })} className="w-10 h-8 rounded cursor-pointer border-none" />
+                  <input type="text" value={lp.buttonColor} onChange={e => updateLp({ buttonColor: e.target.value })}
+                    className="flex-1 h-8 px-3 rounded-lg border text-xs font-mono outline-none"
+                    style={{ background: 'var(--esl-bg-section)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+                </div>
+              </div>
+              <div className="flex items-end pb-1">
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-xs" style={{ color: 'var(--esl-text-secondary)' }}>ДАН нэвтрэх харуулах</span>
+                  <button onClick={() => updateLp({ showDanLogin: !lp.showDanLogin })}
+                    className={`w-10 h-6 rounded-full flex items-center px-0.5 transition-colors cursor-pointer border-none ${lp.showDanLogin ? 'bg-[#E8242C]' : 'bg-[var(--esl-border)]'}`}>
+                    <div className={`w-5 h-5 rounded-full bg-white transition-transform ${lp.showDanLogin ? 'translate-x-4' : 'translate-x-0'}`} />
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* Roles */}
+            <label className="text-[10px] font-bold uppercase tracking-wider block mb-2" style={{ color: 'var(--esl-text-muted)' }}>4 роллын карт</label>
+            <div className="grid grid-cols-2 gap-2">
+              {lp.roles.map((role, i) => (
+                <div key={i} className="rounded-lg border p-2.5" style={{ background: 'var(--esl-bg-section)', borderColor: 'var(--esl-border)' }}>
+                  <div className="flex gap-2 mb-1">
+                    <input type="text" value={role.icon} onChange={e => { const r = [...lp.roles]; r[i] = { ...r[i], icon: e.target.value }; updateLp({ roles: r }); }}
+                      className="w-10 h-7 rounded border text-center text-sm outline-none" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }} />
+                    <input type="text" value={role.title} onChange={e => { const r = [...lp.roles]; r[i] = { ...r[i], title: e.target.value }; updateLp({ roles: r }); }}
+                      className="flex-1 h-7 px-2 rounded border text-xs font-semibold outline-none" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+                  </div>
+                  <input type="text" value={role.desc} onChange={e => { const r = [...lp.roles]; r[i] = { ...r[i], desc: e.target.value }; updateLp({ roles: r }); }}
+                    className="w-full h-6 px-2 rounded border text-[10px] outline-none mb-1" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-muted)' }} />
+                  <input type="text" value={role.badge} onChange={e => { const r = [...lp.roles]; r[i] = { ...r[i], badge: e.target.value }; updateLp({ roles: r }); }}
+                    className="w-full h-6 px-2 rounded border text-[10px] outline-none" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-muted)' }} />
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
     </div>
   );
 }

@@ -1,0 +1,100 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 14px;margin-bottom:8px}
+.ct{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ci{font-size:11px;color:var(--color-text-secondary);line-height:1.85}
+.bdg{display:inline-flex;font-size:9px;font-weight:600;padding:2px 7px;border-radius:99px}
+.b-auto{background:#E8242C;color:#fff}
+.b-man{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-ai{background:#EEEDFE;color:#3C3489}
+.flow{display:flex;gap:0;align-items:stretch;margin-bottom:14px;overflow-x:auto}
+.fn{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;min-width:110px;flex-shrink:0;text-align:center}
+.fi{font-size:16px;margin-bottom:4px}
+.ft{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.fd{font-size:9px;color:var(--color-text-tertiary);line-height:1.4}
+.fa{display:flex;align-items:center;padding:0 4px;color:var(--color-text-tertiary);font-size:14px;flex-shrink:0}
+.warn{background:rgba(232,36,44,0.05);border:0.5px solid rgba(232,36,44,0.2);border-radius:var(--border-radius-lg);padding:12px 14px}
+.wt{font-size:12px;font-weight:500;color:#E8242C;margin-bottom:6px}
+.wd{font-size:11px;color:var(--color-text-secondary);line-height:1.8}
+</style>
+
+<div class="w">
+
+<div class="st">3 арга — хослуулж ашиглах</div>
+
+<div class="card">
+  <div class="ct">1. Claude AI автомат аудит <span class="bdg b-ai">Хамгийн хурдан</span></div>
+  <div class="ci">
+    Claude Code-д нэг тушаал өгнө:<br>
+    <code style="background:var(--color-background-secondary);padding:2px 6px;border-radius:4px;font-size:10px">
+      "Eseller.mn-ийн бүх API routes-г scan хийж
+      DB холболтгүй, mock data ашигласан,
+      TODO/FIXME тэмдэглэгдсэн хэсгүүдийг
+      жагсаан гаргаж тайлан бич"
+    </code><br><br>
+    → Claude бүх файлыг уншиж алдааг олно<br>
+    → "Энэ 12 файл mock data ашиглаж байна" гэж хариулна<br>
+    → Тэр жагсаалтаар нэг нэгнээр засна
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct">2. Feature-ээр тест хийх <span class="bdg b-man">Найдвартай</span></div>
+  <div class="ci">
+    Хэрэглэгч бүр нэг замаар явдаг — тэр замыг бүрэн туршина:<br><br>
+    <strong style="color:var(--color-text-primary)">Buyer flow:</strong> бүртгэл → хайлт → сагс → QPay → захиалга → хянах<br>
+    <strong style="color:var(--color-text-primary)">Seller flow:</strong> нэвтрэх → бараа нэмэх → захиалга авах → хариулах<br>
+    <strong style="color:var(--color-text-primary)">Affiliate flow:</strong> бүртгэл → бараа хүсэх → approve → share → commission<br>
+    <strong style="color:var(--color-text-primary)">Admin flow:</strong> нэвтрэх → дэлгүүр verify → баннер нэмэх → тайлан<br><br>
+    Алхам бүрт: ажиллана уу? → ✓ эсвэл ✗ + screenshot
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct">3. Claude AI developer cron <span class="bdg b-auto">Автомат</span></div>
+  <div class="ci">
+    eseller_claude_ai_developer_prompt.md аль хэдийн бэлэн.<br>
+    Beta нээгдсэний дараа өдөр бүр 06:00-д:<br><br>
+    → Error log шинжлэнэ<br>
+    → "404 гарч байгаа 3 endpoint байна" гэж танд мэдэгдэнэ<br>
+    → "Энэ хэрэглэгч 5 удаа сагсаа орхисон" дүгнэлт гаргана<br>
+    → Admin panel-д санал болгоно → та зөвшөөрнө → засагдана
+  </div>
+</div>
+
+<div class="st">Одоо хийх — Claude аудит тушаал</div>
+
+<div class="flow">
+  <div class="fn"><div class="fi">📋</div><div class="ft">Scan</div><div class="fd">Бүх файл уншина</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">🔍</div><div class="ft">Илрүүлэх</div><div class="fd">Mock, TODO, hardcode</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">📊</div><div class="ft">Тайлан</div><div class="fd">Файл + шугам + шалтгаан</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">🔧</div><div class="ft">Засах</div><div class="fd">Нэг нэгнээр</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">✓</div><div class="ft">Test</div><div class="fd">Build + screenshot</div></div>
+</div>
+
+<div class="warn">
+  <div class="wt">Claude Code-д өгөх тушаал — одоо хийх</div>
+  <div class="wd">
+    <code style="display:block;background:var(--color-background-secondary);padding:10px;border-radius:6px;font-size:11px;line-height:1.9;color:var(--color-text-primary)">
+      Eseller.mn codebase-ийг бүрэн scan хийж
+      дараах зүйлсийг олж тайлан бич:<br><br>
+      1. Hardcoded mock/demo data ашигласан файлууд<br>
+      2. TODO, FIXME, "coming soon" тэмдэглэгдсэн<br>
+      3. API дуудаагүй, зөвхөн UI-тай хэсгүүд<br>
+      4. DB query байхгүй, статик өгөгдөл<br>
+      5. Error handling дутуу endpoint-ууд<br><br>
+      Файл бүрт: файлын нэр + мөр + яагаад асуудалтай<br>
+      Эрэмбэ: Critical → High → Medium → Low
+    </code>
+  </div>
+</div>
+
+</div>

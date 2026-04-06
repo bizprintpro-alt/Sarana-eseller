@@ -226,6 +226,9 @@ export default function LoginPage() {
                       {showPw ? '🙈' : '👁'}
                     </button>
                   </div>
+                  <div className="text-right">
+                    <a href="/forgot-password" className="text-xs font-semibold no-underline" style={{ color: 'var(--esl-text-muted)' }}>Нууц үг мартсан уу?</a>
+                  </div>
                 </div>
 
                 <button

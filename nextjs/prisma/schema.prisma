@@ -1244,6 +1244,21 @@ model Staff {
 }
 
 // ══════════════════════════════════════════════════════════════
+// PASSWORD RESET
+// ══════════════════════════════════════════════════════════════
+
+model PasswordResetToken {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@map("password_reset_tokens")
+}
+
+// ══════════════════════════════════════════════════════════════
 // ORDER TRACKING
 // ══════════════════════════════════════════════════════════════
 

@@ -9,6 +9,14 @@ export interface SiteSettings {
   footerColumns: { title: string; links: { label: string; href: string }[] }[];
   paymentIcons: { qpay: boolean; visa: boolean; mastercard: boolean; socialpay: boolean };
   copyrightText: string;
+  loginPage: {
+    heroTitle: string;
+    heroSubtitle: string;
+    heroBgImage: string;
+    buttonColor: string;
+    showDanLogin: boolean;
+    roles: { icon: string; title: string; desc: string; badge: string }[];
+  };
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -32,6 +40,19 @@ const DEFAULT_SETTINGS: SiteSettings = {
   ],
   paymentIcons: { qpay: true, visa: true, mastercard: true, socialpay: true },
   copyrightText: `© ${new Date().getFullYear()} eseller.mn — Борлуулагчтай л борлуулалт байна`,
+  loginPage: {
+    heroTitle: 'Борлуулагчтай л\nборлуулалт байна.',
+    heroSubtitle: 'eseller.mn — Монголын seller-powered marketplace',
+    heroBgImage: '',
+    buttonColor: '#CC0000',
+    showDanLogin: false,
+    roles: [
+      { icon: '📦', title: 'Дэлгүүр эзэн', desc: 'Бараагаа байршуулна', badge: '💰 70-85%' },
+      { icon: '📢', title: 'Борлуулагч', desc: 'Сүлжээгээр зарна', badge: '🔗 10-20%' },
+      { icon: '🛒', title: 'Худалдан авагч', desc: 'QPay-р аюулгүй', badge: '🚀 2-4ц' },
+      { icon: '🚚', title: 'Жолооч', desc: 'Хүргэж орлого ол', badge: '📦 Орлого' },
+    ],
+  },
 };
 
 // GET
