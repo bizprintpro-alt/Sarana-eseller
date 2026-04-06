@@ -8,23 +8,29 @@ const RESERVED_SLUGS = new Set([
 ]);
 
 export async function GET(req: NextRequest) {
-  const slug = req.nextUrl.searchParams.get('slug')?.toLowerCase().replace(/[^a-z0-9-]/g, '') || '';
+  try {
+    const slug = req.nextUrl.searchParams.get('slug')?.toLowerCase().replace(/[^a-z0-9-]/g, '') || '';
 
-  if (!slug || slug.length < 3) {
-    return NextResponse.json({ available: false, reason: 'Хамгийн бага 3 тэмдэгт' });
+    if (!slug || slug.length < 3) {
+      return NextResponse.json({ available: false, reason: 'Хамгийн бага 3 тэмдэгт' });
+    }
+
+    if (RESERVED_SLUGS.has(slug)) {
+      return NextResponse.json({ available: false, reason: 'Энэ нэр системд ашиглагдаж байна' });
+    }
+
+    const existing = await prisma.shop.findFirst({
+      where: { OR: [{ slug }, { storefrontSlug: slug }] },
+    });
+
+    if (existing) {
+      return NextResponse.json({ available: false, reason: 'Энэ нэр аль хэдийн бүртгэгдсэн' });
+    }
+
+    return NextResponse.json({ available: true, slug, url: `eseller.mn/${slug}` });
+  } catch (error: any) {
+    console.error('[check-slug] Prisma error:', error?.message || error);
+    // Return available on DB error so wizard isn't blocked
+    return NextResponse.json({ available: true, slug: req.nextUrl.searchParams.get('slug'), warning: 'DB шалгаж чадсангүй' });
   }
-
-  if (RESERVED_SLUGS.has(slug)) {
-    return NextResponse.json({ available: false, reason: 'Энэ нэр системд ашиглагдаж байна' });
-  }
-
-  const existing = await prisma.shop.findFirst({
-    where: { OR: [{ slug }, { storefrontSlug: slug }] },
-  });
-
-  if (existing) {
-    return NextResponse.json({ available: false, reason: 'Энэ нэр аль хэдийн бүртгэгдсэн' });
-  }
-
-  return NextResponse.json({ available: true, slug, url: `eseller.mn/${slug}` });
 }
