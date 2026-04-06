@@ -277,7 +277,7 @@ export default function ShopTypeWizard() {
     switch (step) {
       case 0: return !!selectedType;
       case 1: return !!selectedTheme;
-      case 2: return !!storeName && slug.length >= 3 && (slugStatus === 'available' || slugStatus === 'error');
+      case 2: return !!storeName && slug.length >= 3 && slugStatus !== 'taken';
       case 3: return true; // logo/cover optional
       case 4: return true; // first item optional
       case 5: return true; // domain optional
