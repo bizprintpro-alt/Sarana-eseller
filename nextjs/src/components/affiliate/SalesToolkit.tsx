@@ -198,7 +198,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
               <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-[#F1F5F9]">
                 <div className="relative shrink-0">
                   <div className="w-40 h-40 bg-white rounded-2xl border-2 border-[#6366F1]/20 flex items-center justify-center p-2.5 shadow-[0_4px_20px_rgba(99,102,241,.08)]">
-                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(refLink)}&bgcolor=ffffff&color=4338CA`} alt="QR" className="w-full h-full" width={160} height={160} />
+                    <img loading="lazy" src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(refLink)}&bgcolor=ffffff&color=4338CA`} alt="QR" className="w-full h-full" width={160} height={160} />
                   </div>
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#6366F1] text-white text-[9px] font-bold px-3 py-1 rounded-full shadow-sm whitespace-nowrap">
                     @{username}

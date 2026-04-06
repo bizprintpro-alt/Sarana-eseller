@@ -109,7 +109,7 @@ export default function SellerPage() {
             return (
               <div key={p.id} className="group rounded-xl overflow-hidden border transition-all hover:-translate-y-1 hover:shadow-lg" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
                 <div className="relative aspect-square" style={{ background: 'var(--esl-bg-section)' }}>
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                  <img loading="lazy" src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                   {disc > 0 && (
                     <span className="absolute top-2 left-2 bg-[#E8242C] text-white text-[10px] font-bold px-2 py-0.5 rounded">-{disc}%</span>
                   )}

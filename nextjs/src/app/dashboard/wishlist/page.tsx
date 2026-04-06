@@ -40,7 +40,7 @@ export default function WishlistPage() {
           {items.map(item => (
             <div key={item.id} className="bg-dash-card border border-dash-border rounded-xl overflow-hidden">
               <div className="h-32 bg-dash-elevated flex items-center justify-center">
-                {item.image ? <img src={item.image} alt="" className="h-full w-full object-cover" /> : <span className="text-3xl">🛍️</span>}
+                {item.image ? <img loading="lazy" src={item.image} alt="" className="h-full w-full object-cover" /> : <span className="text-3xl">🛍️</span>}
               </div>
               <div className="p-4">
                 <h3 className="text-sm font-bold text-white mb-1">{item.name}</h3>

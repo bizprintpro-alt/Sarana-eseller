@@ -390,7 +390,7 @@ export default function AdminBannersPage() {
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-8 rounded-md bg-[var(--esl-bg-elevated)] flex items-center justify-center shrink-0 overflow-hidden">
                             {b.thumbnailUrl ? (
-                              <img src={b.thumbnailUrl} alt="" className="w-full h-full object-cover" />
+                              <img loading="lazy" src={b.thumbnailUrl} alt="" className="w-full h-full object-cover" />
                             ) : (
                               <Image className="w-4 h-4 text-white/20" />
                             )}

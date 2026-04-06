@@ -1,0 +1,105 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.prog{background:var(--color-background-secondary);border-radius:99px;height:10px;overflow:hidden;margin-bottom:4px}
+.pf{height:100%;border-radius:99px;background:#E8242C}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+.task{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 14px;margin-bottom:8px;display:flex;gap:12px}
+.tnum{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.n1{background:#E8242C;color:#fff}
+.n2{background:rgba(232,36,44,0.15);color:#E8242C}
+.n3{background:var(--color-background-warning);color:var(--color-text-warning)}
+.n4{background:var(--color-background-info);color:var(--color-text-info)}
+.tbody{flex:1}
+.ttitle{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.tdesc{font-size:11px;color:var(--color-text-secondary);line-height:1.7}
+.bdg{display:inline-flex;font-size:9px;font-weight:600;padding:2px 7px;border-radius:99px}
+.b-red{background:#E8242C;color:#fff}
+.b-opt{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-prod{background:var(--color-background-success);color:var(--color-text-success)}
+.b-later{background:var(--color-background-info);color:var(--color-text-info)}
+.launch-box{background:rgba(232,36,44,0.05);border:0.5px solid rgba(232,36,44,0.25);border-radius:var(--border-radius-lg);padding:14px;margin-top:14px}
+.lb-title{font-size:13px;font-weight:500;color:#E8242C;margin-bottom:8px}
+.lb-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.9}
+.check{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.ci{font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px}
+</style>
+
+<div class="w">
+
+<div>
+  <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+    <span style="font-size:14px;font-weight:500;color:var(--color-text-primary)">Нийт явц</span>
+    <span style="font-size:14px;font-weight:500;color:#E8242C">85% → 100%</span>
+  </div>
+  <div class="prog"><div class="pf" style="width:85%"></div></div>
+  <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:20px;text-align:right">Үлдсэн 15% — 2 долоо хоног</div>
+</div>
+
+<div class="st">Үлдсэн 4 зүйл — ялгаатай дараалал</div>
+
+<div class="task">
+  <div class="tnum n1">1</div>
+  <div class="tbody">
+    <div class="ttitle">Performance audit + Core Web Vitals <span class="bdg b-red">Яаралтай</span></div>
+    <div class="tdesc">
+      Beta launch-ын өмнө заавал хийх. Lighthouse score &gt;90 байх ёстой.<br>
+      Image optimization (next/image) · Bundle size · DB query N+1 шалгалт.<br>
+      Google-д rank авах, хэрэглэгч хурдан ачаалах.
+    </div>
+  </div>
+</div>
+
+<div class="task">
+  <div class="tnum n2">2</div>
+  <div class="tbody">
+    <div class="ttitle">Mobile multi-role app <span class="bdg b-later">Долоо хоног 6</span></div>
+    <div class="tdesc">
+      eseller_single_app_multi_role_prompt.md бэлэн байна.<br>
+      Customer + Seller + Driver — нэг Expo апп.<br>
+      Web 100% дууссаны дараа хийх — API бүгд бэлэн байна.
+    </div>
+  </div>
+</div>
+
+<div class="task">
+  <div class="tnum n3">3</div>
+  <div class="tbody">
+    <div class="ttitle">ДАН OAuth KYC <span class="bdg b-prod">Production-д</span></div>
+    <div class="tdesc">
+      sso.gov.mn-д албан хүсэлт гаргах → credentials авах.<br>
+      Demo mode-тай ажиллана — production-д л утга цэнтэй.<br>
+      Seller verify badge → хэрэглэгчийн итгэл нэмэгдэнэ.
+    </div>
+  </div>
+</div>
+
+<div class="task">
+  <div class="tnum n4">4</div>
+  <div class="tbody">
+    <div class="ttitle">Beta launch бэлтгэл <span class="bdg b-prod">Сүүлд</span></div>
+    <div class="tdesc">
+      10-20 beta дэлгүүр урих · Feedback цуглуулах.<br>
+      Critical bug fix · Real QPay credentials тохируулах.<br>
+      Claude AI developer panel — анхны шинжилгээ ажиллуулах.
+    </div>
+  </div>
+</div>
+
+<div class="launch-box">
+  <div class="lb-title">Beta Launch checklist</div>
+  <div class="lb-desc">Web 85% → 100% болоход beta нээх боломжтой. Mobile app optional.</div>
+  <div class="check">
+    <div class="ci"><input type="checkbox" style="accent-color:#E8242C"/> Performance audit дууссан (Lighthouse &gt;85)</div>
+    <div class="ci"><input type="checkbox" style="accent-color:#E8242C"/> Real QPay credentials тохируулсан</div>
+    <div class="ci"><input type="checkbox" style="accent-color:#E8242C"/> 3-5 seed дэлгүүр бодит байршилтай</div>
+    <div class="ci"><input type="checkbox" style="accent-color:#E8242C"/> Error monitoring (Sentry) холбосон</div>
+    <div class="ci"><input type="checkbox" style="accent-color:#E8242C"/> Admin panel-д байнгын хяналт тохируулсан</div>
+    <div class="ci"><input type="checkbox" style="accent-color:#E8242C"/> Claude AI developer cron эхэлсэн</div>
+    <div class="ci"><input type="checkbox" style="accent-color:#E8242C"/> 10+ beta дэлгүүр бүртгүүлсэн</div>
+  </div>
+</div>
+
+</div>

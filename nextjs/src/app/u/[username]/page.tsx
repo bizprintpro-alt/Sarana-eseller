@@ -122,7 +122,7 @@ export default function MicroStorefront() {
           >
             <div className="relative h-64 sm:h-80 bg-gradient-to-br from-[#F8FAFC] to-[#EEF2FF] flex items-center justify-center">
               {heroProduct.images?.[0] ? (
-                <img src={heroProduct.images[0]} alt={heroProduct.name} className="w-full h-full object-cover" />
+                <img loading="lazy" src={heroProduct.images[0]} alt={heroProduct.name} className="w-full h-full object-cover" />
               ) : (
                 <span className="text-8xl">{heroProduct.emoji || '📦'}</span>
               )}
@@ -203,7 +203,7 @@ export default function MicroStorefront() {
                   <div key={p._id} className="bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all group">
                     <div className="relative h-32 bg-[var(--esl-bg-section)] flex items-center justify-center overflow-hidden">
                       {p.images?.[0] ? (
-                        <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                        <img loading="lazy" src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
                         <span className="text-3xl group-hover:scale-110 transition-transform">{p.emoji || '📦'}</span>
                       )}

@@ -67,7 +67,7 @@ export function MediaUploader({ context, value, onChange, maxFiles = 5, label }:
               width: 80, height: 80, borderRadius: 8, overflow: 'hidden',
               position: 'relative', border: '0.5px solid #2A2A2A',
             }}>
-              <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img loading="lazy" src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <button onClick={() => removeFile(i)} style={{
                 position: 'absolute', top: 2, right: 2,
                 width: 20, height: 20, borderRadius: '50%',

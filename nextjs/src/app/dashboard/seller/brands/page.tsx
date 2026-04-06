@@ -235,7 +235,7 @@ export default function BrandsPage() {
                 />
                 {logoUrl && (
                   <div className="mt-2 h-16 bg-[var(--esl-bg-section)] rounded-lg flex items-center justify-center border border-[var(--esl-border)]">
-                    <img src={logoUrl} alt="Preview" className="max-h-12 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                    <img loading="lazy" src={logoUrl} alt="Preview" className="max-h-12 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                   </div>
                 )}
               </div>

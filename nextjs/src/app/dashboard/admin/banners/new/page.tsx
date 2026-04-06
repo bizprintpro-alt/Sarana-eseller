@@ -136,7 +136,7 @@ export default function NewBannerPage() {
               <Eye size={14} color="#777" />
               <span style={{ fontSize: '12px', color: '#777' }}>Урьдчилсан харагдац</span>
             </div>
-            <img src={form.imageUrl} alt="Preview" style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
+            <img loading="lazy" src={form.imageUrl} alt="Preview" style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
           </div>
         )}

@@ -36,7 +36,7 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
         <div className="max-w-3xl mx-auto h-14 flex items-center justify-between px-4">
           <div className="flex items-center gap-2.5">
             {shop.logo ? (
-              <img src={shop.logo} alt="" className="w-8 h-8 rounded-lg object-cover" />
+              <img loading="lazy" src={shop.logo} alt="" className="w-8 h-8 rounded-lg object-cover" />
             ) : (
               <div className="w-8 h-8 rounded-lg bg-[#E8242C] flex items-center justify-center text-white text-xs font-bold">
                 {shop.name.charAt(0)}
@@ -61,7 +61,7 @@ export default function ServiceProfileClient({ data }: { data: ShopPageData }) {
             {/* Avatar */}
             <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#E8242C] flex items-center justify-center text-white text-3xl font-bold shadow-lg shrink-0">
               {shop.logo ? (
-                <img src={shop.logo} alt="" className="w-full h-full rounded-2xl object-cover" />
+                <img loading="lazy" src={shop.logo} alt="" className="w-full h-full rounded-2xl object-cover" />
               ) : (
                 shop.name.charAt(0)
               )}

@@ -51,7 +51,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
           <div className="flex items-start gap-5 mb-6">
             {shop.logo ? (
-              <img src={shop.logo} alt={shop.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20 shadow-lg" />
+              <img loading="lazy" src={shop.logo} alt={shop.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20 shadow-lg" />
             ) : (
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#E8242C] to-[#FF6B6B] flex items-center justify-center text-2xl font-black text-white shadow-lg">
                 {shop.name.charAt(0)}
@@ -130,7 +130,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
                   <div className="rounded-xl overflow-hidden border transition-all hover:-translate-y-1 hover:shadow-lg" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
                     <div className="relative aspect-square" style={{ background: 'var(--esl-bg-section)' }}>
                       {img ? (
-                        <img src={img} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                        <img loading="lazy" src={img} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-4xl">{p.emoji || '📦'}</div>
                       )}

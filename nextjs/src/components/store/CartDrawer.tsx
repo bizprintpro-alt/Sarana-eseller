@@ -81,7 +81,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                 <div key={`${item._id}-${idx}`} className="flex gap-3 items-start group">
                   <div className="w-16 h-16 rounded-xl bg-[var(--esl-bg-section)] border border-[#F1F5F9] flex items-center justify-center text-2xl shrink-0 overflow-hidden">
                     {item.images?.[0] ? (
-                      <img src={item.images[0]} alt="" className="w-full h-full object-cover" />
+                      <img loading="lazy" src={item.images[0]} alt="" className="w-full h-full object-cover" />
                     ) : (
                       item.emoji || '📦'
                     )}

@@ -384,7 +384,7 @@ export default function AffiliateDashboard() {
                     <div key={p._id} className="rounded-2xl border border-[var(--esl-border)] overflow-hidden hover:border-[#E8242C]/30 hover:shadow-md transition-all group" style={{ background: 'var(--esl-bg-card)' }}>
                       <div className="relative flex items-center justify-center overflow-hidden" style={{ aspectRatio: '1', background: 'var(--esl-bg-section)' }}>
                         {p.images?.[0] ? (
-                          <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <img loading="lazy" src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         ) : (
                           <span className="text-[32px] group-hover:scale-110 transition-transform duration-300">{p.emoji || '📦'}</span>
                         )}

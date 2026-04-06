@@ -130,7 +130,7 @@ export default function ProductDetailPage() {
             {/* Main image */}
             <div className="relative aspect-square rounded-2xl overflow-hidden flex items-center justify-center" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)' }}>
               {images[activeImg] ? (
-                <img src={images[activeImg]} alt={product.name} className="w-full h-full object-contain" />
+                <img loading="lazy" src={images[activeImg]} alt={product.name} className="w-full h-full object-contain" />
               ) : (
                 <span className="text-8xl">{product.emoji || '📦'}</span>
               )}
@@ -144,7 +144,7 @@ export default function ProductDetailPage() {
                     className={cn('w-16 h-16 rounded-lg overflow-hidden border-2 shrink-0 cursor-pointer transition',
                       activeImg === i ? 'border-[#E31E24]' : 'opacity-60 hover:opacity-100')}
                     style={activeImg !== i ? { borderColor: 'var(--esl-border)' } : undefined}>
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img loading="lazy" src={img} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

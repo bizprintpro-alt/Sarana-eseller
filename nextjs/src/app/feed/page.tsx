@@ -164,7 +164,7 @@ function MediaCarousel({ media, title, category, isVip, tier, disc }: {
         current.type === 'video' ? (
           <video src={current.url} controls className="w-full h-full object-contain bg-black" poster={current.thumb} />
         ) : (
-          <img src={current.url} alt={title} className="w-full h-full object-cover" />
+          <img loading="lazy" src={current.url} alt={title} className="w-full h-full object-cover" />
         )
       ) : (
         <div className="w-full h-full flex items-center justify-center">
@@ -198,11 +198,11 @@ function MediaCarousel({ media, title, category, isVip, tier, disc }: {
               >
                 {m.type === 'video' ? (
                   <div className="w-full h-full bg-black/80 flex items-center justify-center relative">
-                    {m.thumb && <img src={m.thumb} alt="" className="w-full h-full object-cover absolute inset-0" />}
+                    {m.thumb && <img loading="lazy" src={m.thumb} alt="" className="w-full h-full object-cover absolute inset-0" />}
                     <Play className="w-3 h-3 text-white relative z-10" fill="white" />
                   </div>
                 ) : (
-                  <img src={m.url} alt="" className="w-full h-full object-cover" />
+                  <img loading="lazy" src={m.url} alt="" className="w-full h-full object-cover" />
                 )}
               </button>
             ))}
@@ -593,7 +593,7 @@ export default function FeedPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* Auto Dealer */}
             <Link href="/entity/auto_dealer/autocity" className="group relative h-52 rounded-2xl overflow-hidden no-underline block">
-              <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <img loading="lazy" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="flex items-center gap-2 mb-1">
@@ -607,7 +607,7 @@ export default function FeedPage() {
 
             {/* Construction Company */}
             <Link href="/entity/company/mongolian-properties" className="group relative h-52 rounded-2xl overflow-hidden no-underline block">
-              <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <img loading="lazy" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="flex items-center gap-2 mb-1">
@@ -621,7 +621,7 @@ export default function FeedPage() {
 
             {/* Agent */}
             <Link href="/entity/agent/erdenbat" className="group relative h-52 rounded-2xl overflow-hidden no-underline block">
-              <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              <img loading="lazy" src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80" alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="flex items-center gap-2 mb-1">

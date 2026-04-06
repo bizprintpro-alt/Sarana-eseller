@@ -158,7 +158,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               {qpayUrl ? (
-                <img src={qpayUrl} alt="QPay QR" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img loading="lazy" src={qpayUrl} alt="QPay QR" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               ) : (
                 <span style={{ color: '#777', fontSize: 12 }}>QPay QR</span>
               )}

@@ -640,7 +640,7 @@ export default function CheckoutPage() {
                   <div key={item._id} className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-[var(--esl-bg-section)] flex items-center justify-center text-lg shrink-0 overflow-hidden">
                       {item.images && item.images.length > 0 ? (
-                        <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded-lg" />
+                        <img loading="lazy" src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded-lg" />
                       ) : (
                         <span>{item.emoji || '📦'}</span>
                       )}

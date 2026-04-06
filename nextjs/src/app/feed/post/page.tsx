@@ -159,7 +159,7 @@ export default function PostAdPage() {
                   mediaFiles[0].type === 'video' ? (
                     <video src={mediaFiles[0].preview} className="w-full h-full object-cover" />
                   ) : (
-                    <img src={mediaFiles[0].preview} alt={title} className="w-full h-full object-cover" />
+                    <img loading="lazy" src={mediaFiles[0].preview} alt={title} className="w-full h-full object-cover" />
                   )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
@@ -210,7 +210,7 @@ export default function PostAdPage() {
                 mediaFiles[previewMediaIdx]?.type === 'video' ? (
                   <video src={mediaFiles[previewMediaIdx].preview} controls className="w-full h-full object-contain bg-black" />
                 ) : (
-                  <img src={mediaFiles[previewMediaIdx]?.preview} alt={title} className="w-full h-full object-cover" />
+                  <img loading="lazy" src={mediaFiles[previewMediaIdx]?.preview} alt={title} className="w-full h-full object-cover" />
                 )
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -247,7 +247,7 @@ export default function PostAdPage() {
                             <Play className="w-3 h-3 text-white relative z-10" fill="white" />
                           </div>
                         ) : (
-                          <img src={m.preview} alt="" className="w-full h-full object-cover" />
+                          <img loading="lazy" src={m.preview} alt="" className="w-full h-full object-cover" />
                         )}
                       </button>
                     ))}
@@ -382,7 +382,7 @@ export default function PostAdPage() {
                     </div>
                   </div>
                 ) : (
-                  <img src={m.preview} alt="" className="w-full h-full object-cover" />
+                  <img loading="lazy" src={m.preview} alt="" className="w-full h-full object-cover" />
                 )}
 
                 {/* Remove */}

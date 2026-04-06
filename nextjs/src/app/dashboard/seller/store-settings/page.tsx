@@ -150,7 +150,7 @@ export default function StoreSettingsPage() {
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-[var(--esl-border)] flex items-center justify-center text-2xl overflow-hidden">
                   {config.logo ? (
-                    <img src={config.logo} alt="" className="w-full h-full object-cover" />
+                    <img loading="lazy" src={config.logo} alt="" className="w-full h-full object-cover" />
                   ) : (
                     '🏪'
                   )}

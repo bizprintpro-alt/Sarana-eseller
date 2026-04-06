@@ -134,7 +134,7 @@ export default function QPaYQRCode({
       <div className="flex justify-center">
         <div className="p-4 rounded-2xl border" style={{ background: '#FFFFFF', borderColor: 'var(--esl-border)' }}>
           {qrImage ? (
-            <img src={`data:image/png;base64,${qrImage}`} alt="QPay QR" className="w-48 h-48" />
+            <img loading="lazy" src={`data:image/png;base64,${qrImage}`} alt="QPay QR" className="w-48 h-48" />
           ) : (
             <QRCodeDisplay value={qrText || `qpay:${invoiceId}`} size={192} />
           )}
@@ -168,7 +168,7 @@ export default function QPaYQRCode({
                 className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border no-underline hover:shadow-md transition-all"
                 style={{ background: 'var(--esl-bg-section)', borderColor: 'var(--esl-border)' }}>
                 {bank.logo ? (
-                  <img src={bank.logo} alt={bank.name} className="w-8 h-8 rounded-lg object-contain" />
+                  <img loading="lazy" src={bank.logo} alt={bank.name} className="w-8 h-8 rounded-lg object-contain" />
                 ) : (
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[10px] font-bold"
                     style={{ background: BANK_COLORS[bank.name] || '#666' }}>
