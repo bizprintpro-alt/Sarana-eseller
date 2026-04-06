@@ -1,0 +1,279 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.demo{background:var(--color-background-secondary);border-radius:var(--border-radius-xl);padding:24px;font-family:var(--font-sans,sans-serif)}
+
+/* Store color themes */
+.theme-red{--chat-primary:#E8242C;--chat-light:rgba(232,36,44,0.1)}
+.theme-blue{--chat-primary:#2563EB;--chat-light:rgba(37,99,235,0.1)}
+.theme-green{--chat-primary:#16A34A;--chat-light:rgba(22,163,74,0.1)}
+.theme-purple{--chat-primary:#7C3AED;--chat-light:rgba(124,58,237,0.1)}
+
+.row{display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+
+/* Chat widget */
+.widget-wrap{position:relative;width:320px;flex-shrink:0}
+.chat-bubble{position:absolute;bottom:56px;right:0;width:320px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:16px 16px 4px 16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.12)}
+.chat-head{padding:12px 14px;display:flex;align-items:center;gap:10px}
+.chat-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.chat-store{flex:1}
+.chat-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.chat-status{font-size:10px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:3px}
+.online-dot{width:6px;height:6px;border-radius:50%;background:#22C55E}
+.chat-close{width:24px;height:24px;border-radius:50%;border:none;background:var(--color-background-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--color-text-tertiary)}
+
+.msgs{padding:12px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--color-background-secondary)}
+.msg-them{display:flex;gap:6px;align-items:flex-end}
+.msg-me{display:flex;flex-direction:row-reverse;gap:6px;align-items:flex-end}
+.msg-av-sm{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+.bubble-them{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px 12px 12px 2px;padding:8px 10px;font-size:12px;color:var(--color-text-primary);max-width:200px;line-height:1.5}
+.bubble-me{color:#fff;border-radius:12px 12px 2px 12px;padding:8px 10px;font-size:12px;max-width:200px;line-height:1.5}
+.msg-time{font-size:9px;color:var(--color-text-tertiary);text-align:right;margin-top:2px}
+
+.quick-replies{padding:8px 12px;display:flex;gap:5px;flex-wrap:wrap;border-top:0.5px solid var(--color-border-tertiary)}
+.qr{padding:4px 10px;border-radius:99px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);transition:all .12s;white-space:nowrap}
+
+.chat-input-area{padding:10px 12px;border-top:0.5px solid var(--color-border-tertiary);display:flex;gap:6px;align-items:center}
+.chat-input{flex:1;border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:6px 12px;font-size:12px;background:var(--color-background-secondary);color:var(--color-text-primary);outline:none;font-family:var(--font-sans)}
+.chat-send{width:30px;height:30px;border-radius:50%;border:none;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+.chat-trigger{width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;position:absolute;bottom:0;right:0;font-size:20px}
+
+/* Config panel */
+.config{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;flex:1;min-width:220px}
+.cfg-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.cfg-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;margin-top:10px}
+.color-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.color-dot{width:24px;height:24px;border-radius:50%;cursor:pointer;transition:transform .12s;border:2px solid transparent}
+.color-dot.active{transform:scale(1.2);border-color:var(--color-text-primary)}
+.cfg-toggle{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;color:var(--color-text-secondary)}
+.toggle{width:30px;height:16px;border-radius:99px;position:relative;cursor:pointer;transition:background .2s}
+.toggle.on{background:#E8242C}
+.toggle.off{background:var(--color-border-secondary)}
+.toggle::after{content:'';width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:2px;transition:left .2s}
+.toggle.on::after{left:16px}
+.toggle.off::after{left:2px}
+
+.ai-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:99px;background:rgba(124,58,237,0.1);color:#7C3AED;font-weight:500;margin-left:auto}
+
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 8px;display:flex;align-items:center;gap:7px}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:12px}
+.fnode{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;text-align:center;position:relative}
+.fnode::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--color-text-tertiary)}
+.fnode:last-child::after{display:none}
+.fn-icon{font-size:16px;margin-bottom:4px}
+.fn-title{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.fn-desc{font-size:9px;color:var(--color-text-tertiary);line-height:1.4}
+</style>
+
+<div class="demo">
+
+<!-- Preview row -->
+<div class="row" id="preview-row">
+
+  <!-- Chat widget preview -->
+  <div class="widget-wrap theme-red" id="widget" style="height:360px">
+    <div class="chat-bubble" id="chat-bubble">
+      <div class="chat-head" id="chat-head" style="background:var(--chat-primary)">
+        <div class="chat-av" id="chat-av">SF</div>
+        <div class="chat-store">
+          <div class="chat-name" style="color:#fff" id="store-name">Sarana Fashion</div>
+          <div class="chat-status" style="color:rgba(255,255,255,0.8)">
+            <div class="online-dot"></div>
+            Онлайн · Дунджаар 5 мин
+          </div>
+        </div>
+        <button class="chat-close">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l8 8M9 1L1 9"/></svg>
+        </button>
+      </div>
+
+      <div class="msgs" id="msgs">
+        <div class="msg-them">
+          <div class="msg-av-sm" id="bot-av" style="background:var(--chat-primary)">SF</div>
+          <div>
+            <div class="bubble-them">Сайн байна уу! Sarana Fashion-д тавтай морилно уу. Яаж тусалж болох вэ?</div>
+            <div class="msg-time">14:32</div>
+          </div>
+        </div>
+        <div class="msg-me">
+          <div class="msg-av-sm" style="background:var(--color-background-secondary);color:var(--color-text-primary)">Та</div>
+          <div>
+            <div class="bubble-me" id="me-bubble" style="background:var(--chat-primary)">42 дугаар гутал байна уу?</div>
+            <div class="msg-time">14:33</div>
+          </div>
+        </div>
+        <div class="msg-them">
+          <div class="msg-av-sm" style="background:var(--chat-primary)">SF</div>
+          <div>
+            <div class="bubble-them">Тийм! Sporty Air 42 дугаар одоо бэлэн байна. Захиалах уу? 🎉</div>
+            <div class="msg-time">14:33</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-replies">
+        <button class="qr" id="qr1" onclick="sendQuick('Үнэ хэд вэ?')">Үнэ хэд вэ?</button>
+        <button class="qr" id="qr2" onclick="sendQuick('Хэзээ хүргэх вэ?')">Хэзээ хүргэх вэ?</button>
+        <button class="qr" id="qr3" onclick="sendQuick('Захиалах')">Захиалах →</button>
+      </div>
+
+      <div class="chat-input-area">
+        <input class="chat-input" id="chat-inp" placeholder="Мессеж бичих..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="chat-send" id="send-btn" style="background:var(--chat-primary)" onclick="sendMsg()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 8H2M14 8L9 3M14 8l-5 5"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="chat-trigger" id="trigger-btn" style="background:var(--chat-primary)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
+  </div>
+
+  <!-- Config panel -->
+  <div class="config">
+    <div class="cfg-title">
+      ⚙️ Чатын тохиргоо
+      <span class="ai-badge">✦ AI дэмжлэгтэй</span>
+    </div>
+
+    <div class="cfg-label">Дэлгүүрийн өнгө</div>
+    <div class="color-row">
+      <div class="color-dot active" style="background:#E8242C" onclick="setColor('#E8242C','rgba(232,36,44,0.1)',this)"></div>
+      <div class="color-dot" style="background:#2563EB" onclick="setColor('#2563EB','rgba(37,99,235,0.1)',this)"></div>
+      <div class="color-dot" style="background:#16A34A" onclick="setColor('#16A34A','rgba(22,163,74,0.1)',this)"></div>
+      <div class="color-dot" style="background:#7C3AED" onclick="setColor('#7C3AED','rgba(124,58,237,0.1)',this)"></div>
+      <div class="color-dot" style="background:#F59E0B" onclick="setColor('#F59E0B','rgba(245,158,11,0.1)',this)"></div>
+      <div class="color-dot" style="background:#0F172A" onclick="setColor('#0F172A','rgba(15,23,42,0.1)',this)"></div>
+    </div>
+
+    <div class="cfg-label">Дэлгүүрийн нэр</div>
+    <input style="width:100%;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:12px;outline:none;margin-bottom:4px" value="Sarana Fashion" oninput="updateName(this.value)" />
+
+    <div class="cfg-label">Мэндчилгэний текст</div>
+    <input style="width:100%;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:12px;outline:none;margin-bottom:8px" value="Яаж тусалж болох вэ?" />
+
+    <div class="cfg-toggle">
+      <span>AI автомат хариу</span>
+      <div class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div>
+    </div>
+    <div class="cfg-toggle">
+      <span>Хурдан хариу товчнууд</span>
+      <div class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div>
+    </div>
+    <div class="cfg-toggle">
+      <span>Онлайн/офлайн статус</span>
+      <div class="toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div>
+    </div>
+    <div class="cfg-toggle" style="border-bottom:none">
+      <span>Бараа зөвлөмж</span>
+      <div class="toggle off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Flow -->
+<div class="st">Чатын урсгал</div>
+<div class="flow">
+  <div class="fnode">
+    <div class="fn-icon">👤</div>
+    <div class="fn-title">Хэрэглэгч</div>
+    <div class="fn-desc">Асуулт бичнэ</div>
+  </div>
+  <div class="fnode">
+    <div class="fn-icon">🔍</div>
+    <div class="fn-title">Хяналт</div>
+    <div class="fn-desc">Seller онлайн уу?</div>
+  </div>
+  <div class="fnode">
+    <div class="fn-icon">🏪</div>
+    <div class="fn-title">Seller хариу</div>
+    <div class="fn-desc">Онлайн бол seller</div>
+  </div>
+  <div class="fnode">
+    <div class="fn-icon">✦</div>
+    <div class="fn-title">AI хариу</div>
+    <div class="fn-desc">Офлайн бол AI</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function setColor(primary, light, el) {
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'))
+  el.classList.add('active')
+  const w = document.getElementById('widget')
+  w.style.setProperty('--chat-primary', primary)
+  w.style.setProperty('--chat-light', light)
+  document.getElementById('chat-head').style.background = primary
+  document.getElementById('send-btn').style.background = primary
+  document.getElementById('trigger-btn').style.background = primary
+  document.getElementById('me-bubble').style.background = primary
+  document.querySelectorAll('.msg-av-sm').forEach((a,i) => { if(i%2===0) a.style.background = primary })
+}
+
+function updateName(val) {
+  document.getElementById('store-name').textContent = val
+  const initials = val.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
+  document.getElementById('chat-av').textContent = initials
+  document.getElementById('bot-av').textContent = initials
+}
+
+function sendQuick(text) {
+  addMyMsg(text)
+  setTimeout(() => addBotMsg(getBotReply(text)), 800)
+}
+
+function sendMsg() {
+  const inp = document.getElementById('chat-inp')
+  const text = inp.value.trim()
+  if (!text) return
+  inp.value = ''
+  addMyMsg(text)
+  setTimeout(() => addBotMsg(getBotReply(text)), 900)
+}
+
+function addMyMsg(text) {
+  const msgs = document.getElementById('msgs')
+  const div = document.createElement('div')
+  div.className = 'msg-me'
+  const primary = document.getElementById('widget').style.getPropertyValue('--chat-primary') || '#E8242C'
+  div.innerHTML = `
+    <div class="msg-av-sm" style="background:var(--color-background-secondary);color:var(--color-text-primary)">Та</div>
+    <div>
+      <div class="bubble-me" style="background:${primary}">${text}</div>
+      <div class="msg-time">${new Date().toLocaleTimeString('mn',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`
+  msgs.appendChild(div)
+  msgs.scrollTop = msgs.scrollHeight
+}
+
+function addBotMsg(text) {
+  const msgs = document.getElementById('msgs')
+  const primary = document.getElementById('widget').style.getPropertyValue('--chat-primary') || '#E8242C'
+  const div = document.createElement('div')
+  div.className = 'msg-them'
+  div.innerHTML = `
+    <div class="msg-av-sm" style="background:${primary}">${document.getElementById('chat-av').textContent}</div>
+    <div>
+      <div class="bubble-them">${text}</div>
+      <div class="msg-time">${new Date().toLocaleTimeString('mn',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`
+  msgs.appendChild(div)
+  msgs.scrollTop = msgs.scrollHeight
+}
+
+function getBotReply(text) {
+  const t = text.toLowerCase()
+  if (t.includes('үнэ') || t.includes('хэд')) return 'Sporty Air 42 дугаар — 69,000₮. Хямдрал байгаа бол мэдэгдье!'
+  if (t.includes('хүргэ')) return 'Өнөөдөр 14:00-18:00 хоорондоо хүргэнэ. Хаяг руугаа хүлээнэ үү!'
+  if (t.includes('захиала')) return 'Захиалгыг баталгаажуулъя! QPay-аар төлбөр хийнэ үү → [Захиалах]'
+  if (t.includes('байна')) return 'Тийм, одоо нөөцтэй байна! Хэдийг авмаар байна вэ?'
+  return 'Ойлголоо! Манай seller тантай удахгүй холбогдоно. AI туслах: тэр хүртэл асуулт байвал бичнэ үү.'
+}
+</script>
