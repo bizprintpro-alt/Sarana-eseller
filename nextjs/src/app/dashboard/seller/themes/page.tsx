@@ -235,6 +235,30 @@ export default function ThemeStorePage() {
                       </span>
                     ))}
                   </div>
+                  {/* Apply button */}
+                  <button
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      try {
+                        const token = localStorage.getItem('token');
+                        await fetch('/api/store/storefront', {
+                          method: 'PUT',
+                          headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+                          body: JSON.stringify({ config: { theme: theme.style, primaryColor: '#E8242C' } }),
+                        });
+                        alert('Theme амжилттай тохируулагдлаа! 🎉');
+                      } catch { alert('Алдаа гарлаа'); }
+                    }}
+                    style={{
+                      width: '100%', marginTop: 8, padding: '8px 0', borderRadius: 8,
+                      background: '#E8242C', color: '#FFF', border: 'none', cursor: 'pointer',
+                      fontSize: 12, fontWeight: 600, transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = '#C41E25')}
+                    onMouseLeave={e => (e.currentTarget.style.background = '#E8242C')}
+                  >
+                    Ашиглах
+                  </button>
                 </div>
               </div>
             ))}
