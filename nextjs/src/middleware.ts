@@ -34,7 +34,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Custom domain → DB lookup
+  // Custom domain → DB lookup → rewrite to /[slug] storefront
   try {
     const origin = req.nextUrl.origin;
     const lookupUrl = new URL('/api/shop-domain-lookup', origin);
@@ -48,7 +48,9 @@ export async function middleware(req: NextRequest) {
       const { data } = await res.json();
       if (data?.slug) {
         const url = req.nextUrl.clone();
-        url.pathname = `/s/${data.slug}${req.nextUrl.pathname === '/' ? '' : req.nextUrl.pathname}`;
+        // Try storefront slug first, fallback to /s/[slug]
+        const storefrontSlug = data.storefrontSlug || data.slug;
+        url.pathname = `/${storefrontSlug}${req.nextUrl.pathname === '/' ? '' : req.nextUrl.pathname}`;
         return NextResponse.rewrite(url);
       }
     }
