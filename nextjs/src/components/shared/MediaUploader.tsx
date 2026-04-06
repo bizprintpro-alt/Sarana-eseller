@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Loader2, Video, Globe, FileImage } from 'lucide-react';
+import { ENTITY_CARD_CONFIG, type EntityType } from '@/lib/cards/entityCardConfig';
 
 interface Props {
   context: 'product' | 'banner' | 'profile' | 'chat';
@@ -9,9 +10,21 @@ interface Props {
   onChange: (urls: string[]) => void;
   maxFiles?: number;
   label?: string;
+  entityType?: EntityType;
+  videoUrl?: string;
+  onVideoChange?: (url: string) => void;
+  virtualTourUrl?: string;
+  onVirtualTourChange?: (url: string) => void;
+  floorPlanUrl?: string;
+  onFloorPlanChange?: (url: string) => void;
 }
 
-export function MediaUploader({ context, value, onChange, maxFiles = 5, label }: Props) {
+export function MediaUploader({ context, value, onChange, maxFiles = 5, label, entityType, videoUrl, onVideoChange, virtualTourUrl, onVirtualTourChange, floorPlanUrl, onFloorPlanChange }: Props) {
+  const config = entityType ? ENTITY_CARD_CONFIG[entityType] : null;
+  const effectiveMax = config ? config.maxImages : maxFiles;
+  const hasVideo = config ? config.mediaTypes.includes('VIDEO') : false;
+  const hasVirtualTour = config ? config.mediaTypes.includes('VIRTUAL_TOUR') : false;
+  const hasFloorPlan = config ? config.mediaTypes.includes('FLOOR_PLAN') : false;
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -114,6 +127,61 @@ export function MediaUploader({ context, value, onChange, maxFiles = 5, label }:
       <input ref={inputRef} type="file" accept="image/*" multiple hidden
         onChange={e => { if (e.target.files) handleFiles(e.target.files); }}
       />
+
+      {/* Entity-specific media inputs */}
+      {hasVideo && onVideoChange && (
+        <div style={{ marginTop: 12 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#A0A0A0', marginBottom: 4 }}>
+            <Video size={14} /> Видео (хамгийн ихдээ 2 мин)
+          </span>
+          <input
+            placeholder="Видео URL (Cloudinary/YouTube)"
+            value={videoUrl || ''}
+            onChange={(e) => onVideoChange(e.target.value)}
+            style={{
+              width: '100%', padding: '8px 12px', borderRadius: 8,
+              border: '0.5px solid #3D3D3D', background: 'var(--esl-bg-card)',
+              fontSize: 12, color: 'var(--esl-text)',
+            }}
+          />
+        </div>
+      )}
+
+      {hasVirtualTour && onVirtualTourChange && (
+        <div style={{ marginTop: 12 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#A0A0A0', marginBottom: 4 }}>
+            <Globe size={14} /> 360° Виртуал тойрог
+          </span>
+          <input
+            placeholder="YouTube/Matterport URL"
+            value={virtualTourUrl || ''}
+            onChange={(e) => onVirtualTourChange(e.target.value)}
+            style={{
+              width: '100%', padding: '8px 12px', borderRadius: 8,
+              border: '0.5px solid #3D3D3D', background: 'var(--esl-bg-card)',
+              fontSize: 12, color: 'var(--esl-text)',
+            }}
+          />
+        </div>
+      )}
+
+      {hasFloorPlan && onFloorPlanChange && (
+        <div style={{ marginTop: 12 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#A0A0A0', marginBottom: 4 }}>
+            <FileImage size={14} /> Байрны зураглал (Floor plan)
+          </span>
+          <input
+            placeholder="Floor plan зургийн URL"
+            value={floorPlanUrl || ''}
+            onChange={(e) => onFloorPlanChange(e.target.value)}
+            style={{
+              width: '100%', padding: '8px 12px', borderRadius: 8,
+              border: '0.5px solid #3D3D3D', background: 'var(--esl-bg-card)',
+              fontSize: 12, color: 'var(--esl-text)',
+            }}
+          />
+        </div>
+      )}
 
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>

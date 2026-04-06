@@ -495,6 +495,30 @@ model FeedItem {
   serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id])
   partnerCompany  PartnerCompany?  @relation(fields: [partnerId], references: [id])
   partnerAgent    PartnerAgent?    @relation(fields: [partnerAgentId], references: [id])
+  media           EntityMedia[]
+}
+
+// ══════════════════════════════════════════════════════════════
+// МЕДИА СИСТЕМ
+// ══════════════════════════════════════════════════════════════
+
+model EntityMedia {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  feedItemId  String?  @db.ObjectId
+  productId   String?  @db.ObjectId
+
+  type        String   @default("IMAGE") // IMAGE | VIDEO | VIRTUAL_TOUR | FLOOR_PLAN
+  url         String
+  thumbnail   String?
+  caption     String?
+  sortOrder   Int      @default(0)
+  duration    Int?
+
+  createdAt   DateTime @default(now())
+
+  feedItem    FeedItem? @relation(fields: [feedItemId], references: [id])
+
+  @@map("entity_media")
 }
 
 // ══════════════════════════════════════════════════════════════

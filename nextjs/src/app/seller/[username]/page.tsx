@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Share2, ShoppingBag, Star, Heart, MapPin, QrCode, Copy, Check } from 'lucide-react';
+import { Share2, ShoppingBag, QrCode, Copy, Check } from 'lucide-react';
 import { ShareModal } from '@/components/shared/ShareModal';
+import EntityCard from '@/components/cards/EntityCard';
+import StartSellingModal from '@/components/seller/StartSellingModal';
 
 /* ═══ Demo Data ═══ */
 const DEMO_SELLER = {
@@ -26,16 +28,12 @@ const DEMO_PRODUCTS = [
   { id: 'sp6', name: 'Ажлын ширээ', price: 185000, image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400&q=80', store: 'Home Deco', rating: 4.4 },
 ];
 
-function formatPrice(n: number) {
-  if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + ' сая₮';
-  return n.toLocaleString() + '₮';
-}
-
 export default function SellerPage() {
   const [seller, setSeller] = useState(DEMO_SELLER);
   const [products, setProducts] = useState(DEMO_PRODUCTS);
   const [copied, setCopied] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [sellingItem, setSellingItem] = useState<typeof DEMO_PRODUCTS[0] | null>(null);
   const shareUrl = `https://eseller.mn/seller/${seller.username}`;
 
   // Fetch real seller data, fallback to demo
@@ -115,38 +113,23 @@ export default function SellerPage() {
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {products.map((p) => {
-            const disc = p.salePrice ? Math.round((1 - p.salePrice / p.price) * 100) : 0;
-            const px = p.salePrice || p.price;
-            return (
-              <div key={p.id} className="group rounded-xl overflow-hidden border transition-all hover:-translate-y-1 hover:shadow-lg" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
-                <div className="relative aspect-square" style={{ background: 'var(--esl-bg-section)' }}>
-                  <img loading="lazy" src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" />
-                  {disc > 0 && (
-                    <span className="absolute top-2 left-2 bg-[#E8242C] text-white text-[10px] font-bold px-2 py-0.5 rounded">-{disc}%</span>
-                  )}
-                  {/* Store badge */}
-                  <span className="absolute bottom-2 left-2 text-[9px] font-bold bg-black/60 text-white px-2 py-0.5 rounded backdrop-blur-sm">
-                    {p.store}
-                  </span>
-                </div>
-                <div className="p-3">
-                  <p className="text-xs font-medium line-clamp-2 mb-1.5 leading-snug" style={{ color: 'var(--esl-text-primary)' }}>{p.name}</p>
-                  <div className="flex items-baseline gap-1.5 mb-1">
-                    <span className="text-sm font-bold text-[#E8242C]">{formatPrice(px)}</span>
-                    {disc > 0 && <span className="text-[10px] line-through" style={{ color: 'var(--esl-text-muted)' }}>{formatPrice(p.price)}</span>}
-                  </div>
-                  <div className="flex items-center gap-1 mb-2">
-                    <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                    <span className="text-[10px]" style={{ color: 'var(--esl-text-muted)' }}>{p.rating}</span>
-                  </div>
-                  <button className="w-full py-2 rounded-lg bg-[#E8242C] text-white text-xs font-bold border-none cursor-pointer hover:bg-[#CC0000] transition">
-                    Захиалах
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+          {products.map((p) => (
+            <EntityCard
+              key={p.id}
+              item={{
+                id: p.id,
+                name: p.name,
+                price: p.salePrice || p.price,
+                originalPrice: p.salePrice ? p.price : undefined,
+                images: [p.image],
+                rating: p.rating,
+                allowAffiliate: true,
+                metadata: { orderCount: '—' },
+              }}
+              entityType="STORE"
+              showSellerBtn={false}
+            />
+          ))}
         </div>
       </section>
 
@@ -159,6 +142,7 @@ export default function SellerPage() {
       </footer>
 
       <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} url={shareUrl} title={seller.displayName} description="eseller.mn борлуулагчийн хуудас" />
+      <StartSellingModal item={sellingItem} isOpen={!!sellingItem} onClose={() => setSellingItem(null)} />
     </div>
   );
 }
