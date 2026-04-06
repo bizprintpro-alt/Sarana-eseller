@@ -465,6 +465,7 @@ model FeedItem {
   status        String    @default("active") // active | pending | expired | suspended
   viewCount     Int       @default(0)
   district      String?
+  province      String?
   lat           Float?
   lng           Float?
   metadata      Json?     // entity-specific: sqm, rooms, year, mileage, etc

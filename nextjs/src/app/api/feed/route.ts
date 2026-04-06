@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
   const sort = sp.get('sort') || 'newest';
   const search = sp.get('search');
   const district = sp.get('district');
+  const province = sp.get('province');
   const priceMin = sp.get('priceMin') ? Number(sp.get('priceMin')) : undefined;
   const priceMax = sp.get('priceMax') ? Number(sp.get('priceMax')) : undefined;
 
@@ -22,6 +23,7 @@ export async function GET(req: NextRequest) {
     if (category) where.entityType = category;
     if (tier && tier !== 'all') where.tier = tier;
     if (district) where.district = district;
+    if (province) where.province = province;
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },

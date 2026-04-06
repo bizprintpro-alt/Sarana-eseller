@@ -54,6 +54,7 @@ export default function PostAdPage() {
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
   const [district, setDistrict] = useState('');
+  const [province, setProvince] = useState('');
   const [condition, setCondition] = useState('');
   const [phone, setPhone] = useState('');
   const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([]);
@@ -65,7 +66,7 @@ export default function PostAdPage() {
 
   const imageCount = mediaFiles.filter(m => m.type === 'image').length;
   const videoCount = mediaFiles.filter(m => m.type === 'video').length;
-  const canSubmit = title.trim() && price.trim() && category && district;
+  const canSubmit = title.trim() && price.trim() && category && (district || province);
 
   const addFiles = (files: FileList | null) => {
     if (!files) return;
@@ -506,22 +507,25 @@ export default function PostAdPage() {
           </div>
         </div>
 
-        {/* District */}
+        {/* Location: District or Province */}
         <div className="mb-6">
-          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Дүүрэг <span className="text-[#E8242C]">*</span></label>
-          <div className="flex flex-wrap gap-2">
+          <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Байршил <span className="text-[#E8242C]">*</span></label>
+          <p className="text-xs text-[var(--esl-text-muted)] mb-2">УБ дүүрэг:</p>
+          <div className="flex flex-wrap gap-2 mb-3">
             {DISTRICTS.map((d) => (
-              <button
-                key={d}
-                onClick={() => setDistrict(d)}
-                className={`px-5 py-2.5 rounded-xl text-sm font-semibold border cursor-pointer transition-all ${
-                  district === d
-                    ? 'bg-[#E8242C] border-[#E8242C] text-white'
-                    : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
-                }`}
-              >
-                {d}
-              </button>
+              <button key={d} onClick={() => { setDistrict(d); setProvince(''); }}
+                className={`px-4 py-2 rounded-xl text-sm font-semibold border cursor-pointer transition-all ${
+                  district === d ? 'bg-[#E8242C] border-[#E8242C] text-white' : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
+                }`}>{d}</button>
+            ))}
+          </div>
+          <p className="text-xs text-[var(--esl-text-muted)] mb-2">Аймаг:</p>
+          <div className="flex flex-wrap gap-2">
+            {['Дархан-Уул', 'Орхон', 'Сэлэнгэ', 'Төв', 'Хөвсгөл', 'Увс', 'Ховд', 'Баян-Өлгий', 'Архангай', 'Өвөрхангай', 'Дорнод', 'Хэнтий'].map((p) => (
+              <button key={p} onClick={() => { setProvince(p); setDistrict(''); }}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all ${
+                  province === p ? 'bg-[#E8242C] border-[#E8242C] text-white' : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
+                }`}>{p}</button>
             ))}
           </div>
         </div>

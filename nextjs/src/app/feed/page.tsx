@@ -503,6 +503,7 @@ export default function FeedPage() {
   const [search, setSearch] = useState('');
   const [activeCat, setActiveCat] = useState('all');
   const [activeDistrict, setActiveDistrict] = useState('Бүгд');
+  const [activeProvince, setActiveProvince] = useState('');
   const [activeSort, setActiveSort] = useState('newest');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -531,6 +532,7 @@ export default function FeedPage() {
     let list = [...feedItems];
     if (activeCat !== 'all') list = list.filter(i => i.category === activeCat);
     if (activeDistrict !== 'Бүгд') list = list.filter(i => i.district === activeDistrict);
+    if (activeProvince) list = list.filter(i => (i as any).province === activeProvince);
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(i => i.title.toLowerCase().includes(q) || i.description.toLowerCase().includes(q));
@@ -581,12 +583,20 @@ export default function FeedPage() {
             permissionDenied={permissionDenied}
             onDistrictChange={(key) => {
               setManualDistrict(key);
-              const shortMap: Record<string, string> = {
+              const ubShortMap: Record<string, string> = {
                 'khan-uul': 'ХУД', 'sukhbaatar': 'СБД', 'bayangol': 'БГД',
                 'bayanzurkh': 'БЗД', 'chingeltei': 'ЧД', 'songinokhairkhan': 'СХД',
                 'nalaikh': 'НД', 'baganuur': 'БНД',
               };
-              setActiveDistrict(shortMap[key] || 'Бүгд');
+              if (ubShortMap[key]) {
+                // УБ дүүрэг сонгосон
+                setActiveDistrict(ubShortMap[key]);
+                setActiveProvince('');
+              } else {
+                // Аймаг сонгосон
+                setActiveDistrict('Бүгд');
+                setActiveProvince(key);
+              }
             }}
             onRefresh={refreshLoc}
           />
