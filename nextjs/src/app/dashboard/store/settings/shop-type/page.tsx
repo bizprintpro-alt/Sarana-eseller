@@ -207,7 +207,7 @@ export default function ShopTypeWizard() {
   const [selectedTheme, setSelectedTheme] = useState<string>('');
   const [storeName, setStoreName] = useState('');
   const [slug, setSlug] = useState('');
-  const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'taken'>('idle');
+  const [slugStatus, setSlugStatus] = useState<'idle' | 'checking' | 'available' | 'taken' | 'error'>('idle');
   const [slugReason, setSlugReason] = useState('');
   const [logo, setLogo] = useState<string[]>([]);
   const [cover, setCover] = useState<string[]>([]);
@@ -249,6 +249,12 @@ export default function ShopTypeWizard() {
     const timer = setTimeout(async () => {
       try {
         const res = await fetch(`/api/store/check-slug?slug=${encodeURIComponent(slug)}`);
+        if (!res.ok) {
+          // API алдаатай бол optimistic — зөвшөөрнө
+          setSlugStatus('error');
+          setSlugReason('');
+          return;
+        }
         const data = await res.json();
         if (data.available) {
           setSlugStatus('available');
@@ -258,7 +264,9 @@ export default function ShopTypeWizard() {
           setSlugReason(data.reason || '');
         }
       } catch {
-        setSlugStatus('idle');
+        // Network error — optimistic зөвшөөрнө
+        setSlugStatus('error');
+        setSlugReason('');
       }
     }, 500);
     return () => clearTimeout(timer);
@@ -269,7 +277,7 @@ export default function ShopTypeWizard() {
     switch (step) {
       case 0: return !!selectedType;
       case 1: return !!selectedTheme;
-      case 2: return !!storeName && slug.length >= 3 && slugStatus === 'available';
+      case 2: return !!storeName && slug.length >= 3 && (slugStatus === 'available' || slugStatus === 'error');
       case 3: return true; // logo/cover optional
       case 4: return true; // first item optional
       case 5: return true; // domain optional
@@ -510,6 +518,12 @@ export default function ShopTypeWizard() {
                   <>
                     <XCircle className="w-4 h-4 text-[#E8242C]" />
                     <span className="text-xs text-[#E8242C] font-medium">{slugReason || 'Аль хэдийн байна'}</span>
+                  </>
+                )}
+                {slugStatus === 'error' && (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-[#F59E0B]" />
+                    <span className="text-xs text-[#F59E0B] font-medium">Шалгаж чадсангүй — үргэлжлүүлэх боломжтой</span>
                   </>
                 )}
               </div>
