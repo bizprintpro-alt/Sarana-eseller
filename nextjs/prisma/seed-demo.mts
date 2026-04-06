@@ -40,7 +40,7 @@ async function main() {
     const shop = await prisma.shop.upsert({
       where: { slug: s.slug },
       update: {},
-      create: { userId: user.id, name: s.shopName, slug: s.slug, industry: s.cat, logo: IMGS[s.imgs][0] },
+      create: { userId: user.id, name: s.shopName, slug: s.slug, storefrontSlug: s.slug, industry: s.cat, logo: IMGS[s.imgs][0], allowSellers: true, sellerCommission: 15 },
     })
     await prisma.shopSubscription.upsert({
       where: { shopId: shop.id },
