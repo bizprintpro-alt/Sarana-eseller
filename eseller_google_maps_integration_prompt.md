@@ -756,7 +756,7 @@ export async function POST(req: Request) {
 
 3. Credentials → Create API Key
    → Application restrictions: HTTP referrers
-   → Зөвшөөрөгдсөн domain: nextjs-biz6.vercel.app/*
+   → Зөвшөөрөгдсөн domain: sarana-eseller.vercel.app/*
    → API restrictions: зөвхөн дээрх 3 API
 
 4. Billing тохируулах (шаардлагатай)

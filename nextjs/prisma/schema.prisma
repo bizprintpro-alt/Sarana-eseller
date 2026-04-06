@@ -66,6 +66,7 @@ model User {
   autoDealer AutoDealer?
   serviceProvider ServiceProvider?
   sellerProfile   SellerProfile?
+  partnerAgent    PartnerAgent?
 
   @@map("users")
 }
@@ -88,6 +89,8 @@ model Product {
   deliveryFee   Int?
   deliveryType  String   @default("standard") // standard | express | pickup
   estimatedMins Int?
+  allowAffiliate      Boolean @default(false)
+  affiliateCommission Float?  @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -478,10 +481,20 @@ model FeedItem {
   autoDealerId      String? @db.ObjectId
   serviceProviderId String? @db.ObjectId
 
+  // Partner & Affiliate
+  allowAffiliate      Boolean @default(false)
+  affiliateCommission Float?  @default(0)
+  partnerId           String? @db.ObjectId
+  partnerAgentId      String? @db.ObjectId
+  isPartnerListing    Boolean @default(false)
+  vatIncluded         Boolean @default(false)
+
   agent           Agent?           @relation(fields: [agentId], references: [id])
   company         Company?         @relation(fields: [companyId], references: [id])
   autoDealer      AutoDealer?      @relation(fields: [autoDealerId], references: [id])
   serviceProvider ServiceProvider? @relation(fields: [serviceProviderId], references: [id])
+  partnerCompany  PartnerCompany?  @relation(fields: [partnerId], references: [id])
+  partnerAgent    PartnerAgent?    @relation(fields: [partnerAgentId], references: [id])
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1336,4 +1349,166 @@ model SellerCommission {
   seller SellerProfile @relation(fields: [sellerProfileId], references: [id])
 
   @@map("seller_commissions")
+}
+
+// ══════════════════════════════════════════════════════════════
+// ГЭРЭЭТ БАЙГУУЛЛАГА (Partner System)
+// ══════════════════════════════════════════════════════════════
+
+model PartnerCompany {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  type            String   @default("GENERAL") // REAL_ESTATE | AUTO | SERVICE | CONSTRUCTION | GENERAL
+  registrationNo  String?
+  logo            String?
+  coverImage      String?
+
+  contractStart   DateTime
+  contractEnd     DateTime?
+  contractFile    String?
+  isActive        Boolean  @default(true)
+  isVerified      Boolean  @default(false)
+
+  platformFee     Float    @default(2)
+  agentFee        Float    @default(3)
+  companyFee      Float    @default(95)
+
+  contactName     String?
+  contactPhone    String?
+  contactEmail    String?
+  website         String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  agents          PartnerAgent[]
+  listings        FeedItem[]
+  commissions     PartnerCommission[]
+  invoices        PartnerInvoice[]
+
+  @@map("partner_companies")
+}
+
+model PartnerAgent {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  partnerId     String   @db.ObjectId
+  userId        String   @unique @db.ObjectId
+  agentCode     String   @unique
+  displayName   String
+  licenseNo     String?
+  isVerified    Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  tier          String   @default("JUNIOR") // JUNIOR | SENIOR | EXPERT | MASTER
+
+  totalListings Int      @default(0)
+  totalSales    Int      @default(0)
+  totalEarned   Float    @default(0)
+
+  joinedAt      DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  partner       PartnerCompany @relation(fields: [partnerId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+  listings      FeedItem[]
+  commissions   PartnerCommission[]
+
+  @@map("partner_agents")
+}
+
+model PartnerCommission {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  feedItemId       String   @db.ObjectId
+  agentId          String?  @db.ObjectId
+  partnerId        String   @db.ObjectId
+  buyerId          String?  @db.ObjectId
+
+  saleAmount       Float
+  platformFee      Float
+  agentFee         Float
+  companyFee       Float
+  vatAmount        Float    @default(0)
+  incomeTax        Float    @default(0)
+
+  status           String   @default("PENDING") // PENDING | CONFIRMED | PAID | CANCELLED
+  verificationCode String?
+  paidAt           DateTime?
+  createdAt        DateTime @default(now())
+
+  agent            PartnerAgent?   @relation(fields: [agentId], references: [id])
+  partner          PartnerCompany  @relation(fields: [partnerId], references: [id])
+
+  @@map("partner_commissions")
+}
+
+model PartnerInvoice {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  partnerId     String   @db.ObjectId
+  period        String   // "2026-04"
+  totalAmount   Float
+  platformFee   Float
+  agentFees     Float
+  status        String   @default("PENDING") // PENDING | PAID | OVERDUE | CANCELLED
+  paidAt        DateTime?
+  invoiceFile   String?
+  createdAt     DateTime @default(now())
+
+  partner       PartnerCompany @relation(fields: [partnerId], references: [id])
+
+  @@map("partner_invoices")
+}
+
+// ══════════════════════════════════════════════════════════════
+// СИСТЕМИЙН ТОХИРГОО
+// ══════════════════════════════════════════════════════════════
+
+model SystemSettings {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  key                   String   @unique @default("main")
+
+  // Commission
+  platformFee           Float    @default(2)
+  storeMinCommission    Float    @default(5)
+  storeMaxCommission    Float    @default(30)
+  listingMinCommission  Float    @default(0)
+  listingMaxCommission  Float    @default(15)
+  partnerPlatformFee    Float    @default(2)
+  partnerAgentMin       Float    @default(1)
+  partnerAgentMax       Float    @default(5)
+
+  // VAT
+  vatThreshold          Float    @default(50000000)
+  vatWarningThreshold   Float    @default(40000000)
+  vatRate               Float    @default(10)
+  cityTaxRate           Float    @default(2)
+  incomeTaxRate         Float    @default(10)
+
+  updatedAt             DateTime @updatedAt
+
+  @@map("system_settings")
+}
+
+// ══════════════════════════════════════════════════════════════
+// МАРГААН (Disputes)
+// ══════════════════════════════════════════════════════════════
+
+model Dispute {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  code            String   @unique
+  orderId         String?  @db.ObjectId
+  commissionId    String?  @db.ObjectId
+  sellerId        String?  @db.ObjectId
+  shopId          String?  @db.ObjectId
+  sellerName      String?
+  shopName        String?
+  reason          String
+  description     String?
+  status          String   @default("OPEN") // OPEN | RESOLVED | REJECTED
+  winner          String?  // seller | store
+  resolveNote     String?
+  resolvedAt      DateTime?
+  resolvedBy      String?  @db.ObjectId
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("disputes")
 }

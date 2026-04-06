@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { ArrowRight, Zap, Users, TrendingUp, Shield, Package, Megaphone, ShoppingBag, Truck } from 'lucide-react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
@@ -20,7 +21,22 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
+function formatVolume(n: number) {
+  if (n >= 1_000_000_000) return `${(n / 1_000_000_000).toFixed(1)}B₮`;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(0)}M₮`;
+  return `${n.toLocaleString()}₮`;
+}
+
 export default function LandingPage() {
+  const [stats, setStats] = useState<{ stores: number; users: number; totalVolume: number; listings: number } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/public/stats')
+      .then((r) => r.json())
+      .then((d) => setStats(d))
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen overflow-hidden">
       <Navbar />
@@ -172,6 +188,34 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════
+          STATS BAR
+          ═══════════════════════════════════════════ */}
+      {stats && (
+        <section className="bg-[#0A0C14] border-y border-white/5">
+          <div className="max-w-[1100px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-0">
+            {[
+              { value: `${stats.stores}+`, label: 'Бүртгэлтэй дэлгүүр' },
+              { value: `${stats.users}+`, label: 'Идэвхтэй хэрэглэгч' },
+              { value: formatVolume(stats.totalVolume), label: 'Нийт гүйлгээ' },
+              { value: `${stats.listings}+`, label: 'Идэвхтэй зар' },
+            ].map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="text-center py-6 border-r border-white/5 last:border-r-0"
+              >
+                <div className="text-2xl md:text-3xl font-bold text-white">{s.value}</div>
+                <div className="text-xs text-white/50 mt-1">{s.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ═══════════════════════════════════════════
           PROBLEM — Dark section

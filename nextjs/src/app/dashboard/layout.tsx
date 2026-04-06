@@ -233,6 +233,22 @@ const ADMIN_SECTIONS: SidebarSection[] = [
     ],
   },
   {
+    title: 'Гэрээт байгууллага',
+    items: [
+      { href: '/dashboard/admin/partners', icon: '🤝', label: 'Компаниуд', isNew: true },
+      { href: '/dashboard/admin/partners/agents', icon: '👔', label: 'Агентууд' },
+      { href: '/dashboard/admin/partners/invoices', icon: '🧾', label: 'Нэхэмжлэл' },
+    ],
+  },
+  {
+    title: 'Удирдлага',
+    items: [
+      { href: '/dashboard/admin/commission-rules', icon: '⚙️', label: 'Commission дүрэм', isNew: true },
+      { href: '/dashboard/admin/vat-monitor', icon: '🧾', label: 'НӨАТ хяналт' },
+      { href: '/dashboard/admin/disputes', icon: '⚠️', label: 'Маргаан' },
+    ],
+  },
+  {
     title: 'Систем',
     items: [
       { href: '/dashboard/admin/site-settings', icon: '🌐', label: 'Сайтын тохиргоо', isNew: true },

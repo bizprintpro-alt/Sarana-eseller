@@ -70,7 +70,7 @@ export default function ProfileScreen() {
         Alert.alert('Удахгүй', 'Энэ хэсэг удахгүй нээгдэнэ.');
         break;
       case 'become-seller':
-        Linking.openURL('https://nextjs-biz6.vercel.app/become-seller');
+        Linking.openURL('https://sarana-eseller.vercel.app/become-seller');
         break;
       case 'contact':
         Alert.alert('Холбоо барих', 'Имэйл: info@eseller.mn\nУтас: 7000-1234', [
