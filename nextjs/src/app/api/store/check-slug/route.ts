@@ -29,13 +29,12 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ available: true, slug, url: `eseller.mn/${slug}` });
   } catch (error: any) {
-    console.error('[check-slug] Prisma error:', error?.message || error, error?.stack);
+    console.error('[check-slug] Error:', error?.message || error);
     // Return available on DB error so wizard isn't blocked
     return NextResponse.json({
       available: true,
       slug: req.nextUrl.searchParams.get('slug'),
       warning: 'DB шалгаж чадсангүй',
-      debug: error?.message,
     });
   }
 }
