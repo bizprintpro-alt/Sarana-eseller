@@ -16,6 +16,7 @@ const SAMBAR_PRODUCT: SidebarSection = {
     { href: '/dashboard/seller', icon: '📊', label: 'Самбар' },
     { href: '/dashboard/seller/orders', icon: '📋', label: 'Захиалга' },
     { href: '/dashboard/seller/chat', icon: '💬', label: 'Чат', isNew: true },
+    { href: '/dashboard/seller/chat-settings', icon: '⚙️', label: 'Чат тохиргоо' },
   ],
 };
 
@@ -25,6 +26,7 @@ const SAMBAR_SERVICE: SidebarSection = {
     { href: '/dashboard/seller', icon: '📊', label: 'Самбар' },
     { href: '/dashboard/seller/orders', icon: '📋', label: 'Захиалга' },
     { href: '/dashboard/seller/chat', icon: '💬', label: 'Чат', isNew: true },
+    { href: '/dashboard/seller/chat-settings', icon: '⚙️', label: 'Чат тохиргоо' },
   ],
 };
 
