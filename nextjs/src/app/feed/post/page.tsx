@@ -515,7 +515,7 @@ export default function PostAdPage() {
             {DISTRICTS.map((d) => (
               <button key={d} onClick={() => { setDistrict(d); setProvince(''); }}
                 className={`px-4 py-2 rounded-xl text-sm font-semibold border cursor-pointer transition-all ${
-                  district === d ? 'bg-[#E8242C] border-[#E8242C] text-white' : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
+                  district === d ? 'bg-[#E8242C] border-[#E8242C] text-white' : 'bg-[var(--esl-bg-section)] border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[#E8242C]'
                 }`}>{d}</button>
             ))}
           </div>
@@ -524,7 +524,7 @@ export default function PostAdPage() {
             {['Архангай', 'Баян-Өлгий', 'Баянхонгор', 'Булган', 'Говь-Алтай', 'Дорноговь', 'Дорнод', 'Дундговь', 'Завхан', 'Орхон', 'Өвөрхангай', 'Өмнөговь', 'Сүхбаатар', 'Сэлэнгэ', 'Төв', 'Увс', 'Ховд', 'Хөвсгөл', 'Хэнтий', 'Дархан-Уул', 'Говьсүмбэр'].map((p) => (
               <button key={p} onClick={() => { setProvince(p); setDistrict(''); }}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all ${
-                  province === p ? 'bg-[#E8242C] border-[#E8242C] text-white' : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
+                  province === p ? 'bg-[#E8242C] border-[#E8242C] text-white' : 'bg-[var(--esl-bg-section)] border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[#E8242C]'
                 }`}>{p}</button>
             ))}
           </div>
