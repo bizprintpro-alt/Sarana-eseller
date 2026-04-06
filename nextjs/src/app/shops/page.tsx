@@ -93,7 +93,7 @@ export default function ShopsPage() {
   return (
     <div className="min-h-screen bg-[var(--esl-bg-section)]">
       {/* ═══ Header ═══ */}
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <header className="sticky top-0 z-50 bg-[var(--esl-bg-card)] shadow-sm">
         <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-5">
           <Link href="/" className="flex items-center gap-2 no-underline shrink-0">
             <EsellerLogo size={30} />
@@ -107,7 +107,7 @@ export default function ShopsPage() {
             <input
               type="text" value={search} onChange={(e) => setSearch(e.target.value)}
               placeholder="Дэлгүүр, үйлчилгээ хайх..."
-              className="w-full pl-10 pr-4 py-2.5 bg-[var(--esl-bg-section)] border-2 border-transparent rounded-xl text-sm outline-none focus:border-[#E31E24] focus:bg-white transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-[var(--esl-bg-section)] border-2 border-transparent rounded-xl text-sm outline-none focus:border-[#E31E24] focus:bg-[var(--esl-bg-card)] transition-all"
             />
           </div>
 
@@ -155,13 +155,13 @@ export default function ShopsPage() {
             {CATEGORY_FILTERS.map((c) => (
               <button key={c.key} onClick={() => setActiveCat(c.key)}
                 className={cn('shrink-0 px-3.5 py-2 rounded-lg text-xs font-semibold border cursor-pointer transition-all whitespace-nowrap',
-                  activeCat === c.key ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-white text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:border-gray-400')}>
+                  activeCat === c.key ? 'bg-[#1A1A2E] text-white border-[#1A1A2E]' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border-[var(--esl-border)] hover:border-[var(--esl-border-strong)]')}>
                 {c.label}
               </button>
             ))}
           </div>
           <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-            className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-xs font-semibold text-[var(--esl-text-secondary)] bg-white cursor-pointer appearance-none focus:outline-none focus:ring-1 focus:ring-[#E31E24]">
+            className="px-3 py-2 border border-[var(--esl-border)] rounded-lg text-xs font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-card)] cursor-pointer appearance-none focus:outline-none focus:ring-1 focus:ring-[#E31E24]">
             <option value="rating">Үнэлгээгээр</option>
             <option value="reviews">Сэтгэгдлээр</option>
             <option value="newest">Шинээр</option>
@@ -192,19 +192,19 @@ export default function ShopsPage() {
                 variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}>
                 <Link
                   href={shop.type === 'service' ? `/s/${shop.slug}` : `/u/${shop.slug}`}
-                  className="block bg-white rounded-2xl border border-[var(--esl-border)] overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all no-underline group"
+                  className="block bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all no-underline group"
                 >
                   {/* Card header — gradient bg */}
                   <div className={cn('h-28 relative flex items-center justify-center',
                     shop.type === 'service'
-                      ? 'bg-gradient-to-br from-indigo-50 to-purple-50'
+                      ? 'bg-gradient-to-br from-[var(--esl-bg-section)] to-[var(--esl-bg-card-hover)]'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100'
                   )}>
                     <span className="text-5xl group-hover:scale-110 transition-transform duration-300">{shop.emoji}</span>
 
                     {/* Type badge */}
                     <span className={cn('absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded-full',
-                      shop.type === 'service' ? 'bg-indigo-100 text-indigo-700' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]')}>
+                      shop.type === 'service' ? 'bg-[rgba(232,36,44,0.1)] text-[#E8242C]' : 'bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)]')}>
                       {shop.type === 'service' ? '🛎️ Үйлчилгээ' : '📦 Дэлгүүр'}
                     </span>
 
