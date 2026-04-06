@@ -275,7 +275,7 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
 
       {/* Modal */}
       <div
-        className="relative z-[101] w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[var(--esl-border)] bg-[var(--esl-bg-section)] shadow-2xl"
+        className="relative z-[101] w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[var(--esl-border)] bg-[var(--esl-bg-card)] shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -309,14 +309,14 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
               <span className="font-semibold text-[var(--esl-text-secondary)]">{item.entityName}</span>
             )}
             {item.verified && <BadgeCheck className="w-4 h-4 text-blue-400" />}
-            <span className="text-[#3D3D3D]">·</span>
+            <span className="text-[var(--esl-text-muted)]">·</span>
             <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{item.district}</span>
-            <span className="text-[#3D3D3D]">·</span>
-            <span className="text-xs text-[#555]">#{item.refId}</span>
+            <span className="text-[var(--esl-text-muted)]">·</span>
+            <span className="text-xs text-[var(--esl-text-muted)]">#{item.refId}</span>
           </div>
 
           {/* Title */}
-          <h2 className={`text-2xl font-black mb-2 ${isVip ? 'text-[#FFD700]' : 'text-white'}`}>
+          <h2 className={`text-2xl font-black mb-2 ${isVip ? 'text-[#FFD700]' : 'text-[var(--esl-text-primary)]'}`}>
             {item.title}
           </h2>
 
@@ -334,27 +334,27 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
           {item.metadata && (
             <div className="flex flex-wrap gap-2 mb-5">
               {item.metadata.sqm && (
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
                   <Ruler className="w-3.5 h-3.5" /> {item.metadata.sqm}м²
                 </span>
               )}
               {item.metadata.rooms && (
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
                   <DoorOpen className="w-3.5 h-3.5" /> {item.metadata.rooms} өрөө
                 </span>
               )}
               {item.metadata.year && (
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
                   <Calendar className="w-3.5 h-3.5" /> {item.metadata.year} он
                 </span>
               )}
               {item.metadata.mileage && (
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
                   <Gauge className="w-3.5 h-3.5" /> {(item.metadata.mileage / 1000).toFixed(0)}мян км
                 </span>
               )}
               {item.metadata.fuel && (
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-3 py-1.5 rounded-lg">
                   <Fuel className="w-3.5 h-3.5" /> {item.metadata.fuel}
                 </span>
               )}
@@ -364,11 +364,11 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
           {/* Description */}
           <div className="mb-6">
             <h3 className="text-sm font-bold text-[var(--esl-text-secondary)] mb-2">Тайлбар</h3>
-            <p className="text-sm text-[#999] leading-relaxed">{item.description}</p>
+            <p className="text-sm text-[var(--esl-text-muted)] leading-relaxed">{item.description}</p>
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-4 text-xs text-[#555] mb-6 pb-6 border-b border-[var(--esl-border)]">
+          <div className="flex items-center gap-4 text-xs text-[var(--esl-text-muted)] mb-6 pb-6 border-b border-[var(--esl-border)]">
             <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" /> {item.viewCount} үзсэн</span>
             <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {timeAgo(item.createdAt)}</span>
           </div>
@@ -455,7 +455,7 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
             {item.verified && <span className="text-blue-400">✓</span>}
             {item.district && (
               <>
-                <span className="text-[#3D3D3D]">·</span>
+                <span className="text-[var(--esl-text-muted)]">·</span>
                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{item.district}</span>
               </>
             )}
