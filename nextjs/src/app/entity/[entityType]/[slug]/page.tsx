@@ -343,9 +343,9 @@ function TestimonialCard({ t }: { t: { name: string; text: string; rating: numbe
 /* ═══ Stat Card ═══ */
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="text-center p-4 bg-white/5 rounded-xl border border-white/5">
-      <p className="text-2xl font-black text-white mb-0.5">{value}</p>
-      <p className="text-[11px] text-[var(--esl-text-muted)] font-semibold">{label}</p>
+    <div className="text-center p-4 bg-[var(--esl-bg-elevated)] rounded-xl border border-[var(--esl-border)]">
+      <p className="text-2xl font-black text-[var(--esl-text-primary)] mb-0.5">{value}</p>
+      <p className="text-[11px] text-[var(--esl-text-secondary)] font-semibold">{label}</p>
     </div>
   );
 }
@@ -472,14 +472,14 @@ export default function EntityProfilePage() {
 
       {/* ── Tabs ── */}
       <div className="max-w-6xl mx-auto px-4 mb-6">
-        <div className="flex gap-1 bg-white/5 rounded-xl p-1">
+        <div className="flex gap-1 bg-[var(--esl-bg-elevated)] rounded-xl p-1">
           {tabs.map((tab, i) => (
             <button
               key={tab}
               onClick={() => setActiveTab(i)}
               className={cn(
                 'flex-1 py-2.5 rounded-lg text-sm font-semibold border-none cursor-pointer transition-all',
-                activeTab === i ? 'bg-[#E8242C] text-white' : 'bg-transparent text-[var(--esl-text-muted)] hover:text-white'
+                activeTab === i ? 'bg-[#E8242C] text-white' : 'bg-transparent text-[var(--esl-text-muted)] hover:text-[var(--esl-text-primary)]'
               )}
             >
               {tab}
@@ -514,28 +514,28 @@ export default function EntityProfilePage() {
             {selectedVehicle && (
               <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={() => setSelectedVehicle(null)}>
                 <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
-                <div className="relative z-10 w-full max-w-lg rounded-2xl border border-[var(--esl-border)] bg-[var(--esl-bg-section)] overflow-hidden" onClick={e => e.stopPropagation()}>
+                <div className="relative z-10 w-full max-w-lg rounded-2xl border border-[var(--esl-border)] bg-[var(--esl-bg-card)] overflow-hidden" onClick={e => e.stopPropagation()}>
                   <button onClick={() => setSelectedVehicle(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white cursor-pointer border-none">
                     <X className="w-4 h-4" />
                   </button>
                   <img loading="lazy" src={selectedVehicle.image} alt="" className="w-full h-64 object-cover" />
                   <div className="p-6">
-                    <h2 className="text-xl font-black text-white mb-2">{selectedVehicle.title}</h2>
+                    <h2 className="text-xl font-black text-[var(--esl-text-primary)] mb-2">{selectedVehicle.title}</h2>
                     <p className="text-2xl font-black text-[#E8242C] mb-4">{formatPrice(selectedVehicle.price)}₮</p>
                     <div className="grid grid-cols-3 gap-3 mb-5">
-                      <div className="bg-white/5 rounded-xl p-3 text-center">
+                      <div className="bg-[var(--esl-bg-elevated)] rounded-xl p-3 text-center">
                         <Calendar className="w-4 h-4 text-[var(--esl-text-muted)] mx-auto mb-1" />
-                        <p className="text-sm font-bold text-white">{selectedVehicle.year}</p>
+                        <p className="text-sm font-bold text-[var(--esl-text-primary)]">{selectedVehicle.year}</p>
                         <p className="text-[10px] text-[var(--esl-text-secondary)]">Он</p>
                       </div>
-                      <div className="bg-white/5 rounded-xl p-3 text-center">
+                      <div className="bg-[var(--esl-bg-elevated)] rounded-xl p-3 text-center">
                         <Gauge className="w-4 h-4 text-[var(--esl-text-muted)] mx-auto mb-1" />
-                        <p className="text-sm font-bold text-white">{selectedVehicle.mileage.toLocaleString()} км</p>
+                        <p className="text-sm font-bold text-[var(--esl-text-primary)]">{selectedVehicle.mileage.toLocaleString()} км</p>
                         <p className="text-[10px] text-[var(--esl-text-secondary)]">Гүйлт</p>
                       </div>
-                      <div className="bg-white/5 rounded-xl p-3 text-center">
+                      <div className="bg-[var(--esl-bg-elevated)] rounded-xl p-3 text-center">
                         <Fuel className="w-4 h-4 text-[var(--esl-text-muted)] mx-auto mb-1" />
-                        <p className="text-sm font-bold text-white">{selectedVehicle.fuel}</p>
+                        <p className="text-sm font-bold text-[var(--esl-text-primary)]">{selectedVehicle.fuel}</p>
                         <p className="text-[10px] text-[var(--esl-text-secondary)]">Түлш</p>
                       </div>
                     </div>
@@ -543,7 +543,7 @@ export default function EntityProfilePage() {
                       <button onClick={() => { setShowPhone(true); setSelectedVehicle(null); }} className="flex-1 h-12 bg-[#E8242C] text-white font-bold rounded-xl border-none cursor-pointer text-sm flex items-center justify-center gap-2 hover:bg-[#CC0000] transition">
                         <Phone className="w-4 h-4" /> Залгах
                       </button>
-                      <button className="flex-1 h-12 bg-white/10 text-white font-bold rounded-xl border border-[var(--esl-border)] cursor-pointer text-sm flex items-center justify-center gap-2 hover:bg-white/15 transition">
+                      <button className="flex-1 h-12 bg-[var(--esl-bg-elevated)] text-[var(--esl-text-primary)] font-bold rounded-xl border border-[var(--esl-border)] cursor-pointer text-sm flex items-center justify-center gap-2 hover:opacity-80 transition">
                         <MessageCircle className="w-4 h-4" /> Мессеж
                       </button>
                     </div>
