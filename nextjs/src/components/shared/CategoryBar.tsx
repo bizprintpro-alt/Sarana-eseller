@@ -10,6 +10,25 @@ interface Category {
   icon: string | null;
 }
 
+const FALLBACK_CATEGORIES: Category[] = [
+  { id: 'f1', slug: 'electronics', name: 'Электроник', icon: '💻' },
+  { id: 'f2', slug: 'fashion', name: 'Хувцас', icon: '👗' },
+  { id: 'f3', slug: 'home-living', name: 'Гэр Ахуй', icon: '🏠' },
+  { id: 'f4', slug: 'beauty-health', name: 'Гоо сайхан', icon: '💄' },
+  { id: 'f5', slug: 'kids-toys', name: 'Хүүхдийн', icon: '🧸' },
+  { id: 'f6', slug: 'sports-travel', name: 'Спорт', icon: '⚽' },
+  { id: 'f7', slug: 'food-beverage', name: 'Хоол', icon: '🍔' },
+  { id: 'f8', slug: 'auto-moto', name: 'Авто', icon: '🚗' },
+  { id: 'f9', slug: 'construction', name: 'Барилга', icon: '🔨' },
+  { id: 'f10', slug: 'digital-goods', name: 'Дижитал', icon: '💾' },
+  { id: 'f11', slug: 'books-education', name: 'Ном', icon: '📚' },
+  { id: 'f12', slug: 'jewelry-gifts', name: 'Зоос', icon: '💍' },
+  { id: 'f13', slug: 'pets', name: 'Амьтан', icon: '🐾' },
+  { id: 'f14', slug: 'arts-music', name: 'Урлаг', icon: '🎵' },
+  { id: 'f15', slug: 'agriculture', name: 'Хөдөө', icon: '🌾' },
+  { id: 'f16', slug: 'office-business', name: 'Оффис', icon: '💼' },
+];
+
 interface CategoryBarProps {
   value: string;
   onChange: (slug: string) => void;
@@ -17,7 +36,7 @@ interface CategoryBarProps {
 }
 
 export default function CategoryBar({ value, onChange, entityType }: CategoryBarProps) {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(FALLBACK_CATEGORIES);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,7 +49,7 @@ export default function CategoryBar({ value, onChange, entityType }: CategoryBar
             !c.entityTypes?.length || c.entityTypes.includes(entityType)
           );
         }
-        setCategories(roots);
+        if (roots.length > 0) setCategories(roots);
       })
       .catch(() => {});
   }, [entityType]);

@@ -14,6 +14,21 @@ interface Category {
   children?: Category[];
 }
 
+const FALLBACK_ROOTS: Category[] = [
+  { id: 'f1', slug: 'electronics', name: 'Электроник & Технологи', icon: '💻', level: 0, parentId: null, entityTypes: ['STORE','PRE_ORDER','DIGITAL'] },
+  { id: 'f2', slug: 'fashion', name: 'Хувцас & Гутал', icon: '👗', level: 0, parentId: null, entityTypes: ['STORE','PRE_ORDER'] },
+  { id: 'f3', slug: 'home-living', name: 'Гэр Ахуй & Тавилга', icon: '🏠', level: 0, parentId: null, entityTypes: ['STORE','PRE_ORDER'] },
+  { id: 'f4', slug: 'beauty-health', name: 'Гоо Сайхан & Эрүүл Мэнд', icon: '💄', level: 0, parentId: null, entityTypes: ['STORE','PRE_ORDER'] },
+  { id: 'f5', slug: 'kids-toys', name: 'Хүүхдийн Бараа & Тоглоом', icon: '🧸', level: 0, parentId: null, entityTypes: ['STORE','PRE_ORDER'] },
+  { id: 'f6', slug: 'sports-travel', name: 'Спорт & Аялал', icon: '⚽', level: 0, parentId: null, entityTypes: ['STORE','PRE_ORDER'] },
+  { id: 'f7', slug: 'food-beverage', name: 'Хол & Унд', icon: '🍔', level: 0, parentId: null, entityTypes: ['STORE','PRE_ORDER'] },
+  { id: 'f8', slug: 'auto-moto', name: 'Авто & Мото', icon: '🚗', level: 0, parentId: null, entityTypes: ['STORE','AUTO'] },
+  { id: 'f9', slug: 'construction', name: 'Барилга & Засвар', icon: '🔨', level: 0, parentId: null, entityTypes: ['STORE','CONSTRUCTION'] },
+  { id: 'f10', slug: 'digital-goods', name: 'Дижитал Бараа', icon: '💾', level: 0, parentId: null, entityTypes: ['DIGITAL'] },
+  { id: 'f11', slug: 'books-education', name: 'Ном & Боловсрол', icon: '📚', level: 0, parentId: null, entityTypes: ['STORE','DIGITAL'] },
+  { id: 'f12', slug: 'other', name: 'Бусад', icon: '📦', level: 0, parentId: null, entityTypes: [] },
+];
+
 interface CategorySelectorProps {
   entityType?: string;
   value?: string;
@@ -22,8 +37,8 @@ interface CategorySelectorProps {
 }
 
 export default function CategorySelector({ entityType, value, onChange, label }: CategorySelectorProps) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [flat, setFlat] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(FALLBACK_ROOTS);
+  const [flat, setFlat] = useState<Category[]>(FALLBACK_ROOTS);
   const [loading, setLoading] = useState(true);
   const [selectedRoot, setSelectedRoot] = useState('');
   const [selectedSub, setSelectedSub] = useState('');
@@ -32,8 +47,8 @@ export default function CategorySelector({ entityType, value, onChange, label }:
     fetch('/api/admin/categories')
       .then((r) => r.json())
       .then((d) => {
-        setCategories(d.categories || []);
-        setFlat(d.flat || []);
+        if (d.categories?.length) setCategories(d.categories);
+        if (d.flat?.length) setFlat(d.flat);
         // If value already set, find the root/sub
         if (value && d.flat) {
           const cat = d.flat.find((c: Category) => c.id === value);
