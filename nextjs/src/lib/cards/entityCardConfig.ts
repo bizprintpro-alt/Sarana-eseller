@@ -1,4 +1,4 @@
-export type EntityType = 'STORE' | 'REAL_ESTATE' | 'AUTO' | 'SERVICE' | 'CONSTRUCTION' | 'PRE_ORDER' | 'DIGITAL'
+export type EntityType = 'STORE' | 'REAL_ESTATE' | 'AUTO' | 'SERVICE' | 'CONSTRUCTION' | 'PRE_ORDER' | 'DIGITAL' | 'NETWORK_BUSINESS'
 
 export interface EntityCardConfig {
   mediaTypes: string[]
@@ -82,6 +82,16 @@ export const ENTITY_CARD_CONFIG: Record<EntityType, EntityCardConfig> = {
     badge: 'Дижитал',
     color: '#6366F1',
   },
+  NETWORK_BUSINESS: {
+    mediaTypes: ['IMAGE', 'VIDEO'],
+    maxImages: 10,
+    maxVideos: 2,
+    fields: ['name', 'directRate', 'memberCount', 'rank', 'sponsorCode'],
+    primaryCta: 'Гишүүн болох',
+    sellerCta: 'Борлуулагч болох',
+    badge: 'Сүлжээний',
+    color: '#7C3AED',
+  },
 }
 
 // Entity type mapping from DB values
@@ -95,6 +105,7 @@ export function resolveEntityType(dbType: string): EntityType {
     construction: 'CONSTRUCTION',
     pre_order: 'PRE_ORDER',
     digital: 'DIGITAL',
+    network: 'NETWORK_BUSINESS',
     user: 'STORE',
   }
   return map[dbType] || 'STORE'

@@ -13,9 +13,28 @@ export interface FullCommissionResult {
   agentGross?: number
   companyAmount?: number
   incomeTax: number
+  influencerBonus: number
   netSeller?: number
   netAgent?: number
   ownerAmount: number
+}
+
+export interface TaxSettings {
+  vatEnabled: boolean
+  incomeTaxEnabled: boolean
+  cityTaxEnabled: boolean
+  vatRate: number
+  cityTaxRate: number
+  incomeTaxRate: number
+}
+
+const DEFAULT_TAX: TaxSettings = {
+  vatEnabled: false,
+  incomeTaxEnabled: false,
+  cityTaxEnabled: false,
+  vatRate: 10,
+  cityTaxRate: 2,
+  incomeTaxRate: 10,
 }
 
 export type CommissionType = 'STORE' | 'LISTING' | 'PARTNER'
@@ -28,6 +47,8 @@ export function calculateFullCommission(params: {
   companyRate?: number
   vatRegistered?: boolean
   platformRate?: number
+  influencerBonus?: number
+  taxSettings?: Partial<TaxSettings>
 }): FullCommissionResult {
   const {
     saleAmount,
@@ -37,41 +58,50 @@ export function calculateFullCommission(params: {
     companyRate = 95,
     vatRegistered = false,
     platformRate = 2,
+    influencerBonus = 0,
   } = params
 
-  // НӨАТ тооцоо
-  const vatAmount = vatRegistered ? Math.round(saleAmount * 10 / 110) : 0
-  const cityTax = vatRegistered ? Math.round(saleAmount * 2 / 110) : 0
+  const tax = { ...DEFAULT_TAX, ...params.taxSettings }
+
+  // НӨАТ — toggle-оос хамаарна
+  const vatAmount = (tax.vatEnabled && vatRegistered)
+    ? Math.round(saleAmount * tax.vatRate / (100 + tax.vatRate))
+    : 0
+  const cityTax = (tax.cityTaxEnabled && vatRegistered)
+    ? Math.round(saleAmount * tax.cityTaxRate / (100 + tax.vatRate))
+    : 0
   const netAmount = saleAmount - vatAmount - cityTax
   const platformFee = Math.round(netAmount * platformRate / 100)
 
   if (type === 'STORE' || type === 'LISTING') {
-    const sellerGross = Math.round(netAmount * sellerRate / 100)
-    const incomeTax = Math.round(sellerGross * 0.10)
+    const effectiveRate = sellerRate + influencerBonus
+    const sellerGross = Math.round(netAmount * effectiveRate / 100)
+    const incomeTax = tax.incomeTaxEnabled ? Math.round(sellerGross * tax.incomeTaxRate / 100) : 0
     const netSeller = sellerGross - incomeTax
     const ownerAmount = netAmount - platformFee - sellerGross
     return {
       saleAmount, vatAmount, cityTax, netAmount,
-      platformFee, sellerGross, incomeTax, netSeller, ownerAmount,
+      platformFee, sellerGross, incomeTax, influencerBonus,
+      netSeller, ownerAmount,
     }
   }
 
   if (type === 'PARTNER') {
     const agentGross = Math.round(netAmount * agentRate / 100)
-    const incomeTax = Math.round(agentGross * 0.10)
+    const incomeTax = tax.incomeTaxEnabled ? Math.round(agentGross * tax.incomeTaxRate / 100) : 0
     const netAgent = agentGross - incomeTax
     const companyAmount = Math.round(netAmount * companyRate / 100)
     const ownerAmount = netAmount - platformFee - agentGross
     return {
       saleAmount, vatAmount, cityTax, netAmount,
       platformFee, agentGross, companyAmount,
-      incomeTax, netAgent, ownerAmount,
+      incomeTax, influencerBonus, netAgent, ownerAmount,
     }
   }
 
   return {
     saleAmount, vatAmount, cityTax, netAmount,
-    platformFee, incomeTax: 0,
+    platformFee, incomeTax: 0, influencerBonus: 0,
     ownerAmount: netAmount - platformFee,
   }
 }

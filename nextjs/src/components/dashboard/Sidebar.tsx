@@ -11,7 +11,7 @@ import {
   Megaphone, Palette, Sparkles, Brain, Bot, Wallet,
   Globe, Building2, UserCog, Settings, Bell, ScrollText,
   ChevronDown, ExternalLink, LogOut, Crown, Zap,
-  CalendarDays, Clock, Scissors,
+  CalendarDays, Clock, Scissors, Shield,
 } from 'lucide-react';
 import { ThemeSelector } from '@/components/ui/ThemeToggle';
 
@@ -23,7 +23,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   '✨': Sparkles, '🤖': Bot, '💰': Wallet, '💵': Wallet,
   '🌐': Globe, '🏪': Building2, '👔': UserCog, '⚙️': Settings,
   '🔔': Bell, '👑': Crown, '📈': BarChart3, '🤝': Users, '⚠️': Bell, '🧾': ScrollText, '💬': Bot,
-  '🛎️': Scissors, '📅': CalendarDays, '🕐': Clock,
+  '🛎️': Scissors, '📅': CalendarDays, '🕐': Clock, '🛡️': Shield,
 };
 
 // ═══ Types ═══

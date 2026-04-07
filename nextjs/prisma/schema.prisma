@@ -1365,6 +1365,13 @@ model SellerProfile {
   totalSales     Int      @default(0)
   shareUrl       String?
   qrCode         String?
+
+  // Influencer system
+  sellerType          String   @default("REGULAR") // REGULAR | ACTIVE | MICRO | INFLUENCER | MEGA
+  followers           Int?
+  socialLinks         Json?    // {instagram, tiktok, facebook}
+  influencerVerified  Boolean  @default(false)
+  influencerNote      String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -1544,6 +1551,13 @@ model SystemSettings {
   cityTaxRate           Float    @default(2)
   incomeTaxRate         Float    @default(10)
 
+  // Tax toggles
+  vatEnabled            Boolean  @default(false)
+  incomeTaxEnabled      Boolean  @default(false)
+  vatMonitorEnabled     Boolean  @default(false)
+  cityTaxEnabled        Boolean  @default(false)
+  taxReportEnabled      Boolean  @default(false)
+
   updatedAt             DateTime @updatedAt
 
   @@map("system_settings")
@@ -1573,4 +1587,65 @@ model Dispute {
   updatedAt       DateTime @updatedAt
 
   @@map("disputes")
+}
+
+// ══════════════════════════════════════════════════════════════
+// СҮЛЖЭЭНИЙ БИЗНЕС (Network / MLM)
+// ══════════════════════════════════════════════════════════════
+
+model NetworkBusiness {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String?
+  productLine   String?
+  logo          String?
+
+  directRate    Float    @default(20)
+  level1Rate    Float    @default(5)
+  level2Rate    Float    @default(3)
+  level3Rate    Float    @default(2)
+  maxLevels     Int      @default(3)
+
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  members       NetworkMember[]
+
+  @@map("network_businesses")
+}
+
+model NetworkMember {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  networkId     String   @db.ObjectId
+  userId        String   @db.ObjectId
+  sponsorId     String?  @db.ObjectId
+  level         Int      @default(1)
+  memberCode    String   @unique
+  totalSales    Float    @default(0)
+  totalEarned   Float    @default(0)
+  rank          String   @default("STARTER") // STARTER | BRONZE | SILVER | GOLD | PLATINUM | DIAMOND
+  joinedAt      DateTime @default(now())
+
+  network       NetworkBusiness   @relation(fields: [networkId], references: [id])
+  sponsor       NetworkMember?    @relation("NetworkReferral", fields: [sponsorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  downlines     NetworkMember[]   @relation("NetworkReferral")
+  commissions   NetworkCommission[]
+
+  @@map("network_members")
+}
+
+model NetworkCommission {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  memberId    String   @db.ObjectId
+  orderId     String?  @db.ObjectId
+  level       Int
+  amount      Float
+  rate        Float
+  status      String   @default("PENDING") // PENDING | CONFIRMED | PAID | CANCELLED
+  createdAt   DateTime @default(now())
+
+  member      NetworkMember @relation(fields: [memberId], references: [id])
+
+  @@map("network_commissions")
 }

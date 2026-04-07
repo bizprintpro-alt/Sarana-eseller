@@ -244,6 +244,8 @@ const ADMIN_SECTIONS: SidebarSection[] = [
     title: 'Удирдлага',
     items: [
       { href: '/dashboard/admin/commission-rules', icon: '⚙️', label: 'Commission дүрэм', isNew: true },
+      { href: '/dashboard/admin/system-rules', icon: '🛡️', label: 'Системийн дүрэм', isNew: true },
+      { href: '/dashboard/admin/influencers', icon: '⭐', label: 'Инфлюэнсер', isNew: true },
       { href: '/dashboard/admin/vat-monitor', icon: '🧾', label: 'НӨАТ хяналт' },
       { href: '/dashboard/admin/disputes', icon: '⚠️', label: 'Маргаан' },
     ],
@@ -269,6 +271,7 @@ const AFFILIATE_SECTIONS: SidebarSection[] = [
       { href: '/dashboard/affiliate/earnings', icon: '📈', label: 'Орлого' },
       { href: '/dashboard/affiliate/wallet', icon: '💳', label: 'Хэтэвч' },
       { href: '/dashboard/affiliate/marketing', icon: '📢', label: 'Маркетинг' },
+      { href: '/dashboard/affiliate/influencer-apply', icon: '⭐', label: 'Инфлюэнсер хүсэлт', isNew: true },
     ],
   },
 ];
