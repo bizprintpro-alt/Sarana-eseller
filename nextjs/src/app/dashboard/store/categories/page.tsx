@@ -42,6 +42,25 @@ export default function CategoriesPage() {
   const [parentId, setParentId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  // Category request
+  const [showRequest, setShowRequest] = useState(false);
+  const [reqName, setReqName] = useState('');
+  const [reqReason, setReqReason] = useState('');
+  const [reqSent, setReqSent] = useState(false);
+
+  const handleCategoryRequest = async () => {
+    await fetch('/api/store/category-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: reqName, reason: reqReason }),
+    });
+    setReqSent(true);
+    setReqName('');
+    setReqReason('');
+    // toast notification handled by reqSent state
+    setTimeout(() => { setShowRequest(false); setReqSent(false); }, 2000);
+  };
+
   useEffect(() => {
     setMounted(true);
     setCategories(loadCategories());
@@ -150,14 +169,48 @@ export default function CategoriesPage() {
               <p className="text-[var(--esl-text-secondary)] text-sm">Барааны ангилалуудыг удирдах ({categories.length}/{plan.limits.maxCategories === -1 ? '∞' : plan.limits.maxCategories})</p>
             </div>
           </div>
+          <div className="flex gap-2">
+          <button
+            onClick={() => setShowRequest(true)}
+            className="border border-[var(--esl-border)] text-[var(--esl-text)] px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--esl-bg-hover)] transition flex items-center gap-2"
+          >
+            💡 Шинэ ангилал санал болгох
+          </button>
           <button
             onClick={openAddModal}
             className="bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition flex items-center gap-2"
           >
             + Ангилал нэмэх
           </button>
+          </div>
         </div>
       </div>
+
+      {/* Category Request Modal */}
+      {showRequest && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-[var(--esl-bg-card)] rounded-2xl p-6 w-full max-w-md border border-[var(--esl-border)]">
+            <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Шинэ ангилал санал болгох</h2>
+            {reqSent ? (
+              <div className="text-center py-6">
+                <span className="text-4xl block mb-2">✅</span>
+                <p className="text-sm text-[var(--esl-text-secondary)]">Хүсэлт илгээсэн! Admin шалгаж зөвшөөрнө.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <input placeholder="Ангилалын нэр" value={reqName} onChange={(e) => setReqName(e.target.value)}
+                  className="w-full px-3 py-2 bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)]" />
+                <textarea placeholder="Яагаад энэ ангилал хэрэгтэй вэ?" value={reqReason} onChange={(e) => setReqReason(e.target.value)} rows={3}
+                  className="w-full px-3 py-2 bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)]" />
+                <div className="flex justify-end gap-3">
+                  <button onClick={() => setShowRequest(false)} className="px-4 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)]">Болих</button>
+                  <button onClick={handleCategoryRequest} disabled={!reqName} className="px-4 py-2 bg-[#E8242C] text-white rounded-lg text-sm disabled:opacity-50">Илгээх</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Categories list */}
       {categories.length === 0 ? (

@@ -1685,3 +1685,18 @@ model Category {
 
   @@map("categories")
 }
+
+model CategoryRequest {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  parentId    String?  @db.ObjectId
+  parentName  String?
+  reason      String?
+  requestedBy String?  @db.ObjectId
+  shopName    String?
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED
+  rejectNote  String?
+  createdAt   DateTime @default(now())
+
+  @@map("category_requests")
+}
