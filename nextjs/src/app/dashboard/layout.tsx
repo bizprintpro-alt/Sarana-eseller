@@ -228,6 +228,7 @@ const ADMIN_SECTIONS: SidebarSection[] = [
     items: [
       { href: '/dashboard/admin/homepage', icon: '🏠', label: 'Нүүр хуудас' },
       { href: '/dashboard/admin/marketing', icon: '📢', label: 'Маркетинг' },
+      { href: '/dashboard/admin/categories', icon: '📂', label: 'Ангилал', isNew: true },
       { href: '/dashboard/admin/locations', icon: '📍', label: 'Байршил' },
       { href: '/dashboard/admin/chat-monitor', icon: '💬', label: 'Чат хяналт' },
     ],
