@@ -300,9 +300,9 @@ function ProjectCard({ p }: { p: DemoProject }) {
 }
 
 /* ═══ Listing Card (Agent) ═══ */
-function ListingCard({ l }: { l: DemoListing }) {
+function ListingCard({ l, onClick }: { l: DemoListing; onClick: () => void }) {
   return (
-    <div className="group rounded-2xl overflow-hidden border border-[var(--esl-border)] bg-[var(--esl-bg-section)] hover:border-white/20 transition-all cursor-pointer">
+    <div onClick={onClick} className="group rounded-2xl overflow-hidden border border-[var(--esl-border)] bg-[var(--esl-bg-section)] hover:border-white/20 transition-all cursor-pointer">
       <div className="relative h-44 overflow-hidden">
         <img loading="lazy" src={l.image} alt={l.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
         {l.badge && (
@@ -358,6 +358,7 @@ export default function EntityProfilePage() {
   const [activeTab, setActiveTab] = useState(0);
   const [showPhone, setShowPhone] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<DemoVehicle | null>(null);
+  const [selectedListing, setSelectedListing] = useState<DemoListing | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const entity = DEMO[entityType]?.[slug];
@@ -551,6 +552,47 @@ export default function EntityProfilePage() {
                 </div>
               </div>
             )}
+
+            {/* Listing Detail Modal */}
+            {selectedListing && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={() => setSelectedListing(null)}>
+                <div className="absolute inset-0 bg-black/70" />
+                <div className="relative z-10 w-full max-w-lg rounded-2xl border border-[var(--esl-border)] bg-[var(--esl-bg-card)] overflow-hidden" onClick={e => e.stopPropagation()}>
+                  <button onClick={() => setSelectedListing(null)} className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white cursor-pointer border-none">
+                    <X className="w-4 h-4" />
+                  </button>
+                  <img loading="lazy" src={selectedListing.image} alt="" className="w-full h-64 object-cover" />
+                  <div className="p-5">
+                    <h2 className="text-xl font-black text-[var(--esl-text-primary)] mb-2">{selectedListing.title}</h2>
+                    <p className="text-2xl font-black text-[#E8242C] mb-4">{formatPrice(selectedListing.price)}₮</p>
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      <div className="text-center p-2 bg-[var(--esl-bg-section)] rounded-lg">
+                        <p className="text-sm font-bold text-[var(--esl-text-primary)]">{selectedListing.sqm}м²</p>
+                        <p className="text-[10px] text-[var(--esl-text-secondary)]">Талбай</p>
+                      </div>
+                      {selectedListing.rooms > 0 && (
+                        <div className="text-center p-2 bg-[var(--esl-bg-section)] rounded-lg">
+                          <p className="text-sm font-bold text-[var(--esl-text-primary)]">{selectedListing.rooms}</p>
+                          <p className="text-[10px] text-[var(--esl-text-secondary)]">Өрөө</p>
+                        </div>
+                      )}
+                      <div className="text-center p-2 bg-[var(--esl-bg-section)] rounded-lg">
+                        <p className="text-sm font-bold text-[var(--esl-text-primary)]">{selectedListing.district}</p>
+                        <p className="text-[10px] text-[var(--esl-text-secondary)]">Дүүрэг</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => { setShowPhone(true); setSelectedListing(null); }} className="flex-1 h-12 bg-[#E8242C] text-white font-bold rounded-xl border-none cursor-pointer text-sm flex items-center justify-center gap-2 hover:bg-[#CC0000] transition">
+                        <Phone className="w-4 h-4" /> Залгах
+                      </button>
+                      <button className="flex-1 h-12 bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] font-bold rounded-xl border border-[var(--esl-border)] cursor-pointer text-sm flex items-center justify-center gap-2 hover:bg-[var(--esl-bg-card-hover)] transition">
+                        <MessageCircle className="w-4 h-4" /> Мессеж
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -564,7 +606,7 @@ export default function EntityProfilePage() {
         {/* === AGENT: Listings === */}
         {entityType === 'agent' && activeTab === 0 && entity.listings && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {entity.listings.map(l => <ListingCard key={l.id} l={l} />)}
+            {entity.listings.map(l => <ListingCard key={l.id} l={l} onClick={() => setSelectedListing(l)} />)}
           </div>
         )}
 
