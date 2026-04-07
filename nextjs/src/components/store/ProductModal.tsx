@@ -36,36 +36,63 @@ const FEATURED_ADS = [
 
 /* ═══ Specs generation based on category ═══ */
 function getProductSpecs(product: Product): { icon: typeof Box; label: string; value: string }[] {
-  const cat = product.category;
-  if (cat === 'Электроник' || cat === 'electronics') return [
-    { icon: Box, label: 'Брэнд', value: product.name.split(' ')[0] },
-    { icon: Shield, label: 'Баталгаа', value: '12 сар' },
-    { icon: Package, label: 'Бүрдэл', value: 'Бүрэн комплект' },
-    { icon: Layers, label: 'Нөхцөл', value: 'Шинэ' },
-  ];
-  if (cat === 'Хувцас' || cat === 'fashion') return [
-    { icon: Palette, label: 'Материал', value: '100% хөвөн' },
-    { icon: Ruler, label: 'Хэмжээ', value: 'XS - XXL' },
-    { icon: Tag, label: 'Улирал', value: '4 улирал' },
-    { icon: Layers, label: 'Хийц', value: 'Premium' },
-  ];
-  if (cat === 'Гоо сайхан' || cat === 'beauty') return [
-    { icon: Shield, label: 'Гарал', value: 'Солонгос' },
-    { icon: Clock, label: 'Хүчинтэй', value: '24 сар' },
-    { icon: Layers, label: 'Төрөл', value: 'Органик' },
-    { icon: Package, label: 'Хэмжээ', value: '50мл' },
-  ];
-  if (cat === 'Гэр ахуй' || cat === 'home') return [
-    { icon: Ruler, label: 'Хэмжээ', value: 'Стандарт' },
-    { icon: Weight, label: 'Жин', value: '2.5кг' },
-    { icon: Palette, label: 'Өнгө', value: 'Олон сонголт' },
-    { icon: Shield, label: 'Баталгаа', value: '6 сар' },
-  ];
-  return [
-    { icon: Package, label: 'Нөхцөл', value: 'Шинэ' },
-    { icon: Shield, label: 'Баталгаа', value: 'Тийм' },
-    { icon: Truck, label: 'Хүргэлт', value: 'Боломжтой' },
-  ];
+  const specs: { icon: typeof Box; label: string; value: string }[] = [];
+  const et = product.entityType;
+
+  // Entity-specific fields from DB
+  if (et === 'REAL_ESTATE' || product.area) {
+    if (product.area) specs.push({ icon: Ruler, label: 'Талбай', value: `${product.area}м²` });
+    if (product.rooms) specs.push({ icon: Layers, label: 'Өрөө', value: `${product.rooms}` });
+    if (product.floor) specs.push({ icon: Box, label: 'Давхар', value: `${product.floor}${product.totalFloors ? '/' + product.totalFloors : ''}` });
+    if (product.district) specs.push({ icon: Tag, label: 'Дүүрэг', value: product.district });
+  }
+  if (et === 'AUTO' || product.year) {
+    if (product.brand) specs.push({ icon: Box, label: 'Брэнд', value: product.brand });
+    if (product.year) specs.push({ icon: Clock, label: 'Он', value: `${product.year}` });
+    if (product.mileage) specs.push({ icon: Truck, label: 'Гүйлт', value: `${(product.mileage / 1000).toFixed(0)} мян км` });
+    if (product.fuelType) specs.push({ icon: Package, label: 'Түлш', value: product.fuelType });
+    if (product.transmission) specs.push({ icon: Layers, label: 'Хурдны хайрцаг', value: product.transmission });
+  }
+  if (et === 'SERVICE' || product.duration) {
+    if (product.duration) specs.push({ icon: Clock, label: 'Хугацаа', value: `${product.duration} мин` });
+    if (product.availableSlots != null) specs.push({ icon: Layers, label: 'Чөлөөт цаг', value: `${product.availableSlots}` });
+  }
+  if (et === 'CONSTRUCTION') {
+    if (product.pricePerSqm) specs.push({ icon: Ruler, label: 'м²-ийн үнэ', value: `${product.pricePerSqm.toLocaleString()}₮` });
+    if (product.totalUnits) specs.push({ icon: Layers, label: 'Нийт/Зарагдсан', value: `${product.soldUnits || 0}/${product.totalUnits}` });
+    if (product.completionDate) specs.push({ icon: Clock, label: 'Ашиглалтад', value: product.completionDate });
+  }
+  if (et === 'PRE_ORDER') {
+    if (product.minBatch) specs.push({ icon: Layers, label: 'Batch', value: `${product.currentBatch || 0}/${product.minBatch}` });
+    if (product.advancePercent) specs.push({ icon: Tag, label: 'Урьдчилгаа', value: `${product.advancePercent}%` });
+    if (product.deliveryEstimate) specs.push({ icon: Truck, label: 'Хүргэлт', value: product.deliveryEstimate });
+  }
+  if (et === 'DIGITAL') {
+    if (product.fileType) specs.push({ icon: Package, label: 'Файлын төрөл', value: product.fileType });
+    if (product.fileSize) specs.push({ icon: Box, label: 'Хэмжээ', value: product.fileSize });
+    if (product.downloadCount) specs.push({ icon: Layers, label: 'Татсан', value: `${product.downloadCount}` });
+  }
+
+  // Fallback: category-based
+  if (specs.length === 0) {
+    const cat = product.category;
+    if (cat === 'electronics') return [
+      { icon: Box, label: 'Брэнд', value: product.name.split(' ')[0] },
+      { icon: Shield, label: 'Баталгаа', value: '12 сар' },
+      { icon: Package, label: 'Бүрдэл', value: 'Бүрэн комплект' },
+    ];
+    if (cat === 'fashion') return [
+      { icon: Palette, label: 'Материал', value: '100% хөвөн' },
+      { icon: Ruler, label: 'Хэмжээ', value: 'XS - XXL' },
+    ];
+    return [
+      { icon: Package, label: 'Нөхцөл', value: 'Шинэ' },
+      { icon: Shield, label: 'Баталгаа', value: 'Тийм' },
+      { icon: Truck, label: 'Хүргэлт', value: 'Боломжтой' },
+    ];
+  }
+
+  return specs;
 }
 
 /* ═══ Demo reviews ═══ */
@@ -329,6 +356,17 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                   </div>
                 )}
 
+                {/* Entity metadata quick info */}
+                {specs.length > 0 && (
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    {specs.slice(0, 4).map((s, i) => (
+                      <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--esl-bg-section)] rounded-lg text-xs text-[var(--esl-text-secondary)]">
+                        <s.icon className="w-3 h-3" /> {s.label}: <strong className="text-[var(--esl-text-primary)]">{s.value}</strong>
+                      </span>
+                    ))}
+                  </div>
+                )}
+
                 {/* Colors */}
                 {colors.length > 0 && (
                   <div className="mb-4">
@@ -527,6 +565,13 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 className="w-full bg-[var(--esl-bg-section)] text-[var(--esl-text-secondary)] py-3 rounded-xl font-semibold text-sm border-none cursor-pointer hover:bg-[var(--esl-bg-card-hover)] transition flex items-center justify-center gap-2">
                 <Share2 className="w-4 h-4" /> Хуваалцах линк хуулах
               </button>
+            )}
+
+            {product.allowAffiliate && (
+              <a href={`/dashboard/affiliate?product=${product._id}`}
+                className="w-full py-3 rounded-xl font-semibold text-sm border border-[#E8242C] text-[#E8242C] bg-transparent hover:bg-red-50 transition flex items-center justify-center gap-2 no-underline cursor-pointer">
+                <Share2 className="w-4 h-4" /> Борлуулж эхлэх ({product.affiliateCommission || product.commission || 10}%)
+              </a>
             )}
           </div>
         </div>

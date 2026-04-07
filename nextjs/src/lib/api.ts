@@ -80,6 +80,33 @@ export interface Product {
   reviewCount?: number;
   store?: { name: string };
   createdAt?: string;
+  // Entity fields
+  entityType?: string;
+  area?: number;
+  rooms?: number;
+  floor?: number;
+  totalFloors?: number;
+  district?: string;
+  year?: number;
+  mileage?: number;
+  fuelType?: string;
+  transmission?: string;
+  brand?: string;
+  duration?: number;
+  availableSlots?: number;
+  totalUnits?: number;
+  soldUnits?: number;
+  completionDate?: string;
+  pricePerSqm?: number;
+  minBatch?: number;
+  currentBatch?: number;
+  advancePercent?: number;
+  deliveryEstimate?: string;
+  fileType?: string;
+  fileSize?: string;
+  downloadCount?: number;
+  allowAffiliate?: boolean;
+  affiliateCommission?: number;
 }
 
 export const ProductsAPI = {
