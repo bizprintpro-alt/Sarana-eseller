@@ -6,22 +6,22 @@ import { useRouter } from 'next/navigation';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import {
   Camera, X, Crown, Info, ArrowLeft, Send, Play, Video,
-  Home, Car, Smartphone, ShoppingBag, Wrench, Sofa, Baby,
-  Dumbbell, Sparkles, Package, MapPin, Phone, Eye, Clock,
+  MapPin, Phone, Eye, Clock,
   ImageIcon, ChevronLeft, ChevronRight, BadgeCheck,
 } from 'lucide-react';
+import CategorySelector from '@/components/shared/CategorySelector';
 
 const CATEGORIES = [
-  { key: 'apartment', label: 'Орон сууц', emoji: '🏠', Icon: Home },
-  { key: 'auto', label: 'Авто', emoji: '🚗', Icon: Car },
-  { key: 'electronics', label: 'Электроник', emoji: '📱', Icon: Smartphone },
-  { key: 'fashion', label: 'Хувцас', emoji: '👗', Icon: ShoppingBag },
-  { key: 'furniture', label: 'Тавилга', emoji: '🛋️', Icon: Sofa },
-  { key: 'services', label: 'Үйлчилгээ', emoji: '🔧', Icon: Wrench },
-  { key: 'kids', label: 'Хүүхэд', emoji: '🧸', Icon: Baby },
-  { key: 'sports', label: 'Спорт', emoji: '⚽', Icon: Dumbbell },
-  { key: 'beauty', label: 'Гоо сайхан', emoji: '💄', Icon: Sparkles },
-  { key: 'other', label: 'Бусад', emoji: '📦', Icon: Package },
+  { key: 'apartment', label: 'Орон сууц', emoji: '🏠' },
+  { key: 'auto', label: 'Авто', emoji: '🚗' },
+  { key: 'electronics', label: 'Электроник', emoji: '📱' },
+  { key: 'fashion', label: 'Хувцас', emoji: '👗' },
+  { key: 'furniture', label: 'Тавилга', emoji: '🛋️' },
+  { key: 'services', label: 'Үйлчилгээ', emoji: '🔧' },
+  { key: 'kids', label: 'Хүүхэд', emoji: '🧸' },
+  { key: 'sports', label: 'Спорт', emoji: '⚽' },
+  { key: 'beauty', label: 'Гоо сайхан', emoji: '💄' },
+  { key: 'other', label: 'Бусад', emoji: '📦' },
 ];
 
 const DISTRICTS = ['СБД', 'ХУД', 'БЗД', 'ЧД', 'БГД', 'СХД', 'НД', 'БНД', 'Багахангай'];
@@ -446,25 +446,11 @@ export default function PostAdPage() {
         {/* Category */}
         <div className="mb-6">
           <label className="text-sm font-bold text-[var(--esl-text-secondary)] mb-3 block">Ангилал <span className="text-[#E8242C]">*</span></label>
-          <div className="grid grid-cols-5 gap-2">
-            {CATEGORIES.map((c) => {
-              const isActive = category === c.key;
-              return (
-                <button
-                  key={c.key}
-                  onClick={() => setCategory(c.key)}
-                  className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border cursor-pointer transition-all ${
-                    isActive
-                      ? 'bg-[rgba(232,36,44,0.15)] border-[#E8242C] text-white'
-                      : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555]'
-                  }`}
-                >
-                  <span className="text-xl">{c.emoji}</span>
-                  <span className="text-[11px] font-semibold">{c.label}</span>
-                </button>
-              );
-            })}
-          </div>
+          <CategorySelector
+            value={category}
+            onChange={(_id, slug) => setCategory(slug)}
+            label=""
+          />
         </div>
 
         {/* Price */}

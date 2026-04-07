@@ -6,10 +6,9 @@ import EsellerLogo from '@/components/shared/EsellerLogo';
 import MobileNav from '@/components/shared/MobileNav';
 import { useUserLocation } from '@/hooks/useUserLocation';
 import LocationBar from '@/components/location/LocationBar';
+import CategoryBar from '@/components/shared/CategoryBar';
 import {
   Search, MapPin, Eye, Clock, Plus,
-  Home, Car, Smartphone, ShoppingBag, Wrench, Sofa, Baby,
-  Dumbbell, Sparkles, Package,
   X, Heart, Phone, MessageCircle, Share2, ChevronLeft, ChevronRight,
   BadgeCheck, Calendar, Ruler, DoorOpen, Fuel, Gauge, Play, ImageIcon,
 } from 'lucide-react';
@@ -33,19 +32,6 @@ const ENTITY_LABELS: Record<EntityType, { label: string; emoji: string }> = {
   service: { label: 'Үйлчилгээ', emoji: '🛎️' },
   user: { label: 'Хэрэглэгч', emoji: '👤' },
 };
-
-const CATEGORIES = [
-  { key: 'all', label: 'Бүгд', Icon: Package },
-  { key: 'apartment', label: 'Орон сууц', Icon: Home },
-  { key: 'auto', label: 'Авто', Icon: Car },
-  { key: 'electronics', label: 'Электроник', Icon: Smartphone },
-  { key: 'fashion', label: 'Хувцас', Icon: ShoppingBag },
-  { key: 'services', label: 'Үйлчилгээ', Icon: Wrench },
-  { key: 'furniture', label: 'Тавилга', Icon: Sofa },
-  { key: 'kids', label: 'Хүүхэд', Icon: Baby },
-  { key: 'sports', label: 'Спорт', Icon: Dumbbell },
-  { key: 'beauty', label: 'Гоо сайхан', Icon: Sparkles },
-];
 
 const DISTRICTS = ['Бүгд', 'СБД', 'ХУД', 'БЗД', 'ЧД', 'БГД', 'СХД', 'НД', 'БНД'];
 const SORT_OPTIONS = [
@@ -688,26 +674,9 @@ export default function FeedPage() {
           </select>
         </div>
 
-        {/* Category pills */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {CATEGORIES.map((c) => {
-            const Icon = c.Icon;
-            const isActive = activeCat === c.key;
-            return (
-              <button
-                key={c.key}
-                onClick={() => setActiveCat(c.key)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-[#E8242C] border-[#E8242C] text-white'
-                    : 'bg-[var(--esl-bg-card)] border-[var(--esl-border)] text-[var(--esl-text-muted)] hover:border-[#555] hover:text-white'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                {c.label}
-              </button>
-            );
-          })}
+        {/* Category pills — DB-ээс авна */}
+        <div className="mb-6">
+          <CategoryBar value={activeCat} onChange={setActiveCat} />
         </div>
 
         {/* Result bar */}

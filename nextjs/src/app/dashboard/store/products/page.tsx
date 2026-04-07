@@ -10,6 +10,7 @@ import {
   FileText, DollarSign, Settings, Upload, GripVertical, Star,
   ToggleLeft, ToggleRight, Eye,
 } from 'lucide-react';
+import CategorySelector from '@/components/shared/CategorySelector';
 
 /* ═══ Types ═══ */
 interface ProductForm {
@@ -231,11 +232,12 @@ export default function ProductsPage() {
                       className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5 block">Ангилал</label>
-                    <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
-                      className="w-full px-3 py-2.5 border border-[var(--esl-border)] rounded-lg text-sm bg-[var(--esl-bg-card)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                      {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                    </select>
+                    <CategorySelector
+                      entityType="STORE"
+                      value={form.category}
+                      onChange={(_id, slug) => setForm({ ...form, category: slug })}
+                      label="Ангилал"
+                    />
                   </div>
                 </>
               )}
