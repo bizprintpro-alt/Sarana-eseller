@@ -29,21 +29,21 @@ import {
 
 /* ─── Constants ─── */
 const NAV_CATS = [
-  { key: 'food', label: 'Хоол хүнс' }, { key: 'fashion', label: 'Хувцас' },
-  { key: 'electronics', label: 'Электроник' }, { key: 'beauty', label: 'Гоо сайхан' },
-  { key: 'home', label: 'Гэр ахуй' }, { key: 'sports', label: 'Спорт' },
-  { key: 'salon', label: 'Салон' }, { key: 'repair', label: 'Засвар' },
+  { key: 'food-beverage', label: 'Хоол хүнс' }, { key: 'fashion', label: 'Хувцас' },
+  { key: 'electronics', label: 'Электроник' }, { key: 'beauty-health', label: 'Гоо сайхан' },
+  { key: 'home-living', label: 'Гэр ахуй' }, { key: 'sports-travel', label: 'Спорт' },
+  { key: 'kids-toys', label: 'Хүүхдийн' }, { key: 'auto-moto', label: 'Авто' },
 ];
 
 const CATEGORY_ICONS = [
-  { key: 'food', label: 'Хоол хүнс', icon: UtensilsCrossed, color: '#059669' },
+  { key: 'food-beverage', label: 'Хоол хүнс', icon: UtensilsCrossed, color: '#059669' },
   { key: 'fashion', label: 'Хувцас', icon: Shirt, color: '#7C3AED' },
   { key: 'electronics', label: 'Электроник', icon: Cpu, color: '#0891B2' },
-  { key: 'beauty', label: 'Гоо сайхан', icon: Sparkles, color: '#DB2777' },
-  { key: 'home', label: 'Гэр ахуй', icon: Home, color: '#D97706' },
-  { key: 'sports', label: 'Спорт', icon: Dumbbell, color: '#2563EB' },
-  { key: 'salon', label: 'Салон', icon: Scissors, color: '#9333EA' },
-  { key: 'repair', label: 'Засвар', icon: Wrench, color: '#DC2626' },
+  { key: 'beauty-health', label: 'Гоо сайхан', icon: Sparkles, color: '#DB2777' },
+  { key: 'home-living', label: 'Гэр ахуй', icon: Home, color: '#D97706' },
+  { key: 'sports-travel', label: 'Спорт', icon: Dumbbell, color: '#2563EB' },
+  { key: 'kids-toys', label: 'Хүүхдийн', icon: Scissors, color: '#9333EA' },
+  { key: 'auto-moto', label: 'Авто', icon: Wrench, color: '#DC2626' },
 ];
 
 const TRUST_ITEMS = [

@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   try {
     // Build where clause
     const where: Record<string, unknown> = { status: 'active' };
-    if (category) where.entityType = category;
+    if (category) where.category = category;
     if (tier && tier !== 'all') where.tier = tier;
     if (district) where.district = district;
     if (province) where.province = province;
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
   } catch {
     // DB not available — use demo data
     let items = [...DEMO_FEED];
-    if (category) items = items.filter((i) => i.entityType === category);
+    if (category) items = items.filter((i) => i.category === category);
     if (search) {
       const q = search.toLowerCase();
       items = items.filter((i) => i.title.toLowerCase().includes(q));

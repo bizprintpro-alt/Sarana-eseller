@@ -51,25 +51,25 @@ const DEMO_FEED = [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80' },
-  ] as MediaItem[], category: 'apartment', entityType: 'agent' as EntityType, entityName: 'Голден Риэлти', entitySlug: 'erdenbat', verified: true, tier: 'vip' as ItemTier, viewCount: 1245, district: 'СБД', metadata: { sqm: 78, rooms: 3, floor: 5 }, createdAt: '2026-04-01' },
+  ] as MediaItem[], category: 'home-living', entityType: 'agent' as EntityType, entityName: 'Голден Риэлти', entitySlug: 'erdenbat', verified: true, tier: 'vip' as ItemTier, viewCount: 1245, district: 'СБД', metadata: { sqm: 78, rooms: 3, floor: 5 }, createdAt: '2026-04-01' },
 
   { id: '2', refId: 'VIP-AUTO-001', title: 'Toyota Prius 2022', description: '45,000км, хар өнгө, чипээр ороогүй, татвар төлсөн. Full option. Камер, подогрев, хөтлөгч суудал. Осолд ороогүй, өмчлөгчөөс шууд.', price: 58000000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80' },
     { type: 'video' as const, url: 'https://www.w3schools.com/html/mov_bbb.mp4', thumb: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=400&q=60' },
-  ] as MediaItem[], category: 'auto', entityType: 'auto_dealer' as EntityType, entityName: 'AutoMall', entitySlug: 'autocity', verified: true, tier: 'vip' as ItemTier, viewCount: 892, district: 'ХУД', metadata: { year: 2022, mileage: 45000, fuel: 'Hybrid' }, createdAt: '2026-04-02' },
+  ] as MediaItem[], category: 'auto-moto', entityType: 'auto_dealer' as EntityType, entityName: 'AutoMall', entitySlug: 'autocity', verified: true, tier: 'vip' as ItemTier, viewCount: 892, district: 'ХУД', metadata: { year: 2022, mileage: 45000, fuel: 'Hybrid' }, createdAt: '2026-04-02' },
 
   { id: '3', refId: 'VIP-CMP-001', title: 'Шинэ барилга, 19-р хороолол', description: '45-95мкв, 1-3 өрөө, 2027 он хүлээлгэж өгнө. Банкны зээлтэй. Хаан банк, Голомт банк хамтарсан.', price: 95000000, originalPrice: 110000000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1460317442991-0ec209397118?w=800&q=80' },
-  ] as MediaItem[], category: 'apartment', entityType: 'company' as EntityType, entityName: 'МАК Констракшн', entitySlug: 'mongolian-properties', verified: true, tier: 'vip' as ItemTier, viewCount: 3456, district: 'НД', metadata: { sqm: 65, rooms: 2 }, createdAt: '2026-03-30' },
+  ] as MediaItem[], category: 'home-living', entityType: 'company' as EntityType, entityName: 'МАК Констракшн', entitySlug: 'mongolian-properties', verified: true, tier: 'vip' as ItemTier, viewCount: 3456, district: 'НД', metadata: { sqm: 65, rooms: 2 }, createdAt: '2026-03-30' },
 
   { id: '4', refId: 'FTR-SVC-001', title: 'Вэбсайт хийж өгнө', description: 'React, Next.js, Mobile app хөгжүүлэлт. 3-5 хоногт бэлэн болно. UI/UX дизайн, SEO оптимизаци багтсан.', price: 2500000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80' },
-  ] as MediaItem[], category: 'services', entityType: 'service' as EntityType, entityName: 'TechPro', verified: false, tier: 'featured' as ItemTier, viewCount: 567, district: 'СБД', createdAt: '2026-04-01' },
+  ] as MediaItem[], category: 'construction', entityType: 'service' as EntityType, entityName: 'TechPro', verified: false, tier: 'featured' as ItemTier, viewCount: 567, district: 'СБД', createdAt: '2026-04-01' },
 
   { id: '5', refId: 'FTR-USR-001', title: 'iPhone 15 Pro Max 256GB', description: 'Хэрэглээгүй шинэ, баталгаатай. Утасны хайрцагтай, бүрэн комплект. Natural Titanium өнгө.', price: 3800000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=800&q=80' },
@@ -89,22 +89,22 @@ const DEMO_FEED = [
   { id: '8', refId: 'NRM-USR-002', title: '2 өрөө байр түрээслүүлнэ', description: 'Хотын төвд, шинэ засвартай. Сар бүр 1.2 сая. Тавилгатай, интернэттэй.', price: 1200000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800&q=80' },
-  ] as MediaItem[], category: 'apartment', entityType: 'user' as EntityType, entityName: 'Дорж', verified: false, tier: 'normal' as ItemTier, viewCount: 234, district: 'СБД', metadata: { sqm: 55, rooms: 2 }, createdAt: '2026-04-02' },
+  ] as MediaItem[], category: 'home-living', entityType: 'user' as EntityType, entityName: 'Дорж', verified: false, tier: 'normal' as ItemTier, viewCount: 234, district: 'СБД', metadata: { sqm: 55, rooms: 2 }, createdAt: '2026-04-02' },
 
   { id: '9', refId: 'NRM-AUTO-001', title: 'Hyundai Tucson 2019', description: '85,000км, цагаан, бензин. Осолд ороогүй. Засвар шаардлагагүй.', price: 42000000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1633695632011-e939ef2f0fc6?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80' },
     { type: 'video' as const, url: 'https://www.w3schools.com/html/mov_bbb.mp4', thumb: 'https://images.unsplash.com/photo-1633695632011-e939ef2f0fc6?w=400&q=60' },
-  ] as MediaItem[], category: 'auto', entityType: 'user' as EntityType, entityName: 'Ганаа', verified: false, tier: 'normal' as ItemTier, viewCount: 156, district: 'БГД', metadata: { year: 2019, mileage: 85000, fuel: 'Бензин' }, createdAt: '2026-04-01' },
+  ] as MediaItem[], category: 'auto-moto', entityType: 'user' as EntityType, entityName: 'Ганаа', verified: false, tier: 'normal' as ItemTier, viewCount: 156, district: 'БГД', metadata: { year: 2019, mileage: 85000, fuel: 'Бензин' }, createdAt: '2026-04-01' },
 
   { id: '10', refId: 'NRM-USR-003', title: 'Диван + ширээ комплект', description: 'Хэрэглэсэн, L хэлбэрийн диван, кофены ширээ. Цайвар саарал өнгө.', price: 850000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80' },
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=800&q=80' },
-  ] as MediaItem[], category: 'furniture', entityType: 'user' as EntityType, entityName: 'Оюука', verified: false, tier: 'normal' as ItemTier, viewCount: 67, district: 'БНД', createdAt: '2026-04-03' },
+  ] as MediaItem[], category: 'home-living', entityType: 'user' as EntityType, entityName: 'Оюука', verified: false, tier: 'normal' as ItemTier, viewCount: 67, district: 'БНД', createdAt: '2026-04-03' },
 
   { id: '11', refId: 'NRM-USR-004', title: 'Гэрийн цэвэрлэгээ хийнэ', description: 'Мэргэжлийн цэвэрлэгээ, 1-4 өрөө гэрт. Цонх, хивс, тавилга.', price: 80000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80' },
-  ] as MediaItem[], category: 'services', entityType: 'user' as EntityType, entityName: 'Цэвэр Гэр', verified: false, tier: 'normal' as ItemTier, viewCount: 312, district: 'СХД', createdAt: '2026-04-03' },
+  ] as MediaItem[], category: 'construction', entityType: 'user' as EntityType, entityName: 'Цэвэр Гэр', verified: false, tier: 'normal' as ItemTier, viewCount: 312, district: 'СХД', createdAt: '2026-04-03' },
 
   { id: '12', refId: 'NRM-USR-005', title: 'Samsung Galaxy S24 Ultra', description: '12/256GB, хэрэглэсэн 3 сар, бүрэн комплект. Titanium Gray.', price: 2800000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&q=80' },
@@ -128,7 +128,7 @@ function timeAgo(dateStr: string) {
 }
 
 function categoryEmoji(cat: string) {
-  const map: Record<string, string> = { apartment: '🏠', auto: '🚗', electronics: '📱', fashion: '👗', services: '🔧', furniture: '🛋️', kids: '🧸', sports: '⚽', beauty: '💄' };
+  const map: Record<string, string> = { electronics: '💻', fashion: '👗', 'home-living': '🏠', 'beauty-health': '💄', 'kids-toys': '🧸', 'sports-travel': '⚽', 'food-beverage': '🍔', 'auto-moto': '🚗', construction: '🔨', 'jewelry-gifts': '💍', 'digital-goods': '💾', 'office-business': '💼' };
   return map[cat] || '📦';
 }
 
