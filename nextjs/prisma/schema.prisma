@@ -91,6 +91,42 @@ model Product {
   estimatedMins Int?
   entityType    String?  // STORE | REAL_ESTATE | AUTO | SERVICE | CONSTRUCTION | PRE_ORDER | DIGITAL
   metadata      Json?    // entity-specific fields
+
+  // Real estate
+  area          Float?
+  rooms         Int?
+  floor         Int?
+  totalFloors   Int?
+  district      String?
+
+  // Auto
+  year          Int?
+  mileage       Int?
+  fuelType      String?
+  transmission  String?
+  brand         String?
+
+  // Service
+  duration      Int?
+  availableSlots Int?
+
+  // Construction
+  totalUnits    Int?
+  soldUnits     Int?
+  completionDate String?
+  pricePerSqm   Float?
+
+  // Pre-order
+  minBatch      Int?
+  currentBatch  Int?
+  advancePercent Float?
+  deliveryEstimate String?
+
+  // Digital
+  fileType      String?
+  fileSize      String?
+  downloadCount Int?     @default(0)
+
   allowAffiliate      Boolean @default(false)
   affiliateCommission Float?  @default(0)
   createdAt     DateTime @default(now())
