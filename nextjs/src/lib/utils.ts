@@ -37,18 +37,18 @@ export function discountPercent(price: number, salePrice?: number): number {
 
 // Demo products for fallback when API is empty
 export const DEMO_PRODUCTS = [
-  { _id: 'd1', name: 'Premium цагаан цамц', price: 35000, emoji: '👕', category: 'fashion', description: '100% цэвэр хөвөн. S, M, L, XL хэмжээтэй.', store: { name: 'FashionMN' }, rating: 4.5, reviewCount: 24 },
-  { _id: 'd2', name: 'Sporty гутал Air', price: 89000, salePrice: 69000, emoji: '👟', category: 'fashion', description: 'Спорт болон өдөр тутамд тохиромжтой.', store: { name: 'SportsMN' }, rating: 4.8, reviewCount: 56 },
-  { _id: 'd3', name: 'Designer малгай', price: 22000, emoji: '🧢', category: 'fashion', description: 'Нарны туяанаас хамгаалах загварлаг дизайн.', store: { name: 'FashionMN' }, rating: 4.2, reviewCount: 12 },
-  { _id: 'd4', name: 'Leather цүнх', price: 95000, salePrice: 75000, emoji: '👜', category: 'fashion', description: 'Жинхэнэ арьсан, том багтаамжтай.', store: { name: 'LuxuryMN' }, rating: 4.7, reviewCount: 31 },
-  { _id: 'd5', name: 'Пицца Маргарита', price: 38000, emoji: '🍕', category: 'food-beverage', description: 'Шинэхэн томат, моцарелла, базилик.', store: { name: 'PizzaMN' }, rating: 4.9, reviewCount: 142 },
-  { _id: 'd6', name: 'Burger Double set', price: 42000, salePrice: 35000, emoji: '🍔', category: 'food-beverage', description: 'Давхар котлет, шинэ хүнсний ногоо.', store: { name: 'BurgerMN' }, rating: 4.6, reviewCount: 89 },
-  { _id: 'd7', name: 'iPhone 15 Pro case', price: 18000, emoji: '📱', category: 'electronics', description: 'Магнитан бэхэлгээтэй, дроп хамгаалалт.', store: { name: 'TechUB' }, rating: 4.3, reviewCount: 67 },
-  { _id: 'd8', name: 'Bluetooth чихэвч', price: 125000, salePrice: 99000, emoji: '🎧', category: 'electronics', description: 'ANC, 28ц батарей, IP54 хамгаалалт.', store: { name: 'TechUB' }, rating: 4.5, reviewCount: 43 },
-  { _id: 'd9', name: 'Нүүрний крем SPF50', price: 28000, emoji: '💄', category: 'beauty-health', description: 'K-beauty, SPF50+, чийгшүүлэгч, 50ml.', store: { name: 'BeautyMN' }, rating: 4.8, reviewCount: 201 },
-  { _id: 'd10', name: 'Гоо сайхны багц', price: 65000, salePrice: 52000, emoji: '✨', category: 'beauty-health', description: 'Натурал найрлагатай 5 бүтээгдэхүүн.', store: { name: 'BeautyMN' }, rating: 4.6, reviewCount: 78 },
-  { _id: 'd11', name: 'Гэрийн ургамал', price: 15000, emoji: '🌿', category: 'home-living', description: 'Арчилгаа багатай, агаарыг цэвэршүүлдэг.', store: { name: 'GreenMN' }, rating: 4.4, reviewCount: 34 },
-  { _id: 'd12', name: 'Yoga mat pro', price: 55000, salePrice: 44000, emoji: '🧘', category: 'sports-travel', description: '6мм зузаан, гулсахгүй дэвсгэр.', store: { name: 'SportsMN' }, rating: 4.7, reviewCount: 55 },
+  { _id: 'd1', name: 'Premium цагаан цамц', price: 35000, emoji: '👕', category: 'fashion', description: '100% цэвэр хөвөн. S, M, L, XL хэмжээтэй.', store: { name: 'FashionMN' }, rating: 4.5, reviewCount: 24, allowAffiliate: true, commission: 10 },
+  { _id: 'd2', name: 'Sporty гутал Air', price: 89000, salePrice: 69000, emoji: '👟', category: 'fashion', description: 'Спорт болон өдөр тутамд тохиромжтой.', store: { name: 'SportsMN' }, rating: 4.8, reviewCount: 56, allowAffiliate: true, commission: 12 },
+  { _id: 'd3', name: 'Designer малгай', price: 22000, emoji: '🧢', category: 'fashion', description: 'Нарны туяанаас хамгаалах загварлаг дизайн.', store: { name: 'FashionMN' }, rating: 4.2, reviewCount: 12, allowAffiliate: true, commission: 8 },
+  { _id: 'd4', name: 'Leather цүнх', price: 95000, salePrice: 75000, emoji: '👜', category: 'fashion', description: 'Жинхэнэ арьсан, том багтаамжтай.', store: { name: 'LuxuryMN' }, rating: 4.7, reviewCount: 31, allowAffiliate: true, commission: 10 },
+  { _id: 'd5', name: 'Пицца Маргарита', price: 38000, emoji: '🍕', category: 'food-beverage', description: 'Шинэхэн томат, моцарелла, базилик.', store: { name: 'PizzaMN' }, rating: 4.9, reviewCount: 142, allowAffiliate: true, commission: 8 },
+  { _id: 'd6', name: 'Burger Double set', price: 42000, salePrice: 35000, emoji: '🍔', category: 'food-beverage', description: 'Давхар котлет, шинэ хүнсний ногоо.', store: { name: 'BurgerMN' }, rating: 4.6, reviewCount: 89, allowAffiliate: true, commission: 10 },
+  { _id: 'd7', name: 'iPhone 15 Pro case', price: 18000, emoji: '📱', category: 'electronics', description: 'Магнитан бэхэлгээтэй, дроп хамгаалалт.', store: { name: 'TechUB' }, rating: 4.3, reviewCount: 67, allowAffiliate: true, commission: 12 },
+  { _id: 'd8', name: 'Bluetooth чихэвч', price: 125000, salePrice: 99000, emoji: '🎧', category: 'electronics', description: 'ANC, 28ц батарей, IP54 хамгаалалт.', store: { name: 'TechUB' }, rating: 4.5, reviewCount: 43, allowAffiliate: true, commission: 10 },
+  { _id: 'd9', name: 'Нүүрний крем SPF50', price: 28000, emoji: '💄', category: 'beauty-health', description: 'K-beauty, SPF50+, чийгшүүлэгч, 50ml.', store: { name: 'BeautyMN' }, rating: 4.8, reviewCount: 201, allowAffiliate: true, commission: 10 },
+  { _id: 'd10', name: 'Гоо сайхны багц', price: 65000, salePrice: 52000, emoji: '✨', category: 'beauty-health', description: 'Натурал найрлагатай 5 бүтээгдэхүүн.', store: { name: 'BeautyMN' }, rating: 4.6, reviewCount: 78, allowAffiliate: true, commission: 15 },
+  { _id: 'd11', name: 'Гэрийн ургамал', price: 15000, emoji: '🌿', category: 'home-living', description: 'Арчилгаа багатай, агаарыг цэвэршүүлдэг.', store: { name: 'GreenMN' }, rating: 4.4, reviewCount: 34, allowAffiliate: true, commission: 8 },
+  { _id: 'd12', name: 'Yoga mat pro', price: 55000, salePrice: 44000, emoji: '🧘', category: 'sports-travel', description: '6мм зузаан, гулсахгүй дэвсгэр.', store: { name: 'SportsMN' }, rating: 4.7, reviewCount: 55, allowAffiliate: true, commission: 12 },
 ];
 
 export const CATEGORIES: Record<string, string> = {
