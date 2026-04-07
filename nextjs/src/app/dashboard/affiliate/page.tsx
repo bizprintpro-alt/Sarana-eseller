@@ -21,6 +21,7 @@ import AISuggestions from '@/components/affiliate/AISuggestions';
 import SalesToolkit from '@/components/affiliate/SalesToolkit';
 import AIProductMentor from '@/components/affiliate/AIProductMentor';
 import AIMarketingStudio from '@/components/affiliate/AIMarketingStudio';
+import StartSellingModal from '@/components/seller/StartSellingModal';
 
 type Tab = 'dashboard' | 'products' | 'earnings' | 'wallet' | 'toolkit';
 
@@ -95,6 +96,7 @@ export default function AffiliateDashboard() {
   const [productSearch, setProductSearch] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [mentorProduct, setMentorProduct] = useState<Product | null>(null);
+  const [sellingItem, setSellingItem] = useState<Product | null>(null);
   const [studioProduct, setStudioProduct] = useState<Product | null>(null);
 
   const username = user?.username || user?.name || 'affiliate';
@@ -428,6 +430,12 @@ export default function AffiliateDashboard() {
                         >
                           {copiedId === p._id ? <><Check className="w-3.5 h-3.5" /> Хуулагдлаа!</> : <><Share2 className="w-3.5 h-3.5" /> Борлуулж эхлэх</>}
                         </button>
+                        <button
+                          onClick={() => setSellingItem(p)}
+                          className="w-full mt-1.5 py-2 rounded-xl text-xs font-bold border border-[#E8242C] text-[#E8242C] bg-transparent hover:bg-red-50 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <Zap className="w-3.5 h-3.5" /> Дэлгүүрт нэмэх
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -564,6 +572,19 @@ export default function AffiliateDashboard() {
           onClose={() => setStudioProduct(null)}
         />
       )}
+
+      {/* Start Selling Modal */}
+      <StartSellingModal
+        item={sellingItem ? {
+          id: sellingItem._id || '',
+          name: sellingItem.name,
+          price: sellingItem.price,
+          images: sellingItem.images || [],
+          affiliateCommission: sellingItem.commission || 10,
+        } : null}
+        isOpen={!!sellingItem}
+        onClose={() => setSellingItem(null)}
+      />
     </div>
   );
 }

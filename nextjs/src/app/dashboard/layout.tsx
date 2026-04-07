@@ -272,7 +272,8 @@ const AFFILIATE_SECTIONS: SidebarSection[] = [
       { href: '/dashboard/affiliate/earnings', icon: '📈', label: 'Орлого' },
       { href: '/dashboard/affiliate/wallet', icon: '💳', label: 'Хэтэвч' },
       { href: '/dashboard/affiliate/marketing', icon: '📢', label: 'Маркетинг' },
-      { href: '/dashboard/affiliate/influencer-apply', icon: '⭐', label: 'Инфлюэнсер хүсэлт', isNew: true },
+      { href: '/dashboard/chat', icon: '💬', label: 'Чат' },
+      { href: '/dashboard/affiliate/influencer-apply', icon: '⭐', label: 'Инфлюэнсер болох', isNew: true },
     ],
   },
 ];
