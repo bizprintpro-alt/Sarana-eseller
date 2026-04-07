@@ -6,8 +6,10 @@ export interface TierInfo {
   emoji: string
   color: string
   minFollowers: number
+  minMonthlySales: number
   bonus: number
   description: string
+  requiresApproval: boolean
 }
 
 export const SELLER_TIERS: TierInfo[] = [
@@ -17,8 +19,10 @@ export const SELLER_TIERS: TierInfo[] = [
     emoji: '🌱',
     color: '#94A3B8',
     minFollowers: 0,
+    minMonthlySales: 0,
     bonus: 0,
     description: 'Бүртгэлтэй, дагагчийн тоо хамаагүй',
+    requiresApproval: false,
   },
   {
     type: 'ACTIVE',
@@ -26,17 +30,21 @@ export const SELLER_TIERS: TierInfo[] = [
     emoji: '⭐',
     color: '#10B981',
     minFollowers: 0,
+    minMonthlySales: 10,
     bonus: 1,
     description: '10+ амжилттай борлуулалт',
+    requiresApproval: false,
   },
   {
     type: 'MICRO',
     label: 'Микро инфлюэнсер',
-    emoji: '🏅',
+    emoji: '📱',
     color: '#3B82F6',
     minFollowers: 1000,
+    minMonthlySales: 20,
     bonus: 2,
     description: '1,000+ дагагч, сарын 20+ борлуулалт',
+    requiresApproval: true,
   },
   {
     type: 'INFLUENCER',
@@ -44,8 +52,10 @@ export const SELLER_TIERS: TierInfo[] = [
     emoji: '🌟',
     color: '#F59E0B',
     minFollowers: 10000,
+    minMonthlySales: 50,
     bonus: 3,
-    description: '10,000+ дагагч, гэрээт хамтын ажиллагаа',
+    description: '10,000+ дагагч, сарын 50+ борлуулалт',
+    requiresApproval: true,
   },
   {
     type: 'MEGA',
@@ -53,8 +63,10 @@ export const SELLER_TIERS: TierInfo[] = [
     emoji: '👑',
     color: '#EF4444',
     minFollowers: 100000,
+    minMonthlySales: 0,
     bonus: 5,
     description: '100,000+ дагагч, exclusive commission',
+    requiresApproval: true,
   },
 ]
 
@@ -66,3 +78,14 @@ export function getInfluencerBonus(sellerType: string): number {
 export function getTierInfo(sellerType: string): TierInfo {
   return SELLER_TIERS.find((t) => t.type === sellerType) || SELLER_TIERS[0]
 }
+
+export function getNextTier(sellerType: string): TierInfo | null {
+  const idx = SELLER_TIERS.findIndex((t) => t.type === sellerType)
+  return idx >= 0 && idx < SELLER_TIERS.length - 1 ? SELLER_TIERS[idx + 1] : null
+}
+
+export function getApplicableTiers(): TierInfo[] {
+  return SELLER_TIERS.filter((t) => t.requiresApproval)
+}
+
+export const MAX_COMMISSION_RATE = 30

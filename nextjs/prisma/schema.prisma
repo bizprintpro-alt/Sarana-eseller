@@ -1371,8 +1371,9 @@ model SellerProfile {
   // Influencer system
   sellerType          String   @default("REGULAR") // REGULAR | ACTIVE | MICRO | INFLUENCER | MEGA
   followers           Int?
-  socialLinks         Json?    // {instagram, tiktok, facebook}
+  socialLinks         Json?    // {instagram, tiktok, facebook, youtube}
   influencerVerified  Boolean  @default(false)
+  influencerAppliedAt DateTime?
   influencerNote      String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -1380,6 +1381,7 @@ model SellerProfile {
   user            User             @relation(fields: [userId], references: [id])
   sellerProducts  SellerProduct[]
   commissions     SellerCommission[]
+  influencerApps  InfluencerApplication[]
 
   @@map("seller_profiles")
 }
@@ -1699,4 +1701,29 @@ model CategoryRequest {
   createdAt   DateTime @default(now())
 
   @@map("category_requests")
+}
+
+// ══════════════════════════════════════════════════════════════
+// ИНФЛЮЭНСЕР ХҮСЭЛТ
+// ══════════════════════════════════════════════════════════════
+
+model InfluencerApplication {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  sellerId    String   @db.ObjectId
+  targetTier  String   // MICRO | INFLUENCER | MEGA
+  instagram   String?
+  tiktok      String?
+  facebook    String?
+  youtube     String?
+  followers   Int
+  screenshot  String?
+  note        String?
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED
+  adminNote   String?
+  reviewedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  seller      SellerProfile @relation(fields: [sellerId], references: [id])
+
+  @@map("influencer_applications")
 }
