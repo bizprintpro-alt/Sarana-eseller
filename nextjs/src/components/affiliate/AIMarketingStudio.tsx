@@ -37,6 +37,9 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
   const [generating, setGenerating] = useState(false);
   const [headlineText, setHeadlineText] = useState(product.salePrice ? `${Math.round((1 - product.salePrice / product.price) * 100)}% ХЯМДРАЛ` : 'ШИНЭ ИРЭЛТ');
   const [subText, setSubText] = useState(product.name);
+  const [bgMode, setBgMode] = useState<'gradient' | 'product' | 'custom'>('gradient');
+  const [customBgUrl, setCustomBgUrl] = useState('');
+  const productImage = product.images?.[0];
 
   const handleGenerate = () => {
     if (!prompt.trim()) return;
@@ -97,6 +100,45 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Background mode */}
+            <div>
+              <label className="text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-2 block">Арын зураг</label>
+              <div className="flex gap-1.5 mb-2">
+                <button onClick={() => setBgMode('gradient')}
+                  className={cn('flex-1 py-1.5 rounded-lg text-[10px] font-semibold border transition', bgMode === 'gradient' ? 'bg-[#E8242C] text-white border-[#E8242C]' : 'border-[var(--esl-border)] text-[var(--esl-text-secondary)]')}>
+                  Градиент
+                </button>
+                {productImage && (
+                  <button onClick={() => setBgMode('product')}
+                    className={cn('flex-1 py-1.5 rounded-lg text-[10px] font-semibold border transition', bgMode === 'product' ? 'bg-[#E8242C] text-white border-[#E8242C]' : 'border-[var(--esl-border)] text-[var(--esl-text-secondary)]')}>
+                    Бараа зураг
+                  </button>
+                )}
+                <button onClick={() => setBgMode('custom')}
+                  className={cn('flex-1 py-1.5 rounded-lg text-[10px] font-semibold border transition', bgMode === 'custom' ? 'bg-[#E8242C] text-white border-[#E8242C]' : 'border-[var(--esl-border)] text-[var(--esl-text-secondary)]')}>
+                  Upload
+                </button>
+              </div>
+              {bgMode === 'product' && product.images && product.images.length > 1 && (
+                <div className="flex gap-1 overflow-x-auto pb-1">
+                  {product.images.map((img, i) => (
+                    <button key={i} onClick={() => { /* selecting different product image not needed, uses first */ }}
+                      className="w-10 h-10 rounded border border-[var(--esl-border)] overflow-hidden shrink-0">
+                      <img src={img} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
+              {bgMode === 'custom' && (
+                <input
+                  placeholder="Зургийн URL оруулах..."
+                  value={customBgUrl}
+                  onChange={(e) => setCustomBgUrl(e.target.value)}
+                  className="w-full px-2 py-1.5 text-xs bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg text-[var(--esl-text)]"
+                />
+              )}
             </div>
 
             {/* Size */}
@@ -174,7 +216,18 @@ export default function AIMarketingStudio({ product, username, onClose }: AIMark
           {/* Right — Preview */}
           <div className="flex-1 bg-[#F0F0F0] flex items-center justify-center p-6 overflow-hidden">
             <div className={cn('bg-[var(--esl-bg-card)] rounded-xl shadow-xl overflow-hidden max-h-full', selectedSize.aspect, selectedSize.key === 'story' ? 'w-[280px]' : selectedSize.key === 'post' ? 'w-[360px]' : 'w-full max-w-[560px]')}>
-              <div className={`w-full h-full bg-gradient-to-br ${selectedTemplate.gradient} relative flex flex-col items-center justify-center text-white p-6 text-center min-h-[300px]`}>
+              <div
+                className={`w-full h-full relative flex flex-col items-center justify-center text-white p-6 text-center min-h-[300px] ${bgMode === 'gradient' ? `bg-gradient-to-br ${selectedTemplate.gradient}` : ''}`}
+                style={
+                  bgMode === 'product' && productImage
+                    ? { backgroundImage: `url(${productImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                    : bgMode === 'custom' && customBgUrl
+                    ? { backgroundImage: `url(${customBgUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                    : undefined
+                }
+              >
+                {/* Dark overlay for image backgrounds */}
+                {bgMode !== 'gradient' && <div className="absolute inset-0 bg-black/40" />}
                 {/* Decorative */}
                 <div className="absolute top-[-30px] right-[-30px] w-32 h-32 rounded-full bg-white/[.08]" />
                 <div className="absolute bottom-[-20px] left-[-20px] w-24 h-24 rounded-full bg-white/[.06]" />
