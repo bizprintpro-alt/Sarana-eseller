@@ -312,7 +312,7 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
               {formatPrice(item.price)}
             </span>
             {disc > 0 && (
-              <span className="text-base text-[#555] line-through">{formatPrice(item.originalPrice!)}</span>
+              <span className="text-base text-[var(--esl-text-disabled)] line-through">{formatPrice(item.originalPrice!)}</span>
             )}
           </div>
 
@@ -364,13 +364,13 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
             <button className="flex-1 flex items-center justify-center gap-2 h-12 bg-[#E8242C] text-white font-bold rounded-xl hover:bg-[#CC0000] transition-colors cursor-pointer border-none text-sm">
               <Phone className="w-4 h-4" /> Залгах
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 h-12 bg-[var(--esl-bg-elevated)] text-white font-bold rounded-xl border border-[var(--esl-border)] hover:border-[#555] transition-colors cursor-pointer text-sm">
+            <button className="flex-1 flex items-center justify-center gap-2 h-12 bg-[var(--esl-bg-elevated)] text-[var(--esl-text)] font-bold rounded-xl border border-[var(--esl-border)] hover:border-[#555] transition-colors cursor-pointer text-sm">
               <MessageCircle className="w-4 h-4" /> Мессеж
             </button>
             <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--esl-bg-elevated)] border border-[var(--esl-border)] text-[#888] hover:text-[#E8242C] hover:border-[#555] transition-colors cursor-pointer">
               <Heart className="w-4 h-4" />
             </button>
-            <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--esl-bg-elevated)] border border-[var(--esl-border)] text-[#888] hover:text-white hover:border-[#555] transition-colors cursor-pointer">
+            <button className="w-12 h-12 flex items-center justify-center rounded-xl bg-[var(--esl-bg-elevated)] border border-[var(--esl-border)] text-[var(--esl-text-secondary)] hover:text-[var(--esl-text)] hover:border-[#555] transition-colors cursor-pointer">
               <Share2 className="w-4 h-4" />
             </button>
           </div>
@@ -448,21 +448,21 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
           </div>
 
           {/* Title */}
-          <h3 className={`text-base font-extrabold mb-1.5 line-clamp-2 leading-snug ${isVip ? 'text-[#FFD700]' : 'text-white'} group-hover:text-[#FF4D53] transition-colors`}>
+          <h3 className={`text-base font-extrabold mb-1.5 line-clamp-2 leading-snug ${isVip ? 'text-[#FFD700]' : 'text-[var(--esl-text)]'} group-hover:text-[#FF4D53] transition-colors`}>
             {item.title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm text-[#888] line-clamp-2 mb-3">{item.description}</p>
+          <p className="text-sm text-[var(--esl-text-secondary)] line-clamp-2 mb-3">{item.description}</p>
 
           {/* Metadata chips */}
           {item.metadata && (
             <div className="flex flex-wrap gap-1.5 mb-3">
-              {item.metadata.sqm && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.sqm}м²</span>}
-              {item.metadata.rooms && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.rooms} өрөө</span>}
-              {item.metadata.year && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.year} он</span>}
-              {item.metadata.mileage && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{(item.metadata.mileage / 1000).toFixed(0)}мян км</span>}
-              {item.metadata.fuel && <span className="text-[11px] font-semibold text-[#D0D0D0] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.fuel}</span>}
+              {item.metadata.sqm && <span className="text-[11px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.sqm}м²</span>}
+              {item.metadata.rooms && <span className="text-[11px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.rooms} өрөө</span>}
+              {item.metadata.year && <span className="text-[11px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.year} он</span>}
+              {item.metadata.mileage && <span className="text-[11px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{(item.metadata.mileage / 1000).toFixed(0)}мян км</span>}
+              {item.metadata.fuel && <span className="text-[11px] font-semibold text-[var(--esl-text-secondary)] bg-[var(--esl-bg-elevated)] px-2 py-1 rounded">{item.metadata.fuel}</span>}
             </div>
           )}
 
@@ -470,9 +470,9 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
           <div className="flex items-end justify-between">
             <div>
               <span className={`text-xl font-black ${isVip ? 'text-[#FFD700]' : 'text-[#E8242C]'}`}>{formatPrice(item.price)}</span>
-              {disc > 0 && <span className="text-xs text-[#555] line-through ml-2">{formatPrice(item.originalPrice!)}</span>}
+              {disc > 0 && <span className="text-xs text-[var(--esl-text-disabled)] line-through ml-2">{formatPrice(item.originalPrice!)}</span>}
             </div>
-            <div className="flex items-center gap-3 text-[11px] text-[#555]">
+            <div className="flex items-center gap-3 text-[11px] text-[var(--esl-text-disabled)]">
               <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{item.viewCount}</span>
               <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{timeAgo(item.createdAt)}</span>
             </div>
@@ -538,11 +538,11 @@ export default function FeedPage() {
         <div className="max-w-[1320px] mx-auto px-4 h-16 flex items-center gap-5">
           <Link href="/" className="flex items-center gap-2.5 no-underline shrink-0">
             <EsellerLogo size={32} />
-            <span className="text-xl font-black text-white hidden sm:block">eseller<span className="text-[#E31E24]">.mn</span></span>
+            <span className="text-xl font-black text-[var(--esl-text)] hidden sm:block">eseller<span className="text-[#E31E24]">.mn</span></span>
           </Link>
           <div className="flex-1" />
-          <Link href="/store" className="text-sm font-semibold text-[var(--esl-text-muted)] hover:text-white no-underline transition">Дэлгүүр</Link>
-          <Link href="/shops" className="text-sm font-semibold text-[var(--esl-text-muted)] hover:text-white no-underline transition">Дэлгүүрүүд</Link>
+          <Link href="/store" className="text-sm font-semibold text-[var(--esl-text-muted)] hover:text-[var(--esl-text)] no-underline transition">Дэлгүүр</Link>
+          <Link href="/shops" className="text-sm font-semibold text-[var(--esl-text-muted)] hover:text-[var(--esl-text)] no-underline transition">Дэлгүүрүүд</Link>
           <Link href="/feed" className="text-sm font-bold text-[#E8242C] no-underline">Зарын булан</Link>
         </div>
       </header>
@@ -551,7 +551,7 @@ export default function FeedPage() {
         {/* Page header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-black text-white flex items-center gap-3">
+            <h1 className="text-2xl font-black text-[var(--esl-text)] flex items-center gap-3">
               📋 Зарын булан
             </h1>
             <p className="text-sm text-[var(--esl-text-muted)] mt-1">Бараа, үйлчилгээ, орон сууц, авто — бүгдийг нэг дор</p>
@@ -591,7 +591,7 @@ export default function FeedPage() {
         {/* ═══ Featured Businesses ═══ */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-black text-white">Онцлох бизнесүүд</h2>
+            <h2 className="text-lg font-black text-[var(--esl-text)]">Онцлох бизнесүүд</h2>
             <Link href="/shops" className="text-xs font-semibold text-[#E8242C] no-underline hover:underline">Бүгдийг харах →</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -604,8 +604,8 @@ export default function FeedPage() {
                   <span className="text-xs font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded">Авто</span>
                   <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
                 </div>
-                <h3 className="text-base font-black text-white group-hover:text-[#E8242C] transition-colors">AutoCity Mongolia</h3>
-                <p className="text-xs text-white/70 mt-0.5">Toyota, BMW, Hyundai · 48 машин · ★ 4.8</p>
+                <h3 className="text-base font-black text-[var(--esl-text)] group-hover:text-[#E8242C] transition-colors">AutoCity Mongolia</h3>
+                <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5">Toyota, BMW, Hyundai · 48 машин · ★ 4.8</p>
               </div>
             </Link>
 
@@ -618,8 +618,8 @@ export default function FeedPage() {
                   <span className="text-xs font-bold bg-blue-500 text-white px-2 py-0.5 rounded">Барилга</span>
                   <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
                 </div>
-                <h3 className="text-base font-black text-white group-hover:text-[#E8242C] transition-colors">Монголиан Пропертиз</h3>
-                <p className="text-xs text-white/70 mt-0.5">15+ төсөл · 3,200+ айл · ★ 4.7</p>
+                <h3 className="text-base font-black text-[var(--esl-text)] group-hover:text-[#E8242C] transition-colors">Монголиан Пропертиз</h3>
+                <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5">15+ төсөл · 3,200+ айл · ★ 4.7</p>
               </div>
             </Link>
 
@@ -632,8 +632,8 @@ export default function FeedPage() {
                   <span className="text-xs font-bold bg-[#D4AF37] text-black px-2 py-0.5 rounded">Агент</span>
                   <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
                 </div>
-                <h3 className="text-base font-black text-white group-hover:text-[#E8242C] transition-colors">Б. Эрдэнэбат</h3>
-                <p className="text-xs text-white/70 mt-0.5">12 жил туршлага · 800+ хэлцэл · ★ 4.9</p>
+                <h3 className="text-base font-black text-[var(--esl-text)] group-hover:text-[#E8242C] transition-colors">Б. Эрдэнэбат</h3>
+                <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5">12 жил туршлага · 800+ хэлцэл · ★ 4.9</p>
               </div>
             </Link>
           </div>
@@ -648,10 +648,10 @@ export default function FeedPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Зар хайх..."
-              className="w-full h-11 pl-11 pr-4 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] text-white text-sm outline-none focus:border-[#E8242C] placeholder:text-[#555] transition-all"
+              className="w-full h-11 pl-11 pr-4 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] text-[var(--esl-text)] text-sm outline-none focus:border-[#E8242C] placeholder:text-[var(--esl-text-disabled)] transition-all"
             />
             {search && (
-              <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] bg-transparent border-none cursor-pointer">
+              <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--esl-text-disabled)] bg-transparent border-none cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             )}
@@ -682,7 +682,7 @@ export default function FeedPage() {
         {/* Result bar */}
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-[var(--esl-text-muted)]">
-            <span className="font-extrabold text-white">{filtered.length}</span> зар олдлоо
+            <span className="font-extrabold text-[var(--esl-text)]">{filtered.length}</span> зар олдлоо
             {vipCount > 0 && <span className="text-[#D4AF37]"> · 👑 {vipCount} ВИП</span>}
           </p>
         </div>
@@ -697,7 +697,7 @@ export default function FeedPage() {
         {filtered.length === 0 && (
           <div className="text-center py-20">
             <span className="text-5xl block mb-4">📋</span>
-            <p className="text-lg font-bold text-white">Зар олдсонгүй</p>
+            <p className="text-lg font-bold text-[var(--esl-text)]">Зар олдсонгүй</p>
             <p className="text-sm text-[var(--esl-text-muted)] mt-2">Шүүлтүүрээ өөрчилнө үү</p>
           </div>
         )}
@@ -706,7 +706,7 @@ export default function FeedPage() {
       {/* Footer */}
       <footer className="bg-[var(--esl-bg-section)] border-t border-[var(--esl-border)] py-8 mt-12">
         <div className="max-w-[1320px] mx-auto px-4 text-center">
-          <p className="text-xs text-[#555]">© 2026 eseller.mn — Зарын булан</p>
+          <p className="text-xs text-[var(--esl-text-disabled)]">© 2026 eseller.mn — Зарын булан</p>
         </div>
       </footer>
       <MobileNav />
