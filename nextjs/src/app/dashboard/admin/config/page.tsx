@@ -74,12 +74,12 @@ export default function AdminConfigPage() {
   const [saving, setSaving] = useState('');
   const [error, setError] = useState('');
 
-  const getToken = () => localStorage.getItem('token') || '';
+  const getToken = () => localStorage.getItem('token');
 
   const loadConfigs = useCallback(async () => {
     try {
       const res = await fetch('/api/admin/config', {
-        headers: { Authorization: `Bearer ${getToken()}` },
+        headers: getToken() ? { Authorization: `Bearer ${getToken()}` } : {},
       });
       if (!res.ok) throw new Error(`${res.status}`);
       const data = await res.json();
@@ -101,7 +101,7 @@ export default function AdminConfigPage() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getToken()}`,
+          ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
         },
         body: JSON.stringify({ key, value }),
       });
