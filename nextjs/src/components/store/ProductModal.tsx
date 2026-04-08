@@ -95,12 +95,17 @@ function getProductSpecs(product: Product): { icon: typeof Box; label: string; v
   return specs;
 }
 
-/* ═══ Demo reviews ═══ */
-const DEMO_REVIEWS = [
-  { name: 'Б. Мөнхзул', rating: 5, text: 'Маш сайн чанартай бараа. Хүргэлт хурдан байсан.', date: '2 өдрийн өмнө' },
-  { name: 'О. Тэмүүлэн', rating: 4, text: 'Зурагтай адилхан харагдаж байна. Үнэ цэнэдээ таарсан.', date: '5 өдрийн өмнө' },
-  { name: 'Г. Сарантуяа', rating: 5, text: 'Гайхалтай! Найзууддаа санал болгож байна.', date: '1 долоо хоногийн өмнө' },
-];
+/* ═══ Review type ═══ */
+interface ReviewData {
+  id?: string;
+  name?: string;
+  buyerName?: string;
+  rating: number;
+  text?: string;
+  comment?: string;
+  date?: string;
+  createdAt?: string;
+}
 
 export default function ProductModal({ product, onClose, isAffiliate, onShare, onPrev, onNext, hasPrev, hasNext, allProducts, onProductClick }: ProductModalProps) {
   const [qty, setQty] = useState(1);
@@ -111,12 +116,26 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
   const [added, setAdded] = useState(false);
   const [activeTab, setActiveTab] = useState<'info' | 'specs' | 'reviews'>('info');
   const [zoomedImg, setZoomedImg] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [reviewBreakdown, setReviewBreakdown] = useState<{ rating: number; count: number }[]>([]);
   const cart = useCartStore();
   const toast = useToast();
 
   useEffect(() => {
     setQty(1); setActiveImg(0); setSelectedSize(''); setSelectedColor('');
-    setAdded(false); setActiveTab('info');
+    setAdded(false); setActiveTab('info'); setReviews([]);
+  }, [product?._id]);
+
+  // Fetch reviews from API
+  useEffect(() => {
+    if (!product?._id) return;
+    fetch(`/api/products/${product._id}/reviews`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.reviews) setReviews(data.reviews);
+        if (data.breakdown) setReviewBreakdown(data.breakdown);
+      })
+      .catch(() => {});
   }, [product?._id]);
 
   useEffect(() => {
@@ -334,7 +353,7 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
               {[
                 { key: 'info' as const, label: 'Мэдээлэл' },
                 { key: 'specs' as const, label: 'Үзүүлэлт' },
-                { key: 'reviews' as const, label: `Үнэлгээ (${product.reviewCount || DEMO_REVIEWS.length})` },
+                { key: 'reviews' as const, label: `Үнэлгээ (${product.reviewCount || reviews.length})` },
               ].map(tab => (
                 <button
                   key={tab.key}
@@ -458,18 +477,19 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 {/* Rating summary */}
                 <div className="flex items-center gap-4 p-4 bg-[var(--esl-bg-section)] rounded-xl">
                   <div className="text-center">
-                    <p className="text-3xl font-black text-[var(--esl-text-primary)]">{product.rating || 4.7}</p>
+                    <p className="text-3xl font-black text-[var(--esl-text-primary)]">{product.rating || 0}</p>
                     <div className="flex gap-0.5 justify-center my-1">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={cn('w-3.5 h-3.5', i < Math.round(product.rating || 4.7) ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />
+                        <Star key={i} className={cn('w-3.5 h-3.5', i < Math.round(product.rating || 0) ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />
                       ))}
                     </div>
-                    <p className="text-[10px] text-[var(--esl-text-muted)]">{product.reviewCount || DEMO_REVIEWS.length} үнэлгээ</p>
+                    <p className="text-[10px] text-[var(--esl-text-muted)]">{product.reviewCount || reviews.length} үнэлгээ</p>
                   </div>
                   <div className="flex-1 space-y-1">
                     {[5, 4, 3, 2, 1].map(n => {
-                      const count = DEMO_REVIEWS.filter(r => r.rating === n).length;
-                      const pct = (count / DEMO_REVIEWS.length) * 100;
+                      const count = reviewBreakdown.find(b => b.rating === n)?.count || 0;
+                      const total = reviews.length || 1;
+                      const pct = (count / total) * 100;
                       return (
                         <div key={n} className="flex items-center gap-2">
                           <span className="text-[10px] text-[var(--esl-text-muted)] w-3">{n}</span>
@@ -483,18 +503,24 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 </div>
 
                 {/* Review list */}
-                {DEMO_REVIEWS.map((r, i) => (
-                  <div key={i} className="border-b border-[var(--esl-border)] pb-3 last:border-0">
+                {reviews.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-[var(--esl-text-muted)]">Одоогоор үнэлгээ байхгүй байна</p>
+                  </div>
+                ) : reviews.map((r, i) => (
+                  <div key={r.id || i} className="border-b border-[var(--esl-border)] pb-3 last:border-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{r.name}</span>
-                      <span className="text-[10px] text-[var(--esl-text-muted)]">{r.date}</span>
+                      <span className="text-sm font-semibold text-[var(--esl-text-primary)]">{r.name || r.buyerName || 'Хэрэглэгч'}</span>
+                      <span className="text-[10px] text-[var(--esl-text-muted)]">
+                        {r.date || (r.createdAt ? new Date(r.createdAt).toLocaleDateString('mn') : '')}
+                      </span>
                     </div>
                     <div className="flex gap-0.5 mb-1.5">
                       {Array.from({ length: 5 }).map((_, j) => (
                         <Star key={j} className={cn('w-3 h-3', j < r.rating ? 'text-amber-400 fill-amber-400' : 'text-[var(--esl-text-disabled)]')} />
                       ))}
                     </div>
-                    <p className="text-xs text-[var(--esl-text-secondary)]">{r.text}</p>
+                    <p className="text-xs text-[var(--esl-text-secondary)]">{r.text || r.comment}</p>
                   </div>
                 ))}
               </div>

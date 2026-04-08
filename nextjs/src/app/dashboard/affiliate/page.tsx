@@ -23,7 +23,7 @@ import AIProductMentor from '@/components/affiliate/AIProductMentor';
 import AIMarketingStudio from '@/components/affiliate/AIMarketingStudio';
 import StartSellingModal from '@/components/seller/StartSellingModal';
 
-type Tab = 'dashboard' | 'products' | 'earnings' | 'wallet' | 'toolkit';
+type Tab = 'dashboard' | 'products' | 'commissions' | 'earnings' | 'wallet' | 'toolkit';
 
 interface Earning {
   _id?: string;
@@ -52,8 +52,9 @@ interface EarningsData {
 
 const TABS: { key: Tab; label: string; icon: React.ElementType }[] = [
   { key: 'dashboard', label: 'Самбар', icon: BarChart3 },
-  { key: 'products', label: 'Бүтээгдэхүүн', icon: Gift },
-  { key: 'earnings', label: 'Орлого', icon: DollarSign },
+  { key: 'products', label: 'Бараа сонгох', icon: Gift },
+  { key: 'commissions', label: 'Комиссын тайлан', icon: DollarSign },
+  { key: 'earnings', label: 'Орлого', icon: TrendingUp },
   { key: 'wallet', label: 'Хэтэвч', icon: Wallet },
   { key: 'toolkit', label: 'Маркетинг', icon: Megaphone },
 ];
@@ -75,6 +76,87 @@ const fadeUp = {
   }),
 };
 
+/* ═══ Commissions Tab ═══ */
+const DEMO_COMMISSIONS = [
+  { id: 'c1', orderId: 'ORD-2841', productName: 'iPhone 15 Pro', orderAmount: 3800000, commissionRate: 15, commissionAmount: 570000, status: 'paid' as const, createdAt: '2026-04-01' },
+  { id: 'c2', orderId: 'ORD-2856', productName: 'Cashmere цамц', orderAmount: 89000, commissionRate: 12, commissionAmount: 10680, status: 'paid' as const, createdAt: '2026-04-02' },
+  { id: 'c3', orderId: 'ORD-2870', productName: 'Yoga mat pro', orderAmount: 55000, commissionRate: 15, commissionAmount: 8250, status: 'confirmed' as const, createdAt: '2026-04-03' },
+  { id: 'c4', orderId: 'ORD-2891', productName: 'Wireless earbuds', orderAmount: 65000, commissionRate: 15, commissionAmount: 9750, status: 'confirmed' as const, createdAt: '2026-04-04' },
+  { id: 'c5', orderId: 'ORD-2903', productName: 'Face serum', orderAmount: 45000, commissionRate: 10, commissionAmount: 4500, status: 'pending' as const, createdAt: '2026-04-05' },
+  { id: 'c6', orderId: 'ORD-2910', productName: 'Bluetooth speaker', orderAmount: 85000, commissionRate: 10, commissionAmount: 8500, status: 'pending' as const, createdAt: '2026-04-05' },
+];
+
+const COMM_STATUS: Record<string, { label: string; color: string; bg: string }> = {
+  pending: { label: 'Хүлээгдэж буй', color: '#D97706', bg: 'rgba(217,119,6,0.1)' },
+  confirmed: { label: 'Баталгаажсан', color: '#2563EB', bg: 'rgba(37,99,235,0.1)' },
+  paid: { label: 'Төлөгдсөн', color: '#16A34A', bg: 'rgba(22,163,74,0.1)' },
+};
+
+function CommissionsTab() {
+  const [filter, setFilter] = useState<string>('all');
+  const filtered = filter === 'all' ? DEMO_COMMISSIONS : DEMO_COMMISSIONS.filter(c => c.status === filter);
+  const totalEarned = DEMO_COMMISSIONS.reduce((s, c) => s + c.commissionAmount, 0);
+  const pendingAmount = DEMO_COMMISSIONS.filter(c => c.status === 'pending').reduce((s, c) => s + c.commissionAmount, 0);
+
+  return (
+    <div className="space-y-6">
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard icon="💰" label="Нийт комисс" value={formatPrice(totalEarned)} gradient="indigo" />
+        <StatCard icon="⏳" label="Хүлээгдэж буй" value={formatPrice(pendingAmount)} gradient="amber" />
+        <StatCard icon="🎯" label="Борлуулалт" value={DEMO_COMMISSIONS.length} gradient="green" />
+        <StatCard icon="📊" label="Дундаж комисс" value={`${Math.round(DEMO_COMMISSIONS.reduce((s, c) => s + c.commissionRate, 0) / DEMO_COMMISSIONS.length)}%`} gradient="pink" />
+      </div>
+
+      {/* Filter */}
+      <div className="flex gap-1 p-1 rounded-xl bg-[var(--esl-bg-section)] w-fit">
+        {[{ key: 'all', label: 'Бүгд' }, { key: 'pending', label: 'Хүлээгдэж буй' }, { key: 'confirmed', label: 'Баталгаажсан' }, { key: 'paid', label: 'Төлөгдсөн' }].map(f => (
+          <button key={f.key} onClick={() => setFilter(f.key)}
+            className={cn('px-3 py-1.5 rounded-lg text-xs font-semibold border-none cursor-pointer transition-all',
+              filter === f.key ? 'bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] shadow-sm' : 'bg-transparent text-[var(--esl-text-muted)]')}>
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Table */}
+      <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-[var(--esl-border)]">
+                {['Огноо', 'Захиалга', 'Бараа', 'Дүн', 'Комисс %', 'Авсан', 'Статус'].map(h => (
+                  <th key={h} className="text-left px-5 py-3 text-[10px] font-semibold uppercase tracking-wider text-[var(--esl-text-muted)]">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 ? (
+                <tr><td colSpan={7} className="text-center py-12 text-sm text-[var(--esl-text-muted)]">Мэдээлэл олдсонгүй</td></tr>
+              ) : filtered.map(c => {
+                const st = COMM_STATUS[c.status] || COMM_STATUS.pending;
+                return (
+                  <tr key={c.id} className="hover:bg-[var(--esl-bg-section)] transition-colors border-b border-[var(--esl-border)]">
+                    <td className="px-5 py-3 text-xs text-[var(--esl-text-secondary)]">{c.createdAt}</td>
+                    <td className="px-5 py-3 text-xs font-mono font-medium text-[var(--esl-text-primary)]">{c.orderId}</td>
+                    <td className="px-5 py-3 text-sm font-medium text-[var(--esl-text-primary)]">{c.productName}</td>
+                    <td className="px-5 py-3 text-sm text-[var(--esl-text-secondary)]">{formatPrice(c.orderAmount)}</td>
+                    <td className="px-5 py-3 text-sm font-semibold text-[var(--esl-text-primary)]">{c.commissionRate}%</td>
+                    <td className="px-5 py-3 text-sm font-bold text-[#E8242C]">{formatPrice(c.commissionAmount)}</td>
+                    <td className="px-5 py-3">
+                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-full" style={{ background: st.bg, color: st.color }}>{st.label}</span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AffiliateDashboard() {
   const { user } = useAuth();
   const toast = useToast();
@@ -84,7 +166,7 @@ export default function AffiliateDashboard() {
 
   useEffect(() => {
     const t = searchParams.get('tab') as Tab | null;
-    if (t && ['dashboard', 'products', 'earnings', 'wallet', 'toolkit'].includes(t)) setTab(t);
+    if (t && ['dashboard', 'products', 'commissions', 'earnings', 'wallet', 'toolkit'].includes(t)) setTab(t);
   }, [searchParams]);
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
@@ -442,6 +524,11 @@ export default function AffiliateDashboard() {
                 </div>
               )}
             </div>
+          )}
+
+          {/* ══════════════ COMMISSIONS TAB ══════════════ */}
+          {tab === 'commissions' && (
+            <CommissionsTab />
           )}
 
           {/* ══════════════ EARNINGS TAB ══════════════ */}

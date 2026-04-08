@@ -1,29 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { timeAgo } from '@/lib/utils';
 import StatCard from '@/components/dashboard/StatCard';
 
 interface Review {
   id: string;
-  customerName: string;
-  productName: string;
-  productEmoji: string;
+  customerName?: string;
+  buyerName?: string;
+  buyerId?: string;
+  productId?: string;
+  productName?: string;
+  productEmoji?: string;
   rating: number;
   comment: string;
   reply?: string;
   createdAt: string;
 }
-
-const INITIAL_REVIEWS: Review[] = [
-  { id: '1', customerName: 'Бат-Эрдэнэ', productName: 'Premium цагаан цамц', productEmoji: '👕', rating: 5, comment: 'Чанар маш сайн, хэмжээ яг таарсан. Дахин захиална!', createdAt: '2026-04-02T10:00:00Z' },
-  { id: '2', customerName: 'Сарангэрэл', productName: 'Bluetooth чихэвч', productEmoji: '🎧', rating: 4, comment: 'Дуу чанар сайн, батарей удаан барина. Загвар нь бас гоё.', reply: 'Баярлалаа! Таалагдсанд баяртай байна.', createdAt: '2026-04-01T14:30:00Z' },
-  { id: '3', customerName: 'Ганбаатар', productName: 'Sporty гутал Air', productEmoji: '👟', rating: 5, comment: 'Хөнгөн, тохилог. Спорт хийхэд тохиромжтой.', createdAt: '2026-03-30T09:15:00Z' },
-  { id: '4', customerName: 'Оюунчимэг', productName: 'Нүүрний крем SPF50', productEmoji: '💄', rating: 3, comment: 'Чийгшүүлэгч сайн, гэхдээ үнэр нь хүчтэй.', createdAt: '2026-03-28T16:45:00Z' },
-  { id: '5', customerName: 'Тэмүүлэн', productName: 'Yoga mat pro', productEmoji: '🧘', rating: 5, comment: 'Гулсахгүй, зузаан нь яг тохирсон. Маш сэтгэл хангалуун!', reply: 'Танд баярлалаа! Эрүүл мэндэд тань тустай байг!', createdAt: '2026-03-25T08:00:00Z' },
-  { id: '6', customerName: 'Энхтүвшин', productName: 'iPhone 15 Pro case', productEmoji: '📱', rating: 4, comment: 'Хамгаалалт сайн, магнит хүчтэй. Зөвлөж байна.', createdAt: '2026-03-22T12:00:00Z' },
-];
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -36,11 +30,38 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default function ReviewsPage() {
-  const [reviews, setReviews] = useState<Review[]>(INITIAL_REVIEWS);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
   const [filterRating, setFilterRating] = useState<number | null>(null);
   const toast = useToast();
+
+  useEffect(() => {
+    async function loadReviews() {
+      try {
+        const res = await fetch('/api/reviews?storeOwner=true');
+        if (res.ok) {
+          const data = await res.json();
+          setReviews((data.reviews || []).map((r: any) => ({
+            id: r.id || r._id,
+            customerName: r.buyerName || r.customerName || 'Хэрэглэгч',
+            productName: r.productName || '',
+            productEmoji: r.productEmoji || '',
+            rating: r.rating,
+            comment: r.comment || '',
+            reply: r.reply,
+            createdAt: r.createdAt,
+          })));
+        }
+      } catch (e) {
+        console.error('Failed to load reviews:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadReviews();
+  }, []);
 
   function handleReply(id: string) {
     if (!replyText.trim()) {
@@ -94,7 +115,11 @@ export default function ReviewsPage() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
+          <p className="text-[var(--esl-text-muted)]">Ачааллаж байна...</p>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
           <div className="text-4xl mb-3">⭐</div>
           <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Сэтгэгдэл олдсонгүй</h3>
@@ -107,7 +132,7 @@ export default function ReviewsPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-sm font-bold flex-shrink-0">
-                    {review.customerName.charAt(0)}
+                    {(review.customerName || 'Х').charAt(0)}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
@@ -115,7 +140,7 @@ export default function ReviewsPage() {
                       <StarRating rating={review.rating} />
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-xs text-[var(--esl-text-muted)]">{review.productEmoji} {review.productName}</span>
+                      <span className="text-xs text-[var(--esl-text-muted)]">{review.productEmoji || ''} {review.productName || 'Бүтээгдэхүүн'}</span>
                       <span className="text-xs text-[var(--esl-text-muted)]">|</span>
                       <span className="text-xs text-[var(--esl-text-muted)]">{timeAgo(review.createdAt)}</span>
                     </div>

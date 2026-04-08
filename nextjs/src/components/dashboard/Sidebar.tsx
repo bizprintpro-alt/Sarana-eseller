@@ -23,7 +23,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   '✨': Sparkles, '🤖': Bot, '💰': Wallet, '💵': Wallet,
   '🌐': Globe, '🏪': Building2, '👔': UserCog, '⚙️': Settings,
   '🔔': Bell, '👑': Crown, '📈': BarChart3, '🤝': Users, '⚠️': Bell, '🧾': ScrollText, '💬': Bot,
-  '🛎️': Scissors, '📅': CalendarDays, '🕐': Clock, '🛡️': Shield,
+  '🛎️': Scissors, '📅': CalendarDays, '🕐': Clock, '🛡️': Shield, '🛍️': ShoppingCart,
 };
 
 // ═══ Types ═══

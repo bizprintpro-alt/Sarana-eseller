@@ -268,7 +268,7 @@ const AFFILIATE_SECTIONS: SidebarSection[] = [
     items: [
       { href: '/dashboard/affiliate', icon: '📊', label: 'Самбар' },
       { href: '/dashboard/affiliate/products', icon: '🛍️', label: 'Бараа сонгох' },
-      { href: '/dashboard/affiliate/commissions', icon: '💰', label: 'Комисс', isNew: true },
+      { href: '/dashboard/affiliate/commissions', icon: '💰', label: 'Комиссын тайлан', isNew: true },
       { href: '/dashboard/affiliate/earnings', icon: '📈', label: 'Орлого' },
       { href: '/dashboard/affiliate/wallet', icon: '💳', label: 'Хэтэвч' },
     ],

@@ -35,6 +35,8 @@ const DEMO_ORDER = {
   qty: 1,
   payment: 'QPay төлсөн',
   price: 69000,
+  productId: '',  // filled from real order data
+  orderId: '',    // filled from real order data
 };
 
 const DEMO_MSGS: Msg[] = [
@@ -333,7 +335,28 @@ export default function BuyerChatPage() {
                 }}
               />
               <button
-                onClick={() => { if (starRating > 0) setReviewSent(true); }}
+                onClick={async () => {
+                  if (starRating === 0) return;
+                  try {
+                    const res = await fetch('/api/reviews', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        productId: DEMO_ORDER.productId || '',
+                        orderId: DEMO_ORDER.orderId || '',
+                        rating: starRating,
+                        comment: reviewText || undefined,
+                      }),
+                    });
+                    if (!res.ok) {
+                      const data = await res.json().catch(() => ({}));
+                      console.error('Review submit error:', data);
+                    }
+                  } catch (e) {
+                    console.error('Review submit failed:', e);
+                  }
+                  setReviewSent(true);
+                }}
                 style={{
                   width: '100%', padding: 8, borderRadius: 8, border: 'none',
                   background: starRating > 0 ? '#E8242C' : '#333', color: '#FFF',
