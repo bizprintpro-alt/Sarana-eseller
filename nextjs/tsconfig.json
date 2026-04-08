@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "prisma/seed-config.mts"]
+  "exclude": ["node_modules", "prisma/seed-config.mts", "check.ts", "check2.ts", "check3.ts", "check4.ts", "check5.ts", "check-auth.mts", "reset-admin.mts", "reset-superadmin.mts"]
 }
