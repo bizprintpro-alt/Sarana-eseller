@@ -12,6 +12,33 @@ const PLATFORM_HOSTS = new Set([
 export async function middleware(req: NextRequest) {
   const hostname = req.headers.get('host') || '';
   const hostWithoutPort = hostname.split(':')[0];
+  const { pathname } = req.nextUrl;
+
+  // ═══ Maintenance Mode Check ═══
+  // Skip maintenance check for: admin dashboard, API routes, maintenance page itself, static files
+  const skipMaintenance = pathname.startsWith('/dashboard') ||
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/maintenance') ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/favicon');
+
+  if (!skipMaintenance) {
+    try {
+      const origin = req.nextUrl.origin;
+      const res = await fetch(`${origin}/api/maintenance-status`, { next: { revalidate: 30 } });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.maintenance) {
+          const url = req.nextUrl.clone();
+          url.pathname = '/maintenance';
+          return NextResponse.rewrite(url);
+        }
+      }
+    } catch {
+      // If check fails, let users through
+    }
+  }
 
   // Skip platform's own domains
   if (PLATFORM_HOSTS.has(hostname) || PLATFORM_HOSTS.has(hostWithoutPort)) {
