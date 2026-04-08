@@ -6,19 +6,48 @@ import { useAuth } from '@/lib/auth';
 
 interface Config { key: string; value: string; updatedAt?: string }
 
-function MaintenanceControl({ getVal, updateConfig, saving }: {
-  getVal: (k: string) => string;
-  updateConfig: (k: string, v: string) => Promise<void>;
-  saving: string;
-}) {
-  const isOn = getVal('maintenance_mode') === 'true';
-  const isSaving = saving === 'maintenance_mode';
+function MaintenanceControl() {
+  const { token: authToken } = useAuth();
+  const [isOn, setIsOn] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [mError, setMError] = useState('');
+
+  const getHeaders = (): Record<string, string> => {
+    const token = authToken || localStorage.getItem('token');
+    const h: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) h['Authorization'] = `Bearer ${token}`;
+    return h;
+  };
+
+  useEffect(() => {
+    fetch('/api/admin/maintenance')
+      .then(r => r.json())
+      .then(d => setIsOn(!!d.maintenance))
+      .catch(() => {});
+  }, []);
 
   const handleToggle = async () => {
     if (!isOn) {
       if (!window.confirm('Maintenance mode АСААХ уу?\n\nБүх хэрэглэгчид "засвартай" мессеж харна.\nАдмин самбар хэвийн ажиллана.')) return;
     }
-    await updateConfig('maintenance_mode', isOn ? 'false' : 'true');
+    setIsSaving(true);
+    setMError('');
+    try {
+      const res = await fetch('/api/admin/maintenance', {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ enabled: !isOn }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      setIsOn(!isOn);
+    } catch (e) {
+      setMError((e as Error).message);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -45,6 +74,12 @@ function MaintenanceControl({ getVal, updateConfig, saving }: {
           ? 'Сайт одоо засвартай горимд байна. Бүх хэрэглэгчид maintenance хуудас харагдаж байна. Админ самбар хэвийн ажиллаж байна.'
           : 'Идэвхжүүлбэл бүх хэрэглэгчид "Тун удахгүй" мессеж харна. Админ самбар хэвийн ажиллана.'}
       </p>
+
+      {mError && (
+        <div style={{ background: 'rgba(232,36,44,0.15)', border: '1px solid rgba(232,36,44,0.3)', color: '#F87171', fontSize: 13, padding: '10px 14px', borderRadius: 10, marginBottom: 12 }}>
+          {mError}
+        </div>
+      )}
 
       <button
         type="button"
@@ -226,7 +261,7 @@ export default function AdminConfigPage() {
         </div>
 
         {/* ═══ MAINTENANCE MODE ═══ */}
-        <MaintenanceControl getVal={getVal} updateConfig={updateConfig} saving={saving} />
+        <MaintenanceControl />
       </div>
     </div>
   );
