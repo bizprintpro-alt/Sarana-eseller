@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/lib/api-auth';
-import { collectSystemSnapshot, analyzeSystemWithClaude, saveInsights, checkEndpoints } from '@/lib/ai/analyzeSystem';
+import { collectSystemSnapshot, analyzeSystemWithClaude, saveInsights, testUserFlows } from '@/lib/ai/analyzeSystem';
 
 // POST /api/admin/ai/scan — гар аргаар шинжилгээ эхлүүлэх
 export async function POST(req: NextRequest) {
@@ -9,36 +9,57 @@ export async function POST(req: NextRequest) {
   if (admin instanceof NextResponse) return admin;
 
   try {
-    // Collect DB snapshot + check live endpoints
     const origin = req.nextUrl.origin;
-    const [snapshot, endpointResults] = await Promise.all([
-      collectSystemSnapshot(),
-      checkEndpoints(origin),
-    ]);
 
-    // Add endpoint health to snapshot
-    const failedEndpoints = endpointResults.filter(e => !e.ok);
-    if (failedEndpoints.length > 0) {
-      snapshot.errorLogs = failedEndpoints.map(e => ({
-        type: 'API_ERROR',
-        endpoint: e.endpoint,
-        status: e.status,
-        error: e.error || `HTTP ${e.status}`,
-      }));
-    }
+    // 1. Collect DB snapshot
+    const snapshot = await collectSystemSnapshot();
 
+    // 2. Test all user flows (live endpoint checks)
+    const flowResults = await testUserFlows(origin);
+    snapshot.flowResults = flowResults;
+
+    // 3. Add failed endpoints to error logs
+    const failedFlows = flowResults.filter(f => !f.ok);
+    snapshot.errorLogs = failedFlows.map(f => ({
+      type: 'FLOW_ERROR',
+      flow: f.flow,
+      step: f.step,
+      endpoint: f.endpoint,
+      status: f.status,
+      error: f.error || `HTTP ${f.status}`,
+    }));
+
+    // 4. Claude AI analysis
     const insights = await analyzeSystemWithClaude(snapshot);
     const created = await saveInsights(insights);
 
+    // 5. Log
     await prisma.aiActivityLog.create({
       data: {
         action: 'manual_scan',
-        description: `Гар шинжилгээ: ${created} шинэ санал, ${failedEndpoints.length} API алдаа олдлоо`,
-        metadata: { total: insights.length, created, adminId: admin.id, failedEndpoints: failedEndpoints.length },
+        description: `Шинжилгээ: ${created} шинэ санал, ${failedFlows.length} flow алдаа, ${flowResults.length} endpoint шалгасан`,
+        metadata: {
+          total: insights.length,
+          created,
+          adminId: admin.id,
+          endpointsTested: flowResults.length,
+          endpointsFailed: failedFlows.length,
+          flowSummary: flowResults.map(f => `${f.ok ? '✅' : '❌'} ${f.flow}/${f.step}`),
+        },
       },
     });
 
-    return NextResponse.json({ success: true, created, total: insights.length, endpointsChecked: endpointResults.length, endpointsFailed: failedEndpoints.length });
+    return NextResponse.json({
+      success: true,
+      created,
+      total: insights.length,
+      flowResults: {
+        tested: flowResults.length,
+        passed: flowResults.filter(f => f.ok).length,
+        failed: failedFlows.length,
+        details: flowResults,
+      },
+    });
   } catch (e: unknown) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });
   }
