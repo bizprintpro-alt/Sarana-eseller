@@ -19,6 +19,11 @@ interface SystemMetrics {
   ordersToday: number;
   errorRate: number;
   avgResponseTime: number;
+  totalProducts?: number;
+  avgProductRating?: number;
+  totalReviews?: number;
+  recentOrderStatuses?: string[];
+  platformConfigs?: string[];
 }
 
 interface RawInsight {
@@ -39,7 +44,7 @@ export async function collectSystemSnapshot(): Promise<SystemSnapshot> {
   const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-  const [patterns, totalShops, totalOrders, totalUsers, ordersToday] = await Promise.all([
+  const [patterns, totalShops, totalOrders, totalUsers, ordersToday, recentOrders, products, reviews, configs] = await Promise.all([
     prisma.userBehaviorPattern.findMany({
       where: { lastSeen: { gte: weekAgo } },
       orderBy: { frequency: 'desc' },
@@ -49,7 +54,14 @@ export async function collectSystemSnapshot(): Promise<SystemSnapshot> {
     prisma.order.count(),
     prisma.user.count(),
     prisma.order.count({ where: { createdAt: { gte: dayAgo } } }),
+    prisma.order.findMany({ take: 10, orderBy: { createdAt: 'desc' }, select: { status: true, createdAt: true } }),
+    prisma.product.aggregate({ _count: true, _avg: { rating: true } }),
+    prisma.review.count(),
+    prisma.platformConfig.findMany(),
   ]);
+
+  // Cancelled/failed order rate
+  const failedOrders = recentOrders.filter(o => o.status === 'cancelled' || o.status === 'failed').length;
 
   return {
     errorLogs: [],
@@ -65,10 +77,40 @@ export async function collectSystemSnapshot(): Promise<SystemSnapshot> {
       totalOrders,
       totalUsers,
       ordersToday,
-      errorRate: 0,
+      errorRate: recentOrders.length > 0 ? Math.round((failedOrders / recentOrders.length) * 100) : 0,
       avgResponseTime: 0,
+      // Extended metrics
+      totalProducts: products._count || 0,
+      avgProductRating: products._avg?.rating || 0,
+      totalReviews: reviews,
+      recentOrderStatuses: recentOrders.map(o => o.status),
+      platformConfigs: configs.map(c => `${c.key}=${c.value}`),
     },
   };
+}
+
+// ─── API endpoint-уудыг бодитоор шалгах ────────────────
+export async function checkEndpoints(baseUrl: string): Promise<{ endpoint: string; status: number; ok: boolean; error?: string }[]> {
+  const endpoints = [
+    { url: '/api/products?limit=1', method: 'GET' },
+    { url: '/api/shops?limit=1', method: 'GET' },
+    { url: '/api/maintenance-status', method: 'GET' },
+    { url: '/api/categories', method: 'GET' },
+  ];
+
+  const results = [];
+  for (const ep of endpoints) {
+    try {
+      const res = await fetch(`${baseUrl}${ep.url}`, {
+        method: ep.method,
+        headers: { 'Content-Type': 'application/json' },
+      });
+      results.push({ endpoint: ep.url, status: res.status, ok: res.ok });
+    } catch (e) {
+      results.push({ endpoint: ep.url, status: 0, ok: false, error: (e as Error).message });
+    }
+  }
+  return results;
 }
 
 // ─── Claude API-р шинжилгээ хийх ───────────────────────
@@ -81,15 +123,22 @@ export async function analyzeSystemWithClaude(
     return [];
   }
 
-  const systemPrompt = `Та eseller.mn Монголын онлайн худалдааны платформын байнгын хөгжүүлэгч.
-Таны үүрэг:
-1. Системийн алдаа, дутагдлыг олох
-2. Хэрэглэгчийн зан үйлийн хэв маягаас дүгнэлт гаргах
-3. Сайжруулалтын санал тодорхой болгох
-4. Хэрэгжүүлэх ажлын жагсаалт гаргах
+  const systemPrompt = `Та eseller.mn Монголын e-commerce платформын ахлах хөгжүүлэгч.
+Платформ: Next.js 16 + Prisma + MongoDB + Vercel deploy.
 
-Хариултыг JSON форматаар өг:
-{"insights": [{"type": "BUG|PERFORMANCE|UX_ISSUE|SECURITY|DATA_QUALITY|FEATURE_REQUEST|OPTIMIZATION|SYSTEM_HEALTH", "priority": "CRITICAL|HIGH|MEDIUM|LOW", "title": "string", "description": "string", "suggestion": "string", "impact": "string", "effort": "string", "tasks": [{"title": "string", "description": "string"}]}]}`;
+Таны үүрэг:
+1. Бодит алдаа, дутагдлыг олох (DB state, config, data integrity)
+2. Хэрэглэгчийн зан үйлээс асуудал тодорхойлох
+3. Яг хаана (файл, API route, DB) ямар засвар хийх вэ гэдгийг тодорхой бичих
+4. Хамгийн чухал зүйлийг эхэнд тавих
+
+ЧУХАЛ:
+- "suggestion" талбарт ЯГ ЮУ ХИЙХ — файлын нэр, функцийн нэр, API route бичнэ
+- Ерөнхий "сайжруулах хэрэгтэй" гэхгүй, тодорхой заавар өгнө
+- Хоосон бүтээгдэхүүн, review, захиалга байвал тэрийг тэмдэглэнэ
+
+JSON формат:
+{"insights": [{"type": "BUG|PERFORMANCE|UX_ISSUE|SECURITY|DATA_QUALITY|FEATURE_REQUEST|OPTIMIZATION|SYSTEM_HEALTH", "priority": "CRITICAL|HIGH|MEDIUM|LOW", "title": "string", "description": "string", "suggestion": "файл/route/функцийн нэр + яг юу хийх", "impact": "хэрэглэгчид ямар нөлөөтэй", "effort": "хэдэн цагийн ажил", "tasks": [{"title": "string", "description": "тодорхой хийх зүйл"}]}]}`;
 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -105,13 +154,29 @@ export async function analyzeSystemWithClaude(
         system: systemPrompt,
         messages: [{
           role: 'user',
-          content: `Доорх системийн мэдээллийг шинжилж, алдаа, дутагдал, сайжруулалтын саналыг гарга:
-
-## Хэрэглэгчийн давтамжтай үйлдлүүд:
-${JSON.stringify(snapshot.userPatterns, null, 2)}
+          content: `Доорх системийн мэдээллийг шинжилж, бодит алдаа, хэрэглэгч хийж чадахгүй байгаа үйлдлүүдийг ол:
 
 ## Системийн метрик:
-${JSON.stringify(snapshot.metrics, null, 2)}`,
+${JSON.stringify(snapshot.metrics, null, 2)}
+
+## API endpoint шалгалт (алдаатай бол CRITICAL):
+${snapshot.errorLogs.length > 0 ? JSON.stringify(snapshot.errorLogs, null, 2) : 'Бүх endpoint ажиллаж байна ✓'}
+
+## Хэрэглэгчийн давтамжтай үйлдлүүд (асуудал байж болно):
+${JSON.stringify(snapshot.userPatterns, null, 2)}
+
+## Шалгах зүйлс:
+- Захиалга өгөх процесс бүрэн ажиллаж байна уу? (checkout → payment → order)
+- Review бичих, унших ажиллаж байна уу?
+- Дэлгүүр бүртгэл, бараа нэмэх ажиллаж байна уу?
+- Хайлт, фильтр ажиллаж байна уу?
+- Хэрэглэгч бүртгүүлэх, нэвтрэх ажиллаж байна уу?
+- Chat, мессеж илгээх ажиллаж байна уу?
+- Affiliate линк хуваалцах, комисс тооцоолох ажиллаж байна уу?
+- Админ тохиргоо хадгалагдаж байна уу?
+- Хуудсууд зөв ачааллаж байна уу?
+
+Хэрэглэгч юу хийж чадахгүй байгаа = АЛДАА. Тодорхой файл, API route нэрлэж засварын заавар бич.`,
         }],
       }),
     });
