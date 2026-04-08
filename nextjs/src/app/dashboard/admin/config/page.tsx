@@ -29,7 +29,11 @@ export default function AdminConfigPage() {
       headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       body: JSON.stringify({ key, value }),
     });
-    setConfigs(prev => prev.map(c => c.key === key ? { ...c, value, updatedAt: new Date().toISOString() } : c));
+    setConfigs(prev => {
+      const exists = prev.some(c => c.key === key);
+      if (exists) return prev.map(c => c.key === key ? { ...c, value, updatedAt: new Date().toISOString() } : c);
+      return [...prev, { key, value, updatedAt: new Date().toISOString() }];
+    });
     setSaving('');
   };
 
@@ -105,9 +109,10 @@ export default function AdminConfigPage() {
                     <div className="text-xs text-white/30">{item.desc}</div>
                   </div>
                   <button onClick={() => updateConfig(item.key, isOn ? 'false' : 'true')}
+                    disabled={saving === item.key}
                     className="relative w-11 h-6 rounded-full border-none cursor-pointer transition-colors"
-                    style={{ background: isOn ? '#6366F1' : '#333' }}>
-                    <div className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-[var(--esl-bg-card)] transition-all"
+                    style={{ background: isOn ? '#E8242C' : '#444' }}>
+                    <div className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-white shadow transition-all"
                       style={{ left: isOn ? '22px' : '3px' }} />
                   </button>
                 </div>
