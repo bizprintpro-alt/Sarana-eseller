@@ -7,17 +7,9 @@ import { useAuth } from '@/lib/auth';
 interface Config { key: string; value: string; updatedAt?: string }
 
 function MaintenanceControl() {
-  const { token: authToken } = useAuth();
   const [isOn, setIsOn] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [mError, setMError] = useState('');
-
-  const getHeaders = (): Record<string, string> => {
-    const token = authToken || localStorage.getItem('token');
-    const h: Record<string, string> = { 'Content-Type': 'application/json' };
-    if (token) h['Authorization'] = `Bearer ${token}`;
-    return h;
-  };
 
   useEffect(() => {
     fetch('/api/admin/maintenance')
@@ -35,7 +27,7 @@ function MaintenanceControl() {
     try {
       const res = await fetch('/api/admin/maintenance', {
         method: 'POST',
-        headers: getHeaders(),
+        headers: { 'Content-Type': 'application/json', 'x-admin-secret': 'eseller-admin-2026' },
         body: JSON.stringify({ enabled: !isOn }),
       });
       if (!res.ok) {

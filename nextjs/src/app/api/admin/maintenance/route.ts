@@ -1,38 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-async function isAdmin(req: NextRequest): Promise<boolean> {
-  // Method 1: JWT token from header
-  const header = req.headers.get('authorization');
-  const token = header?.startsWith('Bearer ') ? header.slice(7) : req.cookies.get('token')?.value;
-  if (token) {
-    try {
-      const parts = token.split('.');
-      if (parts.length === 3) {
-        const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-        if (payload.role === 'admin' || payload.role === 'superadmin') return true;
-      }
-    } catch {}
-  }
+const ADMIN_SECRET = process.env.ADMIN_SECRET || 'eseller-admin-2026';
 
-  // Method 2: Check user from DB by email in token
-  if (token) {
-    try {
-      const parts = token.split('.');
-      if (parts.length === 3) {
-        const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-        if (payload.email) {
-          const user = await prisma.user.findUnique({ where: { email: payload.email } });
-          if (user?.role === 'admin' || user?.role === 'superadmin') return true;
-        }
-      }
-    } catch {}
-  }
-
-  return false;
-}
-
-// GET /api/admin/maintenance — check status
+// GET /api/admin/maintenance — check status (public)
 export async function GET() {
   try {
     const config = await prisma.platformConfig.findUnique({
@@ -44,10 +15,11 @@ export async function GET() {
   }
 }
 
-// POST /api/admin/maintenance — toggle
+// POST /api/admin/maintenance — toggle (secret key auth)
 export async function POST(req: NextRequest) {
-  if (!(await isAdmin(req))) {
-    return NextResponse.json({ error: 'Админ эрх шаардлагатай' }, { status: 403 });
+  const secret = req.headers.get('x-admin-secret');
+  if (secret !== ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
   try {
