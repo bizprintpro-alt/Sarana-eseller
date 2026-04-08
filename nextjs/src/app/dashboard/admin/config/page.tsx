@@ -5,6 +5,69 @@ import { Save, Settings, Loader2 } from 'lucide-react';
 
 interface Config { key: string; value: string; updatedAt?: string }
 
+function MaintenanceControl({ getVal, updateConfig, saving }: {
+  getVal: (k: string) => string;
+  updateConfig: (k: string, v: string) => Promise<void>;
+  saving: string;
+}) {
+  const isOn = getVal('maintenance_mode') === 'true';
+  const isSaving = saving === 'maintenance_mode';
+
+  const handleToggle = async () => {
+    if (!isOn) {
+      if (!window.confirm('Maintenance mode АСААХ уу?\n\nБүх хэрэглэгчид "засвартай" мессеж харна.\nАдмин самбар хэвийн ажиллана.')) return;
+    }
+    await updateConfig('maintenance_mode', isOn ? 'false' : 'true');
+  };
+
+  return (
+    <div style={{
+      background: isOn ? 'rgba(232,36,44,0.08)' : 'var(--esl-bg-card, #1a1a2e)',
+      border: isOn ? '2px solid #E8242C' : '1px solid var(--esl-border, #2a2a3e)',
+      borderRadius: 16, padding: 24,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+        <span style={{ fontSize: 20 }}>{isOn ? '\u26A0\uFE0F' : '\uD83D\uDEE0\uFE0F'}</span>
+        <h3 style={{ color: '#FFF', fontWeight: 700, fontSize: 15, margin: 0 }}>Maintenance Mode</h3>
+        <span style={{
+          fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 99,
+          background: isOn ? '#E8242C' : '#333',
+          color: isOn ? '#FFF' : '#888',
+          marginLeft: 8,
+        }}>
+          {isOn ? 'ИДЭВХТЭЙ' : 'УНТАРСАН'}
+        </span>
+      </div>
+
+      <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
+        {isOn
+          ? 'Сайт одоо засвартай горимд байна. Бүх хэрэглэгчид maintenance хуудас харагдаж байна. Админ самбар хэвийн ажиллаж байна.'
+          : 'Идэвхжүүлбэл бүх хэрэглэгчид "Тун удахгүй" мессеж харна. Админ самбар хэвийн ажиллана.'}
+      </p>
+
+      <button
+        type="button"
+        onClick={handleToggle}
+        disabled={isSaving}
+        style={{
+          width: '100%',
+          padding: '14px 24px',
+          borderRadius: 12,
+          border: 'none',
+          fontSize: 14,
+          fontWeight: 700,
+          cursor: isSaving ? 'wait' : 'pointer',
+          background: isOn ? '#333' : '#E8242C',
+          color: '#FFF',
+          transition: 'all 0.2s',
+        }}
+      >
+        {isSaving ? 'Хадгалж байна...' : isOn ? '\u274C Maintenance унтраах' : '\u26A0\uFE0F Maintenance асаах'}
+      </button>
+    </div>
+  );
+}
+
 export default function AdminConfigPage() {
   const [configs, setConfigs] = useState<Config[]>([]);
   const [loading, setLoading] = useState(true);
@@ -135,70 +198,37 @@ export default function AdminConfigPage() {
           </div>
         </div>
 
-        {/* Platform toggles */}
+        {/* Seller Registration */}
         <div className="bg-dash-card border border-dash-border rounded-2xl p-6">
-          <h3 className="text-white font-bold mb-6 flex items-center gap-2"><Settings className="w-4 h-4" /> Платформ</h3>
-
-          <div className="space-y-5">
-            {[
-              { key: 'seller_registration', label: 'Seller бүртгэл нээлттэй', desc: 'Шинэ дэлгүүр эзэн бүртгүүлэх боломж' },
-              { key: 'maintenance_mode', label: 'Maintenance mode', desc: 'Идэвхжүүлбэл бүх хэрэглэгчид "засвартай" мессеж харна' },
-            ].map(item => {
-              const isOn = getVal(item.key) === 'true';
-              const isSaving = saving === item.key;
-              return (
-                <div key={item.key} className="flex items-center justify-between py-2">
-                  <div>
-                    <div className="text-sm text-white font-medium">{item.label}</div>
-                    <div className="text-xs text-white/30 mt-0.5">{item.desc}</div>
-                    {isOn && item.key === 'maintenance_mode' && (
-                      <div className="text-[10px] text-red-400 font-semibold mt-1">&#9888;&#65039; Сайт одоо засвартай горимд байна</div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3 shrink-0">
-                    {isSaving && <Loader2 className="w-4 h-4 text-white/30 animate-spin" />}
-                    <span className="text-[10px] font-bold min-w-[30px] text-right" style={{ color: isOn ? '#4ADE80' : '#666' }}>
-                      {isOn ? 'ON' : 'OFF'}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (item.key === 'maintenance_mode' && !isOn) {
-                          if (!confirm('Maintenance mode асаах уу? Бүх хэрэглэгчид "засвартай" мессеж харна.')) return;
-                        }
-                        updateConfig(item.key, isOn ? 'false' : 'true');
-                      }}
-                      disabled={isSaving}
-                      style={{
-                        position: 'relative',
-                        width: 48,
-                        height: 26,
-                        borderRadius: 13,
-                        border: 'none',
-                        cursor: isSaving ? 'wait' : 'pointer',
-                        background: isOn ? '#E8242C' : '#555',
-                        transition: 'background 0.2s',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <div style={{
-                        position: 'absolute',
-                        top: 3,
-                        left: isOn ? 25 : 3,
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        background: '#FFF',
-                        boxShadow: '0 1px 4px rgba(0,0,0,.3)',
-                        transition: 'left 0.2s',
-                      }} />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
+          <h3 className="text-white font-bold mb-4 flex items-center gap-2"><Settings className="w-4 h-4" /> Платформ</h3>
+          <div className="flex items-center justify-between py-2">
+            <div>
+              <div className="text-sm text-white font-medium">Seller бүртгэл нээлттэй</div>
+              <div className="text-xs text-white/30">Шинэ дэлгүүр эзэн бүртгүүлэх боломж</div>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateConfig('seller_registration', getVal('seller_registration') === 'true' ? 'false' : 'true')}
+              disabled={saving === 'seller_registration'}
+              style={{
+                position: 'relative', width: 48, height: 26, borderRadius: 13,
+                border: 'none', cursor: 'pointer',
+                background: getVal('seller_registration') === 'true' ? '#22C55E' : '#555',
+              }}
+            >
+              <div style={{
+                position: 'absolute', top: 3,
+                left: getVal('seller_registration') === 'true' ? 25 : 3,
+                width: 20, height: 20, borderRadius: 10,
+                background: '#FFF', boxShadow: '0 1px 4px rgba(0,0,0,.3)',
+                transition: 'left 0.2s',
+              }} />
+            </button>
           </div>
         </div>
+
+        {/* ═══ MAINTENANCE MODE ═══ */}
+        <MaintenanceControl getVal={getVal} updateConfig={updateConfig} saving={saving} />
       </div>
     </div>
   );
