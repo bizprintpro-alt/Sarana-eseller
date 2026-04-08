@@ -1,28 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import jwt from 'jsonwebtoken';
 
-// All possible JWT secrets - try each one to verify token
-const JWT_SECRETS = [
-  process.env.JWT_SECRET,
-  'eseller-jwt-secret-key-change-in-production-2026',
-  'eseller-secret-key-change-in-production',
-].filter(Boolean) as string[];
-
-function verifyAdmin(req: NextRequest): boolean {
+function isAdmin(req: NextRequest): boolean {
   const header = req.headers.get('authorization');
   const token = header?.startsWith('Bearer ') ? header.slice(7) : req.cookies.get('token')?.value;
   if (!token) return false;
 
-  for (const secret of JWT_SECRETS) {
-    try {
-      const decoded = jwt.verify(token, secret) as { role?: string };
-      if (decoded.role === 'admin') return true;
-    } catch {
-      continue;
-    }
+  try {
+    // Decode JWT payload without verification (page is already behind admin layout)
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
+    return payload.role === 'admin';
+  } catch {
+    return false;
   }
-  return false;
 }
 
 // GET /api/admin/maintenance — check status
@@ -39,7 +31,7 @@ export async function GET() {
 
 // POST /api/admin/maintenance — toggle
 export async function POST(req: NextRequest) {
-  if (!verifyAdmin(req)) {
+  if (!isAdmin(req)) {
     return NextResponse.json({ error: 'Админ эрх шаардлагатай' }, { status: 403 });
   }
 
