@@ -43,5 +43,11 @@ next-env.d.ts
 # Prisma generated
 src/generated/
 
+# Debug/seed scripts (break Vercel build)
+check*.ts
+reset-*.mts
+check-*.mts
+prisma/*.mts
+
 .vercel
 .env.production.template
