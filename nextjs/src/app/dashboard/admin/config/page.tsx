@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Save, Settings, Loader2 } from 'lucide-react';
+import { useAuth } from '@/lib/auth';
 
 interface Config { key: string; value: string; updatedAt?: string }
 
@@ -69,30 +70,25 @@ function MaintenanceControl({ getVal, updateConfig, saving }: {
 }
 
 export default function AdminConfigPage() {
+  const { token: authToken } = useAuth();
   const [configs, setConfigs] = useState<Config[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState('');
   const [error, setError] = useState('');
 
-  const getToken = () => localStorage.getItem('token');
+  const getToken = () => authToken || localStorage.getItem('token');
 
-  const loadConfigs = useCallback(async () => {
-    try {
-      const res = await fetch('/api/admin/config', {
-        headers: getToken() ? { Authorization: `Bearer ${getToken()}` } : {},
-      });
-      if (!res.ok) throw new Error(`GET ${res.status} — token: ${getToken() ? 'байна' : 'БАЙХГҮЙ'}`);
-      const data = await res.json();
-      if (Array.isArray(data)) setConfigs(data);
-      else if (data?.error) throw new Error(data.error);
-    } catch (e) {
-      setError('Config ачааллахад алдаа: ' + (e as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => { loadConfigs(); }, [loadConfigs]);
+  useEffect(() => {
+    const token = authToken || localStorage.getItem('token');
+    if (!token) { setLoading(false); setError('Token олдсонгүй — дахин нэвтэрнэ үү'); return; }
+    fetch('/api/admin/config', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
+      .then(data => { if (Array.isArray(data)) setConfigs(data); })
+      .catch(e => setError('Config ачааллахад алдаа: ' + e.message))
+      .finally(() => setLoading(false));
+  }, [authToken]);
 
   const updateConfig = async (key: string, value: string) => {
     setSaving(key);
