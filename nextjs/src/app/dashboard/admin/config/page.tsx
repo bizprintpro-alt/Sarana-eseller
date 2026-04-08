@@ -81,9 +81,10 @@ export default function AdminConfigPage() {
       const res = await fetch('/api/admin/config', {
         headers: getToken() ? { Authorization: `Bearer ${getToken()}` } : {},
       });
-      if (!res.ok) throw new Error(`${res.status}`);
+      if (!res.ok) throw new Error(`GET ${res.status} — token: ${getToken() ? 'байна' : 'БАЙХГҮЙ'}`);
       const data = await res.json();
       if (Array.isArray(data)) setConfigs(data);
+      else if (data?.error) throw new Error(data.error);
     } catch (e) {
       setError('Config ачааллахад алдаа: ' + (e as Error).message);
     } finally {
@@ -97,18 +98,19 @@ export default function AdminConfigPage() {
     setSaving(key);
     setError('');
     try {
+      const token = getToken();
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
       const res = await fetch('/api/admin/config', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}),
-        },
+        headers,
         body: JSON.stringify({ key, value }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${res.status}`);
+        const tokenExists = !!getToken();
+        throw new Error(`${data.error || 'HTTP ' + res.status} (token: ${tokenExists ? 'байна' : 'БАЙХГҮЙ'})`);
       }
 
       // Update local state
