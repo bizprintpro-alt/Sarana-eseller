@@ -1,5 +1,11 @@
 node_modules/
 .env
+.env.*
+.env.local
+.env.production
+.env.vercel
+!.env.example
+!.env.production.template
 *.log
 .DS_Store
 Thumbs.db
