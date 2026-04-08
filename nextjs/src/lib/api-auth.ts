@@ -80,7 +80,7 @@ export function requireAuth(req: NextRequest): AuthUser | NextResponse {
 export function requireSeller(req: NextRequest): AuthUser | NextResponse {
   const result = requireAuth(req);
   if (result instanceof NextResponse) return result;
-  if (result.role !== 'seller' && result.role !== 'admin') {
+  if (result.role !== 'seller' && result.role !== 'admin' && result.role !== 'superadmin') {
     return errorJson('Зөвхөн дэлгүүр эзэн хандах боломжтой', 403);
   }
   return result;
@@ -90,7 +90,7 @@ export function requireSeller(req: NextRequest): AuthUser | NextResponse {
 export function requireAdmin(req: NextRequest): AuthUser | NextResponse {
   const result = requireAuth(req);
   if (result instanceof NextResponse) return result;
-  if (result.role !== 'admin') {
+  if (result.role !== 'admin' && result.role !== 'superadmin') {
     return errorJson('Зөвхөн админ хандах боломжтой', 403);
   }
   return result;

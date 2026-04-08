@@ -1,0 +1,427 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans,sans-serif)}
+.tabs{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 12px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
+.tab.active{color:var(--color-text-primary);border-bottom-color:#E8242C;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.st{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:16px 0 10px;display:flex;align-items:center;gap:7px}
+.st:first-child{margin-top:0}
+.st::before{content:'';width:3px;height:14px;background:#E8242C;border-radius:99px;display:inline-block;flex-shrink:0}
+
+/* Entity cards */
+.entity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.ecard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.ecard-img{height:80px;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
+.ecard-body{padding:10px 12px}
+.ecard-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;display:flex;align-items:center;gap:5px}
+.ecard-fields{display:flex;flex-direction:column;gap:3px}
+.field{font-size:10px;color:var(--color-text-tertiary);display:flex;gap:4px;align-items:center}
+.field-val{color:var(--color-text-secondary)}
+.badge{display:inline-flex;font-size:9px;font-weight:600;padding:2px 6px;border-radius:99px}
+.b-red{background:rgba(232,36,44,0.1);color:#E8242C}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+
+/* Media system */
+.media-types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.mt{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px;text-align:center}
+.mt-icon{font-size:20px;margin-bottom:4px}
+.mt-label{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.mt-desc{font-size:10px;color:var(--color-text-tertiary);line-height:1.4}
+
+/* Seller flow */
+.flow{display:flex;gap:0;align-items:stretch;overflow-x:auto;margin-bottom:12px}
+.fn{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;min-width:120px;flex-shrink:0;text-align:center}
+.fi{font-size:16px;margin-bottom:4px}
+.ft{font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.fd{font-size:10px;color:var(--color-text-tertiary);line-height:1.4}
+.fa{display:flex;align-items:center;padding:0 4px;color:var(--color-text-tertiary);font-size:16px;flex-shrink:0}
+
+/* Card mockup */
+.card-mock{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;overflow:hidden;width:100%;max-width:200px}
+.cm-img{height:120px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;background:var(--color-background-secondary)}
+.cm-play{position:absolute;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px}
+.cm-dots{display:flex;gap:4px;position:absolute;bottom:6px;left:50%;transform:translateX(-50%)}
+.cm-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.5)}
+.cm-dot.active{background:#fff}
+.cm-body{padding:10px}
+.cm-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.cm-price{font-size:14px;font-weight:600;color:#E8242C;margin-bottom:6px}
+.cm-meta{font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px}
+.cm-btn{width:100%;padding:6px;border-radius:6px;border:none;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font-sans)}
+.cm-btn-sell{background:#E8242C;color:#fff}
+.cm-btn-add{background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-secondary)}
+
+.cards-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:flex-start}
+
+.win-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.wc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px}
+.wc-icon{font-size:20px;margin-bottom:6px}
+.wc-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.wc-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+</style>
+
+<div class="w">
+<div class="tabs">
+  <button class="tab active" onclick="s('cards')">Entity карт</button>
+  <button class="tab" onclick="s('media')">Медиа систем</button>
+  <button class="tab" onclick="s('seller')">Seller flow</button>
+  <button class="tab" onclick="s('domain')">Domain/Subdomain</button>
+  <button class="tab" onclick="s('win')">Win-Win</button>
+</div>
+
+<!-- ENTITY CARDS -->
+<div id="panel-cards" class="panel active">
+<div class="st">Төрөл бүрийн өвөрмөц карт дизайн</div>
+
+<div class="entity-grid">
+
+  <div class="ecard">
+    <div class="ecard-img" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+      <span>🏪</span>
+      <div style="position:absolute;top:6px;right:6px"><span class="badge b-red">Дэлгүүр</span></div>
+    </div>
+    <div class="ecard-body">
+      <div class="ecard-title">Бараа/Дэлгүүрийн карт</div>
+      <div class="ecard-fields">
+        <div class="field">📸 <span class="field-val">Олон зураг (carousel)</span></div>
+        <div class="field">🎬 <span class="field-val">Видео preview</span></div>
+        <div class="field">💰 <span class="field-val">Үнэ + хямдрал %</span></div>
+        <div class="field">⭐ <span class="field-val">Rating, захиалга тоо</span></div>
+        <div class="field">🚚 <span class="field-val">Хүргэлтийн хугацаа</span></div>
+        <div class="field">📢 <span class="field-val">"Борлуулж эхлэх" товч</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ecard">
+    <div class="ecard-img" style="background:linear-gradient(135deg,#0f3460,#533483)">
+      <span>🏠</span>
+      <div style="position:absolute;top:6px;right:6px"><span class="badge b-blue">Үл хөдлөх</span></div>
+    </div>
+    <div class="ecard-body">
+      <div class="ecard-title">Үл хөдлөхийн карт</div>
+      <div class="ecard-fields">
+        <div class="field">📸 <span class="field-val">Өрөөний зураг галерей</span></div>
+        <div class="field">🎬 <span class="field-val">360° виртуал тойрог</span></div>
+        <div class="field">📐 <span class="field-val">м², өрөө, давхар</span></div>
+        <div class="field">📍 <span class="field-val">Байршил, дүүрэг</span></div>
+        <div class="field">💰 <span class="field-val">Үнэ + м²-ийн үнэ</span></div>
+        <div class="field">👤 <span class="field-val">Агентын мэдээлэл</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ecard">
+    <div class="ecard-img" style="background:linear-gradient(135deg,#1b4332,#2d6a4f)">
+      <span>🚗</span>
+      <div style="position:absolute;top:6px;right:6px"><span class="badge b-green">Авто</span></div>
+    </div>
+    <div class="ecard-body">
+      <div class="ecard-title">Автомашины карт</div>
+      <div class="ecard-fields">
+        <div class="field">📸 <span class="field-val">Гадна/дотор зураг</span></div>
+        <div class="field">🎬 <span class="field-val">Тест драйв видео</span></div>
+        <div class="field">📅 <span class="field-val">Он, гүйлт, түлш</span></div>
+        <div class="field">🔧 <span class="field-val">Техникийн үзүүлэлт</span></div>
+        <div class="field">💰 <span class="field-val">Үнэ + дугуй зарагдсан</span></div>
+        <div class="field">✅ <span class="field-val">Тест драйв товч</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ecard">
+    <div class="ecard-img" style="background:linear-gradient(135deg,#4a1942,#6b2d6b)">
+      <span>✂️</span>
+      <div style="position:absolute;top:6px;right:6px"><span class="badge b-purple">Үйлчилгээ</span></div>
+    </div>
+    <div class="ecard-body">
+      <div class="ecard-title">Үйлчилгээний карт</div>
+      <div class="ecard-fields">
+        <div class="field">📸 <span class="field-val">Ажлын жишээ зураг</span></div>
+        <div class="field">🎬 <span class="field-val">Үйлчилгээний видео</span></div>
+        <div class="field">⏱ <span class="field-val">Үргэлжлэх хугацаа</span></div>
+        <div class="field">📅 <span class="field-val">Чөлөөт цаг</span></div>
+        <div class="field">⭐ <span class="field-val">Үнэлгээ, тоймууд</span></div>
+        <div class="field">📆 <span class="field-val">"Цаг захиалах" товч</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ecard">
+    <div class="ecard-img" style="background:linear-gradient(135deg,#1a3a4a,#2b6cb0)">
+      <span>🏗</span>
+      <div style="position:absolute;top:6px;right:6px"><span class="badge b-blue">Барилга</span></div>
+    </div>
+    <div class="ecard-body">
+      <div class="ecard-title">Барилгын компанийн карт</div>
+      <div class="ecard-fields">
+        <div class="field">📸 <span class="field-val">Нэгж байр, floor plan</span></div>
+        <div class="field">🎬 <span class="field-val">Барилгын явц видео</span></div>
+        <div class="field">📊 <span class="field-val">Борлуулалтын явц %</span></div>
+        <div class="field">📅 <span class="field-val">Ашиглалтад орох хугацаа</span></div>
+        <div class="field">💰 <span class="field-val">м² үнэ + урьдчилгаа</span></div>
+        <div class="field">📋 <span class="field-val">"Захиалга өгөх" товч</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ecard">
+    <div class="ecard-img" style="background:linear-gradient(135deg,#3d2c00,#7b5800)">
+      <span>📦</span>
+      <div style="position:absolute;top:6px;right:6px"><span class="badge b-warn">Pre-order</span></div>
+    </div>
+    <div class="ecard-body">
+      <div class="ecard-title">Pre-order карт</div>
+      <div class="ecard-fields">
+        <div class="field">📸 <span class="field-val">Барааны зураг + render</span></div>
+        <div class="field">📊 <span class="field-val">Batch progress bar</span></div>
+        <div class="field">👥 <span class="field-val">X/Y захиалга цугласан</span></div>
+        <div class="field">📅 <span class="field-val">Хүргэлтийн хугацаа</span></div>
+        <div class="field">💰 <span class="field-val">Үнэ + урьдчилгаа %</span></div>
+        <div class="field">⚡ <span class="field-val">"Урьдчилж захиалах"</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- MEDIA -->
+<div id="panel-media" class="panel">
+<div class="st">Медиа систем — төрөл бүрт</div>
+
+<div class="media-types">
+  <div class="mt">
+    <div class="mt-icon">📸</div>
+    <div class="mt-label">Олон зураг</div>
+    <div class="mt-desc">Carousel swipe<br>Max 20 зураг<br>Cloudinary CDN</div>
+  </div>
+  <div class="mt">
+    <div class="mt-icon">🎬</div>
+    <div class="mt-label">Видео</div>
+    <div class="mt-desc">Max 2 мин<br>Thumbnail auto<br>Lazy load</div>
+  </div>
+  <div class="mt">
+    <div class="mt-icon">🌐</div>
+    <div class="mt-label">360° тойрог</div>
+    <div class="mt-desc">Үл хөдлөх<br>iframe embed<br>VR боломж</div>
+  </div>
+  <div class="mt">
+    <div class="mt-icon">📐</div>
+    <div class="mt-label">Floor plan</div>
+    <div class="mt-desc">Байрны зураглал<br>SVG/PNG<br>Zoom боломж</div>
+  </div>
+</div>
+
+<div class="st">Карт mockup — зураг + видео</div>
+<div class="cards-row">
+
+  <div class="card-mock">
+    <div class="cm-img">
+      🛋
+      <div class="cm-dots">
+        <div class="cm-dot active"></div>
+        <div class="cm-dot"></div>
+        <div class="cm-dot"></div>
+      </div>
+    </div>
+    <div class="cm-body">
+      <div class="cm-title">Диван 3 суудалтай</div>
+      <div class="cm-price">190,000₮</div>
+      <div class="cm-meta">⭐ 4.8 · 36 захиалга</div>
+      <button class="cm-btn cm-btn-sell">📢 Борлуулж эхлэх</button>
+    </div>
+  </div>
+
+  <div class="card-mock">
+    <div class="cm-img" style="background:#1a1a2e">
+      🏠
+      <div class="cm-play">▶</div>
+      <div class="cm-dots">
+        <div class="cm-dot active"></div>
+        <div class="cm-dot"></div>
+        <div class="cm-dot"></div>
+        <div class="cm-dot"></div>
+      </div>
+    </div>
+    <div class="cm-body">
+      <div class="cm-title">3 өрөө орон сууц</div>
+      <div class="cm-price">285,000,000₮</div>
+      <div class="cm-meta">📐 85м² · СБД · 9-р давхар</div>
+      <button class="cm-btn cm-btn-add">+ Дэлгүүртээ нэмэх</button>
+    </div>
+  </div>
+
+  <div class="card-mock">
+    <div class="cm-img" style="background:#1b3a2e">
+      🚗
+      <div class="cm-play">▶</div>
+    </div>
+    <div class="cm-body">
+      <div class="cm-title">Toyota Camry 2022</div>
+      <div class="cm-price">52,000,000₮</div>
+      <div class="cm-meta">📅 2022 · 18км · Бензин</div>
+      <button class="cm-btn cm-btn-sell">📢 Борлуулж эхлэх</button>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- SELLER FLOW -->
+<div id="panel-seller" class="panel">
+<div class="st">"Start Selling" урсгал — борлуулагч бараа нэмэх</div>
+
+<div class="flow">
+  <div class="fn"><div class="fi">👀</div><div class="ft">Бараа харна</div><div class="fd">Feed эсвэл /[slug]-д</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">📢</div><div class="ft">"Борлуулж эхлэх"</div><div class="fd">Товч дарна</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">🏪</div><div class="ft">Дэлгүүр сонгоно</div><div class="fd">Аль дэлгүүртээ</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">📨</div><div class="ft">Хүсэлт явна</div><div class="fd">Дэлгүүрт мэдэгдэл</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">✅</div><div class="ft">Дэлгүүр зөвшөөрнө</div><div class="fd">Commission % тогтооно</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">🏪</div><div class="ft">Дэлгүүрт нэмэгдэнэ</div><div class="fd">Борлуулагчийн хуудаст</div></div>
+  <div class="fa">→</div>
+  <div class="fn"><div class="fi">💰</div><div class="ft">Commission</div><div class="fd">Зарагдах бүрт</div></div>
+</div>
+
+<div class="st">Борлуулагчийн дэлгүүр — 2 хэлбэр</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px">
+    <div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px">1. Борлуулагчийн хуудас</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.8">
+      URL: eseller.mn/seller/[username]<br>
+      Зөвшөөрөгдсөн бараанууд<br>
+      QR + Share товч<br>
+      Commission тооцоо харагдана<br>
+      <span style="color:#E8242C;font-weight:500">→ Үнэгүй</span>
+    </div>
+  </div>
+  <div style="background:var(--color-background-primary);border:0.5px solid rgba(232,36,44,0.3);border-radius:var(--border-radius-lg);padding:13px">
+    <div style="font-size:12px;font-weight:500;color:#E8242C;margin-bottom:8px">2. Борлуулагчийн дэлгүүр ⭐</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.8">
+      URL: bold.eseller.mn эсвэл bold.mn<br>
+      Өөрийн storefront + theme<br>
+      Зөвшөөрөгдсөн бараанууд + өөрийн<br>
+      Custom logo, banner<br>
+      <span style="color:#E8242C;font-weight:500">→ Pro subscription</span>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- DOMAIN -->
+<div id="panel-domain" class="panel">
+<div class="st">Domain / Subdomain эрхийн систем</div>
+
+<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;display:flex;align-items:center;gap:12px">
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🆓</div>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Үнэгүй — eseller.mn/seller/[username]</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">Борлуулагч бүр авна · Бараа жагсаалт · QR/Share</div>
+    </div>
+    <span class="badge b-gray">Үнэгүй</span>
+  </div>
+
+  <div style="background:var(--color-background-primary);border:0.5px solid rgba(37,99,235,0.3);border-radius:var(--border-radius-lg);padding:12px 14px;display:flex;align-items:center;gap:12px">
+    <div style="width:32px;height:32px;border-radius:50%;background:rgba(37,99,235,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⭐</div>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">Pro — bold.eseller.mn</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">Subdomain · Storefront · Theme · Custom logo</div>
+    </div>
+    <span class="badge b-blue">29,900₮/сар</span>
+  </div>
+
+  <div style="background:var(--color-background-primary);border:0.5px solid rgba(232,36,44,0.3);border-radius:var(--border-radius-lg);padding:12px 14px;display:flex;align-items:center;gap:12px">
+    <div style="width:32px;height:32px;border-radius:50%;background:rgba(232,36,44,0.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">💎</div>
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500;color:#E8242C">Business — bold.mn (custom domain)</div>
+      <div style="font-size:11px;color:var(--color-text-secondary)">Өөрийн domain · DNS verify · SSL auto · Full storefront</div>
+    </div>
+    <span class="badge b-red">49,900₮/сар</span>
+  </div>
+</div>
+
+<div style="background:rgba(232,36,44,0.04);border:0.5px solid rgba(232,36,44,0.15);border-radius:var(--border-radius-lg);padding:12px 14px">
+  <div style="font-size:12px;font-weight:500;color:#E8242C;margin-bottom:6px">Техникийн хэрэгжилт</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+    Wildcard DNS: *.eseller.mn → Vercel (Cloudflare-аар)<br>
+    middleware.ts: hostname detect → entity lookup → rewrite<br>
+    Борлуулагчийн storefront: /seller/[username]/page.tsx<br>
+    Pro upgrade: subscription → subdomain автомат идэвхжинэ
+  </div>
+</div>
+</div>
+
+<!-- WIN WIN -->
+<div id="panel-win" class="panel">
+<div class="st">Win-Win систем — бүгд ашигтай</div>
+
+<div class="win-grid">
+  <div class="wc">
+    <div class="wc-icon">🏪</div>
+    <div class="wc-title">Дэлгүүрийн эзэн</div>
+    <div class="wc-desc">
+      ✓ Борлуулагч = маркетер<br>
+      ✓ 0₮ маркетинг зардал<br>
+      ✓ Зарагдсан % л өгнө<br>
+      ✓ Борлуулагч хянана<br>
+      ✓ Approve/reject эрх
+    </div>
+  </div>
+  <div class="wc">
+    <div class="wc-icon">📢</div>
+    <div class="wc-title">Борлуулагч</div>
+    <div class="wc-desc">
+      ✓ Өөрийн дэлгүүр/subdomain<br>
+      ✓ Хөрөнгөгүйгээр орлого<br>
+      ✓ Олон дэлгүүрийн бараа<br>
+      ✓ Commission автомат<br>
+      ✓ Tier дэвшиж % нэмэгдэнэ
+    </div>
+  </div>
+  <div class="wc">
+    <div class="wc-icon">👤</div>
+    <div class="wc-title">Хэрэглэгч</div>
+    <div class="wc-desc">
+      ✓ Найздаа итгэж авна<br>
+      ✓ Бүх мэдээлэл нэг газар<br>
+      ✓ Зураг/видео харна<br>
+      ✓ QPay хялбар төлбөр<br>
+      ✓ еБаримт автомат
+    </div>
+  </div>
+</div>
+
+<div style="background:rgba(232,36,44,0.04);border:0.5px solid rgba(232,36,44,0.2);border-radius:var(--border-radius-lg);padding:12px 14px">
+  <div style="font-size:12px;font-weight:500;color:#E8242C;margin-bottom:6px">Гол зарчим</div>
+  <div style="font-size:11px;color:var(--color-text-secondary);line-height:1.9">
+    Дэлгүүрийн эзэн бараа оруулахдаа <strong style="color:var(--color-text-primary)">allowAffiliate toggle</strong> дарна<br>
+    Борлуулагч бараа харахад <strong style="color:var(--color-text-primary)">"Борлуулж эхлэх"</strong> товч харагдана<br>
+    Дарахад → дэлгүүр зөвшөөрнө → борлуулагчийн дэлгүүрт нэмэгдэнэ<br>
+    Зарагдах бүрт → ESL-XXXXXX код → баталгаажуулалт → commission<br>
+    <strong style="color:#E8242C">Хуулах биш — зөвшөөрөлтэй зарах.</strong>
+  </div>
+</div>
+</div>
+
+</div>
+<script>
+function s(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'))
+  document.getElementById('panel-'+id).classList.add('active')
+  event.target.classList.add('active')
+}
+</script>

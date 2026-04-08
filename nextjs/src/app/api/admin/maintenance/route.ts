@@ -10,7 +10,7 @@ async function isAdmin(req: NextRequest): Promise<boolean> {
       const parts = token.split('.');
       if (parts.length === 3) {
         const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-        if (payload.role === 'admin') return true;
+        if (payload.role === 'admin' || payload.role === 'superadmin') return true;
       }
     } catch {}
   }
@@ -23,7 +23,7 @@ async function isAdmin(req: NextRequest): Promise<boolean> {
         const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
         if (payload.email) {
           const user = await prisma.user.findUnique({ where: { email: payload.email } });
-          if (user?.role === 'admin') return true;
+          if (user?.role === 'admin' || user?.role === 'superadmin') return true;
         }
       }
     } catch {}

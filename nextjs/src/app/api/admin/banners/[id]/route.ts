@@ -8,7 +8,7 @@ type Ctx = { params: Promise<{ id: string }> };
 export async function PATCH(req: NextRequest, ctx: Ctx) {
   const auth = requireAuth(req);
   if (auth instanceof Response) return auth;
-  if (auth.role !== 'admin') return errorJson('Админ эрх шаардлагатай', 403);
+  if (auth.role !== 'admin' && auth.role !== 'superadmin') return errorJson('Админ эрх шаардлагатай', 403);
 
   try {
     const { id } = await ctx.params;
@@ -27,7 +27,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
 export async function DELETE(req: NextRequest, ctx: Ctx) {
   const auth = requireAuth(req);
   if (auth instanceof Response) return auth;
-  if (auth.role !== 'admin') return errorJson('Админ эрх шаардлагатай', 403);
+  if (auth.role !== 'admin' && auth.role !== 'superadmin') return errorJson('Админ эрх шаардлагатай', 403);
 
   try {
     const { id } = await ctx.params;
