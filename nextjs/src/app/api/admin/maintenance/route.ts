@@ -1,20 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-function isAdmin(req: NextRequest): boolean {
+async function isAdmin(req: NextRequest): Promise<boolean> {
+  // Method 1: JWT token from header
   const header = req.headers.get('authorization');
   const token = header?.startsWith('Bearer ') ? header.slice(7) : req.cookies.get('token')?.value;
-  if (!token) return false;
-
-  try {
-    // Decode JWT payload without verification (page is already behind admin layout)
-    const parts = token.split('.');
-    if (parts.length !== 3) return false;
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-    return payload.role === 'admin';
-  } catch {
-    return false;
+  if (token) {
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
+        if (payload.role === 'admin') return true;
+      }
+    } catch {}
   }
+
+  // Method 2: Check user from DB by email in token
+  if (token) {
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
+        if (payload.email) {
+          const user = await prisma.user.findUnique({ where: { email: payload.email } });
+          if (user?.role === 'admin') return true;
+        }
+      }
+    } catch {}
+  }
+
+  return false;
 }
 
 // GET /api/admin/maintenance — check status
@@ -31,7 +46,7 @@ export async function GET() {
 
 // POST /api/admin/maintenance — toggle
 export async function POST(req: NextRequest) {
-  if (!isAdmin(req)) {
+  if (!(await isAdmin(req))) {
     return NextResponse.json({ error: 'Админ эрх шаардлагатай' }, { status: 403 });
   }
 
