@@ -1,16 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 
-// GET /api/maintenance-status — public endpoint, no auth needed
+// GET /api/maintenance-status — reads from env variable, no DB call
 export async function GET() {
-  try {
-    const config = await prisma.platformConfig.findUnique({
-      where: { key: 'maintenance_mode' },
-    });
-    return NextResponse.json({
-      maintenance: config?.value === 'true',
-    });
-  } catch {
-    return NextResponse.json({ maintenance: false });
-  }
+  return NextResponse.json({
+    maintenance: process.env.MAINTENANCE_MODE === 'true',
+  });
 }

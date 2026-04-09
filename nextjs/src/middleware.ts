@@ -14,29 +14,19 @@ export async function middleware(req: NextRequest) {
   const hostWithoutPort = hostname.split(':')[0];
   const { pathname } = req.nextUrl;
 
-  // ═══ Maintenance Mode Check ═══
-  // Skip maintenance check for: admin dashboard, API routes, maintenance page itself, static files
-  const skipMaintenance = pathname.startsWith('/dashboard') ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/maintenance') ||
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/favicon');
+  // ═══ Maintenance Mode Check (env-based, no DB call) ═══
+  if (process.env.MAINTENANCE_MODE === 'true') {
+    const skipMaintenance = pathname.startsWith('/dashboard') ||
+      pathname.startsWith('/api') ||
+      pathname.startsWith('/maintenance') ||
+      pathname.startsWith('/login') ||
+      pathname.startsWith('/_next') ||
+      pathname.startsWith('/favicon');
 
-  if (!skipMaintenance) {
-    try {
-      const origin = req.nextUrl.origin;
-      const res = await fetch(`${origin}/api/maintenance-status`, { next: { revalidate: 30 } });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.maintenance) {
-          const url = req.nextUrl.clone();
-          url.pathname = '/maintenance';
-          return NextResponse.rewrite(url);
-        }
-      }
-    } catch {
-      // If check fails, let users through
+    if (!skipMaintenance) {
+      const url = req.nextUrl.clone();
+      url.pathname = '/maintenance';
+      return NextResponse.rewrite(url);
     }
   }
 
