@@ -63,8 +63,8 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
         <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 50% at 50% -20%, ${primaryColor}4D, transparent)` }} />
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
           <div className="flex items-start gap-5 mb-6">
-            {shop.logo ? (
-              <img loading="lazy" src={shop.logo} alt={shop.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20 shadow-lg" />
+            {logoUrl ? (
+              <img loading="lazy" src={logoUrl} alt={shop.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20 shadow-lg" />
             ) : (
               <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-black text-white shadow-lg" style={{ background: primaryColor }}>
                 {shop.name.charAt(0)}

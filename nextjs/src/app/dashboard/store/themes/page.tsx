@@ -243,10 +243,17 @@ export default function ThemeStorePage() {
                       e.stopPropagation();
                       try {
                         const token = localStorage.getItem('token');
+                        const THEME_CONFIGS: Record<string, any> = {
+                          minimal: { theme: 'minimal', primaryColor: '#0A0A0A', bgMode: 'light', fontHeading: 'Inter', fontBody: 'Inter' },
+                          bold: { theme: 'bold', primaryColor: '#E8242C', bgMode: 'dark', fontHeading: 'Montserrat', fontBody: 'Inter' },
+                          modern: { theme: 'modern', primaryColor: '#E8242C', bgMode: 'dark', fontHeading: 'Inter', fontBody: 'Inter' },
+                          luxury: { theme: 'luxury', primaryColor: '#D4AF37', bgMode: 'dark', fontHeading: 'Playfair Display', fontBody: 'Inter' },
+                        };
+                        const themeConfig = THEME_CONFIGS[theme.style] || THEME_CONFIGS.modern;
                         await fetch('/api/store/storefront', {
                           method: 'PUT',
                           headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
-                          body: JSON.stringify({ config: { theme: theme.style, primaryColor: '#E8242C' } }),
+                          body: JSON.stringify({ config: themeConfig }),
                         });
                         toast.show('Theme амжилттай тохируулагдлаа!');
                       } catch { toast.show('Алдаа гарлаа', 'error'); }

@@ -229,6 +229,20 @@ export default function StorefrontConfigPage() {
             ))}
           </div>
 
+          {/* ── 3.5 ЛОГО ── */}
+          <SectionLabel icon={Image} label="Лого" />
+          <div className="space-y-2 mb-2">
+            <input type="url" value={(config as any).logoUrl || ''} onChange={e => update({ logoUrl: e.target.value } as any)}
+              placeholder="Лого зургийн URL (Cloudinary, imgur г.м.)"
+              className="w-full h-9 px-3 rounded-lg border text-xs outline-none focus:border-[#E8242C]"
+              style={{ background: 'var(--esl-bg-section)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+            {(config as any).logoUrl && (
+              <div className="w-16 h-16 rounded-xl overflow-hidden border" style={{ borderColor: 'var(--esl-border)' }}>
+                <img src={(config as any).logoUrl} alt="Logo" className="w-full h-full object-cover" />
+              </div>
+            )}
+          </div>
+
           {/* ── 4. HERO ── */}
           <SectionLabel icon={Image} label="Hero хэсэг" />
           <div className="space-y-3">
@@ -254,6 +268,45 @@ export default function StorefrontConfigPage() {
                 className="w-full h-9 px-3 rounded-lg border text-sm outline-none focus:border-[#E8242C]"
                 style={{ background: 'var(--esl-bg-section)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
             </div>
+          </div>
+
+          {/* ── 4.5 БАННЕР СЛАЙДЕР ── */}
+          <SectionLabel icon={Image} label="Баннер слайдер" />
+          <div className="space-y-2">
+            {((config as any).banners || []).map((b: any, i: number) => (
+              <div key={i} className="p-3 rounded-lg border space-y-2" style={{ borderColor: 'var(--esl-border)', background: 'var(--esl-bg-section)' }}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold" style={{ color: 'var(--esl-text-muted)' }}>Баннер {i + 1}</span>
+                  <button onClick={() => {
+                    const banners = [...((config as any).banners || [])];
+                    banners.splice(i, 1);
+                    update({ banners } as any);
+                  }} className="text-[10px] text-red-500 font-bold border-none bg-transparent cursor-pointer">Устгах</button>
+                </div>
+                <input placeholder="Зургийн URL" value={b.imageUrl || ''} onChange={e => {
+                  const banners = [...((config as any).banners || [])];
+                  banners[i] = { ...banners[i], imageUrl: e.target.value };
+                  update({ banners } as any);
+                }} className="w-full h-8 px-2 rounded border text-[10px]" style={{ background: 'var(--esl-bg-page)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+                <input placeholder="Гарчиг" value={b.title || ''} onChange={e => {
+                  const banners = [...((config as any).banners || [])];
+                  banners[i] = { ...banners[i], title: e.target.value };
+                  update({ banners } as any);
+                }} className="w-full h-8 px-2 rounded border text-[10px]" style={{ background: 'var(--esl-bg-page)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+                <input placeholder="Товчны текст" value={b.ctaText || ''} onChange={e => {
+                  const banners = [...((config as any).banners || [])];
+                  banners[i] = { ...banners[i], ctaText: e.target.value };
+                  update({ banners } as any);
+                }} className="w-full h-8 px-2 rounded border text-[10px]" style={{ background: 'var(--esl-bg-page)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+              </div>
+            ))}
+            {((config as any).banners || []).length < 5 && (
+              <button onClick={() => update({ banners: [...((config as any).banners || []), { imageUrl: '', title: '', subtitle: '', ctaText: '' }] } as any)}
+                className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold cursor-pointer"
+                style={{ borderColor: 'var(--esl-border)', color: 'var(--esl-text-muted)', background: 'transparent' }}>
+                + Баннер нэмэх (max 5)
+              </button>
+            )}
           </div>
 
           {/* ── 5. SECTIONS ── */}
@@ -376,11 +429,29 @@ function StorefrontPreview({ config, storeName }: { config: StorefrontConfig; st
 
   return (
     <div style={{ fontSize: '11px', fontFamily: config.fontBody || 'Inter' }}>
+      {/* Banners */}
+      {(config as any).banners?.length > 0 && (
+        <div style={{ height: 100, background: '#1a1a2e', position: 'relative', overflow: 'hidden' }}>
+          {(config as any).banners[0].imageUrl && <img src={(config as any).banners[0].imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />}
+          <div style={{ position: 'absolute', bottom: 8, left: 12, color: '#fff' }}>
+            <div style={{ fontSize: 12, fontWeight: 900 }}>{(config as any).banners[0].title || 'Баннер'}</div>
+            {(config as any).banners[0].ctaText && <span style={{ fontSize: 8, background: pc, padding: '2px 8px', borderRadius: 4, marginTop: 4, display: 'inline-block' }}>{(config as any).banners[0].ctaText}</span>}
+          </div>
+          {(config as any).banners.length > 1 && <div style={{ position: 'absolute', bottom: 4, right: 8, display: 'flex', gap: 3 }}>
+            {(config as any).banners.map((_: any, i: number) => <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', background: i === 0 ? '#fff' : 'rgba(255,255,255,0.4)' }} />)}
+          </div>}
+        </div>
+      )}
+
       {/* Hero */}
       <div style={{ background: `linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 50%, ${pc} 150%)`, padding: '32px 20px', color: '#fff' }}>
-        <div style={{ width: 32, height: 32, borderRadius: 10, background: pc, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 14, marginBottom: 12 }}>
-          {storeName?.[0]?.toUpperCase() || 'S'}
-        </div>
+        {(config as any).logoUrl ? (
+          <img src={(config as any).logoUrl} alt="" style={{ width: 32, height: 32, borderRadius: 10, objectFit: 'cover', marginBottom: 12 }} />
+        ) : (
+          <div style={{ width: 32, height: 32, borderRadius: 10, background: pc, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 14, marginBottom: 12 }}>
+            {storeName?.[0]?.toUpperCase() || 'S'}
+          </div>
+        )}
         <h2 style={{ fontSize: 20, fontWeight: 900, margin: '0 0 4px', fontFamily: config.fontHeading || 'Inter' }}>
           {config.heroTitle || storeName || 'Дэлгүүрийн нэр'}
         </h2>
