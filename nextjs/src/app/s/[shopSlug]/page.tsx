@@ -36,21 +36,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ShopProfilePage({ params }: Props) {
   const { shopSlug } = await params;
 
-  // Find the shop
-  const shop = await prisma.shop.findFirst({
-    where: { OR: [{ slug: shopSlug }, { storefrontSlug: shopSlug }] },
-    include: {
-      user: { select: { name: true, avatar: true } },
-      services: { where: { isActive: true }, orderBy: { createdAt: 'desc' } },
-      workingHours: { orderBy: { dayOfWeek: 'asc' } },
-      shopType: true,
-    },
-  });
+  // Find the shop — simplified query to avoid relation issues
+  let shop;
+  try {
+    shop = await prisma.shop.findFirst({
+      where: { OR: [{ slug: shopSlug }, { storefrontSlug: shopSlug }] },
+      include: {
+        user: { select: { name: true, avatar: true } },
+      },
+    });
+  } catch (e) {
+    console.error('[/s/ page] DB error:', (e as Error).message);
+    notFound();
+  }
 
   if (!shop) notFound();
 
-  // Service-type shop → ServiceProfileClient
-  const isService = shop.shopType?.type === 'service' || shop.industry === 'salon' || shop.industry === 'service';
+  // Detect service shop by industry
+  const serviceIndustries = ['salon', 'service', 'clinic', 'gym', 'spa', 'beauty'];
+  const isService = serviceIndustries.includes(shop.industry || '');
 
   if (isService) {
     const data = await getShopBySlug(shopSlug);
