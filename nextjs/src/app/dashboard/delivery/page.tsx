@@ -155,6 +155,12 @@ export default function DeliveryDashboard() {
             </div>
           )}
         </div>
+        {/* GPS Map placeholder */}
+        <div className="mt-8 rounded-2xl p-6 text-center" style={{ background: 'var(--esl-bg-section)', border: '1px solid var(--esl-border)' }}>
+          <div className="text-4xl mb-2">🗺️</div>
+          <p className="text-sm font-semibold" style={{ color: 'var(--esl-text-primary)' }}>Газрын зураг</p>
+          <p className="text-xs mt-1" style={{ color: 'var(--esl-text-muted)' }}>Mobile app-д GPS route харагдана</p>
+        </div>
       </div>
     </div>
   );

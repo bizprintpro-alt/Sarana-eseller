@@ -235,6 +235,34 @@ export default function BuyerOrdersPage() {
                         {o.total.toLocaleString()}₮
                       </span>
                     </div>
+
+                    {/* еБаримт */}
+                    {o.status === 'delivered' && (
+                      <div style={{ marginTop: 12 }}>
+                        <button
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            try {
+                              const token = localStorage.getItem('token');
+                              const res = await fetch(`/api/orders/${o._id}/receipt`, { headers: { Authorization: `Bearer ${token}` } });
+                              if (res.ok) {
+                                const d = await res.json();
+                                if (d.data?.qrData) window.open(d.data.qrData, '_blank');
+                                else alert('еБаримт олдсонгүй');
+                              } else { alert('еБаримт олдсонгүй'); }
+                            } catch { alert('Алдаа гарлаа'); }
+                          }}
+                          style={{
+                            width: '100%', padding: '10px', borderRadius: 10, border: '1px solid #16a34a',
+                            background: 'rgba(22,163,74,0.08)', color: '#16a34a', fontSize: 13,
+                            fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center',
+                            justifyContent: 'center', gap: 6,
+                          }}
+                        >
+                          🧾 еБаримт татах
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
