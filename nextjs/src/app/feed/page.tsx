@@ -485,6 +485,15 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
               <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{timeAgo(item.createdAt)}</span>
             </div>
           </div>
+
+          {/* Detail page link */}
+          <Link
+            href={`/feed/${item.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="block mt-3 text-center py-2 rounded-lg border border-[var(--esl-border)] text-[11px] font-semibold text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-elevated)] hover:text-[var(--esl-text)] transition-colors no-underline"
+          >
+            Дэлгэрэнгүй →
+          </Link>
         </div>
       </div>
     </div>
