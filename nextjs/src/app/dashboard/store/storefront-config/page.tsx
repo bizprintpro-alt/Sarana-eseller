@@ -357,17 +357,72 @@ export default function StorefrontConfigPage() {
           </div>
         </div>
 
-        {/* iframe preview */}
-        <div className="flex-1 p-4">
-          <div className="w-full h-full rounded-xl overflow-hidden border shadow-lg" style={{ borderColor: 'var(--esl-border)' }}>
-            <iframe
-              key={previewKey}
-              src={previewUrl}
-              className="w-full h-full border-none"
-              title="Storefront Preview"
-            />
+        {/* Live preview */}
+        <div className="flex-1 p-4 overflow-y-auto">
+          <div className="w-full rounded-xl overflow-hidden border shadow-lg" style={{ borderColor: 'var(--esl-border)', background: 'var(--esl-bg-page)' }}>
+            <StorefrontPreview config={config} storeName={storeSlug} />
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ Live Preview Component ═══ */
+function StorefrontPreview({ config, storeName }: { config: StorefrontConfig; storeName: string }) {
+  const pc = config.primaryColor || '#E8242C';
+  const social = config.socialLinks || {};
+  const contact = config.contactInfo || {};
+
+  return (
+    <div style={{ fontSize: '11px', fontFamily: config.fontBody || 'Inter' }}>
+      {/* Hero */}
+      <div style={{ background: `linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 50%, ${pc} 150%)`, padding: '32px 20px', color: '#fff' }}>
+        <div style={{ width: 32, height: 32, borderRadius: 10, background: pc, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: 14, marginBottom: 12 }}>
+          {storeName?.[0]?.toUpperCase() || 'S'}
+        </div>
+        <h2 style={{ fontSize: 20, fontWeight: 900, margin: '0 0 4px', fontFamily: config.fontHeading || 'Inter' }}>
+          {config.heroTitle || storeName || 'Дэлгүүрийн нэр'}
+        </h2>
+        {config.heroSubtitle && <p style={{ fontSize: 11, opacity: 0.7, margin: 0 }}>{config.heroSubtitle}</p>}
+        <button style={{ marginTop: 12, background: '#fff', color: pc, border: 'none', padding: '6px 16px', borderRadius: 8, fontWeight: 700, fontSize: 11, cursor: 'pointer' }}>
+          {config.ctaText || 'Захиалах'}
+        </button>
+      </div>
+
+      {/* Products placeholder */}
+      <div style={{ padding: '16px 20px' }}>
+        <h3 style={{ fontSize: 13, fontWeight: 800, margin: '0 0 8px', color: 'var(--esl-text-primary)' }}>Бүтээгдэхүүн</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} style={{ background: 'var(--esl-bg-section)', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--esl-border)' }}>
+              <div style={{ height: 60, background: 'var(--esl-bg-card)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📦</div>
+              <div style={{ padding: 6 }}>
+                <div style={{ fontSize: 9, fontWeight: 600, color: 'var(--esl-text-primary)' }}>Бараа {i}</div>
+                <div style={{ fontSize: 9, fontWeight: 800, color: pc }}>25,000₮</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Social + Contact */}
+      {(Object.values(social).some(Boolean) || Object.values(contact).some(Boolean)) && (
+        <div style={{ padding: '12px 20px', borderTop: '1px solid var(--esl-border)' }}>
+          {contact.phone && <div style={{ fontSize: 9, color: 'var(--esl-text-muted)', marginBottom: 2 }}>📞 {contact.phone}</div>}
+          {contact.email && <div style={{ fontSize: 9, color: 'var(--esl-text-muted)', marginBottom: 2 }}>✉️ {contact.email}</div>}
+          {contact.address && <div style={{ fontSize: 9, color: 'var(--esl-text-muted)', marginBottom: 2 }}>📍 {contact.address}</div>}
+          <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
+            {social.facebook && <span style={{ fontSize: 8, padding: '2px 6px', borderRadius: 4, background: 'rgba(24,119,242,0.1)', color: '#1877F2' }}>FB</span>}
+            {social.instagram && <span style={{ fontSize: 8, padding: '2px 6px', borderRadius: 4, background: 'rgba(225,48,108,0.1)', color: '#E1306C' }}>IG</span>}
+            {social.tiktok && <span style={{ fontSize: 8, padding: '2px 6px', borderRadius: 4, background: 'rgba(0,0,0,0.08)', color: 'var(--esl-text-primary)' }}>TT</span>}
+          </div>
+        </div>
+      )}
+
+      {/* Footer */}
+      <div style={{ padding: '8px 20px', textAlign: 'center', borderTop: '1px solid var(--esl-border)', background: 'var(--esl-bg-section)' }}>
+        <span style={{ fontSize: 8, color: 'var(--esl-text-muted)' }}>© 2026 {storeName} — eseller.mn</span>
       </div>
     </div>
   );
