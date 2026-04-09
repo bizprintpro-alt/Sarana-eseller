@@ -54,11 +54,14 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
   const socialLinks = (cfg.socialLinks as Record<string, string>) || {};
   const contactInfo = (cfg.contactInfo as Record<string, string>) || {};
   const logoUrl = (cfg.logoUrl as string) || shop.logo;
+  const sections = (cfg.sections as string[]) || ['hero', 'products', 'about', 'reviews', 'contact'];
+  const show = (key: string) => sections.includes(key);
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--esl-bg-page)' }}>
 
       {/* ═══ HERO ═══ */}
+      {show('hero') && (
       <section className="relative overflow-hidden" style={{ background: `linear-gradient(135deg, #0A0A0A 0%, #1A1A2E 50%, ${primaryColor} 150%)` }}>
         <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 50% at 50% -20%, ${primaryColor}4D, transparent)` }} />
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
@@ -119,6 +122,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
           )}
         </div>
       </section>
+      )}
 
       {/* ═══ MENU NAV ═══ */}
       {menuItems.length > 0 && (
@@ -135,6 +139,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
       {banners.length > 0 && <BannerSlider banners={banners} primaryColor={primaryColor} />}
 
       {/* ═══ PRODUCTS ═══ */}
+      {show('products') && (
       <section id="products" className="max-w-6xl mx-auto px-6 py-12">
         <h2 className="text-xl font-black mb-6" style={{ color: 'var(--esl-text-primary)' }}>
           Бүтээгдэхүүн
@@ -185,9 +190,10 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
           </div>
         )}
       </section>
+      )}
 
       {/* ═══ ABOUT ═══ */}
-      {shop.address && (
+      {show('about') && shop.address && (
         <section className="max-w-6xl mx-auto px-6 py-12 border-t" style={{ borderColor: 'var(--esl-border)' }}>
           <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--esl-text-primary)' }}>Тухай</h2>
           <div className="grid sm:grid-cols-2 gap-6">
