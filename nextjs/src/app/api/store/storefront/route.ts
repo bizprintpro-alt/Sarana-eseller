@@ -8,7 +8,8 @@ export async function GET(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const shop = await prisma.shop.findUnique({ where: { userId: user.id } });
+    let shop = await prisma.shop.findUnique({ where: { userId: user.id } }).catch(() => null);
+    if (!shop) shop = await prisma.shop.findFirst({ where: { userId: user.id } });
     if (!shop) return NextResponse.json({ error: 'Shop not found' }, { status: 404 });
 
     return NextResponse.json({
@@ -35,8 +36,10 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Config object required' }, { status: 400 });
     }
 
-    const shop = await prisma.shop.findUnique({ where: { userId: user.id } });
-    if (!shop) return NextResponse.json({ error: 'Shop not found', userId: user.id }, { status: 404 });
+    // Try findUnique first, then findFirst as fallback
+    let shop = await prisma.shop.findUnique({ where: { userId: user.id } }).catch(() => null);
+    if (!shop) shop = await prisma.shop.findFirst({ where: { userId: user.id } });
+    if (!shop) return NextResponse.json({ error: `Shop not found for user ${user.id} (${user.email})`, userId: user.id }, { status: 404 });
 
     // Merge with existing config to preserve fields
     const existing = (shop.storefrontConfig || {}) as Record<string, unknown>;

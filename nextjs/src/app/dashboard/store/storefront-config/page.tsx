@@ -117,8 +117,8 @@ export default function StorefrontConfigPage() {
         body: JSON.stringify({ config }),
       });
       if (res.ok) toast.show('Хадгалагдлаа!', 'ok');
-      else toast.show('Алдаа гарлаа', 'error');
-    } catch { toast.show('Алдаа гарлаа', 'error'); }
+      else { const d = await res.json().catch(() => ({})); toast.show(`Алдаа: ${d.error || res.status}`, 'error'); }
+    } catch (e) { toast.show(`Алдаа: ${(e as Error).message}`, 'error'); }
     finally { setSaving(false); }
   };
 
