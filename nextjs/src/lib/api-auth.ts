@@ -38,8 +38,11 @@ function decodePayload(token: string): AuthUser | null {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
     const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-    if (!payload.id || !payload.email || !payload.role) return null;
-    return { id: payload.id, email: payload.email, role: payload.role, name: payload.name || '' };
+    const id = payload.id || payload.userId || payload._id || payload.sub;
+    const email = payload.email || '';
+    const role = payload.role || 'buyer';
+    if (!id) return null;
+    return { id, email, role, name: payload.name || '' };
   } catch {
     return null;
   }
@@ -50,18 +53,27 @@ export function getAuthUser(req: NextRequest): AuthUser | null {
   const token = extractToken(req);
   if (!token) return null;
 
+  // Helper to extract user from decoded payload
+  const extractUser = (decoded: any): AuthUser | null => {
+    const id = decoded.id || decoded.userId || decoded._id || decoded.sub;
+    if (!id) return null;
+    return { id, email: decoded.email || '', role: decoded.role || 'buyer', name: decoded.name || '' };
+  };
+
   // Try verified decode first
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as AuthUser;
-    return { id: decoded.id, email: decoded.email, role: decoded.role, name: decoded.name || '' };
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const user = extractUser(decoded);
+    if (user) return user;
   } catch {}
 
   // Try all known secrets
   const secrets = ['eseller-jwt-secret-key-change-in-production-2026', 'eseller-secret-key-change-in-production'];
   for (const s of secrets) {
     try {
-      const decoded = jwt.verify(token, s) as AuthUser;
-      return { id: decoded.id, email: decoded.email, role: decoded.role, name: decoded.name || '' };
+      const decoded = jwt.verify(token, s) as any;
+      const user = extractUser(decoded);
+      if (user) return user;
     } catch {}
   }
 
