@@ -1,409 +1,265 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Search, Check, ChevronRight, ChevronDown, Loader2, Plus, Send } from 'lucide-react';
 import { useToast } from '@/components/shared/Toast';
-import { checkLimit, getCurrentPlan } from '@/lib/subscription';
+import EmptyState from '@/components/shared/EmptyState';
 
 interface Category {
   id: string;
   name: string;
-  icon: string;
-  description: string;
-  parentId: string | null;
-  order: number;
+  slug: string;
+  icon?: string | null;
+  level: number;
+  children?: Category[];
 }
 
-const EMOJI_OPTIONS = ['📦', '👗', '🍔', '📱', '💄', '🏡', '⚽', '🎮', '📚', '🎵', '🧸', '🛒', '💍', '🧴', '🎒', '🔧', '🌿', '🧁'];
-
-const STORAGE_KEY = 'eseller_categories';
-
-function loadCategories(): Category[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveCategories(cats: Category[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cats));
-}
-
-export default function CategoriesPage() {
+export default function StoreCategoriesPage() {
   const toast = useToast();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [name, setName] = useState('');
-  const [icon, setIcon] = useState('📦');
-  const [description, setDescription] = useState('');
-  const [parentId, setParentId] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  // Category request
+  const [tree, setTree] = useState<Category[]>([]);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState('');
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [showRequest, setShowRequest] = useState(false);
   const [reqName, setReqName] = useState('');
-  const [reqReason, setReqReason] = useState('');
-  const [reqSent, setReqSent] = useState(false);
-
-  const handleCategoryRequest = async () => {
-    await fetch('/api/store/category-request', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: reqName, reason: reqReason }),
-    });
-    setReqSent(true);
-    setReqName('');
-    setReqReason('');
-    // toast notification handled by reqSent state
-    setTimeout(() => { setShowRequest(false); setReqSent(false); }, 2000);
-  };
+  const [reqParent, setReqParent] = useState('');
+  const [reqSending, setReqSending] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    setCategories(loadCategories());
+    loadData();
   }, []);
 
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[var(--esl-bg-section)] flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  async function loadData() {
+    const token = localStorage.getItem('token');
+    const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
-  const plan = getCurrentPlan();
-  const parentCategories = categories.filter((c) => !c.parentId);
+    try {
+      // Load tree + selected in parallel
+      const [treeRes, selRes] = await Promise.all([
+        fetch('/api/categories/tree', { headers }),
+        fetch('/api/store/categories', { headers }),
+      ]);
 
-  function openAddModal() {
-    const check = checkLimit('maxCategories', categories.length);
-    if (!check.allowed) {
-      toast.show(check.message || 'Хязгаарт хүрлээ', 'error');
-      return;
+      const treeData = await treeRes.json();
+      const selData = await selRes.json();
+
+      setTree(treeData.data || []);
+      setSelected(new Set((selData.data || []).map((c: any) => c.id)));
+    } catch {
+      toast.show('Ангилал ачаалж чадсангүй', 'error');
+    } finally {
+      setLoading(false);
     }
-    setEditingId(null);
-    setName('');
-    setIcon('📦');
-    setDescription('');
-    setParentId(null);
-    setShowModal(true);
   }
 
-  function openEditModal(cat: Category) {
-    setEditingId(cat.id);
-    setName(cat.name);
-    setIcon(cat.icon);
-    setDescription(cat.description);
-    setParentId(cat.parentId);
-    setShowModal(true);
+  function toggleCategory(id: string) {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
   }
 
-  function handleSave() {
-    if (!name.trim()) {
-      toast.show('Ангилалын нэр оруулна уу', 'warn');
-      return;
+  function toggleExpand(id: string) {
+    setExpanded(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/store/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        body: JSON.stringify({ categoryIds: Array.from(selected) }),
+      });
+      if (res.ok) toast.show(`${selected.size} ангилал хадгалагдлаа`);
+      else toast.show('Алдаа гарлаа', 'error');
+    } catch {
+      toast.show('Алдаа гарлаа', 'error');
+    } finally {
+      setSaving(false);
     }
+  }
 
-    let updated: Category[];
-    if (editingId) {
-      updated = categories.map((c) =>
-        c.id === editingId ? { ...c, name, icon, description, parentId } : c
+  async function handleRequest() {
+    if (!reqName.trim()) { toast.show('Нэр оруулна уу', 'warn'); return; }
+    setReqSending(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/categories/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        body: JSON.stringify({ name: reqName, parentName: reqParent || null }),
+      });
+      if (res.ok) {
+        toast.show('Хүсэлт илгээгдлээ!');
+        setReqName('');
+        setReqParent('');
+        setShowRequest(false);
+      } else toast.show('Алдаа гарлаа', 'error');
+    } catch {
+      toast.show('Алдаа гарлаа', 'error');
+    } finally {
+      setReqSending(false);
+    }
+  }
+
+  // Filter tree by search
+  function filterTree(cats: Category[], q: string): Category[] {
+    if (!q) return cats;
+    const lower = q.toLowerCase();
+    return cats.filter(c => {
+      const match = c.name.toLowerCase().includes(lower);
+      const childMatch = c.children?.some(ch =>
+        ch.name.toLowerCase().includes(lower) || ch.children?.some(g => g.name.toLowerCase().includes(lower))
       );
-      toast.show('Ангилал шинэчлэгдлээ', 'ok');
-    } else {
-      const newCat: Category = {
-        id: Date.now().toString(),
-        name,
-        icon,
-        description,
-        parentId,
-        order: categories.length + 1,
-      };
-      updated = [...categories, newCat];
-      toast.show('Ангилал нэмэгдлээ', 'ok');
-    }
-
-    setCategories(updated);
-    saveCategories(updated);
-    setShowModal(false);
+      return match || childMatch;
+    });
   }
 
-  function handleDelete(id: string) {
-    // Also delete children
-    const updated = categories.filter((c) => c.id !== id && c.parentId !== id);
-    setCategories(updated);
-    saveCategories(updated);
-    toast.show('Ангилал устгагдлаа', 'ok');
-  }
+  const filtered = filterTree(tree, search);
 
-  function handleReorder(id: string, direction: 'up' | 'down') {
-    const idx = categories.findIndex((c) => c.id === id);
-    if (idx === -1) return;
-    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
-    if (swapIdx < 0 || swapIdx >= categories.length) return;
-
-    const updated = [...categories];
-    const temp = updated[idx].order;
-    updated[idx] = { ...updated[idx], order: updated[swapIdx].order };
-    updated[swapIdx] = { ...updated[swapIdx], order: temp };
-    [updated[idx], updated[swapIdx]] = [updated[swapIdx], updated[idx]];
-    setCategories(updated);
-    saveCategories(updated);
-  }
-
-  function getChildren(parentId: string) {
-    return categories.filter((c) => c.parentId === parentId);
-  }
+  if (loading) return (
+    <div className="flex items-center justify-center py-20">
+      <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#E8242C' }} />
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
+    <div>
       {/* Header */}
-      <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">🗂️</span>
-            <div>
-              <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Ангилал удирдлага</h1>
-              <p className="text-[var(--esl-text-secondary)] text-sm">Барааны ангилалуудыг удирдах ({categories.length}/{plan.limits.maxCategories === -1 ? '∞' : plan.limits.maxCategories})</p>
-            </div>
-          </div>
-          <div className="flex gap-2">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-lg font-bold" style={{ color: 'var(--esl-text-primary)' }}>📂 Ангилал удирдлага</h1>
+          <p className="text-xs mt-1" style={{ color: 'var(--esl-text-muted)' }}>
+            191 ангилалаас сонгож дэлгүүртээ нэмнэ · {selected.size} сонгогдсон
+          </p>
+        </div>
+        <div className="flex gap-2">
           <button
-            onClick={() => setShowRequest(true)}
-            className="border border-[var(--esl-border)] text-[var(--esl-text)] px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--esl-bg-hover)] transition flex items-center gap-2"
+            onClick={() => setShowRequest(!showRequest)}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-colors"
+            style={{ borderColor: 'var(--esl-border)', color: 'var(--esl-text-muted)', background: 'var(--esl-bg-card)' }}
           >
-            💡 Шинэ ангилал санал болгох
+            <Plus size={14} /> Шинэ ангилал санал болгох
           </button>
           <button
-            onClick={openAddModal}
-            className="bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition flex items-center gap-2"
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-sm font-semibold text-white border-none cursor-pointer"
+            style={{ background: '#E8242C' }}
           >
-            + Ангилал нэмэх
+            {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
+            {saving ? 'Хадгалж байна...' : 'Хадгалах'}
           </button>
-          </div>
         </div>
       </div>
 
-      {/* Category Request Modal */}
+      {/* Request form */}
       {showRequest && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-[var(--esl-bg-card)] rounded-2xl p-6 w-full max-w-md border border-[var(--esl-border)]">
-            <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Шинэ ангилал санал болгох</h2>
-            {reqSent ? (
-              <div className="text-center py-6">
-                <span className="text-4xl block mb-2">✅</span>
-                <p className="text-sm text-[var(--esl-text-secondary)]">Хүсэлт илгээсэн! Admin шалгаж зөвшөөрнө.</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <input placeholder="Ангилалын нэр" value={reqName} onChange={(e) => setReqName(e.target.value)}
-                  className="w-full px-3 py-2 bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)]" />
-                <textarea placeholder="Яагаад энэ ангилал хэрэгтэй вэ?" value={reqReason} onChange={(e) => setReqReason(e.target.value)} rows={3}
-                  className="w-full px-3 py-2 bg-[var(--esl-bg-section)] border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)]" />
-                <div className="flex justify-end gap-3">
-                  <button onClick={() => setShowRequest(false)} className="px-4 py-2 border border-[var(--esl-border)] rounded-lg text-sm text-[var(--esl-text-primary)]">Болих</button>
-                  <button onClick={handleCategoryRequest} disabled={!reqName} className="px-4 py-2 bg-[#E8242C] text-white rounded-lg text-sm disabled:opacity-50">Илгээх</button>
-                </div>
-              </div>
-            )}
+        <div className="mb-6 p-4 rounded-xl" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)' }}>
+          <p className="text-sm font-semibold mb-3" style={{ color: 'var(--esl-text-primary)' }}>Шинэ ангилал санал болгох</p>
+          <div className="flex gap-3 items-end">
+            <div className="flex-1">
+              <label className="text-[10px] font-semibold mb-1 block" style={{ color: 'var(--esl-text-muted)' }}>Нэр</label>
+              <input value={reqName} onChange={e => setReqName(e.target.value)} placeholder="Жишээ: Гэр ахуйн бараа"
+                className="w-full px-3 py-2 rounded-lg text-sm" style={{ background: 'var(--esl-bg-page)', border: '1px solid var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+            </div>
+            <div className="flex-1">
+              <label className="text-[10px] font-semibold mb-1 block" style={{ color: 'var(--esl-text-muted)' }}>Эцэг ангилал (заавал биш)</label>
+              <input value={reqParent} onChange={e => setReqParent(e.target.value)} placeholder="Жишээ: Гэр"
+                className="w-full px-3 py-2 rounded-lg text-sm" style={{ background: 'var(--esl-bg-page)', border: '1px solid var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+            </div>
+            <button onClick={handleRequest} disabled={reqSending}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white border-none cursor-pointer shrink-0"
+              style={{ background: '#E8242C' }}>
+              <Send size={14} /> {reqSending ? 'Илгээж байна...' : 'Илгээх'}
+            </button>
           </div>
         </div>
       )}
 
-      {/* Categories list */}
-      {categories.length === 0 ? (
-        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
-          <span className="text-5xl block mb-4">🗂️</span>
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Ангилал байхгүй</h2>
-          <p className="text-[var(--esl-text-secondary)] text-sm mb-4">Эхний ангилалаа нэмнэ үү</p>
-          <button
-            onClick={openAddModal}
-            className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition"
-          >
-            + Ангилал нэмэх
-          </button>
-        </div>
+      {/* Search */}
+      <div className="relative mb-4">
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--esl-text-muted)' }} />
+        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Ангилал хайх..."
+          className="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+      </div>
+
+      {/* Category tree */}
+      {filtered.length === 0 ? (
+        <EmptyState icon="📂" title="Ангилал олдсонгүй" desc="Хайлтаа өөрчилнө үү" />
       ) : (
-        <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
-          <div className="divide-y divide-gray-100">
-            {parentCategories.map((cat, idx) => (
-              <div key={cat.id}>
-                {/* Parent */}
-                <div className="flex items-center gap-4 p-4 hover:bg-[var(--esl-bg-section)] transition">
-                  <div className="flex flex-col gap-1">
-                    <button
-                      onClick={() => handleReorder(cat.id, 'up')}
-                      disabled={idx === 0}
-                      className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] disabled:opacity-30 text-xs"
-                    >
-                      ▲
-                    </button>
-                    <button
-                      onClick={() => handleReorder(cat.id, 'down')}
-                      disabled={idx === parentCategories.length - 1}
-                      className="text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] disabled:opacity-30 text-xs"
-                    >
-                      ▼
-                    </button>
-                  </div>
-                  <span className="text-xs text-[var(--esl-text-muted)] w-6 text-center font-mono">{cat.order}</span>
-                  <div className="w-10 h-10 bg-[var(--esl-bg-section)] rounded-lg flex items-center justify-center text-xl">
-                    {cat.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[var(--esl-text-primary)]">{cat.name}</p>
-                    {cat.description && <p className="text-xs text-[var(--esl-text-secondary)] truncate">{cat.description}</p>}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => openEditModal(cat)}
-                      className="text-indigo-600 hover:bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-medium transition"
-                    >
-                      Засах
-                    </button>
-                    <button
-                      onClick={() => handleDelete(cat.id)}
-                      className="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg text-sm font-medium transition"
-                    >
-                      Устгах
-                    </button>
-                  </div>
-                </div>
-                {/* Children */}
-                {getChildren(cat.id).map((child) => (
-                  <div key={child.id} className="flex items-center gap-4 p-4 pl-16 bg-[var(--esl-bg-section)]/50 hover:bg-[var(--esl-bg-section)] transition border-t border-gray-50">
-                    <span className="text-[var(--esl-text-muted)]">└</span>
-                    <span className="text-xs text-[var(--esl-text-muted)] w-6 text-center font-mono">{child.order}</span>
-                    <div className="w-8 h-8 bg-[var(--esl-bg-card)] rounded-lg flex items-center justify-center text-lg border border-[var(--esl-border)]">
-                      {child.icon}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-[var(--esl-text-primary)] text-sm">{child.name}</p>
-                      {child.description && <p className="text-xs text-[var(--esl-text-secondary)] truncate">{child.description}</p>}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => openEditModal(child)}
-                        className="text-indigo-600 hover:bg-indigo-50 px-3 py-1.5 rounded-lg text-xs font-medium transition"
-                      >
-                        Засах
-                      </button>
-                      <button
-                        onClick={() => handleDelete(child.id)}
-                        className="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg text-xs font-medium transition"
-                      >
-                        Устгах
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-            {/* Orphan categories (parentId set but parent deleted) */}
-            {categories
-              .filter((c) => c.parentId && !categories.find((p) => p.id === c.parentId))
-              .map((cat) => (
-                <div key={cat.id} className="flex items-center gap-4 p-4 hover:bg-[var(--esl-bg-section)] transition">
-                  <div className="w-6" />
-                  <span className="text-xs text-[var(--esl-text-muted)] w-6 text-center font-mono">{cat.order}</span>
-                  <div className="w-10 h-10 bg-[var(--esl-bg-section)] rounded-lg flex items-center justify-center text-xl">
-                    {cat.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[var(--esl-text-primary)]">{cat.name}</p>
-                    {cat.description && <p className="text-xs text-[var(--esl-text-secondary)] truncate">{cat.description}</p>}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button onClick={() => openEditModal(cat)} className="text-indigo-600 hover:bg-indigo-50 px-3 py-1.5 rounded-lg text-sm font-medium transition">Засах</button>
-                    <button onClick={() => handleDelete(cat.id)} className="text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg text-sm font-medium transition">Устгах</button>
-                  </div>
-                </div>
-              ))}
-          </div>
+        <div className="space-y-2">
+          {filtered.map(cat => (
+            <CategoryNode key={cat.id} cat={cat} level={0} selected={selected} expanded={expanded}
+              onToggle={toggleCategory} onExpand={toggleExpand} />
+          ))}
         </div>
       )}
+    </div>
+  );
+}
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-[var(--esl-bg-card)] rounded-2xl w-full max-w-md shadow-xl">
-            <div className="p-6 border-b border-[var(--esl-border)]">
-              <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">
-                {editingId ? 'Ангилал засах' : 'Шинэ ангилал'}
-              </h2>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Нэр</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Ангилалын нэр"
-                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-2">Дүрс тэмдэг</label>
-                <div className="flex flex-wrap gap-2">
-                  {EMOJI_OPTIONS.map((e) => (
-                    <button
-                      key={e}
-                      onClick={() => setIcon(e)}
-                      className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-lg transition-all ${
-                        icon === e ? 'border-indigo-500 bg-indigo-50 scale-110' : 'border-[var(--esl-border)] hover:border-[var(--esl-border-strong)]'
-                      }`}
-                    >
-                      {e}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Эцэг ангилал (сонголтоор)</label>
-                <select
-                  value={parentId || ''}
-                  onChange={(e) => setParentId(e.target.value || null)}
-                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-                >
-                  <option value="">-- Эцэг ангилалгүй --</option>
-                  {parentCategories
-                    .filter((c) => c.id !== editingId)
-                    .map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.icon} {c.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-[var(--esl-text-primary)] mb-1">Тайлбар</label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={2}
-                  placeholder="Товч тайлбар (сонголтоор)"
-                  className="w-full border border-[var(--esl-border)] rounded-lg px-3 py-2.5 text-sm text-[var(--esl-text-primary)] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"
-                />
-              </div>
-            </div>
-            <div className="p-6 border-t border-[var(--esl-border)] flex gap-3">
-              <button
-                onClick={() => setShowModal(false)}
-                className="flex-1 border border-[var(--esl-border)] text-[var(--esl-text-primary)] py-2.5 rounded-xl font-semibold text-sm hover:bg-[var(--esl-bg-section)] transition"
-              >
-                Болих
-              </button>
-              <button
-                onClick={handleSave}
-                className="flex-1 bg-indigo-600 text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition"
-              >
-                {editingId ? 'Хадгалах' : 'Нэмэх'}
-              </button>
-            </div>
-          </div>
+function CategoryNode({ cat, level, selected, expanded, onToggle, onExpand }: {
+  cat: Category; level: number; selected: Set<string>; expanded: Set<string>;
+  onToggle: (id: string) => void; onExpand: (id: string) => void;
+}) {
+  const hasChildren = cat.children && cat.children.length > 0;
+  const isExpanded = expanded.has(cat.id);
+  const isSelected = selected.has(cat.id);
+
+  return (
+    <div>
+      <div
+        className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors"
+        style={{
+          background: isSelected ? 'rgba(232,36,44,0.08)' : 'var(--esl-bg-card)',
+          border: isSelected ? '1.5px solid #E8242C' : '1px solid var(--esl-border)',
+          marginLeft: level * 24,
+        }}
+        onClick={() => onToggle(cat.id)}
+      >
+        {/* Expand button */}
+        {hasChildren ? (
+          <button onClick={(e) => { e.stopPropagation(); onExpand(cat.id); }}
+            className="w-6 h-6 flex items-center justify-center rounded border-none cursor-pointer" style={{ background: 'transparent', color: 'var(--esl-text-muted)' }}>
+            {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+          </button>
+        ) : <div className="w-6" />}
+
+        {/* Checkbox */}
+        <div className="w-5 h-5 rounded flex items-center justify-center shrink-0"
+          style={{ background: isSelected ? '#E8242C' : 'var(--esl-bg-page)', border: isSelected ? 'none' : '1.5px solid var(--esl-border)' }}>
+          {isSelected && <Check size={12} className="text-white" />}
+        </div>
+
+        {/* Icon + Name */}
+        <span className="text-lg">{cat.icon || '📁'}</span>
+        <span className="text-sm font-medium" style={{ color: 'var(--esl-text-primary)' }}>{cat.name}</span>
+
+        {/* Children count */}
+        {hasChildren && (
+          <span className="text-[10px] px-2 py-0.5 rounded-full ml-auto" style={{ background: 'var(--esl-bg-page)', color: 'var(--esl-text-muted)' }}>
+            {cat.children!.length} дэд
+          </span>
+        )}
+      </div>
+
+      {/* Children */}
+      {hasChildren && isExpanded && (
+        <div className="mt-1 space-y-1">
+          {cat.children!.map(child => (
+            <CategoryNode key={child.id} cat={child} level={level + 1} selected={selected} expanded={expanded}
+              onToggle={onToggle} onExpand={onExpand} />
+          ))}
         </div>
       )}
     </div>

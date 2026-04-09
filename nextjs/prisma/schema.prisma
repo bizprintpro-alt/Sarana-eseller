@@ -281,6 +281,9 @@ model Shop {
   sellerCommission Float   @default(10)   // Default commission % for sellers
   maxSellers       Int?
 
+  // Categories selected by shop owner
+  categoryIds      String[] @db.ObjectId
+
   // Storefront public page
   storefrontSlug   String?  @unique       // /[slug] public URL
   storefrontConfig Json?                  // Theme, hero, sections config
