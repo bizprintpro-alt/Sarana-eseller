@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import Link from 'next/link';
 import { formatPrice, discountPercent } from '@/lib/utils';
 import type { Product } from '@/lib/api';
 import { Heart } from 'lucide-react';
@@ -188,6 +189,16 @@ export default function ProductCard({
             {stockInfo.text}
           </div>
         )}
+
+        {/* Detail link */}
+        <Link
+          href={`/product/${p._id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="block mt-2 text-center text-[11px] font-medium py-1.5 rounded-lg border border-[var(--esl-border)] hover:bg-[var(--esl-bg-muted)] transition-colors"
+          style={{ color: 'var(--esl-text-muted)' }}
+        >
+          Дэлгэрэнгүй →
+        </Link>
       </div>
     </div>
   );

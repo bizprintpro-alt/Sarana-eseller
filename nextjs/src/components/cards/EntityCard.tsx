@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Play, Eye, MapPin, Calendar, Fuel, Gauge, Star, Clock, Truck } from 'lucide-react';
 import { ENTITY_CARD_CONFIG, resolveEntityType, formatPrice, type EntityType } from '@/lib/cards/entityCardConfig';
 
@@ -161,6 +162,15 @@ export default function EntityCard({ item, entityType, showSellerBtn = false, on
             </button>
           )}
         </div>
+
+        {/* Detail link */}
+        <Link
+          href={`/feed/${item.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="block mt-2 text-center text-[11px] font-medium py-1.5 rounded-lg border border-[var(--esl-border)] hover:bg-[var(--esl-bg-muted)] transition-colors text-[var(--esl-text-muted)]"
+        >
+          Дэлгэрэнгүй →
+        </Link>
       </div>
     </div>
   );
