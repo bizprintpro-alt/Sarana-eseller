@@ -9,6 +9,22 @@ import {
 } from 'lucide-react';
 
 /* ═══ Types ═══ */
+interface SocialLinks {
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+  youtube?: string;
+  whatsapp?: string;
+}
+
+interface ContactInfo {
+  phone?: string;
+  email?: string;
+  address?: string;
+  workingHours?: string;
+  website?: string;
+}
+
 interface StorefrontConfig {
   theme: 'minimal' | 'bold' | 'modern' | 'luxury';
   primaryColor: string;
@@ -20,6 +36,8 @@ interface StorefrontConfig {
   ctaText: string;
   sections: string[];
   isPublished: boolean;
+  socialLinks?: SocialLinks;
+  contactInfo?: ContactInfo;
 }
 
 const DEFAULT_CONFIG: StorefrontConfig = {
@@ -33,6 +51,8 @@ const DEFAULT_CONFIG: StorefrontConfig = {
   ctaText: 'Захиалах',
   sections: ['hero', 'products', 'about', 'reviews', 'contact'],
   isPublished: false,
+  socialLinks: {},
+  contactInfo: {},
 };
 
 const THEMES = [
@@ -257,7 +277,45 @@ export default function StorefrontConfigPage() {
             })}
           </div>
 
-          {/* ── 6. ACTIONS ── */}
+          {/* ── 6. СОШИАЛ ХОЛБООС ── */}
+          <div className="pt-4 border-t" style={{ borderColor: 'var(--esl-border)' }}>
+            <p className="text-[10px] font-bold uppercase tracking-wider mb-3 flex items-center gap-1.5" style={{ color: 'var(--esl-text-muted)' }}>🌐 Сошиал холбоос</p>
+            {(['facebook', 'instagram', 'tiktok', 'youtube', 'whatsapp'] as const).map(platform => (
+              <div key={platform} className="mb-2">
+                <input
+                  placeholder={platform.charAt(0).toUpperCase() + platform.slice(1) + ' URL'}
+                  value={(config.socialLinks as any)?.[platform] || ''}
+                  onChange={e => update({ socialLinks: { ...config.socialLinks, [platform]: e.target.value } })}
+                  className="w-full px-3 py-2 rounded-lg text-xs"
+                  style={{ background: 'var(--esl-bg-page)', border: '1px solid var(--esl-border)', color: 'var(--esl-text-primary)' }}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* ── 7. ХОЛБОГДОХ МЭДЭЭЛЭЛ ── */}
+          <div className="pt-4 border-t" style={{ borderColor: 'var(--esl-border)' }}>
+            <p className="text-[10px] font-bold uppercase tracking-wider mb-3 flex items-center gap-1.5" style={{ color: 'var(--esl-text-muted)' }}>📞 Холбогдох мэдээлэл</p>
+            {([
+              { key: 'phone', placeholder: 'Утас: 9911-2233' },
+              { key: 'email', placeholder: 'Имэйл: info@myshop.mn' },
+              { key: 'address', placeholder: 'Хаяг: СБД, 1-р хороо' },
+              { key: 'workingHours', placeholder: 'Ажлын цаг: 09:00-18:00' },
+              { key: 'website', placeholder: 'Вэбсайт: https://myshop.mn' },
+            ] as const).map(field => (
+              <div key={field.key} className="mb-2">
+                <input
+                  placeholder={field.placeholder}
+                  value={(config.contactInfo as any)?.[field.key] || ''}
+                  onChange={e => update({ contactInfo: { ...config.contactInfo, [field.key]: e.target.value } })}
+                  className="w-full px-3 py-2 rounded-lg text-xs"
+                  style={{ background: 'var(--esl-bg-page)', border: '1px solid var(--esl-border)', color: 'var(--esl-text-primary)' }}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* ── 8. ACTIONS ── */}
           <div className="mt-6 space-y-2 pb-4">
             <button onClick={handleSave} disabled={saving}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold border cursor-pointer transition-all"

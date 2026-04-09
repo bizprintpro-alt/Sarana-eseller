@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { MapPin, Phone, Star, Shield, ShoppingBag, Users, Share2 } from 'lucide-react';
 import { ShareModal } from '@/components/shared/ShareModal';
@@ -49,6 +49,11 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
   const heroTitle = (cfg.heroTitle as string) || '';
   const heroSubtitle = (cfg.heroSubtitle as string) || '';
   const ctaText = (cfg.ctaText as string) || 'Захиалах';
+  const banners = (cfg.banners as any[]) || [];
+  const menuItems = (cfg.menuItems as any[]) || [];
+  const socialLinks = (cfg.socialLinks as Record<string, string>) || {};
+  const contactInfo = (cfg.contactInfo as Record<string, string>) || {};
+  const logoUrl = (cfg.logoUrl as string) || shop.logo;
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--esl-bg-page)' }}>
@@ -114,6 +119,20 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
           )}
         </div>
       </section>
+
+      {/* ═══ MENU NAV ═══ */}
+      {menuItems.length > 0 && (
+        <nav className="max-w-6xl mx-auto px-6 py-3 flex items-center gap-6 overflow-x-auto" style={{ borderBottom: '1px solid var(--esl-border)' }}>
+          {menuItems.map((item: any, i: number) => (
+            <a key={i} href={item.href || '#'} className="text-sm font-semibold no-underline whitespace-nowrap hover:opacity-80 transition" style={{ color: 'var(--esl-text-primary)' }}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      )}
+
+      {/* ═══ BANNER SLIDER ═══ */}
+      {banners.length > 0 && <BannerSlider banners={banners} primaryColor={primaryColor} />}
 
       {/* ═══ PRODUCTS ═══ */}
       <section id="products" className="max-w-6xl mx-auto px-6 py-12">
@@ -193,10 +212,41 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
       )}
 
       {/* ═══ FOOTER ═══ */}
-      <footer className="border-t py-8 text-center" style={{ borderColor: 'var(--esl-border)', background: 'var(--esl-bg-section)' }}>
-        <p className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>
-          © {new Date().getFullYear()} {shop.name} — eseller.mn дээр
-        </p>
+      <footer className="border-t py-10" style={{ borderColor: 'var(--esl-border)', background: 'var(--esl-bg-section)' }}>
+        <div className="max-w-6xl mx-auto px-6">
+          {/* Contact + Social row */}
+          {(Object.keys(socialLinks).length > 0 || Object.keys(contactInfo).length > 0) && (
+            <div className="grid sm:grid-cols-2 gap-8 mb-8">
+              {/* Contact Info */}
+              {Object.keys(contactInfo).length > 0 && (
+                <div>
+                  <p className="text-sm font-bold mb-3" style={{ color: 'var(--esl-text-primary)' }}>Холбогдох</p>
+                  {contactInfo.phone && <p className="text-sm mb-1" style={{ color: 'var(--esl-text-muted)' }}>📞 {contactInfo.phone}</p>}
+                  {contactInfo.email && <p className="text-sm mb-1" style={{ color: 'var(--esl-text-muted)' }}>✉️ {contactInfo.email}</p>}
+                  {contactInfo.address && <p className="text-sm mb-1" style={{ color: 'var(--esl-text-muted)' }}>📍 {contactInfo.address}</p>}
+                  {contactInfo.workingHours && <p className="text-sm mb-1" style={{ color: 'var(--esl-text-muted)' }}>🕐 {contactInfo.workingHours}</p>}
+                  {contactInfo.website && <a href={contactInfo.website} target="_blank" rel="noopener" className="text-sm no-underline" style={{ color: primaryColor }}>🌐 {contactInfo.website}</a>}
+                </div>
+              )}
+              {/* Social Links */}
+              {Object.keys(socialLinks).length > 0 && (
+                <div>
+                  <p className="text-sm font-bold mb-3" style={{ color: 'var(--esl-text-primary)' }}>Сошиал</p>
+                  <div className="flex flex-wrap gap-2">
+                    {socialLinks.facebook && <a href={socialLinks.facebook} target="_blank" rel="noopener" className="px-3 py-1.5 rounded-lg text-xs font-semibold no-underline" style={{ background: 'rgba(24,119,242,0.1)', color: '#1877F2' }}>Facebook</a>}
+                    {socialLinks.instagram && <a href={socialLinks.instagram} target="_blank" rel="noopener" className="px-3 py-1.5 rounded-lg text-xs font-semibold no-underline" style={{ background: 'rgba(225,48,108,0.1)', color: '#E1306C' }}>Instagram</a>}
+                    {socialLinks.tiktok && <a href={socialLinks.tiktok} target="_blank" rel="noopener" className="px-3 py-1.5 rounded-lg text-xs font-semibold no-underline" style={{ background: 'rgba(0,0,0,0.08)', color: 'var(--esl-text-primary)' }}>TikTok</a>}
+                    {socialLinks.youtube && <a href={socialLinks.youtube} target="_blank" rel="noopener" className="px-3 py-1.5 rounded-lg text-xs font-semibold no-underline" style={{ background: 'rgba(255,0,0,0.1)', color: '#FF0000' }}>YouTube</a>}
+                    {socialLinks.whatsapp && <a href={`https://wa.me/${socialLinks.whatsapp}`} target="_blank" rel="noopener" className="px-3 py-1.5 rounded-lg text-xs font-semibold no-underline" style={{ background: 'rgba(37,211,102,0.1)', color: '#25D366' }}>WhatsApp</a>}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          <p className="text-xs text-center" style={{ color: 'var(--esl-text-muted)' }}>
+            © {new Date().getFullYear()} {shop.name} — eseller.mn дээр
+          </p>
+        </div>
       </footer>
 
       <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} url={shareUrl} title={shop.name} description={`${shop.name} — eseller.mn дэлгүүр`} />
@@ -204,5 +254,47 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
       {/* Chat Widget */}
       <ChatWidget shopId={shop.id} shopName={shop.name} primaryColor={primaryColor} />
     </div>
+  );
+}
+
+/* ═══ Banner Slider ═══ */
+function BannerSlider({ banners, primaryColor }: { banners: any[]; primaryColor: string }) {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (banners.length <= 1) return;
+    const timer = setInterval(() => setActive(i => (i + 1) % banners.length), 5000);
+    return () => clearInterval(timer);
+  }, [banners.length]);
+
+  const b = banners[active];
+  if (!b) return null;
+
+  return (
+    <section className="relative overflow-hidden" style={{ height: 320 }}>
+      {b.imageUrl && (
+        <img src={b.imageUrl} alt={b.title || ''} className="absolute inset-0 w-full h-full object-cover" />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-8 max-w-6xl mx-auto">
+        {b.title && <h2 className="text-2xl md:text-4xl font-black text-white mb-2">{b.title}</h2>}
+        {b.subtitle && <p className="text-white/80 text-sm mb-4 max-w-lg">{b.subtitle}</p>}
+        {b.ctaText && (
+          <a href={b.ctaHref || '#products'} className="inline-block px-6 py-3 rounded-xl text-sm font-bold text-white no-underline" style={{ background: primaryColor }}>
+            {b.ctaText}
+          </a>
+        )}
+      </div>
+      {/* Dots */}
+      {banners.length > 1 && (
+        <div className="absolute bottom-3 right-6 flex gap-1.5">
+          {banners.map((_, i) => (
+            <button key={i} onClick={() => setActive(i)}
+              className="w-2 h-2 rounded-full border-none cursor-pointer transition-all"
+              style={{ background: i === active ? '#fff' : 'rgba(255,255,255,0.4)' }} />
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

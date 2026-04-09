@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Search, Star, Eye } from 'lucide-react';
+import { useToast } from '@/components/shared/Toast';
 
 interface Theme {
   id: string;
@@ -49,6 +50,7 @@ const PREVIEW_GRADIENTS: Record<string, string> = {
 };
 
 export default function ThemeStorePage() {
+  const toast = useToast();
   const [themes, setThemes] = useState<Theme[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('all');
@@ -246,8 +248,8 @@ export default function ThemeStorePage() {
                           headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
                           body: JSON.stringify({ config: { theme: theme.style, primaryColor: '#E8242C' } }),
                         });
-                        alert('Theme амжилттай тохируулагдлаа! 🎉');
-                      } catch { alert('Алдаа гарлаа'); }
+                        toast.show('Theme амжилттай тохируулагдлаа!');
+                      } catch { toast.show('Алдаа гарлаа', 'error'); }
                     }}
                     style={{
                       width: '100%', marginTop: 8, padding: '8px 0', borderRadius: 8,
