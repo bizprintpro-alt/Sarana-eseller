@@ -77,7 +77,7 @@ function SectionLabel({ icon: Icon, label }: { icon: React.ElementType; label: s
 export default function StorefrontConfigPage() {
   const { user } = useAuth();
   const toast = useToast();
-  const storeSlug = user?.username || 'mystore';
+  const [storeSlug, setStoreSlug] = useState(user?.username || 'mystore');
 
   const [config, setConfig] = useState<StorefrontConfig>(DEFAULT_CONFIG);
   const [saving, setSaving] = useState(false);
@@ -93,13 +93,11 @@ export default function StorefrontConfigPage() {
         if (d.config && typeof d.config === 'object') {
           setConfig(prev => ({ ...prev, ...d.config }));
         }
-        if (d.slug) storeSlugRef.current = d.slug;
+        if (d.slug) setStoreSlug(d.slug);
       })
       .catch(() => {})
       .finally(() => setConfigLoaded(true));
   }, []);
-
-  const storeSlugRef = useRef(storeSlug);
 
   const update = useCallback((partial: Partial<StorefrontConfig>) => {
     setConfig(prev => ({ ...prev, ...partial }));
