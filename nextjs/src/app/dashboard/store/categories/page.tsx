@@ -80,7 +80,7 @@ export default function StoreCategoriesPage() {
         body: JSON.stringify({ categoryIds: Array.from(selected) }),
       });
       if (res.ok) toast.show(`${selected.size} ангилал хадгалагдлаа`);
-      else toast.show('Алдаа гарлаа', 'error');
+      else { const d = await res.json().catch(() => ({})); toast.show(d.error || 'Алдаа гарлаа', 'error'); }
     } catch {
       toast.show('Алдаа гарлаа', 'error');
     } finally {

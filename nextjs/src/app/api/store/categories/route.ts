@@ -37,10 +37,13 @@ export async function POST(req: NextRequest) {
   const shop = await prisma.shop.findUnique({ where: { userId: user.id } });
   if (!shop) return errorJson('Дэлгүүр олдсонгүй', 404);
 
-  await prisma.shop.update({
-    where: { id: shop.id },
-    data: { categoryIds },
-  });
-
-  return json({ message: 'Ангилалууд хадгалагдлаа', count: categoryIds.length });
+  try {
+    await prisma.shop.update({
+      where: { id: shop.id },
+      data: { categoryIds },
+    });
+    return json({ message: 'Ангилалууд хадгалагдлаа', count: categoryIds.length });
+  } catch (e) {
+    return errorJson('Хадгалж чадсангүй: ' + (e as Error).message, 500);
+  }
 }
