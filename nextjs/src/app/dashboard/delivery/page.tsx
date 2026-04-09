@@ -13,10 +13,20 @@ export default function DeliveryDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [revenue, setRevenue] = useState<{ todayRevenue: number; monthRevenue: number; totalRevenue: number; totalDeliveries: number } | null>(null);
 
   useEffect(() => {
     loadOrders();
+    loadRevenue();
   }, []);
+
+  async function loadRevenue() {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/driver/revenue', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) { const d = await res.json(); setRevenue(d.data); }
+    } catch {}
+  }
 
   async function loadOrders() {
     try {
@@ -55,6 +65,8 @@ export default function DeliveryDashboard() {
       <div className="p-8">
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <StatCard icon="💰" label="Өнөөдрийн орлого" value={revenue ? `${revenue.todayRevenue.toLocaleString()}₮` : '—'} gradient="green" />
+          <StatCard icon="📊" label="Сарын орлого" value={revenue ? `${revenue.monthRevenue.toLocaleString()}₮` : '—'} gradient="amber" />
           <StatCard icon="📦" label="Хүлээгдэж буй" value={confirmed.length} gradient="indigo" />
           <StatCard icon="🚚" label="Хүргэлтэнд" value={shipped.length} gradient="pink" />
           <StatCard icon="✅" label="Хүргэгдсэн" value={delivered.length} gradient="green" />

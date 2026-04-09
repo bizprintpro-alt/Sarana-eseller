@@ -12,6 +12,7 @@ import {
 } from '@/lib/subscription';
 import StatCard from '@/components/dashboard/StatCard';
 import { LocationCoordReminder } from '@/components/seller/LocationCoordReminder';
+import VatStatusWidget from '@/components/store/VatStatusWidget';
 
 const WEEK_DAYS = ['Да', 'Мя', 'Лх', 'Пү', 'Ба', 'Бя', 'Ня'];
 
@@ -159,6 +160,7 @@ export default function SellerDashboardPage() {
 
         {/* ═══ Координат reminder ═══ */}
         <LocationCoordReminder />
+        <VatStatusWidget />
 
         {/* ═══ Header ═══ */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

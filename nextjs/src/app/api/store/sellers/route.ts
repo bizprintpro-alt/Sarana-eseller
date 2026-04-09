@@ -1,56 +1,47 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireSeller, getShopForUser, json, errorJson } from '@/lib/api-auth';
 
-// GET /api/store/sellers — list seller requests for a store
+// GET /api/store/sellers — list sellers for this shop
 export async function GET(req: NextRequest) {
-  try {
-    const status = req.nextUrl.searchParams.get('status') || 'all';
+  const user = requireSeller(req);
+  if (user instanceof Response) return user;
 
-    const where: Record<string, unknown> = {};
-    if (status === 'pending') where.isApproved = false;
-    else if (status === 'approved') where.isApproved = true;
+  const shopId = await getShopForUser(user.id);
+  if (!shopId) return errorJson('Дэлгүүр олдсонгүй', 404);
 
-    const sellerProducts = await prisma.sellerProduct.findMany({
-      where,
-      include: {
-        seller: true,
-        product: { select: { name: true, price: true, emoji: true, images: true } },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+  const sellers = await prisma.sellerProduct.findMany({
+    where: { product: { userId: user.id } },
+    include: {
+      seller: { include: { user: { select: { name: true, email: true, avatar: true } } } },
+      product: { select: { name: true, price: true } },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
 
-    return NextResponse.json({ sellerProducts });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch sellers' }, { status: 500 });
-  }
-}
-
-// POST /api/store/sellers — approve or reject
-export async function POST(req: NextRequest) {
-  try {
-    const { sellerProductId, action, reason } = await req.json();
-
-    if (!sellerProductId || !['approve', 'reject'].includes(action)) {
-      return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-    }
-
-    if (action === 'approve') {
-      await prisma.sellerProduct.update({
-        where: { id: sellerProductId },
-        data: { isApproved: true, approvedAt: new Date() },
+  const sellerMap = new Map<string, any>();
+  for (const sp of sellers) {
+    const sid = sp.sellerProfileId;
+    if (!sellerMap.has(sid)) {
+      sellerMap.set(sid, {
+        id: sid,
+        name: sp.seller.displayName,
+        username: sp.seller.username,
+        avatar: sp.seller.avatar || sp.seller.user.avatar,
+        email: sp.seller.user.email,
+        isVerified: sp.seller.isVerified,
+        commissionRate: sp.seller.commissionRate,
+        totalSales: sp.seller.totalSales,
+        totalEarned: sp.seller.totalEarned,
+        products: [],
+        pendingCount: 0,
+        approvedCount: 0,
       });
-      return NextResponse.json({ success: true, message: 'Зөвшөөрөгдлөө' });
     }
-
-    if (action === 'reject') {
-      await prisma.sellerProduct.delete({
-        where: { id: sellerProductId },
-      });
-      return NextResponse.json({ success: true, message: 'Татгалзлаа', reason });
-    }
-
-    return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to process' }, { status: 500 });
+    const s = sellerMap.get(sid)!;
+    s.products.push({ id: sp.id, productName: sp.product.name, isApproved: sp.isApproved, clicks: sp.clicks, conversions: sp.conversions });
+    if (sp.isApproved) s.approvedCount++; else s.pendingCount++;
   }
+
+  return json(Array.from(sellerMap.values()));
 }

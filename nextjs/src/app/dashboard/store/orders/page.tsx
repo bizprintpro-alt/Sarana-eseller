@@ -29,14 +29,6 @@ const LIGHT_STATUS: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-700',
 };
 
-const MOCK_ORDERS: Order[] = [
-  { _id: '1', orderNumber: 'ORD-1001', user: { name: 'Бат-Эрдэнэ' }, items: [{ name: 'Premium цагаан цамц', price: 35000, quantity: 2 }], total: 70000, status: 'pending', referralCode: 'REF123', delivery: { phone: '99112233', address: { district: 'СБД', street: '1-р хороо', building: '45-р байр' } }, createdAt: '2026-04-02T10:00:00Z' },
-  { _id: '2', orderNumber: 'ORD-1002', user: { name: 'Сарангэрэл' }, items: [{ name: 'Bluetooth чихэвч', price: 99000, quantity: 1 }], total: 99000, status: 'confirmed', delivery: { phone: '88001122', address: { district: 'БЗД', street: '3-р хороо', building: '12-р байр' } }, createdAt: '2026-04-01T14:30:00Z' },
-  { _id: '3', orderNumber: 'ORD-1003', user: { name: 'Ганбаатар' }, items: [{ name: 'Sporty гутал Air', price: 69000, quantity: 1 }, { name: 'Designer малгай', price: 22000, quantity: 1 }], total: 91000, status: 'shipped', referralCode: 'AFF456', delivery: { phone: '95554433', address: { district: 'ЧД', street: '5-р хороо', building: '8-р байр' } }, createdAt: '2026-03-30T09:15:00Z' },
-  { _id: '4', orderNumber: 'ORD-1004', user: { name: 'Оюунчимэг' }, items: [{ name: 'Нүүрний крем SPF50', price: 28000, quantity: 3 }], total: 84000, status: 'delivered', delivery: { phone: '99887766', address: { district: 'ХУД', street: '2-р хороо', building: '33-р байр' } }, createdAt: '2026-03-28T16:45:00Z' },
-  { _id: '5', orderNumber: 'ORD-1005', user: { name: 'Тэмүүлэн' }, items: [{ name: 'Yoga mat pro', price: 44000, quantity: 1 }], total: 44000, status: 'pending', delivery: { phone: '88776655', address: { district: 'СХД', street: '7-р хороо', building: '20-р байр' } }, createdAt: '2026-04-03T08:00:00Z' },
-  { _id: '6', orderNumber: 'ORD-1006', user: { name: 'Болормаа' }, items: [{ name: 'Leather цүнх', price: 75000, quantity: 1 }], total: 75000, status: 'confirmed', referralCode: 'REF789', delivery: { phone: '99665544', address: { district: 'БГД', street: '4-р хороо', building: '15-р байр' } }, createdAt: '2026-04-02T11:20:00Z' },
-];
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -53,9 +45,9 @@ export default function OrdersPage() {
     setLoading(true);
     try {
       const res = await OrdersAPI.list();
-      setOrders(res.orders?.length ? res.orders : MOCK_ORDERS);
+      setOrders(res.orders || []);
     } catch {
-      setOrders(MOCK_ORDERS);
+      setOrders([]);
     } finally {
       setLoading(false);
     }

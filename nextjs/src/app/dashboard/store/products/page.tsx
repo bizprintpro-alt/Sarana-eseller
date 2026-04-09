@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { ProductsAPI, Product } from '@/lib/api';
-import { formatPrice, CATEGORIES, DEMO_PRODUCTS, cn } from '@/lib/utils';
+import { formatPrice, CATEGORIES, cn } from '@/lib/utils';
 import { useToast } from '@/components/shared/Toast';
 import StatCard from '@/components/dashboard/StatCard';
 import {
@@ -53,8 +53,8 @@ export default function ProductsPage() {
   useEffect(() => { loadProducts(); }, []);
   async function loadProducts() {
     setLoading(true);
-    try { const res = await ProductsAPI.list(); setProducts(res.products?.length ? res.products : DEMO_PRODUCTS as Product[]); }
-    catch { setProducts(DEMO_PRODUCTS as Product[]); }
+    try { const res = await ProductsAPI.list(); setProducts(res.products || []); }
+    catch { setProducts([]); }
     finally { setLoading(false); }
   }
 

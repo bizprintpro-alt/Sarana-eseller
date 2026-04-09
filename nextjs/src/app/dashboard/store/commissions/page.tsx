@@ -1,140 +1,199 @@
 'use client';
 
-import { useState } from 'react';
-import { formatPrice } from '@/lib/utils';
-import StatCard from '@/components/dashboard/StatCard';
-import { useToast } from '@/components/shared/Toast';
-import {
-  DollarSign, Users, TrendingUp, Crown, Search, Check,
-} from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Search, Loader2, DollarSign, Clock, Users, Inbox } from 'lucide-react';
 
-/* ═══ Demo Data ═══ */
-interface SellerCommissionRow {
+interface Commission {
   id: string;
+  orderId: string;
   sellerName: string;
   sellerUsername: string;
-  salesCount: number;
-  totalAmount: number;
+  orderAmount: number;
   commissionRate: number;
-  commissionTotal: number;
-  pendingAmount: number;
-  paidAmount: number;
-  lastSaleDate: string;
+  commissionAmount: number;
+  platformFee: number;
+  shopAmount: number;
+  status: 'pending' | 'confirmed' | 'paid' | 'cancelled';
+  paidAt: string | null;
+  createdAt: string;
 }
 
-const DEMO_SELLERS: SellerCommissionRow[] = [
-  { id: 's1', sellerName: 'Э. Мөнхзул', sellerUsername: 'munkhzul', salesCount: 45, totalAmount: 2850000, commissionRate: 15, commissionTotal: 427500, pendingAmount: 67500, paidAmount: 360000, lastSaleDate: '2026-04-05' },
-  { id: 's2', sellerName: 'Д. Ганбаатар', sellerUsername: 'ganbaa', salesCount: 28, totalAmount: 1540000, commissionRate: 10, commissionTotal: 154000, pendingAmount: 22000, paidAmount: 132000, lastSaleDate: '2026-04-04' },
-  { id: 's3', sellerName: 'Б. Баяраа', sellerUsername: 'bayaraa', salesCount: 15, totalAmount: 975000, commissionRate: 15, commissionTotal: 146250, pendingAmount: 146250, paidAmount: 0, lastSaleDate: '2026-04-05' },
-  { id: 's4', sellerName: 'Б. Тэмүүлэн', sellerUsername: 'temuulen', salesCount: 12, totalAmount: 680000, commissionRate: 10, commissionTotal: 68000, pendingAmount: 8500, paidAmount: 59500, lastSaleDate: '2026-04-03' },
-  { id: 's5', sellerName: 'О. Сарантуяа', sellerUsername: 'sarantuya', salesCount: 8, totalAmount: 420000, commissionRate: 12, commissionTotal: 50400, pendingAmount: 50400, paidAmount: 0, lastSaleDate: '2026-04-02' },
+interface Stats {
+  totalPaid: number;
+  totalPending: number;
+  activeSellers: number;
+}
+
+const STATUS_MAP: Record<string, { label: string; bg: string; color: string }> = {
+  pending:   { label: 'Хүлээгдэж буй', bg: 'rgba(217,119,6,0.1)',  color: '#D97706' },
+  confirmed: { label: 'Батлагдсан',     bg: 'rgba(37,99,235,0.1)',  color: '#2563EB' },
+  paid:      { label: 'Төлөгдсөн',     bg: 'rgba(22,163,74,0.1)',  color: '#16A34A' },
+  cancelled: { label: 'Цуцлагдсан',    bg: 'rgba(220,38,38,0.1)',  color: '#DC2626' },
+};
+
+const TABS: { key: string; label: string }[] = [
+  { key: 'all',       label: 'Бүгд' },
+  { key: 'pending',   label: 'Хүлээгдэж буй' },
+  { key: 'confirmed', label: 'Батлагдсан' },
+  { key: 'paid',      label: 'Төлөгдсөн' },
 ];
 
+function fmt(n: number) {
+  return n.toLocaleString('mn-MN') + '₮';
+}
+
+function fmtDate(d: string) {
+  return new Date(d).toLocaleDateString('mn-MN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+}
+
 export default function StoreCommissionsPage() {
-  const toast = useToast();
+  const [commissions, setCommissions] = useState<Commission[]>([]);
+  const [stats, setStats] = useState<Stats>({ totalPaid: 0, totalPending: 0, activeSellers: 0 });
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [sellers, setSellers] = useState(DEMO_SELLERS);
-  const [payingId, setPayingId] = useState<string | null>(null);
+  const [tab, setTab] = useState('all');
 
-  const totalPaid = sellers.reduce((s, r) => s + r.paidAmount, 0);
-  const totalPending = sellers.reduce((s, r) => s + r.pendingAmount, 0);
-  const thisMonth = sellers.reduce((s, r) => s + r.commissionTotal, 0);
-  const topSeller = sellers.sort((a, b) => b.salesCount - a.salesCount)[0];
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    fetch('/api/store/commissions', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          setCommissions(res.data.commissions);
+          setStats(res.data.stats);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
-  const filtered = search
-    ? sellers.filter(s => s.sellerName.toLowerCase().includes(search.toLowerCase()) || s.sellerUsername.includes(search.toLowerCase()))
-    : sellers;
+  const filtered = useMemo(() => {
+    let list = commissions;
+    if (tab !== 'all') list = list.filter(c => c.status === tab);
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter(c => c.sellerName.toLowerCase().includes(q));
+    }
+    return list;
+  }, [commissions, tab, search]);
 
-  const handlePay = (id: string) => {
-    setPayingId(id);
-    setTimeout(() => {
-      setSellers(prev => prev.map(s => s.id === id ? { ...s, paidAmount: s.paidAmount + s.pendingAmount, pendingAmount: 0 } : s));
-      toast.show('Төлбөр амжилттай!', 'ok');
-      setPayingId(null);
-    }, 1500);
-  };
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-32">
+        <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#E8242C' }} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--esl-text-primary)' }}>Борлуулагчдын комисс</h1>
-        <p className="text-sm mt-0.5" style={{ color: 'var(--esl-text-muted)' }}>Борлуулагч бүрийн орлого, төлбөрийн тайлан</p>
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--esl-text-primary)' }}>Комисс</h1>
+        <p className="text-sm mt-0.5" style={{ color: 'var(--esl-text-muted)' }}>Борлуулагчдын комиссын тайлан</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon="💰" label="Нийт төлсөн комисс" value={formatPrice(totalPaid)} variant="primary" />
-        <StatCard icon="👥" label="Идэвхтэй борлуулагч" value={sellers.length} variant="info" />
-        <StatCard icon="⏳" label="Төлөгдөөгүй" value={formatPrice(totalPending)} variant="warning" />
-        <StatCard icon="👑" label="Шилдэг борлуулагч" value={topSeller?.sellerName || '—'} variant="success" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[
+          { icon: DollarSign, label: 'Нийт төлсөн', value: fmt(stats.totalPaid), color: '#16A34A' },
+          { icon: Clock,      label: 'Хүлээгдэж буй', value: fmt(stats.totalPending), color: '#D97706' },
+          { icon: Users,      label: 'Идэвхтэй борлуулагч', value: String(stats.activeSellers), color: '#2563EB' },
+        ].map(s => (
+          <div key={s.label} className="rounded-2xl border p-4 flex items-center gap-3"
+            style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: s.color + '18' }}>
+              <s.icon className="w-5 h-5" style={{ color: s.color }} />
+            </div>
+            <div>
+              <p className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>{s.label}</p>
+              <p className="text-lg font-bold" style={{ color: 'var(--esl-text-primary)' }}>{s.value}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--esl-text-muted)' }} />
-        <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Борлуулагч хайх..."
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl border text-sm outline-none focus:border-[#E8242C]"
-          style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+      {/* Tabs + Search */}
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+        <div className="flex gap-1 rounded-xl p-1 border" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
+          {TABS.map(t => (
+            <button key={t.key} onClick={() => setTab(t.key)}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+              style={{
+                background: tab === t.key ? '#E8242C' : 'transparent',
+                color: tab === t.key ? '#fff' : 'var(--esl-text-muted)',
+              }}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <div className="relative max-w-xs w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--esl-text-muted)' }} />
+          <input type="text" value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Борлуулагч хайх..."
+            className="w-full pl-10 pr-4 py-2 rounded-xl border text-sm outline-none focus:border-[#E8242C]"
+            style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)' }} />
+        </div>
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border overflow-hidden" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--esl-border)' }}>
-                {['Борлуулагч', 'Борлуулалт', 'Нийт дүн', 'Комисс %', 'Нийт комисс', 'Төлөгдсөн', 'Үлдэгдэл', ''].map(h => (
-                  <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-wider" style={{ color: 'var(--esl-text-muted)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(s => (
-                <tr key={s.id} className="hover:bg-[var(--esl-bg-section)] transition-colors" style={{ borderBottom: '1px solid var(--esl-border)' }}>
-                  <td className="px-4 py-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-full bg-[rgba(232,36,44,0.1)] flex items-center justify-center text-xs font-bold text-[#E8242C]">
-                        {s.sellerName.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold" style={{ color: 'var(--esl-text-primary)' }}>{s.sellerName}</p>
-                        <p className="text-[10px]" style={{ color: 'var(--esl-text-muted)' }}>@{s.sellerUsername}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3.5 text-sm font-medium" style={{ color: 'var(--esl-text-primary)' }}>{s.salesCount}</td>
-                  <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--esl-text-secondary)' }}>{formatPrice(s.totalAmount)}</td>
-                  <td className="px-4 py-3.5 text-sm font-semibold" style={{ color: 'var(--esl-text-primary)' }}>{s.commissionRate}%</td>
-                  <td className="px-4 py-3.5 text-sm font-bold text-[#E8242C]">{formatPrice(s.commissionTotal)}</td>
-                  <td className="px-4 py-3.5">
-                    <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: 'rgba(22,163,74,0.1)', color: '#16A34A' }}>
-                      {formatPrice(s.paidAmount)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3.5">
-                    {s.pendingAmount > 0 ? (
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: 'rgba(217,119,6,0.1)', color: '#D97706' }}>
-                        {formatPrice(s.pendingAmount)}
-                      </span>
-                    ) : (
-                      <span className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>—</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3.5">
-                    {s.pendingAmount > 0 && (
-                      <button onClick={() => handlePay(s.id)} disabled={payingId === s.id}
-                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#E8242C] text-white border-none cursor-pointer hover:bg-[#C41E25] transition whitespace-nowrap">
-                        {payingId === s.id ? '...' : <><Check className="w-3 h-3" /> Төлөх</>}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 rounded-2xl border"
+          style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
+          <Inbox className="w-10 h-10 mb-3" style={{ color: 'var(--esl-text-muted)' }} />
+          <p className="text-sm font-medium" style={{ color: 'var(--esl-text-muted)' }}>Комисс байхгүй байна</p>
         </div>
-      </div>
+      ) : (
+        <div className="rounded-2xl border overflow-hidden" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--esl-border)' }}>
+                  {['Огноо', 'Борлуулагч', 'Захиалгын дүн', 'Хувь', 'Комисс', 'Статус'].map(h => (
+                    <th key={h} className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-wider"
+                      style={{ color: 'var(--esl-text-muted)' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map(c => {
+                  const badge = STATUS_MAP[c.status] || STATUS_MAP.pending;
+                  return (
+                    <tr key={c.id} className="hover:brightness-95 transition-colors"
+                      style={{ borderBottom: '1px solid var(--esl-border)' }}>
+                      <td className="px-4 py-3 text-xs whitespace-nowrap" style={{ color: 'var(--esl-text-muted)' }}>
+                        {fmtDate(c.createdAt)}
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-[rgba(232,36,44,0.1)] flex items-center justify-center text-[10px] font-bold text-[#E8242C]">
+                            {c.sellerName.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium" style={{ color: 'var(--esl-text-primary)' }}>{c.sellerName}</p>
+                            <p className="text-[10px]" style={{ color: 'var(--esl-text-muted)' }}>@{c.sellerUsername}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm" style={{ color: 'var(--esl-text-primary)' }}>{fmt(c.orderAmount)}</td>
+                      <td className="px-4 py-3 text-sm font-semibold" style={{ color: 'var(--esl-text-primary)' }}>{c.commissionRate}%</td>
+                      <td className="px-4 py-3 text-sm font-bold text-[#E8242C]">{fmt(c.commissionAmount)}</td>
+                      <td className="px-4 py-3">
+                        <span className="text-[10px] font-medium px-2 py-0.5 rounded-full"
+                          style={{ background: badge.bg, color: badge.color }}>
+                          {badge.label}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
