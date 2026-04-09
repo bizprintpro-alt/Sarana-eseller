@@ -31,10 +31,13 @@ export default async function StorefrontPage({ params }: { params: Promise<{ slu
     orderBy: { createdAt: 'desc' },
   });
 
+  // Map Prisma `id` to `_id` for client compatibility
+  const clientProducts = products.map(p => ({ ...p, _id: p.id }));
+
   return (
     <StorefrontClient
       shop={JSON.parse(JSON.stringify(shop))}
-      products={JSON.parse(JSON.stringify(products))}
+      products={JSON.parse(JSON.stringify(clientProducts))}
     />
   );
 }
