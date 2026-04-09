@@ -30,24 +30,6 @@ interface Msg {
   createdAt: string;
 }
 
-/* ═══ Demo data (API fallback) ═══ */
-const DEMO_CONVS: Conv[] = [
-  { id: '1', customerName: 'Болд Тэгшбаяр', lastMessage: 'Захиалгаа хэзээ хүргэх вэ?', lastAt: new Date().toISOString(), unreadCount: 2, tag: 'order', orderNumber: '#1042', productName: 'Sporty гутал Air — Цагаан, 42', productPrice: 69000, customerId: 'c1' },
-  { id: '2', customerName: 'Номин Баярмаа', lastMessage: '42 дугаар байна уу?', lastAt: new Date(Date.now() - 3600000).toISOString(), unreadCount: 1, tag: 'question', orderNumber: null, productName: null, productPrice: null, customerId: 'c2' },
-  { id: '3', customerName: 'Ганбаяр Эрдэнэ', lastMessage: 'Баярлалаа!', lastAt: new Date(Date.now() - 86400000).toISOString(), unreadCount: 0, tag: null, orderNumber: null, productName: null, productPrice: null, customerId: 'c3' },
-  { id: '4', customerName: 'Туяа Дорж', lastMessage: 'Захиалга цуцалж болох уу?', lastAt: new Date(Date.now() - 86400000).toISOString(), unreadCount: 1, tag: 'order', orderNumber: '#1039', productName: null, productPrice: null, customerId: 'c4' },
-  { id: '5', customerName: 'Сүхбаатар М.', lastMessage: 'Зураг илгээгдсэн', lastAt: new Date(Date.now() - 259200000).toISOString(), unreadCount: 0, tag: null, orderNumber: null, productName: null, productPrice: null, customerId: 'c5' },
-  { id: '6', customerName: 'Оюунтулга Б.', lastMessage: 'Хэмжээ буруу ирлээ', lastAt: new Date(Date.now() - 172800000).toISOString(), unreadCount: 0, tag: 'order', orderNumber: '#1035', productName: null, productPrice: null, customerId: 'c6' },
-];
-
-const DEMO_MSGS: Msg[] = [
-  { id: 'm1', senderId: 'c1', senderRole: 'customer', text: 'Сайн байна уу! Sporty гутал 42 дугаар захиалсан байсан шүү дээ, хэзээ ирэх вэ?', imageUrl: null, isRead: true, createdAt: new Date(Date.now() - 600000).toISOString() },
-  { id: 'm2', senderId: 'seller', senderRole: 'seller', text: 'Сайн уу Болд! Таны захиалга #1042 баталгаажсан байна. Өнөөдөр 12:00-14:00 цагт хүргэнэ.', imageUrl: null, isRead: true, createdAt: new Date(Date.now() - 540000).toISOString() },
-  { id: 'm3', senderId: 'c1', senderRole: 'customer', text: 'За ойлголоо. Гэрт байна уу гэж асуугаарай жолооч надад залгаад хүргэж болох уу?', imageUrl: null, isRead: true, createdAt: new Date(Date.now() - 480000).toISOString() },
-  { id: 'm4', senderId: 'seller', senderRole: 'seller', text: 'Мэдээж! Жолооч хүргэхийн өмнө залгана. Утас дугаар зөв байна уу: 9911-2233?', imageUrl: null, isRead: true, createdAt: new Date(Date.now() - 420000).toISOString() },
-  { id: 'm5', senderId: 'c1', senderRole: 'customer', text: 'Тийм зөв байна. Баярлалаа!', imageUrl: null, isRead: true, createdAt: new Date(Date.now() - 360000).toISOString() },
-  { id: 'm6', senderId: 'c1', senderRole: 'customer', text: 'Нэг дахин асуумаар байна — хэрэв 44 дугаар авмаар бол боломжтой юу?', imageUrl: null, isRead: false, createdAt: new Date(Date.now() - 60000).toISOString() },
-];
 
 /* ═══ Helpers ═══ */
 function getInitials(name: string) {
@@ -91,17 +73,17 @@ const QUICK_REPLIES = [
 
 /* ═══ Page ═══ */
 export default function SellerChatPage() {
-  const [convs, setConvs] = useState<Conv[]>(DEMO_CONVS);
-  const [msgs, setMsgs] = useState<Msg[]>(DEMO_MSGS);
-  const [activeConv, setActiveConv] = useState<Conv | null>(DEMO_CONVS[0]);
+  const [convs, setConvs] = useState<Conv[]>([]);
+  const [msgs, setMsgs] = useState<Msg[]>([]);
+  const [activeConv, setActiveConv] = useState<Conv | null>(null);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const msgsEndRef = useRef<HTMLDivElement>(null);
 
-  // Fetch conversations
-  useEffect(() => {
+  // Fetch conversations + polling every 5s
+  const fetchConvs = useCallback(() => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (filter !== 'all') params.set('filter', filter);
@@ -111,9 +93,20 @@ export default function SellerChatPage() {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
       .then(r => r.json())
-      .then(data => { if (Array.isArray(data) && data.length > 0) setConvs(data); })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setConvs(data);
+          if (!activeConv && data.length > 0) setActiveConv(data[0]);
+        }
+      })
       .catch(() => {});
-  }, [filter, search]);
+  }, [filter, search, activeConv]);
+
+  useEffect(() => {
+    fetchConvs();
+    const interval = setInterval(fetchConvs, 5000);
+    return () => clearInterval(interval);
+  }, [fetchConvs]);
 
   // Fetch messages when active conv changes
   useEffect(() => {

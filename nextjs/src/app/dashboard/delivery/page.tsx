@@ -40,12 +40,14 @@ export default function DeliveryDashboard() {
   }
 
   async function updateStatus(id: string, status: string) {
+    // Optimistic update
+    setOrders(prev => prev.map(o => o._id === id ? { ...o, status } as Order : o));
     try {
       await OrdersAPI.updateStatus(id, status);
       toast.show('✅ Төлөв шинэчлэгдлээ');
-      loadOrders();
     } catch {
       toast.show('Алдаа гарлаа', 'error');
+      loadOrders(); // revert on error
     }
   }
 
@@ -53,6 +55,11 @@ export default function DeliveryDashboard() {
   const delivered = orders.filter((o) => o.status === 'delivered');
   const confirmed = orders.filter((o) => o.status === 'confirmed');
   const filtered = filter === 'all' ? orders : orders.filter((o) => o.status === filter);
+
+  // First active delivery address for Google Maps link
+  const activeOrder = [...shipped, ...confirmed][0];
+  const addr = activeOrder?.delivery?.address;
+  const activeConvAddress = addr ? [addr.district, addr.street, addr.building].filter(Boolean).join(', ') + ', Улаанбаатар' : null;
 
   return (
     <div>
@@ -158,8 +165,19 @@ export default function DeliveryDashboard() {
         {/* GPS Map placeholder */}
         <div className="mt-8 rounded-2xl p-6 text-center" style={{ background: 'var(--esl-bg-section)', border: '1px solid var(--esl-border)' }}>
           <div className="text-4xl mb-2">🗺️</div>
-          <p className="text-sm font-semibold" style={{ color: 'var(--esl-text-primary)' }}>Газрын зураг</p>
-          <p className="text-xs mt-1" style={{ color: 'var(--esl-text-muted)' }}>Mobile app-д GPS route харагдана</p>
+          <p className="text-sm font-semibold" style={{ color: 'var(--esl-text-primary)' }}>GPS чиглэл</p>
+          <p className="text-xs mt-1 mb-3" style={{ color: 'var(--esl-text-muted)' }}>Хүргэлтийн газрын зураг mobile app-д бүрэн харагдана</p>
+          {activeConvAddress && (
+            <a
+              href={`https://maps.google.com?q=${encodeURIComponent(activeConvAddress)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline"
+              style={{ background: '#E8242C' }}
+            >
+              📍 Google Maps-д харах →
+            </a>
+          )}
         </div>
       </div>
     </div>

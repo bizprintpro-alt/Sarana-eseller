@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { AffiliateAPI, WalletAPI, ProductsAPI, Product } from '@/lib/api';
-import { formatPrice, DEMO_PRODUCTS, cn } from '@/lib/utils';
+import { formatPrice, cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
 import StatCard from '@/components/dashboard/StatCard';
 import EmptyState from '@/components/dashboard/EmptyState';
@@ -77,15 +77,6 @@ const fadeUp = {
 };
 
 /* ═══ Commissions Tab ═══ */
-const DEMO_COMMISSIONS = [
-  { id: 'c1', orderId: 'ORD-2841', productName: 'iPhone 15 Pro', orderAmount: 3800000, commissionRate: 15, commissionAmount: 570000, status: 'paid' as const, createdAt: '2026-04-01' },
-  { id: 'c2', orderId: 'ORD-2856', productName: 'Cashmere цамц', orderAmount: 89000, commissionRate: 12, commissionAmount: 10680, status: 'paid' as const, createdAt: '2026-04-02' },
-  { id: 'c3', orderId: 'ORD-2870', productName: 'Yoga mat pro', orderAmount: 55000, commissionRate: 15, commissionAmount: 8250, status: 'confirmed' as const, createdAt: '2026-04-03' },
-  { id: 'c4', orderId: 'ORD-2891', productName: 'Wireless earbuds', orderAmount: 65000, commissionRate: 15, commissionAmount: 9750, status: 'confirmed' as const, createdAt: '2026-04-04' },
-  { id: 'c5', orderId: 'ORD-2903', productName: 'Face serum', orderAmount: 45000, commissionRate: 10, commissionAmount: 4500, status: 'pending' as const, createdAt: '2026-04-05' },
-  { id: 'c6', orderId: 'ORD-2910', productName: 'Bluetooth speaker', orderAmount: 85000, commissionRate: 10, commissionAmount: 8500, status: 'pending' as const, createdAt: '2026-04-05' },
-];
-
 const COMM_STATUS: Record<string, { label: string; color: string; bg: string }> = {
   pending: { label: 'Хүлээгдэж буй', color: '#D97706', bg: 'rgba(217,119,6,0.1)' },
   confirmed: { label: 'Баталгаажсан', color: '#2563EB', bg: 'rgba(37,99,235,0.1)' },
@@ -94,9 +85,21 @@ const COMM_STATUS: Record<string, { label: string; color: string; bg: string }> 
 
 function CommissionsTab() {
   const [filter, setFilter] = useState<string>('all');
-  const filtered = filter === 'all' ? DEMO_COMMISSIONS : DEMO_COMMISSIONS.filter(c => c.status === filter);
-  const totalEarned = DEMO_COMMISSIONS.reduce((s, c) => s + c.commissionAmount, 0);
-  const pendingAmount = DEMO_COMMISSIONS.filter(c => c.status === 'pending').reduce((s, c) => s + c.commissionAmount, 0);
+  const [commissions, setCommissions] = useState<any[]>([]);
+  const [commLoading, setCommLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    fetch('/api/affiliate/commissions', { headers: token ? { Authorization: `Bearer ${token}` } : {} })
+      .then(r => r.json())
+      .then(d => setCommissions(d.data?.commissions || d.data || []))
+      .catch(() => {})
+      .finally(() => setCommLoading(false));
+  }, []);
+
+  const filtered = filter === 'all' ? commissions : commissions.filter((c: any) => c.status === filter);
+  const totalEarned = commissions.reduce((s: number, c: any) => s + (c.commissionAmount || 0), 0);
+  const pendingAmount = commissions.filter((c: any) => c.status === 'pending').reduce((s: number, c: any) => s + (c.commissionAmount || 0), 0);
 
   return (
     <div className="space-y-6">
@@ -104,8 +107,8 @@ function CommissionsTab() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon="💰" label="Нийт комисс" value={formatPrice(totalEarned)} gradient="indigo" />
         <StatCard icon="⏳" label="Хүлээгдэж буй" value={formatPrice(pendingAmount)} gradient="amber" />
-        <StatCard icon="🎯" label="Борлуулалт" value={DEMO_COMMISSIONS.length} gradient="green" />
-        <StatCard icon="📊" label="Дундаж комисс" value={`${Math.round(DEMO_COMMISSIONS.reduce((s, c) => s + c.commissionRate, 0) / DEMO_COMMISSIONS.length)}%`} gradient="pink" />
+        <StatCard icon="🎯" label="Борлуулалт" value={commissions.length} gradient="green" />
+        <StatCard icon="📊" label="Дундаж комисс" value={commissions.length ? `${Math.round(commissions.reduce((s: number, c: any) => s + (c.commissionRate || 0), 0) / commissions.length)}%` : '—'} gradient="pink" />
       </div>
 
       {/* Filter */}
@@ -131,8 +134,10 @@ function CommissionsTab() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
-                <tr><td colSpan={7} className="text-center py-12 text-sm text-[var(--esl-text-muted)]">Мэдээлэл олдсонгүй</td></tr>
+              {commLoading ? (
+                <tr><td colSpan={7} className="text-center py-12 text-sm text-[var(--esl-text-muted)]">Ачааллаж байна...</td></tr>
+              ) : filtered.length === 0 ? (
+                <tr><td colSpan={7} className="text-center py-12 text-sm text-[var(--esl-text-muted)]">Комисс байхгүй байна</td></tr>
               ) : filtered.map(c => {
                 const st = COMM_STATUS[c.status] || COMM_STATUS.pending;
                 return (
@@ -192,7 +197,7 @@ export default function AffiliateDashboard() {
         ProductsAPI.list(), AffiliateAPI.getEarnings(), WalletAPI.get(),
       ]);
       if (prodRes.status === 'fulfilled' && prodRes.value.products?.length) setProducts(prodRes.value.products);
-      else setProducts(DEMO_PRODUCTS as Product[]);
+      else setProducts([] as Product[]);
       if (earningsRes.status === 'fulfilled') setEarnings(earningsRes.value as EarningsData);
       else setEarnings({
         totalEarnings: 284000, monthlyEarnings: 67500, totalClicks: 1243, conversionRate: 4.8,
@@ -207,7 +212,7 @@ export default function AffiliateDashboard() {
       });
       if (walletRes.status === 'fulfilled') setWallet(walletRes.value as WalletData);
       else setWallet({ balance: 216500, pending: 67500 });
-    } catch { setProducts(DEMO_PRODUCTS as Product[]); }
+    } catch { setProducts([] as Product[]); }
     finally { setLoading(false); }
   }, []);
 
