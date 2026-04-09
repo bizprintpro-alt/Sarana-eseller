@@ -1,55 +1,76 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
+import { prisma } from '@/lib/prisma';
 import { getShopBySlug } from '@/lib/shop-data';
 import { SERVICE_INDUSTRIES } from '@/lib/types/service';
 import ServiceProfileClient from '@/components/service-profile/ServiceProfileClient';
+import StorefrontClient from '@/components/storefront/StorefrontClient';
 
 type Props = { params: Promise<{ shopSlug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { shopSlug } = await params;
-  const data = await getShopBySlug(shopSlug);
 
-  if (!data) {
-    return { title: 'Олдсонгүй — eseller.mn' };
+  try {
+    const shop = await prisma.shop.findFirst({
+      where: { OR: [{ slug: shopSlug }, { storefrontSlug: shopSlug }] },
+      select: { name: true, address: true, logo: true, industry: true, slug: true },
+    });
+    if (!shop) return { title: 'Олдсонгүй — eseller.mn' };
+
+    const title = `${shop.name} — eseller.mn`;
+    return {
+      title,
+      description: shop.address || shop.name,
+      openGraph: {
+        title,
+        url: `https://eseller.mn/s/${shop.slug}`,
+        images: shop.logo ? [{ url: shop.logo }] : [],
+      },
+    };
+  } catch {
+    return { title: 'eseller.mn' };
   }
-
-  const { shop, services } = data;
-  const industryLabel = SERVICE_INDUSTRIES.find((i) => i.value === shop.industry)?.label || '';
-  const serviceNames = services.slice(0, 3).map((s) => s.name).join(', ');
-
-  const title = `${shop.name} — ${industryLabel || 'Үйлчилгээ'} | eseller.mn`;
-  const description = shop.description
-    || `${shop.name} — ${industryLabel}. ${serviceNames}${services.length > 3 ? ` болон бусад ${services.length - 3} үйлчилгээ` : ''}. Онлайнаар цаг захиалах.`;
-
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      type: 'website',
-      siteName: 'eseller.mn',
-      url: `https://eseller.mn/s/${shop.slug}`,
-      images: shop.logo ? [{ url: shop.logo, width: 400, height: 400, alt: shop.name }] : [],
-    },
-    twitter: {
-      card: 'summary',
-      title,
-      description,
-    },
-    other: {
-      'business:contact_data:street_address': shop.address || '',
-      'business:contact_data:phone_number': shop.phone || '',
-    },
-  };
 }
 
 export default async function ShopProfilePage({ params }: Props) {
   const { shopSlug } = await params;
-  const data = await getShopBySlug(shopSlug);
 
-  if (!data) notFound();
+  // Find the shop
+  const shop = await prisma.shop.findFirst({
+    where: { OR: [{ slug: shopSlug }, { storefrontSlug: shopSlug }] },
+    include: {
+      user: { select: { name: true, avatar: true } },
+      services: { where: { isActive: true }, orderBy: { createdAt: 'desc' } },
+      workingHours: { orderBy: { dayOfWeek: 'asc' } },
+      shopType: true,
+    },
+  });
 
-  return <ServiceProfileClient data={data} />;
+  if (!shop) notFound();
+
+  // Service-type shop → ServiceProfileClient
+  const isService = shop.shopType?.type === 'service' || shop.industry === 'salon' || shop.industry === 'service';
+
+  if (isService) {
+    const data = await getShopBySlug(shopSlug);
+    if (!data) notFound();
+    return <ServiceProfileClient data={data} />;
+  }
+
+  // Product-type shop → StorefrontClient
+  const products = await prisma.product.findMany({
+    where: { userId: shop.userId, isActive: true },
+    take: 20,
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const clientProducts = products.map(p => ({ ...p, _id: p.id }));
+
+  return (
+    <StorefrontClient
+      shop={JSON.parse(JSON.stringify(shop))}
+      products={JSON.parse(JSON.stringify(clientProducts))}
+    />
+  );
 }
