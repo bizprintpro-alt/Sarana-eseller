@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Product } from '@/lib/api';
 import { useCartStore } from '@/lib/cart';
@@ -599,6 +600,14 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 <Share2 className="w-4 h-4" /> Борлуулж эхлэх ({product.affiliateCommission || product.commission || 10}%)
               </a>
             )}
+
+            {/* Full detail page link */}
+            <Link
+              href={`/product/${product._id}`}
+              className="w-full py-3 rounded-xl font-semibold text-sm border border-[var(--esl-border)] text-[var(--esl-text-secondary)] bg-transparent hover:bg-[var(--esl-bg-section)] transition flex items-center justify-center gap-2 no-underline"
+            >
+              Дэлгэрэнгүй харах →
+            </Link>
           </div>
         </div>
       </motion.div>

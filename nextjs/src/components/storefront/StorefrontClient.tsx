@@ -134,7 +134,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
               const px = p.salePrice || p.price;
               const img = p.images?.[0];
               return (
-                <Link key={p._id} href={`/store/${p._id}`} className="group no-underline block">
+                <Link key={p._id} href={`/product/${p._id}`} className="group no-underline block">
                   <div className="rounded-xl overflow-hidden border transition-all hover:-translate-y-1 hover:shadow-lg" style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
                     <div className="relative aspect-square" style={{ background: 'var(--esl-bg-section)' }}>
                       {img ? (

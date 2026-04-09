@@ -374,6 +374,14 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
               <Share2 className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Full detail page link */}
+          <Link
+            href={`/feed/${item.id}`}
+            className="block mt-4 text-center py-3 rounded-xl border border-[var(--esl-border)] text-sm font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-elevated)] hover:border-[#555] transition-colors no-underline"
+          >
+            Дэлгэрэнгүй харах →
+          </Link>
         </div>
       </div>
     </div>
