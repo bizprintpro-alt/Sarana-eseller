@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const agents = await prisma.partnerAgent.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { joinedAt: 'desc' },
       take: 100,
     });
     return json(agents);

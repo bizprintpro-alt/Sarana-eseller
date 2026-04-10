@@ -75,11 +75,11 @@ export async function POST(req: NextRequest) {
       data: {
         type: 'system_analysis',
         title: 'Бүрэн системийн шинжилгээ',
-        summary: fullText.slice(0, 300),
-        details: fullText,
+        description: fullText.slice(0, 300),
+        suggestion: fullText,
         priority: score >= 80 ? 'low' : score >= 60 ? 'medium' : 'high',
         status: 'active',
-        metadata: { score, issues, stats: { users, orders, shops, products, sellers, pendingOrders, deliveredOrders } },
+        evidence: { score, issues, stats: { users, orders, shops, products, sellers, pendingOrders, deliveredOrders } },
       },
     });
 
@@ -98,7 +98,7 @@ export async function GET(req: NextRequest) {
     where: { type: 'system_analysis' },
     orderBy: { createdAt: 'desc' },
     take: 10,
-    select: { id: true, title: true, summary: true, details: true, priority: true, metadata: true, createdAt: true },
+    select: { id: true, title: true, description: true, suggestion: true, priority: true, evidence: true, createdAt: true },
   });
 
   return json(history);

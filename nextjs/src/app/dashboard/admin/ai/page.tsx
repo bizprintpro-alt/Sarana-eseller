@@ -14,9 +14,9 @@ interface Analysis {
 interface HistoryItem {
   id: string;
   title: string;
-  summary: string;
-  details: string;
-  metadata: any;
+  description: string;
+  suggestion: string;
+  evidence: any;
   createdAt: string;
 }
 
@@ -62,12 +62,12 @@ export default function AdminAiPage() {
   };
 
   const viewHistory = (h: HistoryItem) => {
-    const meta = h.metadata || {};
+    const meta = h.evidence || {};
     setAnalysis({
       id: h.id,
       score: meta.score || 0,
       issues: meta.issues || [],
-      fullText: h.details || h.summary || '',
+      fullText: h.suggestion || h.description || '',
       stats: meta.stats || {},
     });
   };
@@ -173,7 +173,7 @@ export default function AdminAiPage() {
           <h3 className="text-sm font-bold mb-3" style={{ color: 'var(--esl-text-primary)' }}>Шинжилгээний түүх</h3>
           <div className="space-y-2">
             {history.map(h => {
-              const score = (h.metadata as any)?.score || 0;
+              const score = (h.evidence as any)?.score || 0;
               return (
                 <div key={h.id} onClick={() => viewHistory(h)}
                   className="flex items-center justify-between p-3 rounded-xl cursor-pointer hover:opacity-80 transition"
