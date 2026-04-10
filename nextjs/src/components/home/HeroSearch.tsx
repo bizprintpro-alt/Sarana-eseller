@@ -86,6 +86,27 @@ export default function HeroSearch() {
             </button>
           ))}
         </div>
+
+        {/* Давуу тал badges */}
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginTop: 20 }}>
+          {[
+            { icon: '👑', text: 'Gold гишүүнчлэл' },
+            { icon: '🔗', text: 'Борлуулагч комисс' },
+            { icon: '🚗', text: 'Өөрийн жолооч' },
+            { icon: '🔒', text: 'Дундын данс' },
+          ].map((b, i) => (
+            <div key={i} style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: 'rgba(255,255,255,0.07)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              borderRadius: 20, padding: '6px 12px',
+              fontSize: 12, color: 'rgba(255,255,255,0.7)',
+            }}>
+              <span>{b.icon}</span>
+              <span>{b.text}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

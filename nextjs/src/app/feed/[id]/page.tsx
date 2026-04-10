@@ -7,9 +7,17 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+function isValidObjectId(id: string): boolean {
+  return /^[a-f\d]{24}$/i.test(id);
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const post = await prisma.feedItem.findUnique({ where: { id }, select: { title: true, description: true, images: true } });
+  if (!isValidObjectId(id)) return { title: 'Олдсонгүй' };
+  let post;
+  try {
+    post = await prisma.feedItem.findUnique({ where: { id }, select: { title: true, description: true, images: true } });
+  } catch { return { title: 'Олдсонгүй' }; }
   if (!post) return { title: 'Олдсонгүй' };
   return {
     title: `${post.title} — eseller.mn`,
@@ -24,9 +32,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function FeedDetailPage({ params }: Props) {
   const { id } = await params;
+  if (!isValidObjectId(id)) notFound();
 
-  const post = await prisma.feedItem.findUnique({
-    where: { id },
+  let post;
+  try {
+    post = await prisma.feedItem.findUnique({
+      where: { id },
     include: {
       media: { orderBy: { sortOrder: 'asc' } },
       agent: { select: { id: true, name: true, phone: true } },
@@ -35,6 +46,7 @@ export default async function FeedDetailPage({ params }: Props) {
       serviceProvider: { select: { id: true, name: true, phone: true } },
     },
   });
+  } catch { notFound(); }
 
   if (!post) notFound();
 

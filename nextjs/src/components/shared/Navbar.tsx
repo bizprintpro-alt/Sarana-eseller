@@ -45,6 +45,18 @@ export default function Navbar() {
         Зарын булан
       </Link>
       <Link
+        href="/compare"
+        className="hidden md:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
+      >
+        Яагаад бид?
+      </Link>
+      <Link
+        href="/open-shop"
+        className="hidden md:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
+      >
+        Дэлгүүр нээх
+      </Link>
+      <Link
         href="/gold"
         className="hidden sm:inline-flex text-white/60 no-underline text-sm font-semibold px-4 py-2 rounded-lg hover:text-white hover:bg-white/[.07] transition-all"
       >
