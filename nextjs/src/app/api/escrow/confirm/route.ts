@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
 
     const escrow = await prisma.escrowTransaction.findUnique({
       where: { orderId },
-      include: { order: { include: { entity: true } } },
     });
 
     if (!escrow) {
@@ -26,23 +25,14 @@ export async function POST(req: NextRequest) {
         where: { id: escrow.id },
         data: { status: 'RELEASED', releasedAt: new Date() },
       });
-
       await tx.order.update({
         where: { id: orderId },
-        data: { status: 'DELIVERED' },
-      });
-
-      const commission = escrow.amount * 0.10;
-      const entityAmount = escrow.amount - commission;
-
-      await tx.entity.update({
-        where: { id: escrow.order.entityId },
-        data: { balance: { increment: entityAmount } },
+        data: { status: 'delivered', confirmedByBuyer: true, confirmedAt: new Date() },
       });
     });
 
     return NextResponse.json({ success: true });
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: 'Escrow баталгаажуулахад алдаа гарлаа' }, { status: 500 });
   }
 }

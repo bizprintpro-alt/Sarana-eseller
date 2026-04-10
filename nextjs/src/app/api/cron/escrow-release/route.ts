@@ -10,16 +10,20 @@ export async function GET(req: NextRequest) {
   try {
     const overdueEscrows = await prisma.escrowTransaction.findMany({
       where: { status: 'HOLDING', autoReleaseAt: { lte: new Date() } },
-      include: { order: { include: { entity: true } } },
     });
 
     let released = 0;
     for (const escrow of overdueEscrows) {
       try {
         await prisma.$transaction(async (tx) => {
-          await tx.escrowTransaction.update({ where: { id: escrow.id }, data: { status: 'RELEASED', releasedAt: new Date() } });
-          await tx.order.update({ where: { id: escrow.orderId }, data: { status: 'DELIVERED' } });
-          await tx.entity.update({ where: { id: escrow.order.entityId }, data: { balance: { increment: escrow.amount * 0.9 } } });
+          await tx.escrowTransaction.update({
+            where: { id: escrow.id },
+            data: { status: 'RELEASED', releasedAt: new Date() },
+          });
+          await tx.order.update({
+            where: { id: escrow.orderId },
+            data: { status: 'delivered' },
+          });
         });
         released++;
       } catch (e) {

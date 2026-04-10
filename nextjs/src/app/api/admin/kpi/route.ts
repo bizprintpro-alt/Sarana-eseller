@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
       prisma.order.count(),
       prisma.order.count({ where: { createdAt: { gte: monthAgo } } }),
       prisma.order.count({ where: { createdAt: { gte: weekAgo } } }),
-      prisma.order.aggregate({ where: { createdAt: { gte: monthAgo }, status: { not: 'CANCELLED' } }, _sum: { totalAmount: true } }),
+      prisma.order.aggregate({ where: { createdAt: { gte: monthAgo }, status: { not: 'cancelled' } }, _sum: { total: true } }),
       prisma.feedItem.count({ where: { status: 'active' } }),
     ]);
 
@@ -27,13 +27,13 @@ export async function GET(req: NextRequest) {
       users: { total: totalUsers, newMonth: newUsersMonth },
       entities: { total: totalEntities },
       products: { total: totalProducts },
-      orders: { total: totalOrders, monthly: monthlyOrders, weekly: weeklyOrders, monthlyRevenue: monthlyRevenue._sum.totalAmount || 0 },
+      orders: { total: totalOrders, monthly: monthlyOrders, weekly: weeklyOrders, monthlyRevenue: monthlyRevenue._sum.total || 0 },
       feed: { total: totalFeedPosts },
       targets: {
         entities: { current: totalEntities, target: 50, pct: Math.round((totalEntities / 50) * 100) },
         products: { current: totalProducts, target: 500, pct: Math.round((totalProducts / 500) * 100) },
         users: { current: totalUsers, target: 5000, pct: Math.round((totalUsers / 5000) * 100) },
-        monthlyRevenue: { current: monthlyRevenue._sum.totalAmount || 0, target: 50_000_000, pct: Math.round(((monthlyRevenue._sum.totalAmount || 0) / 50_000_000) * 100) },
+        monthlyRevenue: { current: monthlyRevenue._sum.total || 0, target: 50_000_000, pct: Math.round(((monthlyRevenue._sum.total || 0) / 50_000_000) * 100) },
       },
     });
   } catch (e) {

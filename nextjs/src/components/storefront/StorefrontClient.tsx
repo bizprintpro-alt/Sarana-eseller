@@ -318,7 +318,7 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
       <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} url={shareUrl} title={shop.name} description={`${shop.name} — eseller.mn дэлгүүр`} />
 
       {/* Chat Widget */}
-      <ChatWidget shopId={shop.id} shopName={shop.name} primaryColor={primaryColor} />
+      <ChatWidget />
     </div>
   );
 }
