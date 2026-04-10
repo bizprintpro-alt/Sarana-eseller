@@ -1772,3 +1772,43 @@ model ReturnRequest {
 
   @@map("return_requests")
 }
+
+// ══════════════════════════════════════════════════════════════
+// КУПОН & ХЯМДРАЛ
+// ══════════════════════════════════════════════════════════════
+
+model Coupon {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  code           String   @unique
+  shopId         String?  @db.ObjectId
+  discountType   String   @default("PERCENT") // PERCENT | FIXED
+  discountValue  Float    // 20 = 20%, 5000 = 5000₮
+  minOrderAmount Float?
+  maxDiscount    Float?
+  usageLimit     Int?
+  usageCount     Int      @default(0)
+  isActive       Boolean  @default(true)
+  expiresAt      DateTime?
+  title          String?
+  promotionType  String?  // FLASH_SALE | SEASONAL | NEW_USER | LOYALTY
+  productIds     String[] @db.ObjectId
+  startAt        DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  usages         CouponUsage[]
+
+  @@map("coupons")
+}
+
+model CouponUsage {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  couponId String   @db.ObjectId
+  userId   String   @db.ObjectId
+  orderId  String?  @db.ObjectId
+  discount Float
+  usedAt   DateTime @default(now())
+
+  coupon   Coupon @relation(fields: [couponId], references: [id])
+
+  @@map("coupon_usages")
+}
