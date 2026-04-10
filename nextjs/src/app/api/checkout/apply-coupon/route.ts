@@ -7,42 +7,44 @@ export async function POST(req: Request) {
 
     const coupon = await prisma.coupon.findUnique({
       where: { code: code.toUpperCase() },
-      include: { promotion: true },
     });
 
     if (!coupon) {
       return NextResponse.json({ error: 'Купон код олдсонгүй' }, { status: 404 });
     }
-    if (coupon.usedCount >= coupon.maxUses) {
+    if (!coupon.isActive) {
+      return NextResponse.json({ error: 'Купон идэвхгүй байна' }, { status: 400 });
+    }
+    if (coupon.usageLimit && coupon.usageCount >= coupon.usageLimit) {
       return NextResponse.json({ error: 'Купон дууссан' }, { status: 400 });
     }
-    if (new Date() > coupon.expiresAt) {
+    if (coupon.expiresAt && new Date() > coupon.expiresAt) {
       return NextResponse.json({ error: 'Купон хугацаа дууссан' }, { status: 400 });
     }
-
-    const promo = coupon.promotion;
-    if (!promo.isActive || new Date() > promo.endAt) {
-      return NextResponse.json({ error: 'Хямдрал дууссан' }, { status: 400 });
-    }
-    if (promo.minOrderAmount && cartTotal < promo.minOrderAmount) {
+    if (coupon.minOrderAmount && cartTotal < coupon.minOrderAmount) {
       return NextResponse.json({
-        error: `Захиалгын доод хэмжээ ${promo.minOrderAmount.toLocaleString()}₮`,
+        error: `Захиалгын доод хэмжээ ${coupon.minOrderAmount.toLocaleString()}₮`,
       }, { status: 400 });
     }
 
-    let discount = promo.discountType === 'PERCENTAGE'
-      ? cartTotal * (promo.discountValue / 100)
-      : promo.discountValue;
+    // Хямдрал тооцоолох
+    let discount = coupon.discountType === 'PERCENT'
+      ? cartTotal * (coupon.discountValue / 100)
+      : coupon.discountValue;
 
-    if (promo.maxDiscountAmount) {
-      discount = Math.min(discount, promo.maxDiscountAmount);
+    if (coupon.maxDiscount) {
+      discount = Math.min(discount, coupon.maxDiscount);
     }
 
     return NextResponse.json({
       valid: true,
       discount: Math.round(discount),
       code: coupon.code,
-      message: `${promo.title}: ${promo.discountType === 'PERCENTAGE' ? promo.discountValue + '%' : promo.discountValue.toLocaleString() + '₮'} хямдарлаа!`,
+      message: `${coupon.title || 'Купон'}: ${
+        coupon.discountType === 'PERCENT'
+          ? coupon.discountValue + '%'
+          : coupon.discountValue.toLocaleString() + '₮'
+      } хямдарлаа!`,
     });
   } catch {
     return NextResponse.json({ error: 'Купон шалгахад алдаа гарлаа' }, { status: 500 });

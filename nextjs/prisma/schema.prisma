@@ -1837,6 +1837,73 @@ model CouponUsage {
 }
 
 // ══════════════════════════════════════════════════════════════
+// PROMOTION / ХЯМДРАЛ
+// ══════════════════════════════════════════════════════════════
+
+model Promotion {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  entityId        String?   @db.ObjectId
+  title           String
+  type            String    @default("FLASH_SALE") // FLASH_SALE | COUPON | BULK_BUY | BUNDLE
+  discountType    String    @default("PERCENTAGE") // PERCENTAGE | FIXED
+  discountValue   Float
+  minOrderAmount  Float?
+  maxDiscountAmount Float?
+  startAt         DateTime
+  endAt           DateTime
+  isActive        Boolean   @default(true)
+  isFlash         Boolean   @default(false)
+  usageLimit      Int?
+  usageCount      Int       @default(0)
+  productIds      String[]  @db.ObjectId
+  createdAt       DateTime  @default(now())
+
+  @@map("promotions")
+}
+
+// ══════════════════════════════════════════════════════════════
+// NPS & САНАЛ ХҮСЭЛТ
+// ══════════════════════════════════════════════════════════════
+
+model NpsSurvey {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  orderId   String?  @db.ObjectId
+  score     Int      // 1-10
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@map("nps_surveys")
+}
+
+model FeedbackTicket {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String?  @db.ObjectId
+  email      String?
+  type       String   @default("QUESTION") // BUG | SUGGESTION | COMPLAINT | QUESTION
+  subject    String
+  message    String
+  status     String   @default("OPEN") // OPEN | IN_PROGRESS | RESOLVED | CLOSED
+  adminReply String?
+  createdAt  DateTime @default(now())
+
+  @@map("feedback_tickets")
+}
+
+model ScheduledNotification {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  sendAt     DateTime
+  title      String
+  body       String
+  url        String?
+  targetRole String?  // GOLD | ALL | BUYER | SELLER
+  sent       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@map("scheduled_notifications")
+}
+
+// ══════════════════════════════════════════════════════════════
 // АГУУЛАХ & INVENTORY
 // ══════════════════════════════════════════════════════════════
 
