@@ -4,6 +4,7 @@ import './globals.css';
 import AuthProvider from '@/components/shared/AuthProvider';
 import Toast from '@/components/shared/Toast';
 import { ThemeProvider, ThemeScript } from '@/providers/ThemeProvider';
+import InstallPrompt from '@/components/pwa/InstallPrompt';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
@@ -30,14 +31,25 @@ export default function RootLayout({
         <meta name="theme-color" content="#E8242C" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Eseller" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="min-h-full">
         <ThemeProvider>
           <AuthProvider>
             {children}
             <Toast />
+            <InstallPrompt />
           </AuthProvider>
         </ThemeProvider>
+
+        {/* Service Worker */}
+        <Script id="sw-register" strategy="afterInteractive">{`
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+          }
+        `}</Script>
 
         {/* Google Analytics 4 */}
         {GA_ID && (
