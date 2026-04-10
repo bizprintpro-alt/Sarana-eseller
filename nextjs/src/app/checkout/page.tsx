@@ -9,6 +9,7 @@ import { formatPrice } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
 import Toast, { useToast } from '@/components/shared/Toast';
 import EsellerLogo from '@/components/shared/EsellerLogo';
+import CouponInput from '@/components/checkout/CouponInput';
 
 /* ═══════════ Constants ═══════════ */
 const DISTRICTS = [
@@ -131,7 +132,9 @@ export default function CheckoutPage() {
   const subtotal = cart.total();
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
   const pointsDiscount = pointsApplied ? redeemPoints * POINTS_TO_MNT : 0;
-  const total = Math.max(0, subtotal + deliveryFee - pointsDiscount);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [couponCode, setCouponCode] = useState('');
+  const total = Math.max(0, subtotal + deliveryFee - pointsDiscount - couponDiscount);
 
   // Max redeemable points (30% of order or available points, whichever is less)
   const maxRedeemPoints = Math.min(
@@ -752,6 +755,19 @@ export default function CheckoutPage() {
                   <div className="flex justify-between text-sm">
                     <span style={{ color: '#D4A017' }}>Оноо хямдрал</span>
                     <span className="text-[var(--esl-success)] font-medium">-{formatPrice(pointsDiscount)}</span>
+                  </div>
+                )}
+                {couponDiscount > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span style={{ color: '#E8242C' }}>Купон ({couponCode})</span>
+                    <span className="text-[var(--esl-success)] font-medium">-{formatPrice(couponDiscount)}</span>
+                  </div>
+                )}
+
+                {/* Купон код */}
+                {couponDiscount === 0 && (
+                  <div className="pt-2">
+                    <CouponInput cartAmount={subtotal} onDiscount={(d, code) => { setCouponDiscount(d); setCouponCode(code); }} />
                   </div>
                 )}
                 <div className="flex justify-between text-base font-bold text-[var(--esl-text-primary)] pt-2 border-t border-[var(--esl-border)]">
