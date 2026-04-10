@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET /api/search?q=&category=&minPrice=&maxPrice=&district=&entityType=&sort=&page=
+// GET /api/search?q=&category=&minPrice=&maxPrice=&district=&entityType=&sort=&page=&limit=
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const q = sp.get('q') || '';
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   const entityType = sp.get('entityType');
   const sort = sp.get('sort') || 'newest';
   const page = Math.max(1, Number(sp.get('page') || 1));
-  const limit = 20;
+  const limit = Math.min(50, Number(sp.get('limit') || 20));
 
   const where: any = { isActive: true, price: { gte: minPrice, lte: maxPrice } };
 
@@ -34,19 +34,70 @@ export async function GET(req: NextRequest) {
 
   try {
     const [products, total] = await Promise.all([
-      prisma.product.findMany({ where, orderBy, skip: (page - 1) * limit, take: limit,
-        select: { id: true, name: true, price: true, salePrice: true, images: true, emoji: true, rating: true, reviewCount: true, entityType: true, district: true, category: true, createdAt: true },
+      prisma.product.findMany({
+        where, orderBy, skip: (page - 1) * limit, take: limit,
+        select: {
+          id: true, name: true, price: true, salePrice: true,
+          images: true, emoji: true, rating: true, reviewCount: true,
+          entityType: true, district: true, category: true, createdAt: true,
+        },
       }),
       prisma.product.count({ where }),
     ]);
 
+    // Бараа байвал шууд буцаах
+    if (products.length > 0) {
+      return NextResponse.json({
+        products: products.map((p) => ({ ...p, _id: p.id })),
+        total,
+        pages: Math.ceil(total / limit),
+        page,
+      });
+    }
+
+    // Бараа байхгүй бол Feed posts-оос хайх
+    const feedWhere: any = { isActive: true };
+    if (q) {
+      feedWhere.OR = [
+        { title: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+
+    const feedPosts = await prisma.feedPost.findMany({
+      where: feedWhere,
+      include: {
+        media: { take: 1 },
+        category: { select: { name: true } },
+      },
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const converted = feedPosts.map((p) => ({
+      id: p.id,
+      _id: p.id,
+      name: p.title,
+      price: p.price,
+      images: p.media?.map((m: any) => m.url) || [],
+      media: p.media,
+      category: p.category,
+      isFeedPost: true,
+      district: p.district,
+      createdAt: p.createdAt,
+    }));
+
     return NextResponse.json({
-      products: products.map(p => ({ ...p, _id: p.id })),
-      total,
-      pages: Math.ceil(total / limit),
-      page,
+      products: converted,
+      total: converted.length,
+      pages: 1,
+      page: 1,
+      fromFeed: true,
     });
   } catch (e) {
-    return NextResponse.json({ products: [], total: 0, pages: 0, page: 1, error: (e as Error).message });
+    return NextResponse.json({
+      products: [], total: 0, pages: 0, page: 1,
+      error: (e as Error).message,
+    });
   }
 }
