@@ -7,7 +7,7 @@ const rows = [
   { feature: '4 талын экосистем',   eseller: 'Эзэн+Борлуулагч+Авагч+Жолооч', zary: 'Зөвхөн худалдагч+авагч', eOk: true, zOk: false, highlight: true },
   { feature: 'Gold гишүүнчлэл',    eseller: '3 төлөвлөгөө + тооцоолуур',     zary: 'Байхгүй',               eOk: true, zOk: false, highlight: true },
   { feature: 'Борлуулагч referral', eseller: 'Share → Commission автомат',     zary: 'Байхгүй',               eOk: true, zOk: false, highlight: true },
-  { feature: 'Дундын данс (Escrow)',eseller: '3 өдрийн хамгаалалт',            zary: 'Зары Хэтэвч',           eOk: true, zOk: true,  highlight: false },
+  { feature: 'Дундын данс (Escrow)',eseller: '3 өдрийн хамгаалалт',            zary: 'Хязгаарлагдмал',           eOk: true, zOk: true,  highlight: false },
   { feature: 'Хүргэлтийн систем',  eseller: 'Өөрийн жолооч',                  zary: 'Байгаа',                eOk: true, zOk: true,  highlight: false },
   { feature: 'Чат дэмжлэг',       eseller: 'AI + хүн агент',                  zary: 'Чатбот + утас',         eOk: true, zOk: true,  highlight: false },
   { feature: 'Мобайл апп',        eseller: 'PWA + React Native',               zary: 'iOS + Android',         eOk: true, zOk: true,  highlight: false },
@@ -56,7 +56,7 @@ export default function ComparePage() {
         <div className="grid grid-cols-[2fr_1fr_1fr] bg-[#0D0D0D] dark:bg-[#0D0D0D] px-5 py-4 border-b border-[var(--esl-border)]">
           <span className="text-[var(--esl-text-muted)] text-[13px] font-semibold">Функц</span>
           <span className="text-[#E8242C] font-extrabold text-[15px] text-center">Eseller.mn</span>
-          <span className="text-[var(--esl-text-muted)] text-[14px] text-center font-semibold">Zary.mn</span>
+          <span className="text-[var(--esl-text-muted)] text-[14px] text-center font-semibold">Бусад</span>
         </div>
 
         {rows.map((row, i) => (
