@@ -218,6 +218,14 @@ model Order {
   confirmedByBuyer Boolean  @default(false)
   confirmedAt      DateTime?
 
+  // Delivery tracking
+  trackingCode      String?  @unique
+  estimatedDelivery DateTime?
+  trackingEvents    Json[]   // [{status, description, lat?, lng?, createdAt}]
+  driverLat         Float?
+  driverLng         Float?
+  driverUpdatedAt   DateTime?
+
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
