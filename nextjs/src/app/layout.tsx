@@ -5,6 +5,7 @@ import AuthProvider from '@/components/shared/AuthProvider';
 import Toast from '@/components/shared/Toast';
 import { ThemeProvider, ThemeScript } from '@/providers/ThemeProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
+import ChatWidget from '@/components/chat/ChatWidget';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
@@ -41,6 +42,7 @@ export default function RootLayout({
             {children}
             <Toast />
             <InstallPrompt />
+            <ChatWidget />
           </AuthProvider>
         </ThemeProvider>
 

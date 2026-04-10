@@ -1,0 +1,85 @@
+import { NextResponse } from 'next/server';
+
+const SYSTEM_PROMPT = `Та eseller.mn Монголын нэгдсэн цахим худалдааны платформын дэмжлэгийн туслах юм.
+
+Хэрэглэгчийн түгээмэл асуултуудад хариулж тусалдаг:
+1. ЗАХИАЛГА: Захиалга хийх, хянах, цуцлах, буцаалт
+2. ТӨЛБӨР: QPay, SocialPay, MonPay, Дундын данс
+3. ХҮРГЭЛТ: Хугацаа, байршил, жолоочтой холбоо
+4. ДЭЛГҮҮР: Дэлгүүр нээх, бараа нэмэх, комисс тохиргоо
+5. GOLD: Гишүүнчлэл, давуу тал, үнэ (19,900₮/сар)
+6. БОРЛУУЛАГЧ: Affiliate болох, комисс авах
+
+Хэрэв шийдвэрлэх боломжгүй бол "Энэ асуудлыг хүний агент руу шилжүүлье" гэж хэлж дуусга.
+Монгол хэлээр товч, тодорхой хариулна. Emoji ашигла.`;
+
+export async function POST(req: Request) {
+  try {
+    const { message, history = [] } = await req.json();
+
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+
+    if (apiKey) {
+      // Anthropic API ашиглах
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 500,
+          system: SYSTEM_PROMPT,
+          messages: [
+            ...history.map((h: any) => ({ role: h.role, content: h.content })),
+            { role: 'user', content: message },
+          ],
+        }),
+      });
+
+      const data = await res.json();
+      const text = data.content?.[0]?.text || 'Алдаа гарлаа';
+      const needsHuman = text.includes('хүний агент');
+
+      return NextResponse.json({ reply: text, needsHuman });
+    }
+
+    // API key байхгүй бол rule-based fallback
+    const reply = getFallbackReply(message);
+    return NextResponse.json({ reply, needsHuman: false });
+  } catch {
+    return NextResponse.json({
+      reply: 'Уучлаарай, түр алдаа гарлаа. Дахин оролдоно уу.',
+      needsHuman: false,
+    });
+  }
+}
+
+function getFallbackReply(msg: string): string {
+  const lower = msg.toLowerCase();
+
+  if (lower.includes('захиалга') || lower.includes('хянах'))
+    return '📦 Захиалгаа хянахын тулд Профайл → Захиалгын түүх хэсэгт очно уу. Мөн tracking код-оор eseller.mn/track хуудаснаас хянах боломжтой.';
+
+  if (lower.includes('хүргэлт') || lower.includes('ирэх'))
+    return '🚚 Хүргэлт ихэвчлэн 1-3 өдрийн дотор хийгдэнэ. УБ-д 24 цагийн дотор, хөдөөд 3-5 өдөр. Tracking код-оо ашиглан бодит цагийн мэдээлэл авна уу.';
+
+  if (lower.includes('буцаалт') || lower.includes('буцаах'))
+    return '🔄 Бараа хүлээж авснаас хойш 48 цагийн дотор буцаалт хийх боломжтой. Захиалгын хуудаснаас "Буцаалт хийх" товч дарна уу. Мөнгө дундын дансанд байгаа бол шууд буцаагдана.';
+
+  if (lower.includes('төлбөр') || lower.includes('qpay'))
+    return '💳 QPay, SocialPay, MonPay-ээр төлбөр хийх боломжтой. Төлбөр дундын дансанд хадгалагдаж, бараа хүлээж авсны дараа дэлгүүрт шилжинэ (Escrow систем).';
+
+  if (lower.includes('gold') || lower.includes('гишүүн'))
+    return '👑 Gold гишүүнчлэл — 19,900₮/сар. Давуу тал: Үнэгүй хүргэлт, 5% нэмэлт хямдрал, давхар оноо, VIP дэмжлэг, сарын бэлэг. eseller.mn/gold хуудаснаас бүртгүүлнэ үү.';
+
+  if (lower.includes('дэлгүүр') || lower.includes('нээх'))
+    return '🏪 Дэлгүүр нээхэд: 1) Бүртгүүлэх 2) Dashboard → Дэлгүүр нээх 3) Мэдээлэл оруулах. Эхний 3 сар 0% комисс! eseller.mn/open-shop хуудаснаас эхлэнэ үү.';
+
+  if (lower.includes('борлуулагч') || lower.includes('affiliate') || lower.includes('комисс'))
+    return '📢 Борлуулагч болоход: Бараа share хийж 10-20% комисс авна. Бараа нөөц шаардлагагүй. Барааны хуудаснаас "Борлуулж эхлэх" товч дарна уу.';
+
+  return '😊 Баярлалаа! Тусламж хэрэгтэй бол дараах сэдвүүдээс сонгоно уу:\n\n📦 Захиалга хянах\n🚚 Хүргэлтийн мэдээлэл\n🔄 Буцаалт хийх\n💳 Төлбөрийн асуулт\n👑 Gold гишүүнчлэл\n🏪 Дэлгүүр нээх';
+}
