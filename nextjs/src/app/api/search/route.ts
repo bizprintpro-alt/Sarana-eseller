@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Бараа байхгүй бол Feed posts-оос хайх
-    const feedWhere: any = { isActive: true };
+    const feedWhere: any = { status: 'active' };
     if (q) {
       feedWhere.OR = [
         { title: { contains: q, mode: 'insensitive' } },
@@ -64,12 +64,9 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    const feedPosts = await prisma.feedPost.findMany({
+    const feedPosts = await prisma.feedItem.findMany({
       where: feedWhere,
-      include: {
-        media: { take: 1 },
-        category: { select: { name: true } },
-      },
+      include: { media: { take: 1 } },
       take: limit,
       orderBy: { createdAt: 'desc' },
     });
@@ -79,9 +76,9 @@ export async function GET(req: NextRequest) {
       _id: p.id,
       name: p.title,
       price: p.price,
-      images: p.media?.map((m: any) => m.url) || [],
+      images: p.images || [],
       media: p.media,
-      category: p.category,
+      category: p.category ? { name: p.category } : null,
       isFeedPost: true,
       district: p.district,
       createdAt: p.createdAt,

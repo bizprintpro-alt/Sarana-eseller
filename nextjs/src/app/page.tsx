@@ -12,31 +12,55 @@ import SellerSection from '@/components/home/SellerSection';
 
 async function getHomeData() {
   try {
-    const [feedPosts, entities, products] = await Promise.all([
-      prisma.feedPost.findMany({
-        where: { isActive: true },
+    const [feedPosts, shops, products] = await Promise.all([
+      prisma.feedItem.findMany({
+        where: { status: 'active' },
         orderBy: { createdAt: 'desc' },
         take: 8,
-        include: {
-          media: true,
-          category: true,
-          user: { select: { name: true } },
-        },
+        include: { media: true },
       }),
-      prisma.entity.findMany({
-        where: { isActive: true, isApproved: true },
-        orderBy: { rating: 'desc' },
+      prisma.shop.findMany({
+        where: { isBlocked: false },
+        orderBy: { createdAt: 'desc' },
         take: 6,
-        include: { _count: { select: { products: true } } },
       }),
       prisma.product.findMany({
-        where: { isActive: true, isOnSale: true },
+        where: { isActive: true, salePrice: { not: null } },
         orderBy: { createdAt: 'desc' },
         take: 8,
-        include: { media: { take: 1 }, entity: true },
       }),
     ]);
-    return { feedPosts, entities, products };
+
+    // Map feedItems to expected format
+    const mappedPosts = feedPosts.map((p) => ({
+      id: p.id,
+      title: p.title,
+      price: p.price,
+      district: p.district,
+      media: p.media,
+      category: p.category ? { name: p.category } : null,
+    }));
+
+    // Map shops to expected format
+    const mappedShops = shops.map((s) => ({
+      id: s.id,
+      name: s.name,
+      logoUrl: s.logo,
+      storefrontSlug: s.storefrontSlug || s.slug,
+      rating: null,
+      _count: { products: 0 },
+    }));
+
+    // Map products
+    const mappedProducts = products.map((p) => ({
+      id: p.id,
+      name: p.name,
+      price: p.salePrice || p.price,
+      media: p.images?.[0] ? [{ url: p.images[0] }] : [],
+      entity: null,
+    }));
+
+    return { feedPosts: mappedPosts, entities: mappedShops, products: mappedProducts };
   } catch {
     return { feedPosts: [], entities: [], products: [] };
   }
@@ -48,33 +72,16 @@ export default async function HomePage() {
   return (
     <>
       <Navbar />
-
       <main>
-        {/* Hero Search */}
         <HeroSearch />
-
-        {/* Trust Badges */}
         <TrustBadges />
-
-        {/* Category Icons */}
         <CategoryIcons />
-
-        {/* Feed Preview */}
         <FeedPreview posts={feedPosts} />
-
-        {/* Sale Products */}
         <PromoSection products={products} />
-
-        {/* Featured Shops */}
         <FeaturedShops entities={entities} />
-
-        {/* Gold Banner */}
         <GoldPromoBanner />
-
-        {/* Seller CTA */}
         <SellerSection />
       </main>
-
       <Footer />
       <MobileNav />
     </>
@@ -88,7 +95,6 @@ function TrustBadges() {
     { icon: '🔒', text: 'QPay аюулгүй төлбөр' },
     { icon: '⭐', text: 'Баталгаат бараа' },
   ];
-
   return (
     <div className="bg-[var(--esl-bg-card)] border-y border-[var(--esl-border)]">
       <div className="max-w-[1200px] mx-auto px-4 py-3 flex justify-around flex-wrap gap-2">

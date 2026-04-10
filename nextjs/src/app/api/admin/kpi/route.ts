@@ -14,13 +14,13 @@ export async function GET(req: NextRequest) {
     const [totalUsers, newUsersMonth, totalEntities, totalProducts, totalOrders, monthlyOrders, weeklyOrders, monthlyRevenue, totalFeedPosts] = await Promise.all([
       prisma.user.count(),
       prisma.user.count({ where: { createdAt: { gte: monthAgo } } }),
-      prisma.entity.count({ where: { isApproved: true } }),
+      prisma.shop.count({ where: { isBlocked: false } }),
       prisma.product.count({ where: { isActive: true } }),
       prisma.order.count(),
       prisma.order.count({ where: { createdAt: { gte: monthAgo } } }),
       prisma.order.count({ where: { createdAt: { gte: weekAgo } } }),
       prisma.order.aggregate({ where: { createdAt: { gte: monthAgo }, status: { not: 'CANCELLED' } }, _sum: { totalAmount: true } }),
-      prisma.feedPost.count({ where: { isActive: true } }),
+      prisma.feedItem.count({ where: { status: 'active' } }),
     ]);
 
     return NextResponse.json({
