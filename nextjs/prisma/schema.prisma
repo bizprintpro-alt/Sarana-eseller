@@ -130,6 +130,12 @@ model Product {
   allowAffiliate      Boolean @default(false)
   affiliateCommission Float?  @default(0)
   categoryId    String?  @db.ObjectId
+
+  // Boost
+  isBoosted     Boolean  @default(false)
+  boostEndAt    DateTime?
+  boostScore    Int      @default(0)
+
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -1828,4 +1834,70 @@ model CouponUsage {
   coupon   Coupon @relation(fields: [couponId], references: [id])
 
   @@map("coupon_usages")
+}
+
+// ══════════════════════════════════════════════════════════════
+// АГУУЛАХ & INVENTORY
+// ══════════════════════════════════════════════════════════════
+
+model Warehouse {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  address   String?
+  lat       Float?
+  lng       Float?
+  managerId String?  @db.ObjectId
+  capacity  Int      @default(1000)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  inventory InventoryItem[]
+
+  @@map("warehouses")
+}
+
+model InventoryItem {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  warehouseId String   @db.ObjectId
+  productId   String   @db.ObjectId
+  shopId      String?  @db.ObjectId
+  quantity    Int      @default(0)
+  reserved    Int      @default(0)
+  available   Int      @default(0)
+  location    String?  // "A3-12" shelf
+  minStock    Int      @default(5)
+  updatedAt   DateTime @updatedAt
+
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+
+  @@unique([warehouseId, productId])
+  @@map("inventory_items")
+}
+
+model StockMovement {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  inventoryId String   @db.ObjectId
+  type        String   // IN | OUT | RESERVED | RELEASED | ADJUSTMENT
+  quantity    Int
+  note        String?
+  createdBy   String?  @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  @@map("stock_movements")
+}
+
+// ══════════════════════════════════════════════════════════════
+// EMAIL TEMPLATE
+// ══════════════════════════════════════════════════════════════
+
+model EmailTemplate {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  subject   String
+  htmlBody  String
+  type      String   // WELCOME | ORDER_CONFIRMED | PROMO | DELIVERY
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("email_templates")
 }
