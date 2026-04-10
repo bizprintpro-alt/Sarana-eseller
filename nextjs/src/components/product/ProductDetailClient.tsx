@@ -85,6 +85,22 @@ export default function ProductDetailClient({ product, relatedProducts = [] }: P
             {/* Share / Wishlist */}
             <ShareWishlistBar title={product.name} />
 
+            {/* Chat with seller */}
+            <button onClick={() => {
+              const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+              if (!token) { window.location.href = '/login'; return; }
+              const user = JSON.parse(atob(token.split('.')[1]));
+              fetch('/api/chat/conversations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                body: JSON.stringify({ shopId: (product as any).user?._id || '', customerId: user.userId || user.id, customerName: user.name || 'Хэрэглэгч', productName: product.name, productPrice: product.price }),
+              }).then(r => r.json()).then(conv => { window.location.href = `/dashboard/chat`; }).catch(() => { window.location.href = '/dashboard/chat'; });
+            }}
+              className="w-full h-11 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all border cursor-pointer"
+              style={{ borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)', background: 'var(--esl-bg-card)' }}>
+              💬 Борлуулагчтай чатлах
+            </button>
+
             {/* Affiliate */}
             {product.allowAffiliate && (
               <StartSellingButton productId={product._id} productName={product.name} commission={product.affiliateCommission} />

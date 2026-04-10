@@ -1,64 +1,50 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAuth, json, errorJson } from '@/lib/api-auth';
 
-type Ctx = { params: Promise<{ id: string }> };
+// GET /api/chat/conversations/[id]/messages
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const user = requireAuth(req);
+  if (user instanceof Response) return user;
+  const { id } = await params;
 
-// GET /api/chat/conversations/[id]/messages — list messages (customer side)
-export async function GET(req: NextRequest, ctx: Ctx) {
-  try {
-    const { id } = await ctx.params;
+  const messages = await prisma.message.findMany({
+    where: { conversationId: id },
+    orderBy: { createdAt: 'asc' },
+    take: 100,
+  });
 
-    const messages = await prisma.message.findMany({
-      where: { conversationId: id },
-      orderBy: { createdAt: 'asc' },
-      take: 100,
-    });
+  // Mark as read
+  await prisma.message.updateMany({
+    where: { conversationId: id, senderId: { not: user.id }, isRead: false },
+    data: { isRead: true, readAt: new Date() },
+  });
 
-    return NextResponse.json(messages);
-  } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
-  }
+  return json(messages);
 }
 
-// POST /api/chat/conversations/[id]/messages — send message as customer
-export async function POST(req: NextRequest, ctx: Ctx) {
-  try {
-    const { id } = await ctx.params;
-    const body = await req.json();
+// POST /api/chat/conversations/[id]/messages
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const user = requireAuth(req);
+  if (user instanceof Response) return user;
+  const { id } = await params;
 
-    if (!body.text?.trim() && !body.imageUrl) {
-      return NextResponse.json({ error: 'Мессеж хоосон байна' }, { status: 400 });
-    }
+  const { content, imageUrl } = await req.json();
+  if (!content && !imageUrl) return errorJson('content шаардлагатай');
 
-    if (!body.senderId) {
-      return NextResponse.json({ error: 'senderId шаардлагатай' }, { status: 400 });
-    }
+  const conv = await prisma.conversation.findUnique({ where: { id } });
+  if (!conv) return errorJson('Conversation олдсонгүй', 404);
 
-    const conv = await prisma.conversation.findUnique({ where: { id } });
-    if (!conv) return NextResponse.json({ error: 'Чат олдсонгүй' }, { status: 404 });
+  const senderRole = conv.customerId === user.id ? 'customer' : 'seller';
 
-    const message = await prisma.message.create({
-      data: {
-        conversationId: id,
-        senderId: body.senderId,
-        senderRole: 'customer',
-        text: body.text?.trim() || null,
-        imageUrl: body.imageUrl || null,
-      },
-    });
+  const message = await prisma.message.create({
+    data: { conversationId: id, senderId: user.id, senderRole, text: content || null, imageUrl: imageUrl || null },
+  });
 
-    // Update conversation
-    await prisma.conversation.update({
-      where: { id },
-      data: {
-        lastMessage: body.text?.trim()?.slice(0, 100) || 'Зураг',
-        lastAt: new Date(),
-        unreadCount: { increment: 1 },
-      },
-    });
+  await prisma.conversation.update({
+    where: { id },
+    data: { lastMessage: content?.slice(0, 100) || '📷 Зураг', lastAt: new Date(), ...(senderRole === 'customer' ? { unreadCount: { increment: 1 } } : {}) },
+  });
 
-    return NextResponse.json(message, { status: 201 });
-  } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
-  }
+  return json(message);
 }
