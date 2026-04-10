@@ -7,6 +7,7 @@ import { ArrowRight, Zap, Users, TrendingUp, Shield, Package, Megaphone, Shoppin
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 import MobileNav from '@/components/shared/MobileNav';
+import SearchBar from '@/components/search/SearchBar';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -130,6 +131,12 @@ export default function LandingPage() {
             байршуулна, <strong className="text-white/80">борлуулагч</strong> өөрийн сүлжээгээр
             дамжуулан зарна — хоёулаа ашигтай, хамтдаа ургана.
           </motion.p>
+
+          {/* Search Bar */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.5 }}
+            className="max-w-[500px] mx-auto mt-8 mb-4">
+            <SearchBar placeholder="Бараа, дэлгүүр, үйлчилгээ хайх..." size="lg" />
+          </motion.div>
 
           {/* Dual CTA */}
           <motion.div
