@@ -7,9 +7,17 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+function isValidObjectId(id: string): boolean {
+  return /^[a-f\d]{24}$/i.test(id);
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const product = await prisma.product.findUnique({ where: { id }, select: { name: true, description: true, images: true } });
+  if (!isValidObjectId(id)) return { title: 'Олдсонгүй' };
+  let product;
+  try {
+    product = await prisma.product.findUnique({ where: { id }, select: { name: true, description: true, images: true } });
+  } catch { return { title: 'Олдсонгүй' }; }
   if (!product) return { title: 'Олдсонгүй' };
   return {
     title: `${product.name} — eseller.mn`,
@@ -24,14 +32,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { id } = await params;
+  if (!isValidObjectId(id)) notFound();
 
-  const product = await prisma.product.findUnique({
-    where: { id },
-    include: {
-      categoryRef: true,
-      user: { select: { name: true, id: true, username: true } },
-    },
-  });
+  let product;
+  try {
+    product = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        categoryRef: true,
+        user: { select: { name: true, id: true, username: true } },
+      },
+    });
+  } catch { notFound(); }
 
   if (!product) notFound();
 
