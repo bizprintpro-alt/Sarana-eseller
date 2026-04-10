@@ -1,20 +1,23 @@
 {
   "name": "Eseller.mn",
   "short_name": "Eseller",
-  "description": "Монголын нэгдсэн цахим худалдаа",
+  "description": "Монголын нэгдсэн цахим зах",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#E8242C",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
+  "lang": "mn",
   "icons": [
-    { "src": "/favicon.ico", "sizes": "64x64", "type": "image/x-icon" },
-    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable any" },
-    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable any" }
+    { "src": "/icons/icon-72x72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Дэлгүүр", "url": "/store" },
-    { "name": "Зарын булан", "url": "/feed" },
-    { "name": "Захиалга", "url": "/dashboard/orders" }
-  ]
+    { "name": "Дэлгүүр", "url": "/store", "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }] },
+    { "name": "Зарын булан", "url": "/feed", "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }] },
+    { "name": "Захиалга", "url": "/dashboard/buyer/orders", "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }] }
+  ],
+  "categories": ["shopping", "business"]
 }

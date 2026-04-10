@@ -14,7 +14,11 @@
     },
     {
       "path": "/api/cron/escrow-release",
-      "schedule": "0 1 * * *"
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/inventory-check",
+      "schedule": "0 8 * * *"
     }
   ]
 }

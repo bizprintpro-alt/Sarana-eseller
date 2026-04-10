@@ -10,9 +10,21 @@ import ChatWidget from '@/components/chat/ChatWidget';
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
-  title: 'eseller.mn — Борлуулагчтай л борлуулалт байна',
-  description:
-    'eseller.mn — Монголын seller-powered marketplace. Барааны эзэн + Борлуулагч = Бодит борлуулалт.',
+  metadataBase: new URL('https://eseller.mn'),
+  title: {
+    default: 'Eseller.mn — Монголын нэгдсэн цахим зах',
+    template: '%s | Eseller.mn',
+  },
+  description: 'Монголын хамгийн том цахим зах. 10,000+ бараа, 500+ дэлгүүр. QPay аюулгүй төлбөр, хурдан хүргэлт.',
+  keywords: ['онлайн дэлгүүр монгол', 'бараа худалдаж авах', 'цахим худалдаа', 'eseller', 'зарын булан', 'монгол marketplace'],
+  openGraph: {
+    type: 'website', locale: 'mn_MN', url: 'https://eseller.mn', siteName: 'Eseller.mn',
+    title: 'Eseller.mn — Монголын нэгдсэн цахим зах',
+    description: 'Монголын хамгийн том цахим зах. 10,000+ бараа, 500+ дэлгүүр.',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Eseller.mn' }],
+  },
+  twitter: { card: 'summary_large_image', title: 'Eseller.mn', description: 'Монголын нэгдсэн цахим зах', images: ['/og-image.jpg'] },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large' as const, 'max-snippet': -1 } },
 };
 
 export default function RootLayout({

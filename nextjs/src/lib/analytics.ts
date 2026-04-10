@@ -1,70 +1,57 @@
-// ══════════════════════════════════════════════════════════════
-// eseller.mn — Analytics Event Tracking (GA4 + extensible)
-// ══════════════════════════════════════════════════════════════
+// eseller.mn — Analytics Event Tracking (GA4 + Facebook Pixel)
 
 declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
+  interface Window { dataLayer: any[]; fbq: (...args: any[]) => void }
+}
+
+export function trackPurchase(order: { id: string; total: number; items: any[]; couponCode?: string }) {
+  if (typeof window === 'undefined') return;
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'purchase',
+      ecommerce: {
+        transaction_id: order.id, value: order.total, currency: 'MNT', coupon: order.couponCode,
+        items: order.items.map((i: any) => ({ item_id: i.product?.id || i.productId, item_name: i.product?.name || i.name, price: i.price, quantity: i.quantity })),
+      },
+    });
+  }
+  if (window.fbq) {
+    window.fbq('track', 'Purchase', { value: order.total, currency: 'MNT', content_type: 'product', content_ids: order.items.map((i: any) => i.product?.id || i.productId) });
   }
 }
 
-function gtag(...args: unknown[]) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag(...args);
+export function trackViewProduct(product: { id: string; name: string; price: number; category?: string }) {
+  if (typeof window === 'undefined') return;
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'view_item', ecommerce: { items: [{ item_id: product.id, item_name: product.name, price: product.price, item_category: product.category }] } });
+  }
+  if (window.fbq) {
+    window.fbq('track', 'ViewContent', { content_ids: [product.id], content_name: product.name, value: product.price, currency: 'MNT', content_type: 'product' });
   }
 }
 
-export const analytics = {
-  // Page view (auto-tracked by GA4, but useful for SPAs)
-  pageView: (url: string) => gtag('config', process.env.NEXT_PUBLIC_GA_ID, { page_path: url }),
+export function trackAddToCart(product: { id: string; name: string; price: number }, qty: number) {
+  if (typeof window === 'undefined') return;
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'add_to_cart', ecommerce: { items: [{ item_id: product.id, item_name: product.name, price: product.price, quantity: qty }] } });
+  }
+  if (window.fbq) {
+    window.fbq('track', 'AddToCart', { content_ids: [product.id], content_name: product.name, value: product.price * qty, currency: 'MNT' });
+  }
+}
 
-  // Product/item viewed
-  viewItem: (item: { id: string; name: string; price: number; category?: string }) =>
-    gtag('event', 'view_item', {
-      currency: 'MNT',
-      value: item.price,
-      items: [{ item_id: item.id, item_name: item.name, price: item.price, item_category: item.category }],
-    }),
+export function trackSearch(query: string) {
+  if (typeof window === 'undefined') return;
+  if (window.dataLayer) {
+    window.dataLayer.push({ event: 'search', search_term: query });
+  }
+  if (window.fbq) {
+    window.fbq('track', 'Search', { search_string: query });
+  }
+}
 
-  // Add to cart
-  addToCart: (item: { id: string; name: string; price: number }, qty: number) =>
-    gtag('event', 'add_to_cart', {
-      currency: 'MNT',
-      value: item.price * qty,
-      items: [{ item_id: item.id, item_name: item.name, price: item.price, quantity: qty }],
-    }),
-
-  // Purchase
-  purchase: (order: { id: string; total: number; items: { id: string; name: string; price: number; qty: number }[] }) =>
-    gtag('event', 'purchase', {
-      transaction_id: order.id,
-      value: order.total,
-      currency: 'MNT',
-      items: order.items.map((i) => ({ item_id: i.id, item_name: i.name, price: i.price, quantity: i.qty })),
-    }),
-
-  // Search
-  search: (term: string) => gtag('event', 'search', { search_term: term }),
-
-  // Entity profile viewed
-  viewProfile: (type: string, slug: string) =>
-    gtag('event', 'select_content', { content_type: type, item_id: slug }),
-
-  // Sign up
-  signUp: (method: string) => gtag('event', 'sign_up', { method }),
-
-  // Login
-  login: (method: string) => gtag('event', 'login', { method }),
-
-  // Share
-  share: (contentType: string, itemId: string) =>
-    gtag('event', 'share', { content_type: contentType, item_id: itemId }),
-
-  // Booking (service)
-  booking: (service: { id: string; name: string; price: number }) =>
-    gtag('event', 'begin_checkout', {
-      currency: 'MNT',
-      value: service.price,
-      items: [{ item_id: service.id, item_name: service.name, price: service.price }],
-    }),
-};
+export function trackSignUp() {
+  if (typeof window === 'undefined') return;
+  if (window.dataLayer) { window.dataLayer.push({ event: 'sign_up' }); }
+  if (window.fbq) { window.fbq('track', 'CompleteRegistration'); }
+}
