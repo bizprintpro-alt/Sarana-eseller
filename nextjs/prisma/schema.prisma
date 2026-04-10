@@ -593,15 +593,24 @@ model OrderAnalytics {
 }
 
 model Review {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  productId String   @db.ObjectId
-  buyerId   String   @db.ObjectId
-  orderId   String   @db.ObjectId
-  rating    Int
-  comment   String?
-  createdAt DateTime @default(now())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId    String   @db.ObjectId
+  buyerId      String   @db.ObjectId
+  buyerName    String?
+  orderId      String?  @db.ObjectId
+  rating       Int      // 1-5
+  title        String?
+  comment      String?
+  images       String[]
+  isVerified   Boolean  @default(false) // Худалдан авсан эсэх
+  status       String   @default("APPROVED") // PENDING | APPROVED | REJECTED
+  helpfulCount Int      @default(0)
+  sellerReply  String?
+  createdAt    DateTime @default(now())
 
   product Product @relation(fields: [productId], references: [id])
+
+  @@map("reviews")
 }
 
 // ══════════════════════════════════════════════════════════════

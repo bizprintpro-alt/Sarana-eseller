@@ -17,6 +17,7 @@ import MediaCarousel, { type MediaItem } from './MediaCarousel';
 import AddToCartButton from './AddToCartButton';
 import StartSellingButton from './StartSellingButton';
 import ShareWishlistBar from './ShareWishlistBar';
+import ReviewSection from './ReviewSection';
 
 interface ProductDetailClientProps {
   product: Product & {
@@ -109,6 +110,12 @@ export default function ProductDetailClient({ product, relatedProducts = [] }: P
         </div>
 
         {/* Related products */}
+        {/* Reviews */}
+        <div className="mt-12">
+          <h2 className="text-lg font-bold mb-4">Үнэлгээ & Тойм</h2>
+          <ReviewSection productId={product._id} />
+        </div>
+
         {relatedProducts.length > 0 && (
           <div className="mt-12">
             <h2 className="text-lg font-bold mb-4">Ижил төстэй</h2>
