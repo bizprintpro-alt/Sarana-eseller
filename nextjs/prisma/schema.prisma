@@ -212,6 +212,12 @@ model Order {
   paymentMethod    String?          // qpay | card | cash
   deliveryAddress  String?
   sellerProfileId  String?  @db.ObjectId
+
+  // Escrow
+  escrowStatus     String?  // HOLDING | RELEASED | REFUNDED | DISPUTED
+  confirmedByBuyer Boolean  @default(false)
+  confirmedAt      DateTime?
+
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
@@ -1729,4 +1735,40 @@ model InfluencerApplication {
   seller      SellerProfile @relation(fields: [sellerId], references: [id])
 
   @@map("influencer_applications")
+}
+
+// ══════════════════════════════════════════════════════════════
+// ESCROW / ДУНДЫН ДАНС
+// ══════════════════════════════════════════════════════════════
+
+model EscrowTransaction {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  orderId       String    @unique @db.ObjectId
+  amount        Float
+  status        String    @default("HOLDING") // HOLDING | RELEASED | REFUNDED | DISPUTED
+  buyerId       String    @db.ObjectId
+  sellerId      String    @db.ObjectId
+  note          String?
+  heldAt        DateTime  @default(now())
+  autoReleaseAt DateTime
+  releasedAt    DateTime?
+  refundedAt    DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@map("escrow_transactions")
+}
+
+model ReturnRequest {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String   @db.ObjectId
+  buyerId     String   @db.ObjectId
+  reason      String   // not_received | damaged | wrong_item | not_as_described | other
+  description String?
+  images      String[]
+  status      String   @default("PENDING") // PENDING | APPROVED | REJECTED | COMPLETED
+  adminNote   String?
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  @@map("return_requests")
 }
