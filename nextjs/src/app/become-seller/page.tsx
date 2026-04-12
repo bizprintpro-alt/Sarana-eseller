@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
@@ -82,7 +83,8 @@ const PLANS: Record<string, { name: string; price: string; priceNum: number; fea
 
 /* ═══ Main Page ═══ */
 export default function BecomeSellerPage() {
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -97,6 +99,13 @@ export default function BecomeSellerPage() {
     // Pre-order specific
     sourceCountry: '', deliveryDays: '', minimumOrderQty: '', advancePaymentPct: '30',
   });
+
+  // Нэвтрээгүй бол login руу redirect
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      router.push('/login?redirect=/become-seller');
+    }
+  }, [isLoggedIn, router]);
 
   const def = entityType ? ENTITY_DEFS[entityType] : null;
   const updateForm = (key: string, value: string) => setForm(prev => ({ ...prev, [key]: value }));
