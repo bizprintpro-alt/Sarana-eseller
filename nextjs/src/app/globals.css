@@ -22,6 +22,10 @@
   --color-stat-amber-from: #F59E0B;
   --color-stat-amber-to: #D97706;
   --color-dash-accent: #E8242C;
+  --color-dash-sidebar: #0F1117;
+  --color-dash-card: #1A1B23;
+  --color-dash-border: #2A2B35;
+  --color-dash-elevated: #22232D;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
