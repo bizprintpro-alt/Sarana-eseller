@@ -12,7 +12,8 @@
     "clean:demo": "npx tsx scripts/clean-demo-data.ts",
     "clean:demo:dry": "npx tsx scripts/clean-demo-data.ts --dry-run",
     "test:smoke": "npx tsx scripts/smoke-test.ts",
-    "seed:seller": "npx tsx scripts/seed-first-seller.ts"
+    "seed:seller": "npx tsx scripts/seed-first-seller.ts",
+    "test:upload": "npx tsx scripts/test-upload.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

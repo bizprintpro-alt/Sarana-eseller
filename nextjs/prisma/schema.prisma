@@ -44,7 +44,7 @@ model User {
   email     String    @unique
   password  String
   role      String    @default("buyer") // buyer | seller | affiliate | delivery | admin
-  username  String?   @unique
+  username  String?
   phone     String?
   avatar    String?
   store     StoreInfo?

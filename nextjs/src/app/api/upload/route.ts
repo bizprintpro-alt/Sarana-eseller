@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       }
 
       const uniquePath = `eseller/${user.id}/${Date.now()}-${filename}`;
-      const blob = await put(uniquePath, req.body!, { access: 'public' });
+      const blob = await put(uniquePath, req.body!, { access: 'private' });
       return NextResponse.json({ url: blob.url });
     }
 
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
       const ext = file.name.split('.').pop() || 'jpg';
       const path = `eseller/${user.id}/${Date.now()}.${ext}`;
-      const blob = await put(path, file, { access: 'public' });
+      const blob = await put(path, file, { access: 'private' });
       return NextResponse.json({ url: blob.url });
     }
 
