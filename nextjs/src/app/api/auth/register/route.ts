@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-p
 
 export async function POST(req: Request) {
   try {
-    const { name, email, phone, password } = await req.json();
+    const { name, email, phone, password, role: requestedRole } = await req.json();
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: 'Бүх талбарыг бөглөнө үү' }, { status: 400 });
@@ -18,6 +18,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Энэ имэйл бүртгэлтэй байна' }, { status: 400 });
     }
 
+    const VALID_ROLES = ['seller', 'affiliate', 'buyer', 'delivery'];
+    const role = requestedRole && VALID_ROLES.includes(requestedRole) ? requestedRole : 'buyer';
+
     const hashed = await bcrypt.hash(password, 12);
     const username = email.split('@')[0] + Math.floor(Math.random() * 1000);
 
@@ -27,10 +30,35 @@ export async function POST(req: Request) {
         email: email.toLowerCase(),
         phone: phone || undefined,
         password: hashed,
-        role: 'buyer',
+        role,
         username,
       },
     });
+
+    // Auto-create Shop for sellers
+    if (role === 'seller') {
+      const baseSlug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9\u0400-\u04ff]+/g, '-')
+        .replace(/^-|-$/g, '') || `shop-${user.id.slice(-6)}`;
+
+      let slug = baseSlug;
+      let suffix = 0;
+      while (await prisma.shop.findFirst({ where: { slug } })) {
+        suffix++;
+        slug = `${baseSlug}-${suffix}`;
+      }
+
+      await prisma.shop.create({
+        data: {
+          userId: user.id,
+          name,
+          slug,
+          industry: 'general',
+          locationStatus: 'pending',
+        },
+      });
+    }
 
     const token = jwt.sign(
       { id: user.id, userId: user.id, email: user.email, role: user.role, name: user.name },

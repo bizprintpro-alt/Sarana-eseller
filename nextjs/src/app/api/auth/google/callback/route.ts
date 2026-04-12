@@ -96,6 +96,36 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    // Auto-create Shop for sellers if none exists
+    if (user.role === 'seller') {
+      const existingShop = await prisma.shop.findUnique({ where: { userId: user.id } });
+      if (!existingShop) {
+        const baseName = user.name || email.split('@')[0];
+        const baseSlug = baseName
+          .toLowerCase()
+          .replace(/[^a-z0-9\u0400-\u04ff]+/g, '-')
+          .replace(/^-|-$/g, '') || `shop-${user.id.slice(-6)}`;
+
+        // Ensure unique slug
+        let slug = baseSlug;
+        let suffix = 0;
+        while (await prisma.shop.findFirst({ where: { slug } })) {
+          suffix++;
+          slug = `${baseSlug}-${suffix}`;
+        }
+
+        await prisma.shop.create({
+          data: {
+            userId: user.id,
+            name: `${baseName}`,
+            slug,
+            industry: 'general',
+            locationStatus: 'pending',
+          },
+        });
+      }
+    }
+
     // Issue JWT (same as login route)
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role, name: user.name },
