@@ -421,7 +421,7 @@ export default function LoginPage() {
               </div>
 
               <a
-                href="/api/auth/google"
+                href={`/api/auth/google?role=${role}`}
                 className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-bold text-sm border-none cursor-pointer transition-all hover:shadow-md no-underline"
                 style={{ background: 'var(--esl-bg-card)', border: '1.5px solid var(--esl-border)', color: 'var(--esl-text-primary)' }}
               >

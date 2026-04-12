@@ -23,11 +23,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.redirect(`${baseUrl}/login?error=no_code`);
     }
 
-    // Verify state
+    // Verify state (format: "nonce:role")
     const storedState = req.cookies.get('google_oauth_state')?.value;
-    if (!state || state !== storedState) {
+    const [nonce, selectedRole] = (state || '').split(':');
+    if (!nonce || nonce !== storedState) {
       return NextResponse.redirect(`${baseUrl}/login?error=invalid_state`);
     }
+
+    const VALID_ROLES = ['seller', 'affiliate', 'buyer', 'delivery'];
+    const role = selectedRole && VALID_ROLES.includes(selectedRole) ? selectedRole : 'buyer';
 
     // Exchange code for tokens
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
@@ -79,7 +83,7 @@ export async function GET(req: NextRequest) {
           email,
           name: name || email.split('@')[0],
           password: hashedPassword,
-          role: 'buyer',
+          role,
           avatar: picture || null,
           username: email.split('@')[0],
         },
