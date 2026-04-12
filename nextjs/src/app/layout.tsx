@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import './globals.css';
 import AuthProvider from '@/components/shared/AuthProvider';
@@ -8,6 +8,14 @@ import InstallPrompt from '@/components/pwa/InstallPrompt';
 import ChatWidget from '@/components/chat/ChatWidget';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#E8242C',
+  viewportFit: 'cover',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://eseller.mn'),

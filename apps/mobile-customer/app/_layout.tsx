@@ -67,6 +67,10 @@ function RootNavigator() {
         <Stack.Screen name="order/[id]" options={{ title: 'Захиалга' }} />
         <Stack.Screen name="checkout/index" options={{ title: 'Төлбөр', presentation: 'modal' }} />
         <Stack.Screen name="confirm/[id]" options={{ title: 'Баталгаажуулах', presentation: 'modal' }} />
+        <Stack.Screen name="chat/[roomId]" options={{ title: 'Чат' }} />
+        <Stack.Screen name="(seller)/product/new" options={{ title: 'Бараа нэмэх' }} />
+        <Stack.Screen name="(seller)/product/[id]/edit" options={{ title: 'Бараа засах' }} />
+        <Stack.Screen name="(seller)/order/[id]" options={{ title: 'Захиалга' }} />
       </Stack>
     </View>
   );
