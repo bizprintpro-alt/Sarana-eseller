@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { json } from '@/lib/api-auth';
 import { DEMO_FEED } from '@/lib/types/entity';
 
+import { requireAuth, errorJson } from '@/lib/api-auth';
+
 // GET /api/feed?category=agent&tier=vip&page=1&limit=20&sort=newest&search=...&district=...&priceMin=...&priceMax=...
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
@@ -70,5 +72,70 @@ export async function GET(req: NextRequest) {
       normal: items.filter((i) => i.tier === 'normal'),
       meta: { total: items.length, page: 1, hasMore: false },
     });
+  }
+}
+
+// POST /api/feed — create new listing (FeedItem)
+export async function POST(req: NextRequest) {
+  const user = requireAuth(req);
+  if (user instanceof Response) return user;
+
+  try {
+    const body = await req.json();
+    const { title, description, price, originalPrice, images, category, subcategory, entityType, district, province, lat, lng, metadata, tier } = body;
+
+    if (!title || !entityType) return errorJson('title, entityType шаардлагатай');
+
+    // Generate refId
+    const prefixMap: Record<string, string> = { agent: 'AGT', auto_dealer: 'AUT', company: 'COM', service: 'SRV', store: 'STR', user: 'USR' };
+    const prefix = prefixMap[entityType] || 'USR';
+    const refId = `${prefix}-${Date.now().toString(36).toUpperCase()}`;
+
+    // Find entity ID based on user
+    let entityId = user.id;
+    if (entityType === 'agent') {
+      const agent = await prisma.agent.findUnique({ where: { userId: user.id } });
+      if (agent) entityId = agent.id;
+    } else if (entityType === 'company') {
+      const company = await prisma.company.findUnique({ where: { userId: user.id } });
+      if (company) entityId = company.id;
+    } else if (entityType === 'auto_dealer') {
+      const dealer = await prisma.autoDealer.findUnique({ where: { userId: user.id } });
+      if (dealer) entityId = dealer.id;
+    } else if (entityType === 'service') {
+      const provider = await prisma.serviceProvider.findUnique({ where: { userId: user.id } });
+      if (provider) entityId = provider.id;
+    }
+
+    const item = await prisma.feedItem.create({
+      data: {
+        refId,
+        title,
+        description: description || null,
+        price: price ? Number(price) : null,
+        originalPrice: originalPrice ? Number(originalPrice) : null,
+        images: images || [],
+        category: category || null,
+        subcategory: subcategory || null,
+        entityType,
+        entityId,
+        tier: tier || 'normal',
+        status: 'active',
+        district: district || null,
+        province: province || null,
+        lat: lat ? Number(lat) : null,
+        lng: lng ? Number(lng) : null,
+        metadata: metadata || {},
+        ...(entityType === 'agent' ? { agentId: entityId } : {}),
+        ...(entityType === 'company' ? { companyId: entityId } : {}),
+        ...(entityType === 'auto_dealer' ? { autoDealerId: entityId } : {}),
+        ...(entityType === 'service' ? { serviceProviderId: entityId } : {}),
+      },
+    });
+
+    return json(item, 201);
+  } catch (err: any) {
+    if (err.code === 'P2002') return errorJson('Энэ зар аль хэдийн бүртгэлтэй');
+    return errorJson('Зар нэмэхэд алдаа: ' + (err.message || ''));
   }
 }
