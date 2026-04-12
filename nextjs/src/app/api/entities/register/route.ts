@@ -57,6 +57,19 @@ export async function POST(req: NextRequest) {
       data: { role: ['store', 'pre_order', 'digital'].includes(entityType) ? 'seller' : entityType, entityType },
     });
 
+    // Create SellerProfile for affiliate commission system
+    const username = slug || `seller-${auth.id.slice(-8)}`;
+    await prisma.sellerProfile.upsert({
+      where: { userId: auth.id },
+      create: {
+        userId: auth.id,
+        username,
+        displayName: name,
+        commissionRate: 10, // default 10%
+      },
+      update: { displayName: name },
+    });
+
     return json({ entity, message: 'Амжилттай бүртгэгдлээ' }, 201);
   } catch (err: any) {
     if (err.code === 'P2002') return errorJson('Энэ slug аль хэдийн бүртгэлтэй');

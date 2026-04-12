@@ -7,7 +7,7 @@ import {
   Download, ExternalLink, ToggleLeft, ToggleRight, RefreshCw,
 } from 'lucide-react';
 
-interface ChatParticipant {
+interface ChatUser {
   id: string;
   name: string;
   email?: string;
@@ -17,9 +17,12 @@ interface ChatParticipant {
 
 interface ChatEntry {
   id: string;
-  participants: ChatParticipant[];
+  shopId: string;
+  customer: ChatUser;
   lastMessage: string | null;
-  lastMessageAt: string | null;
+  lastAt: string | null;
+  status: string;
+  unreadCount: number;
   createdAt: string;
 }
 
@@ -54,7 +57,8 @@ export default function ChatMonitorPage() {
   const filtered = chats.filter(c => {
     if (!search) return true;
     const q = search.toLowerCase();
-    return c.participants.some(p => p.name?.toLowerCase().includes(q) || p.email?.toLowerCase().includes(q)) ||
+    return (c.customer?.name || '').toLowerCase().includes(q) ||
+      (c.customer?.email || '').toLowerCase().includes(q) ||
       (c.lastMessage || '').toLowerCase().includes(q);
   });
 
@@ -81,7 +85,7 @@ export default function ChatMonitorPage() {
         {[
           { label: 'Нийт чат', value: String(total), color: 'text-white' },
           { label: 'Энэ хуудас', value: String(filtered.length), color: 'text-green-400' },
-          { label: 'Идэвхтэй (24 цаг)', value: String(chats.filter(c => c.lastMessageAt && new Date(c.lastMessageAt) > new Date(Date.now() - 86400000)).length), color: 'text-blue-400' },
+          { label: 'Идэвхтэй (24 цаг)', value: String(chats.filter(c => c.lastAt && new Date(c.lastAt) > new Date(Date.now() - 86400000)).length), color: 'text-blue-400' },
           { label: 'Хуудас', value: `${page}/${Math.ceil(total / 20) || 1}`, color: 'text-amber-400' },
         ].map(s => (
           <div key={s.label} className="bg-[#1A1A2E] rounded-xl p-4 text-white">
@@ -115,8 +119,9 @@ export default function ChatMonitorPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="text-left text-[10px] text-[var(--esl-text-secondary)] uppercase tracking-wider border-b border-[var(--esl-border)] bg-[var(--esl-bg-section)]/50">
-                    <th className="px-4 py-2.5 font-medium">Оролцогчид</th>
+                    <th className="px-4 py-2.5 font-medium">Хэрэглэгч</th>
                     <th className="px-4 py-2.5 font-medium">Сүүлийн мессеж</th>
+                    <th className="px-4 py-2.5 font-medium">Статус</th>
                     <th className="px-4 py-2.5 font-medium">Огноо</th>
                   </tr>
                 </thead>
@@ -127,26 +132,35 @@ export default function ChatMonitorPage() {
                       <tr key={chat.id} onClick={() => setSelected(chat)}
                         className={cn('cursor-pointer transition', isActive ? 'bg-indigo-500/10' : 'hover:bg-[var(--esl-bg-section)]/50')}>
                         <td className="px-4 py-3">
-                          <div className="space-y-0.5">
-                            {chat.participants.map(p => (
-                              <div key={p.id} className="flex items-center gap-1.5">
-                                <span className={cn('text-[9px] font-bold px-1.5 py-0.5 rounded',
-                                  p.role === 'seller' ? 'bg-green-500/15 text-green-400' :
-                                  p.role === 'admin' ? 'bg-red-500/15 text-red-400' :
-                                  'bg-blue-500/15 text-blue-400'
-                                )}>{p.role}</span>
-                                <span className="text-xs font-semibold text-[var(--esl-text-primary)]">{p.name || 'Unknown'}</span>
-                              </div>
-                            ))}
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
+                              {(chat.customer?.name || '?').charAt(0)}
+                            </div>
+                            <div>
+                              <div className="text-xs font-semibold text-[var(--esl-text-primary)]">{chat.customer?.name || 'Unknown'}</div>
+                              <div className="text-[10px] text-[var(--esl-text-muted)]">{chat.customer?.email || ''}</div>
+                            </div>
                           </div>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="text-xs text-[var(--esl-text-primary)] truncate max-w-[250px]">
+                          <div className="text-xs text-[var(--esl-text-primary)] truncate max-w-[200px]">
                             {chat.lastMessage || '(мессеж байхгүй)'}
                           </div>
+                          {chat.unreadCount > 0 && (
+                            <span className="text-[9px] font-bold bg-red-500/15 text-red-400 px-1.5 py-0.5 rounded mt-0.5 inline-block">
+                              {chat.unreadCount} уншаагүй
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className={cn('text-[10px] font-bold px-2 py-0.5 rounded-lg',
+                            chat.status === 'active' ? 'bg-green-500/15 text-green-400' :
+                            chat.status === 'blocked' ? 'bg-red-500/15 text-red-400' :
+                            'bg-gray-500/15 text-gray-400'
+                          )}>{chat.status === 'active' ? 'Идэвхтэй' : chat.status === 'blocked' ? 'Блок' : 'Архив'}</span>
                         </td>
                         <td className="px-4 py-3 text-xs text-[var(--esl-text-muted)]">
-                          {chat.lastMessageAt ? new Date(chat.lastMessageAt).toLocaleDateString('mn-MN') : '—'}
+                          {chat.lastAt ? new Date(chat.lastAt).toLocaleDateString('mn-MN') : '—'}
                         </td>
                       </tr>
                     );
@@ -180,25 +194,21 @@ export default function ChatMonitorPage() {
                   <button onClick={() => setSelected(null)} className="text-xs text-[var(--esl-text-muted)] hover:text-[var(--esl-text-secondary)] bg-transparent border-none cursor-pointer">✕</button>
                 </div>
 
-                <div className="space-y-2">
-                  {selected.participants.map(p => (
-                    <div key={p.id} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-bold text-indigo-600">
-                        {(p.name || '?').charAt(0)}
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold text-[var(--esl-text-primary)]">{p.name}</div>
-                        <div className="text-[10px] text-[var(--esl-text-muted)]">{p.email || p.role}</div>
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-bold text-indigo-600">
+                    {(selected.customer?.name || '?').charAt(0)}
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-[var(--esl-text-primary)]">{selected.customer?.name}</div>
+                    <div className="text-[10px] text-[var(--esl-text-muted)]">{selected.customer?.email || selected.customer?.role}</div>
+                  </div>
                 </div>
 
                 <div className="space-y-1.5 text-xs">
                   {[
                     { label: 'Чат ID', value: selected.id.slice(-8) },
                     { label: 'Эхэлсэн', value: new Date(selected.createdAt).toLocaleDateString('mn-MN') },
-                    { label: 'Сүүлийн идэвх', value: selected.lastMessageAt ? new Date(selected.lastMessageAt).toLocaleDateString('mn-MN') : '—' },
+                    { label: 'Сүүлийн идэвх', value: selected.lastAt ? new Date(selected.lastAt).toLocaleDateString('mn-MN') : '—' },
                   ].map(r => (
                     <div key={r.label} className="flex justify-between">
                       <span className="text-[var(--esl-text-muted)]">{r.label}</span>
