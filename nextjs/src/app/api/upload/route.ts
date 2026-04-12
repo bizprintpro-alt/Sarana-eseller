@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
       const uniquePath = `eseller/${user.id}/${Date.now()}-${filename}`;
       const blob = await put(uniquePath, req.body!, { access: 'public' });
-      return NextResponse.json({ url: blob.url, size: blob.size });
+      return NextResponse.json({ url: blob.url });
     }
 
     // Method 2: FormData upload (MediaUploader / ImageUpload)
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       const ext = file.name.split('.').pop() || 'jpg';
       const path = `eseller/${user.id}/${Date.now()}.${ext}`;
       const blob = await put(path, file, { access: 'public' });
-      return NextResponse.json({ url: blob.url, size: blob.size });
+      return NextResponse.json({ url: blob.url });
     }
 
     return NextResponse.json({ error: 'filename query param эсвэл FormData шаардлагатай' }, { status: 400 });

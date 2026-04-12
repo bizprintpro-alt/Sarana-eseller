@@ -19,14 +19,18 @@ const ROLE_CONFIG: Record<string, { label: string; color: string }> = {
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [breakdown, setBreakdown] = useState<Record<string, number>>({});
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
+  const totalPages = Math.ceil(total / pageSize);
 
   const fetchUsers = async () => {
     setLoading(true);
     const token = localStorage.getItem('token');
-    const params = new URLSearchParams({ page: '1' });
+    const params = new URLSearchParams({ page: String(page) });
     if (roleFilter !== 'all') params.set('role', roleFilter);
     if (search) params.set('q', search);
     try {
@@ -34,11 +38,13 @@ export default function AdminUsersPage() {
       const data = await res.json();
       if (data.users) setUsers(data.users);
       if (data.breakdown) setBreakdown(data.breakdown);
+      if (data.total) setTotal(data.total);
     } catch {}
     setLoading(false);
   };
 
-  useEffect(() => { fetchUsers(); }, [roleFilter, search]);
+  useEffect(() => { fetchUsers(); }, [roleFilter, search, page]);
+  useEffect(() => { setPage(1); }, [roleFilter, search]);
 
   const updateUser = async (userId: string, updates: Record<string, unknown>) => {
     const token = localStorage.getItem('token');
@@ -125,6 +131,23 @@ export default function AdminUsersPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-4 px-2">
+            <span className="text-xs text-white/30">Нийт {total} хэрэглэгч · Хуудас {page}/{totalPages}</span>
+            <div className="flex gap-2">
+              <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
+                className="px-3 py-1.5 bg-dash-card border border-dash-border rounded-lg text-xs text-white/60 disabled:opacity-30 cursor-pointer disabled:cursor-default">
+                ← Өмнөх
+              </button>
+              <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
+                className="px-3 py-1.5 bg-dash-card border border-dash-border rounded-lg text-xs text-white/60 disabled:opacity-30 cursor-pointer disabled:cursor-default">
+                Дараах →
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
