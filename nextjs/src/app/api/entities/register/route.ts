@@ -41,6 +41,12 @@ export async function POST(req: NextRequest) {
           data: { userId: auth.id, name, slug, phone, address, district, description, isVerified: false },
         });
         break;
+      case 'pre_order':
+      case 'digital':
+        entity = await prisma.shop.create({
+          data: { userId: auth.id, name, slug, phone, address, district, industry: entityType, locationStatus: 'pending' },
+        });
+        break;
       default:
         return errorJson('Буруу entityType');
     }
@@ -48,7 +54,7 @@ export async function POST(req: NextRequest) {
     // Update user role + entityType
     await prisma.user.update({
       where: { id: auth.id },
-      data: { role: entityType === 'store' ? 'seller' : entityType, entityType },
+      data: { role: ['store', 'pre_order', 'digital'].includes(entityType) ? 'seller' : entityType, entityType },
     });
 
     return json({ entity, message: 'Амжилттай бүртгэгдлээ' }, 201);
