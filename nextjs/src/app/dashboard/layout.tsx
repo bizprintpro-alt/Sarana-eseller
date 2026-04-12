@@ -365,10 +365,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       }
     : undefined;
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-[var(--esl-bg-page)]">
-      <Sidebar sections={sections} storeInfo={storeInfo} />
-      <main className="ml-[260px] min-h-screen transition-all duration-300 p-6 lg:p-8">
+      {/* Mobile header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 bg-[var(--esl-bg-section)] border-b border-[var(--esl-border)] flex items-center px-4 z-50">
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="w-9 h-9 rounded-lg bg-[var(--esl-bg-card)] border border-[var(--esl-border)] flex items-center justify-center text-[var(--esl-text-muted)] cursor-pointer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
+        </button>
+        <span className="ml-3 text-sm font-bold text-[var(--esl-text-primary)]">eseller<span className="text-[#E8242C]">.mn</span></span>
+      </div>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setMobileOpen(false)} />
+      )}
+
+      {/* Sidebar — hidden on mobile, slide-in when open */}
+      <div className={`md:block ${mobileOpen ? 'block' : 'hidden'}`}>
+        <Sidebar sections={sections} storeInfo={storeInfo} />
+      </div>
+
+      <main className="ml-0 md:ml-[260px] min-h-screen transition-all duration-300 p-4 pt-18 md:pt-6 md:p-6 lg:p-8">
         {children}
       </main>
     </div>

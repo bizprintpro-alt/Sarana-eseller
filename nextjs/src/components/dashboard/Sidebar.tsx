@@ -85,7 +85,7 @@ export default function Sidebar({ sections, storeInfo }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-screen bg-[var(--esl-bg-section)] flex flex-col transition-all duration-200 z-40 ${
+      className={`fixed top-0 left-0 h-screen bg-[var(--esl-bg-section)] flex flex-col transition-all duration-200 z-50 ${
         collapsed ? 'w-[68px]' : 'w-[260px]'
       }`}
       style={{ borderRight: '1px solid var(--esl-border)' }}

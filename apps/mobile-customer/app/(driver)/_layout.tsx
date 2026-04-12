@@ -37,10 +37,10 @@ export default function DriverLayout() {
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="active"
         options={{
-          title: 'Түүх',
-          tabBarIcon: ({ color }) => <Ionicons name="time-outline" size={22} color={color} />,
+          title: 'Идэвхтэй',
+          tabBarIcon: ({ color }) => <Ionicons name="navigate-outline" size={22} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -57,6 +57,8 @@ export default function DriverLayout() {
           tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={22} color={color} />,
         }}
       />
+      {/* Hidden */}
+      <Tabs.Screen name="history" options={{ href: null }} />
     </Tabs>
   );
 }
