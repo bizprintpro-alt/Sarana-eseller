@@ -135,6 +135,7 @@ model Product {
   isBoosted     Boolean  @default(false)
   boostEndAt    DateTime?
   boostScore    Int      @default(0)
+  isDemo        Boolean  @default(false)
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -295,6 +296,7 @@ model Shop {
 
   isBlocked    Boolean  @default(false)
   blockReason  String?
+  isDemo       Boolean  @default(false)
 
   // Seller/Affiliate permissions
   allowSellers     Boolean @default(false)

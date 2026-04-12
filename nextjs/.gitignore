@@ -51,3 +51,5 @@ prisma/*.mts
 
 .vercel
 .env.production.template
+
+.env*.local
