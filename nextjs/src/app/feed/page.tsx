@@ -515,8 +515,10 @@ export default function FeedPage() {
 
   // Fetch real feed data from API, fallback to DEMO_FEED
   useEffect(() => {
-    fetch('/api/feed').then(r => r.json()).then(data => {
-      if (data.items?.length > 0) setFeedItems(data.items);
+    fetch('/api/feed').then(r => r.json()).then(res => {
+      const d = res.data || res;
+      const all = [...(d.vip || []), ...(d.featured || []), ...(d.discounted || []), ...(d.normal || [])];
+      if (all.length > 0) setFeedItems(all);
     }).catch(() => {});
   }, []);
   const { district: userDistrict, loading: locLoading, permissionDenied, refresh: refreshLoc, setManualDistrict } = useUserLocation();

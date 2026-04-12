@@ -50,6 +50,13 @@ export default function DriverLayout() {
           tabBarIcon: ({ color }) => <Ionicons name="wallet-outline" size={22} color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Профайл',
+          tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={22} color={color} />,
+        }}
+      />
     </Tabs>
   );
 }

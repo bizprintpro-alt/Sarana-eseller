@@ -158,3 +158,35 @@ export const ProductsAPI = {
   },
   get: (id: string) => apiFetch<any>(`/products/${id}`),
 };
+
+// ══════ CHAT (Seller) ══════
+export const ChatAPI = {
+  getThreads: () =>
+    apiFetch<{ chats: any[] }>('/seller/conversations'),
+  getMessages: (threadId: string) =>
+    apiFetch<{ messages: any[] }>(`/seller/conversations/${threadId}/messages`),
+  sendMessage: (threadId: string, content: string) =>
+    apiFetch(`/seller/conversations/${threadId}/messages`, { method: 'POST', body: JSON.stringify({ content }) }),
+};
+
+// ══════ DRIVER ══════
+export const DriverAPI = {
+  getShipments: () =>
+    apiFetch<{ shipments: any[] }>('/driver/shipments'),
+  confirmDelivery: (id: string, method: string, data: any) =>
+    apiFetch(`/driver/shipments/${id}/confirm`, { method: 'POST', body: JSON.stringify({ method, ...data }) }),
+  toggleOnline: (online: boolean) =>
+    apiFetch('/driver/status', { method: 'PUT', body: JSON.stringify({ online }) }),
+  getEarnings: (period: string) =>
+    apiFetch<any>(`/driver/earnings?period=${period}`),
+};
+
+// ══════ POS ══════
+export const POSAPI = {
+  getProducts: (storeId: string) =>
+    apiFetch<{ products: any[] }>(`/pos/products?storeId=${storeId}`),
+  createSale: (data: { items: any[]; total: number; paymentMethod: string; vat: number }) =>
+    apiFetch('/pos/sales', { method: 'POST', body: JSON.stringify(data) }),
+  lookupBarcode: (barcode: string) =>
+    apiFetch<any>(`/pos/barcode/${barcode}`),
+};

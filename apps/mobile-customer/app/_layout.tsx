@@ -18,7 +18,9 @@ function RootNavigator() {
           ? '/(seller)'
           : activeRole === 'driver'
             ? '/(driver)'
-            : '/(tabs)';
+            : activeRole === 'pos'
+              ? '/(pos)'
+              : '/(tabs)';
       router.replace(target as any);
     }
   }, [activeRole]);
@@ -38,10 +40,12 @@ function RootNavigator() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(seller)" options={{ headerShown: false }} />
         <Stack.Screen name="(driver)" options={{ headerShown: false }} />
+        <Stack.Screen name="(pos)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="product/[id]" options={{ title: 'Бараа' }} />
         <Stack.Screen name="order/[id]" options={{ title: 'Захиалга' }} />
         <Stack.Screen name="checkout/index" options={{ title: 'Төлбөр', presentation: 'modal' }} />
+        <Stack.Screen name="confirm/[id]" options={{ title: 'Баталгаажуулах', presentation: 'modal' }} />
       </Stack>
     </View>
   );

@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "Eseller",
-    "slug": "eseller-customer",
+    "slug": "eseller-app",
     "version": "1.0.0",
     "scheme": "eseller",
-    "orientation": "portrait",
+    "orientation": "default",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
@@ -12,13 +12,23 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "mn.eseller.customer"
+      "bundleIdentifier": "mn.eseller.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Баркод скан хийх болон хүргэлт баталгаажуулахад камер ашиглана",
+        "NSLocationWhenInUseUsageDescription": "Хүргэлтийн байршил тодорхойлоход ашиглана"
+      }
     },
     "android": {
-      "package": "mn.eseller.customer",
+      "package": "mn.eseller.app",
       "adaptiveIcon": { "backgroundColor": "#0A0A0A" },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": ["ACCESS_FINE_LOCATION", "CAMERA", "VIBRATE"]
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      ["expo-camera", { "cameraPermission": "Баркод скан болон зураг авахад камер ашиглана" }],
+      ["expo-location", { "locationWhenInUsePermission": "Хүргэлтийн байршил тодорхойлоход ашиглана" }]
+    ]
   }
 }

@@ -78,6 +78,26 @@ export default function SellerSettings() {
         <Text style={s.menuText}>Тусламж</Text>
         <Ionicons name="chevron-forward" size={18} color="#666" />
       </TouchableOpacity>
+
+      <Text style={[s.section, { marginTop: 24 }]}>Нэмэлт</Text>
+
+      <TouchableOpacity style={s.menuItem} activeOpacity={0.7}>
+        <Ionicons name="color-wand-outline" size={20} color="#CCC" />
+        <Text style={s.menuText}>AI Дэлгүүр засварлагч</Text>
+        <Ionicons name="chevron-forward" size={18} color="#666" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={s.menuItem} activeOpacity={0.7}>
+        <Ionicons name="wallet-outline" size={20} color="#CCC" />
+        <Text style={s.menuText}>Хэтэвч</Text>
+        <Ionicons name="chevron-forward" size={18} color="#666" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={s.menuItem} activeOpacity={0.7}>
+        <Ionicons name="link-outline" size={20} color="#CCC" />
+        <Text style={s.menuText}>Интеграц</Text>
+        <Ionicons name="chevron-forward" size={18} color="#666" />
+      </TouchableOpacity>
     </ScrollView>
   );
 }

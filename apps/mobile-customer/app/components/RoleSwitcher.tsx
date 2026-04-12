@@ -15,7 +15,7 @@ interface Props {
   onClose: () => void;
 }
 
-const ALL_ROLES: AppRole[] = ['customer', 'seller', 'driver'];
+const ALL_ROLES: AppRole[] = ['customer', 'seller', 'driver', 'pos'];
 
 export default function RoleSwitcher({ visible, onClose }: Props) {
   const { activeRole, availableRoles, setActiveRole, addRole } = useRoleStore();
@@ -30,7 +30,7 @@ export default function RoleSwitcher({ visible, onClose }: Props) {
     // Demo: unlock all roles
     ALL_ROLES.forEach((r) => {
       if (!availableRoles.includes(r)) {
-        addRole(r, 'demo-entity', r === 'seller' ? 'Миний дэлгүүр' : 'Жолооч #1');
+        addRole(r, 'demo-entity', r === 'seller' ? 'Миний дэлгүүр' : r === 'pos' ? 'POS Терминал' : 'Жолооч #1');
       }
     });
   };
@@ -80,7 +80,7 @@ export default function RoleSwitcher({ visible, onClose }: Props) {
           {!allUnlocked && (
             <TouchableOpacity style={s.unlockBtn} onPress={handleUnlock} activeOpacity={0.7}>
               <Ionicons name="add-circle-outline" size={20} color="#999" />
-              <Text style={s.unlockText}>Борлуулагч / Жолооч болох</Text>
+              <Text style={s.unlockText}>Бүх цэс нээх</Text>
             </TouchableOpacity>
           )}
 

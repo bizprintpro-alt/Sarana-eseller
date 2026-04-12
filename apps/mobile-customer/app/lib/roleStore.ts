@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ─── Types ───────────────────────────────────────────────────
-export type AppRole = 'customer' | 'seller' | 'driver';
+export type AppRole = 'customer' | 'seller' | 'driver' | 'pos';
 
 export interface RoleState {
   userId: string | null;
@@ -125,4 +125,5 @@ export const ROLE_META: Record<AppRole, { emoji: string; label: string; sublabel
   customer: { emoji: '🛍', label: 'Хэрэглэгч', sublabel: 'Бараа захиалах', color: '#E8242C' },
   seller:   { emoji: '🏪', label: 'Борлуулагч', sublabel: 'Дэлгүүр удирдах', color: '#22C55E' },
   driver:   { emoji: '🚚', label: 'Жолооч', sublabel: 'Хүргэлт хийх', color: '#F59E0B' },
+  pos:      { emoji: '🖥', label: 'POS', sublabel: 'Касс терминал', color: '#8B5CF6' },
 };

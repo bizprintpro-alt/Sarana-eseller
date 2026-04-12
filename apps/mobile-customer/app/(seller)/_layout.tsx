@@ -58,6 +58,13 @@ export default function SellerLayout() {
         }}
       />
       <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'Чат',
+          tabBarIcon: ({ color }) => <Ionicons name="chatbubbles-outline" size={22} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: 'Тохиргоо',
