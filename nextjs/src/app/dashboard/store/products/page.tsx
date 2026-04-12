@@ -11,6 +11,7 @@ import {
   ToggleLeft, ToggleRight, Eye, AlertTriangle, Wallet,
 } from 'lucide-react';
 import CategorySelector from '@/components/shared/CategorySelector';
+import { MediaUploader } from '@/components/shared/MediaUploader';
 
 /* ═══ Types ═══ */
 interface ProductForm {
@@ -246,29 +247,13 @@ export default function ProductsPage() {
               {modalTab === 'media' && (
                 <>
                   <div>
-                    <label className="text-xs font-semibold text-[var(--esl-text-secondary)] mb-1.5 block">Зурагнууд ({form.images.length}/10)</label>
-
-                    {/* Image grid */}
-                    {form.images.length > 0 && (
-                      <div className="grid grid-cols-5 gap-2 mb-3">
-                        {form.images.map((img, i) => (
-                          <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-[var(--esl-border)] group/img">
-                            <img loading="lazy" src={img} alt="" className="w-full h-full object-cover" />
-                            {i === 0 && <span className="absolute top-1 left-1 text-[8px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded">Гол</span>}
-                            <button onClick={() => removeImage(i)}
-                              className="absolute top-1 right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center border-none cursor-pointer opacity-0 group-hover/img:opacity-100 transition text-[10px]">✕</button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Upload area */}
-                    <div onClick={addImageUrl}
-                      className="border-2 border-dashed border-[var(--esl-border)] rounded-xl p-6 text-center cursor-pointer hover:border-indigo-400 transition">
-                      <Upload className="w-8 h-8 text-[var(--esl-text-muted)] mx-auto mb-2" />
-                      <p className="text-sm text-[var(--esl-text-secondary)]">Зураг нэмэх (URL)</p>
-                      <p className="text-[10px] text-[var(--esl-text-muted)] mt-1">JPG, PNG, WEBP · 10MB хүртэл · 10 ширхэг хүртэл</p>
-                    </div>
+                    <MediaUploader
+                      context="product"
+                      value={form.images}
+                      onChange={(urls) => setForm(prev => ({ ...prev, images: urls }))}
+                      maxFiles={10}
+                      label={`Зурагнууд (${form.images.length}/10)`}
+                    />
                   </div>
 
                   {/* Video */}
