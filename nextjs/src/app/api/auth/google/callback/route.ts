@@ -88,6 +88,12 @@ export async function GET(req: NextRequest) {
           username: email.split('@')[0],
         },
       });
+    } else if (role !== 'buyer' && user.role === 'buyer') {
+      // User exists but selected a specific role during registration — upgrade from default buyer
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { role },
+      });
     }
 
     // Issue JWT (same as login route)
