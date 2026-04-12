@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { DriverAPI } from '../lib/api';
 
-const DELIVERIES = [
+const DEMO_DELIVERIES = [
   { id: 'D-101', shop: 'Миний дэлгүүр', customer: 'Б.Болд', address: 'БЗД 3-р хороо', distance: '2.4 км', reward: '₮4,500' },
   { id: 'D-102', shop: 'Fashion Store', customer: 'Д.Сараа', address: 'СБД 8-р хороо', distance: '5.1 км', reward: '₮7,200' },
   { id: 'D-103', shop: 'TechShop', customer: 'Г.Тэмүүлэн', address: 'ХУД 11-р хороо', distance: '3.8 км', reward: '₮5,800' },
@@ -10,13 +12,42 @@ const DELIVERIES = [
 
 export default function DriverDashboard() {
   const [online, setOnline] = useState(false);
+  const [deliveries, setDeliveries] = useState(DEMO_DELIVERIES);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadDeliveries = useCallback(async () => {
+    try {
+      const data = await DriverAPI.deliveries('pending');
+      if (data.orders?.length > 0) {
+        setDeliveries(data.orders.map((o: any) => ({
+          id: o.orderNumber || o.id?.slice(-5),
+          shop: o.shop?.name || 'Дэлгүүр',
+          customer: o.user?.name || 'Хэрэглэгч',
+          address: o.delivery?.address || 'Хаяг',
+          distance: '',
+          reward: `₮${(o.deliveryFee || 4500).toLocaleString()}`,
+          _id: o.id || o._id,
+        })));
+      }
+    } catch {}
+    setRefreshing(false);
+  }, []);
+
+  useEffect(() => { if (online) loadDeliveries(); }, [online]);
+
+  const handleToggle = async () => {
+    const next = !online;
+    setOnline(next);
+    // TODO: add driver status endpoint
+    // DriverAPI.toggleOnline(next).catch(() => {});
+  };
 
   return (
     <ScrollView style={s.container} contentContainerStyle={{ padding: 16, paddingBottom: 40 }}>
       {/* Online toggle */}
       <TouchableOpacity
         style={[s.toggleBtn, online && s.toggleOnline]}
-        onPress={() => setOnline(!online)}
+        onPress={handleToggle}
         activeOpacity={0.8}
       >
         <Ionicons
@@ -57,7 +88,7 @@ export default function DriverDashboard() {
           <Text style={s.emptyText}>Идэвхжүүлсний дараа хүргэлт харагдана</Text>
         </View>
       ) : (
-        DELIVERIES.map((d) => (
+        deliveries.map((d) => (
           <View key={d.id} style={s.card}>
             <View style={s.cardHeader}>
               <Text style={s.cardId}>{d.id}</Text>
@@ -76,6 +107,9 @@ export default function DriverDashboard() {
               <TouchableOpacity style={s.acceptBtn} activeOpacity={0.8}>
                 <Ionicons name="checkmark" size={18} color="#FFF" />
                 <Text style={s.acceptText}>Хүлээн авах</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={s.confirmNavBtn} activeOpacity={0.8} onPress={() => router.push(`/confirm/${d.id}` as any)}>
+                <Ionicons name="camera" size={18} color="#8B5CF6" />
               </TouchableOpacity>
               <TouchableOpacity style={s.rejectBtn} activeOpacity={0.8}>
                 <Ionicons name="close" size={18} color="#E8242C" />
@@ -150,6 +184,14 @@ const s = StyleSheet.create({
     gap: 6,
   },
   acceptText: { color: '#FFF', fontSize: 14, fontWeight: '700' },
+  confirmNavBtn: {
+    backgroundColor: '#8B5CF622',
+    borderRadius: 10,
+    padding: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   rejectBtn: {
     backgroundColor: '#E8242C22',
     borderRadius: 10,

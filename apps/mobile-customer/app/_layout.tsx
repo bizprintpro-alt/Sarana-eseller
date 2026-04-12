@@ -2,14 +2,18 @@ import React, { useEffect, useRef } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import { RoleProvider, useRoleStore, AppRole } from './lib/roleStore';
+import { CartProvider } from './lib/cartStore';
+import { registerPushToken, getDeepLinkFromNotification } from './lib/notifications';
 
 function RootNavigator() {
-  const { activeRole } = useRoleStore();
+  const { activeRole, userId } = useRoleStore();
   const router = useRouter();
   const segments = useSegments();
   const prevRole = useRef<AppRole>(activeRole);
 
+  // Role switching navigation
   useEffect(() => {
     if (prevRole.current !== activeRole) {
       prevRole.current = activeRole;
@@ -24,6 +28,23 @@ function RootNavigator() {
       router.replace(target as any);
     }
   }, [activeRole]);
+
+  // Push notifications
+  useEffect(() => {
+    if (userId) {
+      registerPushToken();
+    }
+
+    // Handle notification tap → deep link
+    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+      const link = getDeepLinkFromNotification(response.notification);
+      if (link) {
+        router.push(link as any);
+      }
+    });
+
+    return () => subscription.remove();
+  }, [userId]);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#0A0A0A' }}>
@@ -54,7 +75,9 @@ function RootNavigator() {
 export default function RootLayout() {
   return (
     <RoleProvider>
-      <RootNavigator />
+      <CartProvider>
+        <RootNavigator />
+      </CartProvider>
     </RoleProvider>
   );
 }

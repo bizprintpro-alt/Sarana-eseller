@@ -31,16 +31,9 @@ export default function SellerLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Тойм',
-          headerTitle: 'Борлуулагч',
+          title: 'Самбар',
+          headerTitle: 'Дэлгүүр',
           tabBarIcon: ({ color }) => <Ionicons name="grid-outline" size={22} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="orders"
-        options={{
-          title: 'Захиалга',
-          tabBarIcon: ({ color }) => <Ionicons name="receipt-outline" size={22} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -51,17 +44,17 @@ export default function SellerLayout() {
         }}
       />
       <Tabs.Screen
-        name="analytics"
+        name="orders"
         options={{
-          title: 'Тайлан',
-          tabBarIcon: ({ color }) => <Ionicons name="bar-chart-outline" size={22} color={color} />,
+          title: 'Захиалга',
+          tabBarIcon: ({ color }) => <Ionicons name="receipt-outline" size={22} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="chat"
+        name="revenue"
         options={{
-          title: 'Чат',
-          tabBarIcon: ({ color }) => <Ionicons name="chatbubbles-outline" size={22} color={color} />,
+          title: 'Орлого',
+          tabBarIcon: ({ color }) => <Ionicons name="trending-up-outline" size={22} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -71,6 +64,9 @@ export default function SellerLayout() {
           tabBarIcon: ({ color }) => <Ionicons name="settings-outline" size={22} color={color} />,
         }}
       />
+      {/* Hidden screens - accessible via navigation but not shown in tab bar */}
+      <Tabs.Screen name="analytics" options={{ href: null }} />
+      <Tabs.Screen name="chat" options={{ href: null }} />
     </Tabs>
   );
 }

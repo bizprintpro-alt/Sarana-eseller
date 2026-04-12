@@ -1,26 +1,29 @@
 /**
  * eseller.mn — Mobile API Client
- * Connects to NextJS API routes for all features
+ * Production-ready with SecureStore token management
  */
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+import { CONFIG } from './config';
 
-// Change to your deployed URL in production
-const API_BASE = __DEV__
-  ? 'http://10.0.2.2:3000/api'  // Android emulator → localhost
-  : 'https://eseller.mn/api';
-
+// ─── Token management ───────────────────────────────────────
 async function getToken(): Promise<string | null> {
   try {
-    const raw = await AsyncStorage.getItem('@eseller_role_store');
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      return parsed.accessToken || null;
-    }
-  } catch {}
-  return null;
+    return await SecureStore.getItemAsync(CONFIG.STORAGE_TOKEN);
+  } catch {
+    return null;
+  }
 }
 
-async function apiFetch<T = any>(path: string, opts: RequestInit = {}): Promise<T> {
+export async function setToken(token: string): Promise<void> {
+  await SecureStore.setItemAsync(CONFIG.STORAGE_TOKEN, token);
+}
+
+export async function clearToken(): Promise<void> {
+  await SecureStore.deleteItemAsync(CONFIG.STORAGE_TOKEN);
+}
+
+// ─── Base fetch wrapper ─────────────────────────────────────
+async function request<T = any>(endpoint: string, opts: RequestInit = {}): Promise<T> {
   const token = await getToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -28,16 +31,69 @@ async function apiFetch<T = any>(path: string, opts: RequestInit = {}): Promise<
   };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(API_BASE + path, { ...opts, headers });
-  const data = await res.json().catch(() => ({}));
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
 
-  if (!res.ok) {
-    throw { status: res.status, message: data.error || data.message || 'Алдаа гарлаа', data };
+  try {
+    const res = await fetch(`${CONFIG.API_URL}${endpoint}`, {
+      ...opts,
+      headers,
+      signal: controller.signal,
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw {
+        status: res.status,
+        message: data.error || data.message || `HTTP ${res.status}`,
+        data,
+      };
+    }
+    return data as T;
+  } finally {
+    clearTimeout(timeout);
   }
-  return data as T;
 }
 
-// ══════ BANNERS ══════
+// ══════ AUTH ══════════════════════════════════════════════════
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  phone?: string;
+  avatar?: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: AuthUser;
+}
+
+export const AuthAPI = {
+  login: (email: string, password: string) =>
+    request<AuthResponse>('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
+
+  register: (data: { name: string; email: string; password: string; phone?: string; role?: string }) =>
+    request<AuthResponse>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  me: () => request<AuthUser>('/auth/me'),
+
+  forgotPassword: (email: string) =>
+    request('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    }),
+};
+
+// ══════ BANNERS ══════════════════════════════════════════════
 export interface BannerData {
   id: string;
   refId: string;
@@ -53,12 +109,59 @@ export interface BannerData {
 
 export const BannersAPI = {
   getBySlot: (slot: string) =>
-    apiFetch<{ success: boolean; data: BannerData[] }>(`/banners/slot/${slot}`),
+    request<{ success: boolean; data: BannerData[] }>(`/banners/slot/${slot}`),
   trackClick: (bannerId: string) =>
-    apiFetch(`/banners/${bannerId}/click`, { method: 'POST' }),
+    request(`/banners/${bannerId}/click`, { method: 'POST' }),
 };
 
-// ══════ LOYALTY ══════
+// ══════ PRODUCTS ═════════════════════════════════════════════
+export const ProductsAPI = {
+  list: (params: Record<string, string> = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return request<{ products: any[]; total?: number }>('/marketplace' + (qs ? '?' + qs : ''));
+  },
+  get: (id: string) => request<any>(`/products/${id}`),
+  search: (query: string, category?: string) => {
+    const params: Record<string, string> = { q: query };
+    if (category) params.category = category;
+    const qs = new URLSearchParams(params).toString();
+    return request<{ products: any[]; total: number }>('/search?' + qs);
+  },
+};
+
+// ══════ STORES / ENTITIES ════════════════════════════════════
+export interface StoreListItem {
+  id: string;
+  name: string;
+  slug: string;
+  logo?: string;
+  phone?: string;
+  address?: string;
+  industry?: string;
+  district?: string;
+  type?: string;
+  rating?: number;
+  reviewCount?: number;
+  isVerified?: boolean;
+  productCount?: number;
+  entityType: string;
+}
+
+export const StoresAPI = {
+  list: (params: Record<string, string> = {}) => {
+    const qs = new URLSearchParams(params).toString();
+    return request<{ stores: StoreListItem[]; total: number }>('/stores' + (qs ? '?' + qs : ''));
+  },
+  getBySlug: (slug: string) =>
+    request<StoreListItem>(`/stores/${slug}`),
+};
+
+// ══════ CATEGORIES ═══════════════════════════════════════════
+export const CategoriesAPI = {
+  tree: () => request<any[]>('/categories/tree'),
+};
+
+// ══════ LOYALTY ══════════════════════════════════════════════
 export interface LoyaltyAccount {
   id: string;
   userId: string;
@@ -68,22 +171,16 @@ export interface LoyaltyAccount {
   tier: 'BRONZE' | 'SILVER' | 'GOLD' | 'PLATINUM';
 }
 
-export interface LoyaltyRedeemResult {
-  redemption: any;
-  couponCode: string;
-  valueAmount: number;
-}
-
 export const LoyaltyAPI = {
   getAccount: (userId: string) =>
-    apiFetch<LoyaltyAccount>(`/loyalty/${userId}`),
-  earn: (data: { userId: string; type: string; points: number; description?: string; refType?: string; refId?: string }) =>
-    apiFetch('/loyalty/earn', { method: 'POST', body: JSON.stringify(data) }),
+    request<LoyaltyAccount>(`/loyalty/${userId}`),
+  earn: (data: { userId: string; type: string; points: number; description?: string }) =>
+    request('/loyalty/earn', { method: 'POST', body: JSON.stringify(data) }),
   redeem: (data: { userId: string; points: number; type: string; orderId?: string }) =>
-    apiFetch<LoyaltyRedeemResult>('/loyalty/redeem', { method: 'POST', body: JSON.stringify(data) }),
+    request('/loyalty/redeem', { method: 'POST', body: JSON.stringify(data) }),
 };
 
-// ══════ QPAY PAYMENT ══════
+// ══════ QPAY PAYMENT ═════════════════════════════════════════
 export interface QPayInvoice {
   invoiceId: string;
   qrImage: string;
@@ -99,19 +196,16 @@ export interface QPayStatus {
 
 export const QPayAPI = {
   createInvoice: (data: { orderId: string; amount: number; description?: string }) =>
-    apiFetch<QPayInvoice>('/payment/qpay/create', { method: 'POST', body: JSON.stringify(data) }),
+    request<QPayInvoice>('/payment/qpay/create', { method: 'POST', body: JSON.stringify(data) }),
   checkPayment: (invoiceId: string) =>
-    apiFetch<QPayStatus>('/payment/qpay/check', { method: 'POST', body: JSON.stringify({ invoiceId }) }),
+    request<QPayStatus>('/payment/qpay/check', { method: 'POST', body: JSON.stringify({ invoiceId }) }),
 };
 
-// ══════ ORDERS ══════
+// ══════ ORDERS (Customer) ════════════════════════════════════
 export interface CreateOrderData {
   items: { productId: string; name: string; price: number; quantity: number }[];
   total: number;
-  delivery: {
-    phone: string;
-    address: { district?: string; street?: string; building?: string };
-  };
+  delivery: { phone: string; address: { district?: string; street?: string; building?: string } };
   paymentMethod: string;
   loyaltyDiscount?: number;
   loyaltyCoupon?: string;
@@ -119,74 +213,108 @@ export interface CreateOrderData {
 
 export const OrdersAPI = {
   create: (data: CreateOrderData) =>
-    apiFetch<{ id: string; orderNumber: string }>('/orders', { method: 'POST', body: JSON.stringify(data) }),
+    request<{ id: string; orderNumber: string }>('/checkout/create-invoice', { method: 'POST', body: JSON.stringify(data) }),
+  myOrders: () =>
+    request<{ orders: any[] }>('/buyer/orders'),
+  getOrder: (id: string) =>
+    request<any>(`/orders/${id}`),
 };
 
-// ══════ STORES / ENTITIES ══════
-export interface StoreListItem {
-  id: string;
-  name: string;
-  slug: string;
-  logo?: string;
-  phone?: string;
-  address?: string;
-  industry?: string;
-  district?: string;
-  type?: string;
-  rating?: number;
-  reviewCount?: number;
-  isVerified?: boolean;
-  productCount?: number;
-  followerCount?: number;
-  entityType: string;
-}
+// ══════ SELLER ═══════════════════════════════════════════════
+export const SellerAPI = {
+  // Dashboard
+  stats: () => request<any>('/seller/analytics'),
 
-export const StoresAPI = {
-  list: (params: Record<string, string> = {}) => {
-    const qs = new URLSearchParams(params).toString();
-    return apiFetch<{ stores: StoreListItem[]; total: number }>('/stores' + (qs ? '?' + qs : ''));
+  // Products
+  products: () => request<{ products: any[] }>('/seller/products'),
+  createProduct: (data: any) =>
+    request('/seller/products', { method: 'POST', body: JSON.stringify(data) }),
+  updateProduct: (id: string, data: any) =>
+    request(`/seller/products`, { method: 'PUT', body: JSON.stringify({ id, ...data }) }),
+
+  // Orders
+  orders: (status?: string) => {
+    const qs = status ? `?status=${status}` : '';
+    return request<{ orders: any[] }>(`/seller/orders${qs}`);
   },
-  getBySlug: (slug: string) =>
-    apiFetch<StoreListItem>(`/stores/${slug}`),
-};
+  updateOrderStatus: (id: string, status: string) =>
+    request(`/seller/orders/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
 
-// ══════ PRODUCTS ══════
-export const ProductsAPI = {
-  list: (params: Record<string, string> = {}) => {
-    const qs = new URLSearchParams(params).toString();
-    return apiFetch<{ products: any[] }>('/products' + (qs ? '?' + qs : ''));
+  // Chat
+  conversations: () => request<any>('/seller/conversations'),
+  messages: (id: string) => request<any>(`/seller/conversations/${id}/messages`),
+  sendMessage: (id: string, content: string) =>
+    request(`/seller/conversations/${id}/messages`, { method: 'POST', body: JSON.stringify({ content }) }),
+
+  // Revenue
+  revenue: (period?: string) => {
+    const qs = period ? `?period=${period}` : '';
+    return request<any>(`/seller/analytics${qs}`);
   },
-  get: (id: string) => apiFetch<any>(`/products/${id}`),
+
+  // Upload image
+  uploadImage: async (uri: string) => {
+    const token = await getToken();
+    const form = new FormData();
+    form.append('file', { uri, type: 'image/jpeg', name: 'upload.jpg' } as any);
+    const res = await fetch(`${CONFIG.API_URL}/upload`, {
+      method: 'POST',
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      body: form,
+    });
+    return res.json();
+  },
 };
 
-// ══════ CHAT (Seller) ══════
-export const ChatAPI = {
-  getThreads: () =>
-    apiFetch<{ chats: any[] }>('/seller/conversations'),
-  getMessages: (threadId: string) =>
-    apiFetch<{ messages: any[] }>(`/seller/conversations/${threadId}/messages`),
-  sendMessage: (threadId: string, content: string) =>
-    apiFetch(`/seller/conversations/${threadId}/messages`, { method: 'POST', body: JSON.stringify({ content }) }),
-};
-
-// ══════ DRIVER ══════
+// ══════ DRIVER ═══════════════════════════════════════════════
 export const DriverAPI = {
-  getShipments: () =>
-    apiFetch<{ shipments: any[] }>('/driver/shipments'),
+  deliveries: (status?: string) => {
+    const qs = status ? `?status=${status}` : '';
+    return request<{ orders: any[] }>(`/buyer/orders${qs}`); // TODO: driver-specific endpoint
+  },
+  updateDeliveryStatus: (id: string, status: string) =>
+    request(`/orders/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }),
   confirmDelivery: (id: string, method: string, data: any) =>
-    apiFetch(`/driver/shipments/${id}/confirm`, { method: 'POST', body: JSON.stringify({ method, ...data }) }),
-  toggleOnline: (online: boolean) =>
-    apiFetch('/driver/status', { method: 'PUT', body: JSON.stringify({ online }) }),
-  getEarnings: (period: string) =>
-    apiFetch<any>(`/driver/earnings?period=${period}`),
+    request(`/orders/${id}/confirm`, { method: 'POST', body: JSON.stringify({ confirmMethod: method, ...data }) }),
+  earnings: (period?: string) => {
+    const qs = period ? `?period=${period}` : '';
+    return request<any>(`/driver/revenue${qs}`);
+  },
+  updateLocation: (lat: number, lng: number) =>
+    request('/tracking/location', { method: 'POST', body: JSON.stringify({ lat, lng }) }),
 };
 
-// ══════ POS ══════
+// ══════ POS ══════════════════════════════════════════════════
 export const POSAPI = {
-  getProducts: (storeId: string) =>
-    apiFetch<{ products: any[] }>(`/pos/products?storeId=${storeId}`),
+  products: (search?: string) => {
+    const params: Record<string, string> = { limit: '100' };
+    if (search) params.search = search;
+    return SellerAPI.products(); // reuse seller products
+  },
   createSale: (data: { items: any[]; total: number; paymentMethod: string; vat: number }) =>
-    apiFetch('/pos/sales', { method: 'POST', body: JSON.stringify(data) }),
-  lookupBarcode: (barcode: string) =>
-    apiFetch<any>(`/pos/barcode/${barcode}`),
+    request('/checkout/create-invoice', { method: 'POST', body: JSON.stringify(data) }),
+};
+
+// ══════ PUSH NOTIFICATIONS ═══════════════════════════════════
+export const PushAPI = {
+  registerToken: (pushToken: string, platform: string) =>
+    request('/push/register', { method: 'POST', body: JSON.stringify({ token: pushToken, platform }) }),
+};
+
+// ══════ WISHLIST ═════════════════════════════════════════════
+export const WishlistAPI = {
+  list: () => request<any>('/wishlist'),
+  add: (productId: string) =>
+    request(`/wishlist/${productId}`, { method: 'POST' }),
+  remove: (productId: string) =>
+    request(`/wishlist/${productId}`, { method: 'DELETE' }),
+};
+
+// ══════ USER SETTINGS ════════════════════════════════════════
+export const UserAPI = {
+  updateSettings: (data: any) =>
+    request('/user/settings', { method: 'PUT', body: JSON.stringify(data) }),
+  addresses: () => request<any>('/user/addresses'),
+  addAddress: (data: any) =>
+    request('/user/addresses', { method: 'POST', body: JSON.stringify(data) }),
 };

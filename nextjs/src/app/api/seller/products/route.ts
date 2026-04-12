@@ -36,6 +36,12 @@ export async function POST(req: NextRequest) {
         emoji: body.emoji || null,
         images: body.images || [],
         stock: body.stock ?? 0,
+        commission: body.commission ?? 15,
+        deliveryFee: body.deliveryFee || null,
+        estimatedMins: body.estimatedMins || null,
+        deliveryType: body.deliveryType || 'standard',
+        allowAffiliate: body.allowAffiliate ?? true,
+        affiliateCommission: body.affiliateCommission ?? 10,
       },
     });
 

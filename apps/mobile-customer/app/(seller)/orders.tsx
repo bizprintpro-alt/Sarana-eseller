@@ -1,82 +1,92 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
+import { SellerAPI } from '../lib/api';
 
-type Status = 'all' | 'new' | 'confirmed' | 'preparing' | 'delivering' | 'delivered';
-
-const FILTERS: { key: Status; label: string }[] = [
-  { key: 'all', label: 'Бүгд' },
-  { key: 'new', label: 'Шинэ' },
-  { key: 'confirmed', label: 'Баталсан' },
-  { key: 'preparing', label: 'Бэлтгэж буй' },
-  { key: 'delivering', label: 'Хүргэж буй' },
-  { key: 'delivered', label: 'Хүргэгдсэн' },
+const STATUSES = [
+  { key: 'all', label: 'Бүгд', color: '#FFF' },
+  { key: 'pending', label: 'Шинэ', color: '#22C55E' },
+  { key: 'confirmed', label: 'Баталсан', color: '#3B82F6' },
+  { key: 'preparing', label: 'Бэлтгэж буй', color: '#F59E0B' },
+  { key: 'delivering', label: 'Хүргэж буй', color: '#8B5CF6' },
+  { key: 'delivered', label: 'Хүргэгдсэн', color: '#666' },
 ];
 
-const STATUS_COLORS: Record<string, string> = {
-  new: '#22C55E',
-  confirmed: '#3B82F6',
-  preparing: '#F59E0B',
-  delivering: '#8B5CF6',
-  delivered: '#666',
-};
+export default function SellerOrdersScreen() {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-const STATUS_LABELS: Record<string, string> = {
-  new: 'Шинэ',
-  confirmed: 'Баталсан',
-  preparing: 'Бэлтгэж буй',
-  delivering: 'Хүргэж буй',
-  delivered: 'Хүргэгдсэн',
-};
+  const load = useCallback(async () => {
+    try {
+      const data = await SellerAPI.orders(filter === 'all' ? undefined : filter);
+      setOrders((data as any)?.orders || []);
+    } catch {}
+    setLoading(false);
+    setRefreshing(false);
+  }, [filter]);
 
-const ORDERS = [
-  { id: '#2401', customer: 'Б.Болд', items: 3, total: '₮72,000', status: 'new', time: '2 мин' },
-  { id: '#2400', customer: 'Д.Сараа', items: 1, total: '₮25,000', status: 'confirmed', time: '15 мин' },
-  { id: '#2399', customer: 'Г.Тэмүүлэн', items: 5, total: '₮148,000', status: 'preparing', time: '28 мин' },
-  { id: '#2398', customer: 'О.Оюука', items: 2, total: '₮56,000', status: 'delivering', time: '45 мин' },
-  { id: '#2397', customer: 'Э.Энхжин', items: 1, total: '₮18,000', status: 'delivered', time: '1 цаг' },
-  { id: '#2396', customer: 'Н.Нарангэрэл', items: 4, total: '₮95,000', status: 'delivered', time: '2 цаг' },
-];
+  useEffect(() => { setLoading(true); load(); }, [filter]);
 
-export default function SellerOrders() {
-  const [filter, setFilter] = useState<Status>('all');
-  const filtered = filter === 'all' ? ORDERS : ORDERS.filter((o) => o.status === filter);
+  const updateStatus = async (id: string, status: string) => {
+    try {
+      await SellerAPI.updateOrderStatus(id, status);
+      load();
+    } catch {}
+  };
 
   return (
     <View style={s.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={s.filterRow} contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}>
-        {FILTERS.map((f) => (
+      <FlatList
+        horizontal data={STATUSES} keyExtractor={(i) => i.key}
+        style={s.filterRow} contentContainerStyle={{ paddingHorizontal: 12, gap: 6 }}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item }) => (
           <TouchableOpacity
-            key={f.key}
-            style={[s.filterBtn, filter === f.key && s.filterActive]}
-            onPress={() => setFilter(f.key)}
-          >
-            <Text style={[s.filterText, filter === f.key && s.filterTextActive]}>{f.label}</Text>
+            style={[s.filterChip, filter === item.key && { backgroundColor: item.color + '22', borderColor: item.color }]}
+            onPress={() => setFilter(item.key)}>
+            <Text style={[s.filterText, filter === item.key && { color: item.color }]}>{item.label}</Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
+        )}
+      />
 
       <FlatList
-        data={filtered}
-        keyExtractor={(i) => i.id}
-        contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
-        renderItem={({ item }) => (
-          <View style={s.card}>
-            <View style={s.cardHeader}>
-              <Text style={s.cardId}>{item.id}</Text>
-              <Text style={s.cardTime}>{item.time}</Text>
-            </View>
-            <Text style={s.cardCustomer}>{item.customer} · {item.items} бараа</Text>
-            <View style={s.cardFooter}>
-              <Text style={s.cardTotal}>{item.total}</Text>
-              <View style={[s.badge, { backgroundColor: (STATUS_COLORS[item.status] ?? '#666') + '22' }]}>
-                <Text style={[s.badgeText, { color: STATUS_COLORS[item.status] ?? '#666' }]}>
-                  {STATUS_LABELS[item.status]}
-                </Text>
+        data={orders} keyExtractor={(i) => i.id || i._id}
+        contentContainerStyle={{ padding: 12, gap: 8 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(); }} tintColor="#22C55E" />}
+        renderItem={({ item }) => {
+          const st = STATUSES.find((s) => s.key === item.status) || STATUSES[0];
+          return (
+            <View style={s.card}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={s.orderId}>#{item.orderNumber || (item.id || item._id)?.slice(-5)}</Text>
+                <View style={[s.badge, { backgroundColor: st.color + '20' }]}>
+                  <Text style={[s.badgeText, { color: st.color }]}>{st.label}</Text>
+                </View>
+              </View>
+              <Text style={s.customer}>{item.user?.name || 'Хэрэглэгч'} · {item.items?.length || 0} бараа</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+                <Text style={s.total}>{(item.total || 0).toLocaleString()}₮</Text>
+                {item.status === 'pending' && (
+                  <TouchableOpacity style={s.actionBtn} onPress={() => updateStatus(item.id || item._id, 'confirmed')}>
+                    <Text style={s.actionText}>Батлах</Text>
+                  </TouchableOpacity>
+                )}
+                {item.status === 'confirmed' && (
+                  <TouchableOpacity style={[s.actionBtn, { backgroundColor: '#F59E0B' }]} onPress={() => updateStatus(item.id || item._id, 'preparing')}>
+                    <Text style={s.actionText}>Бэлтгэх</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
+          );
+        }}
+        ListEmptyComponent={
+          <View style={{ alignItems: 'center', paddingTop: 60 }}>
+            <Text style={{ fontSize: 40, marginBottom: 8 }}>📋</Text>
+            <Text style={{ color: '#555', fontSize: 13 }}>{loading ? 'Ачааллаж байна...' : 'Захиалга байхгүй'}</Text>
           </View>
-        )}
+        }
       />
     </View>
   );
@@ -84,32 +94,15 @@ export default function SellerOrders() {
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0A0A0A' },
-  filterRow: { maxHeight: 52, paddingVertical: 10 },
-  filterBtn: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 20,
-    backgroundColor: '#1A1A1A',
-    borderWidth: 1,
-    borderColor: '#2A2A2A',
-  },
-  filterActive: { backgroundColor: '#22C55E22', borderColor: '#22C55E' },
-  filterText: { color: '#999', fontSize: 13, fontWeight: '600' },
-  filterTextActive: { color: '#22C55E' },
-  card: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#2A2A2A',
-  },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-  cardId: { color: '#FFF', fontSize: 15, fontWeight: '700' },
-  cardTime: { color: '#666', fontSize: 12 },
-  cardCustomer: { color: '#CCC', fontSize: 13, marginBottom: 10 },
-  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  cardTotal: { color: '#FFF', fontSize: 16, fontWeight: '800' },
-  badge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
-  badgeText: { fontSize: 11, fontWeight: '700' },
+  filterRow: { maxHeight: 48, backgroundColor: '#111111', borderBottomWidth: 0.5, borderBottomColor: '#2A2A2A' },
+  filterChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: '#1A1A1A', borderWidth: 1, borderColor: '#3D3D3D' },
+  filterText: { fontSize: 12, fontWeight: '700', color: '#A0A0A0' },
+  card: { backgroundColor: '#1A1A1A', borderRadius: 12, padding: 14, borderWidth: 0.5, borderColor: '#3D3D3D' },
+  orderId: { fontSize: 14, fontWeight: '800', color: '#FFF' },
+  customer: { fontSize: 12, color: '#A0A0A0', marginTop: 4 },
+  total: { fontSize: 16, fontWeight: '800', color: '#22C55E' },
+  badge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 8 },
+  badgeText: { fontSize: 10, fontWeight: '700' },
+  actionBtn: { backgroundColor: '#22C55E', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
+  actionText: { color: '#FFF', fontSize: 12, fontWeight: '700' },
 });

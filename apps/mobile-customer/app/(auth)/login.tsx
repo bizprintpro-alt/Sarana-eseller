@@ -1,31 +1,25 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
+import { useAuth } from '../hooks/useAuth';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) { setError('Бүх талбарыг бөглөнө үү'); return; }
     setLoading(true); setError('');
     try {
-      const res = await fetch('https://sarana-backend.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (data.token) {
-        // TODO: store token in SecureStore
-        router.replace('/(tabs)');
-      } else {
-        setError(data.message || 'Нэвтрэх боломжгүй');
-      }
-    } catch { setError('Холболтын алдаа'); }
-    finally { setLoading(false); }
+      await login(email, password);
+    } catch (err: any) {
+      setError(err.message || 'Нэвтрэх боломжгүй');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,19 +29,21 @@ export default function LoginScreen() {
         <Text style={s.title}>Нэвтрэх</Text>
         <Text style={s.sub}>Данс руугаа нэвтрэх</Text>
 
-        {error ? <View style={s.errorBox}><Text style={s.errorText}>⚠️ {error}</Text></View> : null}
+        {error ? <View style={s.errorBox}><Text style={s.errorText}>{error}</Text></View> : null}
 
         <Text style={s.label}>Имэйл</Text>
-        <TextInput style={s.input} value={email} onChangeText={setEmail} placeholder="you@example.com" placeholderTextColor="#555" keyboardType="email-address" autoCapitalize="none" />
+        <TextInput style={s.input} value={email} onChangeText={setEmail} placeholder="you@example.com"
+          placeholderTextColor="#555" keyboardType="email-address" autoCapitalize="none" />
 
         <Text style={s.label}>Нууц үг</Text>
-        <TextInput style={s.input} value={password} onChangeText={setPassword} placeholder="••••••••" placeholderTextColor="#555" secureTextEntry />
+        <TextInput style={s.input} value={password} onChangeText={setPassword} placeholder="••••••••"
+          placeholderTextColor="#555" secureTextEntry />
 
         <TouchableOpacity style={[s.btn, loading && { opacity: 0.6 }]} onPress={handleLogin} disabled={loading} activeOpacity={0.8}>
           <Text style={s.btnText}>{loading ? 'Нэвтрэж байна...' : 'Нэвтрэх'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => Alert.alert('Бүртгүүлэх', 'Бүртгэлийн хэсэг удахгүй нэмэгдэнэ')} style={{ marginTop: 20, alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => router.push('/(auth)/register' as any)} style={{ marginTop: 20, alignItems: 'center' }}>
           <Text style={{ color: '#A0A0A0', fontSize: 13 }}>Данс байхгүй юу? <Text style={{ color: '#FF4D53', fontWeight: '700' }}>Бүртгүүлэх</Text></Text>
         </TouchableOpacity>
       </View>

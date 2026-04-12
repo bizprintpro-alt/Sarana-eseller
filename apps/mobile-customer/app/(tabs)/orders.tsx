@@ -1,11 +1,7 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { router } from 'expo-router';
-
-const DEMO_ORDERS = [
-  { _id: '1', orderNumber: 'ORD-1001', total: 70000, status: 'delivering', items: 2, date: '2026-04-03' },
-  { _id: '2', orderNumber: 'ORD-1002', total: 99000, status: 'confirmed', items: 1, date: '2026-04-02' },
-  { _id: '3', orderNumber: 'ORD-1003', total: 35000, status: 'delivered', items: 3, date: '2026-04-01' },
-];
+import { OrdersAPI } from '../lib/api';
 
 const STATUS: Record<string, { label: string; color: string }> = {
   pending: { label: 'Хүлээгдэж буй', color: '#F59E0B' },
@@ -13,29 +9,51 @@ const STATUS: Record<string, { label: string; color: string }> = {
   preparing: { label: 'Бэлтгэж байна', color: '#F59E0B' },
   delivering: { label: 'Хүргэж байна', color: '#3B82F6' },
   delivered: { label: 'Хүргэгдсэн', color: '#22C55E' },
+  completed: { label: 'Дууссан', color: '#22C55E' },
   cancelled: { label: 'Цуцлагдсан', color: '#E8242C' },
 };
 
 export default function OrdersScreen() {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const data = await OrdersAPI.myOrders();
+      setOrders(data.orders || []);
+    } catch {
+      // Keep existing data on error
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchOrders(); }, []);
+
+  const onRefresh = () => { setRefreshing(true); fetchOrders(); };
+
   return (
     <View style={s.container}>
       <FlatList
-        data={DEMO_ORDERS}
-        keyExtractor={(i) => i._id}
+        data={orders}
+        keyExtractor={(i) => i.id || i._id}
         contentContainerStyle={{ padding: 16, gap: 10 }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#E8242C" />}
         renderItem={({ item }) => {
           const st = STATUS[item.status] || STATUS.pending;
           return (
-            <TouchableOpacity style={s.card} onPress={() => router.push(`/order/${item._id}`)} activeOpacity={0.8}>
+            <TouchableOpacity style={s.card} onPress={() => router.push(`/order/${item.id || item._id}`)} activeOpacity={0.8}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={s.orderNum}>{item.orderNumber}</Text>
+                <Text style={s.orderNum}>#{item.orderNumber || (item.id || item._id)?.slice(-5)}</Text>
                 <View style={[s.badge, { backgroundColor: st.color + '20' }]}>
                   <Text style={[s.badgeText, { color: st.color }]}>{st.label}</Text>
                 </View>
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
-                <Text style={s.meta}>{item.items} бараа · {item.date}</Text>
-                <Text style={s.total}>{item.total.toLocaleString()}₮</Text>
+                <Text style={s.meta}>{item.items?.length || 0} бараа · {item.createdAt ? new Date(item.createdAt).toLocaleDateString('mn-MN') : ''}</Text>
+                <Text style={s.total}>{(item.total || 0).toLocaleString()}₮</Text>
               </View>
             </TouchableOpacity>
           );
@@ -43,7 +61,7 @@ export default function OrdersScreen() {
         ListEmptyComponent={
           <View style={s.empty}>
             <Text style={{ fontSize: 40, marginBottom: 8 }}>📦</Text>
-            <Text style={{ color: '#A0A0A0', fontSize: 14 }}>Захиалга байхгүй</Text>
+            <Text style={{ color: '#A0A0A0', fontSize: 14 }}>{loading ? 'Ачааллаж байна...' : 'Захиалга байхгүй'}</Text>
           </View>
         }
       />
