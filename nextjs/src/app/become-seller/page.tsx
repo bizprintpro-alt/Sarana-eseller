@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
 import EsellerLogo from '@/components/shared/EsellerLogo';
+import ImageUpload from '@/components/shared/ImageUpload';
 import {
   Store, Building2, Car, Scissors, Users, Clock, Download,
   ChevronRight, ChevronLeft, Check, Upload, MapPin, Globe, Phone, Mail,
@@ -96,6 +97,7 @@ export default function BecomeSellerPage() {
     category: '', description: '', address: '', district: '',
     socialFb: '', socialIg: '', website: '',
     regNumber: '', licenseNumber: '',
+    logo: '', coverImage: '',
     // Pre-order specific
     sourceCountry: '', deliveryDays: '', minimumOrderQty: '', advancePaymentPct: '30',
   });
@@ -353,21 +355,20 @@ export default function BecomeSellerPage() {
             {/* ═══ Step 3: Profile ═══ */}
             {step === 3 && (
               <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-6 space-y-4">
-                <div>
-                  <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block"><Camera className="w-3 h-3 inline mr-1" />Cover зураг</label>
-                  <div className="h-32 border-2 border-dashed border-[var(--esl-border)] rounded-xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
-                    <div className="text-center">
-                      <Upload className="w-6 h-6 text-[#3D3D3D] mx-auto mb-1" />
-                      <p className="text-xs text-[#555]">1200×400 px санал болгоно</p>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-[var(--esl-text-muted)] mb-1.5 block">Лого / Профайл</label>
-                  <div className="w-20 h-20 border-2 border-dashed border-[var(--esl-border)] rounded-2xl flex items-center justify-center cursor-pointer hover:border-[#555] transition">
-                    <Camera className="w-6 h-6 text-[#3D3D3D]" />
-                  </div>
-                </div>
+                <ImageUpload
+                  label="Cover зураг"
+                  hint="1200×400 px санал болгоно"
+                  value={form.coverImage}
+                  onUpload={url => updateForm('coverImage', url)}
+                  onRemove={() => updateForm('coverImage', '')}
+                />
+                <ImageUpload
+                  label="Лого / Профайл"
+                  hint="200×200 px санал болгоно"
+                  value={form.logo}
+                  onUpload={url => updateForm('logo', url)}
+                  onRemove={() => updateForm('logo', '')}
+                />
                 {def?.step2Fields.includes('address') && (
                   <>
                     <div>

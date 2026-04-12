@@ -11,7 +11,8 @@
     "lint": "eslint",
     "clean:demo": "npx tsx scripts/clean-demo-data.ts",
     "clean:demo:dry": "npx tsx scripts/clean-demo-data.ts --dry-run",
-    "test:smoke": "npx tsx scripts/smoke-test.ts"
+    "test:smoke": "npx tsx scripts/smoke-test.ts",
+    "seed:seller": "npx tsx scripts/seed-first-seller.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
