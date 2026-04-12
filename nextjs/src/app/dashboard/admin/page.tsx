@@ -143,7 +143,7 @@ export default function AdminDashboard() {
                       </Pie>
                       <Tooltip
                         contentStyle={{ background: '#1E1E2E', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12 }}
-                        formatter={(value: number) => formatMNT(value)}
+                        formatter={(value: any) => formatMNT(Number(value))}
                       />
                       <Legend
                         verticalAlign="bottom"
