@@ -10,7 +10,6 @@ export async function POST(req: NextRequest) {
     const contentType = req.headers.get('content-type') || '';
 
     // Method 1: Stream upload (Vercel Blob recommended)
-    // Client sends: fetch('/api/upload?filename=photo.jpg', { method: 'POST', body: file })
     const filename = req.nextUrl.searchParams.get('filename');
     if (filename) {
       const ext = filename.split('.').pop()?.toLowerCase() || '';
@@ -19,31 +18,23 @@ export async function POST(req: NextRequest) {
       }
 
       const uniquePath = `eseller/${user.id}/${Date.now()}-${filename}`;
-      const blob = await put(uniquePath, req.body!, { access: 'private' });
-      return NextResponse.json({ url: blob.url });
+      const blob = await put(uniquePath, req.body!, { access: 'public' });
+      return NextResponse.json({ url: blob.url, size: blob.size });
     }
 
-    // Method 2: FormData upload (fallback for MediaUploader)
+    // Method 2: FormData upload (MediaUploader / ImageUpload)
     if (contentType.includes('multipart/form-data')) {
       const formData = await req.formData();
       const file = formData.get('file') as File;
 
-      if (!file) {
-        return NextResponse.json({ error: 'Файл байхгүй' }, { status: 400 });
-      }
-
-      if (!file.type.startsWith('image/')) {
-        return NextResponse.json({ error: 'Зөвхөн зураг оруулна уу' }, { status: 400 });
-      }
-
-      if (file.size > 10 * 1024 * 1024) {
-        return NextResponse.json({ error: 'Файл 10MB-аас бага байх ёстой' }, { status: 400 });
-      }
+      if (!file) return NextResponse.json({ error: 'Файл байхгүй' }, { status: 400 });
+      if (!file.type.startsWith('image/')) return NextResponse.json({ error: 'Зөвхөн зураг оруулна уу' }, { status: 400 });
+      if (file.size > 4.5 * 1024 * 1024) return NextResponse.json({ error: 'Файл 4.5MB-аас бага байх ёстой' }, { status: 400 });
 
       const ext = file.name.split('.').pop() || 'jpg';
       const path = `eseller/${user.id}/${Date.now()}.${ext}`;
-      const blob = await put(path, file, { access: 'private' });
-      return NextResponse.json({ url: blob.url });
+      const blob = await put(path, file, { access: 'public' });
+      return NextResponse.json({ url: blob.url, size: blob.size });
     }
 
     return NextResponse.json({ error: 'filename query param эсвэл FormData шаардлагатай' }, { status: 400 });

@@ -20,7 +20,7 @@ async function main() {
   try {
     // 1. Upload
     console.log('📤 Upload хийж байна...');
-    const blob = await put(filename, pngBytes, { access: 'private' });
+    const blob = await put(filename, pngBytes, { access: 'public' });
     console.log(`✅ Upload: ${blob.url}`);
     console.log(`   Size: ${pngBytes.length} bytes`);
 
