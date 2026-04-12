@@ -342,6 +342,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [router, loadShopType]);
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   if (!ready) {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-page)] flex items-center justify-center">
@@ -365,8 +367,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       }
     : undefined;
 
-  const [mobileOpen, setMobileOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-[var(--esl-bg-page)]">
       {/* Mobile header */}
@@ -387,7 +387,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Sidebar sections={sections} storeInfo={storeInfo} />
       </div>
 
-      <main className="ml-0 md:ml-[260px] min-h-screen transition-all duration-300 p-4 pt-18 md:pt-6 md:p-6 lg:p-8">
+      <main className="ml-0 md:ml-[260px] min-h-screen transition-all duration-300 p-4 pt-20 md:pt-6 md:p-6 lg:p-8">
         {children}
       </main>
     </div>
