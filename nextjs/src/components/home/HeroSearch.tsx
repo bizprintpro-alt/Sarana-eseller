@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Crown, Link2, Car, Lock } from 'lucide-react';
 
 const CATEGORIES = [
   { slug: '', name: 'Бүгд' },
@@ -90,10 +91,10 @@ export default function HeroSearch() {
         {/* Давуу тал badges */}
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginTop: 20 }}>
           {[
-            { icon: '👑', text: 'Gold гишүүнчлэл' },
-            { icon: '🔗', text: 'Борлуулагч комисс' },
-            { icon: '🚗', text: 'Өөрийн жолооч' },
-            { icon: '🔒', text: 'Дундын данс' },
+            { icon: <Crown size={14} />, text: 'Gold гишүүнчлэл' },
+            { icon: <Link2 size={14} />, text: 'Борлуулагч комисс' },
+            { icon: <Car size={14} />, text: 'Өөрийн жолооч' },
+            { icon: <Lock size={14} />, text: 'Дундын данс' },
           ].map((b, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 6,
@@ -102,7 +103,7 @@ export default function HeroSearch() {
               borderRadius: 20, padding: '6px 12px',
               fontSize: 12, color: 'rgba(255,255,255,0.7)',
             }}>
-              <span>{b.icon}</span>
+              {b.icon}
               <span>{b.text}</span>
             </div>
           ))}

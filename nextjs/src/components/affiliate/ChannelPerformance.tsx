@@ -1,10 +1,10 @@
 'use client';
 
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, Hash, Camera, Music, MessageSquare, MessageCircle, type LucideIcon } from 'lucide-react';
 
 interface Channel {
   name: string;
-  icon: string;
+  icon: LucideIcon;
   color: string;
   clicks: number;
   sales: number;
@@ -13,11 +13,11 @@ interface Channel {
 }
 
 const CHANNELS: Channel[] = [
-  { name: 'Facebook', icon: '📱', color: '#1877F2', clicks: 523, sales: 28, revenue: 124000, trend: 12 },
-  { name: 'Instagram', icon: '📸', color: '#E4405F', clicks: 312, sales: 18, revenue: 86000, trend: 24 },
-  { name: 'TikTok', icon: '🎵', color: '#000000', clicks: 248, sales: 9, revenue: 42000, trend: 45 },
-  { name: 'Messenger', icon: '💬', color: '#0084FF', clicks: 102, sales: 5, revenue: 22000, trend: -8 },
-  { name: 'WhatsApp', icon: '📩', color: '#25D366', clicks: 58, sales: 2, revenue: 10000, trend: 5 },
+  { name: 'Facebook', icon: Hash, color: '#1877F2', clicks: 523, sales: 28, revenue: 124000, trend: 12 },
+  { name: 'Instagram', icon: Camera, color: '#E4405F', clicks: 312, sales: 18, revenue: 86000, trend: 24 },
+  { name: 'TikTok', icon: Music, color: '#000000', clicks: 248, sales: 9, revenue: 42000, trend: 45 },
+  { name: 'Messenger', icon: MessageSquare, color: '#0084FF', clicks: 102, sales: 5, revenue: 22000, trend: -8 },
+  { name: 'WhatsApp', icon: MessageCircle, color: '#25D366', clicks: 58, sales: 2, revenue: 10000, trend: 5 },
 ];
 
 export default function ChannelPerformance() {
@@ -53,7 +53,7 @@ export default function ChannelPerformance() {
                   <td className="px-6 py-3">
                     <div className="flex items-center gap-2.5">
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style={{ background: ch.color + '12' }}>
-                        {ch.icon}
+                        <ch.icon className="w-4 h-4" style={{ color: ch.color }} />
                       </div>
                       <span className="font-semibold text-[#0F172A]">{ch.name}</span>
                     </div>

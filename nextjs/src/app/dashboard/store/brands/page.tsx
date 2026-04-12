@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { checkLimit, getCurrentPlan } from '@/lib/subscription';
+import { Tag } from 'lucide-react';
 
 interface Brand {
   id: string;
@@ -119,7 +120,7 @@ export default function BrandsPage() {
       <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🏷️</span>
+            <Tag className="w-6 h-6 text-indigo-500" />
             <div>
               <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Брэнд удирдлага</h1>
               <p className="text-[var(--esl-text-secondary)] text-sm">Брэндүүдийг удирдах ({brands.length}/{plan.limits.maxBrands === -1 ? '∞' : plan.limits.maxBrands})</p>
@@ -137,7 +138,7 @@ export default function BrandsPage() {
       {/* Brand Grid */}
       {brands.length === 0 ? (
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
-          <span className="text-5xl block mb-4">🏷️</span>
+          <Tag className="w-12 h-12 mx-auto mb-4 text-[var(--esl-text-muted)]" />
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-2">Брэнд байхгүй</h2>
           <p className="text-[var(--esl-text-secondary)] text-sm mb-4">Эхний брэндээ нэмнэ үү</p>
           <button

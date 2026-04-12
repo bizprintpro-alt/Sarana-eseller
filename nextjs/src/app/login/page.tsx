@@ -8,12 +8,13 @@ import { AuthAPI } from '@/lib/api';
 import { useToast } from '@/components/shared/Toast';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import MobileNav from '@/components/shared/MobileNav';
+import { Store, Megaphone, ShoppingBag, Truck, AlertTriangle, CheckCircle, Hand, Rocket, Eye, EyeOff } from 'lucide-react';
 
 const ROLES = [
-  { value: 'seller', icon: '🏪', label: 'Дэлгүүр эзэн', desc: 'Бараагаа байршуулж зарлуул', badge: '70–85%', color: 'border-green-500/20' },
-  { value: 'affiliate', icon: '📢', label: 'Борлуулагч', desc: 'Линкээр зарж комисс ол', badge: '10–20%', color: 'border-amber-500/20' },
-  { value: 'buyer', icon: '🛍️', label: 'Худалдан авагч', desc: 'Бараа худалдаж авах', badge: 'Үнэгүй', color: 'border-blue-500/20' },
-  { value: 'delivery', icon: '🚚', label: 'Жолооч', desc: 'Захиалга хүргэж орлого ол', badge: 'Хүргэлт бүрт', color: 'border-cyan-500/20' },
+  { value: 'seller', icon: Store, label: 'Дэлгүүр эзэн', desc: 'Бараагаа байршуулж зарлуул', badge: '70–85%', color: 'border-green-500/20' },
+  { value: 'affiliate', icon: Megaphone, label: 'Борлуулагч', desc: 'Линкээр зарж комисс ол', badge: '10–20%', color: 'border-amber-500/20' },
+  { value: 'buyer', icon: ShoppingBag, label: 'Худалдан авагч', desc: 'Бараа худалдаж авах', badge: 'Үнэгүй', color: 'border-blue-500/20' },
+  { value: 'delivery', icon: Truck, label: 'Жолооч', desc: 'Захиалга хүргэж орлого ол', badge: 'Хүргэлт бүрт', color: 'border-cyan-500/20' },
 ];
 
 export default function LoginPage() {
@@ -125,13 +126,13 @@ export default function LoginPage() {
 
         <div className="relative z-10 space-y-3">
           {[
-            { ic: '🏪', t: 'Дэлгүүр эзэн', d: 'Бараагаа байршуул.', earn: '70–85%' },
-            { ic: '📢', t: 'Борлуулагч', d: 'Сүлжээгээр зарж комисс ол.', earn: '10–20%' },
-            { ic: '🛍️', t: 'Худалдан авагч', d: 'Хамгийн сайн бараа, шилдэг үнэ.', earn: '2–4ц хүргэлт' },
-            { ic: '🚚', t: 'Жолооч', d: 'Цагаа тохируулж орлого ол.', earn: 'Хүргэлт бүрт' },
+            { ic: Store, t: 'Дэлгүүр эзэн', d: 'Бараагаа байршуул.', earn: '70–85%' },
+            { ic: Megaphone, t: 'Борлуулагч', d: 'Сүлжээгээр зарж комисс ол.', earn: '10–20%' },
+            { ic: ShoppingBag, t: 'Худалдан авагч', d: 'Хамгийн сайн бараа, шилдэг үнэ.', earn: '2–4ц хүргэлт' },
+            { ic: Truck, t: 'Жолооч', d: 'Цагаа тохируулж орлого ол.', earn: 'Хүргэлт бүрт' },
           ].map((r) => (
             <div key={r.t} className="flex items-center gap-3 rounded-2xl px-4 py-3" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)' }}>
-              <span className="text-xl">{r.ic}</span>
+              <r.ic className="w-5 h-5 shrink-0" style={{ color: 'var(--esl-text-primary)' }} />
               <div className="flex-1 min-w-0">
                 <h4 className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>{r.t}</h4>
                 <p className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>{r.d}</p>
@@ -179,19 +180,19 @@ export default function LoginPage() {
 
           {/* Alerts */}
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm font-semibold px-4 py-3 rounded-xl mb-4">
-              ⚠️ {error}
+            <div className="bg-red-50 text-red-600 text-sm font-semibold px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 shrink-0" /> {error}
             </div>
           )}
           {success && (
-            <div className="bg-green-50 text-green-600 text-sm font-semibold px-4 py-3 rounded-xl mb-4">
-              ✅ {success}
+            <div className="bg-green-50 text-green-600 text-sm font-semibold px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 shrink-0" /> {success}
             </div>
           )}
 
           {mode === 'login' ? (
             <>
-              <div className="text-xl font-black mb-1" style={{ color: 'var(--esl-text-primary)' }}>Сайн уу! 👋</div>
+              <div className="text-xl font-black mb-1 flex items-center gap-2" style={{ color: 'var(--esl-text-primary)' }}>Сайн уу! <Hand className="w-5 h-5" /></div>
               <div className="text-sm mb-6" style={{ color: 'var(--esl-text-muted)' }}>Данс руугаа нэвтрэх</div>
 
               <div className="space-y-4">
@@ -223,7 +224,7 @@ export default function LoginPage() {
                       className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-sm"
                       tabIndex={-1}
                     >
-                      {showPw ? '🙈' : '👁'}
+                      {showPw ? <EyeOff className="w-4 h-4" style={{ color: 'var(--esl-text-muted)' }} /> : <Eye className="w-4 h-4" style={{ color: 'var(--esl-text-muted)' }} />}
                     </button>
                   </div>
                   <div className="text-right">
@@ -267,7 +268,7 @@ export default function LoginPage() {
             </>
           ) : (
             <>
-              <div className="text-xl font-black mb-1" style={{ color: 'var(--esl-text-primary)' }}>Нэгдэцгээе! 🚀</div>
+              <div className="text-xl font-black mb-1 flex items-center gap-2" style={{ color: 'var(--esl-text-primary)' }}>Нэгдэцгээе! <Rocket className="w-5 h-5" /></div>
               <div className="text-sm mb-6" style={{ color: 'var(--esl-text-muted)' }}>Та ямар үүргээр нэгдэх вэ?</div>
 
               <div className="space-y-4">
@@ -295,7 +296,7 @@ export default function LoginPage() {
                         >
                           {role === r.value && <div className="w-2 h-2 rounded-full bg-brand" />}
                         </div>
-                        <span className="text-lg">{r.icon}</span>
+                        <r.icon className="w-5 h-5" style={{ color: 'var(--esl-text-primary)' }} />
                         <div className="flex-1 min-w-0">
                           <h5 className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>{r.label}</h5>
                           <p className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>{r.desc}</p>
@@ -350,7 +351,7 @@ export default function LoginPage() {
                       className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-sm"
                       tabIndex={-1}
                     >
-                      {showPw ? '🙈' : '👁'}
+                      {showPw ? <EyeOff className="w-4 h-4" style={{ color: 'var(--esl-text-muted)' }} /> : <Eye className="w-4 h-4" style={{ color: 'var(--esl-text-muted)' }} />}
                     </button>
                   </div>
                   {password && (

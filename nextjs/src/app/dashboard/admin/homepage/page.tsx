@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Save, Sparkles, Loader2, Eye, Type } from 'lucide-react';
+import { Save, Sparkles, Loader2, Eye, Type, Home, Megaphone } from 'lucide-react';
 
 interface Config { key: string; value: string }
 
@@ -79,7 +79,7 @@ export default function AdminHomepagePage() {
       <div className="bg-dash-sidebar border-b border-dash-border px-8 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-white text-lg font-black">🏠 Нүүр хуудас удирдлага</h1>
+            <h1 className="text-white text-lg font-black flex items-center gap-2"><Home className="w-5 h-5" /> Нүүр хуудас удирдлага</h1>
             <p className="text-white/35 text-xs mt-0.5">Hero, зарлал, онцлох дэлгүүрүүд</p>
           </div>
           <button onClick={saveAll} className="flex items-center gap-1.5 px-4 py-2 bg-dash-accent text-white rounded-lg text-xs font-semibold border-none cursor-pointer">
@@ -130,7 +130,7 @@ export default function AdminHomepagePage() {
         {/* Announcement */}
         <div className="bg-dash-card border border-dash-border rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-white font-bold">📢 Зарлалын мөр</h3>
+            <h3 className="text-white font-bold flex items-center gap-2"><Megaphone className="w-4 h-4" /> Зарлалын мөр</h3>
             <button onClick={() => { const val = !announcementActive; setAnnouncementActive(val); saveConfig('announcement_active', val ? 'true' : 'false'); }}
               className="relative w-11 h-6 rounded-full border-none cursor-pointer transition-colors"
               style={{ background: announcementActive ? '#6366F1' : '#333' }}>

@@ -1,11 +1,12 @@
 'use client';
 import { useState } from 'react';
+import { Landmark, CreditCard, Smartphone, Wallet, type LucideIcon } from 'lucide-react';
 
-const METHODS = [
-  { id: 'qpay', name: 'QPay', icon: '🏦', desc: 'Бүх банкны апп', color: '#E8242C' },
-  { id: 'socialpay', name: 'SocialPay', icon: '💳', desc: 'Голомт банк', color: '#D32F2F' },
-  { id: 'monpay', name: 'MonPay', icon: '📱', desc: 'Хаан банк', color: '#0047AB' },
-  { id: 'storepay', name: 'StorePay', icon: '💰', desc: '3-12 хувааж төлөх', color: '#2E7D32' },
+const METHODS: { id: string; name: string; icon: LucideIcon; desc: string; color: string }[] = [
+  { id: 'qpay', name: 'QPay', icon: Landmark, desc: 'Бүх банкны апп', color: '#E8242C' },
+  { id: 'socialpay', name: 'SocialPay', icon: CreditCard, desc: 'Голомт банк', color: '#D32F2F' },
+  { id: 'monpay', name: 'MonPay', icon: Smartphone, desc: 'Хаан банк', color: '#0047AB' },
+  { id: 'storepay', name: 'StorePay', icon: Wallet, desc: '3-12 хувааж төлөх', color: '#2E7D32' },
 ];
 
 export function PaymentMethods({ selected, onChange }: { selected: string; onChange: (m: string) => void }) {
@@ -23,7 +24,7 @@ export function PaymentMethods({ selected, onChange }: { selected: string; onCha
               borderColor: selected === m.id ? m.color : 'var(--esl-border)',
             }}
           >
-            <span className="text-[28px]">{m.icon}</span>
+            <m.icon className="w-7 h-7" style={{ color: m.color }} />
             <div className="flex-1">
               <p className="text-[var(--esl-text)] font-bold text-[15px] m-0">{m.name}</p>
               <p className="text-[var(--esl-text-muted)] text-xs m-0">{m.desc}</p>

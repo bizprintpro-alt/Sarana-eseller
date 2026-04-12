@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { Truck, RefreshCw, Lock, Star } from 'lucide-react';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 import MobileNav from '@/components/shared/MobileNav';
@@ -90,17 +91,17 @@ export default async function HomePage() {
 
 function TrustBadges() {
   const badges = [
-    { icon: '🚚', text: '50,000₮+ үнэгүй хүргэлт' },
-    { icon: '🔄', text: '48 цагийн буцаалт' },
-    { icon: '🔒', text: 'QPay аюулгүй төлбөр' },
-    { icon: '⭐', text: 'Баталгаат бараа' },
+    { icon: <Truck className="w-5 h-5 text-[var(--esl-accent)]" />, text: '50,000₮+ үнэгүй хүргэлт' },
+    { icon: <RefreshCw className="w-5 h-5 text-[var(--esl-accent)]" />, text: '48 цагийн буцаалт' },
+    { icon: <Lock className="w-5 h-5 text-[var(--esl-accent)]" />, text: 'QPay аюулгүй төлбөр' },
+    { icon: <Star className="w-5 h-5 text-[var(--esl-accent)]" />, text: 'Баталгаат бараа' },
   ];
   return (
     <div className="bg-[var(--esl-bg-card)] border-y border-[var(--esl-border)]">
       <div className="max-w-[1200px] mx-auto px-4 py-3 flex justify-around flex-wrap gap-2">
         {badges.map((b, i) => (
           <div key={i} className="flex items-center gap-2 px-3 py-1.5">
-            <span className="text-xl">{b.icon}</span>
+            {b.icon}
             <span className="text-[var(--esl-text-muted)] text-[13px] font-medium">{b.text}</span>
           </div>
         ))}

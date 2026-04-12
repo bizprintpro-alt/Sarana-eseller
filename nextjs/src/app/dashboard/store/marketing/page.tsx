@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/components/shared/Toast';
 import StatCard from '@/components/dashboard/StatCard';
+import { Link2, Smartphone, Target, Palette, Lightbulb, QrCode, Megaphone } from 'lucide-react';
 
 const SOCIAL_TEMPLATES = [
   {
@@ -58,15 +59,15 @@ export default function MarketingPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <StatCard icon="🔗" label="Реферал линк клик" value={142} gradient="indigo" />
-        <StatCard icon="📱" label="Сошиал хуваалцсан" value={38} gradient="pink" />
-        <StatCard icon="🎯" label="Шинэ захиалагч" value={12} gradient="green" />
+        <StatCard icon={<Link2 className="w-6 h-6" />} label="Реферал линк клик" value={142} gradient="indigo" />
+        <StatCard icon={<Smartphone className="w-6 h-6" />} label="Сошиал хуваалцсан" value={38} gradient="pink" />
+        <StatCard icon={<Target className="w-6 h-6" />} label="Шинэ захиалагч" value={12} gradient="green" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Referral Link */}
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🔗 Реферал линк</h2>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2"><Link2 className="w-5 h-5" /> Реферал линк</h2>
           <p className="text-sm text-[var(--esl-text-secondary)] mb-3">Энэ линкээр орсон хэрэглэгчид таны дэлгүүрийг харж, захиалга өгнө.</p>
           <div className="flex gap-2">
             <input
@@ -85,14 +86,14 @@ export default function MarketingPage() {
           </div>
           <div className="mt-4 p-3 bg-indigo-50 rounded-lg">
             <p className="text-xs text-indigo-700">
-              💡 Реферал линкээр орсон хэрэглэгчийн захиалгад таны шимтгэл тооцогдоно
+              <Lightbulb className="w-3.5 h-3.5 inline shrink-0" /> Реферал линкээр орсон хэрэглэгчийн захиалгад таны шимтгэл тооцогдоно
             </p>
           </div>
         </div>
 
         {/* QR Code */}
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📱 QR Код</h2>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2"><QrCode className="w-5 h-5" /> QR Код</h2>
           <p className="text-sm text-[var(--esl-text-secondary)] mb-3">Дэлгүүрийн QR код — хэвлэж, хуваалцаарай.</p>
           <div className="flex flex-col items-center">
             <div className="w-48 h-48 bg-[var(--esl-bg-section)] border-2 border-dashed border-[var(--esl-border)] rounded-xl flex flex-col items-center justify-center">
@@ -117,7 +118,7 @@ export default function MarketingPage() {
 
         {/* Social Media Templates */}
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📣 Сошиал медиа загвар</h2>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2"><Megaphone className="w-5 h-5" /> Сошиал медиа загвар</h2>
           <p className="text-sm text-[var(--esl-text-secondary)] mb-4">Бэлэн текст хуулж, сошиал хуудас дээрээ нийтлээрэй.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {SOCIAL_TEMPLATES.map((tmpl) => {
@@ -148,7 +149,7 @@ export default function MarketingPage() {
 
         {/* Banner Creator */}
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 lg:col-span-2">
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🎨 Баннер үүсгэгч</h2>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2"><Palette className="w-5 h-5" /> Баннер үүсгэгч</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>

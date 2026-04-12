@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { canUseAI, getSubscription, getCurrentPlan, saveSubscription } from '@/lib/subscription';
+import { FileText, Lock, Sparkles, ClipboardCopy, CheckCircle, Briefcase, Smile, Flame, Gem } from 'lucide-react';
 
 const TONES = [
-  { id: 'professional', name: 'Мэргэжлийн', icon: '💼' },
-  { id: 'casual', name: 'Энгийн', icon: '😊' },
-  { id: 'exciting', name: 'Сэтгэл хөдлөм', icon: '🔥' },
-  { id: 'luxury', name: 'Люкс', icon: '💎' },
+  { id: 'professional', name: 'Мэргэжлийн', icon: <Briefcase className="w-4 h-4 inline" /> },
+  { id: 'casual', name: 'Энгийн', icon: <Smile className="w-4 h-4 inline" /> },
+  { id: 'exciting', name: 'Сэтгэл хөдлөм', icon: <Flame className="w-4 h-4 inline" /> },
+  { id: 'luxury', name: 'Люкс', icon: <Gem className="w-4 h-4 inline" /> },
 ];
 
 const LANGUAGES = [
@@ -92,12 +93,12 @@ export default function AIDescriptionPage() {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 text-center text-white mb-6">
-          <span className="text-4xl mb-3 block">📝</span>
+          <span className="text-4xl mb-3 block"><FileText className="w-10 h-10 mx-auto" /></span>
           <h1 className="text-2xl font-bold">AI Тайлбар бичигч</h1>
           <p className="opacity-90 mt-1">Бүтээгдэхүүний тайлбар автоматаар бич</p>
         </div>
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
-          <span className="text-5xl block mb-4">🔒</span>
+          <span className="text-5xl block mb-4"><Lock className="w-12 h-12 mx-auto" /></span>
           <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
           <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
           <a href="/dashboard/store/package" className="inline-block bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition">
@@ -140,7 +141,7 @@ export default function AIDescriptionPage() {
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 mb-6 text-white">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-2xl font-bold">📝 AI Тайлбар бичигч</h1>
+            <h1 className="text-2xl font-bold flex items-center gap-2"><FileText className="w-7 h-7" /> AI Тайлбар бичигч</h1>
             <p className="opacity-90 text-sm mt-1">Бүтээгдэхүүний борлуулалтыг нэмэгдүүлэх мэргэжлийн тайлбар бич</p>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm">
@@ -189,7 +190,7 @@ export default function AIDescriptionPage() {
                       : 'border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
-                  <span className="mr-1">{t.icon}</span> {t.name}
+                  <span className="mr-1 inline-flex">{t.icon}</span> {t.name}
                 </button>
               ))}
             </div>
@@ -225,7 +226,7 @@ export default function AIDescriptionPage() {
                 Бичиж байна...
               </>
             ) : (
-              '✨ Тайлбар үүсгэх'
+              <><Sparkles className="w-4 h-4" /> Тайлбар үүсгэх</>
             )}
           </button>
         </div>
@@ -244,20 +245,20 @@ export default function AIDescriptionPage() {
                   onClick={handleCopy}
                   className="flex-1 bg-gray-900 text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-800 transition flex items-center justify-center gap-2"
                 >
-                  📋 Хуулах
+                  <ClipboardCopy className="w-4 h-4" /> Хуулах
                 </button>
                 <button
                   onClick={handleApply}
                   className="flex-1 bg-indigo-600 text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition flex items-center justify-center gap-2"
                 >
-                  ✅ Бараанд хэрэгжүүлэх
+                  <CheckCircle className="w-4 h-4" /> Бараанд хэрэгжүүлэх
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-center h-64 bg-[var(--esl-bg-section)] rounded-xl border-2 border-dashed border-[var(--esl-border)]">
               <div className="text-center text-[var(--esl-text-muted)]">
-                <span className="text-4xl block mb-2">📝</span>
+                <span className="block mb-2"><FileText className="w-10 h-10 mx-auto" /></span>
                 <p className="text-sm">Мэдээлэл оруулж тайлбар үүсгэнэ үү</p>
               </div>
             </div>

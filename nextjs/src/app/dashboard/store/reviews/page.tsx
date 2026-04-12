@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { timeAgo } from '@/lib/utils';
 import StatCard from '@/components/dashboard/StatCard';
+import { Star, FileText, Trophy, MessageCircle } from 'lucide-react';
 
 interface Review {
   id: string;
@@ -86,10 +87,10 @@ export default function ReviewsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard icon="⭐" label="Дундаж үнэлгээ" value={avgRating} gradient="amber" />
-        <StatCard icon="📝" label="Нийт сэтгэгдэл" value={reviews.length} gradient="indigo" />
-        <StatCard icon="🏆" label="5 од" value={fiveStarCount} gradient="green" />
-        <StatCard icon="💬" label="Хариу бичсэн" value={reviews.filter((r) => r.reply).length} gradient="pink" />
+        <StatCard icon={<Star className="w-6 h-6" />} label="Дундаж үнэлгээ" value={avgRating} gradient="amber" />
+        <StatCard icon={<FileText className="w-6 h-6" />} label="Нийт сэтгэгдэл" value={reviews.length} gradient="indigo" />
+        <StatCard icon={<Trophy className="w-6 h-6" />} label="5 од" value={fiveStarCount} gradient="green" />
+        <StatCard icon={<MessageCircle className="w-6 h-6" />} label="Хариу бичсэн" value={reviews.filter((r) => r.reply).length} gradient="pink" />
       </div>
 
       {/* Filter by rating */}
@@ -121,7 +122,7 @@ export default function ReviewsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
-          <div className="text-4xl mb-3">⭐</div>
+          <div className="mb-3"><Star className="w-10 h-10 mx-auto" /></div>
           <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Сэтгэгдэл олдсонгүй</h3>
           <p className="text-[var(--esl-text-muted)] mt-1">Энэ үнэлгээтэй сэтгэгдэл байхгүй байна</p>
         </div>
@@ -181,7 +182,7 @@ export default function ReviewsPage() {
                     onClick={() => { setReplyingTo(review.id); setReplyText(''); }}
                     className="px-3 py-1.5 text-xs font-medium bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] rounded-lg hover:bg-[var(--esl-bg-card-hover)] transition-colors flex-shrink-0"
                   >
-                    💬 Хариу
+                    <MessageCircle className="w-3.5 h-3.5 inline mr-1" /> Хариу
                   </button>
                 )}
               </div>

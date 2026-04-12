@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { Crown } from 'lucide-react';
 
 export default function GoldPromoBanner() {
   return (
@@ -8,7 +9,7 @@ export default function GoldPromoBanner() {
         style={{ background: 'linear-gradient(135deg, #1A1100 0%, #2D1F00 50%, #1A1100 100%)' }}>
         <div>
           <div className="flex items-center gap-2.5 mb-2">
-            <span className="text-[32px]">👑</span>
+            <Crown className="w-8 h-8 text-[#F9A825]" />
             <span className="text-[#F9A825] text-[22px] font-black tracking-[2px]">GOLD</span>
           </div>
           <h3 className="text-white text-xl font-bold mb-1.5">

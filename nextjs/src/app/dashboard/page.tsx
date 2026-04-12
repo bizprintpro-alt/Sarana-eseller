@@ -7,6 +7,7 @@ import { formatPrice, STATUS_MAP } from '@/lib/utils';
 import StatCard from '@/components/dashboard/StatCard';
 import { LoyaltyWidget } from '@/components/shared/LoyaltyWidget';
 import Link from 'next/link';
+import { Package, Wallet, Clock, CheckCircle, ShoppingCart } from 'lucide-react';
 
 export default function BuyerDashboard() {
   const { user } = useAuth();
@@ -51,7 +52,7 @@ export default function BuyerDashboard() {
               href="/store"
               className="bg-[var(--esl-bg-section)] text-[var(--esl-text-primary)] text-xs font-bold px-4 py-2 rounded-xl no-underline hover:bg-[var(--esl-bg-card-hover)] transition-all"
             >
-              🛒 Дэлгүүр
+              <ShoppingCart className="w-3.5 h-3.5 inline mr-1" /> Дэлгүүр
             </Link>
           </div>
         </div>
@@ -65,23 +66,23 @@ export default function BuyerDashboard() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <StatCard icon="📦" label="Нийт захиалга" value={total} variant="primary" />
-          <StatCard icon="💰" label="Нийт зарцуулалт" value={formatPrice(revenue)} variant="info" animate={false} />
-          <StatCard icon="⏳" label="Хүлээгдэж буй" value={pending} variant="warning" />
-          <StatCard icon="✅" label="Хүргэгдсэн" value={done} variant="success" />
+          <StatCard icon={<Package className="w-6 h-6" />} label="Нийт захиалга" value={total} variant="primary" />
+          <StatCard icon={<Wallet className="w-6 h-6" />} label="Нийт зарцуулалт" value={formatPrice(revenue)} variant="info" animate={false} />
+          <StatCard icon={<Clock className="w-6 h-6" />} label="Хүлээгдэж буй" value={pending} variant="warning" />
+          <StatCard icon={<CheckCircle className="w-6 h-6" />} label="Хүргэгдсэн" value={done} variant="success" />
         </div>
 
         {/* Recent Orders */}
         <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--esl-border)]">
-            <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">🕐 Сүүлийн захиалгууд</h3>
+            <h3 className="text-sm font-bold text-[var(--esl-text-primary)] flex items-center gap-1.5"><Clock className="w-4 h-4" /> Сүүлийн захиалгууд</h3>
           </div>
 
           {loading ? (
             <div className="p-12 text-center text-[var(--esl-text-muted)] text-sm">Ачааллаж байна...</div>
           ) : orders.length === 0 ? (
             <div className="p-12 text-center text-[var(--esl-text-muted)]">
-              <div className="text-4xl mb-3">📭</div>
+              <Package className="w-10 h-10 mx-auto mb-3 text-[var(--esl-text-muted)]" />
               <p className="text-sm font-semibold">Захиалга байхгүй байна</p>
               <Link href="/store" className="text-brand text-xs font-bold no-underline mt-2 inline-block">
                 Дэлгүүр рүү очих →

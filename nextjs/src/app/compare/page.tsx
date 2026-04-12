@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Check, X, Minus, ArrowRight, Crown, Users, Link2, Shield, Truck, MessageSquare, Smartphone, Percent, Store } from 'lucide-react';
+import { Check, X, Minus, ArrowRight, Crown, Users, Link2, Shield, Truck, MessageSquare, Smartphone, Percent, Store, CircleAlert, CheckCircle, XCircle, Megaphone } from 'lucide-react';
 
 const rows = [
   { feature: '4 талын экосистем',   eseller: 'Эзэн+Борлуулагч+Авагч+Жолооч', zary: 'Зөвхөн худалдагч+авагч', eOk: true, zOk: false, highlight: true },
@@ -17,19 +17,19 @@ const rows = [
 
 const uniqueFeatures = [
   {
-    icon: '👑', title: 'Gold гишүүнчлэл', color: '#F9A825',
+    icon: Crown, title: 'Gold гишүүнчлэл', color: '#F9A825',
     desc: 'Монгол цахим захуудад байхгүй АНХНЫ Premium гишүүнчлэл. 3 сарын дотор нэмэлт 200,000₮+ хэмнэнэ.',
     points: ['Бүх захиалгад үнэгүй хүргэлт', '5% нэмэлт хямдрал', 'Flash sale-д 2 цагийн өмнө нэвтрэх', '2x оноо — cashback болж ашиглах'],
     cta: 'Gold болох', link: '/gold',
   },
   {
-    icon: '🔗', title: 'Борлуулагч referral', color: '#E37400',
+    icon: Link2, title: 'Борлуулагч referral', color: '#E37400',
     desc: 'Зардалгүй маркетинг — борлуулагчид өөрсдөө тарааж өгнө. TikTok, Instagram, Facebook-р share хийхэд л комисс автоматаар орно.',
     points: ['Бараа нэг товчлоор share хийх', '10-20% комисс автомат', 'QR код + богино линк', 'Борлуулалт realtime хянах'],
     cta: 'Борлуулагч болох', link: '/become-seller',
   },
   {
-    icon: '🏪', title: '4 талын экосистем', color: '#1A73E8',
+    icon: Store, title: '4 талын экосистем', color: '#1A73E8',
     desc: 'Eseller.mn нь зөвхөн дэлгүүр биш. Худалдан авагч + Дэлгүүр эзэн + Борлуулагч + Жолооч — бүгд нэг платформд.',
     points: ['Дэлгүүр эзэн: бараа зарна', 'Борлуулагч: share хийж комисс авна', 'Жолооч: хүргэлт хийж орлого авна', 'Нэг хэрэглэгч бүх үүрэг гүйцэтгэж болно'],
     cta: 'Нэгдэх', link: '/login',
@@ -72,8 +72,8 @@ export default function ComparePage() {
               )}
               {row.feature}
             </span>
-            <span className="text-center text-[13px] text-[var(--esl-text)]">{row.eOk ? '✅' : '🟡'} {row.eseller}</span>
-            <span className="text-center text-[13px] text-[var(--esl-text-muted)]">{row.zOk ? '✅' : '❌'} {row.zary}</span>
+            <span className="text-center text-[13px] text-[var(--esl-text)] flex items-center justify-center gap-1">{row.eOk ? <CheckCircle className="w-4 h-4 text-green-500 shrink-0" /> : <CircleAlert className="w-4 h-4 text-amber-400 shrink-0" />} {row.eseller}</span>
+            <span className="text-center text-[13px] text-[var(--esl-text-muted)] flex items-center justify-center gap-1">{row.zOk ? <CheckCircle className="w-4 h-4 text-green-500 shrink-0" /> : <XCircle className="w-4 h-4 text-red-500 shrink-0" />} {row.zary}</span>
           </div>
         ))}
       </div>
@@ -96,14 +96,14 @@ export default function ComparePage() {
                 style={{ background: `${f.color}15` }}
               />
 
-              <div className="text-[40px] mb-4">{f.icon}</div>
+              <div className="mb-4"><f.icon className="w-10 h-10" style={{ color: f.color }} /></div>
               <h3 className="font-extrabold text-xl mb-2" style={{ color: f.color }}>{f.title}</h3>
               <p className="text-[var(--esl-text-muted)] text-[14px] leading-relaxed mb-4">{f.desc}</p>
 
               <ul className="flex flex-col gap-1.5 mb-5">
                 {f.points.map((p, j) => (
                   <li key={j} className="text-[var(--esl-text)] text-[13px] flex gap-2 items-start">
-                    <span style={{ color: f.color }}>✓</span>
+                    <Check className="w-3.5 h-3.5 shrink-0" style={{ color: f.color }} />
                     {p}
                   </li>
                 ))}
@@ -126,11 +126,11 @@ export default function ComparePage() {
         <h2 className="text-white text-[28px] font-black mb-2.5">Өнөөдөр эхлэ</h2>
         <p className="text-white/60 text-[16px] mb-7">Эхний 3 сар 0% комисс · Бүртгэл үнэгүй</p>
         <div className="flex gap-3 justify-center flex-wrap">
-          <Link href="/open-shop" className="bg-[#E8242C] text-white px-7 py-3.5 rounded-xl no-underline font-extrabold text-[16px]">
-            🏪 Дэлгүүр нээх
+          <Link href="/open-shop" className="bg-[#E8242C] text-white px-7 py-3.5 rounded-xl no-underline font-extrabold text-[16px] inline-flex items-center gap-2">
+            <Store className="w-5 h-5" /> Дэлгүүр нээх
           </Link>
-          <Link href="/become-seller" className="text-white px-7 py-3.5 rounded-xl no-underline font-bold text-[16px] border border-white/20">
-            📢 Борлуулагч болох
+          <Link href="/become-seller" className="text-white px-7 py-3.5 rounded-xl no-underline font-bold text-[16px] border border-white/20 inline-flex items-center gap-2">
+            <Megaphone className="w-5 h-5" /> Борлуулагч болох
           </Link>
         </div>
       </div>

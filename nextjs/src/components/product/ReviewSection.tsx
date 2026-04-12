@@ -69,7 +69,7 @@ export default function ReviewSection({ productId }: { productId: string }) {
       {/* Write review */}
       {!sent ? (
         <button onClick={() => setShowForm(!showForm)} className="text-sm font-semibold px-4 py-2 rounded-xl border-none cursor-pointer" style={{ background: '#E8242C', color: '#fff' }}>
-          ⭐ Үнэлгээ бичих
+          <Star size={14} className="fill-amber-400 text-amber-400" /> Үнэлгээ бичих
         </button>
       ) : (
         <div className="flex items-center gap-2 text-sm" style={{ color: '#16A34A' }}><CheckCircle size={16} /> Үнэлгээ илгээгдлээ!</div>

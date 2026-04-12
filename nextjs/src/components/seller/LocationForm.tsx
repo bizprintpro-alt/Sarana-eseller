@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { GoogleMapPicker } from './GoogleMapPicker';
 import { AutoVerifyButton } from './AutoVerifyButton';
-import { ArrowLeft, Save, Clock, MapPin, Phone, Star } from 'lucide-react';
+import { ArrowLeft, Save, Clock, MapPin, Phone, Star, ParkingSquare, ArrowUpDown, CreditCard, Globe, Truck, Undo2, Accessibility, Lock, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
 // ─── Constants ──────────────────────────────────────────────
@@ -14,15 +14,15 @@ const DISTRICTS = [
   'Багануур дүүрэг', 'Багахангай дүүрэг', 'Сонгинохайрхан дүүрэг',
 ];
 
-const FEATURES = [
-  { key: 'parking', label: 'Машины зогсоол', icon: '🅿️' },
-  { key: 'elevator', label: 'Лифт байна', icon: '🛗' },
-  { key: 'card_payment', label: 'Картаар төлнө', icon: '💳' },
-  { key: 'foreign_lang', label: 'Гадаад хэл', icon: '🌐' },
-  { key: 'delivery', label: 'Хүргэлттэй', icon: '🚚' },
-  { key: 'returns', label: 'Буцаалттай', icon: '↩️' },
-  { key: 'wheelchair', label: 'Хөгжлийн бэрхшээлтэй', icon: '♿' },
-  { key: 'security', label: 'Аюулгүй байдал', icon: '🔒' },
+const FEATURES: { key: string; label: string; icon: LucideIcon }[] = [
+  { key: 'parking', label: 'Машины зогсоол', icon: ParkingSquare },
+  { key: 'elevator', label: 'Лифт байна', icon: ArrowUpDown },
+  { key: 'card_payment', label: 'Картаар төлнө', icon: CreditCard },
+  { key: 'foreign_lang', label: 'Гадаад хэл', icon: Globe },
+  { key: 'delivery', label: 'Хүргэлттэй', icon: Truck },
+  { key: 'returns', label: 'Буцаалттай', icon: Undo2 },
+  { key: 'wheelchair', label: 'Хөгжлийн бэрхшээлтэй', icon: Accessibility },
+  { key: 'security', label: 'Аюулгүй байдал', icon: Lock },
 ];
 
 const DAY_LABELS: Record<string, string> = {
@@ -415,7 +415,7 @@ export default function LocationForm({ initialData, isEdit }: Props) {
               return (
                 <button key={f.key} type="button" onClick={() => toggleFeature(f.key)}
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', padding: '12px 8px', borderRadius: '10px', border: `1px solid ${active ? '#E8242C' : '#3D3D3D'}`, backgroundColor: active ? 'rgba(232,36,44,0.08)' : 'var(--esl-bg-elevated)', color: active ? '#E8242C' : 'var(--esl-text-muted)', cursor: 'pointer', fontSize: '11px', transition: 'all 0.2s' }}>
-                  <span style={{ fontSize: '18px' }}>{f.icon}</span>
+                  <f.icon size={18} />
                   <span style={{ textAlign: 'center', lineHeight: '1.3' }}>{f.label}</span>
                 </button>
               );

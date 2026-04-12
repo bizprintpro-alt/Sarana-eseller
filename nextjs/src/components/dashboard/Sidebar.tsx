@@ -11,19 +11,29 @@ import {
   Megaphone, Palette, Sparkles, Brain, Bot, Wallet,
   Globe, Building2, UserCog, Settings, Bell, ScrollText,
   ChevronDown, ExternalLink, LogOut, Crown, Zap,
-  CalendarDays, Clock, Scissors, Shield,
+  CalendarDays, Clock, Scissors, Shield, Link2, Layers,
+  MapPin, BookOpen, PlusCircle, Map, MailOpen, User,
+  Construction, Image, FileText, Folder, Download, KeyRound,
+  Heart, Home, Car, MessageSquare, Truck, ClipboardList,
 } from 'lucide-react';
 import { ThemeSelector } from '@/components/ui/ThemeToggle';
 
 // ═══ Icon Map ═══
 const ICON_MAP: Record<string, React.ElementType> = {
-  '📊': LayoutDashboard, '📋': ShoppingCart, '📦': Package, '📂': FolderTree,
-  '🏷️': Tag, '📊 ': BarChart3, '👥': Users, '🎁': Gift, '💳': CreditCard,
+  '📊': LayoutDashboard, '📋': ClipboardList, '📦': Package, '📂': FolderTree,
+  '🏷️': Tag, '👥': Users, '🎁': Gift, '💳': CreditCard,
   '⭐': Star, '📝': PenSquare, '📢': Megaphone, '🎨': Palette,
   '✨': Sparkles, '🤖': Bot, '💰': Wallet, '💵': Wallet,
   '🌐': Globe, '🏪': Building2, '👔': UserCog, '⚙️': Settings,
-  '🔔': Bell, '👑': Crown, '📈': BarChart3, '🤝': Users, '⚠️': Bell, '🧾': ScrollText, '💬': Bot,
-  '🛎️': Scissors, '📅': CalendarDays, '🕐': Clock, '🛡️': Shield, '🛍️': ShoppingCart,
+  '🔔': Bell, '👑': Crown, '📈': BarChart3, '🤝': Users,
+  '⚠️': Bell, '🧾': ScrollText, '💬': MessageSquare,
+  '🛎️': Bell, '📅': CalendarDays, '🕐': Clock, '🛡️': Shield,
+  '🛍️': ShoppingCart, '🔗': Link2, '🎭': Layers,
+  '📍': MapPin, '📖': BookOpen, '➕': PlusCircle, '🗺️': Map,
+  '📩': MailOpen, '👤': User, '🏗️': Construction, '🖼️': Image,
+  '📄': FileText, '🧠': Brain, '🚗': Car, '📁': Folder,
+  '⬇️': Download, '🔑': KeyRound, '❤️': Heart, '🛒': ShoppingCart,
+  '🏠': Home, '🚚': Truck,
 };
 
 // ═══ Types ═══

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { canUseAI, getSubscription, getCurrentPlan, saveSubscription } from '@/lib/subscription';
+import { Sparkles, Lock, Palette, UtensilsCrossed, Shirt, Monitor, Sparkle, Trophy } from 'lucide-react';
 
 interface LogoHistory {
   id: string;
@@ -14,11 +15,11 @@ interface LogoHistory {
 }
 
 const INDUSTRIES = [
-  { id: 'food', name: 'Хоол хүнс', icon: '🍔' },
-  { id: 'fashion', name: 'Хувцас загвар', icon: '👗' },
-  { id: 'tech', name: 'Технологи', icon: '💻' },
-  { id: 'beauty', name: 'Гоо сайхан', icon: '💄' },
-  { id: 'sports', name: 'Спорт', icon: '⚽' },
+  { id: 'food', name: 'Хоол хүнс', icon: <UtensilsCrossed className="w-4 h-4 inline" /> },
+  { id: 'fashion', name: 'Хувцас загвар', icon: <Shirt className="w-4 h-4 inline" /> },
+  { id: 'tech', name: 'Технологи', icon: <Monitor className="w-4 h-4 inline" /> },
+  { id: 'beauty', name: 'Гоо сайхан', icon: <Sparkle className="w-4 h-4 inline" /> },
+  { id: 'sports', name: 'Спорт', icon: <Trophy className="w-4 h-4 inline" /> },
 ];
 
 const LOGO_STYLES = [
@@ -82,12 +83,12 @@ export default function AILogoPage() {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
         <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-8 text-center text-white mb-6">
-          <span className="text-4xl mb-3 block">✨</span>
+          <span className="text-4xl mb-3 block"><Sparkles className="w-10 h-10 mx-auto" /></span>
           <h1 className="text-2xl font-bold">AI Лого үүсгэгч</h1>
           <p className="opacity-90 mt-1">Бизнесийнхээ лого автоматаар үүсгэ</p>
         </div>
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
-          <span className="text-5xl block mb-4">🔒</span>
+          <span className="text-5xl block mb-4"><Lock className="w-12 h-12 mx-auto" /></span>
           <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
           <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
           <a href="/dashboard/store/package" className="inline-block bg-gradient-to-r from-purple-500 to-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition">
@@ -136,7 +137,7 @@ export default function AILogoPage() {
       <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-6 mb-6 text-white">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-2xl font-bold">✨ AI Лого үүсгэгч</h1>
+            <h1 className="text-2xl font-bold flex items-center gap-2"><Sparkles className="w-7 h-7" /> AI Лого үүсгэгч</h1>
             <p className="opacity-90 text-sm mt-1">Бизнесийнхээ мэргэжлийн лого хэдхэн секундэд үүсгэ</p>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm">
@@ -174,7 +175,7 @@ export default function AILogoPage() {
                       : 'border-[var(--esl-border)] text-[var(--esl-text-primary)] hover:border-[var(--esl-border-strong)]'
                   }`}
                 >
-                  <span className="mr-1">{ind.icon}</span> {ind.name}
+                  <span className="mr-1 inline-flex">{ind.icon}</span> {ind.name}
                 </button>
               ))}
             </div>
@@ -232,7 +233,7 @@ export default function AILogoPage() {
                 Үүсгэж байна...
               </>
             ) : (
-              '✨ Лого үүсгэх'
+              <><Sparkles className="w-4 h-4" /> Лого үүсгэх</>
             )}
           </button>
         </div>
@@ -309,7 +310,7 @@ export default function AILogoPage() {
           ) : (
             <div className="flex items-center justify-center h-64 bg-[var(--esl-bg-section)] rounded-xl border-2 border-dashed border-[var(--esl-border)]">
               <div className="text-center text-[var(--esl-text-muted)]">
-                <span className="text-4xl block mb-2">🎨</span>
+                <span className="block mb-2"><Palette className="w-10 h-10 mx-auto" /></span>
                 <p className="text-sm">Бизнесийн нэр оруулж лого үүсгэнэ үү</p>
               </div>
             </div>

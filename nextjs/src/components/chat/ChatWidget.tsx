@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { MessageSquare, Bot, SendHorizonal, X } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -51,14 +52,14 @@ export default function ChatWidget() {
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#E8242C] border-none cursor-pointer text-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform z-[1000]"
       >
-        {open ? '✕' : '💬'}
+        {open ? <X className="w-5 h-5 text-white" /> : <MessageSquare className="w-6 h-6 text-white" />}
       </button>
 
       {open && (
         <div className="fixed bottom-[90px] right-6 w-[360px] h-[500px] bg-[var(--esl-bg-card,#141414)] rounded-[20px] shadow-2xl flex flex-col z-[999] border border-[var(--esl-border,#222)] overflow-hidden max-sm:w-[calc(100vw-48px)]">
           {/* Header */}
           <div className="p-3.5 bg-[#E8242C] flex items-center gap-2.5 shrink-0">
-            <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-lg">🤖</div>
+            <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-lg"><Bot className="w-5 h-5 text-white" /></div>
             <div>
               <div className="text-white font-bold text-sm">Eseller Туслах</div>
               <div className="text-white/70 text-[11px]">● Онлайн · 24/7</div>
@@ -109,7 +110,7 @@ export default function ChatWidget() {
             />
             <button onClick={send} disabled={!input.trim() || loading}
               className={`w-10 h-10 rounded-xl border-none text-lg ${input.trim() ? 'bg-[#E8242C] text-white cursor-pointer' : 'bg-[var(--esl-bg-section,#1A1A1A)] text-[var(--esl-text-muted,#555)] cursor-not-allowed'}`}>
-              ➤
+              <SendHorizonal className="w-5 h-5" />
             </button>
           </div>
         </div>

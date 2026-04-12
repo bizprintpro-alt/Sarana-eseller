@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { formatPrice } from '@/lib/utils';
 import { useToast } from '@/components/shared/Toast';
 import StatCard from '@/components/dashboard/StatCard';
+import { Gift, CheckCircle, Wallet, BarChart3 } from 'lucide-react';
 
 interface GiftCard {
   id: string;
@@ -92,15 +93,15 @@ export default function GiftCardsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard icon="🎁" label="Нийт карт" value={cards.length} gradient="indigo" />
-        <StatCard icon="✅" label="Идэвхтэй" value={cards.filter((c) => c.status === 'active').length} gradient="green" />
-        <StatCard icon="💰" label="Идэвхтэй үнэ цэнэ" value={formatPrice(activeValue)} gradient="amber" />
-        <StatCard icon="📊" label="Хэрэглэсэн" value={formatPrice(usedValue)} gradient="pink" />
+        <StatCard icon={<Gift className="w-6 h-6" />} label="Нийт карт" value={cards.length} gradient="indigo" />
+        <StatCard icon={<CheckCircle className="w-6 h-6" />} label="Идэвхтэй" value={cards.filter((c) => c.status === 'active').length} gradient="green" />
+        <StatCard icon={<Wallet className="w-6 h-6" />} label="Идэвхтэй үнэ цэнэ" value={formatPrice(activeValue)} gradient="amber" />
+        <StatCard icon={<BarChart3 className="w-6 h-6" />} label="Хэрэглэсэн" value={formatPrice(usedValue)} gradient="pink" />
       </div>
 
       {cards.length === 0 ? (
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-12 text-center">
-          <div className="text-4xl mb-3">🎁</div>
+          <div className="text-4xl mb-3"><Gift className="w-10 h-10 mx-auto text-[var(--esl-text-muted)]" /></div>
           <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Бэлгийн карт байхгүй</h3>
           <p className="text-[var(--esl-text-muted)] mt-1">Шинэ бэлгийн карт үүсгээрэй</p>
         </div>
@@ -112,7 +113,7 @@ export default function GiftCardsPage() {
               <div key={card.id} className={`bg-white rounded-xl border border-[var(--esl-border)] overflow-hidden ${card.status !== 'active' ? 'opacity-70' : ''}`}>
                 <div className="bg-gradient-to-r from-indigo-500 to-purple-500 p-5 text-white">
                   <div className="flex justify-between items-start">
-                    <span className="text-2xl">🎁</span>
+                    <Gift className="w-6 h-6" />
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${card.status === 'active' ? 'bg-white/20 text-white' : 'bg-black/10 text-white/70'}`}>
                       {label}
                     </span>

@@ -95,12 +95,7 @@ const STORE_SETTINGS: SidebarSection = {
   title: 'Дэлгүүрийн тохиргоо',
   items: [
     { href: '/dashboard/store/store-settings', icon: '🎨', label: 'Нүүр хуудас & Дизайн' },
-    { href: '/dashboard/store/storefront-config', icon: '🌐', label: 'Storefront тохиргоо', isNew: true },
-    { href: '/dashboard/store/storefront-editor', icon: '✨', label: 'AI Дэлгүүр засварлагч' },
-    { href: '/dashboard/store/themes', icon: '🎭', label: 'Theme store', isNew: true },
     { href: '/dashboard/store/settings/shop-type', icon: '🏪', label: 'Дэлгүүрийн төрөл' },
-    { href: '/dashboard/store/settings/domain', icon: '🌐', label: 'Домайн тохиргоо' },
-    { href: '/dashboard/store/locations', icon: '📍', label: 'Байршлууд', isNew: true },
     { href: '/dashboard/store/branches', icon: '🏪', label: 'Салбар удирдах' },
     { href: '/dashboard/store/staff', icon: '👔', label: 'Ажилтан' },
     { href: '/dashboard/store/settings', icon: '⚙️', label: 'Ерөнхий тохиргоо' },

@@ -8,7 +8,8 @@ import {
   ArrowLeft, Star, Truck, Shield, Clock, Phone, MapPin,
   Calendar, Fuel, Gauge, Settings2, Tag, Building2,
   Download, FileText, HardDrive, Users, Timer,
-  ChevronDown, ChevronUp, Package,
+  ChevronDown, ChevronUp, Package, MessageCircle,
+  Ruler, BedDouble, Building, MapPinned,
 } from 'lucide-react';
 import type { Product } from '@/lib/api';
 import { formatPrice, discountPercent, cn } from '@/lib/utils';
@@ -99,7 +100,7 @@ export default function ProductDetailClient({ product, relatedProducts = [] }: P
             }}
               className="w-full h-11 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all border cursor-pointer"
               style={{ borderColor: 'var(--esl-border)', color: 'var(--esl-text-primary)', background: 'var(--esl-bg-card)' }}>
-              💬 Борлуулагчтай чатлах
+              <MessageCircle size={18} /> Борлуулагчтай чатлах
             </button>
 
             {/* Affiliate */}
@@ -214,10 +215,10 @@ function RealEstateLayout({ product, price, config }: {
 
       {/* Key specs */}
       <div className="grid grid-cols-2 gap-3">
-        {product.area && <SpecCard icon="📐" label="Талбай" value={`${product.area}м²`} />}
-        {product.rooms && <SpecCard icon="🛏" label="Өрөө" value={`${product.rooms}`} />}
-        {product.floor && <SpecCard icon="🏢" label="Давхар" value={`${product.floor}${product.totalFloors ? '/' + product.totalFloors : ''}`} />}
-        {product.district && <SpecCard icon="📍" label="Дүүрэг" value={product.district} />}
+        {product.area && <SpecCard icon={<Ruler size={20} className="text-[var(--esl-text-muted)]" />} label="Талбай" value={`${product.area}м²`} />}
+        {product.rooms && <SpecCard icon={<BedDouble size={20} className="text-[var(--esl-text-muted)]" />} label="Өрөө" value={`${product.rooms}`} />}
+        {product.floor && <SpecCard icon={<Building size={20} className="text-[var(--esl-text-muted)]" />} label="Давхар" value={`${product.floor}${product.totalFloors ? '/' + product.totalFloors : ''}`} />}
+        {product.district && <SpecCard icon={<MapPinned size={20} className="text-[var(--esl-text-muted)]" />} label="Дүүрэг" value={product.district} />}
       </div>
 
       {/* Price */}
@@ -482,10 +483,10 @@ function DigitalLayout({ product, price, config }: {
 
 /* ═══ Shared small components ═══ */
 
-function SpecCard({ icon, label, value }: { icon: string; label: string; value: string }) {
+function SpecCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <div className="flex items-center gap-3 p-3 rounded-xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)]">
-      <span className="text-lg">{icon}</span>
+      <span className="flex items-center justify-center w-5 h-5">{icon}</span>
       <div>
         <p className="text-[11px] text-[var(--esl-text-muted)]">{label}</p>
         <p className="text-sm font-bold">{value}</p>

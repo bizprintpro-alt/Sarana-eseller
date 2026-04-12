@@ -5,17 +5,22 @@ import { OrdersAPI, Order } from '@/lib/api';
 import { formatPrice, STATUS_MAP, timeAgo } from '@/lib/utils';
 import { useToast } from '@/components/shared/Toast';
 import StatCard from '@/components/dashboard/StatCard';
+import {
+  ClipboardList, Clock, Package, Wallet, MailX, Phone, Link as LinkIcon,
+  CheckCircle, ChefHat, Truck,
+  type LucideIcon,
+} from 'lucide-react';
 
 type OrderFilter = 'all' | 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivering' | 'delivered' | 'cancelled';
 
-const FILTER_TABS: { key: OrderFilter; label: string }[] = [
+const FILTER_TABS: { key: OrderFilter; label: string; icon?: LucideIcon }[] = [
   { key: 'all', label: 'Бүгд' },
-  { key: 'pending', label: '⏳ Хүлээгдэж буй' },
-  { key: 'confirmed', label: '✅ Баталгаажсан' },
-  { key: 'preparing', label: '👨‍🍳 Бэлтгэж байна' },
-  { key: 'ready', label: '📦 Бэлэн' },
-  { key: 'delivering', label: '🚚 Хүргэж байна' },
-  { key: 'delivered', label: '✓ Хүргэгдсэн' },
+  { key: 'pending', label: 'Хүлээгдэж буй', icon: Clock },
+  { key: 'confirmed', label: 'Баталгаажсан', icon: CheckCircle },
+  { key: 'preparing', label: 'Бэлтгэж байна', icon: ChefHat },
+  { key: 'ready', label: 'Бэлэн', icon: Package },
+  { key: 'delivering', label: 'Хүргэж байна', icon: Truck },
+  { key: 'delivered', label: 'Хүргэгдсэн', icon: CheckCircle },
 ];
 
 const LIGHT_STATUS: Record<string, string> = {
@@ -115,10 +120,10 @@ export default function OrdersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard icon="📋" label="Нийт захиалга" value={stats.total} gradient="indigo" />
-        <StatCard icon="⏳" label="Хүлээгдэж буй" value={stats.pending} gradient="amber" />
-        <StatCard icon="📦" label="Өнөөдрийн" value={stats.today} gradient="pink" />
-        <StatCard icon="💰" label="Хүргэгдсэн орлого" value={formatPrice(stats.revenue)} gradient="green" />
+        <StatCard icon={<ClipboardList className="w-6 h-6" />} label="Нийт захиалга" value={stats.total} gradient="indigo" />
+        <StatCard icon={<Clock className="w-6 h-6" />} label="Хүлээгдэж буй" value={stats.pending} gradient="amber" />
+        <StatCard icon={<Package className="w-6 h-6" />} label="Өнөөдрийн" value={stats.today} gradient="pink" />
+        <StatCard icon={<Wallet className="w-6 h-6" />} label="Хүргэгдсэн орлого" value={formatPrice(stats.revenue)} gradient="green" />
       </div>
 
       {/* Filter Tabs */}
@@ -133,6 +138,7 @@ export default function OrdersPage() {
                 : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]'
             }`}
           >
+            {tab.icon && <tab.icon className="w-3.5 h-3.5 inline-block mr-1" />}
             {tab.label}
             {tab.key !== 'all' && (
               <span className="ml-1.5 text-xs opacity-70">
@@ -147,7 +153,7 @@ export default function OrdersPage() {
       <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
-            <div className="text-4xl mb-3">📭</div>
+            <div className="text-4xl mb-3"><MailX className="w-10 h-10 mx-auto" /></div>
             <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Захиалга олдсонгүй</h3>
             <p className="text-[var(--esl-text-muted)] mt-1">Энэ төлөвт захиалга байхгүй байна</p>
           </div>
@@ -185,7 +191,7 @@ export default function OrdersPage() {
                     <td className="p-4">
                       {order.referralCode ? (
                         <span className="inline-block px-2 py-0.5 rounded bg-purple-100 text-purple-700 text-xs font-medium">
-                          🔗 {order.referralCode}
+                          <LinkIcon className="w-3 h-3 inline mr-1" />{order.referralCode}
                         </span>
                       ) : (
                         <span className="text-[var(--esl-text-muted)] text-xs">—</span>
@@ -232,7 +238,7 @@ export default function OrdersPage() {
               <div>
                 <h3 className="text-sm font-semibold text-[var(--esl-text-secondary)] uppercase mb-2">Захиалагч</h3>
                 <p className="text-[var(--esl-text-primary)] font-medium">{selectedOrder.user?.name || selectedOrder.buyer?.name || 'Хэрэглэгч'}</p>
-                {selectedOrder.delivery?.phone && <p className="text-sm text-[var(--esl-text-secondary)]">📞 {selectedOrder.delivery.phone}</p>}
+                {selectedOrder.delivery?.phone && <p className="text-sm text-[var(--esl-text-secondary)] flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> {selectedOrder.delivery.phone}</p>}
               </div>
 
               {/* Delivery Address */}
@@ -270,7 +276,7 @@ export default function OrdersPage() {
               {/* Referral */}
               {selectedOrder.referralCode && (
                 <div className="flex items-center gap-2 bg-purple-50 rounded-lg p-3">
-                  <span className="text-purple-600">🔗</span>
+                  <LinkIcon className="w-4 h-4 text-purple-600" />
                   <span className="text-sm text-purple-700">Реферал код: <strong>{selectedOrder.referralCode}</strong></span>
                 </div>
               )}

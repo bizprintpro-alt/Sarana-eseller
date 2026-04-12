@@ -11,26 +11,29 @@ import {
   Search, MapPin, Eye, Clock, Plus,
   X, Heart, Phone, MessageCircle, Share2, ChevronLeft, ChevronRight,
   BadgeCheck, Calendar, Ruler, DoorOpen, Fuel, Gauge, Play, ImageIcon,
+  Crown, Star, Flame, Store, Home, Building2, Car, BellRing, User,
+  Laptop, Shirt, Sofa, Sparkles, Baby, Dumbbell, UtensilsCrossed, Wrench, Gem, HardDrive, Briefcase, Package,
 } from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 
 /* ═══ Types ═══ */
 type ItemTier = 'vip' | 'featured' | 'discounted' | 'normal';
 type EntityType = 'store' | 'agent' | 'company' | 'auto_dealer' | 'service' | 'user';
 
-const TIER_CONFIG: Record<ItemTier, { label: string; badge: string; color: string; border: string; bg: string }> = {
-  vip: { label: 'ВИП', badge: '👑', color: '#D4AF37', border: 'border-amber-500/30', bg: 'bg-amber-500/5' },
-  featured: { label: 'Онцлох', badge: '⭐', color: '#3B82F6', border: 'border-blue-500/30', bg: 'bg-blue-500/5' },
-  discounted: { label: 'Хямдрал', badge: '🔥', color: '#EF4444', border: 'border-red-500/30', bg: 'bg-red-500/5' },
-  normal: { label: 'Энгийн', badge: '', color: '#6B7280', border: 'border-[var(--esl-border)]', bg: '' },
+const TIER_CONFIG: Record<ItemTier, { label: string; badge: LucideIcon | null; color: string; border: string; bg: string }> = {
+  vip: { label: 'ВИП', badge: Crown, color: '#D4AF37', border: 'border-amber-500/30', bg: 'bg-amber-500/5' },
+  featured: { label: 'Онцлох', badge: Star, color: '#3B82F6', border: 'border-blue-500/30', bg: 'bg-blue-500/5' },
+  discounted: { label: 'Хямдрал', badge: Flame, color: '#EF4444', border: 'border-red-500/30', bg: 'bg-red-500/5' },
+  normal: { label: 'Энгийн', badge: null, color: '#6B7280', border: 'border-[var(--esl-border)]', bg: '' },
 };
 
-const ENTITY_LABELS: Record<EntityType, { label: string; emoji: string }> = {
-  store: { label: 'Дэлгүүр', emoji: '🏪' },
-  agent: { label: 'Агент', emoji: '🏠' },
-  company: { label: 'Компани', emoji: '🏗️' },
-  auto_dealer: { label: 'Авто', emoji: '🚗' },
-  service: { label: 'Үйлчилгээ', emoji: '🛎️' },
-  user: { label: 'Хэрэглэгч', emoji: '👤' },
+const ENTITY_LABELS: Record<EntityType, { label: string; icon: LucideIcon }> = {
+  store: { label: 'Дэлгүүр', icon: Store },
+  agent: { label: 'Агент', icon: Home },
+  company: { label: 'Компани', icon: Building2 },
+  auto_dealer: { label: 'Авто', icon: Car },
+  service: { label: 'Үйлчилгээ', icon: BellRing },
+  user: { label: 'Хэрэглэгч', icon: User },
 };
 
 const DISTRICTS = ['Бүгд', 'СБД', 'ХУД', 'БЗД', 'ЧД', 'БГД', 'СХД', 'НД', 'БНД'];
@@ -127,9 +130,9 @@ function timeAgo(dateStr: string) {
   return dateStr;
 }
 
-function categoryEmoji(cat: string) {
-  const map: Record<string, string> = { electronics: '💻', fashion: '👗', 'home-living': '🏠', 'beauty-health': '💄', 'kids-toys': '🧸', 'sports-travel': '⚽', 'food-beverage': '🍔', 'auto-moto': '🚗', construction: '🔨', 'jewelry-gifts': '💍', 'digital-goods': '💾', 'office-business': '💼' };
-  return map[cat] || '📦';
+function categoryIcon(cat: string): LucideIcon {
+  const map: Record<string, LucideIcon> = { electronics: Laptop, fashion: Shirt, 'home-living': Home, 'beauty-health': Sparkles, 'kids-toys': Baby, 'sports-travel': Dumbbell, 'food-beverage': UtensilsCrossed, 'auto-moto': Car, construction: Wrench, 'jewelry-gifts': Gem, 'digital-goods': HardDrive, 'office-business': Briefcase };
+  return map[cat] || Package;
 }
 
 /* ═══ Media Carousel ═══ */
@@ -154,7 +157,7 @@ function MediaCarousel({ media, title, category, isVip, tier, disc }: {
         )
       ) : (
         <div className="w-full h-full flex items-center justify-center">
-          <span className="text-8xl">{categoryEmoji(category)}</span>
+          {(() => { const CatIcon = categoryIcon(category); return <CatIcon className="w-20 h-20 text-[var(--esl-text-muted)]" />; })()}
         </div>
       )}
 
@@ -198,7 +201,7 @@ function MediaCarousel({ media, title, category, isVip, tier, disc }: {
 
       {tier && (
         <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold" style={{ backgroundColor: tier.color + '25', color: tier.color, backdropFilter: 'blur(8px)' }}>
-          {tier.badge} {tier.label}
+          {tier.badge && <tier.badge className="w-4 h-4" />} {tier.label}
         </div>
       )}
       {disc > 0 && (
@@ -286,7 +289,7 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
         <div className="p-6">
           {/* Entity info */}
           <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)] mb-3">
-            <span className="text-base">{entity.emoji}</span>
+            <entity.icon className="w-4 h-4" />
             {item.entitySlug ? (
               <Link href={`/entity/${item.entityType}/${item.entitySlug}`} className="font-semibold text-[var(--esl-text-secondary)] hover:text-[#E8242C] no-underline transition-colors">
                 {item.entityName}
@@ -408,7 +411,7 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <span className="text-6xl">{categoryEmoji(item.category)}</span>
+              {(() => { const CatIcon = categoryIcon(item.category); return <CatIcon className="w-14 h-14 text-[var(--esl-text-muted)]" />; })()}
             </div>
           )}
           {/* Media count badge */}
@@ -420,7 +423,7 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
           )}
           {item.tier !== 'normal' && (
             <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold" style={{ backgroundColor: tier.color + '20', color: tier.color, backdropFilter: 'blur(8px)' }}>
-              {tier.badge} {tier.label}
+              {tier.badge && <tier.badge className="w-3.5 h-3.5" />} {tier.label}
             </div>
           )}
           {disc > 0 && (
@@ -441,12 +444,12 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
                 onClick={(e) => e.stopPropagation()}
                 className="text-xs font-semibold text-[var(--esl-text-muted)] hover:text-[#E8242C] no-underline transition-colors flex items-center gap-1"
               >
-                {entity.emoji} {item.entityName}
+                <entity.icon className="w-3.5 h-3.5" /> {item.entityName}
               </Link>
             ) : (
-              <span>{entity.emoji} {item.entityName}</span>
+              <span className="flex items-center gap-1"><entity.icon className="w-3.5 h-3.5" /> {item.entityName}</span>
             )}
-            {item.verified && <span className="text-blue-400">✓</span>}
+            {item.verified && <BadgeCheck className="w-3.5 h-3.5 text-blue-400" />}
             {item.district && (
               <>
                 <span className="text-[var(--esl-text-muted)]">·</span>
@@ -619,7 +622,7 @@ export default function FeedPage() {
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs font-bold bg-[#E8242C] text-white px-2 py-0.5 rounded">Авто</span>
-                  <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
+                  <span className="text-[10px] text-blue-400 font-bold flex items-center gap-0.5"><BadgeCheck className="w-3 h-3" /> Баталгаатай</span>
                 </div>
                 <h3 className="text-base font-black text-[var(--esl-text)] group-hover:text-[#E8242C] transition-colors">AutoCity Mongolia</h3>
                 <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5">Toyota, BMW, Hyundai · 48 машин · ★ 4.8</p>
@@ -633,7 +636,7 @@ export default function FeedPage() {
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs font-bold bg-blue-500 text-white px-2 py-0.5 rounded">Барилга</span>
-                  <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
+                  <span className="text-[10px] text-blue-400 font-bold flex items-center gap-0.5"><BadgeCheck className="w-3 h-3" /> Баталгаатай</span>
                 </div>
                 <h3 className="text-base font-black text-[var(--esl-text)] group-hover:text-[#E8242C] transition-colors">Монголиан Пропертиз</h3>
                 <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5">15+ төсөл · 3,200+ айл · ★ 4.7</p>
@@ -647,7 +650,7 @@ export default function FeedPage() {
               <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-xs font-bold bg-[#D4AF37] text-black px-2 py-0.5 rounded">Агент</span>
-                  <span className="text-[10px] text-blue-400 font-bold">✓ Баталгаатай</span>
+                  <span className="text-[10px] text-blue-400 font-bold flex items-center gap-0.5"><BadgeCheck className="w-3 h-3" /> Баталгаатай</span>
                 </div>
                 <h3 className="text-base font-black text-[var(--esl-text)] group-hover:text-[#E8242C] transition-colors">Б. Эрдэнэбат</h3>
                 <p className="text-xs text-[var(--esl-text-secondary)] mt-0.5">12 жил туршлага · 800+ хэлцэл · ★ 4.9</p>
@@ -700,7 +703,7 @@ export default function FeedPage() {
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-[var(--esl-text-muted)]">
             <span className="font-extrabold text-[var(--esl-text)]">{filtered.length}</span> зар олдлоо
-            {vipCount > 0 && <span className="text-[#D4AF37]"> · 👑 {vipCount} ВИП</span>}
+            {vipCount > 0 && <span className="text-[#D4AF37] inline-flex items-center gap-1"> · <Crown className="w-3.5 h-3.5" /> {vipCount} ВИП</span>}
           </p>
         </div>
 

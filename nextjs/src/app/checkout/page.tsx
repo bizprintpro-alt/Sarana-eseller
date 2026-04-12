@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ShoppingCart, Star, Smartphone, CreditCard, Landmark, Building2, Package } from 'lucide-react';
 import { OrdersAPI, PaymentAPI } from '@/lib/api';
 import { useCartStore } from '@/lib/cart';
 import { formatPrice } from '@/lib/utils';
@@ -28,10 +29,10 @@ const FREE_DELIVERY_THRESHOLD = 50000;
 const DELIVERY_FEE = 3000;
 
 const BANK_LINKS = [
-  { name: 'Хаан банк', color: '#00A551', icon: '🏦' },
-  { name: 'Голомт', color: '#0066B3', icon: '🏛️' },
-  { name: 'ХАС банк', color: '#E4002B', icon: '🏦' },
-  { name: 'Төрийн банк', color: '#003DA5', icon: '🏛️' },
+  { name: 'Хаан банк', color: '#00A551', icon: <Landmark size={16} color="#00A551" /> },
+  { name: 'Голомт', color: '#0066B3', icon: <Building2 size={16} color="#0066B3" /> },
+  { name: 'ХАС банк', color: '#E4002B', icon: <Landmark size={16} color="#E4002B" /> },
+  { name: 'Төрийн банк', color: '#003DA5', icon: <Building2 size={16} color="#003DA5" /> },
 ];
 
 const LOYALTY_POINTS_AVAILABLE = 1500;
@@ -405,7 +406,7 @@ export default function CheckoutPage() {
         <Header />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="bg-[var(--esl-bg-card)] rounded-2xl border border-[var(--esl-border)] p-8 md:p-12 text-center max-w-md w-full shadow-sm">
-            <div className="text-5xl mb-4">🛒</div>
+            <div className="flex justify-center mb-4"><ShoppingCart size={48} className="text-[var(--esl-text-muted)]" strokeWidth={1.5} /></div>
             <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">Сагс хоосон байна</h2>
             <p className="text-[var(--esl-text-muted)] mb-6">
               Захиалга хийхийн тулд эхлээд бараа сонгоно уу.
@@ -537,7 +538,7 @@ export default function CheckoutPage() {
                     <span className="font-semibold text-[var(--esl-text-primary)]">QPay</span>
                     <p className="text-sm text-[var(--esl-text-muted)]">Банкны аппликэйшнээр төлөх</p>
                   </div>
-                  <span className="text-2xl">📱</span>
+                  <Smartphone size={24} className="text-[var(--esl-text-primary)]" />
                 </label>
 
                 <label className="flex items-center gap-3 p-4 rounded-xl border-2 border-[var(--esl-border)] opacity-50 cursor-not-allowed">
@@ -546,7 +547,7 @@ export default function CheckoutPage() {
                     <span className="font-semibold text-[var(--esl-text-disabled)]">Банкны карт</span>
                     <p className="text-sm text-[var(--esl-text-disabled)]">Тун удахгүй нэмэгдэнэ</p>
                   </div>
-                  <span className="text-2xl opacity-50">💳</span>
+                  <CreditCard size={24} className="text-[var(--esl-text-disabled)] opacity-50" />
                 </label>
               </div>
 
@@ -645,7 +646,7 @@ export default function CheckoutPage() {
                       {item.images && item.images.length > 0 ? (
                         <img loading="lazy" src={item.images[0]} alt={item.name} className="w-full h-full object-cover rounded-lg" />
                       ) : (
-                        <span>{item.emoji || '📦'}</span>
+                        <Package size={20} className="text-[var(--esl-text-muted)]" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -668,8 +669,8 @@ export default function CheckoutPage() {
                 }}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold" style={{ color: '#D4A017' }}>
-                    ⭐ {LOYALTY_POINTS_AVAILABLE.toLocaleString()} оноо байна (≈ {formatPrice(LOYALTY_POINTS_AVAILABLE * POINTS_TO_MNT)})
+                  <span className="text-sm font-semibold flex items-center" style={{ color: '#D4A017' }}>
+                    <Star size={14} fill="#D4A017" stroke="#D4A017" style={{ marginRight: 4, flexShrink: 0 }} /> {LOYALTY_POINTS_AVAILABLE.toLocaleString()} оноо байна (≈ {formatPrice(LOYALTY_POINTS_AVAILABLE * POINTS_TO_MNT)})
                   </span>
                 </div>
 

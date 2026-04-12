@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import StatCard from '@/components/dashboard/StatCard';
 import { formatPrice } from '@/lib/utils';
+import {
+  Eye, Wallet, Target, ShoppingCart, TrendingUp, Globe, Trophy,
+} from 'lucide-react';
 
 type Period = 'today' | 'week' | 'month';
 
@@ -59,16 +62,16 @@ export default function AnalyticsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard icon="👁️" label="Хандалт" value={VISITS[period]} gradient="indigo" />
-        <StatCard icon="💰" label="Орлого" value={formatPrice(REVENUE_DATA[period])} gradient="green" />
-        <StatCard icon="🎯" label="Конверс %" value={`${CONVERSION[period]}%`} gradient="pink" />
-        <StatCard icon="🛒" label="Захиалга" value={Math.round(VISITS[period] * CONVERSION[period] / 100)} gradient="amber" />
+        <StatCard icon={<Eye className="w-6 h-6" />} label="Хандалт" value={VISITS[period]} gradient="indigo" />
+        <StatCard icon={<Wallet className="w-6 h-6" />} label="Орлого" value={formatPrice(REVENUE_DATA[period])} gradient="green" />
+        <StatCard icon={<Target className="w-6 h-6" />} label="Конверс %" value={`${CONVERSION[period]}%`} gradient="pink" />
+        <StatCard icon={<ShoppingCart className="w-6 h-6" />} label="Захиалга" value={Math.round(VISITS[period] * CONVERSION[period] / 100)} gradient="amber" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Revenue Chart */}
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">📈 7 хоногийн орлого</h2>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2"><TrendingUp className="w-5 h-5" /> 7 хоногийн орлого</h2>
           <div className="flex items-end gap-2 h-48">
             {WEEKLY_REVENUE.map((val, i) => (
               <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -85,7 +88,7 @@ export default function AnalyticsPage() {
 
         {/* Traffic Sources */}
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6">
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">🌐 Хандалтын эх үүсвэр</h2>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2"><Globe className="w-5 h-5" /> Хандалтын эх үүсвэр</h2>
           <div className="space-y-4">
             {TRAFFIC_SOURCES.map((src) => (
               <div key={src.source}>
@@ -105,7 +108,7 @@ export default function AnalyticsPage() {
       {/* Top Products */}
       <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         <div className="p-6 border-b border-[var(--esl-border)]">
-          <h2 className="text-lg font-bold text-[var(--esl-text-primary)]">🏆 Шилдэг бүтээгдэхүүн (үзэлтээр)</h2>
+          <h2 className="text-lg font-bold text-[var(--esl-text-primary)] flex items-center gap-2"><Trophy className="w-5 h-5" /> Шилдэг бүтээгдэхүүн (үзэлтээр)</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">

@@ -1,6 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, type ReactNode } from 'react';
+import {
+  MessageSquare, Mail, Bell, Radio, Zap, CalendarDays,
+  BarChart3, Send, MailOpen, ShoppingBag,
+} from 'lucide-react';
 
 /* ───────────────────────── types ───────────────────────── */
 
@@ -67,12 +71,12 @@ const CHANNEL_OPTIONS: {
   type: ChannelType;
   label: string;
   price: string;
-  icon: string;
+  icon: ReactNode;
 }[] = [
-  { type: 'SMS', label: 'SMS', price: '50₮/мессеж', icon: '💬' },
-  { type: 'EMAIL', label: 'Имэйл', price: '20₮/имэйл', icon: '📧' },
-  { type: 'PUSH', label: 'Push мэдэгдэл', price: '10₮/хүн', icon: '🔔' },
-  { type: 'MULTI', label: 'Олон суваг', price: 'Нэгдсэн', icon: '📡' },
+  { type: 'SMS', label: 'SMS', price: '50₮/мессеж', icon: <MessageSquare size={28} /> },
+  { type: 'EMAIL', label: 'Имэйл', price: '20₮/имэйл', icon: <Mail size={28} /> },
+  { type: 'PUSH', label: 'Push мэдэгдэл', price: '10₮/хүн', icon: <Bell size={28} /> },
+  { type: 'MULTI', label: 'Олон суваг', price: 'Нэгдсэн', icon: <Radio size={28} /> },
 ];
 
 const AUDIENCE_OPTIONS: {
@@ -575,7 +579,7 @@ export default function CampaignsPage() {
                 {(['NOW', 'SCHEDULED'] as const).map((t) => {
                   const sel = form.scheduleType === t;
                   const label = t === 'NOW' ? 'Одоо илгээх' : 'Хуваарьтай';
-                  const icon = t === 'NOW' ? '⚡' : '📅';
+                  const icon = t === 'NOW' ? <Zap size={32} /> : <CalendarDays size={32} />;
                   return (
                     <button
                       key={t}
@@ -781,10 +785,10 @@ export default function CampaignsPage() {
         {/* stats row */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 28 }}>
           {[
-            { label: 'Нийт кампани', value: totalCampaigns.toString(), icon: '📊' },
-            { label: 'Илгээгдсэн', value: formatNum(totalSent), icon: '📤' },
-            { label: 'Нээсэн (avg %)', value: `${avgOpened}%`, icon: '📬' },
-            { label: 'Захиалга хөрвүүлэлт', value: formatNum(totalConverted), icon: '🛍️' },
+            { label: 'Нийт кампани', value: totalCampaigns.toString(), icon: <BarChart3 size={22} /> },
+            { label: 'Илгээгдсэн', value: formatNum(totalSent), icon: <Send size={22} /> },
+            { label: 'Нээсэн (avg %)', value: `${avgOpened}%`, icon: <MailOpen size={22} /> },
+            { label: 'Захиалга хөрвүүлэлт', value: formatNum(totalConverted), icon: <ShoppingBag size={22} /> },
           ].map((s) => (
             <div key={s.label} style={cardStyle}>
               <div style={{ fontSize: 22, marginBottom: 6 }}>{s.icon}</div>

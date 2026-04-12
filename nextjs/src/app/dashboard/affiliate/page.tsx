@@ -13,6 +13,7 @@ import {
   Copy, Check, Share2, DollarSign,
   Search, Wallet, ArrowUpRight,
   Zap, Users, BarChart3, Megaphone, Gift, Star, ChevronRight, TrendingUp, QrCode,
+  ShoppingBag, Coins, Target, MousePointerClick, Clock,
 } from 'lucide-react';
 import TierProgress from '@/components/affiliate/TierProgress';
 import ConversionFunnel from '@/components/affiliate/ConversionFunnel';
@@ -105,10 +106,10 @@ function CommissionsTab() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon="💰" label="Нийт комисс" value={formatPrice(totalEarned)} gradient="indigo" />
-        <StatCard icon="⏳" label="Хүлээгдэж буй" value={formatPrice(pendingAmount)} gradient="amber" />
-        <StatCard icon="🎯" label="Борлуулалт" value={commissions.length} gradient="green" />
-        <StatCard icon="📊" label="Дундаж комисс" value={commissions.length ? `${Math.round(commissions.reduce((s: number, c: any) => s + (c.commissionRate || 0), 0) / commissions.length)}%` : '—'} gradient="pink" />
+        <StatCard icon={<Wallet className="w-6 h-6" />} label="Нийт комисс" value={formatPrice(totalEarned)} gradient="indigo" />
+        <StatCard icon={<Clock className="w-6 h-6" />} label="Хүлээгдэж буй" value={formatPrice(pendingAmount)} gradient="amber" />
+        <StatCard icon={<Target className="w-6 h-6" />} label="Борлуулалт" value={commissions.length} gradient="green" />
+        <StatCard icon={<BarChart3 className="w-6 h-6" />} label="Дундаж комисс" value={commissions.length ? `${Math.round(commissions.reduce((s: number, c: any) => s + (c.commissionRate || 0), 0) / commissions.length)}%` : '—'} gradient="pink" />
       </div>
 
       {/* Filter */}
@@ -357,10 +358,10 @@ export default function AffiliateDashboard() {
 
               {/* Stat Cards */}
               <motion.div variants={fadeUp} custom={2} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard icon="💰" label="Нийт орлого" value={formatPrice(earnings.totalEarnings || 0)} gradient="indigo" sub="Бүх цагийн" sparkData={earnings.sparkData} />
-                <StatCard icon="📈" label="Энэ сарын" value={formatPrice(earnings.monthlyEarnings || 0)} gradient="pink" sub="Сүүлийн 30 хоног" />
-                <StatCard icon="👆" label="Нийт клик" value={earnings.totalClicks || 0} gradient="green" sub="Линк дарсан" />
-                <StatCard icon="🎯" label="Хөрвүүлэлт" value={`${earnings.conversionRate || 0}%`} gradient="amber" sub="Клик → Захиалга" />
+                <StatCard icon={<Wallet className="w-6 h-6" />} label="Нийт орлого" value={formatPrice(earnings.totalEarnings || 0)} gradient="indigo" sub="Бүх цагийн" sparkData={earnings.sparkData} />
+                <StatCard icon={<TrendingUp className="w-6 h-6" />} label="Энэ сарын" value={formatPrice(earnings.monthlyEarnings || 0)} gradient="pink" sub="Сүүлийн 30 хоног" />
+                <StatCard icon={<MousePointerClick className="w-6 h-6" />} label="Нийт клик" value={earnings.totalClicks || 0} gradient="green" sub="Линк дарсан" />
+                <StatCard icon={<Target className="w-6 h-6" />} label="Хөрвүүлэлт" value={`${earnings.conversionRate || 0}%`} gradient="amber" sub="Клик → Захиалга" />
               </motion.div>
 
               {/* Performance Chart + Recent Earnings */}
@@ -466,7 +467,7 @@ export default function AffiliateDashboard() {
               </div>
 
               {filteredProducts.length === 0 ? (
-                <EmptyState icon="🛍️" title="Бүтээгдэхүүн олдсонгүй" description="Хайлтын үгээ өөрчилж үзнэ үү" />
+                <EmptyState icon={ShoppingBag} title="Бүтээгдэхүүн олдсонгүй" description="Хайлтын үгээ өөрчилж үзнэ үү" />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {filteredProducts.map((p) => (
@@ -584,7 +585,7 @@ export default function AffiliateDashboard() {
                     </table>
                   </div>
                 ) : (
-                  <EmptyState icon="💰" title="Орлого байхгүй" description="Бүтээгдэхүүний линк хуваалцаж орлого олоорой" actionLabel="Бараа үзэх" onAction={() => setTab('products')} />
+                  <EmptyState icon={Coins} title="Орлого байхгүй" description="Бүтээгдэхүүний линк хуваалцаж орлого олоорой" actionLabel="Бараа үзэх" onAction={() => setTab('products')} />
                 )}
               </div>
             </div>

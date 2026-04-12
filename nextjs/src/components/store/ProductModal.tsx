@@ -234,7 +234,7 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                 />
               )
             ) : (
-              <span className="text-8xl">{product.emoji || '📦'}</span>
+              <span className="text-8xl">{product.emoji || <Package className="w-20 h-20 text-[#CBD5E1]" />}</span>
             )}
 
             {/* Nav arrows */}
@@ -540,7 +540,7 @@ export default function ProductModal({ product, onClose, isAffiliate, onShare, o
                     {p.images?.[0] ? (
                       <img loading="lazy" src={p.images[0]} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-2xl">{p.emoji || '📦'}</div>
+                      <div className="w-full h-full flex items-center justify-center text-2xl">{p.emoji || <Package className="w-6 h-6 text-[#CBD5E1]" />}</div>
                     )}
                   </div>
                   <p className="text-[11px] font-semibold text-[var(--esl-text-primary)] line-clamp-1 group-hover:text-[#E24B4A] transition-colors">{p.name}</p>

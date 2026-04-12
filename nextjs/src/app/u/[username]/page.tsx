@@ -12,7 +12,7 @@ import EsellerLogo from '@/components/shared/EsellerLogo';
 import MobileNav from '@/components/shared/MobileNav';
 import { useToast } from '@/components/shared/Toast';
 import Toast from '@/components/shared/Toast';
-import { ShoppingCart, Star, Shield, Truck, Clock } from 'lucide-react';
+import { ShoppingCart, Star, Shield, Truck, Clock, Package } from 'lucide-react';
 
 export default function MicroStorefront() {
   const params = useParams();
@@ -124,7 +124,7 @@ export default function MicroStorefront() {
               {heroProduct.images?.[0] ? (
                 <img loading="lazy" src={heroProduct.images[0]} alt={heroProduct.name} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-8xl">{heroProduct.emoji || '📦'}</span>
+                <Package className="w-20 h-20" style={{ color: 'var(--esl-text-muted)' }} />
               )}
               {heroProduct.salePrice && heroProduct.salePrice < heroProduct.price && (
                 <span className="absolute top-4 left-4 bg-[#E31E24] text-white text-sm font-bold px-3 py-1.5 rounded-xl shadow-md">
@@ -205,7 +205,7 @@ export default function MicroStorefront() {
                       {p.images?.[0] ? (
                         <img loading="lazy" src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
-                        <span className="text-3xl group-hover:scale-110 transition-transform">{p.emoji || '📦'}</span>
+                        <Package className="w-8 h-8 group-hover:scale-110 transition-transform" style={{ color: 'var(--esl-text-muted)' }} />
                       )}
                       {disc > 0 && (
                         <span className="absolute top-2 left-2 bg-[#E31E24] text-white text-[9px] font-bold px-2 py-0.5 rounded-md">-{disc}%</span>

@@ -67,7 +67,7 @@ export default function TrackingPage() {
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <p className="text-sm font-bold" style={{ color: 'var(--esl-text-primary)' }}>📦 Захиалга #{data.orderNumber || data.trackingCode}</p>
+            <p className="text-sm font-bold flex items-center gap-1.5" style={{ color: 'var(--esl-text-primary)' }}><Package className="w-4 h-4" /> Захиалга #{data.orderNumber || data.trackingCode}</p>
             <p className="text-xs" style={{ color: 'var(--esl-text-muted)' }}>Tracking: {data.trackingCode}</p>
           </div>
         </div>

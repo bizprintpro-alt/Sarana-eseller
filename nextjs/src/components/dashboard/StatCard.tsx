@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 
 type Variant = 'primary' | 'success' | 'warning' | 'info';
 // Keep old gradient names for backward compat
 type LegacyGradient = 'indigo' | 'pink' | 'green' | 'amber';
 
 interface StatCardProps {
-  icon: string;
+  icon: ReactNode;
   label: string;
   value: string | number;
   sub?: string;

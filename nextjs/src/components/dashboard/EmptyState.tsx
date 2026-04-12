@@ -1,16 +1,18 @@
+import { Inbox, type LucideIcon } from 'lucide-react';
+
 interface EmptyStateProps {
-  icon: string;
+  icon: LucideIcon;
   title: string;
   description: string;
   actionLabel?: string;
   onAction?: () => void;
 }
 
-export default function EmptyState({ icon, title, description, actionLabel, onAction }: EmptyStateProps) {
+export default function EmptyState({ icon: Icon, title, description, actionLabel, onAction }: EmptyStateProps) {
   return (
     <div className="text-center py-16 px-6 flex flex-col items-center">
-      <div className="w-[120px] h-[120px] rounded-full bg-gradient-to-br from-[rgba(99,102,241,.1)] to-[rgba(139,92,246,.1)] flex items-center justify-center text-5xl mb-5 animate-float">
-        {icon}
+      <div className="w-[120px] h-[120px] rounded-full bg-gradient-to-br from-[rgba(99,102,241,.1)] to-[rgba(139,92,246,.1)] flex items-center justify-center mb-5 animate-float">
+        <Icon className="w-12 h-12 text-[rgba(99,102,241,.6)]" />
       </div>
       <h3 className="text-lg font-extrabold text-white mb-2">{title}</h3>
       <p className="text-sm text-white/40 max-w-xs leading-relaxed mb-5">{description}</p>

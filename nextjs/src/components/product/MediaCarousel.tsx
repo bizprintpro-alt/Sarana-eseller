@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, Play, X, Maximize2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, X, Maximize2, Package, Globe, Ruler } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface MediaItem {
@@ -62,7 +62,7 @@ export default function MediaCarousel({ media, layout = 'carousel', aspectRatio 
   if (allVisual.length === 0) {
     return (
       <div className={cn(aspectRatio, 'bg-[var(--esl-bg-card)] rounded-2xl flex items-center justify-center', className)}>
-        <span className="text-4xl opacity-30">📦</span>
+        <Package className="w-10 h-10 opacity-30" />
       </div>
     );
   }
@@ -107,12 +107,12 @@ export default function MediaCarousel({ media, layout = 'carousel', aspectRatio 
           )}
           {tours.length > 0 && (
             <button onClick={() => setPlayingVideo(tours[0].url)} className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-full text-xs font-medium hover:bg-[var(--esl-bg-muted)] transition-colors">
-              🌐 360° тойрог
+              <Globe size={14} /> 360° тойрог
             </button>
           )}
           {floorPlans.length > 0 && (
             <button onClick={() => setZoomed(floorPlans[0].url)} className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-full text-xs font-medium hover:bg-[var(--esl-bg-muted)] transition-colors">
-              📐 Зураглал
+              <Ruler size={14} /> Зураглал
             </button>
           )}
         </div>
@@ -194,12 +194,12 @@ export default function MediaCarousel({ media, layout = 'carousel', aspectRatio 
         <div className="flex gap-2 mt-3">
           {tours.map((t, i) => (
             <button key={i} onClick={() => setPlayingVideo(t.url)} className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-full text-xs font-medium hover:bg-[var(--esl-bg-muted)] transition-colors">
-              🌐 360° харах
+              <Globe size={14} /> 360° харах
             </button>
           ))}
           {floorPlans.map((f, i) => (
             <button key={i} onClick={() => setZoomed(f.url)} className="flex items-center gap-1.5 px-3 py-1.5 bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-full text-xs font-medium hover:bg-[var(--esl-bg-muted)] transition-colors">
-              📐 Зураглал
+              <Ruler size={14} /> Зураглал
             </button>
           ))}
         </div>

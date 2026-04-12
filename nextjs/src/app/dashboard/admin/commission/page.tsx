@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Save, Calculator, AlertTriangle, TrendingUp } from 'lucide-react';
+import { Save, Calculator, AlertTriangle, TrendingUp, Wallet } from 'lucide-react';
 
 const PLAN_LABELS: Record<string, { label: string; color: string }> = {
   free: { label: 'Үнэгүй', color: '#94A3B8' },
@@ -82,7 +82,7 @@ export default function CommissionPage() {
   return (
     <div>
       <div className="bg-dash-sidebar border-b border-dash-border px-8 py-4">
-        <h1 className="text-white text-lg font-black">💰 Комисс тохиргоо</h1>
+        <h1 className="text-white text-lg font-black flex items-center gap-2"><Wallet className="w-5 h-5" /> Комисс тохиргоо</h1>
         <p className="text-white/35 text-xs mt-0.5">Платформ, affiliate, plan хувь удирдлага</p>
       </div>
 

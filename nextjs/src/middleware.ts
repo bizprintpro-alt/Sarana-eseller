@@ -66,40 +66,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // *.eseller.mn subdomain → rewrite to /s/[slug]
-  if (hostWithoutPort.endsWith('.eseller.mn')) {
-    const slug = hostWithoutPort.replace('.eseller.mn', '');
-    if (slug && slug !== 'www') {
-      const url = req.nextUrl.clone();
-      url.pathname = `/s/${slug}${req.nextUrl.pathname === '/' ? '' : req.nextUrl.pathname}`;
-      return NextResponse.rewrite(url);
-    }
-    return NextResponse.next();
-  }
-
-  // Custom domain → DB lookup → rewrite to /[slug] storefront
-  try {
-    const origin = req.nextUrl.origin;
-    const lookupUrl = new URL('/api/shop-domain-lookup', origin);
-    lookupUrl.searchParams.set('domain', hostWithoutPort);
-
-    const res = await fetch(lookupUrl.toString(), {
-      headers: { 'x-middleware-secret': process.env.MIDDLEWARE_SECRET || 'eseller-internal' },
-    });
-
-    if (res.ok) {
-      const { data } = await res.json();
-      if (data?.slug) {
-        const url = req.nextUrl.clone();
-        // Try storefront slug first, fallback to /s/[slug]
-        const storefrontSlug = data.storefrontSlug || data.slug;
-        url.pathname = `/${storefrontSlug}${req.nextUrl.pathname === '/' ? '' : req.nextUrl.pathname}`;
-        return NextResponse.rewrite(url);
-      }
-    }
-  } catch {
-    // Fall through
-  }
+  // Subdomain + custom domain disabled (beta)
+  // All shops accessible via /s/[slug] or /u/[username]
 
   return NextResponse.next();
 }

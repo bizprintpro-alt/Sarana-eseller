@@ -450,7 +450,7 @@ export default function SellerChatPage() {
               ))}
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
                 <span style={{ color: '#777' }}>Tier</span>
-                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: '#FEFCE8', color: '#854D0E', fontWeight: 500 }}>Алт ⭐</span>
+                <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 99, background: '#FEFCE8', color: '#854D0E', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 2 }}>Алт <Star size={10} style={{ color: '#854D0E' }} /></span>
               </div>
             </div>
 

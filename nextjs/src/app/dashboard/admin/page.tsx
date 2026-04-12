@@ -6,6 +6,10 @@ import { formatPrice, STATUS_MAP } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
 import StatCard from '@/components/dashboard/StatCard';
 import { useToast } from '@/components/shared/Toast';
+import {
+  Wrench, BarChart3, Users, Package, Wallet, Clock,
+  ShoppingBag, Store, Megaphone, Truck,
+} from 'lucide-react';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -44,16 +48,16 @@ export default function AdminDashboard() {
   const pendingOrders = orders.filter((o) => o.status === 'pending').length;
 
   const tabs = [
-    { id: 'dashboard', label: '📊 Самбар' },
-    { id: 'users', label: '👥 Хэрэглэгчид' },
-    { id: 'orders', label: '📦 Захиалгууд' },
-    { id: 'commission', label: '💰 Комисс' },
+    { id: 'dashboard', label: 'Самбар', icon: BarChart3 },
+    { id: 'users', label: 'Хэрэглэгчид', icon: Users },
+    { id: 'orders', label: 'Захиалгууд', icon: Package },
+    { id: 'commission', label: 'Комисс', icon: Wallet },
   ] as const;
 
   async function updateOrderStatus(id: string, status: string) {
     try {
       await OrdersAPI.updateStatus(id, status);
-      toast.show('✅ Төлөв шинэчлэгдлээ');
+      toast.show('Төлөв шинэчлэгдлээ', 'ok');
       loadData();
     } catch { toast.show('Алдаа гарлаа', 'error'); }
   }
@@ -61,7 +65,7 @@ export default function AdminDashboard() {
   async function saveCommission() {
     try {
       await AdminAPI.updateCommission(commission);
-      toast.show('✅ Комисс хадгалагдлаа');
+      toast.show('Комисс хадгалагдлаа', 'ok');
     } catch { toast.show('Алдаа гарлаа', 'error'); }
   }
 
@@ -69,7 +73,7 @@ export default function AdminDashboard() {
     <div>
       {/* Topbar */}
       <div className="bg-dash-sidebar border-b border-dash-border px-8 py-4">
-        <h1 className="text-white text-lg font-black">🔧 Админ самбар</h1>
+        <h1 className="text-white text-lg font-black flex items-center gap-2"><Wrench className="w-5 h-5" /> Админ самбар</h1>
         <p className="text-white/35 text-xs mt-0.5">Платформын удирдлага</p>
       </div>
 
@@ -80,11 +84,11 @@ export default function AdminDashboard() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`px-5 py-2 rounded-xl text-sm font-bold border-none cursor-pointer transition-all ${
+              className={`flex items-center gap-1.5 px-5 py-2 rounded-xl text-sm font-bold border-none cursor-pointer transition-all ${
                 tab === t.id ? 'bg-dash-accent text-white' : 'bg-transparent text-white/40 hover:text-white/70'
               }`}
             >
-              {t.label}
+              <t.icon className="w-4 h-4" /> {t.label}
             </button>
           ))}
         </div>
@@ -95,17 +99,17 @@ export default function AdminDashboard() {
         {tab === 'dashboard' && (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <StatCard icon="💰" label="Нийт орлого" value={formatPrice(totalRevenue)} gradient="indigo" animate={false} />
-              <StatCard icon="📦" label="Нийт захиалга" value={totalOrders} gradient="pink" />
-              <StatCard icon="👥" label="Хэрэглэгчид" value={totalUsers} gradient="green" />
-              <StatCard icon="⏳" label="Хүлээгдэж буй" value={pendingOrders} gradient="amber" />
+              <StatCard icon={<Wallet className="w-6 h-6" />} label="Нийт орлого" value={formatPrice(totalRevenue)} gradient="indigo" animate={false} />
+              <StatCard icon={<Package className="w-6 h-6" />} label="Нийт захиалга" value={totalOrders} gradient="pink" />
+              <StatCard icon={<Users className="w-6 h-6" />} label="Хэрэглэгчид" value={totalUsers} gradient="green" />
+              <StatCard icon={<Clock className="w-6 h-6" />} label="Хүлээгдэж буй" value={pendingOrders} gradient="amber" />
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">
               {/* Recent orders */}
               <div className="bg-dash-card border border-dash-border rounded-2xl">
                 <div className="px-6 py-4 border-b border-dash-border">
-                  <h3 className="text-white/80 text-sm font-bold">🕐 Сүүлийн захиалгууд</h3>
+                  <h3 className="text-white/80 text-sm font-bold flex items-center gap-1.5"><Clock className="w-4 h-4" /> Сүүлийн захиалгууд</h3>
                 </div>
                 <div className="p-4 space-y-2">
                   {orders.slice(0, 5).map((o) => {
@@ -130,15 +134,16 @@ export default function AdminDashboard() {
               {/* User breakdown */}
               <div className="bg-dash-card border border-dash-border rounded-2xl">
                 <div className="px-6 py-4 border-b border-dash-border">
-                  <h3 className="text-white/80 text-sm font-bold">👥 Хэрэглэгчийн тоо</h3>
+                  <h3 className="text-white/80 text-sm font-bold flex items-center gap-1.5"><Users className="w-4 h-4" /> Хэрэглэгчийн тоо</h3>
                 </div>
                 <div className="p-6 space-y-3">
                   {['buyer', 'seller', 'affiliate', 'delivery', 'admin'].map((role) => {
                     const count = users.filter((u) => u.role === role).length;
-                    const labels: Record<string, string> = { buyer: '🛍️ Худалдан авагч', seller: '🏪 Дэлгүүр эзэн', affiliate: '📢 Борлуулагч', delivery: '🚚 Жолооч', admin: '🔧 Админ' };
+                    const roleIcons: Record<string, React.ReactNode> = { buyer: <ShoppingBag className="w-3.5 h-3.5 inline mr-1" />, seller: <Store className="w-3.5 h-3.5 inline mr-1" />, affiliate: <Megaphone className="w-3.5 h-3.5 inline mr-1" />, delivery: <Truck className="w-3.5 h-3.5 inline mr-1" />, admin: <Wrench className="w-3.5 h-3.5 inline mr-1" /> };
+                    const labels: Record<string, string> = { buyer: 'Худалдан авагч', seller: 'Дэлгүүр эзэн', affiliate: 'Борлуулагч', delivery: 'Жолооч', admin: 'Админ' };
                     return (
                       <div key={role} className="flex items-center justify-between">
-                        <span className="text-sm text-white/60">{labels[role]}</span>
+                        <span className="text-sm text-white/60 flex items-center">{roleIcons[role]}{labels[role]}</span>
                         <span className="text-sm font-bold text-white bg-white/5 px-3 py-1 rounded-lg">{count}</span>
                       </div>
                     );
@@ -228,7 +233,7 @@ export default function AdminDashboard() {
         {tab === 'commission' && (
           <div className="max-w-lg">
             <div className="bg-dash-card border border-dash-border rounded-2xl p-6">
-              <h3 className="text-white font-bold mb-6">💰 Комиссын тохиргоо</h3>
+              <h3 className="text-white font-bold mb-6 flex items-center gap-2"><Wallet className="w-4 h-4" /> Комиссын тохиргоо</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Платформын комисс (%)</label>

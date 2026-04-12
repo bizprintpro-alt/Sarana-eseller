@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { canUseAI } from '@/lib/subscription';
+import { Brain, Lock, TrendingDown, Lightbulb, Sparkles, Tag, BarChart3, Trophy, Users } from 'lucide-react';
 
 const WEEKLY_DATA = [
   { day: 'Дав', sales: 12, revenue: 480000 },
@@ -36,12 +37,12 @@ export default function AIAnalyticsPage() {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl p-8 text-center text-white mb-6">
-          <span className="text-4xl mb-3 block">🧠</span>
+          <span className="text-4xl mb-3 block"><Brain className="w-10 h-10 mx-auto" /></span>
           <h1 className="text-2xl font-bold">AI Борлуулалтын зөвлөгч</h1>
           <p className="opacity-90 mt-1">Ухаалаг шинжилгээ, зөвлөмж, урьдчилсан таамаглал</p>
         </div>
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-8 text-center max-w-lg mx-auto">
-          <span className="text-5xl block mb-4">🔒</span>
+          <span className="text-5xl block mb-4"><Lock className="w-12 h-12 mx-auto" /></span>
           <h2 className="text-xl font-bold text-[var(--esl-text-primary)] mb-2">AI боломж хязгаарлагдсан</h2>
           <p className="text-[var(--esl-text-secondary)] mb-4">Энэ боломжийг ашиглахын тулд Стандарт эсвэл дээш багц руу шилжинэ үү.</p>
           <a href="/dashboard/store/package" className="inline-block bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition">
@@ -56,7 +57,7 @@ export default function AIAnalyticsPage() {
     <div className="min-h-screen bg-[var(--esl-bg-section)] p-4 md:p-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl p-6 mb-6 text-white">
-        <h1 className="text-2xl font-bold">🧠 AI Борлуулалтын зөвлөгч</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-2"><Brain className="w-7 h-7" /> AI Борлуулалтын зөвлөгч</h1>
         <p className="opacity-90 text-sm mt-1">Таны борлуулалтын мэдээллийг шинжилж, ухаалаг зөвлөмж өгнө</p>
       </div>
 
@@ -66,7 +67,7 @@ export default function AIAnalyticsPage() {
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-              <span className="text-lg">📉</span>
+              <TrendingDown className="w-5 h-5 text-red-500" />
             </div>
             <div>
               <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Борлуулалт 15% буурсан</h3>
@@ -85,7 +86,7 @@ export default function AIAnalyticsPage() {
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-              <span className="text-lg">💡</span>
+              <Lightbulb className="w-5 h-5 text-green-500" />
             </div>
             <div>
               <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Шилдэг 3 бараагаа 10% хямдруулвал 25% өсөлт гарна</h3>
@@ -104,7 +105,7 @@ export default function AIAnalyticsPage() {
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-              <span className="text-lg">🔮</span>
+              <Sparkles className="w-5 h-5 text-blue-500" />
             </div>
             <div>
               <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Ирэх 7 хоногт 45 захиалга хүлээгдэж байна</h3>
@@ -123,7 +124,7 @@ export default function AIAnalyticsPage() {
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
-              <span className="text-lg">🏷️</span>
+              <Tag className="w-5 h-5 text-amber-500" />
             </div>
             <div>
               <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Хямдралтай бараа нэмэх нь +30% борлуулалтыг нэмэгдүүлнэ</h3>
@@ -183,7 +184,7 @@ export default function AIAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg">📊</span>
+            <BarChart3 className="w-5 h-5" />
             <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Хамгийн эрэлттэй цаг</h3>
           </div>
           <p className="text-3xl font-black text-[var(--esl-text-primary)]">14:00-18:00</p>
@@ -195,7 +196,7 @@ export default function AIAnalyticsPage() {
 
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg">🏆</span>
+            <Trophy className="w-5 h-5" />
             <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Шилдэг ангилал</h3>
           </div>
           <p className="text-3xl font-black text-[var(--esl-text-primary)]">Хувцас</p>
@@ -207,7 +208,7 @@ export default function AIAnalyticsPage() {
 
         <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-5">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg">👥</span>
+            <Users className="w-5 h-5" />
             <h3 className="font-bold text-[var(--esl-text-primary)] text-sm">Давтан худалдан авалт</h3>
           </div>
           <p className="text-3xl font-black text-[var(--esl-text-primary)]">23%</p>

@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/lib/api-auth'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const admin = requireAdmin(req);
+  if (admin instanceof NextResponse) return admin;
+
   const partners = await prisma.partnerCompany.findMany({
     include: {
       _count: { select: { agents: true, listings: true, commissions: true } },
@@ -20,6 +24,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const admin = requireAdmin(req);
+  if (admin instanceof NextResponse) return admin;
+
   const body = await req.json()
 
   const partner = await prisma.partnerCompany.create({

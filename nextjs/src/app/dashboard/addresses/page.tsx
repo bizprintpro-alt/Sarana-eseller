@@ -137,7 +137,7 @@ export default function AddressesPage() {
 
       {/* Addresses list */}
       {addresses.length === 0 ? (
-        <EmptyState icon="📍" title="Хаяг байхгүй байна" desc="Хүргэлтийн хаяг нэмнэ үү" action="Хаяг нэмэх" actionHref="#" />
+        <EmptyState icon={MapPin} title="Хаяг байхгүй байна" desc="Хүргэлтийн хаяг нэмнэ үү" action="Хаяг нэмэх" actionHref="#" />
       ) : (
         <div className="space-y-3">
           {addresses.map((a, i) => (

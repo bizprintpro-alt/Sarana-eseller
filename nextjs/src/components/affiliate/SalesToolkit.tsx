@@ -8,6 +8,8 @@ import {
   ChevronDown, HelpCircle, Sparkles, Shield,
   Image, FileText, GraduationCap, Play, Eye, ShoppingCart,
   MousePointerClick, ExternalLink, Smartphone, MessageCircle,
+  Hash, Camera, Music, MessageSquare, Bird, ClipboardCopy,
+  type LucideIcon,
 } from 'lucide-react';
 
 interface SalesToolkitProps {
@@ -26,13 +28,13 @@ const LIVE_STATS = [
   { icon: Check, label: 'Худалдан авсан', value: 1, color: '#10B981', trend: 'Шинэ!' },
 ];
 
-const SHARE_CHANNELS = [
-  { name: 'Messenger', icon: '💬', color: '#0084FF', url: 'https://m.me/?ref=' },
-  { name: 'Facebook', icon: '📱', color: '#1877F2', url: 'https://www.facebook.com/sharer/sharer.php?u=' },
-  { name: 'Instagram', icon: '📸', color: '#E4405F', url: 'https://instagram.com' },
-  { name: 'TikTok', icon: '🎵', color: '#010101', url: 'https://tiktok.com' },
-  { name: 'WhatsApp', icon: '📩', color: '#25D366', url: 'https://wa.me/?text=' },
-  { name: 'Twitter/X', icon: '🐦', color: '#1DA1F2', url: 'https://twitter.com/intent/tweet?url=' },
+const SHARE_CHANNELS: { name: string; icon: LucideIcon; color: string; url: string }[] = [
+  { name: 'Messenger', icon: MessageSquare, color: '#0084FF', url: 'https://m.me/?ref=' },
+  { name: 'Facebook', icon: Hash, color: '#1877F2', url: 'https://www.facebook.com/sharer/sharer.php?u=' },
+  { name: 'Instagram', icon: Camera, color: '#E4405F', url: 'https://instagram.com' },
+  { name: 'TikTok', icon: Music, color: '#010101', url: 'https://tiktok.com' },
+  { name: 'WhatsApp', icon: MessageCircle, color: '#25D366', url: 'https://wa.me/?text=' },
+  { name: 'Twitter/X', icon: Bird, color: '#1DA1F2', url: 'https://twitter.com/intent/tweet?url=' },
 ];
 
 const CREATIVE_POSTERS = [
@@ -159,7 +161,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
               className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--esl-border)] hover:shadow-md hover:-translate-y-1 transition-all no-underline group"
             >
               <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl transition-transform group-hover:scale-110" style={{ background: ch.color + '10' }}>
-                {ch.icon}
+                <ch.icon className="w-5 h-5" style={{ color: ch.color }} />
               </div>
               <span className="text-[10px] font-semibold text-[var(--esl-text-secondary)]">{ch.name}</span>
             </a>
@@ -331,7 +333,7 @@ export default function SalesToolkit({ refLink, username, onCopy, copiedId }: Sa
                               className={cn('mt-2 text-[10px] font-bold px-2.5 py-1 rounded-md transition-all border-none cursor-pointer',
                                 copiedId === `faq-${i}` ? 'bg-emerald-100 text-emerald-600' : 'bg-[var(--esl-bg-card)] text-[#6366F1] hover:bg-[#6366F1] hover:text-white')}
                             >
-                              {copiedId === `faq-${i}` ? '✓ Хуулсан' : '📋 Хуулах'}
+                              {copiedId === `faq-${i}` ? <><Check className="w-3 h-3 inline-block mr-0.5" /> Хуулсан</> : <><ClipboardCopy className="w-3 h-3 inline-block mr-0.5" /> Хуулах</>}
                             </button>
                           </div>
                         </div>

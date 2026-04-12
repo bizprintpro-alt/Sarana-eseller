@@ -11,7 +11,7 @@ import {
   MapPin, Phone, Star, Shield,
   Calendar, MessageCircle, Clock, Award, Heart,
   Share2, Fuel, Gauge, DoorOpen, Ruler, CheckCircle2,
-  Mail, Globe, X,
+  Mail, Globe, X, Search, Camera, BookOpen,
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════════
@@ -367,7 +367,7 @@ export default function EntityProfilePage() {
     return (
       <div className="min-h-screen bg-[var(--esl-bg-page)] flex items-center justify-center">
         <div className="text-center">
-          <div className="text-6xl mb-4">🔍</div>
+          <Search className="w-16 h-16 mb-4 mx-auto" style={{ color: 'var(--esl-text-muted)' }} />
           <h2 className="text-xl font-black text-white mb-2">Олдсонгүй</h2>
           <p className="text-sm text-[var(--esl-text-muted)] mb-4">Энэ хуудас байхгүй эсвэл устсан байна</p>
           <Link href="/feed" className="text-sm text-[#E8242C] font-bold no-underline hover:underline">← Зарын булан руу</Link>
@@ -722,8 +722,8 @@ export default function EntityProfilePage() {
                 {entity.email && <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)]"><Mail className="w-4 h-4 text-[var(--esl-text-muted)]" /> {entity.email}</div>}
                 {entity.website && <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)]"><Globe className="w-4 h-4 text-[var(--esl-text-muted)]" /> {entity.website}</div>}
                 {entity.district && <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)]"><MapPin className="w-4 h-4 text-[var(--esl-text-muted)]" /> {entity.district} дүүрэг</div>}
-                {entity.social?.ig && <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)]"><span className="text-sm">📷</span> {entity.social.ig}</div>}
-                {entity.social?.fb && <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)]"><span className="text-sm">📘</span> {entity.social.fb}</div>}
+                {entity.social?.ig && <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)]"><Camera className="w-4 h-4 text-[var(--esl-text-muted)]" /> {entity.social.ig}</div>}
+                {entity.social?.fb && <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)]"><BookOpen className="w-4 h-4 text-[var(--esl-text-muted)]" /> {entity.social.fb}</div>}
               </div>
             </div>
           </div>

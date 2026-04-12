@@ -4,6 +4,10 @@ import { useState, useEffect, useMemo } from 'react';
 import { OrdersAPI, Order } from '@/lib/api';
 import { formatPrice, timeAgo } from '@/lib/utils';
 import StatCard from '@/components/dashboard/StatCard';
+import {
+  Wallet, CalendarDays, Clock, Landmark, BadgeDollarSign,
+  CheckCircle,
+} from 'lucide-react';
 
 const MOCK_ORDERS: Order[] = [
   { _id: '1', orderNumber: 'ORD-1001', user: { name: 'Бат-Эрдэнэ' }, total: 70000, status: 'delivered', createdAt: '2026-04-02T10:00:00Z' },
@@ -75,10 +79,10 @@ export default function RevenuePage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard icon="💰" label="Нийт орлого" value={formatPrice(stats.totalRevenue)} gradient="green" />
-        <StatCard icon="📅" label="Энэ сарын" value={formatPrice(stats.thisMonth)} gradient="indigo" />
-        <StatCard icon="⏳" label="Хүлээгдэж буй" value={formatPrice(stats.pending)} gradient="amber" />
-        <StatCard icon="🏦" label="Татсан" value={formatPrice(stats.withdrawn)} gradient="pink" />
+        <StatCard icon={<Wallet className="w-6 h-6" />} label="Нийт орлого" value={formatPrice(stats.totalRevenue)} gradient="green" />
+        <StatCard icon={<CalendarDays className="w-6 h-6" />} label="Энэ сарын" value={formatPrice(stats.thisMonth)} gradient="indigo" />
+        <StatCard icon={<Clock className="w-6 h-6" />} label="Хүлээгдэж буй" value={formatPrice(stats.pending)} gradient="amber" />
+        <StatCard icon={<Landmark className="w-6 h-6" />} label="Татсан" value={formatPrice(stats.withdrawn)} gradient="pink" />
       </div>
 
       {/* Revenue Summary */}
@@ -87,7 +91,7 @@ export default function RevenuePage() {
           <h2 className="text-lg font-bold text-[var(--esl-text-primary)] mb-4">Орлогын түүх</h2>
           {revenueHistory.length === 0 ? (
             <div className="p-8 text-center">
-              <div className="text-3xl mb-2">💸</div>
+              <BadgeDollarSign className="w-8 h-8 mb-2 mx-auto" />
               <p className="text-[var(--esl-text-muted)]">Одоогоор орлого бүртгэгдээгүй байна</p>
             </div>
           ) : (
@@ -98,7 +102,7 @@ export default function RevenuePage() {
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
                       order.status === 'delivered' ? 'bg-green-100' : 'bg-amber-100'
                     }`}>
-                      {order.status === 'delivered' ? '✅' : '⏳'}
+                      {order.status === 'delivered' ? <CheckCircle className="w-5 h-5 text-green-600" /> : <Clock className="w-5 h-5 text-amber-600" />}
                     </div>
                     <div>
                       <p className="text-sm font-medium text-[var(--esl-text-primary)]">

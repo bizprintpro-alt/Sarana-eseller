@@ -4,20 +4,21 @@ import { useState } from 'react';
 import Link from 'next/link';
 import EsellerLogo from '@/components/shared/EsellerLogo';
 import MobileNav from '@/components/shared/MobileNav';
+import { Truck, Star, Zap, Gem, Gift, RefreshCw, MessageCircle, Cake, Check } from 'lucide-react';
 
 /* ───────── helpers ───────── */
 const fmt = (n: number) => n.toLocaleString('mn-MN');
 
 /* ───────── data ───────── */
 const benefits = [
-  { icon: '🚚', color: '#22C55E', title: 'Үнэгүй хүргэлт', desc: 'Бүх захиалгад хүргэлтийн төлбөргүй. Хэдэн ч удаа захиалсан хамаагүй.' },
-  { icon: '⭐', color: '#F59E0B', title: 'Оноо 2x', desc: 'Худалдан авалт бүрд 2 дахин их оноо цуглуулна.' },
-  { icon: '⚡', color: '#E8242C', title: 'Flash sale +2 цаг', desc: 'Flash sale эхлэхээс 2 цагийн өмнө нэвтрэх эрх.' },
-  { icon: '💎', color: '#FFD700', title: '5-10% нэмэлт хямдрал', desc: 'Сонгосон бүтээгдэхүүнүүдэд нэмэлт хямдрал авна.' },
-  { icon: '🎁', color: '#7F77DD', title: 'Сар бүр 500 бонус оноо', desc: 'Сар бүр автоматаар 500 бонус оноо нэмэгдэнэ.' },
-  { icon: '🔄', color: '#3B82F6', title: 'Эхний 3 буцаалт үнэгүй', desc: 'Жилд 3 удаагийн буцаалтын хүргэлт үнэгүй.' },
-  { icon: '💬', color: '#1D9E75', title: 'Тусгайлсан дэмжлэг', desc: 'Gold гишүүдэд зориулсан тусгай хэрэглэгчийн дэмжлэг.' },
-  { icon: '🎂', color: '#E8242C', title: 'Төрсөн өдрийн бонус', desc: 'Төрсөн өдрийн сард тусгай урамшуулал болон бонус оноо.' },
+  { icon: Truck, color: '#22C55E', title: 'Үнэгүй хүргэлт', desc: 'Бүх захиалгад хүргэлтийн төлбөргүй. Хэдэн ч удаа захиалсан хамаагүй.' },
+  { icon: Star, color: '#F59E0B', title: 'Оноо 2x', desc: 'Худалдан авалт бүрд 2 дахин их оноо цуглуулна.' },
+  { icon: Zap, color: '#E8242C', title: 'Flash sale +2 цаг', desc: 'Flash sale эхлэхээс 2 цагийн өмнө нэвтрэх эрх.' },
+  { icon: Gem, color: '#FFD700', title: '5-10% нэмэлт хямдрал', desc: 'Сонгосон бүтээгдэхүүнүүдэд нэмэлт хямдрал авна.' },
+  { icon: Gift, color: '#7F77DD', title: 'Сар бүр 500 бонус оноо', desc: 'Сар бүр автоматаар 500 бонус оноо нэмэгдэнэ.' },
+  { icon: RefreshCw, color: '#3B82F6', title: 'Эхний 3 буцаалт үнэгүй', desc: 'Жилд 3 удаагийн буцаалтын хүргэлт үнэгүй.' },
+  { icon: MessageCircle, color: '#1D9E75', title: 'Тусгайлсан дэмжлэг', desc: 'Gold гишүүдэд зориулсан тусгай хэрэглэгчийн дэмжлэг.' },
+  { icon: Cake, color: '#E8242C', title: 'Төрсөн өдрийн бонус', desc: 'Төрсөн өдрийн сард тусгай урамшуулал болон бонус оноо.' },
 ];
 
 const plans = [
@@ -129,8 +130,8 @@ export default function GoldPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
             {benefits.map((b) => (
               <div key={b.title} style={{ background: 'var(--esl-bg-section)', borderRadius: 14, padding: 24, border: '1px solid #1F1F1F' }}>
-                <div style={{ width: 44, height: 44, borderRadius: 10, background: `${b.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 14 }}>
-                  {b.icon}
+                <div style={{ width: 44, height: 44, borderRadius: 10, background: `${b.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
+                  <b.icon style={{ width: 22, height: 22, color: b.color }} />
                 </div>
                 <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff', margin: '0 0 6px' }}>{b.title}</h3>
                 <p style={{ fontSize: 13, color: '#737373', lineHeight: 1.6, margin: 0 }}>{b.desc}</p>
@@ -181,7 +182,7 @@ export default function GoldPage() {
                 <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px' }}>
                   {p.features.map((f) => (
                     <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#A3A3A3', marginBottom: 10 }}>
-                      <span style={{ color: '#22C55E', fontSize: 15 }}>✓</span>{f}
+                      <Check style={{ width: 15, height: 15, color: '#22C55E', flexShrink: 0 }} />{f}
                     </li>
                   ))}
                 </ul>

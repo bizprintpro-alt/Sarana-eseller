@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { OrdersAPI, Order } from '@/lib/api';
 import { formatPrice, timeAgo } from '@/lib/utils';
 import StatCard from '@/components/dashboard/StatCard';
+import { Users, UserPlus, RefreshCw, Search } from 'lucide-react';
 
 interface Customer {
   name: string;
@@ -101,16 +102,16 @@ export default function CustomersPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <StatCard icon="👥" label="Нийт харилцагч" value={stats.total} gradient="indigo" />
-        <StatCard icon="🆕" label="Энэ сард шинэ" value={stats.newThisMonth} gradient="pink" />
-        <StatCard icon="🔄" label="Давтан худалдан авагч" value={stats.repeatBuyers} gradient="green" />
+        <StatCard icon={<Users className="w-6 h-6" />} label="Нийт харилцагч" value={stats.total} gradient="indigo" />
+        <StatCard icon={<UserPlus className="w-6 h-6" />} label="Энэ сард шинэ" value={stats.newThisMonth} gradient="pink" />
+        <StatCard icon={<RefreshCw className="w-6 h-6" />} label="Давтан худалдан авагч" value={stats.repeatBuyers} gradient="green" />
       </div>
 
       {/* Search */}
       <div className="mb-4">
         <input
           type="text"
-          placeholder="🔍 Харилцагч хайх..."
+          placeholder="Харилцагч хайх..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full max-w-md px-4 py-2.5 border border-[var(--esl-border)] rounded-lg bg-[var(--esl-bg-card)] text-[var(--esl-text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -121,7 +122,7 @@ export default function CustomersPage() {
       <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="p-12 text-center">
-            <div className="text-4xl mb-3">👥</div>
+            <div className="mb-3"><Users className="w-10 h-10 mx-auto" /></div>
             <h3 className="text-lg font-semibold text-[var(--esl-text-primary)]">Харилцагч олдсонгүй</h3>
             <p className="text-[var(--esl-text-muted)] mt-1">Захиалга орсны дараа харилцагчид энд харагдана</p>
           </div>

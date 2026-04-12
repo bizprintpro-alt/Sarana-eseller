@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { Package, MapPin } from 'lucide-react';
 
 export default function FeedPreview({ posts }: { posts: any[] }) {
   return (
@@ -29,7 +30,9 @@ export default function FeedPreview({ posts }: { posts: any[] }) {
                   {post.media?.[0]?.url ? (
                     <img src={post.media[0].url} alt={post.title} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[40px]">📦</div>
+                    <div className="w-full h-full flex items-center justify-center text-[var(--esl-text-muted)]">
+                      <Package size={40} />
+                    </div>
                   )}
                   {post.category && (
                     <div className="absolute top-2 left-2 bg-black/60 text-white text-[11px] px-2 py-0.5 rounded-md">
@@ -44,7 +47,9 @@ export default function FeedPreview({ posts }: { posts: any[] }) {
                       {post.price ? post.price.toLocaleString() + '₮' : 'Үнэ тохиролцоно'}
                     </span>
                     {post.district && (
-                      <span className="text-[var(--esl-text-muted)] text-xs">📍 {post.district}</span>
+                      <span className="text-[var(--esl-text-muted)] text-xs inline-flex items-center gap-0.5">
+                        <MapPin size={12} /> {post.district}
+                      </span>
                     )}
                   </div>
                 </div>

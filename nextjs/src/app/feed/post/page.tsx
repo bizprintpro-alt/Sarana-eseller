@@ -8,20 +8,22 @@ import {
   Camera, X, Crown, Info, ArrowLeft, Send, Play, Video,
   MapPin, Phone, Eye, Clock,
   ImageIcon, ChevronLeft, ChevronRight, BadgeCheck,
+  Home, Car, Smartphone, Shirt, Sofa, Wrench, Baby, Dumbbell, Sparkles, Package, User,
 } from 'lucide-react';
+import { type LucideIcon } from 'lucide-react';
 import CategorySelector from '@/components/shared/CategorySelector';
 
 const CATEGORIES = [
-  { key: 'apartment', label: 'Орон сууц', emoji: '🏠' },
-  { key: 'auto', label: 'Авто', emoji: '🚗' },
-  { key: 'electronics', label: 'Электроник', emoji: '📱' },
-  { key: 'fashion', label: 'Хувцас', emoji: '👗' },
-  { key: 'furniture', label: 'Тавилга', emoji: '🛋️' },
-  { key: 'services', label: 'Үйлчилгээ', emoji: '🔧' },
-  { key: 'kids', label: 'Хүүхэд', emoji: '🧸' },
-  { key: 'sports', label: 'Спорт', emoji: '⚽' },
-  { key: 'beauty', label: 'Гоо сайхан', emoji: '💄' },
-  { key: 'other', label: 'Бусад', emoji: '📦' },
+  { key: 'apartment', label: 'Орон сууц', icon: Home },
+  { key: 'auto', label: 'Авто', icon: Car },
+  { key: 'electronics', label: 'Электроник', icon: Smartphone },
+  { key: 'fashion', label: 'Хувцас', icon: Shirt },
+  { key: 'furniture', label: 'Тавилга', icon: Sofa },
+  { key: 'services', label: 'Үйлчилгээ', icon: Wrench },
+  { key: 'kids', label: 'Хүүхэд', icon: Baby },
+  { key: 'sports', label: 'Спорт', icon: Dumbbell },
+  { key: 'beauty', label: 'Гоо сайхан', icon: Sparkles },
+  { key: 'other', label: 'Бусад', icon: Package },
 ];
 
 const DISTRICTS = ['СБД', 'ХУД', 'БЗД', 'ЧД', 'БГД', 'СХД', 'НД', 'БНД', 'Багахангай'];
@@ -164,12 +166,12 @@ export default function PostAdPage() {
                   )
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <span className="text-6xl">{catInfo?.emoji || '📦'}</span>
+                    {(() => { const CatIcon = catInfo?.icon || Package; return <CatIcon className="w-14 h-14 text-[var(--esl-text-muted)]" />; })()}
                   </div>
                 )}
                 {isVip && (
                   <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-[rgba(212,175,55,0.2)] text-[#D4AF37]">
-                    👑 ВИП
+                    <Crown className="w-3.5 h-3.5" /> ВИП
                   </div>
                 )}
                 {mediaFiles.length > 1 && (
@@ -181,7 +183,7 @@ export default function PostAdPage() {
               </div>
               <div className="flex-1 p-4 sm:p-5">
                 <div className="flex items-center gap-2 text-xs text-[var(--esl-text-muted)] mb-2">
-                  <span>👤 Та</span>
+                  <span className="flex items-center gap-1"><User className="w-3.5 h-3.5" /> Та</span>
                   {district && <><span className="text-[#3D3D3D]">·</span><span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{district}</span></>}
                 </div>
                 <h3 className={`text-base font-extrabold mb-1.5 leading-snug ${isVip ? 'text-[#FFD700]' : 'text-white'}`}>{title || 'Гарчиг...'}</h3>
@@ -215,7 +217,7 @@ export default function PostAdPage() {
                 )
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-8xl">{catInfo?.emoji || '📦'}</span>
+                  {(() => { const CatIcon = catInfo?.icon || Package; return <CatIcon className="w-20 h-20 text-[var(--esl-text-muted)]" />; })()}
                 </div>
               )}
               {mediaFiles.length > 1 && (
@@ -257,7 +259,7 @@ export default function PostAdPage() {
               )}
               {isVip && (
                 <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold bg-[rgba(212,175,55,0.25)] text-[#D4AF37]" style={{ backdropFilter: 'blur(8px)' }}>
-                  👑 ВИП
+                  <Crown className="w-4 h-4" /> ВИП
                 </div>
               )}
             </div>
@@ -265,7 +267,7 @@ export default function PostAdPage() {
             {/* Detail content */}
             <div className="p-6">
               <div className="flex items-center gap-2 text-sm text-[var(--esl-text-muted)] mb-3">
-                <span>👤</span>
+                <User className="w-4 h-4" />
                 <span className="font-semibold text-[var(--esl-text-secondary)]">Та</span>
                 <span className="text-[#3D3D3D]">·</span>
                 <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{district || '—'}</span>
@@ -556,7 +558,7 @@ export default function PostAdPage() {
               : 'bg-[var(--esl-bg-card)] border-[rgba(212,175,55,0.25)] hover:border-[rgba(212,175,55,0.5)]'
           }`}
         >
-          <span className="text-3xl">👑</span>
+          <Crown className="w-8 h-8 text-[#FFD700]" />
           <div className="flex-1">
             <p className="text-sm font-extrabold text-[#FFD700]">ВИП зар болгох</p>
             <p className="text-xs text-[#999] mt-1">Зарыг дээд талд байрлуулж, илүү олон хүнд харуулна</p>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { canAddBranch, getCurrentPlan } from '@/lib/subscription';
+import { Store, MapPin, Phone, User, Clock } from 'lucide-react';
 
 interface Branch {
   id: string;
@@ -140,7 +141,7 @@ export default function BranchesPage() {
       <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] p-6 mb-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🏪</span>
+            <Store className="w-7 h-7 text-indigo-600" />
             <div>
               <h1 className="text-2xl font-bold text-[var(--esl-text-primary)]">Салбар удирдлага</h1>
               <p className="text-[var(--esl-text-secondary)] text-sm">Дэлгүүрийн салбаруудыг удирдах ({branches.length}/{plan.limits.maxBranches === -1 ? '∞' : plan.limits.maxBranches})</p>

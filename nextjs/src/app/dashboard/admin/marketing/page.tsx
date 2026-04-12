@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Send, MessageSquare, Mail, Bell, Sparkles, Loader2 } from 'lucide-react';
+import { Send, MessageSquare, Mail, Bell, Sparkles, Loader2, Megaphone, ClipboardList } from 'lucide-react';
 
 interface Campaign {
   id: string; type: string; title: string; body: string;
@@ -69,7 +69,7 @@ export default function MarketingPage() {
   return (
     <div>
       <div className="bg-dash-sidebar border-b border-dash-border px-8 py-4">
-        <h1 className="text-white text-lg font-black">📢 Маркетинг кампани</h1>
+        <h1 className="text-white text-lg font-black flex items-center gap-2"><Megaphone className="w-5 h-5" /> Маркетинг кампани</h1>
         <p className="text-white/35 text-xs mt-0.5">SMS / Email / Push — Claude AI текст генерацтай</p>
       </div>
 
@@ -142,7 +142,7 @@ export default function MarketingPage() {
           {/* Campaign history */}
           <div className="bg-dash-card border border-dash-border rounded-2xl overflow-hidden">
             <div className="px-6 py-4 border-b border-dash-border">
-              <h3 className="text-white/80 text-sm font-bold">📋 Өмнөх кампаниуд</h3>
+              <h3 className="text-white/80 text-sm font-bold flex items-center gap-1.5"><ClipboardList className="w-4 h-4" /> Өмнөх кампаниуд</h3>
             </div>
             <div className="divide-y divide-white/[.04]">
               {loading ? (

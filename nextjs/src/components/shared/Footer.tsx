@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Phone, Mail } from 'lucide-react';
 
 const FOOTER_LINKS: Record<string, { name: string; href: string }[]> = {
   'Платформ': [
@@ -33,8 +34,8 @@ export default function Footer() {
             </div>
             <p className="text-sm text-white/30 mb-4">Монголын нэгдсэн цахим зах</p>
             <div className="flex flex-col gap-2 text-sm text-white/40">
-              <span>📞 7XXX-XXXX</span>
-              <span>✉️ info@eseller.mn</span>
+              <span className="flex items-center gap-1.5"><Phone size={13} /> 7XXX-XXXX</span>
+              <span className="flex items-center gap-1.5"><Mail size={13} /> info@eseller.mn</span>
             </div>
             <div className="flex gap-3 mt-4">
               <a href="https://facebook.com/eseller.mn" target="_blank" rel="noopener noreferrer"

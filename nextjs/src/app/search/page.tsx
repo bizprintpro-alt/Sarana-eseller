@@ -3,15 +3,15 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Search, SlidersHorizontal, Grid3X3, List, Loader2, X } from 'lucide-react';
+import { Search, SlidersHorizontal, Grid3X3, List, Loader2, X, Store, Home, Car, BellRing, Star, Package } from 'lucide-react';
 import SearchBar from '@/components/search/SearchBar';
 
 const DISTRICTS = ['СБД', 'БЗД', 'ЧД', 'ХУД', 'СХД', 'БГД', 'НД', 'БНД', 'ХНД'];
 const ENTITY_TYPES = [
-  { key: 'STORE', label: 'Дэлгүүр', emoji: '🏪' },
-  { key: 'REAL_ESTATE', label: 'Үл хөдлөх', emoji: '🏠' },
-  { key: 'AUTO', label: 'Авто', emoji: '🚗' },
-  { key: 'SERVICE', label: 'Үйлчилгээ', emoji: '🛎' },
+  { key: 'STORE', label: 'Дэлгүүр', icon: Store },
+  { key: 'REAL_ESTATE', label: 'Үл хөдлөх', icon: Home },
+  { key: 'AUTO', label: 'Авто', icon: Car },
+  { key: 'SERVICE', label: 'Үйлчилгээ', icon: BellRing },
 ];
 const SORTS = [
   { key: 'newest', label: 'Шинэ' },
@@ -136,7 +136,7 @@ function SearchPage() {
                 <button key={et.key} onClick={() => updateFilter('entityType', entityType === et.key ? '' : et.key)}
                   className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium border-none cursor-pointer text-left"
                   style={{ background: entityType === et.key ? 'rgba(232,36,44,0.08)' : 'var(--esl-bg-card)', color: 'var(--esl-text-primary)', border: entityType === et.key ? '1px solid #E8242C' : '1px solid var(--esl-border)' }}>
-                  <span>{et.emoji}</span> {et.label}
+                  <et.icon className="w-4 h-4" /> {et.label}
                 </button>
               ))}
             </div>
@@ -171,7 +171,7 @@ function SearchPage() {
                     style={{ background: 'var(--esl-bg-card)', borderColor: 'var(--esl-border)' }}>
                     <div className="relative aspect-square" style={{ background: 'var(--esl-bg-section)' }}>
                       {p.images?.[0] ? <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover transition-transform group-hover:scale-105" loading="lazy" /> :
-                        <div className="w-full h-full flex items-center justify-center text-4xl">{p.emoji || '📦'}</div>}
+                        <div className="w-full h-full flex items-center justify-center"><Package className="w-10 h-10 text-[var(--esl-text-muted)]" /></div>}
                       {disc > 0 && <span className="absolute top-2 left-2 bg-[#E8242C] text-white text-[10px] font-bold px-2 py-0.5 rounded">-{disc}%</span>}
                     </div>
                     <div className="p-3">
@@ -180,7 +180,7 @@ function SearchPage() {
                         <span className="text-sm font-bold" style={{ color: '#E8242C' }}>{(p.salePrice || p.price).toLocaleString()}₮</span>
                         {disc > 0 && <span className="text-[10px] line-through" style={{ color: 'var(--esl-text-muted)' }}>{p.price.toLocaleString()}₮</span>}
                       </div>
-                      {p.rating && <p className="text-[10px] mt-1" style={{ color: 'var(--esl-text-muted)' }}>⭐ {p.rating}</p>}
+                      {p.rating && <p className="text-[10px] mt-1 flex items-center gap-0.5" style={{ color: 'var(--esl-text-muted)' }}><Star className="w-3 h-3 text-amber-400 fill-amber-400" /> {p.rating}</p>}
                     </div>
                   </Link>
                 );

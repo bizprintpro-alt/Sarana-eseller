@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/components/shared/Toast';
+import {
+  Palette, Store, Smartphone, Search, Image, Megaphone, FolderOpen,
+  Phone, Save,
+} from 'lucide-react';
 
 interface StoreConfig {
   storeName: string;
@@ -94,10 +98,10 @@ export default function StoreSettingsPage() {
   };
 
   const tabs = [
-    { id: 'general' as const, label: 'Ерөнхий', icon: '🏪' },
-    { id: 'storefront' as const, label: 'Нүүр хуудас', icon: '🎨' },
-    { id: 'social' as const, label: 'Сошиал & Холбоо', icon: '📱' },
-    { id: 'seo' as const, label: 'SEO', icon: '🔍' },
+    { id: 'general' as const, label: 'Ерөнхий', icon: <Store className="w-4 h-4 inline" /> },
+    { id: 'storefront' as const, label: 'Нүүр хуудас', icon: <Palette className="w-4 h-4 inline" /> },
+    { id: 'social' as const, label: 'Сошиал & Холбоо', icon: <Smartphone className="w-4 h-4 inline" /> },
+    { id: 'seo' as const, label: 'SEO', icon: <Search className="w-4 h-4 inline" /> },
   ];
 
   const storeSlug = (config.storeName || 'store').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
@@ -110,14 +114,14 @@ export default function StoreSettingsPage() {
       <div className="bg-[var(--esl-bg-card)] border-b border-[var(--esl-border)] px-8 py-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-black text-[var(--esl-text-primary)]">🎨 Дэлгүүрийн тохиргоо</h1>
+            <h1 className="text-xl font-black text-[var(--esl-text-primary)] flex items-center gap-2"><Palette className="w-5 h-5" /> Дэлгүүрийн тохиргоо</h1>
             <p className="text-sm text-[var(--esl-text-muted)] mt-0.5">Дэлгүүрийн нүүр хуудас, мэдээлэл, дизайныг тохируулна</p>
           </div>
           <button
             onClick={save}
             className="bg-brand text-white px-6 py-2.5 rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-brand-dark transition-all shadow-sm"
           >
-            💾 Хадгалах
+            <Save className="w-4 h-4 inline" /> Хадгалах
           </button>
         </div>
       </div>
@@ -152,7 +156,7 @@ export default function StoreSettingsPage() {
                   {config.logo ? (
                     <img loading="lazy" src={config.logo} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    '🏪'
+                    <Store className="w-8 h-8 text-[var(--esl-text-muted)]" />
                   )}
                 </div>
                 <div className="flex-1">
@@ -246,7 +250,7 @@ export default function StoreSettingsPage() {
           <div className="space-y-6">
             {/* Hero Section */}
             <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
-              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">🖼 Нүүр хуудасны Hero</h3>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5 flex items-center gap-2"><Image className="w-4 h-4" /> Нүүр хуудасны Hero</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-[var(--esl-text-secondary)] uppercase tracking-wider mb-1.5">Гарчиг</label>
@@ -296,7 +300,7 @@ export default function StoreSettingsPage() {
             {/* Announcement */}
             <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base font-bold text-[var(--esl-text-primary)]">📢 Зарлал (Announcement)</h3>
+                <h3 className="text-base font-bold text-[var(--esl-text-primary)] flex items-center gap-2"><Megaphone className="w-4 h-4" /> Зарлал (Announcement)</h3>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
@@ -322,7 +326,7 @@ export default function StoreSettingsPage() {
 
             {/* Featured Categories */}
             <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
-              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-4">📂 Нүүрэнд гарах ангилалууд</h3>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-4 flex items-center gap-2"><FolderOpen className="w-4 h-4" /> Нүүрэнд гарах ангилалууд</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {CATEGORY_OPTIONS.map((cat) => {
                   const isSelected = config.featuredCategories.includes(cat.value);
@@ -355,7 +359,7 @@ export default function StoreSettingsPage() {
         {activeTab === 'social' && (
           <div className="space-y-6">
             <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
-              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">📱 Сошиал хаягууд</h3>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5 flex items-center gap-2"><Smartphone className="w-4 h-4" /> Сошиал хаягууд</h3>
               <div className="space-y-4">
                 {[
                   { key: 'socialFacebook' as const, label: 'Facebook', icon: '📘', placeholder: 'https://facebook.com/...' },
@@ -376,7 +380,7 @@ export default function StoreSettingsPage() {
             </div>
 
             <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
-              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">📞 Холбоо барих</h3>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5 flex items-center gap-2"><Phone className="w-4 h-4" /> Холбоо барих</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">Утас</label>
@@ -414,7 +418,7 @@ export default function StoreSettingsPage() {
         {activeTab === 'seo' && (
           <div className="space-y-6">
             <div className="bg-[var(--esl-bg-card)] border border-[var(--esl-border)] rounded-2xl p-6">
-              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5">🔍 SEO тохиргоо</h3>
+              <h3 className="text-base font-bold text-[var(--esl-text-primary)] mb-5 flex items-center gap-2"><Search className="w-4 h-4" /> SEO тохиргоо</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-[var(--esl-text-secondary)] mb-1.5">Meta Title</label>
@@ -460,7 +464,7 @@ export default function StoreSettingsPage() {
             onClick={save}
             className="bg-brand text-white px-8 py-3 rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-brand-dark transition-all shadow-sm"
           >
-            💾 Бүх өөрчлөлтийг хадгалах
+            <Save className="w-4 h-4 inline" /> Бүх өөрчлөлтийг хадгалах
           </button>
         </div>
       </div>

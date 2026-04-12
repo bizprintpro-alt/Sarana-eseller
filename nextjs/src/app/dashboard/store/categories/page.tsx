@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Check, ChevronRight, ChevronDown, Loader2, Plus, Send } from 'lucide-react';
+import { Search, Check, ChevronRight, ChevronDown, Loader2, Plus, Send, FolderOpen } from 'lucide-react';
 import { useToast } from '@/components/shared/Toast';
 import EmptyState from '@/components/shared/EmptyState';
 
@@ -195,7 +195,7 @@ export default function StoreCategoriesPage() {
 
       {/* Category tree */}
       {filtered.length === 0 ? (
-        <EmptyState icon="📂" title="Ангилал олдсонгүй" desc="Хайлтаа өөрчилнө үү" />
+        <EmptyState icon={FolderOpen} title="Ангилал олдсонгүй" desc="Хайлтаа өөрчилнө үү" />
       ) : (
         <div className="space-y-2">
           {filtered.map(cat => (

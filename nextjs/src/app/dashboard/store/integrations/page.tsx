@@ -4,14 +4,16 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import {
   ExternalLink, Check, X, Settings, Link2, ToggleLeft, ToggleRight,
-  RefreshCw, Shield, Crown, Clock,
+  RefreshCw, Shield, Crown, Clock, Smartphone, Camera, MessageCircle,
+  Search, Music, Heart, BarChart3, Flame, Mail, ShoppingCart, MessageSquare,
+  Megaphone,
 } from 'lucide-react';
 
 interface Integration {
   id: string;
   name: string;
   desc: string;
-  icon: string;
+  icon: React.ReactNode;
   category: 'sales' | 'chat' | 'analytics' | 'marketing';
   tier: 'free' | 'pro';
   connected: boolean;
@@ -21,23 +23,23 @@ interface Integration {
 }
 
 const INTEGRATIONS: Integration[] = [
-  { id: 'facebook', name: 'Facebook Shop', desc: 'Барааг Facebook Marketplace-д автоматаар sync хийх', icon: '📱', category: 'sales', tier: 'free', connected: false },
-  { id: 'instagram', name: 'Instagram Shopping', desc: 'Зураг дээр бараа tag хийж шууд зарах', icon: '📸', category: 'sales', tier: 'free', connected: false },
-  { id: 'messenger', name: 'Facebook Messenger', desc: 'Messenger мессежийг нэг дор удирдах', icon: '💬', category: 'chat', tier: 'free', connected: false },
-  { id: 'google_merchant', name: 'Google Merchant Center', desc: 'Google Shopping-д бараа гаргах', icon: '🔍', category: 'sales', tier: 'pro', connected: false },
-  { id: 'tiktok', name: 'TikTok Shop', desc: 'TikTok дээр бараа зарах', icon: '🎵', category: 'sales', tier: 'pro', connected: false },
-  { id: 'viber', name: 'Viber Business', desc: 'Viber-ээр мессеж хүлээн авах', icon: '💜', category: 'chat', tier: 'free', connected: false },
-  { id: 'ga4', name: 'Google Analytics 4', desc: 'Хандалт, борлуулалтын аналитик', icon: '📊', category: 'analytics', tier: 'free', connected: true, status: 'active', lastSync: 'Автомат' },
-  { id: 'hotjar', name: 'Hotjar Heatmaps', desc: 'Хэрэглэгчийн зан төлөв, heatmap', icon: '🔥', category: 'analytics', tier: 'pro', connected: false },
-  { id: 'mailchimp', name: 'Mailchimp Email', desc: 'Имэйл маркетинг автоматжуулалт', icon: '📧', category: 'marketing', tier: 'pro', connected: false },
+  { id: 'facebook', name: 'Facebook Shop', desc: 'Барааг Facebook Marketplace-д автоматаар sync хийх', icon: <Smartphone className="w-6 h-6" />, category: 'sales', tier: 'free', connected: false },
+  { id: 'instagram', name: 'Instagram Shopping', desc: 'Зураг дээр бараа tag хийж шууд зарах', icon: <Camera className="w-6 h-6" />, category: 'sales', tier: 'free', connected: false },
+  { id: 'messenger', name: 'Facebook Messenger', desc: 'Messenger мессежийг нэг дор удирдах', icon: <MessageCircle className="w-6 h-6" />, category: 'chat', tier: 'free', connected: false },
+  { id: 'google_merchant', name: 'Google Merchant Center', desc: 'Google Shopping-д бараа гаргах', icon: <Search className="w-6 h-6" />, category: 'sales', tier: 'pro', connected: false },
+  { id: 'tiktok', name: 'TikTok Shop', desc: 'TikTok дээр бараа зарах', icon: <Music className="w-6 h-6" />, category: 'sales', tier: 'pro', connected: false },
+  { id: 'viber', name: 'Viber Business', desc: 'Viber-ээр мессеж хүлээн авах', icon: <Heart className="w-6 h-6" />, category: 'chat', tier: 'free', connected: false },
+  { id: 'ga4', name: 'Google Analytics 4', desc: 'Хандалт, борлуулалтын аналитик', icon: <BarChart3 className="w-6 h-6" />, category: 'analytics', tier: 'free', connected: true, status: 'active', lastSync: 'Автомат' },
+  { id: 'hotjar', name: 'Hotjar Heatmaps', desc: 'Хэрэглэгчийн зан төлөв, heatmap', icon: <Flame className="w-6 h-6" />, category: 'analytics', tier: 'pro', connected: false },
+  { id: 'mailchimp', name: 'Mailchimp Email', desc: 'Имэйл маркетинг автоматжуулалт', icon: <Mail className="w-6 h-6" />, category: 'marketing', tier: 'pro', connected: false },
 ];
 
 const CATEGORIES = [
   { key: 'all', label: 'Бүгд' },
-  { key: 'sales', label: '🛒 Борлуулалт' },
-  { key: 'chat', label: '💬 Чат' },
-  { key: 'analytics', label: '📊 Аналитик' },
-  { key: 'marketing', label: '📢 Маркетинг' },
+  { key: 'sales', label: 'Борлуулалт', icon: <ShoppingCart className="w-3.5 h-3.5 inline" /> },
+  { key: 'chat', label: 'Чат', icon: <MessageSquare className="w-3.5 h-3.5 inline" /> },
+  { key: 'analytics', label: 'Аналитик', icon: <BarChart3 className="w-3.5 h-3.5 inline" /> },
+  { key: 'marketing', label: 'Маркетинг', icon: <Megaphone className="w-3.5 h-3.5 inline" /> },
 ];
 
 export default function IntegrationsPage() {
@@ -81,7 +83,7 @@ export default function IntegrationsPage() {
           <button key={c.key} onClick={() => setCatFilter(c.key)}
             className={cn('px-3.5 py-2 rounded-xl text-xs font-semibold border-none cursor-pointer transition',
               catFilter === c.key ? 'bg-indigo-600 text-white' : 'bg-[var(--esl-bg-card)] text-[var(--esl-text-secondary)] border border-[var(--esl-border)] hover:bg-[var(--esl-bg-section)]')}>
-            {c.label}
+            {'icon' in c && c.icon} {c.label}
           </button>
         ))}
       </div>
@@ -94,7 +96,7 @@ export default function IntegrationsPage() {
             {/* Header */}
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-3">
-                <span className="text-3xl">{intg.icon}</span>
+                <span className="text-[var(--esl-text-secondary)]">{intg.icon}</span>
                 <div>
                   <div className="flex items-center gap-1.5">
                     <h3 className="text-sm font-bold text-[var(--esl-text-primary)]">{intg.name}</h3>

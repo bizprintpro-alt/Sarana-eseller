@@ -100,7 +100,7 @@ export function LoyaltyWidget({ context, userId }: Props) {
           fontSize: 10, fontWeight: 500, padding: '2px 8px', borderRadius: 99,
           background: tierConfig.bg, color: tierConfig.text, marginLeft: 'auto',
         }}>
-          {tierConfig.label} ⭐
+          {tierConfig.label} <Star size={10} color={tierConfig.text} fill={tierConfig.text} />
         </span>
       </div>
 

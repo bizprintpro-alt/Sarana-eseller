@@ -5,7 +5,7 @@ import { formatPrice } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../shared/Toast';
-import { X, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
+import { X, Minus, Plus, Trash2, ShoppingBag, Package } from 'lucide-react';
 
 interface CartDrawerProps {
   open: boolean;
@@ -83,7 +83,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                     {item.images?.[0] ? (
                       <img loading="lazy" src={item.images[0]} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      item.emoji || '📦'
+                      item.emoji || <Package className="w-7 h-7 text-[#CBD5E1]" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

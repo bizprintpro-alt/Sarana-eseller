@@ -5,7 +5,7 @@ import { OrdersAPI, type Order } from '@/lib/api';
 import { formatPrice, STATUS_MAP } from '@/lib/utils';
 import { useAuth } from '@/lib/auth';
 import { useToast } from '@/components/shared/Toast';
-import { Truck, Package, CheckCircle, Clock, DollarSign, BarChart3, MapPin, Phone } from 'lucide-react';
+import { Truck, Package, CheckCircle, Clock, DollarSign, BarChart3, MapPin, Phone, Map, Navigation } from 'lucide-react';
 
 interface RevenueStats {
   todayRevenue: number;
@@ -59,7 +59,7 @@ export default function DeliveryDashboard() {
     setOrders(prev => prev.map(o => o._id === id ? { ...o, status } as Order : o));
     try {
       await OrdersAPI.updateStatus(id, status);
-      toast.show('✅ Төлөв шинэчлэгдлээ');
+      toast.show('Төлөв шинэчлэгдлээ', 'ok');
     } catch {
       toast.show('Алдаа гарлаа', 'error');
       loadOrders();
@@ -136,7 +136,7 @@ export default function DeliveryDashboard() {
             <div className="p-12 text-center text-sm" style={{ color: 'var(--esl-text-muted)' }}>Ачааллаж байна...</div>
           ) : filtered.length === 0 ? (
             <div className="p-12 text-center">
-              <div className="text-4xl mb-3">📭</div>
+              <Package className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--esl-text-muted)' }} />
               <p className="text-sm font-semibold" style={{ color: 'var(--esl-text-muted)' }}>Захиалга байхгүй</p>
             </div>
           ) : (
@@ -177,14 +177,14 @@ export default function DeliveryDashboard() {
                           <button onClick={() => updateStatus(o._id, 'shipped')}
                             className="text-white text-xs font-bold px-4 py-2 rounded-xl border-none cursor-pointer transition"
                             style={{ background: '#2563EB' }}>
-                            🚚 Хүргэлтэнд
+                            <Truck className="w-3.5 h-3.5 inline mr-1" /> Хүргэлтэнд
                           </button>
                         )}
                         {o.status === 'shipped' && (
                           <button onClick={() => updateStatus(o._id, 'delivered')}
                             className="text-white text-xs font-bold px-4 py-2 rounded-xl border-none cursor-pointer transition"
                             style={{ background: '#16A34A' }}>
-                            ✅ Хүргэгдсэн
+                            <CheckCircle className="w-3.5 h-3.5 inline mr-1" /> Хүргэгдсэн
                           </button>
                         )}
                       </div>
@@ -198,14 +198,14 @@ export default function DeliveryDashboard() {
 
         {/* GPS */}
         <div className="mt-6 rounded-xl p-6 text-center" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)' }}>
-          <div className="text-3xl mb-2">🗺️</div>
+          <Map className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--esl-text-primary)' }} />
           <p className="text-sm font-semibold" style={{ color: 'var(--esl-text-primary)' }}>GPS чиглэл</p>
           <p className="text-xs mt-1 mb-3" style={{ color: 'var(--esl-text-muted)' }}>Mobile app-д бүрэн газрын зураг харагдана</p>
           {mapsAddress && (
             <a href={`https://maps.google.com?q=${encodeURIComponent(mapsAddress)}`} target="_blank" rel="noopener"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white no-underline"
               style={{ background: '#E8242C' }}>
-              📍 Google Maps-д харах →
+              <Navigation className="w-4 h-4 inline mr-1" /> Google Maps-д харах →
             </a>
           )}
         </div>

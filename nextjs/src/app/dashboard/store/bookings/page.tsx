@@ -6,7 +6,7 @@ import { DEMO_APPOINTMENTS, type Appointment, type AppointmentStatus } from '@/l
 import StatCard from '@/components/dashboard/StatCard';
 import {
   Search, Calendar, Clock, Phone, Check, X, Filter,
-  ChevronDown,
+  ChevronDown, Hourglass, DollarSign,
 } from 'lucide-react';
 
 const STATUS_MAP: Record<AppointmentStatus, { label: string; style: string }> = {
@@ -69,9 +69,9 @@ export default function BookingsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <StatCard icon="📅" label="Өнөөдрийн захиалга" value={todayCount} gradient="indigo" sub="Баталгаажсан + хүлээгдэж буй" />
-        <StatCard icon="⏳" label="Баталгаажуулах" value={pendingCount} gradient="amber" sub="Хүлээгдэж буй" />
-        <StatCard icon="💰" label="Нийт орлого" value={formatPrice(totalRevenue)} gradient="green" sub="Баталгаажсан захиалгаас" />
+        <StatCard icon={<Calendar className="w-6 h-6" />} label="Өнөөдрийн захиалга" value={todayCount} gradient="indigo" sub="Баталгаажсан + хүлээгдэж буй" />
+        <StatCard icon={<Hourglass className="w-6 h-6" />} label="Баталгаажуулах" value={pendingCount} gradient="amber" sub="Хүлээгдэж буй" />
+        <StatCard icon={<DollarSign className="w-6 h-6" />} label="Нийт орлого" value={formatPrice(totalRevenue)} gradient="green" sub="Баталгаажсан захиалгаас" />
       </div>
 
       {/* Filters */}
@@ -112,7 +112,7 @@ export default function BookingsPage() {
       <div className="bg-[var(--esl-bg-card)] rounded-xl border border-[var(--esl-border)] overflow-hidden">
         {filtered.length === 0 ? (
           <div className="text-center py-16">
-            <div className="text-4xl mb-3 opacity-30">📅</div>
+            <div className="mb-3 opacity-30"><Calendar className="w-10 h-10 mx-auto" /></div>
             <p className="text-sm font-semibold text-[var(--esl-text-muted)]">Захиалга олдсонгүй</p>
           </div>
         ) : (

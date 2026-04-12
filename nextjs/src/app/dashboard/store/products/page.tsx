@@ -8,7 +8,7 @@ import StatCard from '@/components/dashboard/StatCard';
 import {
   Plus, Search, Edit3, Trash2, X, Package, Image as ImageIcon,
   FileText, DollarSign, Settings, Upload, GripVertical, Star,
-  ToggleLeft, ToggleRight, Eye,
+  ToggleLeft, ToggleRight, Eye, AlertTriangle, Wallet,
 } from 'lucide-react';
 import CategorySelector from '@/components/shared/CategorySelector';
 
@@ -142,9 +142,9 @@ export default function ProductsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <StatCard icon="📦" label="Нийт бараа" value={stats.total} gradient="indigo" />
-        <StatCard icon="⚠️" label="Үлдэгдэл бага" value={stats.lowStock} gradient="amber" />
-        <StatCard icon="💰" label="Нийт үнэ" value={formatPrice(stats.totalValue)} gradient="green" />
+        <StatCard icon={<Package className="w-6 h-6" />} label="Нийт бараа" value={stats.total} gradient="indigo" />
+        <StatCard icon={<AlertTriangle className="w-6 h-6" />} label="Үлдэгдэл бага" value={stats.lowStock} gradient="amber" />
+        <StatCard icon={<Wallet className="w-6 h-6" />} label="Нийт үнэ" value={formatPrice(stats.totalValue)} gradient="green" />
       </div>
 
       {/* Search */}
@@ -158,7 +158,7 @@ export default function ProductsPage() {
       {loading ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">{[1, 2, 3, 4].map((i) => <div key={i} className="h-56 bg-gray-200 rounded-xl animate-pulse" />)}</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16"><div className="text-4xl mb-3 opacity-30">📦</div><p className="text-sm text-[var(--esl-text-muted)]">Бараа байхгүй</p></div>
+        <div className="text-center py-16"><div className="mb-3 opacity-30"><Package className="w-10 h-10 mx-auto" /></div><p className="text-sm text-[var(--esl-text-muted)]">Бараа байхгүй</p></div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map((p) => (

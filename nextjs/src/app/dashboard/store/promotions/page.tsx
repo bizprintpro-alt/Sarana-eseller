@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useToast } from '@/components/shared/Toast';
 import { formatPrice } from '@/lib/utils';
 import StatCard from '@/components/dashboard/StatCard';
+import { Tag, CheckCircle, BarChart3 } from 'lucide-react';
 
 interface Promotion {
   id: string;
@@ -74,9 +75,9 @@ export default function PromotionsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <StatCard icon="🏷️" label="Нийт промо код" value={promos.length} gradient="indigo" />
-        <StatCard icon="✅" label="Идэвхтэй" value={activeCount} gradient="green" />
-        <StatCard icon="📊" label="Нийт хэрэглэсэн" value={totalUsed} gradient="amber" />
+        <StatCard icon={<Tag className="w-6 h-6" />} label="Нийт промо код" value={promos.length} gradient="indigo" />
+        <StatCard icon={<CheckCircle className="w-6 h-6" />} label="Идэвхтэй" value={activeCount} gradient="green" />
+        <StatCard icon={<BarChart3 className="w-6 h-6" />} label="Нийт хэрэглэсэн" value={totalUsed} gradient="amber" />
       </div>
 
       {promos.length === 0 ? (

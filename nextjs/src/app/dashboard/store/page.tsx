@@ -13,6 +13,11 @@ import {
 import StatCard from '@/components/dashboard/StatCard';
 import { LocationCoordReminder } from '@/components/seller/LocationCoordReminder';
 import VatStatusWidget from '@/components/store/VatStatusWidget';
+import {
+  Wallet, ClipboardList, Package, TrendingUp, BarChart3,
+  CheckCircle, Trophy, Link as LinkIcon, FolderOpen, Palette,
+  LineChart, Globe, Settings, Zap,
+} from 'lucide-react';
 
 const WEEK_DAYS = ['Да', 'Мя', 'Лх', 'Пү', 'Ба', 'Бя', 'Ня'];
 
@@ -84,7 +89,7 @@ export default function SellerDashboardPage() {
     (o.items || []).forEach((item) => {
       const id = item.product?._id || item.name || 'unknown';
       const name = item.product?.name || item.name || 'Бараа';
-      const emoji = item.product?.emoji || '📦';
+      const emoji = item.product?.emoji || '';
       if (!productRevenue[id]) productRevenue[id] = { name, emoji, units: 0, revenue: 0 };
       productRevenue[id].units += item.quantity || 1;
       productRevenue[id].revenue += (item.price || 0) * (item.quantity || 1);
@@ -120,12 +125,12 @@ export default function SellerDashboardPage() {
 
   // Quick links
   const quickLinks = [
-    { icon: '📦', label: 'Бараа нэмэх', href: '/dashboard/store/products' },
-    { icon: '📂', label: 'Ангилал', href: '/dashboard/store/categories' },
-    { icon: '🎨', label: 'AI Постер', href: '/dashboard/store/ai-poster' },
-    { icon: '📈', label: 'Аналитик', href: '/dashboard/store/analytics' },
-    { icon: '🌐', label: 'Домайн', href: '/dashboard/store/domain' },
-    { icon: '⚙️', label: 'Тохиргоо', href: '/dashboard/store/store-settings' },
+    { icon: <Package className="w-6 h-6" />, label: 'Бараа нэмэх', href: '/dashboard/store/products' },
+    { icon: <FolderOpen className="w-6 h-6" />, label: 'Ангилал', href: '/dashboard/store/categories' },
+    { icon: <Palette className="w-6 h-6" />, label: 'AI Постер', href: '/dashboard/store/ai-poster' },
+    { icon: <LineChart className="w-6 h-6" />, label: 'Аналитик', href: '/dashboard/store/analytics' },
+    { icon: <Globe className="w-6 h-6" />, label: 'Домайн', href: '/dashboard/store/domain' },
+    { icon: <Settings className="w-6 h-6" />, label: 'Тохиргоо', href: '/dashboard/store/store-settings' },
   ];
 
   // ── Loading skeleton ──
@@ -177,7 +182,7 @@ export default function SellerDashboardPage() {
                 rel="noopener"
                 className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[rgba(232,36,44,0.08)] text-[#E8242C] no-underline hover:bg-[rgba(232,36,44,0.15)] transition"
               >
-                🔗 Дэлгүүр харах →
+                <LinkIcon className="w-3.5 h-3.5" /> Дэлгүүр харах →
               </a>
             </div>
           </div>
@@ -200,28 +205,28 @@ export default function SellerDashboardPage() {
         {/* ═══ Row 1 — Stat Cards ═══ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            icon="💰"
+            icon={<Wallet className="w-6 h-6" />}
             label="Энэ сарын борлуулалт"
             value={formatPrice(monthRevenue)}
             variant="primary"
             sparkData={[12, 18, 14, 22, 28, 19, 25, 30]}
           />
           <StatCard
-            icon="📋"
+            icon={<ClipboardList className="w-6 h-6" />}
             label="Нийт захиалга"
             value={totalOrders}
             variant="success"
             sub={`${activeOrders.length} идэвхтэй`}
           />
           <StatCard
-            icon="📦"
+            icon={<Package className="w-6 h-6" />}
             label="Идэвхтэй бараа"
             value={activeProducts}
             variant="info"
             sub={`${products.length} нийт`}
           />
           <StatCard
-            icon="📈"
+            icon={<TrendingUp className="w-6 h-6" />}
             label="Хөрвүүлэлт"
             value={`${conversionRate}%`}
             variant="warning"
@@ -242,7 +247,7 @@ export default function SellerDashboardPage() {
             </div>
             {totalOrders === 0 ? (
               <div className="flex flex-col items-center justify-center h-40 text-[var(--esl-text-muted)]">
-                <span className="text-3xl mb-2">📊</span>
+                <BarChart3 className="w-8 h-8 mb-2" />
                 <p className="text-sm font-medium">Анхны захиалга ирэхэд chart харагдана</p>
                 <Link href="/dashboard/store/products" className="text-xs text-[#E8242C] font-semibold mt-2 no-underline hover:underline">+ Бараа нэмэх</Link>
               </div>
@@ -282,7 +287,7 @@ export default function SellerDashboardPage() {
             </div>
             {activeOrders.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
-                <span className="text-3xl mb-2">📋</span>
+                <ClipboardList className="w-8 h-8 mb-2" />
                 <p className="text-sm mb-3">Идэвхтэй захиалга байхгүй</p>
                 <Link href="/dashboard/store/products" className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#E8242C] text-white text-xs font-bold rounded-lg no-underline hover:bg-[#C41E25] transition">
                   + Бараа нэмэх
@@ -333,7 +338,7 @@ export default function SellerDashboardPage() {
             <h2 className="text-lg font-semibold text-[var(--esl-text-primary)] mb-5">Үлдэгдэл багассан бараа</h2>
             {lowStockProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
-                <span className="text-3xl mb-2">✅</span>
+                <CheckCircle className="w-8 h-8 mb-2" />
                 <p className="text-sm">Бүх барааны үлдэгдэл хангалттай</p>
               </div>
             ) : (
@@ -347,7 +352,7 @@ export default function SellerDashboardPage() {
                       className="flex items-center justify-between py-3 px-4 rounded-xl bg-[var(--esl-bg-section)]"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-xl shrink-0">{p.emoji || '📦'}</span>
+                        <span className="text-xl shrink-0">{p.emoji || <Package className="w-5 h-5 text-[#CBD5E1]" />}</span>
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-[var(--esl-text-primary)] truncate">{p.name}</p>
                           <p className="text-xs text-[var(--esl-text-secondary)]">{formatPrice(p.price)}</p>
@@ -379,7 +384,7 @@ export default function SellerDashboardPage() {
             <h2 className="text-lg font-semibold text-[var(--esl-text-primary)] mb-5">Шилдэг бараанууд</h2>
             {topProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 text-[var(--esl-text-muted)]">
-                <span className="text-3xl mb-2">🏆</span>
+                <Trophy className="w-8 h-8 mb-2" />
                 <p className="text-sm">Захиалгын дата хүлээж байна</p>
               </div>
             ) : (
@@ -391,7 +396,7 @@ export default function SellerDashboardPage() {
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <span className="text-lg w-7 text-center shrink-0">
-                        {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : tp.emoji}
+                        {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : tp.emoji || <Package className="w-5 h-5 text-[#CBD5E1]" />}
                       </span>
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-[var(--esl-text-primary)] truncate">{tp.name}</p>
@@ -431,7 +436,7 @@ export default function SellerDashboardPage() {
                 href="/dashboard/store/package"
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#E8242C] text-white text-sm font-bold rounded-xl hover:bg-[#C41E25] transition-colors shadow-sm no-underline"
               >
-                ⚡ Pro болох
+                <Zap className="w-4 h-4" /> Pro болох
               </Link>
             </div>
           </div>

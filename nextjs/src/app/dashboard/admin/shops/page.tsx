@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, ChevronLeft, ChevronRight, Ban, Shield } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Ban, Shield, Store } from 'lucide-react';
 
 interface ShopRow {
   id: string;
@@ -77,7 +77,7 @@ export default function AdminShopsPage() {
   return (
     <div>
       <div className="bg-dash-sidebar border-b border-dash-border px-8 py-4">
-        <h1 className="text-white text-lg font-black">🏪 Дэлгүүр удирдлага</h1>
+        <h1 className="text-white text-lg font-black flex items-center gap-2"><Store className="w-5 h-5" /> Дэлгүүр удирдлага</h1>
         <p className="text-white/35 text-xs mt-0.5">Багц, комисс, блоклох</p>
       </div>
 

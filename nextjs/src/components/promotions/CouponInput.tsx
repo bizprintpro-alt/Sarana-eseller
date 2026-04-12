@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { CheckCircle, XCircle } from 'lucide-react';
 
 export function CouponInput({ cartTotal, onApply }: {
   cartTotal: number;
@@ -57,7 +58,7 @@ export function CouponInput({ cartTotal, onApply }: {
       </div>
       {message && (
         <p className={`mt-1.5 text-[13px] ${success ? 'text-[#34A853]' : 'text-[#E8242C]'}`}>
-          {success ? '✅ ' : '❌ '}{message}
+          {success ? <CheckCircle className="w-4 h-4 inline-block mr-1 align-text-bottom" /> : <XCircle className="w-4 h-4 inline-block mr-1 align-text-bottom" />}{message}
         </p>
       )}
     </div>
