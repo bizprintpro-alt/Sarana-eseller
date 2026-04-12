@@ -7,31 +7,46 @@ export async function POST(req: NextRequest) {
   if (user instanceof NextResponse) return user;
 
   try {
-    const formData = await req.formData();
-    const file = formData.get('file') as File;
+    const contentType = req.headers.get('content-type') || '';
 
-    if (!file) {
-      return NextResponse.json({ error: 'Файл байхгүй' }, { status: 400 });
+    // Method 1: Stream upload (Vercel Blob recommended)
+    // Client sends: fetch('/api/upload?filename=photo.jpg', { method: 'POST', body: file })
+    const filename = req.nextUrl.searchParams.get('filename');
+    if (filename) {
+      const ext = filename.split('.').pop()?.toLowerCase() || '';
+      if (!['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(ext)) {
+        return NextResponse.json({ error: 'Зөвхөн зураг оруулна уу' }, { status: 400 });
+      }
+
+      const uniquePath = `eseller/${user.id}/${Date.now()}-${filename}`;
+      const blob = await put(uniquePath, req.body!, { access: 'public' });
+      return NextResponse.json({ url: blob.url });
     }
 
-    // Зөвхөн зураг
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'Зөвхөн зураг оруулна уу' }, { status: 400 });
+    // Method 2: FormData upload (fallback for MediaUploader)
+    if (contentType.includes('multipart/form-data')) {
+      const formData = await req.formData();
+      const file = formData.get('file') as File;
+
+      if (!file) {
+        return NextResponse.json({ error: 'Файл байхгүй' }, { status: 400 });
+      }
+
+      if (!file.type.startsWith('image/')) {
+        return NextResponse.json({ error: 'Зөвхөн зураг оруулна уу' }, { status: 400 });
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        return NextResponse.json({ error: 'Файл 10MB-аас бага байх ёстой' }, { status: 400 });
+      }
+
+      const ext = file.name.split('.').pop() || 'jpg';
+      const path = `eseller/${user.id}/${Date.now()}.${ext}`;
+      const blob = await put(path, file, { access: 'public' });
+      return NextResponse.json({ url: blob.url });
     }
 
-    // 10MB хязгаар
-    if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: 'Файл 10MB-аас бага байх ёстой' }, { status: 400 });
-    }
-
-    const ext = file.name.split('.').pop() || 'jpg';
-    const filename = `eseller/${user.id}/${Date.now()}.${ext}`;
-
-    const { url } = await put(filename, file, {
-      access: 'public',
-    });
-
-    return NextResponse.json({ url });
+    return NextResponse.json({ error: 'filename query param эсвэл FormData шаардлагатай' }, { status: 400 });
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json({ error: 'Upload амжилтгүй' }, { status: 500 });
