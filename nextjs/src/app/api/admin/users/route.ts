@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB } from '@/lib/api-auth';
 
 // GET /api/admin/users — list all users
 export async function GET(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdminDB(req);
   if (admin instanceof NextResponse) return admin;
 
   const { searchParams } = new URL(req.url);
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
 
 // PATCH /api/admin/users — update user role/block
 export async function PATCH(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdminDB(req);
   if (admin instanceof NextResponse) return admin;
 
   const body = await req.json();

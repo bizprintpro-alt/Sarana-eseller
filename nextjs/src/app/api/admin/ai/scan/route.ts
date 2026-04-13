@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 import { collectSystemSnapshot, analyzeSystemWithClaude, saveInsights, testUserFlows } from '@/lib/ai/analyzeSystem';
 
 // POST /api/admin/ai/scan — гар аргаар шинжилгээ эхлүүлэх
 export async function POST(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   try {

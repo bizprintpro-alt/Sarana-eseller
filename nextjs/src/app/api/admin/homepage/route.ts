@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 export async function GET(req: NextRequest) {
   try {
-    const admin = requireAdmin(req);
+    const admin = await requireAdmin(req);
     if (admin instanceof NextResponse) return admin;
     const configs = await prisma.homepageConfig.findMany();
     return NextResponse.json(configs);
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const admin = requireAdmin(req);
+    const admin = await requireAdmin(req);
     if (admin instanceof NextResponse) return admin;
     const body = await req.json();
     const { key, value } = body;

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 // GET — онцлох дэлгүүр жагсаалт
 export async function GET(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const featured = await prisma.featuredShop.findMany({
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
 
 // POST — { shopId } нэмэх
 export async function POST(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const body = await req.json();
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
 // DELETE — { shopId } хасах
 export async function DELETE(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const { searchParams } = new URL(req.url);

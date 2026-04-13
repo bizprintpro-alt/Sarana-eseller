@@ -57,6 +57,7 @@ model User {
   updatedAt DateTime  @updatedAt
 
   entityType String?  // store | agent | company | auto_dealer | service
+  pushToken  String?  // Expo push token for notifications
 
   // Relations
   products  Product[]
@@ -69,6 +70,7 @@ model User {
   serviceProvider ServiceProvider?
   sellerProfile   SellerProfile?
   partnerAgent    PartnerAgent?
+  enterpriseUsers EnterpriseUser[]
 
   @@map("users")
 }
@@ -150,6 +152,7 @@ model Product {
   sellerProducts  SellerProduct[]
   importedUrls    ImportedUrl[]
   dropship        DropshipProduct?
+  wholesalePrices WholesalePrice[]
 
   @@map("products")
 }
@@ -230,6 +233,7 @@ model Order {
   confirmedAt      DateTime?
 
   // Delivery tracking
+  driverId          String?  @db.ObjectId
   trackingCode      String?  @unique
   estimatedDelivery DateTime?
   trackingEvents    Json[]   // [{status, description, lat?, lng?, createdAt}]
@@ -314,15 +318,17 @@ model Shop {
   storefrontSlug   String?  @unique       // /[slug] public URL
   storefrontConfig Json?                  // Theme, hero, sections config
 
-  user         User               @relation(fields: [userId], references: [id])
-  shopType     ShopType?
-  services     Service[]
-  bookings     Booking[]
-  shopDomain   ShopDomain?
-  workingHours WorkingHours[]
-  storefront   SellerStorefront?
-  subscription ShopSubscription?
-  integration  StoreIntegration?
+  user            User               @relation(fields: [userId], references: [id])
+  shopType        ShopType?
+  services        Service[]
+  bookings        Booking[]
+  shopDomain      ShopDomain?
+  workingHours    WorkingHours[]
+  storefront      SellerStorefront?
+  subscription    ShopSubscription?
+  integration     StoreIntegration?
+  enterpriseShop  EnterpriseShop?
+  enterpriseUsers EnterpriseUser[]
 
   @@map("stores")
 }
@@ -2129,4 +2135,69 @@ model DropshipProduct {
   updatedAt        DateTime  @updatedAt
 
   @@map("dropship_products")
+}
+
+// ══════════════════════════════════════════════════════════════
+// ENTERPRISE FEATURES
+// ══════════════════════════════════════════════════════════════
+
+model EnterpriseShop {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId       String   @unique @db.ObjectId
+  subdomain    String   @unique  // "nomin" → nomin.eseller.mn
+  customDomain String?  @unique  // "shop.nomin.mn" (optional)
+  primaryColor String   @default("#1B3A5C")
+  accentColor  String   @default("#E67E22")
+  logoUrl      String?
+  faviconUrl   String?
+  plan         String   @default("STARTER") // STARTER | BUSINESS | CORPORATE
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  shop Shop @relation(fields: [shopId], references: [id])
+
+  @@map("enterprise_shops")
+}
+
+model EnterpriseUser {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId      String   @db.ObjectId
+  userId      String   @db.ObjectId
+  role        String   // OWNER | MANAGER | WAREHOUSE | MARKETER | ACCOUNTANT
+  permissions String[]
+  invitedBy   String?  @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  shop Shop @relation(fields: [shopId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([shopId, userId])
+  @@map("enterprise_users")
+}
+
+model EnterpriseInvite {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId    String   @db.ObjectId
+  email     String
+  role      String   // OWNER | MANAGER | WAREHOUSE | MARKETER | ACCOUNTANT
+  token     String   @unique
+  expiresAt DateTime
+  accepted  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("enterprise_invites")
+}
+
+model WholesalePrice {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  productId String @db.ObjectId
+  minQty    Int    // Minimum quantity for this price tier
+  price     Float  // Price per unit at this tier
+  discount  Float  // Discount percentage
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("wholesale_prices")
 }

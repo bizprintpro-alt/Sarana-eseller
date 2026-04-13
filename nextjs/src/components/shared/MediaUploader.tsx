@@ -171,7 +171,7 @@ export function MediaUploader({ context, value, onChange, maxFiles = 5, label, e
             <FileImage size={14} /> Байрны зураглал (Floor plan)
           </span>
           <input
-            placeholder="Floor plan зургийн URL"
+            placeholder="Байрны зураглалын URL"
             value={floorPlanUrl || ''}
             onChange={(e) => onFloorPlanChange(e.target.value)}
             style={{

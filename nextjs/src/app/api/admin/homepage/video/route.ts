@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 export async function POST(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const formData = await req.formData();

@@ -57,7 +57,7 @@ export default function BulkUploadPage() {
         <Link href="/dashboard/store/products" className="text-sm text-[var(--esl-text-muted)] no-underline hover:text-[var(--esl-text-secondary)]">
           ← Бараанууд руу буцах
         </Link>
-        <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)] mt-2">CSV Bulk Upload</h1>
+        <h1 className="text-2xl font-extrabold text-[var(--esl-text-primary)] mt-2">CSV бөөнөөр оруулах</h1>
         <p className="text-sm text-[var(--esl-text-secondary)] mt-1">Excel/CSV файлаас олон бараа нэгэн зэрэг нэмэх</p>
       </div>
 
@@ -69,7 +69,7 @@ export default function BulkUploadPage() {
         </div>
         <button onClick={downloadTemplate}
           className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold bg-indigo-600 text-white border-none cursor-pointer hover:bg-indigo-700 transition">
-          <Download size={14} /> Template
+          <Download size={14} /> Загвар татах
         </button>
       </div>
 

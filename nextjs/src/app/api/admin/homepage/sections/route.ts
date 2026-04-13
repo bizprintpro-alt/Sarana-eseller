@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 const DEFAULT_SECTIONS = [
   { key: 'hero', title: 'Hero Banner', order: 0 },
@@ -17,7 +17,7 @@ const DEFAULT_SECTIONS = [
 
 // GET — бүх section + isActive + order
 export async function GET(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   let sections = await prisma.homepageSection.findMany({
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
 
 // PUT — section идэвхжүүлэх/унтраах
 export async function PUT(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const body = await req.json();
@@ -58,7 +58,7 @@ export async function PUT(req: NextRequest) {
 
 // POST — order шинэчлэх (drag & drop)
 export async function POST(req: NextRequest) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const body = await req.json();

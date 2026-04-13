@@ -52,7 +52,8 @@
         "expo-location",
         {
           "locationWhenInUsePermission": "Хүргэлтийн байршил тодорхойлоход ашиглана",
-          "locationAlwaysAndWhenInUsePermission": "Хүргэлтийн үед байршил шинэчлэхэд ашиглана",
+          "locationAlwaysAndWhenInUsePermission": "eSeller хүргэлтийн байршил тодорхойлоход ашиглана.",
+          "locationAlwaysPermission": "Жолооч апп хаагдсан үед GPS ажиллуулахад ашиглана.",
           "isAndroidBackgroundLocationEnabled": true,
           "isAndroidForegroundServiceEnabled": true
         }

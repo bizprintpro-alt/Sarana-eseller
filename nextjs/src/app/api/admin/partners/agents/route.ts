@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin, json, errorJson } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin, json, errorJson } from '@/lib/api-auth';
 
 export async function GET(req: NextRequest) {
-  const user = requireAdmin(req);
+  const user = await requireAdmin(req);
   if (user instanceof Response) return user;
 
   try {

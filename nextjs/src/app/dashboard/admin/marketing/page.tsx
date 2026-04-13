@@ -74,7 +74,7 @@ export default function MarketingPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
     fetch('/api/admin/campaigns', { headers })
       .then(r => r.json())
       .then(data => {

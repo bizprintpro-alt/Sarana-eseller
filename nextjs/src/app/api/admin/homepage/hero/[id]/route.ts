@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 type Ctx = { params: Promise<{ id: string }> };
 
 // PUT — засах
 export async function PUT(req: NextRequest, ctx: Ctx) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const { id } = await ctx.params;
@@ -32,7 +32,7 @@ export async function PUT(req: NextRequest, ctx: Ctx) {
 
 // DELETE — устгах
 export async function DELETE(req: NextRequest, ctx: Ctx) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const { id } = await ctx.params;
@@ -42,7 +42,7 @@ export async function DELETE(req: NextRequest, ctx: Ctx) {
 
 // PATCH — order/isActive өөрчлөх
 export async function PATCH(req: NextRequest, ctx: Ctx) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   const { id } = await ctx.params;

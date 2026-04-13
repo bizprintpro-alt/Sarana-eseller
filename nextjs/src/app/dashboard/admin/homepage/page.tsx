@@ -381,11 +381,11 @@ function BannerModal({ banner, onClose, onSaved }: {
           <div>
             <label className="block text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">Video</label>
             <div className="flex gap-2">
-              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="Video URL"
+              <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="Видео URL"
                 className="flex-1 bg-dash-elevated text-white border border-dash-border rounded-lg px-3 py-2 text-xs outline-none" />
               <label className="flex items-center gap-1 px-3 py-2 bg-dash-elevated border border-dash-border rounded-lg text-white/60 text-xs cursor-pointer hover:text-white">
                 <Upload className="w-3.5 h-3.5" />
-                {uploading ? 'Uploading...' : 'Upload'}
+                {uploading ? 'Оруулж байна...' : 'Оруулах'}
                 <input type="file" accept="video/mp4,video/webm" className="hidden"
                   onChange={(e) => e.target.files?.[0] && uploadVideo(e.target.files[0])} />
               </label>
@@ -396,7 +396,7 @@ function BannerModal({ banner, onClose, onSaved }: {
           </div>
 
           {/* Image fallback */}
-          <Field label="Fallback зураг URL" value={imageUrl} onChange={setImageUrl} placeholder="https://..." />
+          <Field label="Нөөц зурагны URL" value={imageUrl} onChange={setImageUrl} placeholder="https://..." />
 
           {/* Button */}
           <div className="grid grid-cols-2 gap-3">

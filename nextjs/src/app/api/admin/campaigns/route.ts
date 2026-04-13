@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 import { recordRevenue } from '@/lib/revenue';
 
 const UNIT_PRICES: Record<string, number> = { sms: 50, email: 20, push: 10 };
 
 export async function GET(req: NextRequest) {
   try {
-    const admin = requireAdmin(req);
+    const admin = await requireAdmin(req);
     if (admin instanceof NextResponse) return admin;
     const campaigns = await prisma.marketingCampaign.findMany({ orderBy: { createdAt: 'desc' }, take: 50 });
     return NextResponse.json(campaigns);
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const admin = requireAdmin(req);
+    const admin = await requireAdmin(req);
     if (admin instanceof NextResponse) return admin;
     const body = await req.json();
     const unitPrice = UNIT_PRICES[body.type] || 10;

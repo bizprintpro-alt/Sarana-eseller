@@ -16,6 +16,10 @@
     "test:upload": "npx tsx scripts/test-upload.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.88.0",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@prisma/client": "^6.19.3",
     "@sentry/nextjs": "^10.47.0",
     "@vercel/blob": "^2.3.3",
@@ -29,6 +33,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1",
+    "resend": "^6.10.0",
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
   },

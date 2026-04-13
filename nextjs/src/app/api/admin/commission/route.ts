@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 const COMMISSION_KEYS = [
   'commission_rate', 'affiliate_rate',
@@ -10,7 +10,7 @@ const COMMISSION_KEYS = [
 
 export async function GET(req: NextRequest) {
   try {
-    const admin = requireAdmin(req);
+    const admin = await requireAdmin(req);
     if (admin instanceof NextResponse) return admin;
     const configs = await prisma.platformConfig.findMany({ where: { key: { in: COMMISSION_KEYS } } });
     const get = (key: string, def: string) => configs.find(c => c.key === key)?.value || def;
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    const admin = requireAdmin(req);
+    const admin = await requireAdmin(req);
     if (admin instanceof NextResponse) return admin;
     const body = await req.json();
     const updates: Array<{ key: string; value: string }> = [];

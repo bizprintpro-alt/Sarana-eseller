@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 type Ctx = { params: Promise<{ shopId: string }> };
 
 // PATCH /api/admin/shops/[shopId]/plan — change seller plan
 export async function PATCH(req: NextRequest, ctx: Ctx) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   try {

@@ -66,8 +66,19 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Subdomain + custom domain disabled (beta)
-  // All shops accessible via /s/[slug] or /u/[username]
+  // ═══ Subdomain routing for Enterprise shops ═══
+  const subdomainMatch = hostname.match(/^(.+)\.eseller\.mn$/);
+  if (subdomainMatch) {
+    const subdomain = subdomainMatch[1];
+    // Skip reserved subdomains
+    if (!['www', 'admin', 'api', 'dashboard', 'mail', 'cdn'].includes(subdomain)) {
+      const url = req.nextUrl.clone();
+      url.pathname = `/enterprise/${subdomain}${pathname}`;
+      const res = NextResponse.rewrite(url);
+      res.headers.set('x-subdomain', subdomain);
+      return res;
+    }
+  }
 
   return NextResponse.next();
 }

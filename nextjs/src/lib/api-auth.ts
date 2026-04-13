@@ -103,14 +103,29 @@ export function requireSeller(req: NextRequest): AuthUser | NextResponse {
   return result;
 }
 
-/** Require admin role */
+/** Require admin role (sync — uses token role) */
 export function requireAdmin(req: NextRequest): AuthUser | NextResponse {
   const result = requireAuth(req);
   if (result instanceof NextResponse) return result;
-  if (result.role !== 'admin' && result.role !== 'superadmin') {
-    return errorJson('Зөвхөн админ хандах боломжтой', 403);
-  }
-  return result;
+  const adminRoles = ['admin', 'superadmin', 'super_admin'];
+  if (adminRoles.includes(result.role)) return result;
+  return errorJson('Зөвхөн админ хандах боломжтой', 403);
+}
+
+/** Require admin role (async — falls back to DB check if token role is wrong) */
+export async function requireAdminDB(req: NextRequest): Promise<AuthUser | NextResponse> {
+  const result = requireAuth(req);
+  if (result instanceof NextResponse) return result;
+  const adminRoles = ['admin', 'superadmin', 'super_admin'];
+  if (adminRoles.includes(result.role)) return result;
+  // Token decode fallback may set role='buyer' — verify from DB
+  try {
+    const dbUser = await prisma.user.findUnique({ where: { id: result.id }, select: { role: true } });
+    if (dbUser && adminRoles.includes(dbUser.role)) {
+      return { ...result, role: dbUser.role };
+    }
+  } catch {}
+  return errorJson('Зөвхөн админ хандах боломжтой', 403);
 }
 
 /** Get shopId for authenticated seller */

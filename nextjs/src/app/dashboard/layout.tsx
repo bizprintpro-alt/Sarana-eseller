@@ -37,7 +37,7 @@ const PRODUCT_MANAGEMENT: SidebarSection = {
     { href: '/dashboard/store/categories', icon: '📂', label: 'Ангилал' },
     { href: '/dashboard/store/brands', icon: '🏷️', label: 'Брэнд' },
     { href: '/dashboard/store/inventory', icon: '📊', label: 'Нөөцийн удирдлага' },
-    { href: '/dashboard/store/products/bulk', icon: '📄', label: 'CSV Bulk Upload', isNew: true },
+    { href: '/dashboard/store/products/bulk', icon: '📄', label: 'CSV бөөнөөр оруулах', isNew: true },
     { href: '/dashboard/store/dropship', icon: '🚚', label: 'Dropshipping', isNew: true },
   ],
 };
@@ -101,6 +101,14 @@ const STORE_SETTINGS: SidebarSection = {
     { href: '/dashboard/store/branches', icon: '🏪', label: 'Салбар удирдах' },
     { href: '/dashboard/store/staff', icon: '👔', label: 'Ажилтан' },
     { href: '/dashboard/store/settings', icon: '⚙️', label: 'Ерөнхий тохиргоо' },
+  ],
+};
+
+const ENTERPRISE: SidebarSection = {
+  title: 'Enterprise',
+  items: [
+    { href: '/dashboard/seller/enterprise', icon: '🌐', label: 'Subdomain тохиргоо', isNew: true },
+    { href: '/dashboard/seller/team', icon: '👥', label: 'Баг удирдлага', isNew: true },
   ],
 };
 
@@ -200,7 +208,7 @@ function getSellerSections(shopType: ShopType, entityType?: string): SidebarSect
   }
 
   // product (default)
-  return [SAMBAR_PRODUCT, PRODUCT_MANAGEMENT, CUSTOMER_SALES, CONTENT, AI_SECTION, FINANCE, STORE_SETTINGS, PACKAGE];
+  return [SAMBAR_PRODUCT, PRODUCT_MANAGEMENT, CUSTOMER_SALES, CONTENT, AI_SECTION, FINANCE, STORE_SETTINGS, ENTERPRISE, PACKAGE];
 }
 
 // ═══════════════════════════════════════════════════════
@@ -228,6 +236,8 @@ const ADMIN_SECTIONS: SidebarSection[] = [
       { href: '/dashboard/admin/categories', icon: '📂', label: 'Ангилал', isNew: true },
       { href: '/dashboard/admin/locations', icon: '📍', label: 'Байршил' },
       { href: '/dashboard/admin/chat-monitor', icon: '💬', label: 'Чат хяналт' },
+      { href: '/dashboard/admin/enterprise', icon: '🏢', label: 'Enterprise', isNew: true },
+      { href: '/dashboard/admin/returns', icon: '🔄', label: 'Буцаалт' },
     ],
   },
   {

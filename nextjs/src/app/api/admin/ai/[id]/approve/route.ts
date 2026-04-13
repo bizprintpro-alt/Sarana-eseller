@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/lib/api-auth';
+import { requireAdminDB as requireAdmin } from '@/lib/api-auth';
 
 type Ctx = { params: Promise<{ id: string }> };
 
 // POST /api/admin/ai/[id]/approve — зөвшөөрч хэрэгжүүлэх
 export async function POST(req: NextRequest, ctx: Ctx) {
-  const admin = requireAdmin(req);
+  const admin = await requireAdmin(req);
   if (admin instanceof NextResponse) return admin;
 
   try {

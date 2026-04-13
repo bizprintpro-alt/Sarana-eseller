@@ -1,12 +1,11 @@
 import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { json, errorJson, requireAuth } from '@/lib/api-auth';
+import { json, errorJson, requireAdminDB } from '@/lib/api-auth';
 
 // GET /api/admin/shops?status=...&search=...&page=1&limit=10
 export async function GET(req: NextRequest) {
-  const auth = requireAuth(req);
+  const auth = await requireAdminDB(req);
   if (auth instanceof Response) return auth;
-  if (auth.role !== 'admin' && auth.role !== 'superadmin') return errorJson('Админ эрх шаардлагатай', 403);
 
   const sp = req.nextUrl.searchParams;
   const status = sp.get('status');

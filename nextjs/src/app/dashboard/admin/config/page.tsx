@@ -50,7 +50,7 @@ function MaintenanceControl() {
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
         <span style={{ fontSize: 20 }}>{isOn ? '\u26A0\uFE0F' : '\uD83D\uDEE0\uFE0F'}</span>
-        <h3 style={{ color: '#FFF', fontWeight: 700, fontSize: 15, margin: 0 }}>Maintenance Mode</h3>
+        <h3 style={{ color: '#FFF', fontWeight: 700, fontSize: 15, margin: 0 }}>Засвар үйлчилгээний горим</h3>
         <span style={{
           fontSize: 11, fontWeight: 700, padding: '2px 10px', borderRadius: 99,
           background: isOn ? '#E8242C' : '#333',

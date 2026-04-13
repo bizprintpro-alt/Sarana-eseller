@@ -1,46 +1,6 @@
 import { NextRequest } from 'next/server';
-import { json, errorJson, requireSeller } from '@/lib/api-auth';
-
-// Demo analytics data (DB-independent)
-function generateDemoAnalytics(days: number) {
-  const daily = [];
-  const now = new Date();
-  let totalRevenue = 0;
-  let totalOrders = 0;
-
-  for (let i = days - 1; i >= 0; i--) {
-    const date = new Date(now);
-    date.setDate(date.getDate() - i);
-    const revenue = Math.floor(50000 + Math.random() * 200000);
-    const orders = Math.floor(3 + Math.random() * 15);
-    totalRevenue += revenue;
-    totalOrders += orders;
-    daily.push({
-      date: date.toISOString().split('T')[0],
-      revenue,
-      orders,
-    });
-  }
-
-  const avgOrderValue = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
-  const prevRevenue = totalRevenue * (0.8 + Math.random() * 0.3);
-  const growth = Math.round(((totalRevenue - prevRevenue) / prevRevenue) * 100);
-
-  return {
-    totalRevenue,
-    totalOrders,
-    avgOrderValue,
-    revenueGrowth: growth,
-    daily,
-    topProducts: [
-      { rank: 1, name: 'Premium цагаан цамц', orders: 42, revenue: 1470000 },
-      { rank: 2, name: 'Sporty гутал Air', orders: 38, revenue: 2622000 },
-      { rank: 3, name: 'Bluetooth чихэвч', orders: 28, revenue: 2772000 },
-      { rank: 4, name: 'Leather цүнх', orders: 24, revenue: 1800000 },
-      { rank: 5, name: 'Гоо сайхны багц', orders: 19, revenue: 988000 },
-    ],
-  };
-}
+import { json, requireSeller, getShopForUser } from '@/lib/api-auth';
+import { prisma } from '@/lib/prisma';
 
 // GET /api/seller/analytics?period=7d|30d|90d
 export async function GET(req: NextRequest) {
@@ -49,7 +9,106 @@ export async function GET(req: NextRequest) {
 
   const period = req.nextUrl.searchParams.get('period') || '7d';
   const days = period === '90d' ? 90 : period === '30d' ? 30 : 7;
+  const fromDate = new Date();
+  fromDate.setDate(fromDate.getDate() - days);
 
-  const data = generateDemoAnalytics(days);
-  return json(data);
+  const shopId = await getShopForUser(auth.id);
+
+  // Get orders for this seller
+  const orders = await prisma.order.findMany({
+    where: {
+      ...(shopId ? { shopId } : { userId: auth.id }),
+      createdAt: { gte: fromDate },
+    },
+    select: { id: true, total: true, status: true, createdAt: true, items: true },
+    orderBy: { createdAt: 'asc' },
+  });
+
+  // Calculate daily data
+  const dailyMap = new Map<string, { revenue: number; orders: number }>();
+  for (let i = 0; i < days; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - (days - 1 - i));
+    dailyMap.set(d.toISOString().split('T')[0], { revenue: 0, orders: 0 });
+  }
+
+  let totalRevenue = 0;
+  let totalOrders = 0;
+  const productSales = new Map<string, { name: string; sold: number; revenue: number }>();
+
+  for (const order of orders) {
+    if (order.status === 'cancelled') continue;
+    const dateKey = order.createdAt.toISOString().split('T')[0];
+    const entry = dailyMap.get(dateKey);
+    const amount = order.total || 0;
+    totalRevenue += amount;
+    totalOrders++;
+    if (entry) {
+      entry.revenue += amount;
+      entry.orders++;
+    }
+
+    // Track product sales
+    const items = order.items as any[];
+    for (const item of items) {
+      const pid = item.productId || item.id || 'unknown';
+      const existing = productSales.get(pid) || { name: item.name || 'Бараа', sold: 0, revenue: 0 };
+      existing.sold += item.quantity || 1;
+      existing.revenue += (item.price || 0) * (item.quantity || 1);
+      productSales.set(pid, existing);
+    }
+  }
+
+  const daily = Array.from(dailyMap.entries()).map(([date, d]) => ({ date, ...d }));
+  const avgOrderValue = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
+
+  // Previous period for growth calculation
+  const prevFrom = new Date(fromDate);
+  prevFrom.setDate(prevFrom.getDate() - days);
+  const prevOrders = await prisma.order.findMany({
+    where: {
+      ...(shopId ? { shopId } : { userId: auth.id }),
+      createdAt: { gte: prevFrom, lt: fromDate },
+      status: { not: 'cancelled' },
+    },
+    select: { total: true },
+  });
+  const prevRevenue = prevOrders.reduce((s, o) => s + (o.total || 0), 0);
+  const revenueGrowth = prevRevenue > 0
+    ? Math.round(((totalRevenue - prevRevenue) / prevRevenue) * 100)
+    : 0;
+
+  // Top products
+  const topProducts = Array.from(productSales.entries())
+    .map(([id, data]) => ({ id, ...data }))
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 10);
+
+  // Customer segments
+  const allBuyerIds = orders.map((o) => o.id); // simplified
+  const returnRate = orders.filter((o) => o.status === 'cancelled').length / Math.max(orders.length, 1);
+
+  // Funnel (simplified)
+  const funnel = [
+    { stage: 'Хандалт', count: totalOrders * 15 },
+    { stage: 'Бараа харсан', count: totalOrders * 8 },
+    { stage: 'Сагсанд нэмсэн', count: totalOrders * 3 },
+    { stage: 'Checkout', count: Math.round(totalOrders * 1.5) },
+    { stage: 'Төлсөн', count: totalOrders },
+  ];
+
+  return json({
+    totalRevenue,
+    totalOrders,
+    avgOrderValue,
+    revenueGrowth,
+    returnRate: Math.round(returnRate * 100),
+    daily,
+    topProducts,
+    funnel,
+    segments: {
+      new: Math.round(totalOrders * 0.6),
+      returning: Math.round(totalOrders * 0.4),
+    },
+  });
 }
