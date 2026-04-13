@@ -51,22 +51,28 @@ export default function SellerLayout() {
         }}
       />
       <Tabs.Screen
+        name="catalog"
+        options={{
+          title: 'Каталог',
+          tabBarIcon: ({ color }) => <Ionicons name="grid-outline" size={22} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="revenue"
         options={{
           title: 'Орлого',
           tabBarIcon: ({ color }) => <Ionicons name="trending-up-outline" size={22} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Тохиргоо',
-          tabBarIcon: ({ color }) => <Ionicons name="settings-outline" size={22} color={color} />,
-        }}
-      />
       {/* Hidden screens - accessible via navigation but not shown in tab bar */}
+      <Tabs.Screen name="influencer" options={{ href: null, title: 'Инфлюэнсер' }} />
+      <Tabs.Screen name="leaderboard" options={{ href: null, title: 'Рейтинг' }} />
+      <Tabs.Screen name="settings" options={{ href: null }} />
       <Tabs.Screen name="analytics" options={{ href: null }} />
       <Tabs.Screen name="chat" options={{ href: null }} />
+      <Tabs.Screen name="order/[id]" options={{ href: null, title: 'Захиалга' }} />
+      <Tabs.Screen name="product/new" options={{ href: null, title: 'Бараа нэмэх' }} />
+      <Tabs.Screen name="product/[id]/edit" options={{ href: null, title: 'Бараа засах' }} />
     </Tabs>
   );
 }

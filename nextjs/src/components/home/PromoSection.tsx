@@ -1,14 +1,14 @@
 'use client';
 import Link from 'next/link';
 
-export default function PromoSection({ products }: { products: any[] }) {
+export default function PromoSection({ products, title }: { products: any[]; title?: string }) {
   if (products.length === 0) return null;
 
   return (
     <section className="max-w-[1200px] mx-auto px-4 pb-10">
       <div className="flex justify-between items-center mb-5">
         <h2 className="text-[var(--esl-text)] text-xl font-bold">
-          Хямдралтай бараа
+          {title || 'Хямдралтай бараа'}
         </h2>
         <Link href="/store?sale=true" className="text-[#E8242C] text-sm font-semibold no-underline">
           Бүгд →

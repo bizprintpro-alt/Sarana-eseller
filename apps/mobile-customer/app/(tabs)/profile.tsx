@@ -88,7 +88,7 @@ export default function ProfileScreen() {
     }
   };
 
-  const renderMenuItem = (item: typeof MENU_SHOPPING[0] & { badge?: string }) => (
+  const renderMenuItem = (item: { icon: any; label: string; desc: string; action: string; badge?: string }) => (
     <TouchableOpacity
       key={item.label}
       style={s.menuItem}

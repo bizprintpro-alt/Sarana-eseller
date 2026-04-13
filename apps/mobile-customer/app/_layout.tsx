@@ -24,7 +24,9 @@ function RootNavigator() {
             ? '/(driver)'
             : activeRole === 'pos'
               ? '/(pos)'
-              : '/(tabs)';
+              : activeRole === 'owner' as any
+                ? '/(owner)'
+                : '/(tabs)';
       router.replace(target as any);
     }
   }, [activeRole]);
@@ -62,7 +64,11 @@ function RootNavigator() {
         <Stack.Screen name="(seller)" options={{ headerShown: false }} />
         <Stack.Screen name="(driver)" options={{ headerShown: false }} />
         <Stack.Screen name="(pos)" options={{ headerShown: false }} />
+        <Stack.Screen name="(owner)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(customer)/flash-sale" options={{ title: 'Flash Sale 🔥' }} />
+        <Stack.Screen name="(customer)/addresses" options={{ title: 'Хүргэлтийн хаяг' }} />
+        <Stack.Screen name="(customer)/returns" options={{ title: 'Буцаалт & Баргаан' }} />
         <Stack.Screen name="product/[id]" options={{ title: 'Бараа' }} />
         <Stack.Screen name="order/[id]" options={{ title: 'Захиалга' }} />
         <Stack.Screen name="checkout/index" options={{ title: 'Төлбөр', presentation: 'modal' }} />

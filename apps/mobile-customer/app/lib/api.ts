@@ -218,6 +218,8 @@ export const OrdersAPI = {
     request<{ orders: any[] }>('/buyer/orders'),
   getOrder: (id: string) =>
     request<any>(`/orders/${id}`),
+  requestReturn: (orderId: string, data: { reason: string; images: string[] }) =>
+    request(`/orders/${orderId}/return`, { method: 'POST', body: JSON.stringify(data) }),
 };
 
 // ══════ SELLER ═══════════════════════════════════════════════
@@ -252,6 +254,19 @@ export const SellerAPI = {
     return request<any>(`/seller/analytics${qs}`);
   },
 
+  // Catalog (shared products)
+  catalog: () => request<any>('/seller/shared-products'),
+
+  // Leaderboard
+  leaderboard: (period?: string) => {
+    const qs = period ? `?period=${period}` : '';
+    return request<any>(`/seller/leaderboard${qs}`);
+  },
+
+  // Influencer profile
+  updateInfluencer: (data: { followers: number; platform: string }) =>
+    request('/seller/profile', { method: 'PUT', body: JSON.stringify(data) }),
+
   // Upload image
   uploadImage: async (uri: string) => {
     const token = await getToken();
@@ -282,6 +297,15 @@ export const DriverAPI = {
   },
   updateLocation: (lat: number, lng: number) =>
     request('/tracking/location', { method: 'POST', body: JSON.stringify({ lat, lng }) }),
+  availableDrivers: (lat?: number, lng?: number) => {
+    const params: string[] = [];
+    if (lat) params.push(`lat=${lat}`);
+    if (lng) params.push(`lng=${lng}`);
+    const qs = params.length ? '?' + params.join('&') : '';
+    return request<any>(`/driver/available${qs}`);
+  },
+  assignOrder: (orderId: string, driverId: string) =>
+    request(`/orders/${orderId}/assign-driver`, { method: 'PUT', body: JSON.stringify({ driverId }) }),
 };
 
 // ══════ POS ══════════════════════════════════════════════════
@@ -317,4 +341,21 @@ export const UserAPI = {
   addresses: () => request<any>('/user/addresses'),
   addAddress: (data: any) =>
     request('/user/addresses', { method: 'POST', body: JSON.stringify(data) }),
+};
+
+// ══════ FLASH SALE ══════════════════════════════════════════
+export const FlashSaleAPI = {
+  active: () => request<any>('/flash-sales/active'),
+  upcoming: () => request<any>('/flash-sales/upcoming'),
+};
+
+// ══════ ADDRESS (BUYER) ═════════════════════════════════════
+export const AddressAPI = {
+  list: () => request<any>('/buyer/addresses'),
+  create: (data: any) =>
+    request('/buyer/addresses', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request(`/buyer/addresses/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id: string) =>
+    request(`/buyer/addresses/${id}`, { method: 'DELETE' }),
 };

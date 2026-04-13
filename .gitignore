@@ -12,3 +12,6 @@ Thumbs.db
 seller.txt
 
 .vercel
+
+.vercel
+.env*.local

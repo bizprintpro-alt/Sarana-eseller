@@ -4,16 +4,22 @@ import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
 import MobileNav from '@/components/shared/MobileNav';
 import HeroSearch from '@/components/home/HeroSearch';
+import HeroVideoSlider from '@/components/home/HeroVideoSlider';
 import CategoryIcons from '@/components/home/CategoryIcons';
 import FeedPreview from '@/components/home/FeedPreview';
 import PromoSection from '@/components/home/PromoSection';
 import FeaturedShops from '@/components/home/FeaturedShops';
 import GoldPromoBanner from '@/components/home/GoldPromoBanner';
 import SellerSection from '@/components/home/SellerSection';
+import StatsBar from '@/components/home/StatsBar';
 
 async function getHomeData() {
   try {
-    const [feedPosts, shops, products] = await Promise.all([
+    const [
+      feedPosts, shops, products,
+      heroBanners, sections,
+      featuredProductRows, featuredShopRows, configs,
+    ] = await Promise.all([
       prisma.feedItem.findMany({
         where: { status: 'active' },
         orderBy: { createdAt: 'desc' },
@@ -30,9 +36,25 @@ async function getHomeData() {
         orderBy: { createdAt: 'desc' },
         take: 8,
       }),
+      prisma.heroBanner.findMany({
+        where: { isActive: true },
+        orderBy: { order: 'asc' },
+      }),
+      prisma.homepageSection.findMany({
+        orderBy: { order: 'asc' },
+      }),
+      prisma.featuredProduct.findMany({
+        where: { isActive: true },
+        orderBy: { order: 'asc' },
+      }),
+      prisma.featuredShop.findMany({
+        where: { isActive: true },
+        orderBy: { order: 'asc' },
+      }),
+      prisma.homepageConfig.findMany(),
     ]);
 
-    // Map feedItems to expected format
+    // Map feedItems
     const mappedPosts = feedPosts.map((p) => ({
       id: p.id,
       title: p.title,
@@ -42,7 +64,7 @@ async function getHomeData() {
       category: p.category ? { name: p.category } : null,
     }));
 
-    // Map shops to expected format
+    // Map shops
     const mappedShops = shops.map((s) => ({
       id: s.id,
       name: s.name,
@@ -61,27 +83,167 @@ async function getHomeData() {
       entity: null,
     }));
 
-    return { feedPosts: mappedPosts, entities: mappedShops, products: mappedProducts };
+    // Resolve featured products
+    const fpIds = featuredProductRows.map((f) => f.productId);
+    const fpProducts = fpIds.length
+      ? await prisma.product.findMany({
+          where: { id: { in: fpIds }, isActive: true },
+          select: { id: true, name: true, price: true, salePrice: true, images: true },
+        })
+      : [];
+    const fpMap = new Map(fpProducts.map((p) => [p.id, p]));
+    const featuredProducts = featuredProductRows
+      .map((f) => {
+        const p = fpMap.get(f.productId);
+        if (!p) return null;
+        return {
+          id: p.id,
+          name: p.name,
+          price: p.salePrice || p.price,
+          media: p.images?.[0] ? [{ url: p.images[0] }] : [],
+          entity: null,
+        };
+      })
+      .filter(Boolean);
+
+    // Resolve featured shops
+    const fsIds = featuredShopRows.map((f) => f.shopId);
+    const fsShops = fsIds.length
+      ? await prisma.shop.findMany({
+          where: { id: { in: fsIds }, isBlocked: false },
+          select: { id: true, name: true, logo: true, slug: true, storefrontSlug: true },
+        })
+      : [];
+    const fsMap = new Map(fsShops.map((s) => [s.id, s]));
+    const featuredShopsMapped = featuredShopRows
+      .map((f) => {
+        const s = fsMap.get(f.shopId);
+        if (!s) return null;
+        return {
+          id: s.id,
+          name: s.name,
+          logoUrl: s.logo,
+          storefrontSlug: s.storefrontSlug || s.slug,
+          rating: null,
+          _count: { products: 0 },
+        };
+      })
+      .filter(Boolean);
+
+    // Stats config
+    const configMap = new Map(configs.map((c) => [c.key, c.value]));
+    const stats = {
+      useRealData: configMap.get('stats_use_real') === 'true',
+      products: configMap.get('stats_products') || '10,000+',
+      shops: configMap.get('stats_shops') || '500+',
+      users: configMap.get('stats_users') || '50,000+',
+    };
+
+    // If real data requested, count from DB
+    if (stats.useRealData) {
+      const [productCount, shopCount, userCount] = await Promise.all([
+        prisma.product.count({ where: { isActive: true } }),
+        prisma.shop.count({ where: { isBlocked: false } }),
+        prisma.user.count(),
+      ]);
+      stats.products = productCount.toLocaleString() + '+';
+      stats.shops = shopCount.toLocaleString() + '+';
+      stats.users = userCount.toLocaleString() + '+';
+    }
+
+    // Build section map for active checks
+    const sectionMap = new Map(sections.map((s) => [s.key, s]));
+
+    return {
+      feedPosts: mappedPosts,
+      entities: mappedShops,
+      products: mappedProducts,
+      heroBanners,
+      sections: sections.filter((s) => s.isActive).sort((a, b) => a.order - b.order),
+      sectionMap,
+      featuredProducts,
+      featuredShopsMapped,
+      stats,
+    };
   } catch {
-    return { feedPosts: [], entities: [], products: [] };
+    return {
+      feedPosts: [], entities: [], products: [],
+      heroBanners: [], sections: [], sectionMap: new Map(),
+      featuredProducts: [], featuredShopsMapped: [], stats: null,
+    };
   }
 }
 
 export default async function HomePage() {
-  const { feedPosts, entities, products } = await getHomeData();
+  const {
+    feedPosts, entities, products,
+    heroBanners, sections, sectionMap,
+    featuredProducts, featuredShopsMapped, stats,
+  } = await getHomeData();
+
+  // Helper to check if section is active
+  const isActive = (key: string) => {
+    const s = sectionMap.get(key);
+    return s ? s.isActive : true; // default active if not in DB yet
+  };
+
+  // Render sections in order from DB
+  const renderSection = (key: string) => {
+    if (!isActive(key)) return null;
+    switch (key) {
+      case 'hero':
+        return <HeroVideoSlider key="hero" banners={heroBanners} />;
+      case 'categories':
+        return <CategoryIcons key="categories" />;
+      case 'featured_products':
+        return featuredProducts.length > 0
+          ? <PromoSection key="featured_products" products={featuredProducts} title="Онцлох бараа" />
+          : null;
+      case 'promo':
+        return <PromoSection key="promo" products={products} />;
+      case 'featured_shops':
+        return featuredShopsMapped.length > 0
+          ? <FeaturedShops key="featured_shops" entities={featuredShopsMapped} />
+          : <FeaturedShops key="featured_shops_default" entities={entities} />;
+      case 'stats':
+        return stats ? <StatsBar key="stats" stats={stats} /> : null;
+      case 'gold':
+        return <GoldPromoBanner key="gold" />;
+      case 'seller':
+        return <SellerSection key="seller" />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
       <Navbar />
       <main>
-        <HeroSearch />
-        <TrustBadges />
-        <CategoryIcons />
-        <FeedPreview posts={feedPosts} />
-        <PromoSection products={products} />
-        <FeaturedShops entities={entities} />
-        <GoldPromoBanner />
-        <SellerSection />
+        {/* If sections exist in DB, render in DB order */}
+        {sections.length > 0 ? (
+          <>
+            {sections.map((s) => renderSection(s.key))}
+            {/* Always show search + trust after hero */}
+            <HeroSearch />
+            <TrustBadges />
+            {/* Feed is always shown */}
+            <FeedPreview posts={feedPosts} />
+          </>
+        ) : (
+          <>
+            {/* Fallback: original static order */}
+            <HeroVideoSlider banners={heroBanners} />
+            <HeroSearch />
+            <TrustBadges />
+            <CategoryIcons />
+            <FeedPreview posts={feedPosts} />
+            <PromoSection products={products} />
+            <FeaturedShops entities={entities} />
+            <GoldPromoBanner />
+            <SellerSection />
+          </>
+        )}
       </main>
       <Footer />
       <MobileNav />

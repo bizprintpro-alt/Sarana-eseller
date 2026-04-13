@@ -1,8 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
+import * as Location from 'expo-location';
+import * as TaskManager from 'expo-task-manager';
 import { DriverAPI } from '../lib/api';
+
+const LOCATION_TASK = 'background-location';
+const COUNTDOWN_SECS = 30;
+
+TaskManager.defineTask(LOCATION_TASK, async ({ data, error }: any) => {
+  if (error) return;
+  const { locations } = data;
+  if (locations?.length > 0) {
+    const { latitude, longitude } = locations[0].coords;
+    try { await DriverAPI.updateLocation(latitude, longitude); } catch {}
+  }
+});
 
 const DEMO_DELIVERIES = [
   { id: 'D-101', shop: 'Миний дэлгүүр', customer: 'Б.Болд', address: 'БЗД 3-р хороо', distance: '2.4 км', reward: '₮4,500' },
@@ -14,6 +29,8 @@ export default function DriverDashboard() {
   const [online, setOnline] = useState(false);
   const [deliveries, setDeliveries] = useState(DEMO_DELIVERIES);
   const [refreshing, setRefreshing] = useState(false);
+  const [countdowns, setCountdowns] = useState<Record<string, number>>({});
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const loadDeliveries = useCallback(async () => {
     try {
@@ -35,11 +52,93 @@ export default function DriverDashboard() {
 
   useEffect(() => { if (online) loadDeliveries(); }, [online]);
 
+  // Initialize countdowns for each delivery
+  useEffect(() => {
+    if (!online) return;
+    const initial: Record<string, number> = {};
+    deliveries.forEach(d => {
+      if (countdowns[d.id] === undefined) initial[d.id] = COUNTDOWN_SECS;
+    });
+    if (Object.keys(initial).length > 0) {
+      setCountdowns(prev => ({ ...prev, ...initial }));
+    }
+  }, [deliveries, online]);
+
+  // Countdown timer — tick every second
+  useEffect(() => {
+    if (!online) return;
+    countdownRef.current = setInterval(() => {
+      setCountdowns(prev => {
+        const next = { ...prev };
+        let changed = false;
+        for (const key of Object.keys(next)) {
+          if (next[key] > 0) {
+            next[key] = next[key] - 1;
+            changed = true;
+            if (next[key] === 0) {
+              Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+            }
+          }
+        }
+        return changed ? next : prev;
+      });
+    }, 1000);
+    return () => { if (countdownRef.current) clearInterval(countdownRef.current); };
+  }, [online]);
+
+  // Remove expired deliveries (countdown hit 0)
+  useEffect(() => {
+    const expired = Object.entries(countdowns)
+      .filter(([, v]) => v === 0)
+      .map(([k]) => k);
+    if (expired.length > 0) {
+      const timeout = setTimeout(() => {
+        setDeliveries(prev => prev.filter(d => !expired.includes(d.id)));
+        setCountdowns(prev => {
+          const next = { ...prev };
+          expired.forEach(k => delete next[k]);
+          return next;
+        });
+      }, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [countdowns]);
+
+  // Background GPS
+  const startGPS = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') return;
+    const { status: bgStatus } = await Location.requestBackgroundPermissionsAsync();
+    if (bgStatus !== 'granted') return;
+    const isRunning = await TaskManager.isTaskRegisteredAsync(LOCATION_TASK);
+    if (!isRunning) {
+      await Location.startLocationUpdatesAsync(LOCATION_TASK, {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 15000,
+        distanceInterval: 30,
+        foregroundService: {
+          notificationTitle: 'eSeller хүргэлт',
+          notificationBody: 'Байршил шинэчлэгдэж байна...',
+        },
+      });
+    }
+  };
+
+  const stopGPS = async () => {
+    const isRunning = await TaskManager.isTaskRegisteredAsync(LOCATION_TASK);
+    if (isRunning) {
+      await Location.stopLocationUpdatesAsync(LOCATION_TASK);
+    }
+  };
+
   const handleToggle = async () => {
     const next = !online;
     setOnline(next);
-    // TODO: add driver status endpoint
-    // DriverAPI.toggleOnline(next).catch(() => {});
+    if (next) {
+      startGPS();
+    } else {
+      stopGPS();
+    }
   };
 
   return (
@@ -88,11 +187,22 @@ export default function DriverDashboard() {
           <Text style={s.emptyText}>Идэвхжүүлсний дараа хүргэлт харагдана</Text>
         </View>
       ) : (
-        deliveries.map((d) => (
+        deliveries.map((d) => {
+          const secs = countdowns[d.id] ?? COUNTDOWN_SECS;
+          const isUrgent = secs <= 10;
+          return (
           <View key={d.id} style={s.card}>
             <View style={s.cardHeader}>
               <Text style={s.cardId}>{d.id}</Text>
-              <Text style={s.cardReward}>{d.reward}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View style={[s.countdownBadge, isUrgent && s.countdownUrgent]}>
+                  <Ionicons name="time" size={12} color={isUrgent ? '#FFF' : '#F59E0B'} />
+                  <Text style={[s.countdownText, isUrgent && { color: '#FFF' }]}>
+                    00:{String(secs).padStart(2, '0')}
+                  </Text>
+                </View>
+                <Text style={s.cardReward}>{d.reward}</Text>
+              </View>
             </View>
             <Text style={s.cardShop}>{d.shop}</Text>
             <View style={s.cardRow}>
@@ -116,7 +226,8 @@ export default function DriverDashboard() {
               </TouchableOpacity>
             </View>
           </View>
-        ))
+          );
+        })
       )}
     </ScrollView>
   );
@@ -199,5 +310,23 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  countdownBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: '#F59E0B22',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  countdownUrgent: {
+    backgroundColor: '#E8242C',
+  },
+  countdownText: {
+    color: '#F59E0B',
+    fontSize: 13,
+    fontWeight: '900',
+    fontVariant: ['tabular-nums'],
   },
 });
