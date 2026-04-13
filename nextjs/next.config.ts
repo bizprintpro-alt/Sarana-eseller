@@ -32,10 +32,28 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '*.googleusercontent.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'cdnp.cody.mn' },
+      { protocol: 'https', hostname: 'public.blob.vercel-storage.com' },
+      { protocol: 'https', hostname: 'cdn.eseller.mn' },
     ],
+    formats: ['image/webp', 'image/avif'],
   },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        // Dev: nomin.localhost:3000 → /_shop/nomin/...
+        // Add to hosts: 127.0.0.1 nomin.localhost
+        {
+          source: '/:path*',
+          has: [{ type: 'host', value: '(?<slug>[a-z0-9-]+)\\.localhost' }],
+          destination: '/_shop/:slug/:path*',
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
   },
 };
 

@@ -86,5 +86,38 @@ export default async function ProductPage({ params }: Props) {
     _id: r.id,
   }));
 
-  return <ProductDetailClient product={clientProduct as any} relatedProducts={relatedProducts as any} />;
+  // Product JSON-LD structured data for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description || product.name,
+    image: product.images?.[0] || undefined,
+    offers: {
+      '@type': 'Offer',
+      price: product.salePrice || product.price,
+      priceCurrency: 'MNT',
+      availability: (product.stock ?? 0) > 0
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      url: `https://eseller.mn/product/${product.id}`,
+    },
+    ...(product.rating ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: product.rating,
+        reviewCount: product.reviewCount || 1,
+      },
+    } : {}),
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductDetailClient product={clientProduct as any} relatedProducts={relatedProducts as any} />
+    </>
+  );
 }

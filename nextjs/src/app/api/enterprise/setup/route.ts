@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth, json, errorJson } from '@/lib/api-auth';
+import { invalidateShopCache } from '@/lib/shop-cache';
 
 // POST /api/enterprise/setup — create enterprise shop
 export async function POST(req: NextRequest) {
@@ -48,6 +49,9 @@ export async function POST(req: NextRequest) {
       permissions: ['*'],
     },
   });
+
+  // Invalidate cache
+  await invalidateShopCache(clean);
 
   return json({ enterprise, url: `https://${clean}.eseller.mn` });
 }

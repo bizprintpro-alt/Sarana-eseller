@@ -68,9 +68,10 @@ model User {
   company   Company?
   autoDealer AutoDealer?
   serviceProvider ServiceProvider?
-  sellerProfile   SellerProfile?
-  partnerAgent    PartnerAgent?
-  enterpriseUsers EnterpriseUser[]
+  sellerProfile         SellerProfile?
+  partnerAgent          PartnerAgent?
+  enterpriseUsers       EnterpriseUser[]
+  bankLoyaltyTransactions BankLoyaltyTransaction[]
 
   @@map("users")
 }
@@ -244,7 +245,8 @@ model Order {
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
+  user          User           @relation(fields: [userId], references: [id])
+  dropshipOrder DropshipOrder?
 
   @@map("orders")
 }
@@ -2200,4 +2202,52 @@ model WholesalePrice {
   product Product @relation(fields: [productId], references: [id])
 
   @@map("wholesale_prices")
+}
+
+// ══════════════════════════════════════════════════════════════
+// BANK LOYALTY INTEGRATION
+// ══════════════════════════════════════════════════════════════
+
+model BankIntegration {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  bank       String   // KHAN | GOLOMT | TDB | HAS | ARIG | CAPITRON
+  apiKey     String
+  merchantId String
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@map("bank_integrations")
+}
+
+model BankLoyaltyTransaction {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  bank          String   // KHAN | GOLOMT | TDB
+  bankPoints    Int
+  esellerPoints Int
+  rate          Float    // 1 bank point = X eseller points
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("bank_loyalty_transactions")
+}
+
+// ══════════════════════════════════════════════════════════════
+// DROPSHIP ORDERS
+// ══════════════════════════════════════════════════════════════
+
+model DropshipOrder {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderId         String   @unique @db.ObjectId
+  supplierOrderId String?
+  status          String   @default("PENDING") // PENDING | ORDERED | SHIPPED | DELIVERED | FAILED
+  trackingNumber  String?
+  trackingUrl     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("dropship_orders")
 }

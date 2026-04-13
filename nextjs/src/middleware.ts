@@ -1,4 +1,14 @@
+// ══════════════════════════════════════════════════════════════
+// eseller.mn — Edge Middleware
+// ДҮРЭМ: Зөвхөн routing шийдвэр. Prisma байхгүй. DB call байхгүй.
+// ══════════════════════════════════════════════════════════════
+
 import { NextRequest, NextResponse } from 'next/server';
+
+const RESERVED_SUBDOMAINS = new Set([
+  'www', 'api', 'admin', 'dashboard', 'cdn', 'mail',
+  'dev', 'staging', 'app', 'help', 'support', 'blog',
+]);
 
 const PLATFORM_HOSTS = new Set([
   'eseller.mn',
@@ -9,9 +19,8 @@ const PLATFORM_HOSTS = new Set([
   '127.0.0.1:3000',
 ]);
 
-export async function middleware(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const hostname = req.headers.get('host') || '';
-  const hostWithoutPort = hostname.split(':')[0];
   const { pathname } = req.nextUrl;
 
   // ═══ CORS for API routes (mobile app support) ═══
@@ -40,49 +49,66 @@ export async function middleware(req: NextRequest) {
     return response;
   }
 
-  // ═══ Maintenance Mode Check (env-based, no DB call) ═══
+  // ═══ Maintenance Mode (env-based, no DB call) ═══
   if (process.env.MAINTENANCE_MODE === 'true') {
-    const skipMaintenance = pathname.startsWith('/dashboard') ||
+    const skip = pathname.startsWith('/dashboard') ||
       pathname.startsWith('/api') ||
       pathname.startsWith('/maintenance') ||
       pathname.startsWith('/login') ||
       pathname.startsWith('/_next') ||
       pathname.startsWith('/favicon');
-
-    if (!skipMaintenance) {
+    if (!skip) {
       const url = req.nextUrl.clone();
       url.pathname = '/maintenance';
       return NextResponse.rewrite(url);
     }
   }
 
-  // Skip platform's own domains
-  if (PLATFORM_HOSTS.has(hostname) || PLATFORM_HOSTS.has(hostWithoutPort)) {
+  // ═══ Skip platform's own domains ═══
+  if (PLATFORM_HOSTS.has(hostname) || PLATFORM_HOSTS.has(hostname.split(':')[0])) {
     return NextResponse.next();
   }
 
-  // Skip Vercel preview URLs
+  // ═══ Skip Vercel preview URLs ═══
   if (hostname.includes('vercel.app') || hostname.includes('vercel-') || hostname.includes('.local')) {
     return NextResponse.next();
   }
 
-  // ═══ Subdomain routing for Enterprise shops ═══
-  const subdomainMatch = hostname.match(/^(.+)\.eseller\.mn$/);
+  // ═══ Subdomain routing (Edge — no DB) ═══
+  // nomin.eseller.mn → /_shop/nomin/...
+  const subdomainMatch = hostname.match(/^([a-z0-9][a-z0-9-]+)\.eseller\.mn$/i);
   if (subdomainMatch) {
-    const subdomain = subdomainMatch[1];
-    // Skip reserved subdomains
-    if (!['www', 'admin', 'api', 'dashboard', 'mail', 'cdn'].includes(subdomain)) {
-      const url = req.nextUrl.clone();
-      url.pathname = `/enterprise/${subdomain}${pathname}`;
-      const res = NextResponse.rewrite(url);
-      res.headers.set('x-subdomain', subdomain);
-      return res;
+    const slug = subdomainMatch[1].toLowerCase();
+
+    if (RESERVED_SUBDOMAINS.has(slug)) {
+      return NextResponse.next();
     }
+
+    // Rewrite to /_shop/[slug] — URL doesn't change for user
+    const url = req.nextUrl.clone();
+    url.pathname = `/_shop/${slug}${pathname === '/' ? '' : pathname}`;
+
+    const res = NextResponse.rewrite(url);
+    res.headers.set('x-shop-slug', slug);
+    return res;
+  }
+
+  // ═══ Custom domain routing ═══
+  // shop.nomin.mn → same as nomin.eseller.mn
+  // Pass hostname via header, resolve in server component
+  if (!hostname.includes('eseller.mn') && !hostname.includes('localhost')) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/_shop/_custom${pathname === '/' ? '' : pathname}`;
+    const res = NextResponse.rewrite(url);
+    res.headers.set('x-custom-domain', hostname);
+    return res;
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+  ],
 };
