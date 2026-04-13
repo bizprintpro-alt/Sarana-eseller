@@ -1,8 +1,6 @@
 /**
  * Seed Enterprise Demo Data
  * Usage: npx tsx scripts/seed-enterprise-demo.ts
- *
- * Creates demo enterprise shops with sample products
  */
 
 import { PrismaClient } from '@prisma/client';
@@ -30,50 +28,64 @@ const DEMO_PRODUCTS = [
 async function main() {
   console.log('[SEED] Creating enterprise demo data...');
 
-  // Find or create a demo user
-  let user = await prisma.user.findFirst({ where: { email: 'demo@eseller.mn' } });
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        name: 'Demo Enterprise',
-        email: 'demo@eseller.mn',
-        password: '$2b$10$demohashedpassword',
-        role: 'seller',
-      },
-    });
-  }
+  // 1. Upsert demo user
+  const user = await prisma.user.upsert({
+    where: { email: 'demo@eseller.mn' },
+    update: {},
+    create: {
+      name: 'Номин Дэлгүүр',
+      email: 'demo@eseller.mn',
+      password: '$2b$10$demohashedpassword',
+      role: 'seller',
+    },
+  });
+  console.log(`[SEED] User: ${user.id}`);
 
-  // Create demo shop
-  let shop = await prisma.shop.findFirst({ where: { slug: 'nomin-demo' } });
-  if (!shop) {
+  // 2. Find or create demo shop
+  let shop = await prisma.shop.findUnique({ where: { userId: user.id } });
+  if (shop) {
+    // Update existing shop slug to 'nomin'
+    try {
+      shop = await prisma.shop.update({
+        where: { id: shop.id },
+        data: { name: 'Номин Дэлгүүр', slug: 'nomin', storefrontSlug: 'nomin' },
+      });
+    } catch {
+      // slug or storefrontSlug conflict — keep as-is
+      console.log(`[SEED] Shop exists: ${shop.slug} (keeping existing slug)`);
+    }
+  } else {
     shop = await prisma.shop.create({
       data: {
         userId: user.id,
-        name: 'Номин (Demo)',
-        slug: 'nomin-demo',
+        name: 'Номин Дэлгүүр',
+        slug: 'nomin',
+        storefrontSlug: 'nomin',
         phone: '77001234',
-        address: 'Улаанбаатар, СБД',
+        address: 'Улаанбаатар, СБД, 1-р хороо',
         industry: 'retail',
         isDemo: true,
       },
     });
   }
+  console.log(`[SEED] Shop: ${shop.id} (slug: ${shop.slug})`);
 
-  // Create enterprise config
-  const existing = await prisma.enterpriseShop.findFirst({ where: { shopId: shop.id } });
-  if (!existing) {
-    await prisma.enterpriseShop.create({
-      data: {
-        shopId: shop.id,
-        subdomain: 'nomin-demo',
-        primaryColor: '#003DA5',
-        accentColor: '#E67E22',
-        plan: 'CORPORATE',
-      },
-    });
-  }
+  // 3. Upsert enterprise config
+  const enterprise = await prisma.enterpriseShop.upsert({
+    where: { subdomain: 'nomin' },
+    update: {},
+    create: {
+      shopId: shop.id,
+      subdomain: 'nomin',
+      primaryColor: '#003DA5',
+      accentColor: '#E67E22',
+      plan: 'CORPORATE',
+    },
+  });
+  console.log(`[SEED] Enterprise: ${enterprise.id} (subdomain: nomin)`);
 
-  // Create products
+  // 4. Upsert products
+  let created = 0;
   for (const p of DEMO_PRODUCTS) {
     const exists = await prisma.product.findFirst({
       where: { name: p.name, userId: user.id },
@@ -91,10 +103,12 @@ async function main() {
           stock: Math.floor(10 + Math.random() * 90),
         },
       });
+      created++;
     }
   }
 
-  console.log(`[SEED] Done! nomin-demo.eseller.mn ready with ${DEMO_PRODUCTS.length} products`);
+  console.log(`[SEED] Products: ${created} created, ${DEMO_PRODUCTS.length - created} already existed`);
+  console.log(`[SEED] Done! http://nomin.localhost:3000 ready`);
 }
 
 main()

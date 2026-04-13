@@ -75,14 +75,8 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // Dev: nomin.localhost:3000 → /shop-sub/nomin/...
-  const devMatch = hostname.match(/^([a-z0-9][a-z0-9-]+)\.localhost(?::\d+)?$/i);
-  if (devMatch) {
-    const slug = devMatch[1].toLowerCase();
-    if (!RESERVED_SUBDOMAINS.has(slug)) {
-      return rewriteToShop(req, slug, pathname);
-    }
-  }
+  // Dev: nomin.localhost:3000 handled by next.config.ts rewrites
+  // (middleware runs AFTER rewrites for *.localhost)
 
   // Skip platform's own domains
   if (PLATFORM_HOSTS.has(hostname) || PLATFORM_HOSTS.has(hostname.split(':')[0])) {

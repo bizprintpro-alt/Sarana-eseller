@@ -44,11 +44,11 @@ const nextConfig: NextConfig = {
     return {
       beforeFiles: [
         // Dev: nomin.localhost:3000 → /shop-sub/nomin/...
-        // Add to hosts: 127.0.0.1 nomin.localhost
+        // _next, api, favicon зэргийг ОРХИНО
         {
-          source: '/:path*',
-          has: [{ type: 'host', value: '(?<slug>[a-z0-9-]+)\\.localhost' }],
-          destination: '/shop-sub/:slug/:path*',
+          source: '/((?!_next|api|favicon\\.ico|manifest\\.json|robots\\.txt|sitemap\\.xml).*)',
+          has: [{ type: 'host', value: '(?<slug>[^.]+)\\.localhost' }],
+          destination: '/shop-sub/:slug/:1',
         },
       ],
       afterFiles: [],
