@@ -146,6 +146,7 @@ model Product {
   addOns          AddOn[]
   reviews         Review[]
   sellerProducts  SellerProduct[]
+  importedUrls    ImportedUrl[]
 
   @@map("products")
 }
@@ -318,6 +319,7 @@ model Shop {
   workingHours WorkingHours[]
   storefront   SellerStorefront?
   subscription ShopSubscription?
+  integration  StoreIntegration?
 
   @@map("stores")
 }
@@ -1985,4 +1987,111 @@ model EmailTemplate {
   createdAt DateTime @default(now())
 
   @@map("email_templates")
+}
+
+// ══════════════════════════════════════════════════════════════
+// HOMEPAGE CMS
+// ══════════════════════════════════════════════════════════════
+
+model HeroBanner {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  subtitle   String?
+  videoUrl   String?
+  imageUrl   String?
+  buttonText String?
+  buttonLink String?
+  badge      String?
+  color      String?  @default("#E8242C")
+  gradient   String?
+  order      Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("hero_banners")
+}
+
+model FeaturedProduct {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId String   @db.ObjectId
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("featured_products")
+}
+
+model FeaturedShop {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId    String   @db.ObjectId
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("featured_shops")
+}
+
+model HomepageSection {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  key      String  @unique
+  title    String?
+  isActive Boolean @default(true)
+  order    Int     @default(0)
+
+  @@map("homepage_sections")
+}
+
+// ══════════════════════════════════════════════════════════════
+// STORE INTEGRATIONS (API / Feed / URL Import)
+// ══════════════════════════════════════════════════════════════
+
+model StoreIntegration {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId        String   @unique @db.ObjectId
+  shop          Shop     @relation(fields: [shopId], references: [id])
+
+  // API Integration
+  apiKey        String   @unique @default(cuid())
+  apiSecret     String   @default(cuid())
+
+  // Feed Integration
+  feedUrl       String?     // XML/CSV/RSS URL
+  feedType      String?     // "xml" | "csv" | "json" | "rss"
+  feedInterval  Int         @default(60) // minutes
+  lastSyncAt    DateTime?
+  syncStatus    String      @default("idle") // idle|syncing|error|success
+  syncError     String?
+
+  // URL Import history
+  importedUrls  ImportedUrl[]
+
+  // Stats
+  totalImported Int         @default(0)
+  totalSynced   Int         @default(0)
+
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@map("store_integrations")
+}
+
+model ImportedUrl {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  integrationId   String           @db.ObjectId
+  integration     StoreIntegration @relation(fields: [integrationId], references: [id])
+
+  url             String
+  sourceType      String?  // "shopify"|"woocommerce"|"custom"|"aliexpress" etc
+  productId       String?  @db.ObjectId
+  product         Product? @relation(fields: [productId], references: [id])
+
+  status          String   @default("pending") // pending|success|failed
+  error           String?
+  rawData         Json?    // scraped raw data
+
+  createdAt       DateTime @default(now())
+
+  @@map("imported_urls")
 }
