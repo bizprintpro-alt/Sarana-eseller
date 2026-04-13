@@ -64,47 +64,55 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // ═══ Skip platform's own domains ═══
+  // ═══ Subdomain routing (Edge — no DB) ═══
+
+  // Production: nomin.eseller.mn → /shop-sub/nomin/...
+  const prodMatch = hostname.match(/^([a-z0-9][a-z0-9-]+)\.eseller\.mn$/i);
+  if (prodMatch) {
+    const slug = prodMatch[1].toLowerCase();
+    if (!RESERVED_SUBDOMAINS.has(slug)) {
+      return rewriteToShop(req, slug, pathname);
+    }
+  }
+
+  // Dev: nomin.localhost:3000 → /shop-sub/nomin/...
+  const devMatch = hostname.match(/^([a-z0-9][a-z0-9-]+)\.localhost(?::\d+)?$/i);
+  if (devMatch) {
+    const slug = devMatch[1].toLowerCase();
+    if (!RESERVED_SUBDOMAINS.has(slug)) {
+      return rewriteToShop(req, slug, pathname);
+    }
+  }
+
+  // Skip platform's own domains
   if (PLATFORM_HOSTS.has(hostname) || PLATFORM_HOSTS.has(hostname.split(':')[0])) {
     return NextResponse.next();
   }
 
-  // ═══ Skip Vercel preview URLs ═══
+  // Skip Vercel preview URLs
   if (hostname.includes('vercel.app') || hostname.includes('vercel-') || hostname.includes('.local')) {
     return NextResponse.next();
   }
 
-  // ═══ Subdomain routing (Edge — no DB) ═══
-  // nomin.eseller.mn → /_shop/nomin/...
-  const subdomainMatch = hostname.match(/^([a-z0-9][a-z0-9-]+)\.eseller\.mn$/i);
-  if (subdomainMatch) {
-    const slug = subdomainMatch[1].toLowerCase();
-
-    if (RESERVED_SUBDOMAINS.has(slug)) {
-      return NextResponse.next();
-    }
-
-    // Rewrite to /_shop/[slug] — URL doesn't change for user
-    const url = req.nextUrl.clone();
-    url.pathname = `/_shop/${slug}${pathname === '/' ? '' : pathname}`;
-
-    const res = NextResponse.rewrite(url);
-    res.headers.set('x-shop-slug', slug);
-    return res;
-  }
-
-  // ═══ Custom domain routing ═══
-  // shop.nomin.mn → same as nomin.eseller.mn
-  // Pass hostname via header, resolve in server component
+  // Custom domain: shop.nomin.mn → /shop-sub/_custom/...
   if (!hostname.includes('eseller.mn') && !hostname.includes('localhost')) {
     const url = req.nextUrl.clone();
-    url.pathname = `/_shop/_custom${pathname === '/' ? '' : pathname}`;
+    url.pathname = `/shop-sub/_custom${pathname === '/' ? '' : pathname}`;
     const res = NextResponse.rewrite(url);
     res.headers.set('x-custom-domain', hostname);
     return res;
   }
 
   return NextResponse.next();
+}
+
+/** Rewrite to /shop-sub/[slug] — shared by prod + dev */
+function rewriteToShop(req: NextRequest, slug: string, pathname: string) {
+  const url = req.nextUrl.clone();
+  url.pathname = `/shop-sub/${slug}${pathname === '/' ? '' : pathname}`;
+  const res = NextResponse.rewrite(url);
+  res.headers.set('x-shop-slug', slug);
+  return res;
 }
 
 export const config = {

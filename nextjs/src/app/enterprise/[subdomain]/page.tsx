@@ -5,10 +5,10 @@ interface Props {
 }
 
 /**
- * Legacy route — redirects to /_shop/[slug] which is the new
+ * Legacy route — redirects to /shop-sub/[slug] which is the new
  * subdomain-powered enterprise shop system.
  */
 export default async function EnterpriseRedirect({ params }: Props) {
   const { subdomain } = await params;
-  redirect(`/_shop/${subdomain}`);
+  redirect(`/shop-sub/${subdomain}`);
 }

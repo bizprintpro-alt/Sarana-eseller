@@ -111,7 +111,7 @@ export default function EnterpriseSetupPage() {
             </a>
           </div>
           <iframe
-            src={`/_shop/${enterprise.subdomain}`}
+            src={`/shop-sub/${enterprise.subdomain}`}
             className="w-full border-none"
             style={{ height: 500 }}
             title="Shop Preview"

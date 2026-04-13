@@ -50,7 +50,7 @@ export default async function ShopAboutPage({ params }: Props) {
 
         {/* Back to products */}
         <Link
-          href={`/_shop/${slug}/products`}
+          href={`/shop-sub/${slug}/products`}
           className="inline-block text-white px-6 py-3 rounded-xl font-semibold text-sm no-underline"
           style={{ background: config.accentColor }}
         >

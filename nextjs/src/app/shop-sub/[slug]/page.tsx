@@ -65,7 +65,7 @@ export default async function ShopHomePage({ params }: Props) {
             {products.map((product) => (
               <Link
                 key={product.id}
-                href={`/_shop/${slug}/products/${product.id}`}
+                href={`/shop-sub/${slug}/products/${product.id}`}
                 className="bg-white rounded-xl border overflow-hidden hover:shadow-lg transition group no-underline"
               >
                 <div className="aspect-square bg-gray-100 overflow-hidden">

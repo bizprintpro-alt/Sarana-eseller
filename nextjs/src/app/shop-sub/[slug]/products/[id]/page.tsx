@@ -40,9 +40,9 @@ export default async function ShopProductDetailPage({ params }: Props) {
     <div className="max-w-5xl mx-auto px-4 py-8">
       {/* Breadcrumb */}
       <div className="text-sm text-gray-400 mb-4">
-        <Link href={`/_shop/${slug}`} className="hover:text-gray-600 no-underline text-gray-400">Нүүр</Link>
+        <Link href={`/shop-sub/${slug}`} className="hover:text-gray-600 no-underline text-gray-400">Нүүр</Link>
         {' / '}
-        <Link href={`/_shop/${slug}/products`} className="hover:text-gray-600 no-underline text-gray-400">Бараа</Link>
+        <Link href={`/shop-sub/${slug}/products`} className="hover:text-gray-600 no-underline text-gray-400">Бараа</Link>
         {' / '}
         <span className="text-gray-600">{product.name}</span>
       </div>

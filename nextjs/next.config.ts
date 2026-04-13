@@ -43,12 +43,12 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [
-        // Dev: nomin.localhost:3000 → /_shop/nomin/...
+        // Dev: nomin.localhost:3000 → /shop-sub/nomin/...
         // Add to hosts: 127.0.0.1 nomin.localhost
         {
           source: '/:path*',
           has: [{ type: 'host', value: '(?<slug>[a-z0-9-]+)\\.localhost' }],
-          destination: '/_shop/:slug/:path*',
+          destination: '/shop-sub/:slug/:path*',
         },
       ],
       afterFiles: [],

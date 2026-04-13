@@ -62,7 +62,7 @@ export default async function ShopProductsPage({ params, searchParams }: Props) 
 
         <div className="flex gap-2 flex-wrap">
           <Link
-            href={`/_shop/${slug}/products`}
+            href={`/shop-sub/${slug}/products`}
             className={`px-3 py-1.5 rounded-lg text-sm no-underline ${!category ? 'text-white' : 'bg-gray-100 text-gray-600'}`}
             style={!category ? { background: config.primaryColor } : undefined}
           >
@@ -71,7 +71,7 @@ export default async function ShopProductsPage({ params, searchParams }: Props) 
           {categories.map((cat) => (
             <Link
               key={cat}
-              href={`/_shop/${slug}/products?category=${cat}`}
+              href={`/shop-sub/${slug}/products?category=${cat}`}
               className={`px-3 py-1.5 rounded-lg text-sm no-underline ${category === cat ? 'text-white' : 'bg-gray-100 text-gray-600'}`}
               style={category === cat ? { background: config.primaryColor } : undefined}
             >
@@ -89,7 +89,7 @@ export default async function ShopProductsPage({ params, searchParams }: Props) 
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/_shop/${slug}/products/${product.id}`}
+              href={`/shop-sub/${slug}/products/${product.id}`}
               className="bg-white rounded-xl border overflow-hidden hover:shadow-lg transition group no-underline"
             >
               <div className="aspect-square bg-gray-100 overflow-hidden">

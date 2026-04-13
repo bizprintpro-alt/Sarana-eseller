@@ -29,7 +29,7 @@ export default async function ShopLayout({
           flexShrink: 0,
         }}
       >
-        <Link href={`/_shop/${config.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+        <Link href={`/shop-sub/${config.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
           {config.logoUrl ? (
             <img src={config.logoUrl} style={{ height: 36, borderRadius: 4 }} alt={config.name} />
           ) : null}
@@ -40,13 +40,13 @@ export default async function ShopLayout({
 
         {/* Nav */}
         <nav style={{ marginLeft: 'auto', display: 'flex', gap: 20, alignItems: 'center' }}>
-          <Link href={`/_shop/${config.slug}`} style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textDecoration: 'none' }}>
+          <Link href={`/shop-sub/${config.slug}`} style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textDecoration: 'none' }}>
             Нүүр
           </Link>
-          <Link href={`/_shop/${config.slug}/products`} style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textDecoration: 'none' }}>
+          <Link href={`/shop-sub/${config.slug}/products`} style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textDecoration: 'none' }}>
             Бараа
           </Link>
-          <Link href={`/_shop/${config.slug}/about`} style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textDecoration: 'none' }}>
+          <Link href={`/shop-sub/${config.slug}/about`} style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14, textDecoration: 'none' }}>
             Бидний тухай
           </Link>
           <Link href="/cart" style={{ color: '#fff', marginLeft: 8, fontSize: 18 }}>
