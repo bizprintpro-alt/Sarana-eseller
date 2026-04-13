@@ -42,7 +42,7 @@ export async function getShopConfig(slug: string): Promise<ShopConfig | null> {
     // Redis unavailable — fall through to DB
   }
 
-  // 2. DB lookup
+  // 2. DB lookup — enterprise shop
   const enterprise = await prisma.enterpriseShop.findFirst({
     where: {
       OR: [{ subdomain: slug }, { shop: { slug } }],
@@ -58,28 +58,59 @@ export async function getShopConfig(slug: string): Promise<ShopConfig | null> {
     },
   });
 
-  if (!enterprise) {
+  if (enterprise) {
+    const config: ShopConfig = {
+      id: enterprise.id,
+      shopId: enterprise.shopId,
+      name: enterprise.shop.name,
+      slug: enterprise.subdomain,
+      primaryColor: enterprise.primaryColor,
+      accentColor: enterprise.accentColor,
+      logoUrl: enterprise.logoUrl || enterprise.shop.logo,
+      faviconUrl: enterprise.faviconUrl,
+      plan: enterprise.plan,
+      isActive: enterprise.isActive,
+      phone: enterprise.shop.phone,
+      address: enterprise.shop.address,
+      ownerId: enterprise.shop.userId,
+    };
+    try { await redis.set(key, config, { ex: CACHE_TTL }); } catch {}
+    return config;
+  }
+
+  // 3. Fallback — regular shop (no enterprise setup)
+  const shop = await prisma.shop.findFirst({
+    where: {
+      OR: [{ slug }, { storefrontSlug: slug }],
+      isBlocked: false,
+    },
+    select: {
+      id: true, name: true, slug: true, phone: true,
+      address: true, userId: true, logo: true,
+    },
+  });
+
+  if (!shop) {
     try { await redis.set(key, null, { ex: NULL_TTL }); } catch {}
     return null;
   }
 
   const config: ShopConfig = {
-    id: enterprise.id,
-    shopId: enterprise.shopId,
-    name: enterprise.shop.name,
-    slug: enterprise.subdomain,
-    primaryColor: enterprise.primaryColor,
-    accentColor: enterprise.accentColor,
-    logoUrl: enterprise.logoUrl || enterprise.shop.logo,
-    faviconUrl: enterprise.faviconUrl,
-    plan: enterprise.plan,
-    isActive: enterprise.isActive,
-    phone: enterprise.shop.phone,
-    address: enterprise.shop.address,
-    ownerId: enterprise.shop.userId,
+    id: shop.id,
+    shopId: shop.id,
+    name: shop.name,
+    slug: shop.slug,
+    primaryColor: '#1B3A5C',
+    accentColor: '#E8242C',
+    logoUrl: shop.logo,
+    faviconUrl: null,
+    plan: 'FREE',
+    isActive: true,
+    phone: shop.phone,
+    address: shop.address,
+    ownerId: shop.userId,
   };
 
-  // 3. Cache
   try { await redis.set(key, config, { ex: CACHE_TTL }); } catch {}
   return config;
 }
