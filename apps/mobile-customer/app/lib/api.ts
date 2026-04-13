@@ -349,6 +349,17 @@ export const FlashSaleAPI = {
   upcoming: () => request<any>('/flash-sales/upcoming'),
 };
 
+// ══════ LIVE COMMERCE ═════════════════════════════════════════
+export const LiveAPI = {
+  list: () => request<any>('/live'),
+  detail: (id: string) => request<any>(`/live/${id}`),
+  messages: (id: string) => request<any>(`/live/${id}/messages`),
+  sendMessage: (id: string, content: string) =>
+    request(`/live/${id}/messages`, { method: 'POST', body: JSON.stringify({ content }) }),
+  purchase: (id: string, productId: string, quantity = 1) =>
+    request(`/live/${id}/purchase`, { method: 'POST', body: JSON.stringify({ productId, quantity }) }),
+};
+
 // ══════ ADDRESS (BUYER) ═════════════════════════════════════
 export const AddressAPI = {
   list: () => request<any>('/buyer/addresses'),

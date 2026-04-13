@@ -66,8 +66,20 @@ export default function ProductCard({
       }}
       onClick={() => onClick?.(p._id)}
     >
+      {/* ─── LIVE badge ─── */}
+      {(p as Product & { isLive?: boolean; currentLiveId?: string }).isLive && (
+        <Link
+          href={`/live/${(p as Product & { currentLiveId?: string }).currentLiveId || ''}`}
+          onClick={(e) => e.stopPropagation()}
+          className="absolute top-2 left-2 z-20 inline-flex items-center gap-1 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse no-underline"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-white inline-block" />
+          LIVE
+        </Link>
+      )}
+
       {/* ─── Badges ─── */}
-      <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1">
+      <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1" style={(p as Product & { isLive?: boolean }).isLive ? { top: 28 } : undefined}>
         {disc > 0 && (
           <span className="bg-[#E24B4A] text-white text-[10px] font-medium px-2 py-0.5 rounded tracking-wider">
             -{disc}%

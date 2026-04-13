@@ -242,3 +242,9 @@
 [class*="animate-"], [class*="swiper-"], [style*="animation"] {
   transition-property: unset;
 }
+
+/* Live badge pulse for inline styles */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}

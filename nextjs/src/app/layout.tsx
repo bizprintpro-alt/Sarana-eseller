@@ -6,6 +6,7 @@ import Toast from '@/components/shared/Toast';
 import { ThemeProvider, ThemeScript } from '@/providers/ThemeProvider';
 import InstallPrompt from '@/components/pwa/InstallPrompt';
 import ChatWidget from '@/components/chat/ChatWidget';
+import AIShopperWidget from '@/components/AIShopperWidget';
 import { FacebookPixel } from '@/components/analytics/FacebookPixel';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -64,6 +65,7 @@ export default function RootLayout({
             <Toast />
             <InstallPrompt />
             <ChatWidget />
+            <AIShopperWidget />
           </AuthProvider>
         </ThemeProvider>
 

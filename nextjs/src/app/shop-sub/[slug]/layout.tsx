@@ -1,6 +1,7 @@
 import { getShopConfig, type ShopConfig } from '@/lib/shop-cache';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { prisma } from '@/lib/prisma';
 
 export default async function ShopLayout({
   children,
@@ -14,6 +15,15 @@ export default async function ShopLayout({
 
   // Subdomain олдохгүй → eseller.mn руу redirect
   if (!config) redirect('https://eseller.mn');
+
+  // Check for active live stream on this shop
+  let activeLive: { id: string; title: string } | null = null;
+  try {
+    activeLive = await prisma.liveStream.findFirst({
+      where: { shopId: config.shopId, status: 'LIVE', scope: { in: ['SHOP', 'PUBLIC'] } },
+      select: { id: true, title: true },
+    });
+  } catch { /* ignore if DB unavailable */ }
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -37,6 +47,29 @@ export default async function ShopLayout({
             {config.name}
           </span>
         </Link>
+
+        {/* LIVE badge */}
+        {activeLive && (
+          <Link
+            href={`/live/${activeLive.id}`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: '#FF0000',
+              color: '#fff',
+              borderRadius: 99,
+              padding: '4px 12px',
+              fontSize: 12,
+              fontWeight: 600,
+              textDecoration: 'none',
+              animation: 'pulse 1.5s infinite',
+            }}
+          >
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff', display: 'inline-block' }} />
+            LIVE — {activeLive.title}
+          </Link>
+        )}
 
         {/* Nav */}
         <nav style={{ marginLeft: 'auto', display: 'flex', gap: 20, alignItems: 'center' }}>
