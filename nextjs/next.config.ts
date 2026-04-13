@@ -41,25 +41,14 @@ const nextConfig: NextConfig = {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
   async rewrites() {
+    // Production: middleware.ts handles *.eseller.mn → /shop-sub/:slug
+    // Dev only: next.config handles *.localhost → /shop-sub/:slug
     return {
       beforeFiles: [
-        // Dev: nomin.localhost:3000 → /shop-sub/nomin/...
         {
           source: '/:path*',
           has: [{ type: 'host', value: '(?<slug>[^.]+)\\.localhost' }],
           destination: '/shop-sub/:slug/:path*',
-          missing: [
-            { type: 'header', key: 'x-nextjs-data' },
-          ],
-        },
-        // Prod: nomin.eseller.mn → /shop-sub/nomin/...
-        {
-          source: '/:path*',
-          has: [{ type: 'host', value: '(?<slug>[^.]+)\\.eseller\\.mn' }],
-          destination: '/shop-sub/:slug/:path*',
-          missing: [
-            { type: 'header', key: 'x-nextjs-data' },
-          ],
         },
       ],
       afterFiles: [],
