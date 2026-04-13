@@ -37,6 +37,7 @@ const PRODUCT_MANAGEMENT: SidebarSection = {
     { href: '/dashboard/store/categories', icon: '📂', label: 'Ангилал' },
     { href: '/dashboard/store/brands', icon: '🏷️', label: 'Брэнд' },
     { href: '/dashboard/store/inventory', icon: '📊', label: 'Нөөцийн удирдлага' },
+    { href: '/dashboard/store/dropship', icon: '🚚', label: 'Dropshipping', isNew: true },
   ],
 };
 

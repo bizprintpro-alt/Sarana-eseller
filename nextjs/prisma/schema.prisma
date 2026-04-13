@@ -147,6 +147,7 @@ model Product {
   reviews         Review[]
   sellerProducts  SellerProduct[]
   importedUrls    ImportedUrl[]
+  dropship        DropshipProduct?
 
   @@map("products")
 }
@@ -2094,4 +2095,36 @@ model ImportedUrl {
   createdAt       DateTime @default(now())
 
   @@map("imported_urls")
+}
+
+// ══════════════════════════════════════════════════════════════
+// DROPSHIPPING (AliExpress / CJ / 1688)
+// ══════════════════════════════════════════════════════════════
+
+model DropshipProduct {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  productId        String    @unique @db.ObjectId
+  product          Product   @relation(fields: [productId], references: [id])
+
+  supplierName     String    // "aliexpress" | "cj" | "1688"
+  supplierId       String    // External product ID
+  supplierUrl      String
+  supplierSku      String?
+  supplierPrice    Float     // Нийлүүлэгчийн үнэ (USD/CNY)
+  supplierCurrency String    @default("USD") // USD | CNY | MNT
+  supplierShipping Float     @default(0)
+  supplierStock    Int       @default(0)
+
+  profitMargin     Float     @default(30) // %
+  autoSync         Boolean   @default(true)
+  lastSyncAt       DateTime?
+  syncStatus       String    @default("idle") // idle|syncing|error|success
+  syncError        String?
+
+  supplierData     Json?     // Raw supplier response
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@map("dropship_products")
 }
