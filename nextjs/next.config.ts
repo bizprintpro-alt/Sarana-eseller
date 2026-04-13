@@ -44,11 +44,22 @@ const nextConfig: NextConfig = {
     return {
       beforeFiles: [
         // Dev: nomin.localhost:3000 → /shop-sub/nomin/...
-        // _next, api, favicon зэргийг ОРХИНО
         {
-          source: '/((?!_next|api|favicon\\.ico|manifest\\.json|robots\\.txt|sitemap\\.xml).*)',
+          source: '/:path*',
           has: [{ type: 'host', value: '(?<slug>[^.]+)\\.localhost' }],
-          destination: '/shop-sub/:slug/:1',
+          destination: '/shop-sub/:slug/:path*',
+          missing: [
+            { type: 'header', key: 'x-nextjs-data' },
+          ],
+        },
+        // Prod: nomin.eseller.mn → /shop-sub/nomin/...
+        {
+          source: '/:path*',
+          has: [{ type: 'host', value: '(?<slug>[^.]+)\\.eseller\\.mn' }],
+          destination: '/shop-sub/:slug/:path*',
+          missing: [
+            { type: 'header', key: 'x-nextjs-data' },
+          ],
         },
       ],
       afterFiles: [],
