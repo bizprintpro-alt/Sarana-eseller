@@ -9,6 +9,11 @@ import { prisma } from './prisma';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-production-2026';
 
+/** Sign a JWT token */
+export function signToken(payload: { id: string; role: string; email?: string }): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '30d' });
+}
+
 export interface AuthUser {
   id: string;
   email: string;

@@ -45,8 +45,10 @@ model User {
   password  String
   role      String    @default("buyer") // buyer | seller | affiliate | delivery | admin
   username  String?
-  phone     String?
-  avatar    String?
+  phone      String?
+  avatar     String?
+  otpCode    String?
+  otpExpires DateTime?
   store     StoreInfo?
   affiliate AffiliateInfo?
   bankInfo  BankInfo?
