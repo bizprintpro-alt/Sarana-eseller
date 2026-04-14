@@ -2,32 +2,60 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createInvoice, isDemoMode, createDemoInvoice } from '@/lib/payment/qpay';
 import { generateQRCode } from '@/lib/share/generateShareContent';
+import { getAuthUser } from '@/lib/api-auth';
 
 export async function POST(req: NextRequest) {
   try {
-    const { items, totalAmount, deliveryAddress, deliveryMethod, sellerProfileId, userId } = await req.json();
+    // Extract userId from JWT (required — orders must be tied to user)
+    const authUser = getAuthUser(req);
+    if (!authUser) {
+      return NextResponse.json({ error: 'Нэвтрэх шаардлагатай' }, { status: 401 });
+    }
 
-    if (!items?.length || !totalAmount) {
+    const body = await req.json();
+    const { items, totalAmount, deliveryAddress, phone, sellerProfileId } = body;
+
+    // Compute amount from items if not provided
+    const amount = totalAmount || items?.reduce(
+      (s: number, i: { price: number; qty?: number; quantity?: number }) =>
+        s + i.price * (i.qty || i.quantity || 1),
+      0
+    );
+
+    if (!items?.length || !amount) {
       return NextResponse.json({ error: 'Cart items and amount required' }, { status: 400 });
     }
+
+    // Normalize items (mobile uses qty, web uses quantity)
+    const normalizedItems = items.map((i: {
+      productId?: string; id?: string; name?: string; price: number;
+      qty?: number; quantity?: number; image?: string;
+    }) => ({
+      productId: i.productId || i.id,
+      name: i.name,
+      price: i.price,
+      quantity: i.qty || i.quantity || 1,
+      image: i.image || null,
+    }));
 
     // Create pending order
     const order = await prisma.order.create({
       data: {
-        userId: userId || undefined,
-        items: items,
-        total: totalAmount,
+        userId: authUser.id,
+        items: normalizedItems,
+        total: amount,
         status: 'pending',
         deliveryAddress: deliveryAddress || undefined,
         paymentMethod: 'qpay',
         sellerProfileId: sellerProfileId || undefined,
+        delivery: phone ? { phone } : undefined,
       },
     });
 
     // Create QPay invoice
     const invoiceParams = {
       orderId: order.id,
-      amount: totalAmount,
+      amount,
       description: `eseller.mn захиалга #${order.orderNumber || order.id.slice(-6)}`,
     };
 
@@ -61,7 +89,7 @@ export async function POST(req: NextRequest) {
           orderId: order.id,
           method: 'qpay',
           invoiceId: invoice.invoice_id,
-          amount: totalAmount,
+          amount,
           status: 'PENDING',
           qrImage: invoice.qr_image || null,
           qrText: invoice.qr_text || null,
@@ -79,7 +107,7 @@ export async function POST(req: NextRequest) {
       qrImage: invoice.qr_image || '',
       qrDataUrl,
       deepLinks: invoice.urls || [],
-      amount: totalAmount,
+      amount,
       isDemoMode: isDemoMode(),
     });
   } catch (error) {
