@@ -12,6 +12,9 @@ import FeaturedShops from '@/components/home/FeaturedShops';
 import GoldPromoBanner from '@/components/home/GoldPromoBanner';
 import SellerSection from '@/components/home/SellerSection';
 import StatsBar from '@/components/home/StatsBar';
+import LiveSection from '@/components/LiveSection';
+import { SocialFeedSection } from '@/components/SocialFeedSection';
+import { HerderSection } from '@/components/HerderSection';
 
 async function getHomeData() {
   try {
@@ -234,10 +237,13 @@ export default async function HomePage() {
           <>
             {/* Fallback: original static order */}
             <HeroVideoSlider banners={heroBanners} />
+            <LiveSection />
             <HeroSearch />
             <TrustBadges />
             <CategoryIcons />
+            <SocialFeedSection />
             <FeedPreview posts={feedPosts} />
+            <HerderSection />
             <PromoSection products={products} />
             <FeaturedShops entities={entities} />
             <GoldPromoBanner />
