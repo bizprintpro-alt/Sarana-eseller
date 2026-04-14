@@ -83,7 +83,8 @@ export default function LiveDetailPage() {
 
   useEffect(() => {
     fetchStream();
-    const interval = setInterval(fetchStream, 5000);
+    // 2 секунд — chat near-realtime мэдрэмж
+    const interval = setInterval(fetchStream, 2000);
     return () => clearInterval(interval);
   }, [fetchStream]);
 
