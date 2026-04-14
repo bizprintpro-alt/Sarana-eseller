@@ -7,16 +7,24 @@ const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-p
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
+    const { email, phone, password } = await req.json();
 
-    if (!email || !password) {
-      return NextResponse.json({ error: 'Имэйл болон нууц үг оруулна уу' }, { status: 400 });
+    if ((!email && !phone) || !password) {
+      return NextResponse.json({ error: 'Имэйл/утас болон нууц үг оруулна уу' }, { status: 400 });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    // Login by email OR phone
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          ...(email ? [{ email: email.toLowerCase() }] : []),
+          ...(phone ? [{ phone }] : []),
+        ],
+      },
+    });
 
     if (!user) {
-      return NextResponse.json({ error: 'Имэйл эсвэл нууц үг буруу' }, { status: 401 });
+      return NextResponse.json({ error: 'Хэрэглэгч олдсонгүй' }, { status: 401 });
     }
 
     const isValid = await bcrypt.compare(password, user.password);

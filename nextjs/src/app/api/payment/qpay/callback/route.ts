@@ -33,11 +33,11 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Update order status
+    // Update order status (lowercase — schema uses pending|confirmed|...)
     try {
       await prisma.order.update({
         where: { id: transaction.orderId },
-        data: { status: 'PAID' } as any,
+        data: { status: 'confirmed' },
       });
     } catch {
       // Order update is best-effort

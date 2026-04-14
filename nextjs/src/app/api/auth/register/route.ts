@@ -9,25 +9,42 @@ export async function POST(req: Request) {
   try {
     const { name, email, phone, password, role: requestedRole } = await req.json();
 
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: 'Бүх талбарыг бөглөнө үү' }, { status: 400 });
+    if (!name || !password) {
+      return NextResponse.json({ error: 'Нэр, нууц үг оруулна уу' }, { status: 400 });
+    }
+    if (!email && !phone) {
+      return NextResponse.json({ error: 'Имэйл эсвэл утас оруулна уу' }, { status: 400 });
+    }
+    if (password.length < 6) {
+      return NextResponse.json({ error: 'Нууц үг 6+ тэмдэгт байх ёстой' }, { status: 400 });
     }
 
-    const existing = await prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+    // Synthetic email for phone-only registration (email is @unique required)
+    const normalizedEmail = (email || `${phone}@phone.eseller.mn`).toLowerCase();
+
+    const existing = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: normalizedEmail },
+          ...(phone ? [{ phone }] : []),
+        ],
+      },
+    });
     if (existing) {
-      return NextResponse.json({ error: 'Энэ имэйл бүртгэлтэй байна' }, { status: 400 });
+      return NextResponse.json({ error: 'Энэ имэйл/утас бүртгэлтэй байна' }, { status: 400 });
     }
 
     const VALID_ROLES = ['seller', 'affiliate', 'buyer', 'delivery'];
     const role = requestedRole && VALID_ROLES.includes(requestedRole) ? requestedRole : 'buyer';
 
     const hashed = await bcrypt.hash(password, 12);
-    const username = email.split('@')[0] + Math.floor(Math.random() * 1000);
+    const usernameBase = email ? email.split('@')[0] : phone || 'user';
+    const username = usernameBase + Math.floor(Math.random() * 1000);
 
     const user = await prisma.user.create({
       data: {
         name,
-        email: email.toLowerCase(),
+        email: normalizedEmail,
         phone: phone || undefined,
         password: hashed,
         role,

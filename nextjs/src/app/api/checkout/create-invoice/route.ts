@@ -54,6 +54,23 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Create PaymentTransaction so QPay webhook can find it
+    try {
+      await prisma.paymentTransaction.create({
+        data: {
+          orderId: order.id,
+          method: 'qpay',
+          invoiceId: invoice.invoice_id,
+          amount: totalAmount,
+          status: 'PENDING',
+          qrImage: invoice.qr_image || null,
+          qrText: invoice.qr_text || null,
+        },
+      });
+    } catch (e) {
+      console.error('PaymentTransaction create failed:', e);
+    }
+
     return NextResponse.json({
       orderId: order.id,
       orderNumber: order.orderNumber || order.id.slice(-6),
