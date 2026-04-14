@@ -66,7 +66,28 @@ export async function POST(
       },
     });
 
-    return json(comment, 201);
+    // Buy-intent detection — auto-suggest quick buy
+    const BUY_KEYWORDS = ['авах', 'захиалах', 'buy', 'order', 'авна', 'хүсч байна', 'хэдэн төгрөг'];
+    const lower = content.toLowerCase();
+    const isBuyIntent = BUY_KEYWORDS.some((kw) => lower.includes(kw));
+
+    let botReply: { content: string; productId: string; quickBuyUrl: string } | null = null;
+    if (isBuyIntent) {
+      const postWithProducts = await prisma.socialPost.findUnique({
+        where: { id: postId },
+        include: { products: { include: { product: true }, take: 1 } },
+      });
+      const product = postWithProducts?.products[0]?.product;
+      if (product) {
+        botReply = {
+          content: `🛒 ${product.name} — ${(product.salePrice || product.price).toLocaleString()}₮. Шууд захиалах: eseller.mn/quick/${product.id}`,
+          productId: product.id,
+          quickBuyUrl: `/quick/${product.id}`,
+        };
+      }
+    }
+
+    return json({ comment, botReply }, 201);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error';
     return errorJson('Сэтгэгдэл нэмэхэд алдаа: ' + message, 500);

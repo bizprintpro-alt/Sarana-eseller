@@ -72,6 +72,9 @@ model User {
   partnerAgent          PartnerAgent?
   enterpriseUsers       EnterpriseUser[]
   bankLoyaltyTransactions BankLoyaltyTransaction[]
+  quickOrders             QuickOrder[]     @relation("QuickOrderUser")
+  stories                 Story[]          @relation("StoryUser")
+  groupBuyMemberships     GroupBuyMember[] @relation("GroupBuyMemberUser")
 
   // Sprint 5 relations
   liveStreams        LiveStream[]      @relation("LiveStreamHost")
@@ -166,6 +169,9 @@ model Product {
   importedUrls    ImportedUrl[]
   dropship        DropshipProduct?
   wholesalePrices WholesalePrice[]
+  quickOrders     QuickOrder[]
+  productStories  Story[]          @relation("StoryProduct")
+  productGroupBuys GroupBuy[]      @relation("GroupBuyProduct")
 
   // Sprint 5 relations
   liveProducts       LiveProduct[]
@@ -2616,4 +2622,70 @@ model TenderBid {
   shop   Shop             @relation(fields: [shopId], references: [id])
 
   @@map("tender_bids")
+}
+
+// ══════════════════════════════════════════════════════════════
+// SOCIAL COMMERCE: QUICK BUY, STORIES, GROUP BUY
+// ══════════════════════════════════════════════════════════════
+
+model QuickOrder {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  quantity  Int      @default(1)
+  invoiceId String?
+  status    String   @default("PENDING") // PENDING | PAID | CANCELLED
+  createdAt DateTime @default(now())
+
+  user    User    @relation("QuickOrderUser", fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("quick_orders")
+}
+
+model Story {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  shopId    String?  @db.ObjectId
+  userId    String   @db.ObjectId
+  imageUrl  String
+  productId String?  @db.ObjectId
+  caption   String?
+  views     Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user    User     @relation("StoryUser", fields: [userId], references: [id])
+  product Product? @relation("StoryProduct", fields: [productId], references: [id])
+
+  @@map("stories")
+}
+
+model GroupBuy {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId    String   @db.ObjectId
+  targetCount  Int
+  discount     Float    // 0.30 = 30%
+  currentCount Int      @default(0)
+  status       String   @default("OPEN") // OPEN | COMPLETED | EXPIRED | CANCELLED
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  product Product          @relation("GroupBuyProduct", fields: [productId], references: [id])
+  members GroupBuyMember[]
+
+  @@map("group_buys")
+}
+
+model GroupBuyMember {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  groupBuyId String  @db.ObjectId
+  userId     String  @db.ObjectId
+  isPaid     Boolean @default(false)
+  createdAt  DateTime @default(now())
+
+  groupBuy GroupBuy @relation(fields: [groupBuyId], references: [id])
+  user     User     @relation("GroupBuyMemberUser", fields: [userId], references: [id])
+
+  @@unique([groupBuyId, userId])
+  @@map("group_buy_members")
 }
