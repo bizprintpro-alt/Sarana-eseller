@@ -171,6 +171,13 @@
     overflow-x: hidden;
   }
 
+  /* Mobile: reserve space for MobileNav (~64px) + safe area */
+  @media (max-width: 767px) {
+    body {
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    }
+  }
+
   h1, h2, h3, h4, h5, h6 {
     color: var(--esl-text-primary);
     font-family: var(--font-heading);
