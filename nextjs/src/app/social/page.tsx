@@ -13,7 +13,12 @@ import {
   User,
   ImageIcon,
   Loader2,
+  Flame,
+  Radio,
+  Users,
+  Zap,
 } from "lucide-react";
+import { QuickBuySheet } from "@/components/QuickBuySheet";
 
 // ── Types ────────────────────────────────────────────────────
 
@@ -78,13 +83,70 @@ function formatPrice(price: number): string {
 
 // ── Main Page ────────────────────────────────────────────────
 
+type Tab = "all" | "friends" | "trending" | "live";
+
+interface Story {
+  id: string;
+  imageUrl: string;
+  caption: string | null;
+  user: { id: string; name: string; avatar: string | null };
+  product: { id: string; name: string; price: number; images: string[] } | null;
+}
+
+interface GroupBuy {
+  id: string;
+  targetCount: number;
+  currentCount: number;
+  discount: number;
+  expiresAt: string;
+  product: { id: string; name: string; price: number; salePrice: number | null; images: string[] };
+}
+
 export default function SocialPage() {
   const [posts, setPosts] = useState<SocialPost[]>([]);
+  const [trending, setTrending] = useState<SocialPost[]>([]);
+  const [stories, setStories] = useState<Story[]>([]);
+  const [groupBuys, setGroupBuys] = useState<GroupBuy[]>([]);
+  const [activeStory, setActiveStory] = useState<Story | null>(null);
+  const [quickBuyProduct, setQuickBuyProduct] = useState<{
+    id: string; name: string; price: number; images: string[]; stock: number | null;
+  } | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>("all");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
+
+  // Load stories + group buys on mount
+  useEffect(() => {
+    fetch("/api/stories")
+      .then((r) => r.json())
+      .then((d) => setStories(d?.data?.stories || []))
+      .catch(() => {});
+    fetch("/api/group-buy")
+      .then((r) => r.json())
+      .then((d) => setGroupBuys(d?.data?.groupBuys || []))
+      .catch(() => {});
+  }, []);
+
+  // Load trending on tab switch
+  useEffect(() => {
+    if (activeTab === "trending" && trending.length === 0) {
+      fetch("/api/social/trending")
+        .then((r) => r.json())
+        .then((d) => {
+          const list: SocialPost[] = (d?.data?.posts || []).map((p: SocialPost) => ({
+            ...p,
+            liked: false,
+            likeCount: p._count.likes,
+            commentCount: p._count.comments,
+          }));
+          setTrending(list);
+        })
+        .catch(() => {});
+    }
+  }, [activeTab, trending.length]);
 
   const fetchPosts = useCallback(async (pageNum: number, append = false) => {
     if (pageNum === 1) setLoading(true);
@@ -183,11 +245,13 @@ export default function SocialPage() {
 
   // ── Render ───────────────────────────────────────────────
 
+  const displayedPosts = activeTab === "trending" ? trending : posts;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-white border-b border-gray-200 px-4 py-3">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-900">Нийгмийн худалдаа</h1>
           <button
             onClick={() => setShowCreate(true)}
@@ -199,45 +263,193 @@ export default function SocialPage() {
         </div>
       </div>
 
-      {/* Feed */}
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-          </div>
-        ) : posts.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            <MessageCircle className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-            <p className="text-lg font-medium">Одоогоор пост байхгүй байна</p>
-            <p className="text-sm mt-1">Эхний постоо нэмээрэй!</p>
-          </div>
-        ) : (
-          <>
-            {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                onLike={toggleLike}
-                onShare={handleShare}
-                onToggleComments={toggleComments}
-              />
-            ))}
-            {hasMore && (
-              <button
-                onClick={loadMore}
-                disabled={loadingMore}
-                className="w-full py-3 bg-white border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 font-medium"
-              >
-                {loadingMore ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-                Цааш үзэх
+      {/* Stories bar */}
+      {stories.length > 0 && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto overflow-x-auto">
+            <div className="flex gap-3 p-3 min-w-max">
+              <button className="flex flex-col items-center gap-1 flex-shrink-0">
+                <div className="w-14 h-14 rounded-full border-2 border-dashed border-orange-500 bg-orange-50 flex items-center justify-center">
+                  <Plus className="w-5 h-5 text-orange-500" />
+                </div>
+                <span className="text-[10px] text-gray-500">Минийх</span>
               </button>
+              {stories.map((story) => (
+                <button
+                  key={story.id}
+                  onClick={() => {
+                    setActiveStory(story);
+                    fetch(`/api/stories/${story.id}/view`, { method: "POST" }).catch(() => {});
+                  }}
+                  className="flex flex-col items-center gap-1 flex-shrink-0"
+                >
+                  <div className={`w-14 h-14 rounded-full p-0.5 border-2 relative ${story.product ? "border-orange-500" : "border-blue-900"}`}>
+                    {story.user.avatar ? (
+                      <img src={story.user.avatar} alt="" className="w-full h-full rounded-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-blue-900 text-white flex items-center justify-center text-sm font-bold">
+                        {story.user.name?.[0] || "?"}
+                      </div>
+                    )}
+                    {story.product && (
+                      <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-orange-500 border-2 border-white flex items-center justify-center text-[9px]">
+                        🛍
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-gray-500 max-w-[56px] truncate">
+                    {story.user.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab switcher */}
+      <div className="bg-white border-b border-gray-200 sticky top-[56px] z-30">
+        <div className="max-w-6xl mx-auto flex px-4">
+          {([
+            { key: "all" as const, label: "Бүгд", icon: null },
+            { key: "friends" as const, label: "Найзуудынх", icon: <Users className="w-3.5 h-3.5" /> },
+            { key: "trending" as const, label: "Trending", icon: <Flame className="w-3.5 h-3.5" /> },
+            { key: "live" as const, label: "Live", icon: <Radio className="w-3.5 h-3.5" /> },
+          ]).map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex items-center gap-1.5 px-4 py-3 border-b-2 text-sm font-medium transition-colors ${
+                activeTab === tab.key
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 2-column layout (desktop) */}
+      <div className="max-w-6xl mx-auto px-4 py-4 flex gap-6">
+        {/* Left: Feed */}
+        <div className="flex-1 max-w-2xl mx-auto lg:mx-0 space-y-4">
+          {/* Group Buy cards */}
+          {activeTab === "all" && groupBuys.length > 0 && (
+            <div className="space-y-3">
+              {groupBuys.slice(0, 2).map((gb) => (
+                <GroupBuyCardWeb key={gb.id} groupBuy={gb} />
+              ))}
+            </div>
+          )}
+
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            </div>
+          ) : displayedPosts.length === 0 ? (
+            <div className="text-center py-20 text-gray-500">
+              <MessageCircle className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+              <p className="text-lg font-medium">Одоогоор пост байхгүй байна</p>
+              <p className="text-sm mt-1">Эхний постоо нэмээрэй!</p>
+            </div>
+          ) : (
+            <>
+              {displayedPosts.map((post) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onLike={toggleLike}
+                  onShare={handleShare}
+                  onToggleComments={toggleComments}
+                  onQuickBuy={(p) => setQuickBuyProduct({ ...p, stock: null })}
+                />
+              ))}
+              {activeTab === "all" && hasMore && (
+                <button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="w-full py-3 bg-white border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 font-medium"
+                >
+                  {loadingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : <ChevronDown className="w-4 h-4" />}
+                  Цааш үзэх
+                </button>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Right: Trending sidebar (desktop only) */}
+        <aside className="hidden lg:block w-80 flex-shrink-0 space-y-4">
+          {/* Trending products */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Flame className="w-4 h-4 text-orange-500" />
+              <h3 className="font-bold text-sm text-gray-900">Хамгийн их like</h3>
+            </div>
+            {trending.length === 0 ? (
+              <p className="text-xs text-gray-400">Одоохондоо байхгүй</p>
+            ) : (
+              <div className="space-y-2">
+                {trending.slice(0, 5).map((p) => {
+                  const prod = p.products[0]?.product;
+                  if (!prod) return null;
+                  return (
+                    <div key={p.id} className="flex items-center gap-2">
+                      <img src={prod.images?.[0] || ""} alt="" className="w-10 h-10 rounded object-cover bg-gray-100" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium truncate">{prod.name}</p>
+                        <p className="text-xs text-blue-600 font-bold">
+                          {(prod.salePrice || prod.price).toLocaleString()}₮
+                        </p>
+                      </div>
+                      <span className="text-[10px] text-gray-400">❤️ {p._count.likes}</span>
+                    </div>
+                  );
+                })}
+              </div>
             )}
-          </>
-        )}
+          </div>
+
+          {/* Active group buys */}
+          {groupBuys.length > 0 && (
+            <div className="bg-white rounded-xl border border-gray-200 p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Users className="w-4 h-4 text-orange-500" />
+                <h3 className="font-bold text-sm text-gray-900">Идэвхтэй хамтралт</h3>
+              </div>
+              <div className="space-y-3">
+                {groupBuys.slice(0, 3).map((gb) => {
+                  const progress = Math.min(100, (gb.currentCount / gb.targetCount) * 100);
+                  return (
+                    <div key={gb.id}>
+                      <p className="text-xs font-medium truncate">{gb.product.name}</p>
+                      <div className="h-1.5 bg-gray-100 rounded-full my-1 overflow-hidden">
+                        <div className="h-full bg-orange-500" style={{ width: `${progress}%` }} />
+                      </div>
+                      <p className="text-[10px] text-gray-500">
+                        {gb.currentCount}/{gb.targetCount} хүн · {Math.round(gb.discount * 100)}% хямд
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Live section placeholder */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Radio className="w-4 h-4 text-red-500" />
+              <h3 className="font-bold text-sm text-gray-900">Одоо live</h3>
+            </div>
+            <p className="text-xs text-gray-400">
+              <a href="/live" className="text-blue-600 hover:underline">Бүгдийг харах →</a>
+            </p>
+          </div>
+        </aside>
       </div>
 
       {/* Create Post Modal */}
@@ -246,6 +458,153 @@ export default function SocialPage() {
           onClose={() => setShowCreate(false)}
           onCreated={handlePostCreated}
         />
+      )}
+
+      {/* Story overlay */}
+      {activeStory && (
+        <StoryViewer story={activeStory} onClose={() => setActiveStory(null)} onBuy={(p) => {
+          setActiveStory(null);
+          setQuickBuyProduct({ ...p, stock: null });
+        }} />
+      )}
+
+      {/* Quick Buy sheet */}
+      {quickBuyProduct && (
+        <QuickBuySheet
+          product={quickBuyProduct}
+          isOpen={!!quickBuyProduct}
+          onClose={() => setQuickBuyProduct(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+// ── Group Buy Card (web) ─────────────────────────────────────
+
+function GroupBuyCardWeb({ groupBuy }: { groupBuy: GroupBuy }) {
+  const [joining, setJoining] = useState(false);
+  const [count, setCount] = useState(groupBuy.currentCount);
+
+  const base = groupBuy.product.salePrice || groupBuy.product.price;
+  const discounted = Math.floor(base * (1 - groupBuy.discount));
+  const progress = Math.min(100, (count / groupBuy.targetCount) * 100);
+  const remaining = Math.max(0, groupBuy.targetCount - count);
+
+  const diff = new Date(groupBuy.expiresAt).getTime() - Date.now();
+  const hours = Math.max(0, Math.floor(diff / 3600000));
+  const minutes = Math.max(0, Math.floor((diff % 3600000) / 60000));
+
+  async function handleJoin() {
+    setJoining(true);
+    try {
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const res = await fetch(`/api/group-buy/${groupBuy.id}/join`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const data = await res.json();
+      if (res.ok) setCount(count + 1);
+      else alert(data.error || "Алдаа");
+    } catch {
+      alert("Сүлжээний алдаа");
+    }
+    setJoining(false);
+  }
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-yellow-50 px-4 py-2 text-xs font-semibold text-yellow-800">
+        👥 Хамтарч авах — {Math.round(groupBuy.discount * 100)}% хямд
+      </div>
+      <div className="p-4 flex gap-3">
+        <img src={groupBuy.product.images?.[0] || ""} alt="" className="w-20 h-20 rounded-xl object-cover bg-gray-100" />
+        <div className="flex-1">
+          <p className="text-sm font-semibold line-clamp-2">{groupBuy.product.name}</p>
+          <div className="flex items-baseline gap-2 mt-1">
+            <span className="text-lg font-bold text-blue-900">{discounted.toLocaleString()}₮</span>
+            <span className="text-xs text-gray-400 line-through">{base.toLocaleString()}₮</span>
+          </div>
+          <p className="text-[11px] text-orange-600 mt-1">⏰ {hours}ц {minutes}мин үлдлээ</p>
+        </div>
+      </div>
+      <div className="px-4 pb-2">
+        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-full bg-orange-500 rounded-full" style={{ width: `${progress}%` }} />
+        </div>
+        <div className="flex justify-between text-[11px] mt-1">
+          <span className="text-gray-600">{count}/{groupBuy.targetCount} хүн нэгдсэн</span>
+          <span className="text-orange-600 font-semibold">{remaining} хүн дутуу</span>
+        </div>
+      </div>
+      <div className="p-3 pt-1">
+        <button
+          onClick={handleJoin}
+          disabled={joining || remaining === 0}
+          className="w-full py-3 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white rounded-lg font-semibold text-sm"
+        >
+          {remaining === 0 ? "✓ Бүрэн" : joining ? "Нэгдэж байна..." : `⚡ Нэгдэх — ${discounted.toLocaleString()}₮`}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Story Viewer ─────────────────────────────────────────────
+
+function StoryViewer({
+  story, onClose, onBuy,
+}: {
+  story: Story;
+  onClose: () => void;
+  onBuy: (product: { id: string; name: string; price: number; images: string[] }) => void;
+}) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 100) { onClose(); return 0; }
+        return p + 2;
+      });
+    }, 100);
+    return () => clearInterval(t);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+      <div className="absolute top-4 left-4 right-4 h-1 bg-white/30 rounded overflow-hidden z-10">
+        <div className="h-full bg-white transition-all" style={{ width: `${progress}%` }} />
+      </div>
+      <button onClick={onClose} className="absolute top-5 right-5 z-10 text-white">
+        <X className="w-6 h-6" />
+      </button>
+      <div className="absolute top-6 left-4 z-10 flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-blue-900 text-white flex items-center justify-center text-xs font-bold">
+          {story.user.name?.[0] || "?"}
+        </div>
+        <span className="text-white text-sm font-semibold">{story.user.name}</span>
+      </div>
+      <img src={story.imageUrl} alt="" className="max-w-full max-h-full object-contain" />
+      {story.caption && (
+        <div className={`absolute left-4 right-4 bg-black/50 rounded-lg p-3 ${story.product ? "bottom-32" : "bottom-6"}`}>
+          <p className="text-white text-sm">{story.caption}</p>
+        </div>
+      )}
+      {story.product && (
+        <div className="absolute bottom-6 left-4 right-4 bg-white rounded-2xl p-3 flex items-center gap-3">
+          <img src={story.product.images?.[0] || ""} alt="" className="w-14 h-14 rounded-lg object-cover bg-gray-100" />
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold truncate">{story.product.name}</p>
+            <p className="text-base font-bold text-blue-900">{story.product.price.toLocaleString()}₮</p>
+          </div>
+          <button
+            onClick={() => onBuy(story.product!)}
+            className="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1"
+          >
+            <Zap className="w-3.5 h-3.5" /> Авах
+          </button>
+        </div>
       )}
     </div>
   );
@@ -258,11 +617,13 @@ function PostCard({
   onLike,
   onShare,
   onToggleComments,
+  onQuickBuy,
 }: {
   post: SocialPost;
   onLike: (id: string) => void;
   onShare: (id: string) => void;
   onToggleComments: (id: string) => void;
+  onQuickBuy?: (product: { id: string; name: string; price: number; images: string[] }) => void;
 }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -372,9 +733,20 @@ function PostCard({
                       </span>
                     )}
                   </div>
-                  <button className="mt-1.5 w-full text-[10px] bg-blue-600 text-white py-1 rounded font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-1">
-                    <ShoppingCart className="w-3 h-3" />
-                    Сагсанд нэмэх
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onQuickBuy?.({
+                        id: pp.product.id,
+                        name: pp.product.name,
+                        price: pp.product.salePrice || pp.product.price,
+                        images: pp.product.images,
+                      });
+                    }}
+                    className="mt-1.5 w-full text-[10px] bg-orange-500 text-white py-1 rounded font-medium hover:bg-orange-600 transition-colors flex items-center justify-center gap-1"
+                  >
+                    <Zap className="w-3 h-3" />
+                    Шууд авах
                   </button>
                 </div>
               </div>
