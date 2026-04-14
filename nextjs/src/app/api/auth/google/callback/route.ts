@@ -106,10 +106,14 @@ export async function GET(req: NextRequest) {
           .replace(/[^a-z0-9\u0400-\u04ff]+/g, '-')
           .replace(/^-|-$/g, '') || `shop-${user.id.slice(-6)}`;
 
-        // Ensure unique slug
+        // Ensure unique slug + storefrontSlug
         let slug = baseSlug;
         let suffix = 0;
-        while (await prisma.shop.findFirst({ where: { slug } })) {
+        while (
+          await prisma.shop.findFirst({
+            where: { OR: [{ slug }, { storefrontSlug: slug }] },
+          })
+        ) {
           suffix++;
           slug = `${baseSlug}-${suffix}`;
         }
@@ -119,6 +123,7 @@ export async function GET(req: NextRequest) {
             userId: user.id,
             name: `${baseName}`,
             slug,
+            storefrontSlug: slug,
             industry: 'general',
             locationStatus: 'pending',
           },

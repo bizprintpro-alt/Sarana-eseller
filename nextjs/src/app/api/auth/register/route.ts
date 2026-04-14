@@ -44,7 +44,11 @@ export async function POST(req: Request) {
 
       let slug = baseSlug;
       let suffix = 0;
-      while (await prisma.shop.findFirst({ where: { slug } })) {
+      while (
+        await prisma.shop.findFirst({
+          where: { OR: [{ slug }, { storefrontSlug: slug }] },
+        })
+      ) {
         suffix++;
         slug = `${baseSlug}-${suffix}`;
       }
@@ -54,6 +58,7 @@ export async function POST(req: Request) {
           userId: user.id,
           name,
           slug,
+          storefrontSlug: slug,
           industry: 'general',
           locationStatus: 'pending',
         },
