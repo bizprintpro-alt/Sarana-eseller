@@ -28,6 +28,11 @@ export async function POST(req: NextRequest) {
         create: { userId: auth.id, endpoint: body.token, type, subscription: JSON.stringify(body) },
         update: { subscription: JSON.stringify(body), type },
       });
+      // Also write to User.pushToken so sendExpoPush() can find it
+      await prisma.user.update({
+        where: { id: auth.id },
+        data: { pushToken: body.token },
+      });
       return NextResponse.json({ success: true, type });
     }
 

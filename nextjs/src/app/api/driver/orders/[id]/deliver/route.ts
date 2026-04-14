@@ -27,7 +27,7 @@ export async function POST(
   if (order.shopId && order.total) {
     const shop = await prisma.shop.findUnique({
       where: { id: order.shopId },
-      select: { userId: true },
+      select: { userId: true, user: { select: { pushToken: true } } },
     });
     if (shop?.userId) {
       const amount = order.total * 0.95;
@@ -36,6 +36,14 @@ export async function POST(
         update: { balance: { increment: amount } },
         create: { userId: shop.userId, balance: amount },
       });
+      // Push seller — wallet income
+      if (shop.user?.pushToken) {
+        await sendExpoPush(shop.user.pushToken, {
+          title: '💰 Орлого нэмэгдлээ!',
+          body: `${Math.floor(amount).toLocaleString()}₮ таны хэтэвчид орлоо`,
+          data: { screen: 'wallet' },
+        });
+      }
     }
   }
 

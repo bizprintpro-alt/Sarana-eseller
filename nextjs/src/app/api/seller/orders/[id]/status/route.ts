@@ -3,6 +3,22 @@ import { prisma } from '@/lib/prisma';
 import { requireSeller, errorJson } from '@/lib/api-auth';
 import { calculateOrderCommission } from '@/lib/commission';
 import { recordRevenue } from '@/lib/revenue';
+import { sendExpoPush } from '@/lib/push';
+
+const STATUS_MSG: Record<string, { title: string; body: string }> = {
+  preparing: {
+    title: '🔄 Захиалга бэлтгэгдэж байна',
+    body: 'Таны захиалгыг бэлтгэж эхэллээ',
+  },
+  ready: {
+    title: '✅ Захиалга бэлэн боллоо',
+    body: 'Жолоочид шилжүүлж байна',
+  },
+  handed_to_driver: {
+    title: '🚚 Жолооч захиалгыг авлаа',
+    body: 'Удахгүй хүргэгдэнэ',
+  },
+};
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -46,5 +62,28 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
     await recordRevenue('commission', comm.platformAmount, { orderId: id, shopId: order.shopId });
   }
 
+  // Push buyer — status change
+  const msg = STATUS_MSG[status];
+  if (msg && order.userId) {
+    try {
+      const buyer = await prisma.user.findUnique({
+        where: { id: order.userId },
+        select: { pushToken: true },
+      });
+      if (buyer?.pushToken) {
+        await sendExpoPush(buyer.pushToken, {
+          title: msg.title,
+          body: msg.body,
+          data: { orderId: id },
+        });
+      }
+    } catch (e) {
+      console.error('Status push failed:', e);
+    }
+  }
+
   return NextResponse.json({ success: true, status });
 }
+
+// Mobile client uses PUT — alias to PATCH
+export const PUT = PATCH;

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { createInvoice, isDemoMode, createDemoInvoice } from '@/lib/payment/qpay';
 import { generateQRCode } from '@/lib/share/generateShareContent';
 import { getAuthUser } from '@/lib/api-auth';
+import { sendExpoPush } from '@/lib/push';
 
 export async function POST(req: NextRequest) {
   try {
@@ -81,6 +82,38 @@ export async function POST(req: NextRequest) {
         paymentId: invoice.invoice_id,
       },
     });
+
+    // Notify seller of new pending order (derive shop from first product)
+    try {
+      const firstProductId = normalizedItems[0]?.productId;
+      if (firstProductId) {
+        const product = await prisma.product.findUnique({
+          where: { id: firstProductId },
+          select: { userId: true },
+        });
+        if (product?.userId) {
+          const shop = await prisma.shop.findUnique({
+            where: { userId: product.userId },
+            select: { id: true, user: { select: { pushToken: true } } },
+          });
+          if (shop?.id) {
+            await prisma.order.update({
+              where: { id: order.id },
+              data: { shopId: shop.id },
+            });
+          }
+          if (shop?.user?.pushToken) {
+            await sendExpoPush(shop.user.pushToken, {
+              title: '🛍️ Шинэ захиалга ирлээ!',
+              body: `${normalizedItems.length} бараа — ${amount.toLocaleString()}₮`,
+              data: { orderId: order.id, screen: 'seller-orders' },
+            });
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Seller notify failed:', e);
+    }
 
     // Create PaymentTransaction so QPay webhook can find it
     try {

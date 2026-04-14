@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendExpoPush } from '@/lib/push';
 
 /**
  * QPay webhook callback
@@ -109,13 +110,33 @@ async function handleCallback(req: NextRequest): Promise<NextResponse> {
     });
 
     // Update order status
+    let confirmedOrder = null;
     try {
-      await prisma.order.update({
+      confirmedOrder = await prisma.order.update({
         where: { id: transaction.orderId },
         data: { status: 'confirmed' },
       });
     } catch (e) {
       console.error('[QPay callback] Order update failed:', e);
+    }
+
+    // Push buyer — payment confirmed
+    try {
+      if (confirmedOrder?.userId) {
+        const buyer = await prisma.user.findUnique({
+          where: { id: confirmedOrder.userId },
+          select: { pushToken: true },
+        });
+        if (buyer?.pushToken) {
+          await sendExpoPush(buyer.pushToken, {
+            title: '✅ Захиалга баталгаажлаа!',
+            body: 'Таны захиалга хүлээн авагдлаа. Дэлгэрэнгүйг харах →',
+            data: { orderId: confirmedOrder.id },
+          });
+        }
+      }
+    } catch (e) {
+      console.error('[QPay callback] Buyer push failed:', e);
     }
 
     return NextResponse.json({ success: true });
