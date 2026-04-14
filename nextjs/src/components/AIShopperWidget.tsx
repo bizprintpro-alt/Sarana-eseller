@@ -179,7 +179,7 @@ export default function AIShopperWidget() {
       <button
         onClick={() => setOpen(!open)}
         aria-label="AI Худалдааны туслах"
-        className="fixed bottom-6 right-6 z-[1001] flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-500 shadow-lg shadow-violet-500/30 transition-transform hover:scale-110 active:scale-95 cursor-pointer border-none"
+        className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-[1001] flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-500 shadow-lg shadow-violet-500/30 transition-transform hover:scale-110 active:scale-95 cursor-pointer border-none"
       >
         {open ? (
           <X className="h-5 w-5 text-white" />
@@ -190,7 +190,7 @@ export default function AIShopperWidget() {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-[90px] right-6 z-[1000] flex h-[540px] w-[380px] flex-col overflow-hidden rounded-2xl border border-[var(--esl-border,#222)] bg-[var(--esl-bg-card,#141414)] shadow-2xl max-sm:right-3 max-sm:w-[calc(100vw-24px)]">
+        <div className="fixed bottom-[160px] right-4 md:bottom-[90px] md:right-6 z-[1000] flex h-[540px] max-h-[calc(100vh-180px)] w-[380px] flex-col overflow-hidden rounded-2xl border border-[var(--esl-border,#222)] bg-[var(--esl-bg-card,#141414)] shadow-2xl max-sm:right-3 max-sm:w-[calc(100vw-24px)]">
           {/* Header */}
           <div className="flex shrink-0 items-center gap-3 bg-gradient-to-r from-violet-600 to-fuchsia-500 px-4 py-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">

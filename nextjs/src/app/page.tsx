@@ -222,7 +222,7 @@ export default async function HomePage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="pb-20 md:pb-0">
         {/* If sections exist in DB, render in DB order */}
         {sections.length > 0 ? (
           <>
