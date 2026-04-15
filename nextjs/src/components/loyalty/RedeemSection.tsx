@@ -31,7 +31,7 @@ export default function RedeemSection({ balance, orderTotal, onApply }: RedeemSe
       const res = await fetch('/api/loyalty/redeem', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: 'current', points, type: 'discount' }),
+        body: JSON.stringify({ points, type: 'discount' }),
       });
       const data = await res.json();
       if (data.couponCode) {
