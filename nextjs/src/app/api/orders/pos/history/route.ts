@@ -37,10 +37,11 @@ export async function GET(req: NextRequest) {
     const where = {
       source: 'pos',
       shopId: shop.id,
+      status: { in: ['completed', 'refunded', 'voided'] },
       createdAt: { gte: startOf, lte: endOf },
     };
 
-    const [sales, totalOrders, aggregate] = await Promise.all([
+    const [sales, totalOrders, completedAgg, refundedAgg] = await Promise.all([
       prisma.order.findMany({
         where,
         orderBy: { createdAt: 'desc' },
@@ -55,12 +56,20 @@ export async function GET(req: NextRequest) {
           cashReceived: true,
           change: true,
           createdAt: true,
+          status: true,
+          refundedAt: true,
+          refundReason: true,
         },
       }),
       prisma.order.count({ where }),
       prisma.order.aggregate({
-        where,
+        where: { ...where, status: 'completed' },
         _sum: { total: true },
+      }),
+      prisma.order.aggregate({
+        where: { ...where, status: { in: ['refunded', 'voided'] } },
+        _sum: { total: true },
+        _count: true,
       }),
     ]);
 
@@ -75,6 +84,9 @@ export async function GET(req: NextRequest) {
         cashReceived: s.cashReceived ?? null,
         change: s.change ?? null,
         createdAt: s.createdAt,
+        status: s.status,
+        refundedAt: s.refundedAt,
+        refundReason: s.refundReason,
       };
     });
 
@@ -82,7 +94,9 @@ export async function GET(req: NextRequest) {
       success: true,
       sales: mapped,
       totalOrders,
-      totalRevenue: aggregate._sum.total ?? 0,
+      totalRevenue: completedAgg._sum.total ?? 0,
+      refundedCount: refundedAgg._count,
+      refundedAmount: refundedAgg._sum.total ?? 0,
       page,
       totalPages: Math.ceil(totalOrders / limit),
       date,

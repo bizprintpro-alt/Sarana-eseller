@@ -280,6 +280,11 @@ model Order {
   change        Float?
   vatAmount     Float?
 
+  // Refund / void
+  refundReason  String?
+  refundedAt    DateTime?
+  refundedById  String?  @db.ObjectId
+
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
