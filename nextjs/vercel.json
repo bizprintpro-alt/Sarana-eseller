@@ -23,6 +23,10 @@
     {
       "path": "/api/cron/live-start",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/points-birthday",
+      "schedule": "0 9 * * *"
     }
   ]
 }

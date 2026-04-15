@@ -58,6 +58,7 @@ model User {
 
   entityType String?  // store | agent | company | auto_dealer | service
   pushToken  String?  // Expo push token for notifications
+  birthday   DateTime?
 
   // Relations
   products  Product[]
@@ -285,13 +286,14 @@ model Order {
 }
 
 model Wallet {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @unique @db.ObjectId
-  balance   Float    @default(0)
-  pending   Float    @default(0)
-  history   Json[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @unique @db.ObjectId
+  balance    Float    @default(0)
+  pending    Float    @default(0)
+  escrowHold Float    @default(0)
+  history    Json[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
 

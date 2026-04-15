@@ -93,6 +93,82 @@ export class LoyaltyService {
 
     return redemption;
   }
+
+  /**
+   * Redeem points directly for wallet cash credit.
+   * Uses LOYALTY_CONFIG.redeem.pointValue (5₮/point by default).
+   * Minimum 500 points.
+   */
+  async redeemForCash(userId: string, points: number): Promise<number> {
+    if (points < 500) {
+      throw new Error('Хамгийн бага 500 оноо шаардлагатай');
+    }
+    const account = await this.getOrCreate(userId);
+    if (account.balance < points) {
+      throw new Error('Оноо хүрэлцэхгүй');
+    }
+
+    const cashAmount = points * LOYALTY_CONFIG.redeem.pointValue;
+
+    // Decrement loyalty balance + record transaction
+    await prisma.loyaltyAccount.update({
+      where: { id: account.id },
+      data: {
+        balance: { decrement: points },
+        lifetimeSpent: { increment: points },
+      },
+    });
+    await prisma.loyaltyTransaction.create({
+      data: {
+        accountId: account.id,
+        type: 'REDEEM_CASH',
+        points: -points,
+        description: `${points} оноо → ${cashAmount.toLocaleString()}₮ хэтэвч`,
+      },
+    });
+
+    // Credit wallet balance + history entry
+    await prisma.wallet.upsert({
+      where: { userId },
+      create: {
+        userId,
+        balance: cashAmount,
+        pending: 0,
+        escrowHold: 0,
+        history: [
+          {
+            type: 'POINTS_REDEEM',
+            amount: cashAmount,
+            points: -points,
+            description: `${points} оноо → ${cashAmount.toLocaleString()}₮`,
+            status: 'COMPLETED',
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      },
+      update: {
+        balance: { increment: cashAmount },
+        history: {
+          push: {
+            type: 'POINTS_REDEEM',
+            amount: cashAmount,
+            points: -points,
+            description: `${points} оноо → ${cashAmount.toLocaleString()}₮`,
+            status: 'COMPLETED',
+            createdAt: new Date().toISOString(),
+          },
+        },
+      },
+    });
+
+    return cashAmount;
+  }
+
+  /** Lifetime earned points (alias for LoyaltyAccount.lifetimeEarned) */
+  async getLifetimeTotal(userId: string): Promise<number> {
+    const account = await prisma.loyaltyAccount.findUnique({ where: { userId } });
+    return account?.lifetimeEarned ?? 0;
+  }
 }
 
 export const loyaltyService = new LoyaltyService();
