@@ -48,6 +48,11 @@ const SORT_OPTIONS = [
 type MediaItem = { type: 'image'; url: string } | { type: 'video'; url: string; thumb?: string };
 
 /* ═══ Demo Data ═══ */
+// Real feed items have MongoDB ObjectIds (24 hex chars). DEMO_FEED uses
+// placeholder "1"–"12" — linking to /feed/7 would 404 because the detail
+// page rejects non-ObjectId ids.
+const isRealFeedId = (id: string) => /^[a-f\d]{24}$/i.test(id);
+
 const DEMO_FEED = [
   { id: '1', refId: 'VIP-AGT-001', title: '3 өрөө байр, 13-р хороолол', description: '78мкв, 5 давхарт, шинэ засвартай, тавилгатай. Цонх нар руу харсан, 2 ариун цэврийн өрөөтэй. Паркинг, хамгаалалттай, лифттэй. Төвд ойр, сургууль цэцэрлэгтэй.', price: 280000000, media: [
     { type: 'image' as const, url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80' },
@@ -378,13 +383,22 @@ function FeedDetailModal({ item, onClose, onPrev, onNext, hasPrev, hasNext }: {
             </button>
           </div>
 
-          {/* Full detail page link */}
-          <Link
-            href={`/feed/${item.id}`}
-            className="block mt-4 text-center py-3 rounded-xl border border-[var(--esl-border)] text-sm font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-elevated)] hover:border-[#555] transition-colors no-underline"
-          >
-            Дэлгэрэнгүй харах →
-          </Link>
+          {/* Full detail page link — only for real DB items */}
+          {isRealFeedId(item.id) ? (
+            <Link
+              href={`/feed/${item.id}`}
+              className="block mt-4 text-center py-3 rounded-xl border border-[var(--esl-border)] text-sm font-semibold text-[var(--esl-text-secondary)] hover:bg-[var(--esl-bg-elevated)] hover:border-[#555] transition-colors no-underline"
+            >
+              Дэлгэрэнгүй харах →
+            </Link>
+          ) : (
+            <div
+              className="block mt-4 text-center py-3 rounded-xl border border-[var(--esl-border)] text-sm font-semibold text-[var(--esl-text-disabled)] opacity-60 cursor-not-allowed"
+              title="Жишээ мэдээлэл — дэлгэрэнгүй харах боломжгүй"
+            >
+              Жишээ мэдээлэл
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -489,14 +503,23 @@ function FeedCard({ item, onClick }: { item: typeof DEMO_FEED[0]; onClick: () =>
             </div>
           </div>
 
-          {/* Detail page link */}
-          <Link
-            href={`/feed/${item.id}`}
-            onClick={(e) => e.stopPropagation()}
-            className="block mt-3 text-center py-2 rounded-lg border border-[var(--esl-border)] text-[11px] font-semibold text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-elevated)] hover:text-[var(--esl-text)] transition-colors no-underline"
-          >
-            Дэлгэрэнгүй →
-          </Link>
+          {/* Detail page link — only for real DB items */}
+          {isRealFeedId(item.id) ? (
+            <Link
+              href={`/feed/${item.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="block mt-3 text-center py-2 rounded-lg border border-[var(--esl-border)] text-[11px] font-semibold text-[var(--esl-text-muted)] hover:bg-[var(--esl-bg-elevated)] hover:text-[var(--esl-text)] transition-colors no-underline"
+            >
+              Дэлгэрэнгүй →
+            </Link>
+          ) : (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="block mt-3 text-center py-2 rounded-lg border border-[var(--esl-border)] text-[11px] font-semibold text-[var(--esl-text-disabled)] opacity-60 cursor-not-allowed"
+            >
+              Жишээ
+            </div>
+          )}
         </div>
       </div>
     </div>
