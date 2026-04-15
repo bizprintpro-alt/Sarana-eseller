@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { loyaltyService } from '@/lib/loyalty/LoyaltyService';
+import { requireAuth } from '@/lib/api-auth';
 
 export async function POST(req: NextRequest) {
-  try {
-    const { userId, points, type, orderId } = await req.json();
-    if (!userId || !points) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+  const user = requireAuth(req);
+  if (user instanceof NextResponse) return user;
 
-    const redemption = await loyaltyService.redeem(userId, points, type || 'discount', orderId);
+  try {
+    // userId in body is ignored — trust the JWT only
+    const { points, type, orderId } = await req.json();
+    if (!points) return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+
+    const redemption = await loyaltyService.redeem(user.id, points, type || 'discount', orderId);
 
     return NextResponse.json({
       couponCode: redemption.couponCode,
