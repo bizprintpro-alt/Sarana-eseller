@@ -78,8 +78,42 @@ async function run() {
     // 4. History entries
     const entries = (w3?.history as unknown as unknown[] | null)?.length ?? 0;
     check(`History: ${entries} entries (>=4 expected)`, entries >= 4);
+
+    // 5. redeemForCash
+    console.log('\n── redeemForCash ──');
+    await prisma.loyaltyAccount.upsert({
+      where: { userId: buyer.id },
+      create: {
+        userId: buyer.id,
+        balance: 1000,
+        lifetimeEarned: 1000,
+        lifetimeSpent: 0,
+        tier: 'SILVER',
+      },
+      update: { balance: 1000 },
+    });
+
+    const { LoyaltyService } = await import('../src/lib/loyalty/LoyaltyService');
+    const svc = new LoyaltyService();
+    const walletBefore = await prisma.wallet.findUnique({ where: { userId: buyer.id } });
+    const cash = await svc.redeemForCash(buyer.id, 500);
+    const afterPoints = await prisma.loyaltyAccount.findUnique({ where: { userId: buyer.id } });
+    const afterWallet = await prisma.wallet.findUnique({ where: { userId: buyer.id } });
+
+    check('redeemForCash: cash > 0', cash > 0);
+    check('redeemForCash: points deducted (1000 → 500)', afterPoints?.balance === 500);
+    check(
+      `redeemForCash: wallet increased (+${cash}₮)`,
+      (afterWallet?.balance ?? 0) === (walletBefore?.balance ?? 0) + cash,
+    );
   } finally {
     // Cleanup
+    await prisma.loyaltyTransaction.deleteMany({
+      where: { account: { userId: { in: [buyer.id, seller.id] } } },
+    }).catch(() => {});
+    await prisma.loyaltyAccount.deleteMany({
+      where: { userId: { in: [buyer.id, seller.id] } },
+    }).catch(() => {});
     await prisma.wallet.deleteMany({ where: { userId: { in: [buyer.id, seller.id] } } });
     await prisma.user.deleteMany({ where: { id: { in: [buyer.id, seller.id] } } });
   }
