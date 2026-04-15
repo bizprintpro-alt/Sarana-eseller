@@ -273,6 +273,13 @@ model Order {
   driverLng         Float?
   driverUpdatedAt   DateTime?
 
+  // POS fields
+  source        String?         // "online" | "pos" | "mobile"
+  posTerminalId String?
+  cashReceived  Float?
+  change        Float?
+  vatAmount     Float?
+
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
