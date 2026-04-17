@@ -39,12 +39,18 @@ export async function POST(req: NextRequest) {
       image: i.image || null,
     }));
 
+    // Platform fee 2%
+    const platformFee = Math.round(amount * 0.02)
+    const sellerAmount = amount - platformFee
+
     // Create pending order
     const order = await prisma.order.create({
       data: {
         userId: authUser.id,
         items: normalizedItems,
         total: amount,
+        platformAmount: platformFee,
+        sellerAmount: sellerAmount,
         status: 'pending',
         deliveryAddress: deliveryAddress || undefined,
         paymentMethod: 'qpay',
@@ -148,3 +154,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to create invoice' }, { status: 500 });
   }
 }
+
+
