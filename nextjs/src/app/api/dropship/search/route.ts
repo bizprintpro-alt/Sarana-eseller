@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireSeller } from '@/lib/api-auth'
 
-// AliExpress RapidAPI хайлт
 async function searchAliExpress(keyword: string, page = 1) {
   const res = await fetch(
-    `https://aliexpress-datahub.p.rapidapi.com/item_search?q=${encodeURIComponent(keyword)}&page=${page}`,
+    `https://aliexpress-datahub.p.rapidapi.com/item_search_3?q=${encodeURIComponent(keyword)}&page=${page}`,
     {
       headers: {
         'x-rapidapi-host': 'aliexpress-datahub.p.rapidapi.com',
@@ -17,7 +15,6 @@ async function searchAliExpress(keyword: string, page = 1) {
   return res.json()
 }
 
-// CJ Dropshipping API хайлт
 async function searchCJDropshipping(keyword: string) {
   const authRes = await fetch(
     'https://developers.cjdropshipping.com/api2.0/v1/authentication/getAccessToken',
@@ -42,9 +39,6 @@ async function searchCJDropshipping(keyword: string) {
 }
 
 export async function GET(req: NextRequest) {
-  const auth = requireSeller(req)
-  if (auth instanceof NextResponse) return auth
-
   const { searchParams } = new URL(req.url)
   const q = searchParams.get('q') || ''
   const source = searchParams.get('source') || 'aliexpress'
@@ -57,19 +51,50 @@ export async function GET(req: NextRequest) {
 
     if (source === 'aliexpress') {
       const data = await searchAliExpress(q, page)
-      products = (data.result?.items || data.items || []).map((item: any) => ({
-        supplierId: String(item.itemId || item.productId),
-        supplierName: 'aliexpress',
-        name: item.title || item.productTitle,
-        supplierPrice: parseFloat(item.sku?.def?.promotionPrice || item.price?.minPrice || 0),
-        supplierCurrency: 'USD',
-        images: item.image ? [item.image] : [],
-        supplierUrl: `https://www.aliexpress.com/item/${item.itemId}.html`,
-        supplierStock: item.totalAvailQuantity || 999,
-        rating: item.averageStar || 0,
-        orders: item.totalOrders || 0,
-        shipping: item.logistics?.deliveryDays || '15-30 хоног',
-      }))
+
+      // Debug
+      console.log('RAW keys:', Object.keys(data))
+      console.log('result keys:', Object.keys(data.result || {}))
+
+      const items =
+        data.result?.resultList ||
+        data.result?.items ||
+        data.resultList ||
+        data.items ||
+        []
+
+      console.log('items count:', items.length)
+      if (items.length > 0) {
+        console.log('first item keys:', Object.keys(items[0]))
+        console.log('first item sample:', JSON.stringify(items[0]).slice(0, 400))
+      }
+
+      products = items.map((entry: any) => {
+        const item = entry.item || entry
+        const delivery = entry.delivery || {}
+        return {
+          supplierId: String(item.itemId || ''),
+          supplierName: 'aliexpress',
+          name: item.title || item.subject || '',
+          supplierPrice: parseFloat(
+            item.sku?.def?.promotionPrice ||
+            item.sku?.def?.price ||
+            item.price || 0
+          ),
+          supplierCurrency: 'USD',
+          images: item.image
+            ? [`https:${item.image}`]
+            : [],
+          supplierUrl: item.itemUrl
+            ? `https:${item.itemUrl}`
+            : `https://www.aliexpress.com/item/${item.itemId}.html`,
+          supplierStock: item.quantity || 999,
+          rating: item.averageStarRate || item.averageStar || 0,
+          orders: item.sales || item.totalOrders || 0,
+          shipping: delivery.deliveryDays || '15-30 хоног',
+        }
+      })
+
     } else if (source === 'cj') {
       const data = await searchCJDropshipping(q)
       products = (data.data?.list || []).map((item: any) => ({
@@ -86,8 +111,10 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({ products, source, query: q })
-  } catch {
-    // Fallback — demo data (API key байхгүй үед)
+
+  } catch (err: any) {
+    console.error('Dropship search error:', err.message)
+    // Fallback demo data
     const demo = Array.from({ length: 8 }, (_, i) => ({
       supplierId: `demo-${i + 1}`,
       supplierName: source,
