@@ -3,6 +3,15 @@ const Product = require('../models/Product');
 const { protect, authorize } = require('../middleware/auth');
 const { upload } = require('../config/cloudinary');
 
+// Fields a seller may set on a product. Anything else (seller, rating, reviewCount,
+// soldCount, isActive, createdAt, …) is set by the server or derived from auth.
+const PRODUCT_WRITABLE = ['name', 'description', 'price', 'salePrice', 'category', 'images', 'emoji', 'stock', 'commission'];
+function pickWritable(body) {
+  const out = {};
+  for (const k of PRODUCT_WRITABLE) if (body[k] !== undefined) out[k] = body[k];
+  return out;
+}
+
 // GET /products — Бараа жагсаалт (нийтэд нээлттэй)
 router.get('/', async (req, res) => {
   try {
@@ -40,7 +49,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', protect, authorize('seller', 'admin'), async (req, res) => {
   try {
     const product = await Product.create({
-      ...req.body,
+      ...pickWritable(req.body),
       seller: req.user._id,
       store: { name: req.user.store?.name || req.user.name, _id: req.user._id },
     });
@@ -58,7 +67,7 @@ router.put('/:id', protect, authorize('seller', 'admin'), async (req, res) => {
     if (String(product.seller) !== String(req.user._id) && req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Эрх хүрэлцэхгүй' });
     }
-    Object.assign(product, req.body);
+    Object.assign(product, pickWritable(req.body));
     await product.save();
     res.json(product);
   } catch (err) {

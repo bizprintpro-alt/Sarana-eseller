@@ -9,6 +9,12 @@ const { protect, authorize } = require('../middleware/auth');
 
 const adminOnly = [protect, authorize('admin')];
 
+// Escape user-provided text before building a Mongo $regex — prevents ReDoS and
+// syntactic injection (e.g. `(.*)+`, unbounded quantifiers).
+function escapeRegex(s) {
+  return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // GET /admin/stats
 router.get('/stats', adminOnly, async (req, res) => {
   try {
@@ -43,10 +49,13 @@ router.get('/users', adminOnly, async (req, res) => {
     const { role, limit = 100, page = 1, search } = req.query;
     const filter = {};
     if (role && role !== 'all') filter.role = role;
-    if (search) filter.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { email: { $regex: search, $options: 'i' } },
-    ];
+    if (search) {
+      const q = escapeRegex(String(search).slice(0, 80));
+      filter.$or = [
+        { name:  { $regex: q, $options: 'i' } },
+        { email: { $regex: q, $options: 'i' } },
+      ];
+    }
     const users = await User.find(filter)
       .sort({ createdAt: -1 })
       .limit(Number(limit))

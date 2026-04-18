@@ -21,8 +21,10 @@ router.get('/', protect, async (req, res) => {
 // POST /wallet/withdraw
 router.post('/withdraw', protect, async (req, res) => {
   try {
-    const { amount, method, bankCode, accountNumber } = req.body;
-    if (!amount || amount < 10000) {
+    const { amount: rawAmount, method, bankCode, accountNumber } = req.body;
+    // Coerce then validate — rejects strings, NaN, Infinity, non-integers, negatives.
+    const amount = Number(rawAmount);
+    if (!Number.isFinite(amount) || !Number.isInteger(amount) || amount < 10000) {
       return res.status(400).json({ message: 'Дор хаяж ₮10,000 татах боломжтой' });
     }
     const wallet = await Wallet.getOrCreate(req.user._id);
@@ -38,8 +40,8 @@ router.post('/withdraw', protect, async (req, res) => {
       note: `Мөнгө татах хүсэлт`,
       status: 'pending',
       bankInfo: {
-        bankName:      bankCode || method,
-        accountNumber: accountNumber || '',
+        bankName:      String(bankCode || method || '').slice(0, 100),
+        accountNumber: String(accountNumber || '').slice(0, 100),
         accountName:   req.user.name,
       },
     });

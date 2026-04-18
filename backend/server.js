@@ -69,13 +69,12 @@ app.get('/api/health', (req, res) => {
 });
 
 // ── Error handler ──
+// Always log full details server-side; never leak stack/message to clients.
+// Previously exposed raw err.message when NODE_ENV wasn't 'production' — Render's
+// env isn't guaranteed to set that, so the leak was reachable in prod.
 app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
-  res.status(err.status || 500).json({
-    message: process.env.NODE_ENV === 'production'
-      ? 'Серверийн алдаа'
-      : err.message,
-  });
+  console.error('[error]', req.method, req.path, err);
+  res.status(err.status || 500).json({ message: 'Серверийн алдаа' });
 });
 
 // ── Start ──
