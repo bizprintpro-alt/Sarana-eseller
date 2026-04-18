@@ -57,6 +57,7 @@ app.use('/api/payment',       apiLimiter,  require('./routes/payment'));
 app.use('/api/affiliate',     apiLimiter,  require('./routes/affiliate'));
 app.use('/api/wallet',        apiLimiter,  require('./routes/wallet'));
 app.use('/api/admin',         apiLimiter,  require('./routes/admin'));
+app.use('/api/herder',        apiLimiter,  require('./routes/herder'));
 app.use('/api/notifications', require('./routes/notifications'));
 
 // ── Health check ──
