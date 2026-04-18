@@ -5,7 +5,19 @@
 
 const clients = new Map(); // userId -> [res, res, ...]
 
+// Cap per user so one account can't exhaust server memory with unlimited
+// SSE connections (rate-limiters don't work well on long-lived streams).
+const MAX_CONNECTIONS_PER_USER = 5;
+
 function addClient(userId, res) {
+  const id = String(userId);
+  const existing = clients.get(id) || [];
+  if (existing.length >= MAX_CONNECTIONS_PER_USER) {
+    res.writeHead(429, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Too many open connections' }));
+    return;
+  }
+
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
@@ -14,7 +26,6 @@ function addClient(userId, res) {
   });
   res.write(`data: ${JSON.stringify({ type: 'connected' })}\n\n`);
 
-  const id = String(userId);
   if (!clients.has(id)) clients.set(id, []);
   clients.get(id).push(res);
 

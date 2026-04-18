@@ -96,13 +96,14 @@ router.get('/qpay/check/:invoiceId', protect, async (req, res) => {
     const paid = data.count > 0;
 
     if (paid) {
-      const order = await Order.findOne({ 'payment.invoiceId': req.params.invoiceId })
-        .populate('items.product', 'name price salePrice emoji category commission store seller');
-      if (order && order.payment.status !== 'paid') {
-        order.payment.status = 'paid';
-        order.payment.paidAt = new Date();
-        order.status = 'confirmed';
-        await order.save();
+      // Atomic claim — only ONE concurrent caller wins. Returns null if already paid,
+      // which prevents double commission calculation under concurrent webhook + poll.
+      const order = await Order.findOneAndUpdate(
+        { 'payment.invoiceId': req.params.invoiceId, 'payment.status': { $ne: 'paid' } },
+        { $set: { 'payment.status': 'paid', 'payment.paidAt': new Date(), status: 'confirmed' } },
+        { new: true },
+      ).populate('items.product', 'name price salePrice emoji category commission store seller');
+      if (order) {
         await calculateCommissions(order);
         sendToUser(order.user, 'payment-confirmed', { orderId: order._id, orderNumber: order.orderNumber });
       }
@@ -131,16 +132,16 @@ router.post('/qpay/callback', async (req, res) => {
     }
 
     const { orderId } = req.query;
-    if (!orderId) return res.json({ ok: true });
+    if (!orderId || !/^[0-9a-fA-F]{24}$/.test(orderId)) return res.json({ ok: true });
 
-    const order = await Order.findById(orderId)
-      .populate('items.product', 'name price salePrice emoji category commission store seller');
+    // Atomic claim — only one concurrent webhook/poll can transition the order.
+    const order = await Order.findOneAndUpdate(
+      { _id: orderId, 'payment.status': { $ne: 'paid' } },
+      { $set: { 'payment.status': 'paid', 'payment.paidAt': new Date(), status: 'confirmed' } },
+      { new: true },
+    ).populate('items.product', 'name price salePrice emoji category commission store seller');
 
-    if (order && order.payment.status !== 'paid') {
-      order.payment.status = 'paid';
-      order.payment.paidAt = new Date();
-      order.status = 'confirmed';
-      await order.save();
+    if (order) {
       await calculateCommissions(order);
       sendToUser(order.user, 'payment-confirmed', { orderId: order._id, orderNumber: order.orderNumber });
     }
