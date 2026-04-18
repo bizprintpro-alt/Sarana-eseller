@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminDB } from '@/lib/api-auth'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = await requireAdminDB(req);
+  if (auth instanceof NextResponse) return auth;
+
   let settings = await prisma.systemSettings.findFirst({
     where: { key: 'main' },
   })
@@ -16,6 +20,9 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
+  const auth = await requireAdminDB(req);
+  if (auth instanceof NextResponse) return auth;
+
   const body = await req.json()
 
   const settings = await prisma.systemSettings.upsert({

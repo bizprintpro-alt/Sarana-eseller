@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireSeller, getShopForUser, errorJson, json } from '@/lib/api-auth';
 
+// Restrict digital product files to trusted CDN hosts — prevents SSRF-like
+// redirects and phishing payloads being attached to paid downloads.
+const ALLOWED_HOSTS = /^(?:[\w-]+\.)?(?:public\.blob\.vercel-storage\.com|res\.cloudinary\.com)$/i;
+const ALLOWED_TYPES = new Set(['pdf', 'zip', 'mp4', 'mp3', 'xlsx', 'xls', 'docx', 'doc', 'png', 'jpg', 'jpeg']);
+const MAX_FILE_BYTES = 200 * 1024 * 1024; // 200MB cap on declared size
+
 // POST /api/digital/upload — create a digital product record
 export async function POST(req: NextRequest) {
   const user = requireSeller(req);
@@ -16,6 +22,23 @@ export async function POST(req: NextRequest) {
 
     if (!productId || !fileUrl || !fileType) {
       return errorJson('productId, fileUrl, fileType шаардлагатай', 400);
+    }
+    // Validate fileUrl host — only allow uploads stored in our CDNs
+    let parsed: URL;
+    try { parsed = new URL(fileUrl); } catch { return errorJson('fileUrl буруу байна', 400); }
+    if (parsed.protocol !== 'https:' || !ALLOWED_HOSTS.test(parsed.hostname)) {
+      return errorJson('Зөвхөн зөвшөөрөгдсөн CDN-ийн файл оруулах боломжтой', 400);
+    }
+    if (!ALLOWED_TYPES.has(String(fileType).toLowerCase())) {
+      return errorJson('Дэмжигдээгүй файлын төрөл', 400);
+    }
+    const declaredSize = Number(fileSize ?? 0);
+    if (!Number.isFinite(declaredSize) || declaredSize < 0 || declaredSize > MAX_FILE_BYTES) {
+      return errorJson('Файлын хэмжээ буруу байна', 400);
+    }
+    const dl = Number(maxDownloads ?? 5);
+    if (!Number.isFinite(dl) || dl < 1 || dl > 100) {
+      return errorJson('maxDownloads 1-100 байх ёстой', 400);
     }
 
     // Verify product belongs to this seller
@@ -39,8 +62,8 @@ export async function POST(req: NextRequest) {
         data: {
           fileUrl,
           fileType,
-          fileSize: fileSize || 0,
-          maxDownloads: maxDownloads || 5,
+          fileSize: declaredSize,
+          maxDownloads: dl,
         },
       });
       return json(updated);
@@ -52,8 +75,8 @@ export async function POST(req: NextRequest) {
         productId,
         fileUrl,
         fileType,
-        fileSize: fileSize || 0,
-        maxDownloads: maxDownloads || 5,
+        fileSize: declaredSize,
+        maxDownloads: dl,
       },
     });
 

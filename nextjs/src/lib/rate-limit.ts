@@ -72,6 +72,31 @@ export function checkRateLimit(req: NextRequest): { limited: boolean; remaining:
   return { limited: false, remaining: config.max - entry.count, resetIn: entry.resetAt - now };
 }
 
+/**
+ * Generic bucket — increment counter for `key` within `windowMs`.
+ * Returns { limited, retryAfter } where retryAfter is seconds until reset.
+ * Use for custom throttles (e.g., per-phone OTP send) that the path-based
+ * checkRateLimit can't express.
+ */
+export function checkBucket(key: string, max: number, windowMs: number): { limited: boolean; retryAfter: number; count: number } {
+  const now = Date.now();
+  const entry = store.get(key);
+  if (!entry || now > entry.resetAt) {
+    store.set(key, { count: 1, resetAt: now + windowMs });
+    return { limited: false, retryAfter: 0, count: 1 };
+  }
+  entry.count++;
+  if (entry.count > max) {
+    return { limited: true, retryAfter: Math.ceil((entry.resetAt - now) / 1000), count: entry.count };
+  }
+  return { limited: false, retryAfter: 0, count: entry.count };
+}
+
+/** Reset a bucket — call after a successful OTP verify so the user isn't locked out. */
+export function resetBucket(key: string): void {
+  store.delete(key);
+}
+
 /** Apply rate limit to API route handler */
 export function withRateLimit(handler: (req: NextRequest, ...args: any[]) => Promise<Response>) {
   return async (req: NextRequest, ...args: any[]) => {

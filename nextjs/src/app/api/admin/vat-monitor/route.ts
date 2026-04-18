@@ -1,7 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getVatMonitorData } from '@/lib/tax/vatMonitor'
+import { requireAdminDB } from '@/lib/api-auth'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = await requireAdminDB(req);
+  if (auth instanceof NextResponse) return auth;
+
   try {
     const data = await getVatMonitorData()
     const stats = {

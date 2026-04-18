@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAuth } from '@/lib/api-auth';
 
 // GET — widget config (public)
 export async function GET(
@@ -34,19 +35,26 @@ export async function GET(
   });
 }
 
-// PUT — update widget config
+// PUT — update widget config (shop owner only)
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ entityId: string }> }
 ) {
+  const auth = requireAuth(req);
+  if (auth instanceof NextResponse) return auth;
+
   const { entityId } = await params;
   const body = await req.json();
 
+  // Resolve shop, then verify the caller owns it — prevents anyone from rewriting a shop's widget
   const shop = await prisma.shop.findFirst({
     where: { OR: [{ id: entityId }, { userId: entityId }] },
   });
 
   if (!shop) return NextResponse.json({ error: 'Shop not found' }, { status: 404 });
+  if (shop.userId !== auth.id && auth.role !== 'admin' && auth.role !== 'superadmin') {
+    return NextResponse.json({ error: 'Эрх байхгүй' }, { status: 403 });
+  }
 
   const existing = (shop.storefrontConfig as Record<string, unknown>) || {};
 
