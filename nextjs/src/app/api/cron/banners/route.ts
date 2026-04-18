@@ -22,6 +22,7 @@ export async function GET() {
       data: { activated: activated.count, expired: expired.count },
     });
   } catch (e: unknown) {
-    return NextResponse.json({ success: false, error: (e as Error).message }, { status: 500 });
+    console.error('[cron/banners]', e);
+    return NextResponse.json({ success: false, error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

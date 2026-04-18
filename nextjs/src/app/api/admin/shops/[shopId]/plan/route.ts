@@ -35,6 +35,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json(sub);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/shops/plan]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

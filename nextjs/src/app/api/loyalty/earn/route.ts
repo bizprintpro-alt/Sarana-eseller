@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ transaction, balance: account.balance, tier: newTier });
   } catch (error: unknown) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    console.error('[loyalty/earn]', error);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

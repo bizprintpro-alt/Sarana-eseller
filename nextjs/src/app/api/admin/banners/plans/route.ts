@@ -12,7 +12,8 @@ export async function GET(req: NextRequest) {
     const plans = await prisma.bannerPlan.findMany({ orderBy: { sortOrder: 'asc' } });
     return json(plans);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/banners/plans GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
     const plan = await prisma.bannerPlan.create({ data: body });
     return json(plan, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/banners/plans POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

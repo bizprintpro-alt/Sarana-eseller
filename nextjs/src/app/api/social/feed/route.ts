@@ -41,8 +41,8 @@ export async function GET(req: NextRequest) {
       meta: { total, page, limit, hasMore: page * limit < total },
     });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    return errorJson('Фийд ачаалахад алдаа: ' + message, 500);
+    console.error('[social/feed GET]', err);
+    return errorJson('Фийд ачаалахад алдаа', 500);
   }
 }
 
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
 
     return json(post, 201);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    return errorJson('Пост үүсгэхэд алдаа: ' + message, 500);
+    console.error('[social/feed POST]', err);
+    return errorJson('Пост үүсгэхэд алдаа', 500);
   }
 }

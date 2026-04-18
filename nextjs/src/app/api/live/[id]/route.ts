@@ -37,7 +37,8 @@ export async function GET(
 
     return json(stream);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/[id] GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -75,6 +76,7 @@ export async function PUT(
 
     return json(updated);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/[id] PUT]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

@@ -27,6 +27,7 @@ export async function POST(_req: NextRequest, ctx: Ctx) {
 
     return json({ status: 'queued', recipientCount });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[campaigns/send]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

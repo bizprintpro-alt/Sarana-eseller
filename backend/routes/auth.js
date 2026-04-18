@@ -16,7 +16,8 @@ router.post('/register', async (req, res) => {
     const token = signToken(user._id);
     res.status(201).json({ token, user: user.toPublic() });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[auth]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 
@@ -34,7 +35,8 @@ router.post('/login', async (req, res) => {
     const token = signToken(user._id);
     res.json({ token, user: user.toPublic() });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[auth]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 

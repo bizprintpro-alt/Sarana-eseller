@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
       message: '1-3 ажлын өдрийн дотор шилжих болно',
     });
   } catch (e) {
-    return errorJson((e as Error).message, 500);
+    console.error('[wallet/payout]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

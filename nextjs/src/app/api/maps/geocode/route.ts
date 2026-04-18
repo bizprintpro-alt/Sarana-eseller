@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
     const coordCheck = validateCoords(result.lat, result.lng);
     return NextResponse.json({ ...result, coordCheck });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[maps/geocode]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

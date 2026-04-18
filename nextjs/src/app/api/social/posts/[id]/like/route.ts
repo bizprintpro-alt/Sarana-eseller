@@ -36,7 +36,7 @@ export async function POST(
       return json({ liked: true, count });
     }
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    return errorJson('Like алдаа: ' + message, 500);
+    console.error('[social/posts/[id]/like]', err);
+    return errorJson('Like алдаа', 500);
   }
 }

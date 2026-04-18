@@ -18,7 +18,8 @@ export async function POST(req: NextRequest) {
       message: `${points} ${bank} оноо → ${result.esellerPoints} eseller оноо болголоо!`,
       esellerPoints: result.esellerPoints,
     });
-  } catch (err: any) {
-    return errorJson(err.message || 'Хөрвүүлэхэд алдаа гарлаа', 500);
+  } catch (err: unknown) {
+    console.error('[bank/loyalty/convert]', err);
+    return errorJson('Хөрвүүлэхэд алдаа гарлаа', 500);
   }
 }

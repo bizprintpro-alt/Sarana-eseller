@@ -101,7 +101,8 @@ export async function POST(req: Request) {
         avatar: user.avatar,
       },
     }, { status: 201 });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Бүртгэл үүсгэхэд алдаа гарлаа' }, { status: 500 });
+  } catch (e: unknown) {
+    console.error('[auth/register]', e);
+    return NextResponse.json({ error: 'Бүртгэл үүсгэхэд алдаа гарлаа' }, { status: 500 });
   }
 }

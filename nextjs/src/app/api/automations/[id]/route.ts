@@ -37,7 +37,8 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
 
     return json(flow);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[automations/[id] PATCH]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -51,6 +52,7 @@ export async function DELETE(_req: NextRequest, ctx: Ctx) {
     await prisma.automationFlow.delete({ where: { id } });
     return json({ deleted: true });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[automations/[id] DELETE]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

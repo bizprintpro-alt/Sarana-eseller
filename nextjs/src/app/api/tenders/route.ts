@@ -35,7 +35,8 @@ export async function GET(req: NextRequest) {
       pagination: { page, limit, total, pages: Math.ceil(total / limit) },
     });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[tenders GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -66,6 +67,7 @@ export async function POST(req: NextRequest) {
 
     return json(tender, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[tenders POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

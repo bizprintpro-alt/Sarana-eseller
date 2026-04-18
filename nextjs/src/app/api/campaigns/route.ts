@@ -29,7 +29,8 @@ export async function GET(req: NextRequest) {
 
     return json({ campaigns, total, page, limit, pages: Math.ceil(total / limit) });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[campaigns GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
 
     return json(campaign, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[campaigns POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

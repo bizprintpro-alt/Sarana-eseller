@@ -73,6 +73,7 @@ export async function POST(req: NextRequest) {
     return json({ entity, message: 'Амжилттай бүртгэгдлээ' }, 201);
   } catch (err: any) {
     if (err.code === 'P2002') return errorJson('Энэ slug аль хэдийн бүртгэлтэй');
-    return errorJson('Бүртгэл амжилтгүй: ' + (err.message || 'Unknown error'));
+    console.error('[entities/register]', err);
+    return errorJson('Бүртгэл амжилтгүй');
   }
 }

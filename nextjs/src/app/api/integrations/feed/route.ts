@@ -109,10 +109,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, synced, total: products.length })
   } catch (e: any) {
+    console.error('[integrations/feed]', e);
     await prisma.storeIntegration.update({
       where: { id: integration.id },
-      data: { syncStatus: 'error', syncError: e.message },
+      data: { syncStatus: 'error', syncError: e?.message ?? 'sync failed' },
     })
-    return NextResponse.json({ error: e.message }, { status: 500 })
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 })
   }
 }

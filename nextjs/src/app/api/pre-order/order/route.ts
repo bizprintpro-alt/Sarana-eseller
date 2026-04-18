@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ data: item }, { status: 201 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    console.error('[pre-order/order]', err);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

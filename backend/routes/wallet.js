@@ -14,7 +14,8 @@ router.get('/', protect, async (req, res) => {
       transactions: wallet.transactions.slice(-20).reverse(),
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[wallet]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 
@@ -49,7 +50,8 @@ router.post('/withdraw', protect, async (req, res) => {
 
     res.json({ message: 'Татах хүсэлт илгээгдлээ', wallet });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[wallet]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 

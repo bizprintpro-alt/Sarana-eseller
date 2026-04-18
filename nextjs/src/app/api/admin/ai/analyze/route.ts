@@ -85,7 +85,8 @@ export async function POST(req: NextRequest) {
 
     return json({ id: insight.id, score, issues, fullText, stats: { users, orders, shops, products, sellers, pendingOrders, deliveredOrders } });
   } catch (e) {
-    return errorJson('Шинжилгээ амжилтгүй: ' + (e as Error).message, 500);
+    console.error('[admin/ai/analyze]', e);
+    return errorJson('Шинжилгээ амжилтгүй', 500);
   }
 }
 

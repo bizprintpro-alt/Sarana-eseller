@@ -37,6 +37,7 @@ export async function POST(
 
     return json(result);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/end]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

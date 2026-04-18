@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
     });
     return json({ message: 'Ангилалууд хадгалагдлаа', count: categoryIds.length });
   } catch (e) {
-    return errorJson('Хадгалж чадсангүй: ' + (e as Error).message, 500);
+    console.error('[store/categories POST]', e);
+    return errorJson('Хадгалж чадсангүй', 500);
   }
 }

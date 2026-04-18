@@ -88,8 +88,7 @@ export async function POST(req: NextRequest) {
       status: 'voided',
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Void алдаа';
     console.error('[POS Void]', error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: 'Void алдаа' }, { status: 500 });
   }
 }

@@ -23,6 +23,7 @@ export async function GET(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json({ entity, feedItems });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[entity/[type]/[slug]]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

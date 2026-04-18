@@ -10,6 +10,7 @@ export async function POST(_req: NextRequest, ctx: Ctx) {
     await prisma.banner.update({ where: { id }, data: { clicks: { increment: 1 } } });
     return NextResponse.json({ success: true });
   } catch (e: unknown) {
-    return NextResponse.json({ success: false, error: (e as Error).message }, { status: 500 });
+    console.error('[banners/click]', e);
+    return NextResponse.json({ success: false, error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

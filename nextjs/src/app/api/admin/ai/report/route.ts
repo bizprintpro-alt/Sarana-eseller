@@ -46,7 +46,8 @@ export async function GET(req: NextRequest) {
       activityLogs: logs,
     });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/ai/report GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -64,6 +65,7 @@ export async function POST(req: NextRequest) {
     const report = await generateWorkReport(commits);
     return NextResponse.json({ report });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/ai/report POST]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

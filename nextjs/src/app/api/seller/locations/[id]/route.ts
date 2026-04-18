@@ -22,7 +22,8 @@ export async function GET(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json(location);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/locations/[id] GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -60,7 +61,8 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json(updated);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/locations/[id] PATCH]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -96,6 +98,7 @@ export async function DELETE(req: NextRequest, ctx: Ctx) {
 
     return new NextResponse(null, { status: 204 });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/locations/[id] DELETE]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

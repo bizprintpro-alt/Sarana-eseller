@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
         isActive: membership.status !== "CANCELLED" && new Date(membership.endsAt) > new Date(),
       },
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('[gold/status]', error);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

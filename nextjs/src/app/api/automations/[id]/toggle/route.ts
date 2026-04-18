@@ -18,6 +18,7 @@ export async function POST(_req: NextRequest, ctx: Ctx) {
 
     return json({ id: flow.id, isActive: flow.isActive });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[automations/toggle]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

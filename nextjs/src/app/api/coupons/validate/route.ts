@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
       coupon: { code: coupon.code, discountType: coupon.discountType, discountValue: coupon.discountValue, title: coupon.title },
     });
   } catch (e) {
-    return NextResponse.json({ valid: false, error: (e as Error).message });
+    console.error('[coupons/validate]', e);
+    return NextResponse.json({ valid: false, error: 'Серверийн алдаа' });
   }
 }

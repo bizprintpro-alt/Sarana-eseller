@@ -18,8 +18,8 @@ export async function GET(req: NextRequest) {
       isPublished: !!(shop.storefrontConfig as any)?.isPublished,
     });
   } catch (e) {
-    console.error('[storefront GET]', (e as Error).message);
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[storefront GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -55,7 +55,7 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json({ success: true, message: 'Storefront хадгалагдлаа' });
   } catch (e) {
-    console.error('[storefront PUT]', (e as Error).message);
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[storefront PUT]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

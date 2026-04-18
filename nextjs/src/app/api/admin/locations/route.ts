@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(locations);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/locations]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

@@ -82,7 +82,8 @@ export async function GET(req: NextRequest) {
 
     return json(result);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -180,6 +181,7 @@ export async function POST(req: NextRequest) {
 
     return json(result, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

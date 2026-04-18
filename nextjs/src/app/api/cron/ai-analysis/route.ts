@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       critical: critical.length,
     });
   } catch (e: unknown) {
-    console.error('AI analysis cron error:', e);
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[cron/ai-analysis]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

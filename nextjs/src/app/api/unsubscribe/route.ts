@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
 
     return json(record, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[unsubscribe]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

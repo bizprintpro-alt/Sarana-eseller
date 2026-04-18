@@ -35,6 +35,7 @@ export async function GET(req: NextRequest) {
       totalImpressions: impressionsAgg._sum.impressions || 0,
     });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/banners/stats]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
