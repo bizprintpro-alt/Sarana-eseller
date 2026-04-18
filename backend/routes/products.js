@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Product = require('../models/Product');
 const { protect, authorize } = require('../middleware/auth');
-const { upload } = require('../config/cloudinary');
+const { upload, uploadBuffer } = require('../config/cloudinary');
 
 // Fields a seller may set on a product. Anything else (seller, rating, reviewCount,
 // soldCount, isActive, createdAt, …) is set by the server or derived from auth.
@@ -92,9 +92,14 @@ router.delete('/:id', protect, authorize('seller', 'admin'), async (req, res) =>
 });
 
 // POST /products/upload — Зураг upload (Cloudinary)
-router.post('/upload', protect, authorize('seller', 'admin'), upload.single('image'), (req, res) => {
-  if (!req.file) return res.status(400).json({ message: 'Зураг оруулна уу' });
-  res.json({ url: req.file.path, public_id: req.file.filename });
+router.post('/upload', protect, authorize('seller', 'admin'), upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'Зураг оруулна уу' });
+    const result = await uploadBuffer(req.file.buffer);
+    res.json({ url: result.secure_url, public_id: result.public_id });
+  } catch (err) {
+    res.status(500).json({ message: 'Зураг хадгалж чадсангүй' });
+  }
 });
 
 module.exports = router;
