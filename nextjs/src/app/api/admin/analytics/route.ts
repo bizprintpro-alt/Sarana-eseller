@@ -10,7 +10,13 @@ export async function GET(req: NextRequest) {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
     const sevenDaysAgo = new Date(Date.now() - 7 * 86400000);
 
-    const [totalUsers, newUsers7d, newUsers30d, totalOrders, orders30d, totalProducts, totalShops] = await Promise.all([
+    // All independent queries in ONE Promise.all — was ~4 sequential waves.
+    // roleGroups replaces 5 per-role count() calls (groupBy).
+    const [
+      totalUsers, newUsers7d, newUsers30d, totalOrders, orders30d,
+      totalProducts, totalShops, revenues30d, recentUsers, recentOrders,
+      roleGroups, topProducts, paidOrders,
+    ] = await Promise.all([
       prisma.user.count(),
       prisma.user.count({ where: { createdAt: { gte: sevenDaysAgo } } }),
       prisma.user.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
@@ -18,20 +24,27 @@ export async function GET(req: NextRequest) {
       prisma.order.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
       prisma.product.count({ where: { isDemo: false, isActive: true } }),
       prisma.shop.count({ where: { isDemo: false } }),
+      prisma.platformRevenue.findMany({ where: { date: { gte: thirtyDaysAgo } } }).catch(() => [] as { amount: number }[]),
+      prisma.user.findMany({
+        where: { createdAt: { gte: thirtyDaysAgo } },
+        select: { createdAt: true },
+        orderBy: { createdAt: 'asc' },
+      }),
+      prisma.order.findMany({
+        where: { createdAt: { gte: thirtyDaysAgo } },
+        select: { createdAt: true, total: true },
+        orderBy: { createdAt: 'asc' },
+      }),
+      prisma.user.groupBy({ by: ['role'], _count: { _all: true } }),
+      prisma.product.findMany({
+        where: { isDemo: false, isActive: true },
+        select: { id: true, name: true, reviewCount: true, price: true },
+        orderBy: { reviewCount: 'desc' },
+        take: 10,
+      }),
+      prisma.order.count({ where: { status: { in: ['paid', 'delivered', 'completed'] } } }),
     ]);
-
-    // Revenue
-    const revenues30d = await prisma.platformRevenue.findMany({
-      where: { date: { gte: thirtyDaysAgo } },
-    }).catch(() => []);
     const totalRevenue30d = revenues30d.reduce((s, r) => s + r.amount, 0);
-
-    // Daily signups
-    const recentUsers = await prisma.user.findMany({
-      where: { createdAt: { gte: thirtyDaysAgo } },
-      select: { createdAt: true },
-      orderBy: { createdAt: 'asc' },
-    });
 
     const dailySignups: Record<string, number> = {};
     for (let i = 29; i >= 0; i--) {
@@ -42,13 +55,6 @@ export async function GET(req: NextRequest) {
       const key = new Date(u.createdAt).toISOString().slice(0, 10);
       if (dailySignups[key] !== undefined) dailySignups[key]++;
     }
-
-    // Daily orders
-    const recentOrders = await prisma.order.findMany({
-      where: { createdAt: { gte: thirtyDaysAgo } },
-      select: { createdAt: true, total: true },
-      orderBy: { createdAt: 'asc' },
-    });
 
     const dailyOrders: Record<string, { count: number; revenue: number }> = {};
     for (let i = 29; i >= 0; i--) {
@@ -71,27 +77,13 @@ export async function GET(req: NextRequest) {
       revenue: dailyOrders[date]?.revenue || 0,
     }));
 
-    // Role distribution
-    const [buyers, sellers, affiliates, drivers, admins] = await Promise.all([
-      prisma.user.count({ where: { role: 'buyer' } }),
-      prisma.user.count({ where: { role: 'seller' } }),
-      prisma.user.count({ where: { role: 'affiliate' } }),
-      prisma.user.count({ where: { role: 'delivery' } }),
-      prisma.user.count({ where: { role: 'admin' } }),
-    ]);
-
-    // Top products (by reviewCount as proxy for popularity)
-    const topProducts = await prisma.product.findMany({
-      where: { isDemo: false, isActive: true },
-      select: { id: true, name: true, reviewCount: true, price: true },
-      orderBy: { reviewCount: 'desc' },
-      take: 10,
-    });
-
-    // Conversion funnel
-    const paidOrders = await prisma.order.count({
-      where: { status: { in: ['paid', 'delivered', 'completed'] } },
-    });
+    const roleCount = (r: string) =>
+      roleGroups.find((g) => g.role === r)?._count._all ?? 0;
+    const buyers = roleCount('buyer');
+    const sellers = roleCount('seller');
+    const affiliates = roleCount('affiliate');
+    const drivers = roleCount('delivery');
+    const admins = roleCount('admin');
 
     return NextResponse.json({
       overview: { totalUsers, newUsers7d, newUsers30d, totalOrders, orders30d, totalProducts, totalShops, totalRevenue30d },

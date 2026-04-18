@@ -26,7 +26,9 @@ export async function GET(req: NextRequest) {
     ];
   }
 
-  const [shops, total] = await Promise.all([
+  // Run list query + stats aggregations in parallel.
+  // locationStats uses groupBy (1 query) instead of 4× count. noCoords needs a separate count (lat==null filter).
+  const [shops, total, totalShops, locationStats, noCoords, planStats] = await Promise.all([
     prisma.shop.findMany({
       where,
       include: { user: { select: { name: true, email: true } }, shopType: true, subscription: true },
@@ -35,22 +37,21 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: 'desc' },
     }),
     prisma.shop.count({ where }),
-  ]);
-
-  // Stats
-  const [totalShops, verified, pendingCount, noCoords] = await Promise.all([
     prisma.shop.count(),
-    prisma.shop.count({ where: { locationStatus: 'verified' } }),
-    prisma.shop.count({ where: { locationStatus: 'pending' } }),
+    prisma.shop.groupBy({ by: ['locationStatus'], _count: { _all: true } }),
     prisma.shop.count({ where: { lat: null } }),
+    prisma.shopSubscription.groupBy({ by: ['planKey'], _count: { _all: true } }),
   ]);
 
-  // Plan breakdown
+  const statusCount = (key: string) =>
+    locationStats.find((g) => g.locationStatus === key)?._count._all ?? 0;
+  const planCount = (key: string) => planStats.find((g) => g.planKey === key)?._count._all ?? 0;
+
   const planBreakdown = {
-    free: await prisma.shopSubscription.count({ where: { planKey: 'free' } }),
-    standard: await prisma.shopSubscription.count({ where: { planKey: 'standard' } }),
-    ultimate: await prisma.shopSubscription.count({ where: { planKey: 'ultimate' } }),
-    ai_pro: await prisma.shopSubscription.count({ where: { planKey: 'ai_pro' } }),
+    free: planCount('free'),
+    standard: planCount('standard'),
+    ultimate: planCount('ultimate'),
+    ai_pro: planCount('ai_pro'),
   };
 
   return json({
@@ -58,7 +59,7 @@ export async function GET(req: NextRequest) {
     total,
     page,
     pages: Math.ceil(total / limit),
-    stats: { total: totalShops, verified, pending: pendingCount, noCoords },
+    stats: { total: totalShops, verified: statusCount('verified'), pending: statusCount('pending'), noCoords },
     planBreakdown,
   });
 }

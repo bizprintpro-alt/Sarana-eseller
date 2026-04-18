@@ -11,58 +11,74 @@ export async function GET() {
   try {
     const now = new Date();
 
-    // 1. Expire old points (where expiresAt passed and points still positive)
+    // 1. Expire old points — group by accountId so each account gets ONE decrement
+    //    instead of one per transaction (was O(2N); now O(accounts) reads/writes).
     const expiredTxns = await prisma.loyaltyTransaction.findMany({
       where: { expiresAt: { lt: now }, points: { gt: 0 } },
       include: { account: true },
     });
 
-    let expiredCount = 0;
+    const byAccount = new Map<string, { balance: number; totalExpire: number; txnIds: string[] }>();
     for (const txn of expiredTxns) {
       if (!txn.account || txn.account.balance <= 0) continue;
-      const expireAmount = Math.min(txn.points, txn.account.balance);
-      if (expireAmount <= 0) continue;
-
-      await prisma.loyaltyAccount.update({
-        where: { id: txn.accountId },
-        data: { balance: { decrement: expireAmount } },
-      });
-      await prisma.loyaltyTransaction.update({
-        where: { id: txn.id },
-        data: { points: 0 },
-      });
-      expiredCount++;
+      const entry = byAccount.get(txn.accountId) ?? {
+        balance: txn.account.balance,
+        totalExpire: 0,
+        txnIds: [],
+      };
+      const remaining = entry.balance - entry.totalExpire;
+      const amt = Math.min(txn.points, Math.max(0, remaining));
+      if (amt <= 0) continue;
+      entry.totalExpire += amt;
+      entry.txnIds.push(txn.id);
+      byAccount.set(txn.accountId, entry);
     }
 
-    // 2. Auto-renew gold memberships expiring within next day
+    let expiredCount = 0;
+    await Promise.all(
+      Array.from(byAccount.entries()).map(async ([accountId, e]) => {
+        if (e.totalExpire <= 0) return;
+        expiredCount += e.txnIds.length;
+        await Promise.all([
+          prisma.loyaltyAccount.update({
+            where: { id: accountId },
+            data: { balance: { decrement: e.totalExpire } },
+          }),
+          prisma.loyaltyTransaction.updateMany({
+            where: { id: { in: e.txnIds } },
+            data: { points: 0 },
+          }),
+        ]);
+      }),
+    );
+
+    // 2. Auto-renew gold memberships — run in parallel
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
     const renewals = await prisma.goldMembership.findMany({
       where: { endsAt: { lte: tomorrow }, autoRenew: true, status: 'ACTIVE' },
     });
 
-    let renewedCount = 0;
-    for (const m of renewals) {
-      const planConfig = PLAN_DURATIONS[m.plan];
-      if (!planConfig) continue;
-
-      const newEndsAt = new Date(m.endsAt.getTime() + planConfig.duration * 24 * 60 * 60 * 1000);
-
-      await prisma.goldMembership.update({
-        where: { id: m.id },
-        data: { endsAt: newEndsAt },
-      });
-
-      await prisma.membershipPayment.create({
-        data: {
-          membershipId: m.id,
-          plan: m.plan,
-          amount: planConfig.price,
-          method: 'auto-renew',
-          refId: `auto-${m.id}-${Date.now()}`,
-        },
-      });
-      renewedCount++;
-    }
+    const renewalResults: number[] = await Promise.all(
+      renewals.map(async (m): Promise<number> => {
+        const planConfig = PLAN_DURATIONS[m.plan];
+        if (!planConfig) return 0;
+        const newEndsAt = new Date(m.endsAt.getTime() + planConfig.duration * 24 * 60 * 60 * 1000);
+        await prisma.$transaction([
+          prisma.goldMembership.update({ where: { id: m.id }, data: { endsAt: newEndsAt } }),
+          prisma.membershipPayment.create({
+            data: {
+              membershipId: m.id,
+              plan: m.plan,
+              amount: planConfig.price,
+              method: 'auto-renew',
+              refId: `auto-${m.id}-${Date.now()}`,
+            },
+          }),
+        ]);
+        return 1;
+      }),
+    );
+    const renewedCount = renewalResults.reduce((a, b) => a + b, 0);
 
     return NextResponse.json({
       expiredPoints: expiredCount,

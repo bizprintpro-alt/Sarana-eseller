@@ -43,28 +43,34 @@ export async function GET(req: NextRequest) {
   let processed = 0;
   let skipped = 0;
 
-  for (const user of birthdayUsers) {
-    const [account, gold] = await Promise.all([
-      prisma.loyaltyAccount.findUnique({
-        where: { userId: user.id },
-        select: { tier: true },
-      }),
-      prisma.goldMembership.findUnique({
-        where: { userId: user.id },
-        select: { status: true, endsAt: true },
-      }),
-    ]);
+  // Batch-fetch accounts + memberships for all birthday users → 2 queries instead of 2N
+  const userIds = birthdayUsers.map((u) => u.id);
+  const [accounts, memberships] = await Promise.all([
+    prisma.loyaltyAccount.findMany({
+      where: { userId: { in: userIds } },
+      select: { userId: true, tier: true },
+    }),
+    prisma.goldMembership.findMany({
+      where: { userId: { in: userIds } },
+      select: { userId: true, status: true, endsAt: true },
+    }),
+  ]);
+  const accountByUser = new Map(accounts.map((a) => [a.userId, a]));
+  const membershipByUser = new Map(memberships.map((m) => [m.userId, m]));
+  const nowDate = new Date();
 
+  for (const user of birthdayUsers) {
+    const gold = membershipByUser.get(user.id);
     const goldActive =
       !!gold &&
       (gold.status === 'ACTIVE' || gold.status === 'TRIAL') &&
-      new Date(gold.endsAt) > new Date();
+      new Date(gold.endsAt) > nowDate;
     if (!goldActive) {
       skipped++;
       continue;
     }
 
-    const tier = account?.tier ?? 'BRONZE';
+    const tier = accountByUser.get(user.id)?.tier ?? 'BRONZE';
     const bonus = BIRTHDAY_BONUS[tier];
     if (!bonus) {
       skipped++;
