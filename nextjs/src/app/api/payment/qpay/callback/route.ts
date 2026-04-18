@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendExpoPush } from '@/lib/push';
 
+const QPAY_WEBHOOK_SECRET = process.env.QPAY_WEBHOOK_SECRET;
+
 /**
  * QPay webhook callback
  * QPay нь олон форматаар callback илгээдэг:
@@ -15,6 +17,23 @@ import { sendExpoPush } from '@/lib/push';
  */
 async function handleCallback(req: NextRequest): Promise<NextResponse> {
   try {
+    // Shared-secret verification — header, query, or basic-auth fallback.
+    // Configure QPay webhook URL with ?secret=... or X-QPay-Secret header.
+    if (!QPAY_WEBHOOK_SECRET) {
+      console.error('[QPay callback] QPAY_WEBHOOK_SECRET env missing — refusing callback');
+      return NextResponse.json({ success: false, error: 'Server misconfigured' }, { status: 500 });
+    }
+    const providedSecret =
+      req.headers.get('x-qpay-secret') ||
+      req.nextUrl.searchParams.get('secret') ||
+      '';
+    if (providedSecret !== QPAY_WEBHOOK_SECRET) {
+      console.warn('[QPay callback] Invalid webhook secret', {
+        ip: req.headers.get('x-forwarded-for'),
+      });
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
     // 1. Query params (GET эсвэл POST-ийн URL params)
     const sp = req.nextUrl.searchParams;
 

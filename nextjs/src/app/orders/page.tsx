@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-production-2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   pending: { label: 'Хүлээгдэж байна', color: '#854F0B', bg: '#FAEEDA' },

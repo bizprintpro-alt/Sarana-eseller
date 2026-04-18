@@ -7,7 +7,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { prisma } from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-production-2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required. Set it in .env.local or platform secrets.');
+}
 
 /** Sign a JWT token */
 export function signToken(payload: { id: string; role: string; email?: string }): string {
@@ -37,53 +40,19 @@ function extractToken(req: NextRequest): string | null {
   return req.cookies.get('token')?.value || null;
 }
 
-/** Decode JWT payload without verification */
-function decodePayload(token: string): AuthUser | null {
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return null;
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-    const id = payload.id || payload.userId || payload._id || payload.sub;
-    const email = payload.email || '';
-    const role = payload.role || 'buyer';
-    if (!id) return null;
-    return { id, email, role, name: payload.name || '' };
-  } catch {
-    return null;
-  }
-}
-
 /** Extract and verify JWT from Authorization header or cookie */
 export function getAuthUser(req: NextRequest): AuthUser | null {
   const token = extractToken(req);
   if (!token) return null;
 
-  // Helper to extract user from decoded payload
-  const extractUser = (decoded: any): AuthUser | null => {
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
     const id = decoded.id || decoded.userId || decoded._id || decoded.sub;
     if (!id) return null;
     return { id, email: decoded.email || '', role: decoded.role || 'buyer', name: decoded.name || '' };
-  };
-
-  // Try verified decode first
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    const user = extractUser(decoded);
-    if (user) return user;
-  } catch {}
-
-  // Try all known secrets
-  const secrets = ['eseller-jwt-secret-key-change-in-production-2026', 'eseller-secret-key-change-in-production'];
-  for (const s of secrets) {
-    try {
-      const decoded = jwt.verify(token, s) as any;
-      const user = extractUser(decoded);
-      if (user) return user;
-    } catch {}
+  } catch {
+    return null;
   }
-
-  // Last resort: decode without verification (token exists, user is in dashboard)
-  return decodePayload(token);
 }
 
 /** Require auth — returns user or error response */

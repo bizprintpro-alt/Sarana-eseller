@@ -20,11 +20,6 @@ export async function POST(req: NextRequest) {
       return errorJson('Банк болон дансны дугаар шаардлагатай', 400);
     }
 
-    const wallet = await prisma.wallet.findUnique({ where: { userId: user.id } });
-    if (!wallet || wallet.balance < amount) {
-      return errorJson('Үлдэгдэл хүрэлцэхгүй', 400);
-    }
-
     const entry: WalletHistoryEntry = {
       type: 'PAYOUT',
       amount: -amount,
@@ -33,19 +28,26 @@ export async function POST(req: NextRequest) {
       createdAt: new Date().toISOString(),
     };
 
-    const updated = await prisma.wallet.update({
-      where: { userId: user.id },
+    // Atomic check-and-decrement — prevents race on concurrent payout requests
+    const result = await prisma.wallet.updateMany({
+      where: { userId: user.id, balance: { gte: amount } },
       data: {
         balance: { decrement: amount },
         history: { push: entry as unknown as Prisma.InputJsonValue },
       },
     });
 
+    if (result.count === 0) {
+      return errorJson('Үлдэгдэл хүрэлцэхгүй', 400);
+    }
+
+    const updated = await prisma.wallet.findUnique({ where: { userId: user.id } });
+
     // TODO: bank transfer API integration (Khan/Golomt/TDB)
     // await bankTransfer({ bankName, bankAccount, amount })
 
     return json({
-      newBalance: updated.balance,
+      newBalance: updated?.balance ?? 0,
       message: '1-3 ажлын өдрийн дотор шилжих болно',
     });
   } catch (e) {

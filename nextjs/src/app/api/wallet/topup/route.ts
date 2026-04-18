@@ -21,12 +21,31 @@ export async function POST(req: NextRequest) {
       return errorJson('Буруу төлбөрийн арга', 400);
     }
 
-    const wallet = await getOrCreateWallet(user.id);
+    // Verify payment succeeded server-side before crediting.
+    // Client must pass the PaymentTransaction.id (reference) of a PAID topup invoice.
+    if (!reference) {
+      return errorJson('Төлбөрийн баталгаа шаардлагатай', 400);
+    }
+    const paymentTx = await prisma.paymentTransaction.findFirst({
+      where: { id: reference, status: 'PAID' },
+    });
+    if (!paymentTx) {
+      return errorJson('Төлбөр баталгаажаагүй байна', 402);
+    }
+    if (paymentTx.amount !== amount) {
+      return errorJson('Төлбөрийн дүн таарахгүй байна', 400);
+    }
+    // Idempotency — refuse to credit the same PaymentTransaction twice
+    const existingWallet = await getOrCreateWallet(user.id);
+    const history = (existingWallet.history as unknown as WalletHistoryEntry[]) || [];
+    if (history.some((h) => h.type === 'TOPUP' && h.reference === reference)) {
+      return json({ balance: existingWallet.balance, message: 'Цэнэглэлт аль хэдийн бүртгэгдсэн' });
+    }
 
     const entry: WalletHistoryEntry = {
       type: 'TOPUP',
       amount,
-      reference: reference || undefined,
+      reference,
       description: `${method.toUpperCase()}-р цэнэглэлт`,
       method,
       status: 'COMPLETED',
@@ -34,7 +53,7 @@ export async function POST(req: NextRequest) {
     };
 
     const updated = await prisma.wallet.update({
-      where: { id: wallet.id },
+      where: { id: existingWallet.id },
       data: {
         balance: { increment: amount },
         history: { push: entry as unknown as Prisma.InputJsonValue },

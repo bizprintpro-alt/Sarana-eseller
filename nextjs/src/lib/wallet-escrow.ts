@@ -31,12 +31,10 @@ export async function getOrCreateWallet(userId: string) {
   });
 }
 
-/** Buyer purchase — move funds from balance into escrow hold */
+/** Buyer purchase — move funds from balance into escrow hold. Atomic check-and-decrement. */
 export async function holdForEscrow(userId: string, orderId: string, amount: number) {
-  const wallet = await getOrCreateWallet(userId);
-  if (wallet.balance < amount) {
-    throw new Error('Үлдэгдэл хүрэлцэхгүй');
-  }
+  if (amount <= 0) throw new Error('Дүн буруу байна');
+  await getOrCreateWallet(userId);
 
   const entry: WalletHistoryEntry = {
     type: 'ESCROW_HOLD',
@@ -47,14 +45,21 @@ export async function holdForEscrow(userId: string, orderId: string, amount: num
     createdAt: new Date().toISOString(),
   };
 
-  return prisma.wallet.update({
-    where: { userId },
+  // Conditional update — only succeeds when balance >= amount
+  const updated = await prisma.wallet.updateMany({
+    where: { userId, balance: { gte: amount } },
     data: {
       balance: { decrement: amount },
       escrowHold: { increment: amount },
       history: { push: asJson(entry) },
     },
   });
+
+  if (updated.count === 0) {
+    throw new Error('Үлдэгдэл хүрэлцэхгүй');
+  }
+
+  return prisma.wallet.findUnique({ where: { userId } });
 }
 
 /**
@@ -90,30 +95,40 @@ export async function releaseEscrow(
     createdAt: now,
   };
 
-  // Buyer: release escrow
-  await prisma.wallet.update({
-    where: { userId: buyerId },
-    data: {
-      escrowHold: { decrement: amount },
-      history: { push: asJson(buyerEntry) },
-    },
+  // Ensure seller wallet exists before atomic transfer
+  await getOrCreateWallet(sellerId);
+
+  // Atomic two-sided transfer — buyer escrow must have sufficient hold
+  const result = await prisma.$transaction(async (tx) => {
+    const buyerUpdate = await tx.wallet.updateMany({
+      where: { userId: buyerId, escrowHold: { gte: amount } },
+      data: {
+        escrowHold: { decrement: amount },
+        history: { push: asJson(buyerEntry) },
+      },
+    });
+    if (buyerUpdate.count === 0) {
+      throw new Error('Худалдан авагчийн escrow дүн хүрэлцэхгүй');
+    }
+
+    await tx.wallet.update({
+      where: { userId: sellerId },
+      data: {
+        balance: { increment: sellerNet },
+        history: { push: asJson(sellerEntry) },
+      },
+    });
+
+    return { sellerNet, platformFee, affiliateFee };
   });
 
-  // Seller: credit net revenue (upsert in case seller has no wallet yet)
-  const sellerWallet = await getOrCreateWallet(sellerId);
-  await prisma.wallet.update({
-    where: { id: sellerWallet.id },
-    data: {
-      balance: { increment: sellerNet },
-      history: { push: asJson(sellerEntry) },
-    },
-  });
-
-  return { sellerNet, platformFee, affiliateFee };
+  return result;
 }
 
-/** Refund escrow back to buyer */
+/** Refund escrow back to buyer — atomic check on escrow hold */
 export async function refundEscrow(orderId: string, buyerId: string, amount: number) {
+  if (amount <= 0) throw new Error('Дүн буруу байна');
+
   const entry: WalletHistoryEntry = {
     type: 'ESCROW_REFUND',
     amount,
@@ -123,12 +138,18 @@ export async function refundEscrow(orderId: string, buyerId: string, amount: num
     createdAt: new Date().toISOString(),
   };
 
-  return prisma.wallet.update({
-    where: { userId: buyerId },
+  const updated = await prisma.wallet.updateMany({
+    where: { userId: buyerId, escrowHold: { gte: amount } },
     data: {
       balance: { increment: amount },
       escrowHold: { decrement: amount },
       history: { push: asJson(entry) },
     },
   });
+
+  if (updated.count === 0) {
+    throw new Error('Escrow дүн хүрэлцэхгүй — буцаалт хийх боломжгүй');
+  }
+
+  return prisma.wallet.findUnique({ where: { userId: buyerId } });
 }

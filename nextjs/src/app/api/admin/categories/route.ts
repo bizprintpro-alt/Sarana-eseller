@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminDB } from '@/lib/api-auth'
 
 export async function GET() {
   const categories = await prisma.category.findMany({
@@ -35,6 +36,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = await requireAdminDB(req)
+  if (auth instanceof NextResponse) return auth
+
   const body = await req.json()
 
   const category = await prisma.category.create({
@@ -49,7 +53,7 @@ export async function POST(req: NextRequest) {
       entityTypes: body.entityTypes || [],
       isFeatured: body.isFeatured || false,
       isApproved: body.isApproved ?? true,
-      createdBy: body.createdBy,
+      createdBy: auth.id,
     },
   })
 

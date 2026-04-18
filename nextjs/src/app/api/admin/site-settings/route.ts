@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdminDB } from '@/lib/api-auth';
 
 const CONFIG_KEY = 'site_settings';
 
@@ -71,6 +72,9 @@ export async function GET() {
 // PUT
 export async function PUT(req: NextRequest) {
   try {
+    const auth = await requireAdminDB(req);
+    if (auth instanceof NextResponse) return auth;
+
     const body = await req.json();
     await prisma.platformConfig.upsert({
       where: { key: CONFIG_KEY },

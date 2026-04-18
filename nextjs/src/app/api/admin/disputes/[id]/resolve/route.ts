@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { requireAdminDB } from '@/lib/api-auth'
 
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireAdminDB(req)
+  if (auth instanceof NextResponse) return auth
+
   const { id } = await params
   const body = await req.json()
 
@@ -15,7 +19,7 @@ export async function POST(
       winner: body.winner,
       resolveNote: body.note,
       resolvedAt: new Date(),
-      resolvedBy: body.resolvedBy,
+      resolvedBy: auth.id,
     },
   })
 
