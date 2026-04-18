@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
     const suggestions = await getPlaceSuggestions(q, token);
     return NextResponse.json({ suggestions });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[maps/places]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

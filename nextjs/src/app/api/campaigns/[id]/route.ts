@@ -12,7 +12,8 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
     if (!campaign) return errorJson('Campaign not found', 404);
     return json(campaign);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[campaigns/[id] GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -43,7 +44,8 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
 
     return json(campaign);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[campaigns/[id] PATCH]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -57,6 +59,7 @@ export async function DELETE(_req: NextRequest, ctx: Ctx) {
     await prisma.campaign.delete({ where: { id } });
     return json({ deleted: true });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[campaigns/[id] DELETE]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

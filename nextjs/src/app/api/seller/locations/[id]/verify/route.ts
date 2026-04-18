@@ -59,6 +59,7 @@ export async function POST(req: NextRequest, ctx: Ctx) {
       message:       `Байршил олдлоо (${result.confidence === 'high' ? 'нарийн' : 'ойролцоо'})`,
     });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/locations/verify]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

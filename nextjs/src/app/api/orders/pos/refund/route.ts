@@ -82,8 +82,7 @@ export async function POST(req: NextRequest) {
       status: 'refunded',
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Refund алдаа';
     console.error('[POS Refund]', error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: 'Refund алдаа' }, { status: 500 });
   }
 }

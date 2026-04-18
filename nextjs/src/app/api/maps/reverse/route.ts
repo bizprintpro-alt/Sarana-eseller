@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ address });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[maps/reverse]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

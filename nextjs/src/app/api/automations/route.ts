@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
 
     return json(flows);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[automations GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -50,6 +51,7 @@ export async function POST(req: NextRequest) {
 
     return json(flow, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[automations POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

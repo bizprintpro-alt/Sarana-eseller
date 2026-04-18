@@ -47,7 +47,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(product, { status: 201 });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/products POST]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -63,6 +64,7 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json({ products });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/products GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

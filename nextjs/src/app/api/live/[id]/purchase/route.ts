@@ -81,6 +81,7 @@ export async function POST(
 
     return json(order, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/purchase]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

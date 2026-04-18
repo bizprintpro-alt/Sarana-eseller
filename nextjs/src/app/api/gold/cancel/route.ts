@@ -20,7 +20,8 @@ export async function POST(req: NextRequest) {
       membership: updated,
       message: `Access continues until ${updated.endsAt.toISOString()}`,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('[gold/cancel]', error);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

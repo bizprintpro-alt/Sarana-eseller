@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
       allPlans: Object.values(PLANS),
     });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/subscription]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

@@ -88,7 +88,8 @@ export async function POST(req: NextRequest) {
 
     return json(digital, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[digital/upload POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -121,6 +122,7 @@ export async function GET(req: NextRequest) {
 
     return json({ products, digitalProducts: digitalsWithCount });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[digital/upload GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

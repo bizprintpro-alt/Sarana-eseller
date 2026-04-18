@@ -27,7 +27,8 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(locations);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/locations GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -81,6 +82,7 @@ export async function POST(req: NextRequest) {
       coordWarning: coordCheck.needsUpdate ? coordCheck.message : null,
     }, { status: 201 });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/locations POST]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

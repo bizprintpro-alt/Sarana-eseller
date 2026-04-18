@@ -38,7 +38,8 @@ export async function GET(
           }
         : null,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('[loyalty/[userId]]', error);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

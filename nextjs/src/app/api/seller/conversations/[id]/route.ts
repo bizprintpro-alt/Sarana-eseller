@@ -21,7 +21,8 @@ export async function GET(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json(conversation);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/conversations/[id] GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -51,6 +52,7 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json(updated);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/conversations/[id] PATCH]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

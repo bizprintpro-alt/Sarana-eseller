@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(conversations);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/conversations GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

@@ -21,7 +21,8 @@ export async function GET(
 
     return json(messages);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/[id]/messages GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -61,6 +62,7 @@ export async function POST(
 
     return json(message, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/[id]/messages POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

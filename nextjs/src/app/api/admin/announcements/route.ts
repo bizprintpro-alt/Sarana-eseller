@@ -15,7 +15,8 @@ export async function GET(req: NextRequest) {
     });
     return json(announcements);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/announcements GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -33,6 +34,7 @@ export async function POST(req: NextRequest) {
     const announcement = await prisma.announcement.create({ data: body });
     return json(announcement, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/announcements POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

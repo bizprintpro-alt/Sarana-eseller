@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
       checkedAt: new Date().toISOString(),
     });
   } catch (e: unknown) {
-    console.error('Coord check cron error:', e);
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[cron/check-locations]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

@@ -136,6 +136,7 @@ export async function POST(req: NextRequest) {
     return json(item, 201);
   } catch (err: any) {
     if (err.code === 'P2002') return errorJson('Энэ зар аль хэдийн бүртгэлтэй');
-    return errorJson('Зар нэмэхэд алдаа: ' + (err.message || ''));
+    console.error('[feed POST]', err);
+    return errorJson('Зар нэмэхэд алдаа');
   }
 }

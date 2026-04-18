@@ -102,8 +102,7 @@ export async function GET(req: NextRequest) {
       date,
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Алдаа гарлаа';
     console.error('[POS History]', error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: 'Алдаа гарлаа' }, { status: 500 });
   }
 }

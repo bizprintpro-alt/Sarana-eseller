@@ -38,7 +38,8 @@ export async function GET(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json(messages);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/conversations/messages GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -83,6 +84,7 @@ export async function POST(req: NextRequest, ctx: Ctx) {
 
     return NextResponse.json(message, { status: 201 });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[seller/conversations/messages POST]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

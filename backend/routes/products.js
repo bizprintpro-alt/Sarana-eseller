@@ -30,7 +30,8 @@ router.get('/', async (req, res) => {
     const total = await Product.countDocuments(filter);
     res.json({ products, total, page: Number(page), pages: Math.ceil(total / Number(limit)) });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[products]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 
@@ -41,7 +42,8 @@ router.get('/:id', async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Бараа олдсонгүй' });
     res.json(product);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[products]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 
@@ -55,7 +57,8 @@ router.post('/', protect, authorize('seller', 'admin'), async (req, res) => {
     });
     res.status(201).json(product);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[products]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 
@@ -71,7 +74,8 @@ router.put('/:id', protect, authorize('seller', 'admin'), async (req, res) => {
     await product.save();
     res.json(product);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[products]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 
@@ -87,7 +91,8 @@ router.delete('/:id', protect, authorize('seller', 'admin'), async (req, res) =>
     await product.save();
     res.json({ message: 'Устгагдлаа' });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[products]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 

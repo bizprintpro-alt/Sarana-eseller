@@ -86,6 +86,7 @@ export async function GET() {
       timestamp: now.toISOString(),
     });
   } catch (error: unknown) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    console.error('[cron/loyalty]', error);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

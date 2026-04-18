@@ -87,6 +87,7 @@ export async function GET(
       fileSize: digital.fileSize,
     });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[digital/download]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

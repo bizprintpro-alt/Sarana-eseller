@@ -48,7 +48,8 @@ export async function POST(
 
     return json(liveProduct, 201);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/[id]/products POST]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -80,6 +81,7 @@ export async function DELETE(
 
     return json({ deleted: true });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/[id]/products DELETE]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

@@ -160,10 +160,9 @@ async function handleCallback(req: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    console.error('[QPay callback] Error:', message);
+    console.error('[QPay callback] Error:', error);
     // Always return 200 to prevent retry storms
-    return NextResponse.json({ success: false, error: message });
+    return NextResponse.json({ success: false, error: 'Серверийн алдаа' });
   }
 }
 

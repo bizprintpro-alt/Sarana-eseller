@@ -73,7 +73,8 @@ router.post('/qpay/create', protect, async (req, res) => {
       urls: invoice.urls,
     });
   } catch (err) {
-    res.status(500).json({ message: 'QPay алдаа: ' + err.message });
+    console.error('[payment/qpay/create]', err);
+    res.status(500).json({ message: 'QPay алдаа' });
   }
 });
 
@@ -111,7 +112,8 @@ router.get('/qpay/check/:invoiceId', protect, async (req, res) => {
 
     res.json({ paid, count: data.count });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('[payment/qpay/check]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
 

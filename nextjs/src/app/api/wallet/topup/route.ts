@@ -84,6 +84,7 @@ export async function POST(req: NextRequest) {
       message: `${amount.toLocaleString()}₮ амжилттай цэнэглэгдлээ`,
     });
   } catch (e) {
-    return errorJson((e as Error).message, 500);
+    console.error('[wallet/topup]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

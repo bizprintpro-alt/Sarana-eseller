@@ -33,8 +33,9 @@ export async function GET(req: NextRequest) {
       data: products,
       meta: { total, page, hasMore: page * limit < total },
     });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    console.error('[pre-order GET]', err);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -79,7 +80,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ data: product }, { status: 201 });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    console.error('[pre-order POST]', err);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, referrerId: referral.referrerId });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('[referral/apply]', error);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

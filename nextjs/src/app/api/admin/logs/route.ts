@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ logs, total, page, limit });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/logs]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

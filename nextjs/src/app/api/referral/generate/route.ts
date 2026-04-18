@@ -34,7 +34,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ code: referral.code });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    console.error('[referral/generate]', error);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

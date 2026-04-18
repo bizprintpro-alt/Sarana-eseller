@@ -37,7 +37,8 @@ export async function GET(req: NextRequest) {
 
     return json({ plans: planCounts, activeLives, totalViewers: viewersAgg._sum.viewerCount ?? 0, shops });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/live-plans GET]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -66,6 +67,7 @@ export async function PUT(req: NextRequest) {
 
     return json(updated);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/live-plans PUT]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

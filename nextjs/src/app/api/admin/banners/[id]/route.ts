@@ -19,7 +19,8 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
     const banner = await prisma.banner.update({ where: { id }, data: body });
     return json(banner);
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/banners/[id] PATCH]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }
 
@@ -35,6 +36,7 @@ export async function DELETE(req: NextRequest, ctx: Ctx) {
     await prisma.banner.delete({ where: { id } });
     return json({ deleted: true });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/banners/[id] DELETE]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

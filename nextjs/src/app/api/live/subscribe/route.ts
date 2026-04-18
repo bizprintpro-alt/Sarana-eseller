@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
 
     return json({ success: true, plan, shop: updated });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[live/subscribe]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

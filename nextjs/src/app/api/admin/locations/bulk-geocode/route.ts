@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
       message: `${results.success} байршил шинэчлэгдлээ, ${results.failed} олдсонгүй`,
     });
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/locations/bulk-geocode]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

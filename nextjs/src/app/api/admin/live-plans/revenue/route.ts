@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
       monthlyRevenue,
     });
   } catch (e: unknown) {
-    return errorJson((e as Error).message, 500);
+    console.error('[admin/live-plans/revenue]', e);
+    return errorJson('Серверийн алдаа', 500);
   }
 }

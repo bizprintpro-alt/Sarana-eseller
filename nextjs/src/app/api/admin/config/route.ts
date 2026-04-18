@@ -11,7 +11,8 @@ export async function GET(req: NextRequest) {
     const configs = await prisma.platformConfig.findMany();
     return NextResponse.json(configs);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/config GET]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }
 
@@ -44,6 +45,7 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json(config);
   } catch (e: unknown) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    console.error('[admin/config PATCH]', e);
+    return NextResponse.json({ error: 'Серверийн алдаа' }, { status: 500 });
   }
 }

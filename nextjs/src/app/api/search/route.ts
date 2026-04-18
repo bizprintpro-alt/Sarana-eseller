@@ -92,9 +92,10 @@ export async function GET(req: NextRequest) {
       fromFeed: true,
     });
   } catch (e) {
+    console.error('[search]', e);
     return NextResponse.json({
       products: [], total: 0, pages: 0, page: 1,
-      error: (e as Error).message,
+      error: 'Серверийн алдаа',
     });
   }
 }

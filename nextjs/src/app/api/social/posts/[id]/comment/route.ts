@@ -28,8 +28,8 @@ export async function GET(
 
     return json({ comments, meta: { total, page, hasMore: page * limit < total } });
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    return errorJson('Сэтгэгдэл ачаалахад алдаа: ' + message, 500);
+    console.error('[social/posts/[id]/comment GET]', err);
+    return errorJson('Сэтгэгдэл ачаалахад алдаа', 500);
   }
 }
 
@@ -89,7 +89,7 @@ export async function POST(
 
     return json({ comment, botReply }, 201);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    return errorJson('Сэтгэгдэл нэмэхэд алдаа: ' + message, 500);
+    console.error('[social/posts/[id]/comment POST]', err);
+    return errorJson('Сэтгэгдэл нэмэхэд алдаа', 500);
   }
 }
