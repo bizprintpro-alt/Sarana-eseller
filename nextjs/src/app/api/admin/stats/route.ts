@@ -10,7 +10,9 @@ export async function GET(req: NextRequest) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Core counts (parallel)
+    // Wide Promise.all — 5 per-role counts replaced by 1 groupBy; all independent
+    // findMany/aggregate calls execute in one wave instead of 4 sequential waves.
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
     const [
       totalUsers,
       totalShops,
@@ -19,11 +21,11 @@ export async function GET(req: NextRequest) {
       totalCategories,
       pendingDisputes,
       activeChats,
-      buyerCount,
-      sellerCount,
-      affiliateCount,
-      deliveryCount,
-      adminCount,
+      roleGroups,
+      todayRevenues,
+      walletAgg,
+      recentOrders,
+      allRevenues,
     ] = await Promise.all([
       prisma.user.count(),
       prisma.shop.count({ where: { isDemo: false } }),
@@ -32,33 +34,26 @@ export async function GET(req: NextRequest) {
       prisma.category.count(),
       prisma.dispute.count({ where: { status: 'open' } }).catch(() => 0),
       prisma.conversation.count().catch(() => 0),
-      prisma.user.count({ where: { role: 'buyer' } }),
-      prisma.user.count({ where: { role: 'seller' } }),
-      prisma.user.count({ where: { role: 'affiliate' } }),
-      prisma.user.count({ where: { role: 'delivery' } }),
-      prisma.user.count({ where: { role: 'admin' } }),
+      prisma.user.groupBy({ by: ['role'], _count: { _all: true } }),
+      prisma.platformRevenue.findMany({ where: { date: { gte: today } } }).catch(() => [] as { amount: number }[]),
+      prisma.wallet.aggregate({ where: { balance: { gt: 0 } }, _sum: { balance: true } }).catch(() => ({ _sum: { balance: 0 } })),
+      prisma.order.findMany({
+        where: { createdAt: { gte: thirtyDaysAgo } },
+        select: { createdAt: true, total: true },
+        orderBy: { createdAt: 'asc' },
+      }).catch(() => [] as { createdAt: Date; total: number | null }[]),
+      prisma.platformRevenue.findMany({ where: { date: { gte: thirtyDaysAgo } } }).catch(() => [] as { source: string; amount: number }[]),
     ]);
 
-    // Today's revenue
-    const todayRevenues = await prisma.platformRevenue.findMany({
-      where: { date: { gte: today } },
-    }).catch(() => []);
+    const roleCount = (r: string) => roleGroups.find((g) => g.role === r)?._count._all ?? 0;
+    const buyerCount = roleCount('buyer');
+    const sellerCount = roleCount('seller');
+    const affiliateCount = roleCount('affiliate');
+    const deliveryCount = roleCount('delivery');
+    const adminCount = roleCount('admin');
+
     const todayRevenue = todayRevenues.reduce((s, r) => s + r.amount, 0);
-
-    // Pending payouts
-    const wallets = await prisma.wallet.findMany({
-      where: { balance: { gt: 0 } },
-      select: { balance: true },
-    }).catch(() => []);
-    const pendingPayout = wallets.reduce((s, w) => s + w.balance, 0);
-
-    // Orders per day (last 30 days) for line chart
-    const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
-    const recentOrders = await prisma.order.findMany({
-      where: { createdAt: { gte: thirtyDaysAgo } },
-      select: { createdAt: true, total: true },
-      orderBy: { createdAt: 'asc' },
-    }).catch(() => []);
+    const pendingPayout = walletAgg._sum.balance ?? 0;
 
     const ordersByDay: Record<string, { count: number; revenue: number }> = {};
     for (let i = 29; i >= 0; i--) {
@@ -80,10 +75,6 @@ export async function GET(req: NextRequest) {
       revenue: data.revenue,
     }));
 
-    // Revenue by source (pie chart)
-    const allRevenues = await prisma.platformRevenue.findMany({
-      where: { date: { gte: thirtyDaysAgo } },
-    }).catch(() => []);
     const revenueBySource: Record<string, number> = {};
     for (const r of allRevenues) {
       revenueBySource[r.source] = (revenueBySource[r.source] || 0) + r.amount;

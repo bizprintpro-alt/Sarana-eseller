@@ -25,6 +25,19 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Tree-shake barrel imports from heavy UI libs → smaller initial JS on
+  // every route that touches lucide-react (nearly all) and the admin
+  // chart/dashboard pages (recharts, framer-motion, @dnd-kit).
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      'recharts',
+      'framer-motion',
+      '@dnd-kit/core',
+      '@dnd-kit/sortable',
+      '@dnd-kit/utilities',
+    ],
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'res.cloudinary.com' },

@@ -15,18 +15,19 @@ export async function POST(req: NextRequest) {
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order) return errorJson('Захиалга олдсонгүй', 404);
 
-  // Check order has dropship items
+  // Check order has dropship items — batch fetch instead of per-item lookup
   const items = order.items as any[];
-  const dropshipItems = [];
-
-  for (const item of items) {
-    const productId = item.productId || item.id;
-    if (!productId) continue;
-    const dropship = await prisma.dropshipProduct.findFirst({ where: { productId } });
-    if (dropship) {
-      dropshipItems.push({ item, dropship });
-    }
-  }
+  const productIds = Array.from(new Set(items.map((i) => i.productId || i.id).filter(Boolean)));
+  const dropshipProducts = productIds.length
+    ? await prisma.dropshipProduct.findMany({ where: { productId: { in: productIds } } })
+    : [];
+  const dropshipByProductId = new Map(dropshipProducts.map((d) => [d.productId, d]));
+  const dropshipItems = items
+    .map((item) => {
+      const dropship = dropshipByProductId.get(item.productId || item.id);
+      return dropship ? { item, dropship } : null;
+    })
+    .filter((x): x is { item: any; dropship: (typeof dropshipProducts)[number] } => x !== null);
 
   if (dropshipItems.length === 0) return errorJson('Энэ захиалгад dropship бараа байхгүй');
 

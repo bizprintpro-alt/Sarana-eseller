@@ -22,7 +22,8 @@ export async function GET(req: NextRequest) {
     ];
   }
 
-  const [users, total] = await Promise.all([
+  // Run list + count + role breakdown in parallel; groupBy replaces 5 sequential counts
+  const [users, total, roleGroups] = await Promise.all([
     prisma.user.findMany({
       where,
       select: { id: true, name: true, email: true, role: true, phone: true, avatar: true, isActive: true, createdAt: true },
@@ -31,15 +32,16 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: 'desc' },
     }),
     prisma.user.count({ where }),
+    prisma.user.groupBy({ by: ['role'], _count: { _all: true } }),
   ]);
 
-  // Role breakdown
+  const byRole = (r: string) => roleGroups.find((g) => g.role === r)?._count._all ?? 0;
   const breakdown = {
-    buyer: await prisma.user.count({ where: { role: 'buyer' } }),
-    seller: await prisma.user.count({ where: { role: 'seller' } }),
-    affiliate: await prisma.user.count({ where: { role: 'affiliate' } }),
-    delivery: await prisma.user.count({ where: { role: 'delivery' } }),
-    admin: await prisma.user.count({ where: { role: 'admin' } }),
+    buyer: byRole('buyer'),
+    seller: byRole('seller'),
+    affiliate: byRole('affiliate'),
+    delivery: byRole('delivery'),
+    admin: byRole('admin'),
   };
 
   return NextResponse.json({ users, total, page, breakdown });

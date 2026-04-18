@@ -11,16 +11,19 @@ export async function GET(req: NextRequest) {
 
   const where = status && status !== 'ALL' ? { status } : {}
 
-  const disputes = await prisma.dispute.findMany({
-    where,
-    orderBy: { createdAt: 'desc' },
-  })
+  // 1 list + 1 groupBy instead of 4 sequential counts
+  const [disputes, groups, total] = await Promise.all([
+    prisma.dispute.findMany({ where, orderBy: { createdAt: 'desc' } }),
+    prisma.dispute.groupBy({ by: ['status'], _count: { _all: true } }),
+    prisma.dispute.count(),
+  ])
 
+  const byStatus = (s: string) => groups.find((g) => g.status === s)?._count._all ?? 0
   const stats = {
-    total: await prisma.dispute.count(),
-    open: await prisma.dispute.count({ where: { status: 'OPEN' } }),
-    resolved: await prisma.dispute.count({ where: { status: 'RESOLVED' } }),
-    rejected: await prisma.dispute.count({ where: { status: 'REJECTED' } }),
+    total,
+    open: byStatus('OPEN'),
+    resolved: byStatus('RESOLVED'),
+    rejected: byStatus('REJECTED'),
   }
 
   return NextResponse.json({ disputes, stats })

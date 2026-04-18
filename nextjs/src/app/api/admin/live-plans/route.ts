@@ -9,39 +9,33 @@ export async function GET(req: NextRequest) {
   if (user instanceof NextResponse) return user;
 
   try {
-    // Count shops per plan
     const planKeys = Object.keys(LIVE_PLANS) as LivePlanKey[];
-    const planCounts: Record<string, number> = {};
 
+    // Parallel: groupBy replaces loop of count(). Sum viewers via aggregate.
+    const [planGroups, activeLives, viewersAgg, shops] = await Promise.all([
+      prisma.shop.groupBy({ by: ['livePlan'], _count: { _all: true } }),
+      prisma.liveStream.count({ where: { status: 'LIVE' } }),
+      prisma.liveStream.aggregate({ where: { status: 'LIVE' }, _sum: { viewerCount: true } }),
+      prisma.shop.findMany({
+        select: {
+          id: true,
+          name: true,
+          logo: true,
+          livePlan: true,
+          liveCount: true,
+          liveResetAt: true,
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 100,
+      }),
+    ]);
+
+    const planCounts: Record<string, number> = {};
     for (const key of planKeys) {
-      planCounts[key] = await prisma.shop.count({ where: { livePlan: key } });
+      planCounts[key] = planGroups.find((g) => g.livePlan === key)?._count._all ?? 0;
     }
 
-    // Active live count
-    const activeLives = await prisma.liveStream.count({ where: { status: 'LIVE' } });
-
-    // Total viewers from active streams
-    const activeStreams = await prisma.liveStream.findMany({
-      where: { status: 'LIVE' },
-      select: { viewerCount: true },
-    });
-    const totalViewers = activeStreams.reduce((sum, s) => sum + s.viewerCount, 0);
-
-    // Shops with their plans
-    const shops = await prisma.shop.findMany({
-      select: {
-        id: true,
-        name: true,
-        logo: true,
-        livePlan: true,
-        liveCount: true,
-        liveResetAt: true,
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 100,
-    });
-
-    return json({ plans: planCounts, activeLives, totalViewers, shops });
+    return json({ plans: planCounts, activeLives, totalViewers: viewersAgg._sum.viewerCount ?? 0, shops });
   } catch (e: unknown) {
     return errorJson((e as Error).message, 500);
   }
