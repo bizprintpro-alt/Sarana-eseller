@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { requireAdminDB } from '@/lib/api-auth';
 
 // GET /api/admin/locations — list all store locations for admin
 export async function GET(req: NextRequest) {
+  const auth = await requireAdminDB(req);
+  if (auth instanceof NextResponse) return auth;
+
   try {
     const locations = await prisma.storeLocation.findMany({
       where: { isActive: true },
