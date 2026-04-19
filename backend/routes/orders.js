@@ -6,6 +6,34 @@ const { protect, authorize } = require('../middleware/auth');
 const { calculateCommissions, confirmEarnings } = require('../utils/commissionCalc');
 const { sendToUser } = require('../utils/sse');
 
+// ── Order state machine ────────────────────────────────────
+// Single source of truth for valid transitions. The legacy `shipped`
+// state is intentionally unreachable here — new writes go through the
+// expanded pipeline instead.
+//
+// Terminal states (`delivered`, `cancelled`) have no onward transitions.
+// `cancelled` is reachable from any non-terminal state.
+const STATUS_TRANSITIONS = {
+  pending:          ['confirmed', 'cancelled'],
+  confirmed:        ['preparing', 'cancelled'],
+  preparing:        ['ready', 'cancelled'],
+  ready:            ['handed_to_driver', 'cancelled'],
+  handed_to_driver: ['delivering', 'cancelled'],
+  delivering:       ['delivered', 'cancelled'],
+  delivered:        [],
+  cancelled:        [],
+  // Legacy rows — admins may still move them forward.
+  shipped:          ['delivering', 'delivered', 'cancelled'],
+};
+
+// Role → statuses that role is allowed to transition TO.
+// Admins skip this check entirely.
+const ROLE_CAN_SET = {
+  seller:   new Set(['confirmed', 'preparing', 'ready', 'handed_to_driver', 'cancelled']),
+  delivery: new Set(['delivering', 'delivered']),
+  buyer:    new Set(['cancelled']),
+};
+
 // GET /orders
 router.get('/', protect, async (req, res) => {
   try {
@@ -91,32 +119,72 @@ router.post('/', protect, async (req, res) => {
 // PUT /orders/:id/status
 router.put('/:id/status', protect, async (req, res) => {
   try {
+    const next = req.body.status;
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'superadmin';
+
+    // ── Enum check — stops silent DB corruption ──
+    if (!next || !Object.prototype.hasOwnProperty.call(STATUS_TRANSITIONS, next)) {
+      return res.status(400).json({ message: `Зөвшөөрөгдөөгүй төлөв: ${next}` });
+    }
+
     const order = await Order.findById(req.params.id)
       .populate('items.product', 'name price salePrice emoji category commission store seller');
     if (!order) return res.status(404).json({ message: 'Захиалга олдсонгүй' });
 
     const prev = order.status;
-    order.status = req.body.status;
 
-    // Төлбөр баталгаажсан → комисс тооцоолох
-    if (req.body.status === 'confirmed' && !order.commissions?.calculated) {
+    // ── Transition check (admin bypasses) ──
+    if (!isAdmin) {
+      const allowed = STATUS_TRANSITIONS[prev] || [];
+      if (prev !== next && !allowed.includes(next)) {
+        return res.status(400).json({
+          message: `"${prev}" төлвөөс "${next}" рүү шилжих боломжгүй`,
+        });
+      }
+
+      // ── Role check (admin bypasses) ──
+      const roleCan = ROLE_CAN_SET[req.user.role];
+      if (!roleCan || !roleCan.has(next)) {
+        return res.status(403).json({
+          message: 'Энэ төлөвт шилжүүлэх эрх хүрэхгүй',
+        });
+      }
+
+      // Buyers can only cancel their own orders, and only before they ship.
+      if (req.user.role === 'buyer') {
+        if (String(order.user) !== String(req.user._id)) {
+          return res.status(403).json({ message: 'Энэ захиалга таных биш' });
+        }
+        if (!['pending', 'confirmed'].includes(prev)) {
+          return res.status(400).json({
+            message: 'Бэлтгэл эхэлсэн захиалгыг цуцалж болохгүй',
+          });
+        }
+      }
+    }
+
+    order.status = next;
+
+    // Commission calc on first confirmation.
+    if (next === 'confirmed' && !order.commissions?.calculated) {
       await calculateCommissions(order);
     }
 
-    // Хүргэлт хийгдсэн → pending earnings → balance
-    if (req.body.status === 'delivered' && prev !== 'delivered') {
-      order.delivery.deliveredAt = new Date();
-      await confirmEarnings(order);
-    }
-
-    if (req.body.status === 'shipped' && !order.delivery?.pickedAt) {
+    // Driver pickup timestamp + driver binding (legacy `shipped` path kept
+    // for back-compat if an old client still POSTs it).
+    if ((next === 'handed_to_driver' || next === 'shipped') && !order.delivery?.pickedAt) {
       order.delivery.pickedAt = new Date();
       if (req.user.role === 'delivery') order.delivery.driver = req.user._id;
     }
 
+    // Delivered → release escrow / confirm affiliate earnings.
+    if (next === 'delivered' && prev !== 'delivered') {
+      order.delivery.deliveredAt = new Date();
+      await confirmEarnings(order);
+    }
+
     await order.save();
 
-    // Notify buyer
     sendToUser(order.user, 'order-status', {
       orderId: order._id, orderNumber: order.orderNumber, status: order.status,
     });
