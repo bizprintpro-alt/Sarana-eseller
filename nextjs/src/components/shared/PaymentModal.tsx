@@ -42,12 +42,16 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
         headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
         body: JSON.stringify({ amount, orderId, context }),
       });
-      const data = await res.json();
-      if (data.qr_image || data.qrImage) {
+      const body = await res.json();
+      // Envelope: { success: true, data: {qrImage, ...} } | { success: false, error }
+      // Legacy:    {qrImage, ...} | {error}
+      if (body?.success === false) throw new Error(body.error || 'QPay алдаа');
+      const data = body?.success === true ? body.data : body;
+      if (data?.qr_image || data?.qrImage) {
         setQpayUrl(data.qr_image || data.qrImage);
         setStatus('pending');
       } else {
-        throw new Error(data.error || 'QPay алдаа');
+        throw new Error(data?.error || 'QPay алдаа');
       }
     } catch (e: unknown) {
       setError((e as Error).message);

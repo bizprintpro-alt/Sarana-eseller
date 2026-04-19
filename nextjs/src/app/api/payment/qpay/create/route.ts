@@ -1,16 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createInvoice } from '@/lib/qpay';
+import { ok, fail } from '@/lib/api-envelope';
 
 export async function POST(request: NextRequest) {
   try {
     const { orderId, amount, description } = await request.json();
 
     if (!orderId || !amount) {
-      return NextResponse.json(
-        { error: 'orderId болон amount шаардлагатай' },
-        { status: 400 }
-      );
+      return fail('orderId болон amount шаардлагатай', 400);
     }
 
     // Create QPay invoice
@@ -34,7 +32,7 @@ export async function POST(request: NextRequest) {
       },
     }).catch((e) => console.warn('QPay transaction save failed:', e.message));
 
-    return NextResponse.json({
+    return ok({
       invoiceId: invoice.invoiceId,
       qrImage: invoice.qrImage,
       qrText: invoice.qrText,
@@ -42,9 +40,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     console.error('QPay invoice алдаа:', error);
-    return NextResponse.json(
-      { error: 'Нэхэмжлэл үүсгэхэд алдаа гарлаа' },
-      { status: 500 }
-    );
+    return fail('Нэхэмжлэл үүсгэхэд алдаа гарлаа', 500);
   }
 }
