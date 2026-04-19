@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { ok, fail } from '@/lib/api-envelope';
 
 const TIERS = [
   { name: 'PLATINUM', min: 50000 },
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
     const { userId, type, points, description, refType, refId } = await req.json();
 
     if (!userId || !type || !points || points <= 0) {
-      return NextResponse.json({ error: 'userId, type, and positive points required' }, { status: 400 });
+      return fail('userId, type, and positive points required', 400);
     }
 
     // Upsert account first
@@ -39,8 +40,8 @@ export async function POST(req: NextRequest) {
       await prisma.loyaltyAccount.update({ where: { userId }, data: { tier: newTier } });
     }
 
-    return NextResponse.json({ transaction, balance: account.balance, tier: newTier });
+    return ok({ transaction, balance: account.balance, tier: newTier });
   } catch (error: unknown) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return fail((error as Error).message, 500);
   }
 }

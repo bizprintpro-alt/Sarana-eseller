@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { ok, fail } from "@/lib/api-envelope";
 
 const TIERS = [
   { name: "PLATINUM", min: 50000 },
@@ -27,8 +28,10 @@ export async function GET(
 
     const gold = await prisma.goldMembership.findUnique({ where: { userId } });
 
-    return NextResponse.json({
+    return ok({
       ...account,
+      // Alias for legacy consumers that read `points` instead of `balance`
+      points: account.balance,
       tier: getTier(account.lifetimeEarned),
       goldMembership: gold
         ? {
@@ -39,6 +42,6 @@ export async function GET(
         : null,
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return fail(error.message, 500);
   }
 }

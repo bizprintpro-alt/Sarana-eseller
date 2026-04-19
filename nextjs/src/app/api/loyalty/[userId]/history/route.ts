@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { ok, fail } from '@/lib/api-envelope';
 
 export async function GET(
   req: NextRequest,
@@ -14,7 +15,7 @@ export async function GET(
 
     // Find account first, then query transactions by accountId
     const account = await prisma.loyaltyAccount.findUnique({ where: { userId } });
-    if (!account) return NextResponse.json({ transactions: [], pagination: { page, limit, total: 0, pages: 0 } });
+    if (!account) return ok({ transactions: [], pagination: { page, limit, total: 0, pages: 0 } });
 
     const [transactions, total] = await Promise.all([
       prisma.loyaltyTransaction.findMany({
@@ -26,11 +27,11 @@ export async function GET(
       prisma.loyaltyTransaction.count({ where: { accountId: account.id } }),
     ]);
 
-    return NextResponse.json({
+    return ok({
       transactions,
       pagination: { page, limit, total, pages: Math.ceil(total / limit) },
     });
   } catch (error: unknown) {
-    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+    return fail((error as Error).message, 500);
   }
 }

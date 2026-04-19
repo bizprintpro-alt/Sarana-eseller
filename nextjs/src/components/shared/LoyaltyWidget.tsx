@@ -32,7 +32,12 @@ export function LoyaltyWidget({ context, userId }: Props) {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     })
       .then(r => r.json())
-      .then(d => { if (d.points !== undefined) setData(d); })
+      .then(body => {
+        // Envelope: { success: true, data } | { success: false, error } | legacy bare body
+        if (body?.success === false) return;
+        const d = body?.success === true ? body.data : body;
+        if (d?.points !== undefined) setData(d);
+      })
       .catch(() => {});
   }, [userId]);
 
