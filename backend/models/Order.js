@@ -16,9 +16,25 @@ const orderSchema = new mongoose.Schema({
   total:       { type: Number, required: true },
   deliveryFee: { type: Number, default: 0 },
 
+  // Full fulfillment pipeline. Keep in sync with:
+  //   web:    nextjs/.../orders/page.tsx STATUS
+  //   mobile: eseller-mobile/app/(tabs)/orders.tsx STATUS
+  //   seller: eseller-mobile/app/(owner)/orders.tsx NEXT_STATUS
+  // `shipped` was the legacy two-state rollup; migrated rows that still
+  // carry it are treated as `delivering` in UI layers until backfilled.
   status: {
     type: String,
-    enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'],
+    enum: [
+      'pending',
+      'confirmed',
+      'preparing',
+      'ready',
+      'handed_to_driver',
+      'delivering',
+      'delivered',
+      'cancelled',
+      'shipped', // deprecated — kept so old docs don't fail validation; do not emit from new writes
+    ],
     default: 'pending',
   },
 
