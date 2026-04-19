@@ -153,6 +153,14 @@ export async function GET(req: NextRequest) {
 
     const res = NextResponse.redirect(redirectUrl.toString());
     res.cookies.delete('google_oauth_state');
+    // Mirror token into httpOnly cookie for Edge middleware role enforcement.
+    res.cookies.set('auth-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+    });
     return res;
   } catch (e: unknown) {
     console.error('GOOGLE CALLBACK ERROR:', (e as Error).message);
