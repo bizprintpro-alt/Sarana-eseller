@@ -18,7 +18,11 @@
 //   PUT    /herder/my/orders/:id/status          state transition
 //   GET    /herder/my/earnings                   summary
 //
-// Future PR: /herder/coordinator/*
+// Auth + requireCoordinator (sum-level coordinator, M7):
+//   GET    /herder/coordinator/applications       scope-д унасан pending/under_review
+//   PUT    /herder/coordinator/applications/:id   approve | reject (reason)
+//   GET    /herder/coordinator/herders            scope-д approved malchin-ууд
+//   GET    /herder/coordinator/stats              aggregate: applications, orders, sales
 // ════════════════════════════════════════════════════════
 
 const router = require('express').Router();
@@ -27,6 +31,7 @@ const HerderProduct = require('../models/HerderProduct');
 const HerderOrder   = require('../models/HerderOrder');
 const { protect } = require('../middleware/auth');
 const { requireHerder } = require('../middleware/herder');
+const { requireCoordinator } = require('../middleware/coordinator');
 const { PROVINCE_CODES, HERDER_CATEGORIES } = require('../models/HerderProfile');
 
 // Province code → localized name (server-side source of truth)
@@ -487,6 +492,221 @@ router.get('/my/earnings', protect, requireHerder, async (req, res) => {
     });
   } catch (err) {
     console.error('[herder/my/earnings]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
+  }
+});
+
+// ════════════════════════════════════════════════════════
+// Coordinator — sum-level хяналт, applications review
+// ════════════════════════════════════════════════════════
+
+// req.coordinatorScope буцаах province filter. null → admin (бүх аймаг).
+function scopeFilter(scope) {
+  return scope ? { province: { $in: scope } } : {};
+}
+
+// ── GET /herder/coordinator/applications ─────────────────
+// Coordinator-ийн аймгаас ирсэн pending / under_review хүсэлтүүд.
+// Query: ?status=pending|under_review|all (default: pending)
+router.get('/coordinator/applications', protect, requireCoordinator, async (req, res) => {
+  try {
+    const { status = 'pending', limit = 20, page = 1 } = req.query;
+    const lim  = Math.min(Number(limit) || 20, 100);
+    const skip = (Math.max(Number(page) || 1, 1) - 1) * lim;
+
+    const filter = { ...scopeFilter(req.coordinatorScope) };
+    if (status !== 'all') {
+      filter.status = status;
+    } else {
+      filter.status = { $in: ['pending', 'under_review'] };
+    }
+
+    const [applications, total] = await Promise.all([
+      HerderProfile.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(lim)
+        .populate('user', 'name email phone')
+        .lean(),
+      HerderProfile.countDocuments(filter),
+    ]);
+
+    res.json({
+      applications: applications.map((a) => ({
+        id:             a._id,
+        user:           a.user,
+        herderName:     `${a.firstName} ${a.lastName}`,
+        phone:          a.phone,
+        registerNumber: a.registerNumber,
+        province:       a.province,
+        provinceName:   a.provinceName,
+        district:       a.district,
+        livestock:      a.livestock,
+        aDansNumber:    a.aDansNumber,
+        vetCertUri:     a.vetCertUri,
+        bankInfo:       a.bankInfo,
+        notes:          a.notes,
+        status:         a.status,
+        createdAt:      a.createdAt,
+      })),
+      total,
+      page: Number(page) || 1,
+      pages: Math.ceil(total / lim) || 0,
+    });
+  } catch (err) {
+    console.error('[herder/coordinator/applications]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
+  }
+});
+
+// ── PUT /herder/coordinator/applications/:id ─────────────
+// body: { action: 'approve' | 'reject' | 'request_review', reason? }
+// Coordinator scope-оос гадуурх application-д хандахгүй (404).
+router.put('/coordinator/applications/:id', protect, requireCoordinator, async (req, res) => {
+  try {
+    const { action, reason } = req.body || {};
+    if (!['approve', 'reject', 'request_review'].includes(action)) {
+      return res.status(400).json({ message: 'action буруу (approve | reject | request_review)' });
+    }
+    if (action === 'reject' && !reason?.trim()) {
+      return res.status(400).json({ message: 'Татгалзах шалтгаан оруулна уу' });
+    }
+
+    const filter = { _id: req.params.id, ...scopeFilter(req.coordinatorScope) };
+    const app = await HerderProfile.findOne(filter);
+    if (!app) {
+      return res.status(404).json({ message: 'Өргөдөл олдсонгүй эсвэл танд эрх байхгүй' });
+    }
+    if (app.status === 'approved') {
+      return res.status(409).json({ message: 'Аль хэдийн баталгаажсан өргөдөл' });
+    }
+
+    const nextStatus = action === 'approve'
+      ? 'approved'
+      : action === 'reject'
+        ? 'rejected'
+        : 'under_review';
+
+    app.status          = nextStatus;
+    app.reviewedAt      = new Date();
+    app.reviewedBy      = req.user._id;
+    app.rejectionReason = action === 'reject' ? reason.trim() : undefined;
+    await app.save();
+
+    // Approve үед User-ийн role-ийг 'herder' болгоно (1-удаа).
+    if (nextStatus === 'approved') {
+      const User = require('../models/User');
+      await User.updateOne(
+        { _id: app.user },
+        { $set: { role: 'herder' } },
+      );
+    }
+
+    res.json({
+      id:     app._id,
+      status: app.status,
+      reviewedAt: app.reviewedAt,
+      rejectionReason: app.rejectionReason,
+    });
+  } catch (err) {
+    console.error('[herder/coordinator/applications/:id]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
+  }
+});
+
+// ── GET /herder/coordinator/herders ──────────────────────
+// Approved malchin-ууд coordinator-ийн аймагт. Нэмэлт: product/order count.
+router.get('/coordinator/herders', protect, requireCoordinator, async (req, res) => {
+  try {
+    const { limit = 50, page = 1 } = req.query;
+    const lim  = Math.min(Number(limit) || 50, 200);
+    const skip = (Math.max(Number(page) || 1, 1) - 1) * lim;
+
+    const filter = { status: 'approved', ...scopeFilter(req.coordinatorScope) };
+    const [herders, total] = await Promise.all([
+      HerderProfile.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(lim)
+        .populate('user', 'name phone email')
+        .lean(),
+      HerderProfile.countDocuments(filter),
+    ]);
+
+    res.json({
+      herders: herders.map((h) => ({
+        id:           h._id,
+        user:         h.user,
+        herderName:   `${h.firstName} ${h.lastName}`,
+        phone:        h.phone,
+        province:     h.province,
+        district:     h.district,
+        isVerified:   h.isVerified,
+        rating:       h.rating,
+        orderCount:   h.orderCount,
+        productCount: h.stats?.productCount ?? 0,
+        onTimeRate:   h.stats?.onTimeRate ?? 0,
+        joinedAt:     h.createdAt,
+      })),
+      total,
+      page:  Number(page) || 1,
+      pages: Math.ceil(total / lim) || 0,
+    });
+  } catch (err) {
+    console.error('[herder/coordinator/herders]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
+  }
+});
+
+// ── GET /herder/coordinator/stats ────────────────────────
+// Scope-дох сум-хэмжээний дүгнэлт. Application funnel + sales aggregate.
+router.get('/coordinator/stats', protect, requireCoordinator, async (req, res) => {
+  try {
+    const filter = scopeFilter(req.coordinatorScope);
+
+    const [pending, underReview, approved, rejected, herderIds] = await Promise.all([
+      HerderProfile.countDocuments({ ...filter, status: 'pending' }),
+      HerderProfile.countDocuments({ ...filter, status: 'under_review' }),
+      HerderProfile.countDocuments({ ...filter, status: 'approved' }),
+      HerderProfile.countDocuments({ ...filter, status: 'rejected' }),
+      HerderProfile.find({ ...filter, status: 'approved' }).distinct('_id'),
+    ]);
+
+    // Orders aggregate — only approved herder-үүдийн захиалга.
+    const orderMatch = herderIds.length > 0 ? { herder: { $in: herderIds } } : { herder: null };
+
+    const [ordersAgg, salesAgg] = await Promise.all([
+      HerderOrder.aggregate([
+        { $match: orderMatch },
+        {
+          $group: {
+            _id: '$status',
+            count: { $sum: 1 },
+          },
+        },
+      ]),
+      HerderOrder.aggregate([
+        { $match: { ...orderMatch, status: 'delivered' } },
+        { $group: { _id: null, total: { $sum: '$total' }, count: { $sum: 1 } } },
+      ]),
+    ]);
+
+    const ordersByStatus = ordersAgg.reduce((acc, r) => {
+      acc[r._id] = r.count;
+      return acc;
+    }, {});
+
+    res.json({
+      scope: req.coordinatorScope ?? 'ALL',
+      applications: { pending, underReview, approved, rejected },
+      herders:      { active: approved },
+      orders:       ordersByStatus,
+      sales: salesAgg[0]
+        ? { total: salesAgg[0].total, count: salesAgg[0].count }
+        : { total: 0, count: 0 },
+    });
+  } catch (err) {
+    console.error('[herder/coordinator/stats]', err);
     res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
