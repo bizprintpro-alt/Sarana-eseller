@@ -366,11 +366,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const role = user?.role || 'buyer';
   const userEntityType = (user as any)?.entityType || undefined;
-  const sections = role === 'seller'
+  const isSellerRole = ['seller', 'agent', 'company', 'auto_dealer', 'service'].includes(role);
+  const sections = isSellerRole
     ? getSellerSections(shopType, userEntityType)
     : OTHER_ROLE_SECTIONS[role] || BUYER_SECTIONS;
 
-  const storeInfo = user?.role === 'seller'
+  const storeInfo = isSellerRole
     ? {
         name: user?.store?.name || user?.name + 'ийн дэлгүүр',
         url: (user?.store?.name || user?.name || 'store').toLowerCase().replace(/\s+/g, '-') + '.eseller.mn',
