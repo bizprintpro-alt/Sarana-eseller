@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { ok } from '@/lib/api-envelope';
 
 // GET /api/products/[id]/related?limit=4
 // Same-category active products, excluding the current one.
@@ -20,7 +21,7 @@ export async function GET(
     });
 
     if (!current || !current.category) {
-      return NextResponse.json({ products: [] });
+      return ok({ products: [] });
     }
 
     const products = await prisma.product.findMany({
@@ -44,9 +45,12 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ products });
+    return ok({ products });
   } catch (err) {
     console.error('Related products error:', err);
-    return NextResponse.json({ products: [] });
+    // Soft-fail with an empty list so the caller renders the "no
+    // related products" branch instead of an error toast. Using ok()
+    // (not fail()) keeps the envelope `success: true` contract.
+    return ok({ products: [] });
   }
 }
