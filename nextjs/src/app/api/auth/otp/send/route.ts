@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { ok, fail } from '@/lib/api-envelope';
 
 export async function POST(req: NextRequest) {
   const { phone } = await req.json();
-  if (!phone) return NextResponse.json({ error: 'Утасны дугаар оруулна уу' }, { status: 400 });
+  if (!phone) return fail('Утасны дугаар оруулна уу', 400);
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expires = new Date(Date.now() + 5 * 60 * 1000);
@@ -27,8 +28,7 @@ export async function POST(req: NextRequest) {
 
   const isDev = process.env.NODE_ENV === 'development';
 
-  return NextResponse.json({
-    success: true,
+  return ok({
     message: 'OTP илгээгдлээ',
     ...(isDev && { code }),
   });

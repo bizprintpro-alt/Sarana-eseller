@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { ok, fail } from '@/lib/api-envelope';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-production-2026';
 
@@ -10,13 +10,13 @@ export async function POST(req: Request) {
     const { name, email, phone, password, role: requestedRole } = await req.json();
 
     if (!name || !password) {
-      return NextResponse.json({ error: 'Нэр, нууц үг оруулна уу' }, { status: 400 });
+      return fail('Нэр, нууц үг оруулна уу', 400);
     }
     if (!email && !phone) {
-      return NextResponse.json({ error: 'Имэйл эсвэл утас оруулна уу' }, { status: 400 });
+      return fail('Имэйл эсвэл утас оруулна уу', 400);
     }
     if (password.length < 6) {
-      return NextResponse.json({ error: 'Нууц үг 6+ тэмдэгт байх ёстой' }, { status: 400 });
+      return fail('Нууц үг 6+ тэмдэгт байх ёстой', 400);
     }
 
     // Synthetic email for phone-only registration (email is @unique required)
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       },
     });
     if (existing) {
-      return NextResponse.json({ error: 'Энэ имэйл/утас бүртгэлтэй байна' }, { status: 400 });
+      return fail('Энэ имэйл/утас бүртгэлтэй байна', 400);
     }
 
     const VALID_ROLES = ['seller', 'affiliate', 'buyer', 'delivery'];
@@ -88,18 +88,21 @@ export async function POST(req: Request) {
       { expiresIn: '30d' },
     );
 
-    const res = NextResponse.json({
-      token,
-      user: {
-        _id: user.id,
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        avatar: user.avatar,
+    const res = ok(
+      {
+        token,
+        user: {
+          _id: user.id,
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          avatar: user.avatar,
+        },
       },
-    }, { status: 201 });
+      201,
+    );
 
     // Mirror the token into an httpOnly cookie so Edge middleware can enforce
     // role-based access on /dashboard/* routes. Client code still reads the
@@ -114,6 +117,6 @@ export async function POST(req: Request) {
 
     return res;
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'Бүртгэл үүсгэхэд алдаа гарлаа' }, { status: 500 });
+    return fail(e.message || 'Бүртгэл үүсгэхэд алдаа гарлаа', 500);
   }
 }
