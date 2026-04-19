@@ -34,8 +34,12 @@ export default function ReceiptPage() {
   useEffect(() => {
     fetch(`/api/orders/${orderId}/receipt`)
       .then((r) => r.json())
-      .then((data) => {
-        if (data.error) throw new Error(data.error);
+      .then((body) => {
+        // Envelope: { success: true, data: Receipt } | { success: false, error }
+        // Legacy:    Receipt | { error }
+        if (body?.success === false) throw new Error(body.error || 'Баримт олдсонгүй');
+        const data = body?.success === true ? body.data : body;
+        if (data?.error) throw new Error(data.error);
         setReceipt(data);
       })
       .catch((e) => setError(e.message))

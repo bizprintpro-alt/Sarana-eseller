@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/api-auth';
+import { ok, fail } from '@/lib/api-envelope';
 
 /**
  * GET /api/orders/pos/history?date=YYYY-MM-DD&page=1
@@ -24,13 +25,15 @@ export async function GET(req: NextRequest) {
 
     const shop = await prisma.shop.findUnique({ where: { userId: authUser.id } });
     if (!shop) {
-      return NextResponse.json({
-        success: true,
+      return ok({
         sales: [],
         totalOrders: 0,
         totalRevenue: 0,
+        refundedCount: 0,
+        refundedAmount: 0,
         page,
         totalPages: 0,
+        date,
       });
     }
 
@@ -90,8 +93,7 @@ export async function GET(req: NextRequest) {
       };
     });
 
-    return NextResponse.json({
-      success: true,
+    return ok({
       sales: mapped,
       totalOrders,
       totalRevenue: completedAgg._sum.total ?? 0,
@@ -104,6 +106,6 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Алдаа гарлаа';
     console.error('[POS History]', error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    return fail(message, 500);
   }
 }
