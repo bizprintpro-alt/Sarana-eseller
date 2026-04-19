@@ -7,7 +7,7 @@ const { upload } = require('../config/cloudinary');
 router.get('/', async (req, res) => {
   try {
     const { search, category, seller, creator, limit = 60, page = 1 } = req.query;
-    const filter = { isActive: true };
+    const filter = { isActive: true, price: { $gt: 0 }, stock: { $gt: 0 }, name: { $not: /test/i } };
     if (category) filter.category = category;
     if (seller)   filter.seller = seller;
     if (search)   filter.$text = { $search: search };

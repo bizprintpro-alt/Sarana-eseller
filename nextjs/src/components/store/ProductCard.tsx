@@ -109,6 +109,13 @@ export default function ProductCard({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
+        {/* Out-of-stock overlay */}
+        {p.stock === 0 && (
+          <span className="absolute top-2 left-2 z-20 bg-gray-500 text-white text-[11px] font-semibold px-2 py-0.5 rounded">
+            Дууссан
+          </span>
+        )}
+
         {images.length > 0 ? (
           <div
             className="flex h-full"
@@ -126,6 +133,7 @@ export default function ProductCard({
                   alt={p.name}
                   className="w-full h-full object-cover"
                   loading={i === 0 ? 'eager' : 'lazy'}
+                  onError={(e) => { e.currentTarget.src = '/images/placeholder.svg'; }}
                 />
               </div>
             ))}
@@ -169,7 +177,7 @@ export default function ProductCard({
         )}
 
         {/* Product name */}
-        <div className="text-[13px] font-medium mb-1.5 line-clamp-2 leading-snug" style={{ color: 'var(--esl-text-primary)' }}>
+        <div className="text-[13px] font-medium mb-1.5 line-clamp-2 leading-snug min-h-[2.5rem]" style={{ color: 'var(--esl-text-primary)' }}>
           {p.name}
         </div>
 

@@ -28,7 +28,12 @@ export default function FeedPreview({ posts }: { posts: any[] }) {
               <div className="bg-[var(--esl-bg-card)] rounded-2xl overflow-hidden border border-[var(--esl-border)] group-hover:-translate-y-1 group-hover:shadow-lg transition-all">
                 <div className="aspect-[4/3] bg-[var(--esl-bg-section)] overflow-hidden relative">
                   {post.media?.[0]?.url ? (
-                    <img src={post.media[0].url} alt={post.title} className="w-full h-full object-cover" />
+                    <img
+                      src={post.media[0].url}
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.currentTarget.src = '/images/placeholder.svg'; }}
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-[var(--esl-text-muted)]">
                       <Package size={40} />

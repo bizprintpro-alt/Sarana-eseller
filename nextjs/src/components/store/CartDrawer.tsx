@@ -115,7 +115,7 @@ export default function CartDrawer({ open, onClose }: CartDrawerProps) {
                   </div>
                   <button
                     className="w-7 h-7 rounded-lg bg-transparent border-none cursor-pointer hover:bg-red-50 flex items-center justify-center text-[#CBD5E1] hover:text-red-500 transition opacity-0 group-hover:opacity-100"
-                    onClick={() => remove(idx)}
+                    onClick={() => { if (window.confirm('Энэ барааг сагснаас хасах уу?')) remove(idx); }}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>

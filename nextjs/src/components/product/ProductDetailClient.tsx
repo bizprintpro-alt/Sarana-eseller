@@ -60,6 +60,13 @@ export default function ProductDetailClient({ product, relatedProducts = [] }: P
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
+        {/* Breadcrumb */}
+        <nav className="text-sm text-[var(--esl-text-muted)] mb-4 flex items-center gap-1.5">
+          <Link href="/store" className="hover:text-[var(--esl-text)] transition-colors no-underline">Дэлгүүр</Link>
+          <span>/</span>
+          <span className="truncate max-w-[200px]">{product.name}</span>
+        </nav>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left: Media */}
           <div>

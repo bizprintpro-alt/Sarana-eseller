@@ -37,7 +37,7 @@ export default function NotFound() {
           Нүүр хуудас
         </Link>
         <Link
-          href="/feed"
+          href="/store"
           style={{
             background: '#fff',
             color: '#1B3A5C',
@@ -49,7 +49,7 @@ export default function NotFound() {
             border: '1px solid #1B3A5C',
           }}
         >
-          Зарын булан
+          Дэлгүүр рүү буцах
         </Link>
       </div>
     </main>

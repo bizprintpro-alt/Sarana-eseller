@@ -2,11 +2,11 @@
 import { useState } from 'react';
 import { Landmark, CreditCard, Smartphone, Wallet, type LucideIcon } from 'lucide-react';
 
-const METHODS: { id: string; name: string; icon: LucideIcon; desc: string; color: string }[] = [
+const METHODS: { id: string; name: string; icon: LucideIcon; desc: string; color: string; disabled?: boolean }[] = [
   { id: 'qpay', name: 'QPay', icon: Landmark, desc: 'Бүх банкны апп', color: '#E8242C' },
   { id: 'socialpay', name: 'SocialPay', icon: CreditCard, desc: 'Голомт банк', color: '#D32F2F' },
-  { id: 'monpay', name: 'MonPay', icon: Smartphone, desc: 'Хаан банк', color: '#0047AB' },
-  { id: 'storepay', name: 'StorePay', icon: Wallet, desc: '3-12 хувааж төлөх', color: '#2E7D32' },
+  { id: 'monpay', name: 'MonPay', icon: Smartphone, desc: 'Хаан банк', color: '#0047AB', disabled: true },
+  { id: 'storepay', name: 'StorePay', icon: Wallet, desc: '3-12 хувааж төлөх', color: '#2E7D32', disabled: true },
 ];
 
 export function PaymentMethods({ selected, onChange }: { selected: string; onChange: (m: string) => void }) {
@@ -15,27 +15,35 @@ export function PaymentMethods({ selected, onChange }: { selected: string; onCha
       <h3 className="text-[var(--esl-text)] font-bold mb-3 text-base">Төлбөрийн арга</h3>
       <div className="flex flex-col gap-2">
         {METHODS.map((m) => (
-          <button
-            key={m.id}
-            onClick={() => onChange(m.id)}
-            className="flex items-center gap-3.5 p-3.5 rounded-xl w-full text-left cursor-pointer transition-all border"
-            style={{
-              background: selected === m.id ? `${m.color}12` : 'var(--esl-bg-section)',
-              borderColor: selected === m.id ? m.color : 'var(--esl-border)',
-            }}
-          >
-            <m.icon className="w-7 h-7" style={{ color: m.color }} />
-            <div className="flex-1">
-              <p className="text-[var(--esl-text)] font-bold text-[15px] m-0">{m.name}</p>
-              <p className="text-[var(--esl-text-muted)] text-xs m-0">{m.desc}</p>
-            </div>
-            <div
-              className="w-5 h-5 rounded-full flex items-center justify-center"
-              style={{ border: `2px solid ${selected === m.id ? m.color : 'var(--esl-border)'}`, background: selected === m.id ? m.color : 'transparent' }}
+          <div key={m.id} className={`relative ${m.disabled ? 'opacity-50' : ''}`}>
+            {m.disabled && (
+              <span className="absolute top-1.5 right-1.5 z-10 text-[10px] bg-yellow-400 text-yellow-900 px-1.5 py-0.5 rounded font-semibold">
+                Удахгүй
+              </span>
+            )}
+            <button
+              onClick={() => !m.disabled && onChange(m.id)}
+              disabled={m.disabled}
+              className="flex items-center gap-3.5 p-3.5 rounded-xl w-full text-left transition-all border"
+              style={{
+                cursor: m.disabled ? 'not-allowed' : 'pointer',
+                background: selected === m.id ? `${m.color}12` : 'var(--esl-bg-section)',
+                borderColor: selected === m.id ? m.color : 'var(--esl-border)',
+              }}
             >
-              {selected === m.id && <div className="w-2 h-2 rounded-full bg-white" />}
-            </div>
-          </button>
+              <m.icon className="w-7 h-7" style={{ color: m.color }} />
+              <div className="flex-1">
+                <p className="text-[var(--esl-text)] font-bold text-[15px] m-0">{m.name}</p>
+                <p className="text-[var(--esl-text-muted)] text-xs m-0">{m.desc}</p>
+              </div>
+              <div
+                className="w-5 h-5 rounded-full flex items-center justify-center"
+                style={{ border: `2px solid ${selected === m.id ? m.color : 'var(--esl-border)'}`, background: selected === m.id ? m.color : 'transparent' }}
+              >
+                {selected === m.id && <div className="w-2 h-2 rounded-full bg-white" />}
+              </div>
+            </button>
+          </div>
         ))}
       </div>
 

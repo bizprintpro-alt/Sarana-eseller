@@ -39,9 +39,12 @@ export default function CartPage() {
                 {items.map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', gap: 16, background: 'var(--esl-bg-card)', borderRadius: 16, padding: 16, border: '1px solid var(--esl-border)' }}>
                     <div style={{ width: 90, height: 90, borderRadius: 12, overflow: 'hidden', flexShrink: 0, background: 'var(--esl-bg-section)' }}>
-                      {item.images?.[0] && (
-                        <img src={item.images[0]} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      )}
+                      <img
+                        src={item.images?.[0] || '/images/placeholder.svg'}
+                        alt={item.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => { e.currentTarget.src = '/images/placeholder.svg'; }}
+                      />
                     </div>
                     <div style={{ flex: 1 }}>
                       <Link href={`/product/${item._id}`} style={{ color: 'var(--esl-text)', fontWeight: 600, textDecoration: 'none', fontSize: 15 }}>
@@ -54,7 +57,7 @@ export default function CartPage() {
                         <button onClick={() => updateQty(idx, item.qty - 1)} style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid var(--esl-border)', background: 'var(--esl-bg-section)', color: 'var(--esl-text)', cursor: 'pointer', fontSize: 18 }}>−</button>
                         <span style={{ color: 'var(--esl-text)', fontWeight: 700, minWidth: 28, textAlign: 'center' }}>{item.qty}</span>
                         <button onClick={() => updateQty(idx, item.qty + 1)} style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: '#E8242C', color: '#fff', cursor: 'pointer', fontSize: 18 }}>+</button>
-                        <button onClick={() => remove(idx)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#E8242C', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={18} /></button>
+                        <button onClick={() => { if (window.confirm('Энэ барааг сагснаас хасах уу?')) remove(idx); }} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#E8242C', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={18} /></button>
                       </div>
                     </div>
                   </div>
