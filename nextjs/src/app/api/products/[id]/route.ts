@@ -20,6 +20,16 @@ export async function GET(
             shop: { select: { id: true, name: true, slug: true, logo: true } },
           },
         },
+        // DropshipProduct is 1:1 via productId. When present the mobile +
+        // web UIs render "imported from abroad" badges and longer ETAs.
+        dropship: {
+          select: {
+            supplierName: true,
+            supplierCurrency: true,
+            supplierStock: true,
+            supplierShipping: true,
+          },
+        },
       },
     });
 
@@ -42,6 +52,22 @@ export async function GET(
       isActive: product.isActive,
       shop: product.user?.shop || null,
       seller: product.user ? { id: product.user.id, name: product.user.name, avatar: product.user.avatar } : null,
+      // Null for non-dropship products; populated flat object otherwise so
+      // clients can `if (product.dropship) {...}` without a null check on
+      // each field.
+      dropship: product.dropship
+        ? {
+            supplierName: product.dropship.supplierName,
+            supplierCurrency: product.dropship.supplierCurrency,
+            supplierStock: product.dropship.supplierStock,
+            supplierShipping: product.dropship.supplierShipping,
+            // Standard AliExpress/CJ international air-freight window.
+            // Stored per-product in `supplierData` for now; hardcoding here
+            // until the import pipeline captures per-supplier estimates.
+            estimatedShippingDaysMin: 15,
+            estimatedShippingDaysMax: 30,
+          }
+        : null,
     });
   } catch (err) {
     console.error('Product detail error:', err);
