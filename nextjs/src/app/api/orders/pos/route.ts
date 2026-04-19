@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/api-auth';
 import { Prisma } from '@prisma/client';
+import { ok, fail } from '@/lib/api-envelope';
 
 /**
  * POST /api/orders/pos
@@ -35,22 +36,22 @@ export async function POST(req: NextRequest) {
 
     // Validation
     if (!Array.isArray(items) || items.length === 0) {
-      return NextResponse.json({ error: 'Бараа байхгүй' }, { status: 400 });
+      return fail('Бараа байхгүй', 400);
     }
     if (!paymentMethod || !['cash', 'qpay', 'card'].includes(paymentMethod)) {
-      return NextResponse.json({ error: 'Буруу төлбөрийн арга' }, { status: 400 });
+      return fail('Буруу төлбөрийн арга', 400);
     }
     if (typeof total !== 'number' || total <= 0) {
-      return NextResponse.json({ error: 'Нийт дүн буруу' }, { status: 400 });
+      return fail('Нийт дүн буруу', 400);
     }
 
     // Seller/store owner must have a shop
     const shop = await prisma.shop.findUnique({ where: { userId: authUser.id } });
     if (!shop) {
-      return NextResponse.json({ error: 'Дэлгүүр олдсонгүй' }, { status: 404 });
+      return fail('Дэлгүүр олдсонгүй', 404);
     }
     if (shop.isBlocked) {
-      return NextResponse.json({ error: 'Дэлгүүр хаагдсан' }, { status: 403 });
+      return fail('Дэлгүүр хаагдсан', 403);
     }
 
     // Totals
@@ -121,9 +122,8 @@ export async function POST(req: NextRequest) {
       console.error('POS wallet credit failed:', e);
     }
 
-    return NextResponse.json(
+    return ok(
       {
-        success: true,
         orderId: order.id,
         total,
         change,
@@ -131,11 +131,11 @@ export async function POST(req: NextRequest) {
         sellerAmount,
         platformFee: platformAmount,
       },
-      { status: 201 },
+      201,
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Захиалга үүсгэхэд алдаа гарлаа';
     console.error('[POS Order]', error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    return fail(message, 500);
   }
 }

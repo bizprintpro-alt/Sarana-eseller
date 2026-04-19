@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createReceipt, calculateTax } from '@/lib/ebarimt';
+import { ok, fail } from '@/lib/api-envelope';
 
 export async function GET(
   request: NextRequest,
@@ -15,7 +16,7 @@ export async function GET(
     });
 
     if (existing) {
-      return NextResponse.json(existing);
+      return ok(existing);
     }
 
     // Fetch order
@@ -24,10 +25,7 @@ export async function GET(
     });
 
     if (!order) {
-      return NextResponse.json(
-        { error: 'Захиалга олдсонгүй' },
-        { status: 404 }
-      );
+      return fail('Захиалга олдсонгүй', 404);
     }
 
     // Build items from order
@@ -71,12 +69,9 @@ export async function GET(
       },
     });
 
-    return NextResponse.json(saved);
+    return ok(saved);
   } catch (error: any) {
     console.error('еБаримт алдаа:', error);
-    return NextResponse.json(
-      { error: 'Баримт үүсгэхэд алдаа гарлаа' },
-      { status: 500 }
-    );
+    return fail('Баримт үүсгэхэд алдаа гарлаа', 500);
   }
 }

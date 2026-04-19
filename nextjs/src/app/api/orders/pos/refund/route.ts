@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/api-auth';
 import { Prisma } from '@prisma/client';
+import { ok, fail } from '@/lib/api-envelope';
 
 /**
  * POST /api/orders/pos/refund
@@ -19,24 +20,24 @@ export async function POST(req: NextRequest) {
       orderId?: string;
       reason?: string;
     };
-    if (!orderId) return NextResponse.json({ error: 'orderId шаардлагатай' }, { status: 400 });
+    if (!orderId) return fail('orderId шаардлагатай', 400);
 
     const order = await prisma.order.findUnique({ where: { id: orderId } });
-    if (!order) return NextResponse.json({ error: 'Захиалга олдсонгүй' }, { status: 404 });
+    if (!order) return fail('Захиалга олдсонгүй', 404);
     if (order.source !== 'pos') {
-      return NextResponse.json({ error: 'Зөвхөн POS захиалга' }, { status: 400 });
+      return fail('Зөвхөн POS захиалга', 400);
     }
     if (order.status !== 'completed') {
-      return NextResponse.json({ error: `Refund хийх боломжгүй (${order.status})` }, { status: 400 });
+      return fail(`Refund хийх боломжгүй (${order.status})`, 400);
     }
     if (order.refundedAt) {
-      return NextResponse.json({ error: 'Аль хэдийн буцаагдсан' }, { status: 400 });
+      return fail('Аль хэдийн буцаагдсан', 400);
     }
 
     // Shop ownership check
     const shop = await prisma.shop.findUnique({ where: { userId: authUser.id } });
     if (!shop || order.shopId !== shop.id) {
-      return NextResponse.json({ error: 'Энэ захиалга таных биш' }, { status: 403 });
+      return fail('Энэ захиалга таных биш', 403);
     }
 
     const refundAmount = order.sellerAmount ?? order.total ?? 0;
@@ -75,8 +76,7 @@ export async function POST(req: NextRequest) {
       console.error('POS refund wallet debit failed:', e);
     }
 
-    return NextResponse.json({
-      success: true,
+    return ok({
       orderId,
       refundAmount,
       status: 'refunded',
@@ -84,6 +84,6 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Refund алдаа';
     console.error('[POS Refund]', error);
-    return NextResponse.json({ error: message }, { status: 500 });
+    return fail(message, 500);
   }
 }
