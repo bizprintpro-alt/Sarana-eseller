@@ -15,8 +15,8 @@ const JWT_SECRET_BYTES = new TextEncoder().encode(
 // shared space for any authenticated user and don't appear here.
 const ROLE_GUARDED_PREFIXES: Array<{ prefix: string; roles: readonly string[] }> = [
   { prefix: '/dashboard/admin', roles: ['admin', 'superadmin'] },
-  { prefix: '/dashboard/store', roles: ['seller'] },
-  { prefix: '/dashboard/seller', roles: ['seller'] },
+  { prefix: '/dashboard/store', roles: ['seller', 'agent', 'company', 'auto_dealer', 'service'] },
+  { prefix: '/dashboard/seller', roles: ['seller', 'agent', 'company', 'auto_dealer', 'service'] },
   { prefix: '/dashboard/affiliate', roles: ['affiliate'] },
   { prefix: '/dashboard/delivery', roles: ['delivery'] },
 ];
@@ -27,6 +27,10 @@ function roleHome(role: string): string {
     case 'superadmin':
       return '/dashboard/admin';
     case 'seller':
+    case 'agent':
+    case 'company':
+    case 'auto_dealer':
+    case 'service':
       return '/dashboard/store';
     case 'affiliate':
       return '/dashboard/affiliate';

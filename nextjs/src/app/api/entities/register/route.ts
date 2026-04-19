@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     // Update user role + entityType
     await prisma.user.update({
       where: { id: auth.id },
-      data: { role: ['store', 'pre_order', 'digital'].includes(entityType) ? 'seller' : entityType, entityType },
+      data: { role: 'seller', entityType },
     });
 
     // Create SellerProfile for affiliate commission system
