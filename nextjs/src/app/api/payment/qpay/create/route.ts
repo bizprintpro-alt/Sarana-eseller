@@ -1,16 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createInvoice } from '@/lib/qpay';
+import { getAuthUser } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const { orderId, amount, description } = await request.json();
+    const user = getAuthUser(request);
+    if (!user) {
+      return NextResponse.json({ error: 'Нэвтрэх шаардлагатай' }, { status: 401 });
+    }
 
-    if (!orderId || !amount) {
+    const { orderId, description } = await request.json();
+
+    if (!orderId) {
       return NextResponse.json(
-        { error: 'orderId болон amount шаардлагатай' },
+        { error: 'orderId шаардлагатай' },
         { status: 400 }
       );
+    }
+
+    // Always derive amount server-side from the order — never trust client input
+    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    if (!order) {
+      return NextResponse.json({ error: 'Захиалга олдсонгүй' }, { status: 404 });
+    }
+    if (order.userId !== user.id) {
+      return NextResponse.json(
+        { error: 'Зөвхөн эзэмшигч төлбөр үүсгэх боломжтой' },
+        { status: 403 },
+      );
+    }
+
+    const amount = order.total;
+    if (!amount || amount <= 0) {
+      return NextResponse.json({ error: 'Захиалгын дүн буруу байна' }, { status: 400 });
     }
 
     // Create QPay invoice

@@ -1,4 +1,8 @@
+import { notFound } from 'next/navigation';
+
 export default function TestPage() {
+  if (process.env.NODE_ENV === 'production') notFound();
+
   return (
     <div style={{ padding: 40, fontFamily: 'sans-serif' }}>
       <h1 style={{ color: '#CC0000' }}>eseller.mn — Test Page</h1>

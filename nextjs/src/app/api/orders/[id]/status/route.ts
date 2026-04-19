@@ -14,6 +14,12 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
   cancelled: [],
 };
 
+// Which role transitions each status
+const BUYER_TRANSITIONS = new Set(['cancelled']);
+const SELLER_TRANSITIONS = new Set(['confirmed', 'preparing', 'ready', 'cancelled']);
+const DRIVER_TRANSITIONS = new Set(['delivering', 'delivered']);
+const ADMIN_ROLES = new Set(['admin', 'superadmin', 'super_admin']);
+
 // PATCH /api/orders/[id]/status
 export async function PATCH(req: NextRequest, ctx: Ctx) {
   const auth = requireAuth(req);
@@ -33,7 +39,27 @@ export async function PATCH(req: NextRequest, ctx: Ctx) {
       return errorJson(`"${order.status}" → "${status}" шилжих боломжгүй`);
     }
 
-    const historyEntry = { status, timestamp: new Date().toISOString(), note: note || undefined };
+    // Role/ownership check — admins bypass
+    if (!ADMIN_ROLES.has(auth.role)) {
+      const isBuyer = order.userId === auth.id;
+      const isDriver = order.driverId === auth.id;
+      let isSeller = false;
+      if (order.shopId) {
+        const shop = await prisma.shop.findUnique({ where: { id: order.shopId }, select: { userId: true } });
+        isSeller = shop?.userId === auth.id;
+      }
+
+      const allowedByRole =
+        (isBuyer && BUYER_TRANSITIONS.has(status)) ||
+        (isSeller && SELLER_TRANSITIONS.has(status)) ||
+        (isDriver && DRIVER_TRANSITIONS.has(status));
+
+      if (!allowedByRole) {
+        return errorJson('Энэ захиалгын төлвийг өөрчлөх эрхгүй', 403);
+      }
+    }
+
+    const historyEntry = { status, timestamp: new Date().toISOString(), note: note || undefined, by: auth.id };
     const currentHistory = (order.statusHistory as any[]) || [];
 
     const updated = await prisma.order.update({

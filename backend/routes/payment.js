@@ -27,11 +27,20 @@ async function getQPayToken() {
 // POST /payment/qpay/create
 router.post('/qpay/create', protect, async (req, res) => {
   try {
-    const { orderId, amount } = req.body;
-    const order = orderId ? await Order.findById(orderId) : null;
-    const invoiceAmount = amount || order?.total;
+    const { orderId } = req.body;
+    if (!orderId) return res.status(400).json({ message: 'orderId шаардлагатай' });
 
-    if (!invoiceAmount) return res.status(400).json({ message: 'Дүн шаардлагатай' });
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: 'Захиалга олдсонгүй' });
+    if (String(order.user) !== String(req.user._id || req.user.id)) {
+      return res.status(403).json({ message: 'Зөвхөн эзэмшигч төлбөр үүсгэх боломжтой' });
+    }
+
+    // Always derive amount server-side from the order — never trust client
+    const invoiceAmount = order.total;
+    if (!invoiceAmount || invoiceAmount <= 0) {
+      return res.status(400).json({ message: 'Захиалгын дүн буруу байна' });
+    }
 
     const token = await getQPayToken();
     const qRes = await fetch('https://merchant.qpay.mn/v2/invoice', {
@@ -108,6 +117,19 @@ router.get('/qpay/check/:invoiceId', protect, async (req, res) => {
 // POST /payment/qpay/callback — QPay webhook
 router.post('/qpay/callback', async (req, res) => {
   try {
+    // Shared-secret verification — header or query param.
+    // Configure QPay webhook URL with ?secret=...
+    const expected = process.env.QPAY_WEBHOOK_SECRET;
+    if (!expected) {
+      console.error('[QPay callback] QPAY_WEBHOOK_SECRET env missing — refusing');
+      return res.status(500).json({ ok: false, error: 'Server misconfigured' });
+    }
+    const provided = req.headers['x-qpay-secret'] || req.query.secret || '';
+    if (provided !== expected) {
+      console.warn('[QPay callback] Invalid webhook secret', { ip: req.ip });
+      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+    }
+
     const { orderId } = req.query;
     if (!orderId) return res.json({ ok: true });
 

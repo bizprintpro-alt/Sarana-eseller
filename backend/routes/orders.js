@@ -95,8 +95,35 @@ router.put('/:id/status', protect, async (req, res) => {
       .populate('items.product', 'name price salePrice emoji category commission store seller');
     if (!order) return res.status(404).json({ message: 'Захиалга олдсонгүй' });
 
+    // Role/ownership check — only the buyer, assigned driver, shop seller, or admin can update
+    const userId = String(req.user._id || req.user.id);
+    const role = req.user.role;
+    const isAdmin = ['admin', 'superadmin', 'super_admin'].includes(role);
+    const isBuyer = String(order.user) === userId;
+    const isDriver = order.delivery?.driver && String(order.delivery.driver) === userId;
+    const isSeller =
+      role === 'delivery' ||
+      (order.items || []).some(
+        (it) => it.product && it.product.seller && String(it.product.seller) === userId,
+      );
+
+    const BUYER_ALLOWED = new Set(['cancelled']);
+    const SELLER_ALLOWED = new Set(['confirmed', 'preparing', 'ready', 'shipped', 'cancelled']);
+    const DRIVER_ALLOWED = new Set(['shipped', 'delivering', 'delivered']);
+
+    const newStatus = req.body.status;
+    if (!isAdmin) {
+      const allowed =
+        (isBuyer && BUYER_ALLOWED.has(newStatus)) ||
+        (isSeller && SELLER_ALLOWED.has(newStatus)) ||
+        (isDriver && DRIVER_ALLOWED.has(newStatus));
+      if (!allowed) {
+        return res.status(403).json({ message: 'Энэ захиалгын төлвийг өөрчлөх эрхгүй' });
+      }
+    }
+
     const prev = order.status;
-    order.status = req.body.status;
+    order.status = newStatus;
 
     // Төлбөр баталгаажсан → комисс тооцоолох
     if (req.body.status === 'confirmed' && !order.commissions?.calculated) {

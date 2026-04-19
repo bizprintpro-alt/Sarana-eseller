@@ -23,11 +23,8 @@ export async function POST(req: NextRequest) {
   const { amount, bank, account } = await req.json();
   if (!amount || amount <= 0) return errorJson('Дүн буруу', 400);
 
-  const wallet = await prisma.wallet.findUnique({ where: { userId: user.id } });
-  if (!wallet || wallet.balance < amount) return errorJson('Үлдэгдэл хүрэлцэхгүй', 400);
-
-  await prisma.wallet.update({
-    where: { userId: user.id },
+  const result = await prisma.wallet.updateMany({
+    where: { userId: user.id, balance: { gte: amount } },
     data: {
       balance: { decrement: amount },
       history: {
@@ -35,6 +32,8 @@ export async function POST(req: NextRequest) {
       },
     },
   });
+
+  if (result.count === 0) return errorJson('Үлдэгдэл хүрэлцэхгүй', 400);
 
   return json({ message: 'Гаргалгааны хүсэлт илгээгдлээ. 24 цагийн дотор шилжүүлнэ.' });
 }
