@@ -5,9 +5,11 @@
 //   GET  /herder/products           list (filter: province, category, herderId, limit, page)
 //   GET  /herder/products/:id       product detail
 //   GET  /herder/profile/:id        public herder profile + stats
+//   GET  /herder/profile/:id/reviews  нийтийн үнэлгээний жагсаалт
 //
 // Auth (JWT):
 //   POST /herder/register           нэвтэрсэн buyer → herder application
+//   POST /herder/reviews            buyer-ийн delivered захиалга дээр үнэлгээ
 //
 // Auth + requireHerder (seller-side CRUD, M5/M6):
 //   GET    /herder/my/products                   өөрийн listings (pagination)
@@ -29,6 +31,7 @@ const router = require('express').Router();
 const HerderProfile = require('../models/HerderProfile');
 const HerderProduct = require('../models/HerderProduct');
 const HerderOrder   = require('../models/HerderOrder');
+const HerderReview  = require('../models/HerderReview');
 const { protect } = require('../middleware/auth');
 const { requireHerder } = require('../middleware/herder');
 const { requireCoordinator } = require('../middleware/coordinator');
@@ -151,6 +154,53 @@ router.get('/profile/:id', async (req, res) => {
     res.json(h.toPublic());
   } catch (err) {
     console.error('[herder/profile/:id]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
+  }
+});
+
+// ── PUBLIC: GET /herder/profile/:id/reviews ──────────────
+// Нийтийн үнэлгээний жагсаалт — buyer-ийн нэр populate хийж буцаана.
+router.get('/profile/:id/reviews', async (req, res) => {
+  try {
+    const { limit = 20, page = 1 } = req.query;
+    const lim = Math.min(Math.max(parseInt(limit, 10) || 20, 1), 50);
+    const pg  = Math.max(parseInt(page,  10) || 1, 1);
+
+    const filter = { herder: req.params.id, isHidden: false };
+
+    const [reviews, total] = await Promise.all([
+      HerderReview.find(filter)
+        .sort({ createdAt: -1 })
+        .limit(lim)
+        .skip((pg - 1) * lim)
+        .populate({ path: 'buyer', select: 'firstName lastName name' })
+        .lean(),
+      HerderReview.countDocuments(filter),
+    ]);
+
+    const items = reviews.map((r) => {
+      const b = r.buyer || {};
+      const name =
+        b.name ||
+        [b.firstName, b.lastName].filter(Boolean).join(' ') ||
+        'Хэрэглэгч';
+      return {
+        id:        r._id,
+        rating:    r.rating,
+        text:      r.text || '',
+        createdAt: r.createdAt,
+        buyerName: name,
+      };
+    });
+
+    res.json({
+      reviews: items,
+      total,
+      page:  pg,
+      pages: Math.ceil(total / lim),
+    });
+  } catch (err) {
+    console.error('[herder/profile/:id/reviews]', err);
     res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });
@@ -492,6 +542,74 @@ router.get('/my/earnings', protect, requireHerder, async (req, res) => {
     });
   } catch (err) {
     console.error('[herder/my/earnings]', err);
+    res.status(500).json({ message: 'Серверийн алдаа' });
+  }
+});
+
+// ── AUTH: POST /herder/reviews ───────────────────────────
+// Trust gate: зөвхөн `delivered` HerderOrder-той buyer үнэлж чадна.
+// Нэг захиалга = нэг үнэлгээ (schema-д unique index).
+// Body: { orderId, rating (1..5), text? }
+router.post('/reviews', protect, async (req, res) => {
+  try {
+    const { orderId, rating, text } = req.body;
+
+    if (!orderId) {
+      return res.status(400).json({ message: 'orderId шаардлагатай' });
+    }
+    const r = Number(rating);
+    if (!Number.isInteger(r) || r < 1 || r > 5) {
+      return res.status(400).json({ message: 'Оноо 1-5 хооронд байх ёстой' });
+    }
+    if (text != null && String(text).length > 500) {
+      return res.status(400).json({ message: 'Сэтгэгдэл 500 тэмдэгтээс урт байж болохгүй' });
+    }
+
+    const order = await HerderOrder.findById(orderId);
+    if (!order) return res.status(404).json({ message: 'Захиалга олдсонгүй' });
+
+    if (String(order.buyer) !== String(req.user._id)) {
+      return res.status(403).json({ message: 'Энэ захиалга таных биш' });
+    }
+    if (order.status !== 'delivered') {
+      return res.status(400).json({ message: 'Зөвхөн хүргэгдсэн захиалгыг үнэлж болно' });
+    }
+
+    // Давхар үнэлгээ хориглох (schema-ийн unique index-ээс өмнө тодорхой алдаа өгөх).
+    const exists = await HerderReview.findOne({ order: order._id });
+    if (exists) {
+      return res.status(409).json({ message: 'Энэ захиалга аль хэдийн үнэлэгдсэн байна' });
+    }
+
+    const review = await HerderReview.create({
+      buyer:  req.user._id,
+      herder: order.herder,
+      order:  order._id,
+      rating: r,
+      text:   text ? String(text).trim() : undefined,
+    });
+
+    // Recompute herder rating aggregate (visible reviews only).
+    const agg = await HerderReview.aggregate([
+      { $match: { herder: order.herder, isHidden: false } },
+      { $group: { _id: null, avg: { $avg: '$rating' }, count: { $sum: 1 } } },
+    ]);
+    const stats = agg[0] || { avg: 0, count: 0 };
+    await HerderProfile.updateOne(
+      { _id: order.herder },
+      { $set: {
+          rating:       Math.round(stats.avg * 10) / 10,
+          reviewCount:  stats.count,
+      } },
+    );
+
+    res.status(201).json(review.toPublic());
+  } catch (err) {
+    // Mongo duplicate key на order-index-ийн race condition дээр.
+    if (err && err.code === 11000) {
+      return res.status(409).json({ message: 'Энэ захиалга аль хэдийн үнэлэгдсэн байна' });
+    }
+    console.error('[herder/reviews POST]', err);
     res.status(500).json({ message: 'Серверийн алдаа' });
   }
 });

@@ -54,9 +54,10 @@ const herderProfileSchema = new mongoose.Schema({
   reviewedAt:      Date,
   reviewedBy:      { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
-  isVerified: { type: Boolean, default: false },
-  rating:     { type: Number, default: 0, min: 0, max: 5 },
-  orderCount: { type: Number, default: 0 },
+  isVerified:  { type: Boolean, default: false },
+  rating:      { type: Number, default: 0, min: 0, max: 5 },
+  reviewCount: { type: Number, default: 0, min: 0 },
+  orderCount:  { type: Number, default: 0 },
 
   bio:         { type: String, trim: true },
   coverImage:  String,
@@ -83,6 +84,7 @@ herderProfileSchema.methods.toPublic = function () {
     district:     this.district,
     isVerified:   this.isVerified,
     rating:       this.rating,
+    reviewCount:  this.reviewCount,
     orderCount:   this.orderCount,
     bio:          this.bio,
     joinedAt:     this.createdAt,
