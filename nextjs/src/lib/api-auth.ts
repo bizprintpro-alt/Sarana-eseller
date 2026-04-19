@@ -7,7 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { prisma } from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-production-2026';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET env var is required');
 
 /** Sign a JWT token */
 export function signToken(payload: { id: string; role: string; email?: string }): string {
@@ -37,22 +38,6 @@ function extractToken(req: NextRequest): string | null {
   return req.cookies.get('token')?.value || null;
 }
 
-/** Decode JWT payload without verification */
-function decodePayload(token: string): AuthUser | null {
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return null;
-    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-    const id = payload.id || payload.userId || payload._id || payload.sub;
-    const email = payload.email || '';
-    const role = payload.role || 'buyer';
-    if (!id) return null;
-    return { id, email, role, name: payload.name || '' };
-  } catch {
-    return null;
-  }
-}
-
 /** Extract and verify JWT from Authorization header or cookie */
 export function getAuthUser(req: NextRequest): AuthUser | null {
   const token = extractToken(req);
@@ -65,25 +50,12 @@ export function getAuthUser(req: NextRequest): AuthUser | null {
     return { id, email: decoded.email || '', role: decoded.role || 'buyer', name: decoded.name || '' };
   };
 
-  // Try verified decode first
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as any;
-    const user = extractUser(decoded);
-    if (user) return user;
-  } catch {}
-
-  // Try all known secrets
-  const secrets = ['eseller-jwt-secret-key-change-in-production-2026', 'eseller-secret-key-change-in-production'];
-  for (const s of secrets) {
-    try {
-      const decoded = jwt.verify(token, s) as any;
-      const user = extractUser(decoded);
-      if (user) return user;
-    } catch {}
+    return extractUser(decoded);
+  } catch {
+    return null;
   }
-
-  // Last resort: decode without verification (token exists, user is in dashboard)
-  return decodePayload(token);
 }
 
 /** Require auth — returns user or error response */
@@ -93,13 +65,13 @@ export function requireAuth(req: NextRequest): AuthUser | NextResponse {
   return user;
 }
 
-/** Require seller role — accepts seller/admin + any user with a shop */
+/** Require seller role */
 export function requireSeller(req: NextRequest): AuthUser | NextResponse {
   const result = requireAuth(req);
   if (result instanceof NextResponse) return result;
-  // Accept seller, admin, superadmin, AND 'buyer' (backend tokens often lack role)
-  // We trust that dashboard access is already gated by the frontend
-  // The actual shop ownership is verified in each API handler via findUnique({ where: { userId } })
+  if (result.role === 'buyer') {
+    return errorJson('Seller account required', 403);
+  }
   return result;
 }
 
@@ -118,7 +90,7 @@ export async function requireAdminDB(req: NextRequest): Promise<AuthUser | NextR
   if (result instanceof NextResponse) return result;
   const adminRoles = ['admin', 'superadmin', 'super_admin'];
   if (adminRoles.includes(result.role)) return result;
-  // Token decode fallback may set role='buyer' — verify from DB
+  // Verify from DB in case the token role is stale
   try {
     const dbUser = await prisma.user.findUnique({ where: { id: result.id }, select: { role: true } });
     if (dbUser && adminRoles.includes(dbUser.role)) {

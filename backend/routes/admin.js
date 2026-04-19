@@ -33,7 +33,8 @@ router.get('/stats', adminOnly, async (req, res) => {
       pendingPay: pendingPay[0]?.total || 0,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -55,7 +56,8 @@ router.get('/users', adminOnly, async (req, res) => {
     const total = await User.countDocuments(filter);
     res.json({ users, total });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -65,7 +67,8 @@ router.get('/commission', adminOnly, async (req, res) => {
     const rates = await Commission.getGlobal();
     res.json(rates);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -83,7 +86,8 @@ router.put('/commission', adminOnly, async (req, res) => {
     );
     res.json(rates);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -110,7 +114,8 @@ router.get('/commission/categories', adminOnly, async (req, res) => {
     }
     res.json(result);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -135,7 +140,8 @@ router.put('/commission/categories', adminOnly, async (req, res) => {
     await Promise.all(ops);
     res.json({ message: 'Ангиллын комисс хадгалагдлаа', categories: Object.keys(categories).length });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

@@ -64,7 +64,8 @@ router.post('/qpay/create', protect, async (req, res) => {
       urls: invoice.urls,
     });
   } catch (err) {
-    res.status(500).json({ message: 'QPay алдаа: ' + err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -101,7 +102,8 @@ router.get('/qpay/check/:invoiceId', protect, async (req, res) => {
 
     res.json({ paid, count: data.count });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

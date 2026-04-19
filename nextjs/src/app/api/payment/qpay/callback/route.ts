@@ -14,6 +14,12 @@ import { sendExpoPush } from '@/lib/push';
  * хүсэлтүүдэд 200 буцаана.
  */
 async function handleCallback(req: NextRequest): Promise<NextResponse> {
+  // Verify QPay callback secret to reject spoofed webhooks
+  const qpaySecret = req.headers.get('x-qpay-secret');
+  if (!qpaySecret || qpaySecret !== process.env.QPAY_CALLBACK_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     // 1. Query params (GET эсвэл POST-ийн URL params)
     const sp = req.nextUrl.searchParams;

@@ -15,20 +15,19 @@ connectDB();
 // ── Security ──
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(mongoSanitize());
+const ALLOWED_ORIGINS = [
+  'https://eseller.mn',
+  'https://www.eseller.mn',
+  process.env.FRONTEND_URL,
+  ...(process.env.NODE_ENV === 'development' ? ['http://localhost:3000', 'http://127.0.0.1:3000'] : []),
+].filter(Boolean);
+
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc)
+    // Allow requests with no origin (mobile apps, Expo, curl)
     if (!origin) return callback(null, true);
-    // Allow all Vercel deployments
-    if (origin.includes('vercel.app')) return callback(null, true);
-    // Allow eseller.mn and subdomains
-    if (origin.includes('eseller.mn')) return callback(null, true);
-    // Allow localhost
-    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return callback(null, true);
-    // Allow custom FRONTEND_URL
-    if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) return callback(null, true);
-    // Block others
-    callback(null, false);
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
 }));

@@ -50,7 +50,8 @@ router.get('/', protect, async (req, res) => {
       .populate('items.product', 'name price salePrice emoji category commission store seller');
     res.json({ orders });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -112,7 +113,8 @@ router.post('/', protect, async (req, res) => {
 
     res.status(201).json({ order });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -191,7 +193,8 @@ router.put('/:id/status', protect, async (req, res) => {
 
     res.json({ order });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

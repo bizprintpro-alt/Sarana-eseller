@@ -83,7 +83,8 @@ router.get('/links', protect, authorize('affiliate', 'admin'), async (req, res) 
 
     res.json({ links, totalClicks: totalClickCount, totalSales: orders.length });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -95,7 +96,8 @@ router.post('/link', protect, authorize('affiliate', 'admin'), async (req, res) 
       referralCode: req.user.username,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -111,7 +113,8 @@ router.get('/earnings', protect, authorize('affiliate', 'admin'), async (req, re
       transactions: wallet.transactions.slice(-20).reverse(),
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -150,7 +153,8 @@ router.get('/profile/:username', async (req, res) => {
       earnings:  wallet.balance + wallet.pending + wallet.withdrawn,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -178,7 +182,8 @@ router.put('/profile', protect, authorize('affiliate', 'admin'), async (req, res
     await req.user.save();
     res.json({ message: 'Профайл шинэчлэгдлээ', user: req.user.toPublic() });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
