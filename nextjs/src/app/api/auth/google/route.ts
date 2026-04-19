@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { fail } from '@/lib/api-envelope';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const VALID_ROLES = ['seller', 'affiliate', 'buyer', 'delivery'];
 
 export async function GET(req: NextRequest) {
   if (!GOOGLE_CLIENT_ID) {
-    return NextResponse.json({ error: 'Google OAuth тохиргоо дутуу' }, { status: 500 });
+    return fail('Google OAuth тохиргоо дутуу', 500);
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://eseller.mn';

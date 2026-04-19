@@ -90,7 +90,11 @@ export default function LoginPage() {
           body: JSON.stringify({ email, password }),
         });
         const json = await res.json();
-        if (json.token) data = json;
+        // New envelope: { success: true, data: { token, user } }
+        // Legacy:       { token, user }
+        // Express backend fallback uses AuthAPI.login below.
+        if (json?.success && json.data?.token) data = json.data;
+        else if (json?.token) data = json;
       } catch {}
 
       if (!data) {

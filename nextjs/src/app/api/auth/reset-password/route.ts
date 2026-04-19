@@ -1,19 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { ok, fail } from '@/lib/api-envelope';
 
 export async function POST(req: NextRequest) {
   try {
     const { token, password } = await req.json();
 
-    if (!token || !password) return NextResponse.json({ error: 'Token болон нууц үг шаардлагатай' }, { status: 400 });
-    if (password.length < 6) return NextResponse.json({ error: 'Нууц үг хамгийн бага 6 тэмдэгт' }, { status: 400 });
+    if (!token || !password) return fail('Token болон нууц үг шаардлагатай', 400);
+    if (password.length < 6) return fail('Нууц үг хамгийн бага 6 тэмдэгт', 400);
 
     const resetToken = await prisma.passwordResetToken.findUnique({ where: { token } });
 
-    if (!resetToken) return NextResponse.json({ error: 'Буруу эсвэл хүчингүй линк' }, { status: 400 });
-    if (resetToken.usedAt) return NextResponse.json({ error: 'Энэ линк аль хэдийн ашиглагдсан' }, { status: 400 });
-    if (new Date() > resetToken.expiresAt) return NextResponse.json({ error: 'Линкийн хугацаа дууссан' }, { status: 400 });
+    if (!resetToken) return fail('Буруу эсвэл хүчингүй линк', 400);
+    if (resetToken.usedAt) return fail('Энэ линк аль хэдийн ашиглагдсан', 400);
+    if (new Date() > resetToken.expiresAt) return fail('Линкийн хугацаа дууссан', 400);
 
     // Hash new password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -30,8 +31,8 @@ export async function POST(req: NextRequest) {
       data: { usedAt: new Date() },
     });
 
-    return NextResponse.json({ message: 'Нууц үг амжилттай шинэчлэгдлээ!' });
+    return ok({ message: 'Нууц үг амжилттай шинэчлэгдлээ!' });
   } catch {
-    return NextResponse.json({ error: 'Алдаа гарлаа' }, { status: 500 });
+    return fail('Алдаа гарлаа', 500);
   }
 }

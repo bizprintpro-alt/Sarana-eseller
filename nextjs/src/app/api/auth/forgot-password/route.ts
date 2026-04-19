@@ -1,17 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import crypto from 'crypto';
 import { sendEmail, buildEmailTemplate } from '@/lib/marketing/EmailService';
+import { ok, fail } from '@/lib/api-envelope';
 
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
-    if (!email) return NextResponse.json({ error: 'Email шаардлагатай' }, { status: 400 });
+    if (!email) return fail('Email шаардлагатай', 400);
 
     const user = await prisma.user.findUnique({ where: { email } });
 
     // Always return success (don't reveal if email exists)
-    if (!user) return NextResponse.json({ message: 'Хэрэв бүртгэлтэй бол сэргээх линк илгээгдлээ' });
+    if (!user) return ok({ message: 'Хэрэв бүртгэлтэй бол сэргээх линк илгээгдлээ' });
 
     // Generate token
     const token = crypto.randomBytes(32).toString('hex');
@@ -33,8 +34,8 @@ export async function POST(req: NextRequest) {
     );
     await sendEmail(email, 'Нууц үг сэргээх — eseller.mn', html);
 
-    return NextResponse.json({ message: 'Сэргээх линк илгээгдлээ! Имэйл шалгана уу.' });
+    return ok({ message: 'Сэргээх линк илгээгдлээ! Имэйл шалгана уу.' });
   } catch {
-    return NextResponse.json({ error: 'Алдаа гарлаа' }, { status: 500 });
+    return fail('Алдаа гарлаа', 500);
   }
 }

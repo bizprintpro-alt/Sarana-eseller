@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { ok, fail } from '@/lib/api-envelope';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'eseller-jwt-secret-key-change-in-production-2026';
 
@@ -10,7 +11,7 @@ export async function POST(req: NextRequest) {
     const { email, phone, password } = await req.json();
 
     if ((!email && !phone) || !password) {
-      return NextResponse.json({ error: 'Имэйл/утас болон нууц үг оруулна уу' }, { status: 400 });
+      return fail('Имэйл/утас болон нууц үг оруулна уу', 400);
     }
 
     // Login by email OR phone
@@ -24,12 +25,12 @@ export async function POST(req: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: 'Хэрэглэгч олдсонгүй' }, { status: 401 });
+      return fail('Хэрэглэгч олдсонгүй', 401);
     }
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
-      return NextResponse.json({ error: 'Имэйл эсвэл нууц үг буруу' }, { status: 401 });
+      return fail('Имэйл эсвэл нууц үг буруу', 401);
     }
 
     const token = jwt.sign(
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
       { expiresIn: '30d' }
     );
 
-    const res = NextResponse.json({
+    const res = ok({
       token,
       user: {
         _id: user.id,
@@ -66,6 +67,6 @@ export async function POST(req: NextRequest) {
     return res;
   } catch (e: unknown) {
     console.error('LOGIN ERROR:', (e as Error).message);
-    return NextResponse.json({ error: 'Нэвтрэхэд алдаа гарлаа' }, { status: 500 });
+    return fail('Нэвтрэхэд алдаа гарлаа', 500);
   }
 }
