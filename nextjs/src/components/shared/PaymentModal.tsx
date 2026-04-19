@@ -19,6 +19,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
   const [method, setMethod] = useState<PayMethod>('qpay');
   const [status, setStatus] = useState<PayStatus>('idle');
   const [qpayUrl, setQpayUrl] = useState('');
+  const [invoiceId, setInvoiceId] = useState('');
   const [error, setError] = useState('');
 
   // Reset on open
@@ -27,6 +28,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
       setStatus('idle');
       setError('');
       setQpayUrl('');
+      setInvoiceId('');
     }
   }, [isOpen]);
 
@@ -49,6 +51,7 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
       const data = body?.success === true ? body.data : body;
       if (data?.qr_image || data?.qrImage) {
         setQpayUrl(data.qr_image || data.qrImage);
+        setInvoiceId(data.invoiceId || data.invoice_id || '');
         setStatus('pending');
       } else {
         throw new Error(data?.error || 'QPay алдаа');
@@ -60,13 +63,18 @@ export function PaymentModal({ isOpen, onClose, amount, orderId, context, onSucc
   };
 
   const checkPayment = async () => {
+    if (!invoiceId) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/payment/qpay/check?orderId=${orderId}`, {
+      const res = await fetch(`/api/payment/qpay/check/${encodeURIComponent(invoiceId)}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
-      const data = await res.json();
-      if (data.paid) {
+      const body = await res.json();
+      // Envelope: { success: true, data: {paid, ...} } | { success: false, error }
+      // Legacy:    {paid, ...}
+      if (body?.success === false) return;
+      const data = body?.success === true ? body.data : body;
+      if (data?.paid) {
         setStatus('success');
         onSuccess?.(data.paymentId || orderId || '');
         setTimeout(onClose, 2000);
