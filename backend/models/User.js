@@ -41,6 +41,10 @@ const userSchema = new mongoose.Schema({
     accountName:   String,
   },
 
+  // Coordinator-specific — 1..N аймагт хариуцах. Scope-оос гадуурх
+  // herder/order-т coordinator хандаж болохгүй (403).
+  coordinatorProvinces: [{ type: String, uppercase: true, trim: true }],
+
   isActive: { type: Boolean, default: true },
 }, { timestamps: true });
 
