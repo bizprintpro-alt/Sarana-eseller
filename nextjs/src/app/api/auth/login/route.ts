@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       { expiresIn: '30d' }
     );
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       token,
       user: {
         _id: user.id,
@@ -50,6 +50,20 @@ export async function POST(req: NextRequest) {
         store: user.store,
       },
     });
+
+    // Mirror the token into an httpOnly cookie so Edge middleware can enforce
+    // role-based access on /dashboard/* routes. Client code still reads the
+    // token from localStorage for the Authorization header — the cookie is
+    // middleware-only.
+    res.cookies.set('auth-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+    });
+
+    return res;
   } catch (e: unknown) {
     console.error('LOGIN ERROR:', (e as Error).message);
     return NextResponse.json({ error: 'Нэвтрэхэд алдаа гарлаа' }, { status: 500 });
