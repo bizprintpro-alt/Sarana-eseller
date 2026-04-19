@@ -56,6 +56,39 @@ export async function GET(
       deliveryType: product.deliveryType,
       estimatedMins: product.estimatedMins,
       entityType: product.entityType,
+      // Entity-specific fields — mobile renders distinct layouts per
+      // entityType (REAL_ESTATE / SERVICE / PRE_ORDER / AUTO / CONSTRUCTION
+      // / DIGITAL) mirroring web ProductDetailClient. Fields are nullable on
+      // the Product model so STORE listings return `null` for all of them.
+      // Real estate
+      area: product.area,
+      rooms: product.rooms,
+      floor: product.floor,
+      totalFloors: product.totalFloors,
+      district: product.district,
+      // Auto
+      year: product.year,
+      mileage: product.mileage,
+      fuelType: product.fuelType,
+      transmission: product.transmission,
+      brand: product.brand,
+      // Service
+      duration: product.duration,
+      availableSlots: product.availableSlots,
+      // Construction
+      totalUnits: product.totalUnits,
+      soldUnits: product.soldUnits,
+      completionDate: product.completionDate,
+      pricePerSqm: product.pricePerSqm,
+      // Pre-order
+      minBatch: product.minBatch,
+      currentBatch: product.currentBatch,
+      advancePercent: product.advancePercent,
+      deliveryEstimate: product.deliveryEstimate,
+      // Digital
+      fileType: product.fileType,
+      fileSize: product.fileSize,
+      downloadCount: product.downloadCount,
       shop: product.user?.shop || null,
       seller: product.user ? { id: product.user.id, name: product.user.name, avatar: product.user.avatar } : null,
       // Null for non-dropship products; populated flat object otherwise so
