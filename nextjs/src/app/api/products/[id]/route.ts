@@ -50,6 +50,12 @@ export async function GET(
       rating: product.rating,
       reviewCount: product.reviewCount,
       isActive: product.isActive,
+      // Delivery metadata — web product detail and storefront modal render
+      // these directly. Mobile gained parity with AUDIT M1.
+      deliveryFee: product.deliveryFee,
+      deliveryType: product.deliveryType,
+      estimatedMins: product.estimatedMins,
+      entityType: product.entityType,
       shop: product.user?.shop || null,
       seller: product.user ? { id: product.user.id, name: product.user.name, avatar: product.user.avatar } : null,
       // Null for non-dropship products; populated flat object otherwise so
