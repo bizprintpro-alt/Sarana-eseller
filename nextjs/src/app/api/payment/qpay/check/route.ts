@@ -1,16 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { checkPayment } from '@/lib/qpay';
+import { ok, fail } from '@/lib/api-envelope';
 
 export async function POST(request: NextRequest) {
   try {
     const { invoiceId } = await request.json();
 
     if (!invoiceId) {
-      return NextResponse.json(
-        { error: 'invoiceId шаардлагатай' },
-        { status: 400 }
-      );
+      return fail('invoiceId шаардлагатай', 400);
     }
 
     const status = await checkPayment(invoiceId);
@@ -26,12 +24,9 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(status);
+    return ok(status);
   } catch (error: any) {
     console.error('QPay check алдаа:', error);
-    return NextResponse.json(
-      { error: 'Төлбөр шалгахад алдаа гарлаа' },
-      { status: 500 }
-    );
+    return fail('Төлбөр шалгахад алдаа гарлаа', 500);
   }
 }
