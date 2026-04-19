@@ -90,6 +90,7 @@ export default function CheckoutPage() {
   // QPay state
   const [qpayStatus, setQpayStatus] = useState<'idle' | 'pending' | 'paid'>('idle');
   const [qpayChecking, setQpayChecking] = useState(false);
+  const [qpayInvoiceId, setQpayInvoiceId] = useState<string | null>(null);
   const qpayPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Loyalty points state
@@ -157,12 +158,16 @@ export default function CheckoutPage() {
 
   /* ── QPay check ── */
   const checkQpayPayment = useCallback(async () => {
-    if (!orderId || qpayStatus === 'paid') return;
+    if (!qpayInvoiceId || qpayStatus === 'paid') return;
     setQpayChecking(true);
     try {
-      const res = await fetch(`/api/payment/qpay/check?orderId=${orderId}`);
-      const data = await res.json();
-      if (data.paid) {
+      const res = await fetch(`/api/payment/qpay/check/${encodeURIComponent(qpayInvoiceId)}`);
+      const body = await res.json();
+      // Envelope: { success: true, data: {paid, ...} } | { success: false, error }
+      // Legacy:    {paid, ...}
+      if (body?.success === false) return;
+      const data = body?.success === true ? body.data : body;
+      if (data?.paid) {
         setQpayStatus('paid');
         toast.show('Төлбөр амжилттай хийгдлээ!', 'ok');
         if (qpayPollRef.current) {
@@ -175,7 +180,7 @@ export default function CheckoutPage() {
     } finally {
       setQpayChecking(false);
     }
-  }, [orderId, qpayStatus, toast]);
+  }, [qpayInvoiceId, qpayStatus, toast]);
 
   /* ── Apply loyalty points ── */
   function handleApplyPoints() {
@@ -238,11 +243,18 @@ export default function CheckoutPage() {
 
       // Create QPay invoice
       try {
-        await PaymentAPI.createQPay({
+        const qpayRes = await PaymentAPI.createQPay({
           orderId: order._id,
           amount: total,
           description: `eseller.mn захиалга #${order.orderNumber || order._id}`,
         });
+        // Accept both envelope {success, data} and legacy bare-body shapes.
+        const qpayData: Record<string, unknown> =
+          qpayRes && typeof qpayRes === 'object' && (qpayRes as { success?: unknown }).success === true
+            ? ((qpayRes as { data: Record<string, unknown> }).data ?? {})
+            : (qpayRes as Record<string, unknown>) ?? {};
+        const invId = (qpayData.invoiceId ?? qpayData.invoice_id) as string | undefined;
+        if (invId) setQpayInvoiceId(invId);
       } catch {
         // QPay invoice creation failure is non-blocking
       }
