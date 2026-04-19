@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { ok } from '@/lib/api-envelope';
 
 // GET /api/social/trending — top liked posts in last 24h
 export async function GET() {
@@ -27,5 +27,5 @@ export async function GET() {
   // Sort by likes count
   const sorted = posts.sort((a, b) => b._count.likes - a._count.likes);
 
-  return NextResponse.json({ data: { posts: sorted } });
+  return ok({ posts: sorted });
 }

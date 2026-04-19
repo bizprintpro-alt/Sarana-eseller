@@ -33,8 +33,12 @@ export default function RedeemSection({ balance, orderTotal, onApply }: RedeemSe
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ points, type: 'discount' }),
       });
-      const data = await res.json();
-      if (data.couponCode) {
+      const body = await res.json();
+      // Envelope: { success: true, data: {couponCode, ...} } | { success: false, error }
+      // Legacy:    {couponCode, ...}
+      if (body?.success === false) return;
+      const data = body?.success === true ? body.data : body;
+      if (data?.couponCode) {
         onApply(data.valueAmount, data.couponCode);
         setApplied(true);
       }
