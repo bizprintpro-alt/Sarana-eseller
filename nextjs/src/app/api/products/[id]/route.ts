@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { ok, fail } from '@/lib/api-envelope';
 
 // GET /api/products/[id] — product detail for mobile/web
 export async function GET(
@@ -34,10 +35,10 @@ export async function GET(
     });
 
     if (!product) {
-      return NextResponse.json({ error: 'Бараа олдсонгүй' }, { status: 404 });
+      return fail('Бараа олдсонгүй', 404);
     }
 
-    return NextResponse.json({
+    return ok({
       id: product.id,
       name: product.name,
       price: product.price,
@@ -110,6 +111,6 @@ export async function GET(
     });
   } catch (err) {
     console.error('Product detail error:', err);
-    return NextResponse.json({ error: 'Бараа ачаалахад алдаа' }, { status: 500 });
+    return fail('Бараа ачаалахад алдаа', 500);
   }
 }

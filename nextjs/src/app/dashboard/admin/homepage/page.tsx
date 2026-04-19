@@ -530,7 +530,15 @@ function FeaturedProductsTab({ items, onRefresh }: { items: FeaturedProductRow[]
     if (!query.trim()) return;
     setSearching(true);
     const res = await api(`/api/products?q=${encodeURIComponent(query)}&limit=10`);
-    setResults(Array.isArray(res) ? res : res.data || []);
+    // `/api/products` returns the envelope `{ success, data: { products, ... } }`
+    // (AUDIT M5). Fall through legacy shapes so an old build of the API
+    // doesn't break admin search during a deploy window.
+    const list = Array.isArray(res)
+      ? res
+      : res?.data?.products
+        ?? res?.products
+        ?? [];
+    setResults(list);
     setSearching(false);
   };
 

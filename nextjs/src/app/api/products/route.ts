@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { ok, fail } from '@/lib/api-envelope';
 
 // GET /api/products?limit=20&search=&category=
 export async function GET(req: NextRequest) {
@@ -46,7 +47,7 @@ export async function GET(req: NextRequest) {
       prisma.product.count({ where }),
     ]);
 
-    return NextResponse.json({
+    return ok({
       products,
       total,
       page,
@@ -54,6 +55,6 @@ export async function GET(req: NextRequest) {
     });
   } catch (err) {
     console.error('Products list error:', err);
-    return NextResponse.json({ error: 'Бараа ачаалахад алдаа' }, { status: 500 });
+    return fail('Бараа ачаалахад алдаа', 500);
   }
 }
