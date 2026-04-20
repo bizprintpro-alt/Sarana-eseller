@@ -54,7 +54,7 @@ export default function CartPage() {
                         <button onClick={() => updateQty(idx, item.qty - 1)} style={{ width: 32, height: 32, borderRadius: 8, border: '1px solid var(--esl-border)', background: 'var(--esl-bg-section)', color: 'var(--esl-text)', cursor: 'pointer', fontSize: 18 }}>−</button>
                         <span style={{ color: 'var(--esl-text)', fontWeight: 700, minWidth: 28, textAlign: 'center' }}>{item.qty}</span>
                         <button onClick={() => updateQty(idx, item.qty + 1)} style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: '#E8242C', color: '#fff', cursor: 'pointer', fontSize: 18 }}>+</button>
-                        <button onClick={() => remove(idx)} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#E8242C', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={18} /></button>
+                        <button onClick={() => { if (window.confirm(`"${item.name}" барааг сагснаас хасах уу?`)) remove(idx); }} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#E8242C', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={18} /></button>
                       </div>
                     </div>
                   </div>

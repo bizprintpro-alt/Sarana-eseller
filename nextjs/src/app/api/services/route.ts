@@ -4,15 +4,24 @@ import { json, errorJson, requireSeller, getShopForUser } from '@/lib/api-auth';
 
 // GET /api/services?shopId=...
 export async function GET(req: NextRequest) {
-  const shopId = req.nextUrl.searchParams.get('shopId');
-  if (!shopId) return errorJson('shopId шаардлагатай');
+  try {
+    const shopId = req.nextUrl.searchParams.get('shopId');
 
-  const services = await prisma.service.findMany({
-    where: { shopId },
-    orderBy: { createdAt: 'desc' },
-  });
+    const where = shopId && shopId !== 'all'
+      ? { shopId, isActive: true }
+      : { isActive: true };
 
-  return json(services);
+    const services = await prisma.service.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
+
+    return json(services);
+  } catch (error) {
+    console.error('Services fetch error:', error);
+    return json([]);
+  }
 }
 
 // POST /api/services — create service (auth required, seller only)

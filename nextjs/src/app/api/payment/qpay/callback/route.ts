@@ -15,6 +15,15 @@ import { sendExpoPush } from '@/lib/push';
  */
 async function handleCallback(req: NextRequest): Promise<NextResponse> {
   try {
+    // Verify QPay callback secret if configured
+    const expectedSecret = process.env.QPAY_CALLBACK_SECRET;
+    if (expectedSecret) {
+      const providedSecret = req.headers.get('x-qpay-secret');
+      if (providedSecret !== expectedSecret) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+    }
+
     // 1. Query params (GET эсвэл POST-ийн URL params)
     const sp = req.nextUrl.searchParams;
 
