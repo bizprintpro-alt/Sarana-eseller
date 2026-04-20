@@ -2,8 +2,11 @@
 export default function LicensesPage() {
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-2">Лицензүүд</h1>
-      <p className="text-gray-500">Энэ хэсэг удахгүй нээгдэнэ.</p>
+      <h1 className="text-2xl font-bold mb-2">Лиценз удирдлага</h1>
+      <p className="text-gray-500 mb-6">Хэрэглэгч бүрт өгсөн лицензийн жагсаалт</p>
+      <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 text-purple-800 text-sm">
+        🔑 Лицензийн систем удахгүй нэмэгдэнэ
+      </div>
     </div>
   );
 }
