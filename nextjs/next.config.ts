@@ -27,7 +27,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: 'res.cloudinary.com' },
+      { protocol: 'https', hostname: 'res.cloudinary.com', pathname: '/duo61k04v/**' },
       { protocol: 'https', hostname: 'api.qrserver.com' },
       { protocol: 'https', hostname: '*.googleusercontent.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
