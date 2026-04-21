@@ -52,6 +52,29 @@ export async function POST(req: Request) {
       },
     });
 
+    // Auto-create SellerProfile for affiliates (commission marketers)
+    if (role === 'affiliate') {
+      const baseUsername = (email ? email.split('@')[0] : phone || 'aff')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+      let affUsername = baseUsername || `aff${user.id.slice(-6)}`;
+      let affSuffix = 0;
+      while (await prisma.sellerProfile.findFirst({ where: { username: affUsername } })) {
+        affSuffix++;
+        affUsername = `${baseUsername}${affSuffix}`;
+      }
+      await prisma.sellerProfile.create({
+        data: {
+          userId: user.id,
+          username: affUsername,
+          displayName: name,
+          isActive: true,
+          commissionRate: 10,
+          sellerType: 'REGULAR',
+        },
+      });
+    }
+
     // Auto-create Shop for sellers
     if (role === 'seller') {
       const baseSlug = name
