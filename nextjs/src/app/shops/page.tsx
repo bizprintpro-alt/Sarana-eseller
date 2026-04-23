@@ -128,8 +128,22 @@ export default function ShopsPage() {
             />
           </div>
 
-          <Link href="/store" className="text-sm font-semibold text-[var(--esl-text-secondary)] hover:text-[#E31E24] no-underline transition hidden sm:inline">
-            Marketplace →
+          <nav className="hidden md:flex items-center gap-1 text-sm">
+            <Link href="/store" className="px-3 py-1.5 rounded-lg font-semibold text-[var(--esl-text-secondary)] hover:text-[#E31E24] hover:bg-[var(--esl-bg-section)] no-underline transition">
+              Дэлгүүр
+            </Link>
+            <Link href="/feed" className="px-3 py-1.5 rounded-lg font-semibold text-[var(--esl-text-secondary)] hover:text-[#E31E24] hover:bg-[var(--esl-bg-section)] no-underline transition">
+              Зарын булан
+            </Link>
+            <Link href="/gold" className="px-3 py-1.5 rounded-lg font-semibold text-[var(--esl-text-secondary)] hover:text-[#E31E24] hover:bg-[var(--esl-bg-section)] no-underline transition">
+              Gold
+            </Link>
+            <Link href="/login" className="px-3 py-1.5 rounded-lg font-semibold text-[var(--esl-text-secondary)] hover:text-[#E31E24] hover:bg-[var(--esl-bg-section)] no-underline transition">
+              Нэвтрэх
+            </Link>
+          </nav>
+          <Link href="/open-shop" className="hidden sm:inline-flex bg-[#E31E24] text-white text-sm font-bold px-4 py-2 rounded-xl no-underline hover:bg-[#c91a1f] transition whitespace-nowrap">
+            Дэлгүүр нээх
           </Link>
         </div>
       </header>

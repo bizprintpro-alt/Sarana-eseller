@@ -51,12 +51,30 @@ export default function ProductDetailClient({ product, relatedProducts = [] }: P
           <button onClick={() => router.back()} className="w-9 h-9 rounded-full bg-[var(--esl-bg-card)] border border-[var(--esl-border)] flex items-center justify-center hover:bg-[var(--esl-bg-muted)] transition-colors">
             <ArrowLeft size={18} />
           </button>
+          <Link href="/" className="flex items-center gap-1 no-underline shrink-0">
+            <span className="text-base font-black tracking-tight">
+              eseller<span className="text-[#E31E24]">.mn</span>
+            </span>
+          </Link>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold truncate">{product.name}</p>
-            <p className="text-xs text-[var(--esl-text-muted)]">{config.badge}</p>
           </div>
           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: config.color }}>{config.badge}</span>
         </div>
+        {/* Breadcrumb */}
+        <nav className="max-w-6xl mx-auto px-4 py-2 flex items-center gap-1.5 text-xs text-[var(--esl-text-muted)] overflow-x-auto">
+          <Link href="/" className="hover:text-[var(--esl-text-primary)] no-underline">Нүүр</Link>
+          <span>›</span>
+          <Link href="/store" className="hover:text-[var(--esl-text-primary)] no-underline">Дэлгүүр</Link>
+          {product.categoryRef?.name && (
+            <>
+              <span>›</span>
+              <span className="truncate">{product.categoryRef.name}</span>
+            </>
+          )}
+          <span>›</span>
+          <span className="text-[var(--esl-text-primary)] font-medium truncate">{product.name}</span>
+        </nav>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
