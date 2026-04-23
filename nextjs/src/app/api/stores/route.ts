@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
       const shops = await prisma.shop.findMany({
         where,
         include: {
-          user: { select: { name: true, avatar: true } },
+          user: { select: { id: true, name: true, avatar: true } },
           shopType: true,
           services: { select: { id: true } },
         },
@@ -54,6 +54,7 @@ export async function GET(req: NextRequest) {
       for (const shop of shops) {
         stores.push({
           id: shop.id,
+          ownerId: shop.userId,
           name: shop.name,
           slug: shop.slug,
           logo: shop.logo,
@@ -86,6 +87,7 @@ export async function GET(req: NextRequest) {
       for (const agent of agents) {
         stores.push({
           id: agent.id,
+          ownerId: agent.userId,
           name: agent.name,
           slug: agent.slug,
           logo: agent.profilePhoto,
@@ -118,6 +120,7 @@ export async function GET(req: NextRequest) {
       for (const company of companies) {
         stores.push({
           id: company.id,
+          ownerId: company.userId,
           name: company.name,
           slug: company.slug,
           logo: company.logo,
@@ -150,6 +153,7 @@ export async function GET(req: NextRequest) {
       for (const dealer of dealers) {
         stores.push({
           id: dealer.id,
+          ownerId: dealer.userId,
           name: dealer.name,
           slug: dealer.slug,
           logo: dealer.logo,
@@ -182,6 +186,7 @@ export async function GET(req: NextRequest) {
       for (const provider of providers) {
         stores.push({
           id: provider.id,
+          ownerId: provider.userId,
           name: provider.name,
           slug: provider.slug,
           logo: provider.logo,

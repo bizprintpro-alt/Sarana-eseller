@@ -32,8 +32,18 @@ export default function LoginPage() {
   const router = useRouter();
   const toast = useToast();
 
+  // Pull `?redirect=/some/path` from URL to override roleHome-based routing
+  function getRedirectTarget(role?: string): string {
+    if (typeof window === 'undefined') return roleHome(role);
+    const params = new URLSearchParams(window.location.search);
+    const target = params.get('redirect');
+    // Allow only safe relative paths
+    if (target && target.startsWith('/') && !target.startsWith('//')) return target;
+    return roleHome(role);
+  }
+
   useEffect(() => {
-    if (isLoggedIn && user) router.replace(roleHome(user.role));
+    if (isLoggedIn && user) router.replace(getRedirectTarget(user.role));
   }, [isLoggedIn, user, router]);
 
   useEffect(() => {
@@ -48,7 +58,7 @@ export default function LoginPage() {
           login(data.token, data.user);
           setSuccess('Google-ээр амжилттай нэвтэрлээ!');
           window.location.hash = '';
-          setTimeout(() => router.push(roleHome(data.user.role)), 700);
+          setTimeout(() => router.push(getRedirectTarget(data.user.role)), 700);
         }
       } catch {}
     }
@@ -104,7 +114,7 @@ export default function LoginPage() {
       if (data?.token) {
         login(data.token, data.user);
         setSuccess('Амжилттай нэвтэрлээ!');
-        setTimeout(() => router.push(roleHome(data.user.role)), 700);
+        setTimeout(() => router.push(getRedirectTarget(data.user.role)), 700);
       } else {
         setError('Имэйл эсвэл нууц үг буруу');
       }
@@ -122,7 +132,7 @@ export default function LoginPage() {
       if (data.token) {
         login(data.token, data.user);
         setSuccess('Бүртгэл амжилттай!');
-        setTimeout(() => router.push(roleHome(data.user.role)), 700);
+        setTimeout(() => router.push(getRedirectTarget(data.user.role)), 700);
       }
     } catch (e: any) {
       setError(e.message || 'Холболтын алдаа');
