@@ -20,12 +20,12 @@ const DEMO_SELLER = {
 };
 
 const DEMO_PRODUCTS = [
-  { id: 'sp1', name: 'iPhone 15 Pro 256GB', price: 3800000, image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&q=80', store: 'TechUB', rating: 4.8 },
-  { id: 'sp2', name: 'Cashmere цамц', price: 89000, salePrice: 65000, image: 'https://images.unsplash.com/photo-1434389677669-e08b4cda3a0a?w=400&q=80', store: 'Gobi Store', rating: 4.6 },
-  { id: 'sp3', name: 'Yoga mat pro', price: 55000, image: 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&q=80', store: 'SportsMN', rating: 4.9 },
-  { id: 'sp4', name: 'Гоо сайхны багц', price: 45000, image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80', store: 'Beauty Lab', rating: 4.7 },
-  { id: 'sp5', name: 'Wireless earbuds', price: 65000, image: 'https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&q=80', store: 'TechUB', rating: 4.5 },
-  { id: 'sp6', name: 'Ажлын ширээ', price: 185000, image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=400&q=80', store: 'Home Deco', rating: 4.4 },
+  { id: 'sp1', name: 'iPhone 15 Pro 256GB', price: 3800000, image: 'https://picsum.photos/seed/eseller-400/400', store: 'TechUB', rating: 4.8 },
+  { id: 'sp2', name: 'Cashmere цамц', price: 89000, salePrice: 65000, image: 'https://picsum.photos/seed/eseller-400/400', store: 'Gobi Store', rating: 4.6 },
+  { id: 'sp3', name: 'Yoga mat pro', price: 55000, image: 'https://picsum.photos/seed/eseller-400/400', store: 'SportsMN', rating: 4.9 },
+  { id: 'sp4', name: 'Гоо сайхны багц', price: 45000, image: 'https://picsum.photos/seed/eseller-400/400', store: 'Beauty Lab', rating: 4.7 },
+  { id: 'sp5', name: 'Wireless earbuds', price: 65000, image: 'https://picsum.photos/seed/eseller-400/400', store: 'TechUB', rating: 4.5 },
+  { id: 'sp6', name: 'Ажлын ширээ', price: 185000, image: 'https://picsum.photos/seed/eseller-400/400', store: 'Home Deco', rating: 4.4 },
 ];
 
 export default function SellerPage() {

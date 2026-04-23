@@ -34,6 +34,8 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'cdnp.cody.mn' },
       { protocol: 'https', hostname: 'public.blob.vercel-storage.com' },
       { protocol: 'https', hostname: 'cdn.eseller.mn' },
+      { protocol: 'https', hostname: 'picsum.photos' },
+      { protocol: 'https', hostname: 'fastly.picsum.photos' },
     ],
     formats: ['image/webp', 'image/avif'],
   },

@@ -25,9 +25,17 @@ export async function GET(req: NextRequest) {
 
     const stores: any[] = [];
 
+    // Hide test shops/users from public listings
+    const HIDE_TEST = {
+      AND: [
+        { NOT: { slug: { startsWith: 'test-' } } },
+        { NOT: { name: { contains: 'test', mode: 'insensitive' as const } } },
+      ],
+    };
+
     // ─── Shops (product/service/hybrid stores) ───────────
     if (type === 'all' || type === 'store') {
-      const where: any = {};
+      const where: any = { ...HIDE_TEST };
       if (search) where.name = { contains: search, mode: 'insensitive' };
       if (district) where.district = district;
 

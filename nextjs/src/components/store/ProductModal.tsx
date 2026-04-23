@@ -29,10 +29,10 @@ interface ProductModalProps {
 
 /* ═══ Recommended items (mixed products + featured ads) ═══ */
 const FEATURED_ADS = [
-  { id: 'ad-1', type: 'auto' as const, title: 'Toyota Land Cruiser 300', price: '185 сая₮', image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=400&q=80', badge: 'Авто зар', link: '/entity/auto_dealer/autocity' },
-  { id: 'ad-2', type: 'realty' as const, title: '3 өрөө байр, Ривер Гарден', price: '450 сая₮', image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&q=80', badge: 'Орон сууц', link: '/entity/agent/erdenbat' },
-  { id: 'ad-3', type: 'service' as const, title: 'Вэбсайт хөгжүүлэлт', price: '2.5 сая₮', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80', badge: 'Үйлчилгээ', link: '/feed' },
-  { id: 'ad-4', type: 'building' as const, title: 'Zaisan Heights — шинэ төсөл', price: '95 сая₮~', image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&q=80', badge: 'Шинэ барилга', link: '/entity/company/mongolian-properties' },
+  { id: 'ad-1', type: 'auto' as const, title: 'Toyota Land Cruiser 300', price: '185 сая₮', image: 'https://picsum.photos/seed/eseller-400/400', badge: 'Авто зар', link: '/entity/auto_dealer/autocity' },
+  { id: 'ad-2', type: 'realty' as const, title: '3 өрөө байр, Ривер Гарден', price: '450 сая₮', image: 'https://picsum.photos/seed/eseller-400/400', badge: 'Орон сууц', link: '/entity/agent/erdenbat' },
+  { id: 'ad-3', type: 'service' as const, title: 'Вэбсайт хөгжүүлэлт', price: '2.5 сая₮', image: 'https://picsum.photos/seed/eseller-400/400', badge: 'Үйлчилгээ', link: '/feed' },
+  { id: 'ad-4', type: 'building' as const, title: 'Zaisan Heights — шинэ төсөл', price: '95 сая₮~', image: 'https://picsum.photos/seed/eseller-400/400', badge: 'Шинэ барилга', link: '/entity/company/mongolian-properties' },
 ];
 
 /* ═══ Specs generation based on category ═══ */

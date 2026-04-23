@@ -54,10 +54,11 @@ export function clearAuth() {
 
 export function roleHome(role?: string): string {
   const map: Record<string, string> = {
+    buyer: '/',
     seller: '/dashboard/store',
     affiliate: '/dashboard/affiliate',
     delivery: '/dashboard/delivery',
     admin: '/dashboard/admin',
   };
-  return map[role || ''] || '/dashboard';
+  return map[role || ''] || '/';
 }

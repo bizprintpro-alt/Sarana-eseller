@@ -2,17 +2,25 @@ import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { json, errorJson, requireSeller, getShopForUser } from '@/lib/api-auth';
 
-// GET /api/services?shopId=...
+// GET /api/services?shopId=... | shopId=all returns all active services across shops
 export async function GET(req: NextRequest) {
-  const shopId = req.nextUrl.searchParams.get('shopId');
-  if (!shopId) return errorJson('shopId шаардлагатай');
+  try {
+    const shopId = req.nextUrl.searchParams.get('shopId');
+    if (!shopId) return errorJson('shopId шаардлагатай');
 
-  const services = await prisma.service.findMany({
-    where: { shopId },
-    orderBy: { createdAt: 'desc' },
-  });
+    const where = shopId === 'all' ? { isActive: true } : { shopId };
 
-  return json(services);
+    const services = await prisma.service.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: shopId === 'all' ? 50 : undefined,
+    });
+
+    return json(services);
+  } catch (e: unknown) {
+    console.warn('Services API error:', (e as Error).message);
+    return json([]);
+  }
 }
 
 // POST /api/services — create service (auth required, seller only)
