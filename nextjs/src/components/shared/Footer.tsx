@@ -29,9 +29,9 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div>
-            <div className="text-xl font-black text-white mb-2">
+            <Link href="/" className="text-xl font-black text-white mb-2 inline-block no-underline cursor-pointer">
               eseller<em className="text-[#E8242C] not-italic">.mn</em>
-            </div>
+            </Link>
             <p className="text-sm text-white/30 mb-4">Монголын нэгдсэн цахим зах</p>
             <div className="flex flex-col gap-2 text-sm text-white/40">
               <span className="flex items-center gap-1.5"><Phone size={13} /> 7XXX-XXXX</span>

@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import EsellerLogo from './EsellerLogo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 30);
@@ -14,6 +16,13 @@ export default function Navbar() {
     handler();
     return () => window.removeEventListener('scroll', handler);
   }, []);
+
+  function handleLogoClick(e: React.MouseEvent) {
+    if (pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
 
   return (
     <nav
@@ -23,7 +32,7 @@ export default function Navbar() {
           : ''
       }`}
     >
-      <Link href="/" className="flex items-center gap-2 no-underline shrink-0">
+      <Link href="/" onClick={handleLogoClick} className="flex items-center gap-2 no-underline shrink-0">
         <EsellerLogo />
         <span className="text-xl font-black text-white tracking-tight">
           eseller<em className="text-[#CC0000] not-italic">.mn</em>
