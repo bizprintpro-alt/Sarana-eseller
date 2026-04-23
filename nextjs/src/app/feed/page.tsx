@@ -740,10 +740,32 @@ export default function FeedPage() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-20">
+          <div className="text-center py-16 px-6 rounded-2xl bg-[var(--esl-bg-card)] border border-[var(--esl-border)] max-w-xl mx-auto">
             <span className="text-5xl block mb-4">📋</span>
-            <p className="text-lg font-bold text-[var(--esl-text)]">Зар олдсонгүй</p>
-            <p className="text-sm text-[var(--esl-text-muted)] mt-2">Шүүлтүүрээ өөрчилнө үү</p>
+            <p className="text-lg font-bold text-[var(--esl-text)]">Энэ шүүлтүүрээр зар олдсонгүй</p>
+            <p className="text-sm text-[var(--esl-text-muted)] mt-2 mb-5">
+              Бүх дүүргийн бүх зарыг шалгана уу
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              <button
+                onClick={() => {
+                  setSearch('');
+                  setActiveCat('all');
+                  setActiveDistrict('Бүгд');
+                  setActiveProvince('');
+                  setActiveSort('newest');
+                }}
+                className="px-5 py-2.5 rounded-xl bg-[#E8242C] text-white text-sm font-semibold hover:bg-[#c91f26] transition border-none cursor-pointer"
+              >
+                Шүүлтүүр арилгах
+              </button>
+              <a
+                href="/store"
+                className="px-5 py-2.5 rounded-xl text-sm font-semibold no-underline hover:bg-[var(--esl-bg-section)] transition border border-[var(--esl-border)] text-[var(--esl-text)]"
+              >
+                Marketplace руу
+              </a>
+            </div>
           </div>
         )}
       </div>

@@ -53,8 +53,8 @@ export default async function ProductPage({ params }: Props) {
     orderBy: { sortOrder: 'asc' },
   });
 
-  // Fetch related products (same category, max 4)
-  const related = product.categoryId
+  // Fetch related products — prefer same category, fallback to recent
+  let related = product.categoryId
     ? await prisma.product.findMany({
         where: {
           categoryId: product.categoryId,
@@ -65,6 +65,19 @@ export default async function ProductPage({ params }: Props) {
         orderBy: { createdAt: 'desc' },
       })
     : [];
+
+  // Fallback: recent active products if category has none
+  if (related.length < 4) {
+    const fallback = await prisma.product.findMany({
+      where: {
+        id: { notIn: [id, ...related.map(r => r.id)] },
+        isActive: true,
+      },
+      take: 4 - related.length,
+      orderBy: { createdAt: 'desc' },
+    });
+    related = [...related, ...fallback];
+  }
 
   // Transform to client-compatible shape
   const clientProduct = {

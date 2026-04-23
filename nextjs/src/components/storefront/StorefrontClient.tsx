@@ -146,10 +146,20 @@ export default function StorefrontClient({ shop, products }: { shop: ShopData; p
         </h2>
 
         {products.length === 0 ? (
-          <div className="text-center py-20">
+          <div className="text-center py-16 px-6 rounded-2xl" style={{ background: 'var(--esl-bg-card)', border: '1px solid var(--esl-border)' }}>
             <span className="text-5xl block mb-4">📦</span>
-            <p className="font-bold" style={{ color: 'var(--esl-text-primary)' }}>Бараа байхгүй байна</p>
-            <p className="text-sm mt-1" style={{ color: 'var(--esl-text-muted)' }}>Удахгүй нэмэгдэнэ</p>
+            <p className="font-bold text-lg" style={{ color: 'var(--esl-text-primary)' }}>Энэ дэлгүүрт бараа хараахан байхгүй</p>
+            <p className="text-sm mt-2 mb-6 max-w-sm mx-auto" style={{ color: 'var(--esl-text-muted)' }}>
+              Өөр олон дэлгүүр, 10,000+ бараа таныг хүлээж байна
+            </p>
+            <div className="flex gap-2 justify-center flex-wrap">
+              <Link href="/store" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#E8242C] text-white text-sm font-semibold no-underline hover:bg-[#c91f26] transition">
+                Marketplace харах →
+              </Link>
+              <Link href="/shops" className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold no-underline hover:bg-[var(--esl-bg-section)] transition" style={{ color: 'var(--esl-text-primary)', border: '1px solid var(--esl-border)' }}>
+                Бусад дэлгүүр
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
