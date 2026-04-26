@@ -35,6 +35,13 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image', title: 'Eseller.mn', description: 'Монголын нэгдсэн цахим зах', images: ['/og-image.jpg'] },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large' as const, 'max-snippet': -1 } },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.YANDEX_VERIFICATION,
+    other: {
+      'msvalidate.01': process.env.BING_VERIFICATION || '',
+    },
+  },
 };
 
 export default function RootLayout({
