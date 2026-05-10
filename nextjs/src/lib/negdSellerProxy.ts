@@ -25,6 +25,12 @@ export interface NegdProxyResult {
   status: number;
   body: unknown;
   correlationId: string;
+  /** True when the helper produced the local-dev empty-success stub
+   *  because NEGD_INTERNAL_BASE_URL / ESELLER_S2S_INTEGRATION_KEY are
+   *  unset. Routes that have a richer fallback (e.g. /api/seller/dashboard
+   *  → Prisma) check this and fall through; routes with no fallback just
+   *  return the stub. */
+  isDevStub?: boolean;
 }
 
 /** Resolve the inbound correlation id, or generate one. */
@@ -59,6 +65,23 @@ export function upstreamUnavailableEnvelope(correlationId: string, message?: str
   };
 }
 
+/**
+ * Empty-success envelope returned in development when Negd S2S env vars
+ * aren't set. Lets `npm run dev` boot without spamming 503s on every
+ * seller-tab fetch — production still gets the 503 so ops sees a real
+ * config gap. Mobile reads `data: null` and renders empty state.
+ */
+export function devNegdMissingEnvelope(correlationId: string) {
+  return {
+    ok: true,
+    data: null,
+    correlationId,
+    bff: 'sarana-eseller',
+    upstream: 'negd-not-configured',
+    devNote: 'Negd S2S env vars are unset; this is a local-dev empty stub',
+  };
+}
+
 /** Build an INTERNAL_ERROR failure envelope. */
 export function internalErrorEnvelope(correlationId: string) {
   return {
@@ -83,11 +106,25 @@ export async function callNegdSellerEndpoint(
   const { eSellerUserId, correlationId } = opts;
 
   if (!NEGD_BASE || !S2S_KEY_PRESENT) {
-    console.error('[negdSellerProxy] Missing NEGD_INTERNAL_BASE_URL or ESELLER_S2S_INTEGRATION_KEY');
+    // In production a missing env is a real ops gap → keep the 503 so
+    // monitoring fires. In development (npm run dev / EAS preview), there
+    // is no Negd to talk to anyway, so 503 just clutters logs and turns
+    // every mobile seller tab into an error toast. Return an empty 200
+    // stub instead — mobile will render an empty state.
+    if (process.env.NODE_ENV === 'production') {
+      console.error('[negdSellerProxy] Missing NEGD_INTERNAL_BASE_URL or ESELLER_S2S_INTEGRATION_KEY');
+      return {
+        status: 503,
+        body: upstreamUnavailableEnvelope(correlationId, 'Negd S2S not configured'),
+        correlationId,
+      };
+    }
+    console.warn('[negdSellerProxy] dev mode — Negd env unset, returning empty 200 stub');
     return {
-      status: 503,
-      body: upstreamUnavailableEnvelope(correlationId, 'Negd S2S not configured'),
+      status: 200,
+      body: devNegdMissingEnvelope(correlationId),
       correlationId,
+      isDevStub: true,
     };
   }
 
