@@ -35,14 +35,19 @@ export async function GET(req: NextRequest) {
       eSellerUserId: auth.id,
       correlationId,
     });
-    if (result.status >= 200 && result.status < 300) {
+    // Forward Negd's response only when it's a real upstream success.
+    // The dev-mode empty stub (isDevStub=true, missing env vars) deliberately
+    // falls through so local dev still gets the richer Prisma snapshot —
+    // an empty {ok:true,data:null} would be a regression for this specific
+    // route, which has its own fallback.
+    if (result.status >= 200 && result.status < 300 && !result.isDevStub) {
       return NextResponse.json(decorateBff(result.body, result.correlationId), {
         status: result.status,
         headers: { 'X-Correlation-ID': correlationId },
       });
     }
-    // Non-2xx → callNegdSellerEndpoint has already logged upstream details.
-    // Fall through to the Prisma fallback below.
+    // Non-2xx OR dev stub → fall through to the Prisma fallback below.
+    // callNegdSellerEndpoint has already logged any upstream errors.
   } catch (e: unknown) {
     console.warn('[seller/dashboard] Negd call threw, falling back to Prisma', {
       message: (e as Error)?.message,
